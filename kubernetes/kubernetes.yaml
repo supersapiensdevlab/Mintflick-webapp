@@ -1,0 +1,57 @@
+---
+apiVersion: "v1"
+kind: "ConfigMap"
+metadata:
+  name: "dbeatsfrontend-config-e270"
+  namespace: "default"
+  labels:
+    app: "dbeatsfrontend"
+data:
+  REACT_APP_SERVER_URL: "https://server.dbeats.live"
+---
+apiVersion: "apps/v1"
+kind: "Deployment"
+metadata:
+  name: "dbeatsfrontend"
+  namespace: "default"
+  labels:
+    app: "dbeatsfrontend"
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: "dbeatsfrontend"
+  template:
+    metadata:
+      labels:
+        app: "dbeatsfrontend"
+    spec:
+      containers:
+      - name: "dbeats-frontend-1"
+        image: "gcr.io/hazel-champion-334507/github.com/supersapiensdevlab/dbeats-frontend:$SHORT_SHA"
+        env:
+        - name: "REACT_APP_SERVER_URL"
+          valueFrom:
+            configMapKeyRef:
+              key: "REACT_APP_SERVER_URL"
+              name: "dbeatsfrontend-config-e270"
+---
+apiVersion: "autoscaling/v2beta1"
+kind: "HorizontalPodAutoscaler"
+metadata:
+  name: "dbeatsfrontend-hpa-yw37"
+  namespace: "default"
+  labels:
+    app: "dbeatsfrontend"
+spec:
+  scaleTargetRef:
+    kind: "Deployment"
+    name: "dbeatsfrontend"
+    apiVersion: "apps/v1"
+  minReplicas: 1
+  maxReplicas: 5
+  metrics:
+  - type: "Resource"
+    resource:
+      name: "cpu"
+      targetAverageUtilization: 80
