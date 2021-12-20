@@ -10,7 +10,7 @@ FROM node:16.6.2
 
 ADD package.json /tmp/package.json
 #ADD package-lock.json /tmp/package-lock.json
-RUN cd /tmp && npm install -g npm@8.3.0 && npm i 
+RUN cd /tmp && npm install -g npm@8.3.0 && npm i --force
 RUN mkdir -p /usr/src/app && cp -a /tmp/node_modules /usr/src/app/
 # Create app directory
 WORKDIR /usr/src/app
