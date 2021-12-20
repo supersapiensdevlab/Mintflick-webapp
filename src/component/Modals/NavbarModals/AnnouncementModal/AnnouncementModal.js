@@ -19,7 +19,6 @@ const AnnouncementModal = (props) => {
   //const [postImage, setPostImage] = useState(null);
   const [postImage, setPostImage] = useState(null);
   const [showLinkPreview, setShowLinkPreview] = useState(false);
-
   const [announcement, setAnnouncement] = useState({
     announcementText: '',
     postImage: null,
@@ -31,6 +30,7 @@ const AnnouncementModal = (props) => {
     mintTrxHash: '',
   });
 
+  const [linkPreviewUrl, setLinkPreviewUrl] = useState(null);
   const [linkPreviewData, setLinkPreviewData] = useState(null);
 
   const handleInputChange = (e) => {
@@ -38,9 +38,9 @@ const AnnouncementModal = (props) => {
     let value = e.target.value;
     setAnnouncement({ ...announcement, announcementText: value });
     let url = detectURLs(value);
-    //getLinkPreview(url[url.length - 1]).then((data) => setLinkPreviewData(data));
+    //getLinkPreview(url[url.length - 1]).then((data) => setLinkPreviewUrl(data));
     if (url && url.length > 0) {
-      setLinkPreviewData(url[url.length - 1]);
+      setLinkPreviewUrl(url[url.length - 1]);
       setShowLinkPreview(true);
     } else {
       setShowLinkPreview(false);
@@ -197,6 +197,9 @@ const AnnouncementModal = (props) => {
 
         formData.append('eventlink', announcement.event_link);
         formData.append('announcementHash', announcement.cid);
+        formData.append('previewData', JSON.stringify(linkPreviewData));
+
+        console.log(linkPreviewData);
 
         console.log('anu', announcement);
 
@@ -231,6 +234,9 @@ const AnnouncementModal = (props) => {
       formData.append('postVideo', announcement.postVideo);
       formData.append('timestamp', moment().toDate().getTime());
       formData.append('eventlink', announcement.event_link);
+      formData.append('previewData', JSON.stringify(linkPreviewData));
+
+      console.log(linkPreviewData);
 
       axios
         .post(`${process.env.REACT_APP_SERVER_URL}/user/announcement`, formData, {
@@ -284,16 +290,17 @@ const AnnouncementModal = (props) => {
                     placeholder="Enter Announcement Details"
                     onChange={(e) => handleInputChange(e)}
                   ></textarea>
-                  {showLinkPreview ? (
+                  {showLinkPreview && !postImage ? (
                     <>
                       <LinkPreview
-                        linkurl={linkPreviewData}
+                        linkurl={linkPreviewUrl}
                         setShowLinkPreview={setShowLinkPreview}
+                        setLinkPreviewData={setLinkPreviewData}
                       />
                     </>
                   ) : (
                     <>
-                      {postImage && !linkPreviewData ? (
+                      {postImage ? (
                         <div className="">
                           <img
                             src={postImage}

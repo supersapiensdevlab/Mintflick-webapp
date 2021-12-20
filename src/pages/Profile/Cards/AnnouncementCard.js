@@ -5,8 +5,6 @@ import moment from 'moment';
 import { detectURLs } from '../../../component/uploadHelperFunction';
 moment().format();
 
-const mql = require('@microlink/mql');
-
 const AnnouncementCard = (props) => {
   //console.log(props);
   const [playing, setPlaying] = useState(false);
@@ -20,15 +18,19 @@ const AnnouncementCard = (props) => {
 
   const handleMouseMove = () => {
     setPlaying(true);
-    if (props.post.post_video !== null && props.post.post_image) {
-      setShowImage(false);
+    if (props.post.post_video !== null) {
+      if ((!props.post.post_image && linkData) || props.post.post_image) {
+        setShowImage(false);
+      }
     }
   };
 
   const hanldeMouseLeave = () => {
     setPlaying(false);
-    if (props.post.post_video !== null && props.post.post_image) {
-      setShowImage(true);
+    if (props.post.post_video !== null) {
+      if ((!props.post.post_image && linkData) || props.post.post_image) {
+        setShowImage(true);
+      }
     }
   };
 
@@ -37,10 +39,10 @@ const AnnouncementCard = (props) => {
       setTime(moment(Math.floor(props.post.timestamp)).fromNow());
     }
 
-    if (props.post.announcement && !props.post.post_image && !props.post.post_video) {
+    if (props.post.announcement && !props.post.post_image) {
       let url = detectURLs(props.post.announcement);
       if (url && url.length > 0) {
-        fetchData(url[url.length - 1]);
+        setLinkData(props.post.linkpreview_data);
         setShowLinkPreview(true);
       } else {
         setShowLinkPreview(false);
@@ -48,19 +50,6 @@ const AnnouncementCard = (props) => {
     }
     // eslint-disable-next-line
   }, []);
-
-  const fetchData = async (linkurl) => {
-    // eslint-disable-next-line
-    const { status, data, response } = await mql(`${linkurl}`, {
-      animations: true,
-    });
-
-    if (data.title.indexOf('Page Not Found') === -1) {
-      setLinkData(data);
-    } else {
-      setShowLinkPreview(false);
-    }
-  };
 
   // const convertTimestampToTime = () => {
   //   const timestamp = new Date(props.playbackUserData.time * 1000); // This would be the timestamp you want to format
@@ -75,59 +64,57 @@ const AnnouncementCard = (props) => {
   return (
     <div id="tracks-section" className="py-1 ">
       <div
-        className={`w-full  flex  md:flex-row flex-col  py-3 
-      bg-gray-50 shadow-lg  rounded  dark:bg-dbeats-dark-secondary 
-        dark:text-gray-100 
-      lg:px-3 2xl:px-3 md:p-2`}
+        className={`w-full  flex  md:flex-row flex-col  py-3 bg-gray-50 shadow-lg  
+        rounded  dark:bg-dbeats-dark-secondary dark:text-gray-100 
+        lg:px-3 2xl:px-3 md:p-2`}
       >
-        {props.post.post_video || props.post.post_image ? (
-          <div
-            className={`cursor-pointer mx-auto items-center lg:w-80 2xl:w-80 2xl:h-48 lg:h-32 md:w-96 h-52 dark:bg-dbeats-dark-primary bg-gray-100`}
-            onMouseMove={handleMouseMove}
-            onMouseLeave={hanldeMouseLeave}
+        <div
+          className={`cursor-pointer mx-auto items-center lg:w-80 2xl:w-80 2xl:h-48 lg:h-32 md:w-96 h-52 dark:bg-dbeats-dark-primary bg-gray-100`}
+          onMouseMove={handleMouseMove}
+          onMouseLeave={hanldeMouseLeave}
+        >
+          <a
+            href={props.post.link}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={props.post.link === '' ? { pointerEvents: 'none' } : null}
           >
-            <a href={props.post.link} target="_blank" rel="noopener noreferrer">
-              {showImage && props.post.post_image ? (
-                <>
-                  <img
-                    src={props.post.post_image}
-                    alt="announcement_info"
-                    className="mx-auto h-full w-auto"
-                  />
-                </>
-              ) : props.post.post_video ? (
-                <ReactPlayer
-                  width="100%"
-                  height="100%"
-                  playing={playing}
-                  muted={false}
-                  volume={0.5}
-                  url={props.post.post_video}
-                  controls={false}
-                  className={classes.cards_videos}
-                />
-              ) : null}
-            </a>
-          </div>
-        ) : (
-          <div
-            className={`cursor-pointer mx-auto items-center lg:w-80 2xl:w-80 2xl:h-48 lg:h-32 md:w-96 h-52 dark:bg-dbeats-dark-primary bg-gray-100`}
-            onMouseMove={handleMouseMove}
-            onMouseLeave={hanldeMouseLeave}
-          >
-            <a href={props.post.link} target="_blank" rel="noopener noreferrer">
-              {showLinkPreview && linkData ? (
-                <>
-                  <img
-                    src={linkData.image.url}
-                    alt="announcement_info"
-                    className="mx-auto h-full w-auto"
-                  />
-                </>
-              ) : null}
-            </a>
-          </div>
-        )}
+            {showImage ? (
+              <>
+                {props.post.post_image ? (
+                  <>
+                    <img
+                      src={props.post.post_image}
+                      alt="announcement_info"
+                      className="mx-auto h-full w-auto"
+                    />
+                  </>
+                ) : null}
+                {!props.post.post_image && showLinkPreview && linkData ? (
+                  <>
+                    <img
+                      src={linkData.image.url}
+                      alt="announcement_info"
+                      className="mx-auto h-full w-auto"
+                    />
+                  </>
+                ) : null}
+              </>
+            ) : props.post.post_video ? (
+              <ReactPlayer
+                width="100%"
+                height="100%"
+                playing={playing}
+                muted={false}
+                volume={0.5}
+                url={props.post.post_video}
+                controls={false}
+                className={classes.cards_videos}
+              />
+            ) : null}
+          </a>
+        </div>
+
         <div className={`px-5 w-full py-2`}>
           <p className="flex w-full justify-between text-black text-sm font-medium dark:text-gray-100">
             <div className="w-full">

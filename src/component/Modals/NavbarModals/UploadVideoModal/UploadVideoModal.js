@@ -272,14 +272,14 @@ const UploadVideoModal = (props) => {
                             id="file-upload3"
                             type="file"
                             name="videoImage"
-                            accept=".jpg,.png,.jpeg"
+                            accept=".jpg,.png,.jpeg,.gif,.webp"
                             onChange={onVideoFileChange}
                             className="sr-only "
                           />
                         </label>
                         <p className="pl-1"> </p>
                       </div>
-                      <p className="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
+                      <p className="text-xs text-gray-400">PNG, JPG, GIF</p>
                     </div>
                   </div>
                 </div>
@@ -320,7 +320,7 @@ const UploadVideoModal = (props) => {
                         </label>
                         <p className="pl-1"></p>
                       </div>
-                      <p className="text-xs text-gray-500">Mp4, MKV, MOV, AVI up to 250MB</p>
+                      <p className="text-xs text-gray-400">Mp4, MKV, MOV, AVI</p>
                     </div>
                   </div>
                 </div>
@@ -404,7 +404,7 @@ const UploadVideoModal = (props) => {
                           rows={3}
                           value={video.description}
                           onChange={handleVideoInputs}
-                          className="dark:placeholder-dbeats-dark-alt focus:ring-dbeats-dark-primary border-0 dark:bg-dbeats-dark-primary ring-dbeats-dark-secondary  ring-0   flex-1 block w-full rounded-md sm:text-sm  "
+                          className="dark:placeholder-gray-600 focus:ring-dbeats-dark-primary border-0 dark:bg-dbeats-dark-primary ring-dbeats-dark-secondary  ring-0   flex-1 block w-full rounded-md sm:text-sm  "
                           placeholder="Any Behind the scenes you'll like your Audience to know!"
                         />
                       </div>

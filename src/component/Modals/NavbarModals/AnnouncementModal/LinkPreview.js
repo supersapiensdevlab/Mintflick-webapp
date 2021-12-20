@@ -3,7 +3,7 @@ import classes from './LinkPreview.module.css';
 
 const mql = require('@microlink/mql');
 
-const LinkPreview = ({ linkurl, setShowLinkPreview }) => {
+const LinkPreview = ({ linkurl, setShowLinkPreview, setLinkPreviewData }) => {
   const [linkData, setLinkData] = useState(null);
 
   useEffect(() => {
@@ -21,6 +21,7 @@ const LinkPreview = ({ linkurl, setShowLinkPreview }) => {
 
     if (data.title.indexOf('Page Not Found') === -1) {
       setLinkData(data);
+      setLinkPreviewData(data);
     } else {
       setShowLinkPreview(false);
     }
