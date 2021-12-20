@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'Proxima';
+  src: local('Proxima'), url(./assets/fonts/reg/ProximaNova-Regular.otf) format('otf');
+}
+
+html {
+  overflow-x: hidden;
+}
+
+@media only screen and (max-width: 640px) {
+  body {
+    overflow-x: hidden;
+  }
+}
+
+.MuiContainer-root {
+  padding: 0 !important;
+}
+
+.sc-bwzfXH .bhRnqO {
+  top: calc(30% - 17.5px) !important;
+}

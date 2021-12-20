@@ -1,0 +1,37 @@
+.profile_pic {
+  margin-top: -100px;
+  margin-left: 50px;
+  z-index: 10;
+}
+
+.profile_sec {
+  display: flex;
+}
+
+.share_icons {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.share_btn {
+  border: none;
+  background: none;
+}
+
+.link_copy_btn {
+  display: block;
+  margin: auto;
+  padding: 8px;
+  margin-top: 25px;
+  margin-bottom: 15px;
+  width: 87%;
+  background-color: #00d3ff;
+  color: #fff;
+  border: none;
+  border-radius: 3px;
+}
+
+.cards_videos video {
+  border-radius: 2px;
+}

@@ -1,0 +1,80 @@
+
+.main_footer{
+  position:fixed;
+  margin-bottom: 0px;
+  padding-bottom: 0px;
+  bottom: 0;
+  background-color: #fff;
+  height: 100px;
+  width:100%;
+  box-shadow: 10px 10px 10px 10px #cfcfcf;
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  align-items: center;
+  z-index:2;
+}
+
+
+.root{
+  width:40%;
+}
+
+.player{
+  height:100px;
+  box-shadow: none;
+}
+
+.player svg {
+  color:#00d3ff;
+  font-size: 2.6rem;
+}
+
+.volume{
+  width:200px;
+  margin-left: 100px;
+  display: block;
+  margin-top: auto;
+}
+
+.volumeButton .bottomIcons{
+  color: #00d3ff;
+}
+
+.footer_img{
+  height: 5rem;
+  width:5rem;
+}
+
+.play_icon{
+  background: linear-gradient(315.71deg, #00D3FF 6.42%, #2A3CFE 104.19%);
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  padding: 3px;
+  color: #fff;
+}
+
+.pause_icon{
+  background: linear-gradient(315.71deg, #00D3FF 6.42%, #2A3CFE 104.19%);
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  padding: 5px;
+  color: #fff;
+}
+
+.fast_forward{
+  color: #00d3ff;
+}
+
+.footer_h1{
+  font-size: 15px;
+}
+
+.footer_person{
+  margin-top: auto;
+}
+
+
+

@@ -1,0 +1,69 @@
+.controlsWrapper {
+  visibility: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 100%;
+  background: rgb(255, 255, 255);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(221, 221, 221, 0) 55%,
+    rgba(0, 0, 0, 0.896796218487395) 100%
+  );
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.button {
+  margin: 1;
+}
+
+.controlIcons {
+  color: #777;
+  font-size: 20px;
+  transform: scale(0.9);
+}
+
+.controlIcons :hover {
+  color: #fff;
+  transform: scale(1);
+}
+
+.bottomIcons {
+  color: #fff;
+}
+
+.bottomIcons:hover {
+  color: #fff;
+}
+
+.playcontrolsWrapper {
+  visibility: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 100%;
+  width: 100%;
+  border-radius: 2px;
+  background: rgb(255, 255, 255);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(221, 221, 221, 0) 55%,
+    rgba(0, 0, 0, 0.896796218487395) 100%
+  );
+}
+
+.playbtn_position {
+  position: absolute;
+  top: 50%;
+  left: 46%;
+  transform: translateX(-50%);
+  transform: translateY(-50%);
+}

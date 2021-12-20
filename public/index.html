@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <!-- For Smart Link  -->
+
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/dbeats.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    <meta
+      property="og:title"
+      content="<div style='display:flex;align-items:center'>
+        <img src='https://beta.dbeats.live/favicon.ico' style='border-radius:10px' height='25px' width='25px'></img>
+        <span style='padding-left:4px'>DBeats</span>
+    </div>"
+    />
+    <meta
+      property="og:description"
+      content="<div style='font-size:16px; font-weight:400;'>Live Streaming Videos 🎥, Music &#127926; & NFTs Platform on the Blockchain 🚀</div>"
+    />
+    <meta
+      property="og:image"
+      content="https://user-images.githubusercontent.com/61380295/144381168-6cc06e33-bd03-403b-aa6e-06402297f3b6.png"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+      integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link
+      rel="stylesheet"
+      href=" https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/1.8.10/tailwind.min.css"
+    />
+
+    <script>
+      (function (d, s) {
+        var js = d.createElement(s),
+          sc = d.getElementsByTagName(s)[0];
+        js.src = 'https://paywall.unlock-protocol.com/static/unlock.latest.min.js';
+        sc.parentNode.insertBefore(js, sc);
+      })(document, 'script');
+    </script>
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/favicon.ico" />
+    <!--
+      manifest.json provides metadata used when your web app is installed on a
+      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
+    -->
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+
+    <script src="https://unpkg.com/react/umd/react.production.min.js" crossorigin></script>
+
+    <script src="https://unpkg.com/react-dom/umd/react-dom.production.min.js" crossorigin></script>
+
+    <script
+      src="https://unpkg.com/react-bootstrap@next/dist/react-bootstrap.min.js"
+      crossorigin
+    ></script>
+
+    <title>DBeats</title>
+  </head>
+  <body className="font-proxima-reg   ">
+    <script>
+      var unlockProtocolConfig = {
+        network: 4,
+        locks: {
+          '0x74Bb04781E361d554A31d57503f36810C95D067F': {
+            network: 4,
+            name: 'Dbeats-Event',
+          },
+        },
+        icon: 'https://unlock-protocol.com/static/images/svg/unlock-word-mark.svg',
+        callToAction: {
+          default: 'Purchase tickets before you can join the event!',
+        },
+      };
+    </script>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+
+    <div
+      className="bg-gradient-to-l from-blue-50 via-blue-50 to-white  dark:bg-gradient-to-l dark:from-dbeats-dark-primary  dark:to-dbeats-dark-primary"
+      id="root"
+    ></div>
+    <!--
+      This HTML file is a template.
+      If you open it directly in the browser, you will see an empty page.
+
+      You can add webfonts, meta tags, or analytics to this file.
+      The build step will place the bundled scripts into the <body> tag.
+
+      To begin the development, run `npm start` or `yarn start`.
+      To create a production bundle, use `npm run build` or `yarn build`.
+    -->
+  </body>
+  <script
+    src="https://cdn.jsdelivr.net/npm/jdenticon@3.1.1/dist/jdenticon.min.js"
+    integrity="sha384-l0/0sn63N3mskDgRYJZA6Mogihu0VY3CusdLMiwpJ9LFPklOARUcOiWEIGGmFELx"
+    crossorigin="anonymous"
+  ></script>
+</html>
