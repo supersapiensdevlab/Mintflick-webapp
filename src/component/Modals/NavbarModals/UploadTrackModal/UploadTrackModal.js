@@ -338,6 +338,7 @@ const UploadTrackModal = (props) => {
     storeWithProgress(e.target.value).then(() => {
       let formData = new FormData(); // Currently empty
       formData.append('userName', user.username);
+      formData.append('userImage', user.profile_image);
       formData.append('trackName', trackName);
       formData.append('genre', genre);
       formData.append('mood', mood);
@@ -360,7 +361,7 @@ const UploadTrackModal = (props) => {
         track.cid.length !== 0
       ) {
         axios
-          .post(`${process.env.REACT_APP_SERVER_URL}/upload`, formData, {
+          .post(`${process.env.REACT_APP_SERVER_URL}/upload_music`, formData, {
             headers: {
               'content-type': 'multipart/form-data',
             },

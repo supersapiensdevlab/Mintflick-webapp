@@ -5,6 +5,7 @@ export function theme({ darkMode }) {
         display: 'flex',
         position: 'relative',
         backgroundColor: !darkMode ? '#101010' : '#fff',
+        color: darkMode ? '#101010' : '#fff',
         font: '14px',
         minHeight: 24,
         width: '17rem',

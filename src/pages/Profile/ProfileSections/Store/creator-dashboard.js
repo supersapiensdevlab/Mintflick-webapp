@@ -7,7 +7,7 @@ import { useHistory } from 'react-router-dom';
 import Web3Modal from 'web3modal';
 import Market from '../../../../artifacts/contracts/Market.sol/NFTMarket.json';
 import NFT from '../../../../artifacts/contracts/NFT.sol/NFT.json';
-import { nftaddress, nftmarketaddress, rpc_url } from '../config';
+import { nftaddress, nftmarketaddress } from '../config';
 
 const client = ipfsHttpClient('https://ipfs.infura.io:5001/api/v0');
 

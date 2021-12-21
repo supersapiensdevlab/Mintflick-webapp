@@ -373,41 +373,28 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                   </div>
 
                   <div className="lg:grid lg:grid-flow-rows lg:grid-cols-3  font-bold 2xl:text-xl lg:text-sm text-gray-20 lg:gap-4 flex justify-between items-center mb-2 md:mb-5">
-                    <div className="mx-auto 2xl:px-4 px-2 flex flex-col lg:flex-row justify-center items-center">
-                      <div className=" w-full mr-2 flex justify-center">
-                        {user.videos ? user.videos.length : 0}{' '}
-                      </div>
-                      <div className="2xl:text-sm lg:text-xs">VIDEOS</div>
-                    </div>
                     <div className="mx-auto lg:px-4 px-2 flex flex-col lg:flex-row justify-center items-center">
                       <div className=" w-full mr-2 flex justify-center ">
                         {/*{user.subscribers ? <>{user.subscribers.length}</> : 0}{" "}*/}
                         {followers}{' '}
                       </div>
-                      {privateUser ? (
-                        <Link to={`/profile/${urlUsername}/followers`}>
-                          <div className="cursor-pointer 2xl:text-sm lg:text-xs hover:underline hover:text-gray-50">
-                            FOLLOWERS
-                          </div>
-                        </Link>
-                      ) : (
-                        <div className="2xl:text-sm lg:text-xs">FOLLOWERS</div>
-                      )}
+
+                      <Link to={`/profile/${urlUsername}/followers`}>
+                        <div className="cursor-pointer 2xl:text-sm lg:text-xs hover:underline hover:text-gray-50">
+                          FOLLOWERS
+                        </div>
+                      </Link>
                     </div>
                     <div className="mx-auto lg:px-4 px-2 flex flex-col lg:flex-row justify-center items-center">
                       <div className=" w-full mr-2 flex justify-center ">
                         {/*{user.subscribed ? <>{user.subscribed.length}</> : 0}{" "}*/}
                         {following}{' '}
                       </div>
-                      {privateUser ? (
-                        <Link to={`/profile/${urlUsername}/following`}>
-                          <div className="cursor-pointer 2xl:text-sm lg:text-xs hover:underline hover:text-gray-50">
-                            FOLLOWING
-                          </div>
-                        </Link>
-                      ) : (
-                        <div className=" 2xl:text-sm lg:text-xs">FOLLOWING</div>
-                      )}
+                      <Link to={`/profile/${urlUsername}/following`}>
+                        <div className="cursor-pointer 2xl:text-sm lg:text-xs hover:underline hover:text-gray-50">
+                          FOLLOWING
+                        </div>
+                      </Link>
                     </div>
                   </div>
                 </div>
@@ -491,7 +478,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                 </div>
               </Route>
 
-              <Route path={`/profile/:username/Activity`}>
+              <Route path={`/profile/:username/activity`}>
                 <div className=" sm:px-5  pb-5">
                   {user.your_reactions.length > 0 ? (
                     <div>
@@ -551,74 +538,78 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                 </div>
               </Route>
 
-              {privateUser ? (
-                <Route path={`/profile/:username/following`}>
-                  <div className="pt-4 pl-4">
+              <Route path={`/profile/:username/following`}>
+                <div className="pt-4 pl-4">
+                  {privateUser ? (
                     <h2 className="text-white opacity-40">
                       Pinned Channels will be shown on left sidebar.
                     </h2>
-                    <div className=" grid grid-cols-2 sm:grid-cols-4 grid-flow-row ">
-                      {user.followee_count ? (
-                        <div>
-                          {user.followee_count.map((following, i) => {
-                            ////console.log(playbackUser)
-                            return (
-                              <div
-                                key={i}
-                                className="flex 2xl:text-lg lg:text-sm text-md shadow  w-full  lg:w-full   my-3 lg:my-2.5 py-2 rounded dark:hover:bg-dbeats-dark-alt dark:bg-dbeats-dark-secondary dark:text-gray-100 "
-                              >
-                                {pinnedData.indexOf(following) > -1 ? (
-                                  <i
-                                    className="fas fa-thumbtack mx-3 my-auto 2xl:text-xl lg:text-md cursor-pointer "
-                                    onClick={() => UnPinningUser(following)}
-                                  ></i>
-                                ) : (
-                                  <i
-                                    className="fas fa-thumbtack mx-3 my-auto 2xl:text-xl lg:text-md  opacity-20 hover:opacity-100 cursor-pointer -rotate-45 transform"
-                                    onClick={() => PinningUser(following)}
-                                  ></i>
-                                )}
-                                <h2>{following}</h2>
-                              </div>
-                            );
-                          })}
-                        </div>
-                      ) : (
-                        <p className="2xl:text-lg lg:text-sm dark:text-white">0 Subscribed</p>
-                      )}
-                    </div>
-                  </div>
-                </Route>
-              ) : null}
-
-              {privateUser ? (
-                <Route path={`/profile/:username/followers`}>
-                  <div className="pt-4 pl-4">
-                    <h2 className="text-white opacity-40">Users You Follow</h2>
-                    <div className=" grid grid-cols-2 sm:grid-cols-4 grid-flow-row ">
-                      {user.follower_count ? (
-                        <div>
-                          {user.follower_count.map((follower, i) => {
-                            ////console.log(playbackUser)
-                            return (
-                              <a href={`/profile/${follower}`}>
-                                <div
-                                  key={i}
-                                  className="flex 2xl:text-lg lg:text-sm text-md shadow  w-full  lg:w-full pl-4  my-3 lg:my-2.5 py-2 rounded dark:hover:bg-dbeats-dark-alt dark:bg-dbeats-dark-secondary dark:text-gray-100 "
-                                >
-                                  <h2>{follower}</h2>
-                                </div>
+                  ) : null}
+                  <div className=" grid grid-cols-2 sm:grid-cols-4 grid-flow-row ">
+                    {user.followee_count ? (
+                      <div>
+                        {user.followee_count.map((following, i) => {
+                          ////console.log(playbackUser)
+                          return (
+                            <div
+                              key={i}
+                              className="flex 2xl:text-lg lg:text-sm text-md shadow pl-4 w-full  lg:w-full   my-3 lg:my-2.5 py-2 rounded dark:hover:bg-dbeats-dark-alt dark:bg-dbeats-dark-secondary dark:text-gray-100 "
+                            >
+                              {privateUser ? (
+                                <>
+                                  {pinnedData.indexOf(following) > -1 ? (
+                                    <i
+                                      className="fas fa-thumbtack mx-3 my-auto 2xl:text-xl lg:text-md cursor-pointer "
+                                      onClick={() => UnPinningUser(following)}
+                                    ></i>
+                                  ) : (
+                                    <i
+                                      className="fas fa-thumbtack mx-3 my-auto 2xl:text-xl lg:text-md  opacity-20 hover:opacity-100 cursor-pointer -rotate-45 transform"
+                                      onClick={() => PinningUser(following)}
+                                    ></i>
+                                  )}
+                                </>
+                              ) : null}
+                              <a href={`/profile/${following}`}>
+                                <h2 className="hover:underline">{following}</h2>
                               </a>
-                            );
-                          })}
-                        </div>
-                      ) : (
-                        <p className="2xl:text-lg lg:text-sm dark:text-white">0 Subscribed</p>
-                      )}
-                    </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    ) : (
+                      <p className="2xl:text-lg lg:text-sm dark:text-white">0 Subscribed</p>
+                    )}
                   </div>
-                </Route>
-              ) : null}
+                </div>
+              </Route>
+
+              <Route path={`/profile/:username/followers`}>
+                <div className="pt-4 pl-4">
+                  {privateUser ? <h2 className="text-white opacity-40">Users You Follow</h2> : null}
+                  <div className=" grid grid-cols-2 sm:grid-cols-4 grid-flow-row ">
+                    {user.follower_count ? (
+                      <div>
+                        {user.follower_count.map((follower, i) => {
+                          ////console.log(playbackUser)
+                          return (
+                            <div
+                              key={i}
+                              className="flex 2xl:text-lg lg:text-sm text-md shadow  w-full  lg:w-full pl-4  my-3 lg:my-2.5 py-2 rounded dark:hover:bg-dbeats-dark-alt dark:bg-dbeats-dark-secondary dark:text-gray-100 "
+                            >
+                              <a href={`/profile/${follower}`}>
+                                <h2 className="hover:underline">{follower}</h2>
+                              </a>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    ) : (
+                      <p className="2xl:text-lg lg:text-sm dark:text-white">0 Subscribed</p>
+                    )}
+                  </div>
+                </div>
+              </Route>
             </Switch>
           </Tab.Group>
         </div>

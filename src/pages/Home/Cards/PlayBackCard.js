@@ -86,7 +86,6 @@ const PlayBackCard = (props) => {
                     {props.playbackUserData.videos[index].videoName.slice(0, 45)}
                     {props.playbackUserData.videos[index].videoName.length > 45 ? '...' : ''}
                   </span>
-                  {console.log(props.playbackUserData)}
                   <br />
                   <div className="w-full   ">
                     <a

@@ -161,6 +161,7 @@ const UploadVideoModal = (props) => {
       storeWithProgress(e.target.value).then(() => {
         let formData = new FormData(); // Currently empty
         formData.append('userName', user.username);
+        formData.append('userImage', user.profile_image);
 
         formData.append('videoName', videoName);
 
@@ -184,7 +185,7 @@ const UploadVideoModal = (props) => {
           video.videoName.length !== 0
         ) {
           axios
-            .post(`${process.env.REACT_APP_SERVER_URL}/upload-video`, formData, {
+            .post(`${process.env.REACT_APP_SERVER_URL}/upload_video`, formData, {
               headers: {
                 'content-type': 'multipart/form-data',
               },
