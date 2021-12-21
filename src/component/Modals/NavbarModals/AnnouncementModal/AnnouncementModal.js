@@ -199,8 +199,6 @@ const AnnouncementModal = (props) => {
         formData.append('announcementHash', announcement.cid);
         formData.append('previewData', JSON.stringify(linkPreviewData));
 
-        console.log(linkPreviewData);
-
         console.log('anu', announcement);
 
         if (announcement.postImage?.length !== 0 || announcement.postVideo?.length !== 0) {
@@ -235,8 +233,6 @@ const AnnouncementModal = (props) => {
       formData.append('timestamp', moment().toDate().getTime());
       formData.append('eventlink', announcement.event_link);
       formData.append('previewData', JSON.stringify(linkPreviewData));
-
-      console.log(linkPreviewData);
 
       axios
         .post(`${process.env.REACT_APP_SERVER_URL}/user/announcement`, formData, {

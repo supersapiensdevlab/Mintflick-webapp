@@ -2,6 +2,8 @@ import { Tab } from '@headlessui/react';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import Carousel from 'react-grid-carousel';
+import { Route, Switch, useHistory } from 'react-router';
+import { Link } from 'react-router-dom';
 import person from '../../../../assets/images/profile.svg';
 import background from '../../../../assets/images/wallpaper.jpg';
 import {
@@ -25,6 +27,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
   const [subscribeLoader, setSubscribeLoader] = useState(true);
 
   const handleShow = () => setShow(true);
+  const navigate = useHistory();
 
   const [showUploadCoverImage, setShowUploadCoverImage] = useState(false);
   const [showUploadProfileImage, setShowUploadProfileImage] = useState(false);
@@ -47,7 +50,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
     let value = JSON.parse(window.localStorage.getItem('user'));
     let tabno = tabname;
     switch (tabno) {
-      case 'announcements':
+      case 'posts':
         setTabIndex(0);
         break;
       case 'videos':
@@ -56,16 +59,14 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
       case 'music':
         setTabIndex(2);
         break;
-      case 'playlists':
+      case 'activity':
         setTabIndex(3);
         break;
-      case 'reposts':
+      case 'playlists':
         setTabIndex(4);
         break;
-      case 'subscribed_channels':
-        setTabIndex(5);
-        break;
       default:
+        navigate.push(`/profile/${urlUsername}/posts`);
         setTabIndex(0);
     }
     // //console.log(value);
@@ -261,30 +262,34 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
       <Tab
         className={({ selected }) =>
           classNames(
-            'w-full py-2.5 text-sm leading-5 font-semibold text-gray-400 2xl:text-lg lg:text-xs ',
+            'w-full  text-sm leading-5 font-semibold text-gray-400 2xl:text-lg lg:text-xs ',
             selected
               ? 'text-dbeats-light font-bold border-b-2 border-dbeats-light'
               : 'hover:bg-black/[0.12]  dark:hover:text-gray-100 hover:text-gray-700',
           )
         }
       >
-        {text}
+        <Link to={`/profile/${urlUsername}/${text.toLowerCase()}`}>
+          <div className="w-full py-2.5 font-semibold text-gray-400 2xl:text-lg lg:text-xs ">
+            {text}
+          </div>
+        </Link>
       </Tab>
     );
   };
 
   return (
     <div className={`${darkMode && 'dark'}   h-max lg:col-span-5 col-span-6 w-full   `}>
-      <div id="display_details" className="   h-full">
+      <div id="display_details" className="h-full 2xl:pt-16 lg:pt-12">
         <div className="bg-white dark:bg-dbeats-dark-primary 2xl:pb-3 lg:pb-2">
           {privateUser ? (
             <div
-              className="ml-2 mt-2 absolute dark:bg-dbeats-dark-alt dark:hover:bg-dbeats-dark hover:bg-white
-              hover:text-dbeats-light dark:hover:text-white rounded-full z-2 text-white dark:text-gray-400"
+              className="ml-2 mt-2 absolute dark:bg-dbeats-dark-alt dark:hover:bg-dbeats-dark dark:text-gray-400 hover:bg-gray-200
+          hover:text-dbeats-light dark:hover:text-white text-dbeats-light bg-white  rounded-full z-2 w-7 h-7 items-center"
             >
               <i
-                className="fas fa-pen 2xl:p-3 lg:p-1.5 
-                cursor-pointer"
+                className="fas fa-pen p-1.5 
+       cursor-pointer align-middle items-center  "
                 onClick={() => setShowUploadCoverImage(true)}
               ></i>
             </div>
@@ -355,7 +360,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                         hover:text-dbeats-light dark:hover:text-white text-dbeats-light bg-white  rounded-full z-2 -mt-4 -mr-2 w-7 h-7 items-center"
                           >
                             <i
-                              className="fas fa-pen  2xl:p-2.5 lg:p-1.5 
+                              className="fas fa-pen p-1.5 
                      cursor-pointer align-middle items-center  "
                               onClick={() => setShowUploadProfileImage(true)}
                             ></i>
@@ -379,14 +384,30 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                         {/*{user.subscribers ? <>{user.subscribers.length}</> : 0}{" "}*/}
                         {followers}{' '}
                       </div>
-                      <div className="2xl:text-sm lg:text-xs">FOLLOWERS</div>
+                      {privateUser ? (
+                        <Link to={`/profile/${urlUsername}/followers`}>
+                          <div className="cursor-pointer 2xl:text-sm lg:text-xs hover:underline hover:text-gray-50">
+                            FOLLOWERS
+                          </div>
+                        </Link>
+                      ) : (
+                        <div className="2xl:text-sm lg:text-xs">FOLLOWERS</div>
+                      )}
                     </div>
                     <div className="mx-auto lg:px-4 px-2 flex flex-col lg:flex-row justify-center items-center">
                       <div className=" w-full mr-2 flex justify-center ">
                         {/*{user.subscribed ? <>{user.subscribed.length}</> : 0}{" "}*/}
                         {following}{' '}
                       </div>
-                      <div className="2xl:text-sm lg:text-xs">FOLLOWING</div>
+                      {privateUser ? (
+                        <Link to={`/profile/${urlUsername}/following`}>
+                          <div className="cursor-pointer 2xl:text-sm lg:text-xs hover:underline hover:text-gray-50">
+                            FOLLOWING
+                          </div>
+                        </Link>
+                      ) : (
+                        <div className=" 2xl:text-sm lg:text-xs">FOLLOWING</div>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -402,8 +423,8 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
               })}
             </Tab.List>
 
-            <Tab.Panels className="dark:bg-dbeats-dark-primary text-gray-900  ">
-              <Tab.Panel className="">
+            <Switch>
+              <Route path={`/profile/:username/posts`}>
                 <div className=" sm:px-5  pb-5">
                   {postsData && postsData.length > 0 ? (
                     <div>
@@ -420,8 +441,8 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                     <p className="2xl:text-lg lg:text-sm dark:text-white">No Posts till now</p>
                   )}
                 </div>
-              </Tab.Panel>
-              <Tab.Panel className="">
+              </Route>
+              <Route path={`/profile/:username/videos`}>
                 <div className=" sm:px-5  pb-5">
                   {user.videos && user.videos.length > 0 ? (
                     <div>
@@ -444,9 +465,9 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                     <p className="2xl:text-lg lg:text-sm dark:text-white">No Videos till now</p>
                   )}
                 </div>
-              </Tab.Panel>
+              </Route>
 
-              <Tab.Panel className="">
+              <Route path={`/profile/:username/music`}>
                 <div className="sm:px-5  pb-5">
                   {user.tracks && user.tracks.length > 0 ? (
                     <div className="w-full">
@@ -468,9 +489,9 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                     <p className="2xl:text-lg lg:text-sm dark:text-white">No Music till now</p>
                   )}
                 </div>
-              </Tab.Panel>
+              </Route>
 
-              <Tab.Panel>
+              <Route path={`/profile/:username/Activity`}>
                 <div className=" sm:px-5  pb-5">
                   {user.your_reactions.length > 0 ? (
                     <div>
@@ -493,9 +514,9 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                     <p className="2xl:text-lg lg:text-sm dark:text-white">No Latest Activity</p>
                   )}
                 </div>
-              </Tab.Panel>
+              </Route>
 
-              <Tab.Panel className="">
+              <Route path={`/profile/:username/playlists`}>
                 <div className="px-2 2xl:pt-5 lg:pt-2 pb-5">
                   {user.my_playlists && user.my_playlists.length > 0 ? (
                     <div>
@@ -528,46 +549,77 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                     <p className="2xl:text-lg lg:text-sm dark:text-white">No Existing PlayLists</p>
                   )}
                 </div>
-              </Tab.Panel>
+              </Route>
 
               {privateUser ? (
-                <Tab.Panel className="px-5 2xl:pt-10 lg:pt-5 pb-5">
-                  <h2 className="text-white opacity-40">
-                    Pinned Channels will be shown on left sidebar.
-                  </h2>
-                  <div className=" grid grid-cols-2 sm:grid-cols-4 grid-flow-row ">
-                    {user.followee_count ? (
-                      <div>
-                        {user.followee_count.map((following, i) => {
-                          ////console.log(playbackUser)
-                          return (
-                            <div
-                              key={i}
-                              className="flex 2xl:text-lg lg:text-sm text-md shadow  w-full  lg:w-full   my-3 lg:my-2.5 py-2 rounded dark:hover:bg-dbeats-dark-alt dark:bg-dbeats-dark-secondary dark:text-gray-100 "
-                            >
-                              {pinnedData.indexOf(following) > -1 ? (
-                                <i
-                                  className="fas fa-thumbtack mx-3 my-auto 2xl:text-xl lg:text-md cursor-pointer "
-                                  onClick={() => UnPinningUser(following)}
-                                ></i>
-                              ) : (
-                                <i
-                                  className="fas fa-thumbtack mx-3 my-auto 2xl:text-xl lg:text-md  opacity-20 hover:opacity-100 cursor-pointer -rotate-45 transform"
-                                  onClick={() => PinningUser(following)}
-                                ></i>
-                              )}
-                              <h2>{following}</h2>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    ) : (
-                      <p className="2xl:text-lg lg:text-sm dark:text-white">0 Subscribed</p>
-                    )}
+                <Route path={`/profile/:username/following`}>
+                  <div className="pt-4 pl-4">
+                    <h2 className="text-white opacity-40">
+                      Pinned Channels will be shown on left sidebar.
+                    </h2>
+                    <div className=" grid grid-cols-2 sm:grid-cols-4 grid-flow-row ">
+                      {user.followee_count ? (
+                        <div>
+                          {user.followee_count.map((following, i) => {
+                            ////console.log(playbackUser)
+                            return (
+                              <div
+                                key={i}
+                                className="flex 2xl:text-lg lg:text-sm text-md shadow  w-full  lg:w-full   my-3 lg:my-2.5 py-2 rounded dark:hover:bg-dbeats-dark-alt dark:bg-dbeats-dark-secondary dark:text-gray-100 "
+                              >
+                                {pinnedData.indexOf(following) > -1 ? (
+                                  <i
+                                    className="fas fa-thumbtack mx-3 my-auto 2xl:text-xl lg:text-md cursor-pointer "
+                                    onClick={() => UnPinningUser(following)}
+                                  ></i>
+                                ) : (
+                                  <i
+                                    className="fas fa-thumbtack mx-3 my-auto 2xl:text-xl lg:text-md  opacity-20 hover:opacity-100 cursor-pointer -rotate-45 transform"
+                                    onClick={() => PinningUser(following)}
+                                  ></i>
+                                )}
+                                <h2>{following}</h2>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      ) : (
+                        <p className="2xl:text-lg lg:text-sm dark:text-white">0 Subscribed</p>
+                      )}
+                    </div>
                   </div>
-                </Tab.Panel>
+                </Route>
               ) : null}
-            </Tab.Panels>
+
+              {privateUser ? (
+                <Route path={`/profile/:username/followers`}>
+                  <div className="pt-4 pl-4">
+                    <h2 className="text-white opacity-40">Users You Follow</h2>
+                    <div className=" grid grid-cols-2 sm:grid-cols-4 grid-flow-row ">
+                      {user.follower_count ? (
+                        <div>
+                          {user.follower_count.map((follower, i) => {
+                            ////console.log(playbackUser)
+                            return (
+                              <a href={`/profile/${follower}`}>
+                                <div
+                                  key={i}
+                                  className="flex 2xl:text-lg lg:text-sm text-md shadow  w-full  lg:w-full pl-4  my-3 lg:my-2.5 py-2 rounded dark:hover:bg-dbeats-dark-alt dark:bg-dbeats-dark-secondary dark:text-gray-100 "
+                                >
+                                  <h2>{follower}</h2>
+                                </div>
+                              </a>
+                            );
+                          })}
+                        </div>
+                      ) : (
+                        <p className="2xl:text-lg lg:text-sm dark:text-white">0 Subscribed</p>
+                      )}
+                    </div>
+                  </div>
+                </Route>
+              ) : null}
+            </Switch>
           </Tab.Group>
         </div>
       </div>

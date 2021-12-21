@@ -38,7 +38,7 @@ const PinnedPanel = (props) => {
   return (
     <div className={` w-full fixed top-0 ${darkMode && 'dark'} z-2 -ml-1`}>
       <div
-        className={`hidden lg:block pt-16 bg-white w-max shadow  z-10 h-full fixed dark:bg-dbeats-dark-primary 2xl:px-3 lg:px-2  dark:text-gray-100  flex flex-col justify-center `}
+        className={`hidden 2xl:block lg:block 2xl:pt-16 lg:pt-14 bg-white w-max shadow  z-10 h-full fixed dark:bg-dbeats-dark-primary 2xl:px-3 lg:px-2  dark:text-gray-100  flex flex-col justify-center `}
       >
         {/* Subscribed User Avatar */}
         {pinnedData.map((pinnedUser, i) => {

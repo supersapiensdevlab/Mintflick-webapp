@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
+import { Image } from 'react-img-placeholder';
 import maticLogo from '../../../../assets/graphics/polygon-matic-logo.svg';
 import dbeatsLogoBnW from '../../../../assets/images/Logo/logo-blacknwhite.png';
-import { Image } from 'react-img-placeholder';
 
 const NFTCard = ({ nft, buyNft }) => {
   //console.log(nft);
@@ -67,6 +67,7 @@ const NFTCard = ({ nft, buyNft }) => {
               <img
                 className="h-5 w-5 ml-1 text-white self-center align-middle items-center"
                 src={maticLogo}
+                alt="maticLogo"
               ></img>
             </span>
           </div>

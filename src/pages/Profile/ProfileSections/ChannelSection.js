@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import Modal from 'react-awesome-modal';
 import { Col, Container, Row } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 const ChannelSection = (props) => {
   const [showChannelModal, setShowChannelModal] = useState(false);
@@ -39,7 +40,7 @@ const ChannelSection = (props) => {
     <div
       className={`${
         darkMode && 'dark'
-      } pl-3 h-full  hidden lg:block  bg-gradient-to-b from-blue-50 via-blue-50 to-white  dark:bg-gradient-to-b dark:from-dbeats-dark-secondary  dark:to-dbeats-dark-primary`}
+      } 2xl:pl-3 h-full  hidden lg:block  bg-gradient-to-b from-blue-50 via-blue-50 to-white  dark:bg-gradient-to-b dark:from-dbeats-dark-secondary  dark:to-dbeats-dark-primary`}
     >
       <div
         id="recommended_channel"
@@ -54,7 +55,7 @@ const ChannelSection = (props) => {
           )}{' '}
         </div> */}
 
-        <div className="2xl:px-5 lg:px-2 2xl:pt-10 lg:pt-5 fixed ">
+        <div className="2xl:px-5 lg:px-0 2xl:pt-10 lg:pt-5 fixed ">
           <h5 className="font-semibold text-base dark:text-gray-200 w-full 2xl:text-lg lg:text-sm relative pl-2">
             {' '}
             {props.user.name}&apos;s Channels
@@ -72,7 +73,7 @@ const ChannelSection = (props) => {
             return (
               <div key={i} className="  2xl:pb-2 2xl:pt-2 lg:my-1 lg:mt-3 2xl:mt-0">
                 <div>
-                  <a href={`/profile/${props.user.username}/${channel.type}`}>
+                  <Link to={`/profile/${props.user.username}/${channel.type}`}>
                     <div className="text-gray-600   cursor-pointer 2xl:text-base lg:text-xs dark:text-gray-200 hover:text-white w-full justify-between self-center hover:bg-dbeats-light dark:hover:bg-dbeats-dark-secondary dark:hover:text-dbeats-light  rounded 2xl:p-2 lg:p-1.5 relative">
                       {' '}
                       {channel.type === 'text' ? <i className="fas fa-hashtag mr-2"></i> : ''}
@@ -86,7 +87,7 @@ const ChannelSection = (props) => {
                       {channel.name}
                       {/* <i className="fas fa-user-plus ml-5 absolute right-3 self-center text-center mt-1"></i> */}
                     </div>
-                  </a>
+                  </Link>
 
                   {/* <span className="text-gray-400 text-sm cursor-pointer ml-5 dark:hover:text-white hover:text-dbeats-light">
                     {' '}

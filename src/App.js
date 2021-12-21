@@ -12,7 +12,7 @@ import Loader from './component/Loader/Loader';
 //import BottomBar from "./component/bottom-player.component";
 import NFTFeed from './component/nft.component';
 import PageNotFound from './component/PageNotFound/PageNotFound';
-import PinnedPanel from './component/Subscribe_Panel/Pinned_Panel';
+import PinnedPanel from './component/Pinned_Panel/Pinned_Panel';
 import Track from './component/track.component';
 import ChatRoom from './pages/Profile/ProfileSections/ChatRoom/ChatRoom';
 import Ticket from './pages/Profile/ProfileSections/Ticket/Ticket';

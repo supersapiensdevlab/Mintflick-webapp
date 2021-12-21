@@ -3,7 +3,6 @@ import axios from 'axios';
 import React, { Fragment, useEffect, useRef, useState } from 'react';
 import { push as Menu } from 'react-burger-menu';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
 import { toggleDarkMode } from '../../actions/index';
 import logoDark from '../../assets/images/dark-logo.svg';
 import CircleLogo from '../../assets/images/dbeats-logo.png';
@@ -11,9 +10,9 @@ import logo from '../../assets/images/white-logo.svg';
 import useWeb3Modal from '../../hooks/useWeb3Modal';
 import {
   AnnouncementModal,
-  UploadVideoModal,
-  UploadTrackModal,
   UploadNFTModal,
+  UploadTrackModal,
+  UploadVideoModal,
 } from '../Modals/NavbarModals';
 import Toggle from '../toggle.component';
 import classes from './Navbar.module.css';
@@ -119,17 +118,12 @@ const NavBar = () => {
       if (value.videos) {
         value.videos.map(async (video, index) => {
           if (video.videoName.toLowerCase().includes(searchWord.toLowerCase())) {
-            await axios
-              .get(`${process.env.REACT_APP_SERVER_URL}/user/${value.username}`)
-              .then((resData) => {
-                let data = {
-                  username: value.username,
-                  index: index,
-                  video: video,
-                  profile: resData.profile_image,
-                };
-                newVideoFilter.push(data);
-              });
+            let data = {
+              username: value.username,
+              index: index,
+              video: video,
+            };
+            newVideoFilter.push(data);
           }
           return 0;
         });
@@ -373,10 +367,8 @@ const NavBar = () => {
                   value={wordEntered}
                   onChange={handleFilter}
                 ></input>
-                <Link
-                  to={{
-                    pathname: '/search',
-                  }}
+                <a
+                  href={'/search'}
                   className="self-center text-gray-900"
                   onClick={() => {
                     setFilteredData([]);
@@ -399,7 +391,7 @@ const NavBar = () => {
                       d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
                     />
                   </svg>
-                </Link>
+                </a>
               </div>
               <div
                 ref={wrapperRef}

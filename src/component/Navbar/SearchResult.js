@@ -38,8 +38,8 @@ const SearchResult = () => {
                           <SplideSlide className=" md:px-5 " key={i}>
                             <a href={`/profile/${value.username}`}>
                               <img
-                                className="mx-auto   self-center  cursor-pointer"
-                                src={value.profile}
+                                className="mx-auto  h-32 w-32 rounded-full self-center  cursor-pointer"
+                                src={value.profile_image ? value.profile_image : logo}
                                 alt={`Profile ${i}`}
                               />
                             </a>

@@ -6,8 +6,6 @@ import Market from '../../../../artifacts/contracts/Market.sol/NFTMarket.json';
 import NFT from '../../../../artifacts/contracts/NFT.sol/NFT.json';
 import { nftaddress, nftmarketaddress } from '../config';
 import NFTCard from './NFTCard';
-// const CONTRACT_ADDRESS = '0x03160747b94be986261d9340d01128d4d5566383';
-import NFTMarket from './NFTMarket';
 import UserOwnedAssets from './UserOwnedAssets';
 
 export default function NFTStore() {
