@@ -91,9 +91,11 @@ export default function Track() {
         console.log(error);
       });
     //console.log(data.data[0].tracks);
-    let tracksArray = [];
-    tracksArray.push(data.data[0].tracks);
-    if (data) setDbeatsTrack({ dbeatsTracks: data.data[0].tracks });
+    if (data.data[0]) {
+      let tracksArray = [];
+      tracksArray.push(data.data[0].tracks);
+      if (data) setDbeatsTrack({ dbeatsTracks: data.data[0].tracks });
+    }
   };
 
   useEffect(() => {
@@ -485,7 +487,7 @@ export default function Track() {
                                           ? favorites.indexOf(todo.id) > -1
                                             ? () => removeFavorite(todo.id)
                                             : () => setFavorite(todo.id)
-                                          : false
+                                          : null
                                       }
                                       className={`${
                                         favorites
@@ -621,7 +623,7 @@ export default function Track() {
                                         ? favorites.indexOf(todo.id) > -1
                                           ? () => removeFavorite(todo.id)
                                           : () => setFavorite(todo.id)
-                                        : false
+                                        : null
                                     }
                                     className={`${
                                       favorites

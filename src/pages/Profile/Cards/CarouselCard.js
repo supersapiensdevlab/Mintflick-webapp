@@ -41,7 +41,7 @@ const CarouselCard = (props) => {
         <div
           className={`cursor-pointer h-44 lg:h-32 2xl:h-48 md:h-40 lg:w-1/3 w-full  my-auto dark:bg-dbeats-dark-primary `}
         >
-          <a href={`/playback/${props.username}/${props.index}`}>
+          <a href={`/playback/${props.username}/${props.playbackUserData.videoId}`}>
             <ReactPlayer
               width="100%"
               height="100%"

@@ -43,7 +43,10 @@ const PlayBackCard = (props) => {
           <div
             className={`cursor-pointer w-full 2xl:h-52 lg:h-32 h-44 dark:bg-dbeats-dark-primary bg-black `}
           >
-            <a href={`/playback/${props.playbackUserData.username}/${index}`} className=" ">
+            <a
+              href={`/playback/${props.playbackUserData.username}/${props.playbackUserData.videos[index].videoId}`}
+              className=" "
+            >
               <ReactPlayer
                 width="100%"
                 height="100%"

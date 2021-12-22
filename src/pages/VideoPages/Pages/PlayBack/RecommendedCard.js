@@ -19,14 +19,18 @@ const RecommendedCard = (props) => {
   return (
     <div className={`${props.darkMode && 'dark'} flex w-full`}>
       <div className="cursor-pointer 2xl:h-28 lg:h-20 dark:bg-dbeats-dark-primary">
-        <a href={`/playback/${props.value.username}/0`}>
+        <a
+          href={`/playback/${props.value.username}/${
+            props.value.videos[props.value.videos.length - 1].videoId
+          }`}
+        >
           <ReactPlayer
             className="justify-self-center"
             width={window.innerWidth >= '1536' ? '12rem' : '9rem'}
             height="100%"
             playing={playing}
             volume={0.5}
-            url={props.value.videos[0].link}
+            url={props.value.videos[props.value.videos.length - 1].link}
             controls={false}
             onMouseMove={handleMouseMove}
             onMouseLeave={hanldeMouseLeave}

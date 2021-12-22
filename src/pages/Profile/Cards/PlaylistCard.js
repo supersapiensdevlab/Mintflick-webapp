@@ -53,7 +53,7 @@ const PlaylistCard = (props) => {
           className={`flex items-center justify-center cursor-pointer 2xl:h-48 lg:h-32 md:h-36 h-44 dark:bg-black w-full`}
         >
           <a
-            href={`/playback/${props.playlistData.username}/${props.playlistData.index}`}
+            href={`/playback/${props.playlistData.username}/${props.playlistData.data.videoId}`}
             className="2xl:h-48 lg:h-32 md:h-36 h-44"
           >
             <ReactPlayer

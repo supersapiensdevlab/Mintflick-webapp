@@ -415,38 +415,45 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                 <div className=" sm:px-5  pb-5">
                   {postsData && postsData.length > 0 ? (
                     <div>
-                      {postsData.map((post, i) => {
-                        ////console.log(playbackUser)
-                        return (
-                          <div key={i}>
-                            <AnnouncementCard post={post} index={i} username={user.username} />
-                          </div>
-                        );
-                      })}
+                      {postsData
+                        .slice(0)
+                        .reverse()
+                        .map((post, i) => {
+                          ////console.log(playbackUser)
+                          return (
+                            <div key={i}>
+                              <AnnouncementCard post={post} index={i} username={user.username} />
+                            </div>
+                          );
+                        })}
                     </div>
                   ) : (
                     <p className="2xl:text-lg lg:text-sm dark:text-white">No Posts till now</p>
                   )}
                 </div>
               </Route>
+
               <Route path={`/profile/:username/videos`}>
                 <div className=" sm:px-5  pb-5">
                   {user.videos && user.videos.length > 0 ? (
                     <div>
-                      {user.videos.map((playbackUser, i) => {
-                        ////console.log(playbackUser)
-                        return (
-                          <div key={i}>
-                            <CarouselCard
-                              videono={i}
-                              playbackUserData={playbackUser}
-                              index={i}
-                              username={user.username}
-                              type="video"
-                            />
-                          </div>
-                        );
-                      })}
+                      {user.videos
+                        .slice(0)
+                        .reverse()
+                        .map((playbackUser, i) => {
+                          ////console.log(playbackUser)
+                          return (
+                            <div key={i}>
+                              <CarouselCard
+                                videono={i}
+                                playbackUserData={playbackUser}
+                                index={user.videos.length - 1 - i}
+                                username={user.username}
+                                type="video"
+                              />
+                            </div>
+                          );
+                        })}
                     </div>
                   ) : (
                     <p className="2xl:text-lg lg:text-sm dark:text-white">No Videos till now</p>
@@ -458,19 +465,22 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                 <div className="sm:px-5  pb-5">
                   {user.tracks && user.tracks.length > 0 ? (
                     <div className="w-full">
-                      {user.tracks.map((track, i) => {
-                        ////console.log(playbackUser)
-                        return (
-                          <div key={i} className="w-full">
-                            <TrackCard
-                              trackno={i}
-                              track={track}
-                              index={i}
-                              username={user.username}
-                            />
-                          </div>
-                        );
-                      })}
+                      {user.tracks
+                        .slice(0)
+                        .reverse()
+                        .map((track, i) => {
+                          ////console.log(playbackUser)
+                          return (
+                            <div key={i} className="w-full">
+                              <TrackCard
+                                trackno={i}
+                                track={track}
+                                index={i}
+                                username={user.username}
+                              />
+                            </div>
+                          );
+                        })}
                     </div>
                   ) : (
                     <p className="2xl:text-lg lg:text-sm dark:text-white">No Music till now</p>
@@ -482,20 +492,23 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                 <div className=" sm:px-5  pb-5">
                   {user.your_reactions.length > 0 ? (
                     <div>
-                      {user.your_reactions.map((playbackUser, i) => {
-                        ////console.log(playbackUser)
-                        return (
-                          <div key={i} className="">
-                            <ReactionCard
-                              reactno={i}
-                              playbackUserData={playbackUser}
-                              index={i}
-                              username={user.username}
-                              type="video"
-                            />
-                          </div>
-                        );
-                      })}
+                      {user.your_reactions
+                        .slice(0)
+                        .reverse()
+                        .map((playbackUser, i) => {
+                          ////console.log(playbackUser)
+                          return (
+                            <div key={i} className="">
+                              <ReactionCard
+                                reactno={i}
+                                playbackUserData={playbackUser}
+                                index={i}
+                                username={user.username}
+                                type="video"
+                              />
+                            </div>
+                          );
+                        })}
                     </div>
                   ) : (
                     <p className="2xl:text-lg lg:text-sm dark:text-white">No Latest Activity</p>
@@ -507,30 +520,33 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                 <div className="px-2 2xl:pt-5 lg:pt-2 pb-5">
                   {user.my_playlists && user.my_playlists.length > 0 ? (
                     <div>
-                      {user.my_playlists.map((playlist, i) => {
-                        ////console.log(playbackUser)
-                        return (
-                          <>
-                            <div key={i} className="">
-                              <h2 className="dark:text-white font-bold 2xl:text-2xl lg:text-lg text-md ml-2 my-2">
-                                {playlist.playlistname}
-                              </h2>
-                              <div>
-                                <Carousel cols={4}>
-                                  {playlist.playlistdata.map((data, i) => {
-                                    return (
-                                      <Carousel.Item key={i}>
-                                        <PlaylistCard playlistData={data} />
-                                      </Carousel.Item>
-                                    );
-                                  })}
-                                </Carousel>
+                      {user.my_playlists
+                        .slice(0)
+                        .reverse()
+                        .map((playlist, i) => {
+                          ////console.log(playbackUser)
+                          return (
+                            <>
+                              <div key={i} className="">
+                                <h2 className="dark:text-white font-bold 2xl:text-2xl lg:text-lg text-md ml-2 my-2">
+                                  {playlist.playlistname}
+                                </h2>
+                                <div>
+                                  <Carousel cols={4}>
+                                    {playlist.playlistdata.map((data, i) => {
+                                      return (
+                                        <Carousel.Item key={i}>
+                                          <PlaylistCard playlistData={data} />
+                                        </Carousel.Item>
+                                      );
+                                    })}
+                                  </Carousel>
+                                </div>
                               </div>
-                            </div>
-                            <hr className="2xl:my-7 lg:my-3 opacity-30" />
-                          </>
-                        );
-                      })}
+                              <hr className="2xl:my-7 lg:my-3 opacity-30" />
+                            </>
+                          );
+                        })}
                     </div>
                   ) : (
                     <p className="2xl:text-lg lg:text-sm dark:text-white">No Existing PlayLists</p>

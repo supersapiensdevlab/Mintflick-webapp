@@ -70,15 +70,18 @@ const PlayBackInfo = (props) => {
     },
   };
 
-  //const [videoUsername, setVideoUsername] = useState('');
+  //const [videoUsername, setVideoPresentUsername] = useState('');
 
   const user = JSON.parse(window.localStorage.getItem('user'));
 
   const [playbackUrl, setPlaybackUrl] = useState('');
 
   const [loader, setLoader] = useState(true);
+
   const [userData, setUserData] = useState(null);
-  const [videoData, setVideoData] = useState(false);
+  const [videoData, setVideoData] = useState(null);
+  const [videoPresent, setVideoPresent] = useState(false);
+
   const [notFound, setNotFound] = useState(false);
   const [userNotFound, setUserNotFound] = useState(false);
 
@@ -165,18 +168,27 @@ const PlayBackInfo = (props) => {
   const get_User = async () => {
     await axios.get(`${process.env.REACT_APP_SERVER_URL}/user/${props.stream_id}`).then((value) => {
       console.log(value);
+      let fetchedVideoData;
+      for (let i = 0; i < value.data.videos.length; i++) {
+        console.log(value.data.videos[i].videoId, ' ', props.video_id);
+        if (value.data.videos[i].videoId === props.video_id) {
+          fetchedVideoData = value.data.videos[i];
+          setVideoData(value.data.videos[i]);
+          break;
+        }
+      }
       if (value.data === '') {
         setUserNotFound(true);
         return;
       }
       setUserData(value.data);
-      if (value.data.videos.length - 1 < parseInt(props.video_id)) {
+      if (!fetchedVideoData) {
         setNotFound(true);
         return;
       } else {
-        setVideoData(true);
+        setVideoPresent(true);
       }
-      convertTimestampToTime(value.data.videos[props.video_id]);
+      convertTimestampToTime(fetchedVideoData);
       for (let i = 0; i < value.data.follower_count.length; i++) {
         if (user ? value.data.follower_count[i] === user.username : false) {
           setSubscribeButtonText('Unsubscribe');
@@ -184,13 +196,13 @@ const PlayBackInfo = (props) => {
         }
       }
 
-      //setVideoUsername(value.data.username);
-      setPlaybackUrl(`${value.data.videos[props.video_id].link}`);
+      //setVideoPresentUsername(value.data.username);
+      setPlaybackUrl(`${fetchedVideoData.link}`);
 
       let reactionData = {
         videousername: value.data.username,
         videoname: `${props.stream_id}/${props.video_id}`,
-        videolink: `${value.data.videos[props.video_id].link}`,
+        videolink: `${fetchedVideoData.link}`,
       };
       //console.log('reaction: ', reactionData);
 
@@ -219,7 +231,7 @@ const PlayBackInfo = (props) => {
           username: `${user.username}`,
           videousername: value.data.username,
           videoname: `${props.stream_id}/${props.video_id}`,
-          videolink: `${value.data.videos[props.video_id].link}`,
+          videolink: `${fetchedVideoData.link}`,
         };
 
         axios({
@@ -245,17 +257,14 @@ const PlayBackInfo = (props) => {
   };
 
   const fetchData = async () => {
-    const fileRes = await axios.get(`${process.env.REACT_APP_SERVER_URL}/`);
-    for (let i = 0; i < fileRes.data.array.length; i++) {
-      if (fileRes.data.array[i].videos) {
-        if (user ? fileRes.data.array[i].username === user.username : false) {
+    const fileRes = await axios.get(`${process.env.REACT_APP_SERVER_URL}/user`);
+    for (let i = 0; i < fileRes.data.length; i++) {
+      if (fileRes.data[i].videos) {
+        if (user ? fileRes.data[i].username === user.username : false) {
           continue;
         }
-        if (
-          fileRes.data.array[i].username !== props.stream_id &&
-          fileRes.data.array[i].videos.length > 0
-        ) {
-          setArrayData((prevState) => [...prevState, fileRes.data.array[i]]);
+        if (fileRes.data[i].username !== props.stream_id && fileRes.data[i].videos.length > 0) {
+          setArrayData((prevState) => [...prevState, fileRes.data[i]]);
         }
       }
     }
@@ -264,7 +273,7 @@ const PlayBackInfo = (props) => {
   };
 
   // //console.log('userData', userData);
-  // //console.log(userData ? userData.videos[props.video_id].link : '');
+  // //console.log(userData ? videoData.link : '');
 
   const handlereaction = (videoprops) => {
     if (!user) {
@@ -278,7 +287,7 @@ const PlayBackInfo = (props) => {
         reaction: videoprops,
         videostreamid: `${props.stream_id}`,
         videoindex: `${props.video_id}`,
-        videolink: `${userData.videos[props.video_id].link}`,
+        videolink: `${videoData.link}`,
       };
 
       if (videoprops === 'like') {
@@ -322,7 +331,7 @@ const PlayBackInfo = (props) => {
         oldreaction: userreact,
         videostreamid: `${props.stream_id}`,
         videoindex: `${props.video_id}`,
-        videolink: `${userData.videos[props.video_id].link}`,
+        videolink: `${videoData.link}`,
       };
 
       if (videoprops === userreact) {
@@ -441,17 +450,17 @@ const PlayBackInfo = (props) => {
     //console.log(details.cfa.flows.outFlows[0]);
   };
   if (userData) {
-    console.log(userData.videos[props.video_id]);
+    console.log(videoData);
     console.log(playbackUrl);
   }
   return (
     <>
-      {videoData ? (
+      {videoPresent ? (
         <div>
           {/* <Helmet>
-              <meta property="og:title"              content={userData.videos[props.video_id].videoName} />
-              <meta property="og:description"        content={`<div style='font-size:20px; font-weight:500;color:green;'>${userData.videos[props.video_id].description}</div>`} />
-              <meta property="og:image"              content={`${userData.videos[props.video_id].videoImage}`} />
+              <meta property="og:title"              content={videoData.videoName} />
+              <meta property="og:description"        content={`<div style='font-size:20px; font-weight:500;color:green;'>${videoData.description}</div>`} />
+              <meta property="og:image"              content={`${videoData.videoImage}`} />
               
             </Helmet> */}
           <div
@@ -470,9 +479,9 @@ const PlayBackInfo = (props) => {
                 <div className="lg:flex flex-row justify-between lg:my-2 my-1  ">
                   <div className="2xl:py-4 lg:py-2">
                     <div className=" w-full text-left mt-0" style={{ padding: '0px' }}>
-                      {userData ? (
+                      {videoData ? (
                         <p className="font-semibold 2xl:text-xl lg:text-md pb-4">
-                          {userData.videos[props.video_id].videoName}
+                          {videoData.videoName}
                         </p>
                       ) : null}
                       {time ? (
@@ -626,13 +635,11 @@ const PlayBackInfo = (props) => {
                     </Menu>
                   </div>
                 </div>
-                {userData ? (
+                {videoData ? (
                   <div className="w-full">
                     <hr />
                     <h4 className="py-2 lg:text-sm 2xl:text-lg">Description : </h4>
-                    <p className="pb-2 lg:text-sm 2xl:text-lg">
-                      {userData.videos[props.video_id].description}
-                    </p>
+                    <p className="pb-2 lg:text-sm 2xl:text-lg">{videoData.description}</p>
                     <hr />
                   </div>
                 ) : null}
