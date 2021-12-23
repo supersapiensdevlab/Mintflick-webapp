@@ -70,8 +70,6 @@ const PlayBackInfo = (props) => {
     },
   };
 
-  //const [videoUsername, setVideoPresentUsername] = useState('');
-
   const user = JSON.parse(window.localStorage.getItem('user'));
 
   const [playbackUrl, setPlaybackUrl] = useState('');
@@ -196,7 +194,6 @@ const PlayBackInfo = (props) => {
         }
       }
 
-      //setVideoPresentUsername(value.data.username);
       setPlaybackUrl(`${fetchedVideoData.link}`);
 
       let reactionData = {
@@ -449,10 +446,6 @@ const PlayBackInfo = (props) => {
     //const details = await carol2.details();
     //console.log(details.cfa.flows.outFlows[0]);
   };
-  if (userData) {
-    console.log(videoData);
-    console.log(playbackUrl);
-  }
   return (
     <>
       {videoPresent ? (

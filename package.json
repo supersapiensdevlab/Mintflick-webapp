@@ -55,6 +55,7 @@
     "react-scripts": "^3.4.4",
     "react-share": "^4.4.0",
     "react-stacked-center-carousel": "^1.0.3",
+    "react-top-loading-bar": "^2.1.0",
     "reactjs-popup": "^2.0.5",
     "screenfull": "^5.1.0",
     "tailwindcss-filters": "^3.0.0",

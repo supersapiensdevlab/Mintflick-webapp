@@ -103,7 +103,7 @@ const Home = () => {
               id="recommended_channel"
               className="w-full  pt-8 h-full lg:col-span-1 hidden  lg:block sm:hidden mt-4  bg-gradient-to-b from-blue-50 via-blue-50 to-white  dark:bg-gradient-to-b dark:from-dbeats-dark-secondary  dark:to-dbeats-dark-primary"
             >
-              <div className="2xl:px-5 2xl:pt-8 lg:px-2 lg:pt-4 ">
+              <div className="2xl:pl-8 2xl:pt-8 lg:pl-4 lg:pt-4 ">
                 {latestUploads ? (
                   <>
                     <div>
@@ -249,7 +249,7 @@ const Home = () => {
                   </div>
                   <div id="display_playback_videos" className="2xl:px-4 lg:px-3 px-1">
                     <div className="  ">
-                      <h4 className=" font-bold 2xl:pl-5 pl-3 2xl:pt-3 lg:pt-0 pt-3 pb-4 dark:text-gray-200">
+                      <h4 className=" font-bold 2xl:pl-3 pl-3 2xl:pt-1 lg:pt-0 pt-2 pb-4 dark:text-gray-200">
                         Trending
                       </h4>
                       <div className="">

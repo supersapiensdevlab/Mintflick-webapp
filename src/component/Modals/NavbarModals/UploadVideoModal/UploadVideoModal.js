@@ -41,7 +41,11 @@ const UploadVideoModal = (props) => {
   const [selectedCommercialUse, setSelectedCommercialUse] = useState(commercialUse[0]);
   const [selectedDerivativeWorks, setSelectedDerivativeWorks] = useState(derivativeWorks[0]);
   const [selectedCategory, setSelectedCategory] = useState(category[0]);
+  const [uploading, setUploading] = useState(0);
   const [tags, setTags] = useState([]);
+
+  const [videoUpload, setVideoUpload] = useState(false);
+  const [videoImageUpload, setVideoImageUpload] = useState(false);
 
   const [video, setVideo] = useState({
     videoName: '',
@@ -104,7 +108,8 @@ const UploadVideoModal = (props) => {
     const onStoredChunk = (size) => {
       uploaded += size;
       const pct = totalSize / uploaded;
-      console.log(`Uploading... ${pct.toFixed(2)}% complete`);
+      setUploading(10 - pct);
+      console.log(`Uploading... ${pct}% complete`);
     };
 
     // makeStorageClient returns an authorized Web3.Storage client instance
@@ -117,16 +122,19 @@ const UploadVideoModal = (props) => {
 
   const onVideoFileChange = (e) => {
     if (e.target.name === 'videoFile') {
-      video.videoFile = e.target.files[0];
-      var trckName = e.target.files[0].name.replace(/\.[^/.]+$/, '');
-      document.getElementById('videoName').value = trckName;
-      video.videoName = trckName;
-      document.getElementById('video-label').textContent = trckName;
+      setVideo({ ...video, videoFile: e.target.files[0] });
+
+      let videoName = e.target.files[0].name.replace(/\.[^/.]+$/, '');
+      document.getElementById('videoName').value = videoName;
+
+      setVideo({ ...video, videoName: videoName });
+      document.getElementById('video-label').textContent = videoName;
+      setVideoUpload(true);
     } else if (e.target.name === 'videoImage') {
-      video.videoImage = e.target.files[0];
-      console.log(e.target.files[0]);
-      var videoImage = e.target.files[0].name.replace(/\.[^/.]+$/, '');
+      setVideo({ ...video, videoImage: e.target.files[0] });
+      let videoImage = e.target.files[0].name.replace(/\.[^/.]+$/, '');
       document.getElementById('video-thumbnail-label').textContent = videoImage;
+      setVideoImageUpload(true);
     }
   };
 
@@ -469,17 +477,33 @@ const UploadVideoModal = (props) => {
           </div>
 
           <div className="lg:px-4 2xl:py-3 lg:py-1 lg:text-right text-center sm:px-6 flex justify-end items-center">
+            <div className=" mx-5 flex items-center w-64">
+              <input
+                type="range"
+                value={uploading}
+                min="0"
+                max="10"
+                hidden={props.loader}
+                className="appearance-none cursor-pointer w-full h-3 bg-green-400 
+                font-white rounded-full slider-thumb  backdrop-blur-md"
+              />
+              <p className="mx-2 text-base font-medium text-white" hidden={props.loader}>
+                {Math.round(uploading * 10)}%
+              </p>
+            </div>
+
             <input
               type="submit"
               onClick={PostData}
               value="Upload Video"
-              className="inline-flex justify-center 2xl:py-2 py-1 lg:px-5 
-                px-3 border border-transparent shadow-sm 2xl:text-lg 
-                lg:text-md text-md font-bold rounded-md text-white 
-                bg-gradient-to-r from-green-400 to-blue-500 hover:bg-indigo-700 
-                transform transition delay-50 duration-300 ease-in-out 
-                hover:scale-105 focus:outline-none focus:ring-0 focus:ring-offset-2 
-                focus:ring-blue-500"
+              className={`${
+                videoUpload && videoImageUpload ? 'cursor-pointer hover:bg-dbeats-light' : ''
+              } 
+               flex justify-center 2xl:py-2 py-1 lg:px-5 
+                px-3 2xl:text-lg rounded  border-dbeats-light border
+                lg:text-md text-md my-auto font-semibold px-3 bg-transparent
+                dark:text-white `}
+              disabled={video.videoImage === '' || video.videoFile === ''}
             ></input>
             <div
               className="animate-spin rounded-full h-7 w-7 ml-3 border-t-2 border-b-2 bg-gradient-to-r from-green-400 to-blue-500 "
