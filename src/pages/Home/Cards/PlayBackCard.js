@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import ReactPlayer from 'react-player';
-import person from '../../../assets/images/profile.svg';
 import moment from 'moment';
+import React, { useEffect, useState } from 'react';
+import { Image } from 'react-img-placeholder';
+import ReactPlayer from 'react-player';
+import { Link } from 'react-router-dom';
 import maticLogo from '../../../assets/graphics/polygon-matic-logo.svg';
 import dbeatsLogoBnW from '../../../assets/images/Logo/logo-blacknwhite.png';
-import { Image } from 'react-img-placeholder';
+import person from '../../../assets/images/profile.svg';
 
 moment().format();
 
@@ -43,8 +44,8 @@ const PlayBackCard = (props) => {
           <div
             className={`cursor-pointer w-full 2xl:h-52 lg:h-32 h-44 dark:bg-dbeats-dark-primary bg-black `}
           >
-            <a
-              href={`/playback/${props.playbackUserData.username}/${props.playbackUserData.videos[index].videoId}`}
+            <Link
+              to={`/playback/${props.playbackUserData.username}/${props.playbackUserData.videos[index].videoId}`}
               className=" "
             >
               <ReactPlayer
@@ -58,7 +59,7 @@ const PlayBackCard = (props) => {
                 onMouseMove={handleMouseMove}
                 onMouseLeave={hanldeMouseLeave}
               />
-            </a>
+            </Link>
 
             <Image
               src={props.playbackUserData.videos[index].videoImage}
@@ -72,7 +73,7 @@ const PlayBackCard = (props) => {
 
           <div className="col-start-1 row-start-3 pb-2 pt-4">
             <div className="flex   text-black text-sm font-medium">
-              <a href={`/profile/${props.playbackUserData.username}/`} className="mr-4">
+              <Link to={`/profile/${props.playbackUserData.username}/`} className="mr-4">
                 <img
                   src={
                     props.playbackUserData.profile_image
@@ -82,7 +83,7 @@ const PlayBackCard = (props) => {
                   alt=""
                   className="2xl:w-10 2xl:h-10 w-10 h-10 lg:w-7 lg:h-7 rounded-full  bg-gray-100 self-start"
                 />
-              </a>
+              </Link>
               <div className="w-full flex  justify-between ">
                 <div>
                   <span className=" text-base font-semibold dark:text-gray-200 mb-2">
@@ -91,12 +92,12 @@ const PlayBackCard = (props) => {
                   </span>
                   <br />
                   <div className="w-full   ">
-                    <a
-                      href={`/profile/${props.playbackUserData.username}/`}
+                    <Link
+                      to={`/profile/${props.playbackUserData.username}/`}
                       className="2xl:text-sm lg:text-xs text-sm text-gray-500  mb-2"
                     >
                       {props.playbackUserData.name}
-                    </a>{' '}
+                    </Link>{' '}
                     <div className="2xl:text-sm lg:text-xs text-sm text-gray-500 pr-2 flex  ">
                       {time}
                     </div>

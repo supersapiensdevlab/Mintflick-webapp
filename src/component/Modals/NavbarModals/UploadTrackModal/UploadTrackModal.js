@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react';
 import Chips from 'react-chips';
 import Modal from 'react-modal';
 import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import Dropdown from '../../../dropdown.component';
 import { makeStorageClient } from '../../../uploadHelperFunction';
 import { chipTheme, theme } from '../Theme';
@@ -745,14 +746,14 @@ const UploadTrackModal = (props) => {
           </div>
 
           <div className="lg:px-4 2xl:py-3 lg:py-2 lg:pt-3 lg:text-right text-center flex justify-end items-center">
-            <a
+            <Link
               className="text-sm font-medium dark:text-gray-100 text-gray-700 px-2"
               id="nftAddress"
               target="_blank"
-              href="/"
+              to="/"
             >
               NFT
-            </a>
+            </Link>
             <input
               type="submit"
               onClick={PostData}

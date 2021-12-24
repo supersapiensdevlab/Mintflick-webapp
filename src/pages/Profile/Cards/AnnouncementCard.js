@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import ReactPlayer from 'react-player';
-import classes from '../Profile.module.css';
 import moment from 'moment';
+import React, { useEffect, useState } from 'react';
+import ReactPlayer from 'react-player';
+import { Link } from 'react-router-dom';
 import { detectURLs } from '../../../component/uploadHelperFunction';
+import classes from '../Profile.module.css';
+
 moment().format();
 
 const AnnouncementCard = (props) => {
@@ -73,8 +75,8 @@ const AnnouncementCard = (props) => {
           onMouseMove={handleMouseMove}
           onMouseLeave={hanldeMouseLeave}
         >
-          <a
-            href={props.post.link}
+          <Link
+            to={props.post.link}
             target="_blank"
             rel="noopener noreferrer"
             style={props.post.link === '' ? { pointerEvents: 'none' } : null}
@@ -112,7 +114,7 @@ const AnnouncementCard = (props) => {
                 className={classes.cards_videos}
               />
             ) : null}
-          </a>
+          </Link>
         </div>
 
         <div className={`px-5 w-full py-2`}>

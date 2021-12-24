@@ -48,28 +48,6 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
 
   useEffect(() => {
     let value = JSON.parse(window.localStorage.getItem('user'));
-    let tabno = tabname;
-    switch (tabno) {
-      case 'posts':
-        setTabIndex(0);
-        break;
-      case 'videos':
-        setTabIndex(1);
-        break;
-      case 'music':
-        setTabIndex(2);
-        break;
-      case 'activity':
-        setTabIndex(3);
-        break;
-      case 'playlists':
-        setTabIndex(4);
-        break;
-      default:
-        navigate.push(`/profile/${urlUsername}/posts`);
-        setTabIndex(0);
-    }
-    // //console.log(value);
     if (value) {
       if (value.username === urlUsername) {
         setSharable_data(`${process.env.REACT_APP_CLIENT_URL}/profile/${value.username}`);
@@ -106,7 +84,36 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
       setPrivate(false);
     }
     // eslint-disable-next-line
-  }, []);
+  }, [urlUsername]);
+
+  useEffect(() => {
+    let tabno = tabname;
+    switch (tabno) {
+      case 'posts':
+        setTabIndex(0);
+        break;
+      case 'videos':
+        setTabIndex(1);
+        break;
+      case 'music':
+        setTabIndex(2);
+        break;
+      case 'activity':
+        setTabIndex(3);
+        break;
+      case 'playlists':
+        setTabIndex(4);
+        break;
+      case 'following':
+        break;
+      case 'followers':
+        break;
+      default:
+        navigate.push(`/profile/${urlUsername}/posts`);
+        setTabIndex(0);
+    }
+    // eslint-disable-next-line
+  }, [tabname]);
 
   const get_User = async () => {
     await axios.get(`${process.env.REACT_APP_SERVER_URL}/user/${urlUsername}`).then((value) => {
@@ -586,9 +593,9 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                                   )}
                                 </>
                               ) : null}
-                              <a href={`/profile/${following}`}>
+                              <Link to={`/profile/${following}/posts`}>
                                 <h2 className="hover:underline">{following}</h2>
-                              </a>
+                              </Link>
                             </div>
                           );
                         })}
@@ -613,9 +620,9 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                               key={i}
                               className="flex 2xl:text-lg lg:text-sm text-md shadow  w-full  lg:w-full pl-4  my-3 lg:my-2.5 py-2 rounded dark:hover:bg-dbeats-dark-alt dark:bg-dbeats-dark-secondary dark:text-gray-100 "
                             >
-                              <a href={`/profile/${follower}`}>
+                              <Link to={`/profile/${follower}/posts`}>
                                 <h2 className="hover:underline">{follower}</h2>
-                              </a>
+                              </Link>
                             </div>
                           );
                         })}

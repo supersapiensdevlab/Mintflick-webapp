@@ -8,6 +8,7 @@ import { Container, Row } from 'react-bootstrap';
 import Lottie from 'react-lottie';
 import Modal from 'react-modal';
 import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import superfluid from '../../../../assets/images/superfluid-black.svg';
 import { Playlist } from '../../../../component/Modals/PlaylistModals/PlaylistModal';
 import { ShareModal } from '../../../../component/Modals/ShareModal/ShareModal';
@@ -18,6 +19,7 @@ import animationDataNotFound from '../../../../lotties/error-animation.json';
 import animationData from '../../../../lotties/fans.json';
 import animationDataGiraffee from '../../../../lotties/giraffee.json';
 import RecommendedCard from './RecommendedCard';
+
 // import {Helmet} from "react-helmet";
 
 moment().format();
@@ -504,12 +506,12 @@ const PlayBackInfo = (props) => {
                             </button>
                           </div>
                         ) : (
-                          <a
-                            href="/signup"
+                          <Link
+                            to="/signup"
                             className="bg-dbeats-light  p-1 2xl:text-lg lg:text-sm text-md  rounded-sm 2xl:px-4 px-4 lg:px-2 mr-3 font-semibold text-white "
                           >
                             <span>Login to Subscribe and Become a SuperFan</span>
-                          </a>
+                          </Link>
                         )}
                       </div>
                     ) : null}
@@ -787,12 +789,12 @@ const PlayBackInfo = (props) => {
                   </h2>
                 </Row>
                 <Row>
-                  <a
-                    href="/signup"
+                  <Link
+                    to="/signup"
                     className="block mx-auto 2xl:p-2 p-2 lg:p-1 mt-4 mb-2 2xl:w-96 lg:w-72 w-full lg:text-md 2xl:text-lg  text-white text-center font-semibold rounded-lg bg-dbeats-light"
                   >
                     Login
-                  </a>
+                  </Link>
                 </Row>
               </Container>
             </div>

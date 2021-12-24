@@ -1,7 +1,7 @@
-import React from 'react';
-import ReactPlayer from 'react-player';
 import { Menu, Transition } from '@headlessui/react';
-import { Fragment, useState } from 'react';
+import React, { Fragment, useState } from 'react';
+import ReactPlayer from 'react-player';
+import { Link } from 'react-router-dom';
 
 const RecommendedCard = (props) => {
   const [playing, setPlaying] = useState(false);
@@ -19,8 +19,8 @@ const RecommendedCard = (props) => {
   return (
     <div className={`${props.darkMode && 'dark'} flex w-full`}>
       <div className="cursor-pointer 2xl:h-28 lg:h-20 dark:bg-dbeats-dark-primary">
-        <a
-          href={`/playback/${props.value.username}/${
+        <Link
+          to={`/playback/${props.value.username}/${
             props.value.videos[props.value.videos.length - 1].videoId
           }`}
         >
@@ -36,7 +36,7 @@ const RecommendedCard = (props) => {
             onMouseLeave={hanldeMouseLeave}
             muted={true}
           />
-        </a>
+        </Link>
       </div>
       <div className="pl-3 text-sm 2xl:text-sm lg:text-xs w-full">
         {/* <p className="text-2xl font-semibold mb-0">{props.value.videos[0].videoName.slice(0, 30) + " ..."}</p> */}

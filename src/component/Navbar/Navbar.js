@@ -3,6 +3,7 @@ import axios from 'axios';
 import React, { Fragment, useEffect, useRef, useState } from 'react';
 import { push as Menu } from 'react-burger-menu';
 import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { toggleDarkMode } from '../../actions/index';
 import logoDark from '../../assets/images/dark-logo.svg';
 import CircleLogo from '../../assets/images/dbeats-logo.png';
@@ -203,8 +204,8 @@ const NavBar = () => {
     console.log(data);
     return (
       <div className="h-full my-1">
-        <a
-          href={`https://beta.dbeats.live/profile/${data.username}/posts`}
+        <Link
+          to={`https://beta.dbeats.live/profile/${data.username}/posts`}
           target="_blank"
           rel="noopener noreferrer"
           className="grid grid-cols-4 justify-center p-2 dark:bg-dbeats-dark-alt dark:hover:bg-dbeats-dark-secondary dark:text-white text-gray-500"
@@ -223,7 +224,7 @@ const NavBar = () => {
               {data.announcement}
             </p>
           </div>
-        </a>
+        </Link>
       </div>
     );
   };
@@ -242,34 +243,34 @@ const NavBar = () => {
         >
           <div className="pt-5 bg-transparent hidden w-0"></div>
           <div className={classes.menu_items}>
-            <a
+            <Link
               className="text-black 2xl:text-xl lg:text-md text-bold dark:text-white"
               id="home"
-              href="/"
+              to="/"
             >
               <i id={classes.menu_item} className="fa fa-fw fa-home" />
               <span className={classes.menu_item_name}> Home </span>
-            </a>
+            </Link>
           </div>
           <div className={classes.menu_items}>
-            <a
+            <Link
               className="text-black 2xl:text-xl lg:text-md text-bold dark:text-white"
               id="about"
-              href="#/about"
+              to="#/about"
             >
               <i id={classes.menu_item} className="fas fa-compass" />
               <span className={classes.menu_item_name}> Explorer </span>
-            </a>
+            </Link>
           </div>
           <div className={classes.menu_items}>
-            <a
+            <Link
               className="text-black 2xl:text-xl lg:text-md text-bold dark:text-white"
               id="contact"
-              href="/music"
+              to="/music"
             >
               <i id={classes.menu_item} className="fas fa-cogs" />
               <span className={classes.menu_item_name}>Music </span>
-            </a>
+            </Link>
           </div>
           {/* {user ? (
             <div
@@ -336,7 +337,7 @@ const NavBar = () => {
               </svg>
             </div>
             <div className="flex items-center">
-              <a href="/" className="  self-center cursor-pointer sm:flex hidden">
+              <Link to="/" className="  self-center cursor-pointer sm:flex hidden">
                 <img
                   src={logo}
                   alt="dbeats_logo"
@@ -348,8 +349,8 @@ const NavBar = () => {
                   className="h-10 lg:h-7 2xl:h-10 w-max hidden dark:block"
                 ></img>
                 <span className="mr-5 text-lg font-bold ml-2"> </span>
-              </a>
-              <a href="/" className="flex self-center cursor-pointer sm:hidden ">
+              </Link>
+              <Link to="/" className="flex self-center cursor-pointer sm:hidden ">
                 <img
                   src={CircleLogo}
                   alt="dbeats_logo"
@@ -361,7 +362,7 @@ const NavBar = () => {
                   className="h-10 lg:h-7 2xl:h-10 w-max hidden dark:block"
                 ></img>
                 <span className="mr-5 text-lg font-bold ml-2"> </span>
-              </a>
+              </Link>
               <p
                 className="px-2 -ml-3.5 flex pb-0.5 mt-1 text-sm text-white dark:text-dbeats-light 
               bg-dbeats-light dark:bg-dbeats-alt border dark:border-dbeats-light font-semibold rounded-lg"
@@ -379,12 +380,14 @@ const NavBar = () => {
                   value={wordEntered}
                   onChange={handleFilter}
                 ></input>
-                <a
-                  href={'/search'}
+                <Link
+                  to={'/search'}
                   className="self-center text-gray-900"
                   onClick={() => {
+                    console.log('searchData : ', searchData);
                     setFilteredData([]);
                     setFilteredVideoData([]);
+
                     window.sessionStorage.setItem('searchResult', JSON.stringify(searchData));
                   }}
                 >
@@ -403,7 +406,7 @@ const NavBar = () => {
                       d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
                     />
                   </svg>
-                </a>
+                </Link>
               </div>
               <div
                 ref={wrapperRef}
@@ -414,8 +417,8 @@ const NavBar = () => {
                   <>
                     {filteredVideoData.slice(0, 15).map((value, key) => {
                       return (
-                        <a
-                          href="/search"
+                        <Link
+                          to="/search"
                           key={key}
                           className="w-full h-10"
                           onClick={() => {
@@ -430,7 +433,7 @@ const NavBar = () => {
                           <div className="p-2 pl-3 dark:hover:bg-dbeats-dark-primary">
                             {value.video.videoName}{' '}
                           </div>
-                        </a>
+                        </Link>
                       );
                     })}
                   </>
@@ -439,8 +442,8 @@ const NavBar = () => {
                   <>
                     {filteredData.slice(0, 15).map((value, key) => {
                       return (
-                        <a
-                          href="/search"
+                        <Link
+                          to="/search"
                           key={key}
                           className="w-full h-10 "
                           onClick={() => {
@@ -455,7 +458,7 @@ const NavBar = () => {
                           <div className="p-2 pl-3 dark:hover:bg-dbeats-dark-primary">
                             {value.username}{' '}
                           </div>
-                        </a>
+                        </Link>
                       );
                     })}
                   </>
@@ -596,8 +599,8 @@ const NavBar = () => {
                     </Dropdown.Items>
                   </Transition>
                 </Dropdown>
-                <a
-                  href={`/streamer/${user.username}`}
+                <Link
+                  to={`/streamer/${user.username}`}
                   className="border-dbeats-light 2xl:border-1 invisible lg:visible text-dbeats-light hover:bg-dbeats-light hover:text-white rounded font-bold mx-2 "
                 >
                   <div className="flex lg:py-1 2xl:py-2.5 py-1.5 2xl:px-3 lg:px-2 px-1.5 hidden">
@@ -611,9 +614,9 @@ const NavBar = () => {
                     </svg>
                     <span className="self-center md:flex   lg:text-xs 2xl:text-lg ">Go Live</span>
                   </div>
-                </a>
-                <a
-                  href={`/profile/${user.username}`}
+                </Link>
+                <Link
+                  to={`/profile/${user.username}`}
                   className="shadow-sm 2xl:h-10  2xl:w-10 self-center  h-7 w-7 bg-gradient-to-r from-dbeats-secondary-light to-dbeats-light text-white rounded-full font-bold mx-2 flex"
                 >
                   <svg
@@ -628,17 +631,17 @@ const NavBar = () => {
                       clipRule="evenodd"
                     />
                   </svg>
-                </a>
+                </Link>
               </div>
             ) : (
-              <a
-                href="/signup"
+              <Link
+                to="/signup"
                 className="shadow-sm px-2  2xl:px-3 lg:px-1.5 2xl:py-1 lg:py-0.5 bg-gradient-to-r from-dbeats-secondary-light to-dbeats-light dark:bg-gradient-to-r 
                 dark:from-dbeats-secondary-light dark:to-dbeats-light text-white rounded font-bold ml-2 md:mx-2 md:ml-0 flex"
               >
                 <i className="fas fa-sign-in-alt text-xs lg:text-sm 2xl:text-lg self-center mr-2 hidden md:block"></i>
                 <span className="self-center text-sm lg:text-xs 2xl:text-lg">SignUp</span>
-              </a>
+              </Link>
             )}
           </div>
         </div>

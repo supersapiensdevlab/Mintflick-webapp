@@ -54,7 +54,7 @@ const Profile = () => {
     }
 
     // eslint-disable-next-line
-  }, []);
+  }, [urlUsername]);
 
   const get_User = async () => {
     await axios.get(`${process.env.REACT_APP_SERVER_URL}/user/${urlUsername}`).then((value) => {

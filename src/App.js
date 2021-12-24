@@ -1,8 +1,7 @@
 import axios from 'axios';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import LoadingBar from 'react-top-loading-bar';
 import '../node_modules/noty/lib/noty.css';
 import '../node_modules/noty/lib/themes/metroui.css';
 import { toggleDarkMode } from '../src/actions/index';
@@ -10,70 +9,12 @@ import NavBar from '../src/component/Navbar/Navbar';
 import './App.css';
 import Loader from './component/Loader/Loader';
 import SearchPage from './component/Navbar/SearchResult';
-//import Navbar from "./component/navbar.component";
-//import BottomBar from "./component/bottom-player.component";
 import NFTFeed from './component/nft.component';
 import PageNotFound from './component/PageNotFound/PageNotFound';
 import PinnedPanel from './component/Pinned_Panel/Pinned_Panel';
 import UploadPage from './component/switcher.component';
 import Track from './component/track.component';
-// const VideoHome = lazy(() => {
-//   return new Promise((resolve) => {
-//     setTimeout(() => resolve(import('./pages/Home/Home')), 1000);
-//   });
-// });
-// const PublicRoom = lazy(() => {
-//   return new Promise((resolve) => {
-//     setTimeout(
-//       () => resolve(import('./pages/VideoPages/Pages/LivePublicPage/PublicRoomPage')),
-//       1000,
-//     );
-//   });
-// });
-// const Playback = lazy(() => {
-//   return new Promise((resolve) => {
-//     setTimeout(() => resolve(import('./pages/VideoPages/Pages/PlayBack/PlaybackRoomPage')), 1000);
-//   });
-// });
-// // eslint-disable-next-line no-unused-vars
-// const UserRoom = lazy(() => {
-//   return new Promise((resolve) => {
-//     setTimeout(
-//       () => resolve(import('./pages/VideoPages/Pages/GoLive_UserPage/UserRoomPage')),
-//       1000,
-//     );
-//   });
-// });
-// const Profile = lazy(() => {
-//   return new Promise((resolve) => {
-//     setTimeout(() => resolve(import('./pages/Profile/Profile')), 1000);
-//   });
-// });
-// const Login = lazy(() => {
-//   return new Promise((resolve) => {
-//     setTimeout(() => resolve(import('./pages/Login/Login')), 1000);
-//   });
-// });
-// const NewPassword = lazy(() => {
-//   return new Promise((resolve) => {
-//     setTimeout(() => resolve(import('./pages/Login/NewPassword')), 1000);
-//   });
-// });
-// const UploadPage = lazy(() => {
-//   return new Promise((resolve) => {
-//     setTimeout(() => resolve(import('./component/switcher.component')), 1000);
-//   });
-// });
-// const SearchPage = lazy(() => {
-//   return new Promise((resolve) => {
-//     setTimeout(() => resolve(import('./component/Navbar/SearchResult')), 1000);
-//   });
-// });
-// const TrackPlayback = lazy(() => {
-//   return new Promise((resolve) => {
-//     setTimeout(() => resolve(import('./pages/VideoPages/Pages/TrackPage/TrackInfo')), 1000);
-//   });
-// });
+import TopLoader from './hooks/TopLoader';
 import VideoHome from './pages/Home/Home';
 import Login from './pages/Login/Login';
 import NewPassword from './pages/Login/NewPassword';
@@ -89,7 +30,6 @@ export default function App() {
   const darkMode = useSelector((state) => state.toggleDarkMode);
   let darkmode = JSON.parse(window.localStorage.getItem('darkmode'));
   const dispatch = useDispatch();
-  const loaderRef = useRef(null);
 
   useEffect(() => {
     if (user) {
@@ -113,86 +53,94 @@ export default function App() {
       }
     }
 
-    loaderRef.current.continuousStart();
-    setTimeout(() => {
-      loaderRef.current.complete();
-    }, 2000);
     // eslint-disable-next-line
   }, []);
 
   return (
     <>
-      <LoadingBar color="#00d3ff" ref={loaderRef} shadow={true} />
       <Router>
         <div className={`${darkMode && 'dark'}  `}>
           <div className=" h-full  dark:bg-gradient-to-b dark:from-dbeats-dark-primary  dark:to-dbeats-dark-primary   ">
             <div className=" ">
               <Switch>
                 <Route exact path="/">
+                  <TopLoader page="home" />
                   <NavBar />
-                  <PinnedPanel userdata={user} />
+                  <PinnedPanel />
                   <VideoHome />
                 </Route>
                 <Route exact path="/signup">
+                  <TopLoader page="signup" />
                   <NavBar />
-                  <PinnedPanel userdata={user} />
+                  <PinnedPanel />
                   <Login />
                 </Route>
                 <Route exact path="/profile/:username/:tab?">
+                  <TopLoader page="profile" />
                   <NavBar />
-                  <PinnedPanel userdata={user} />
+                  <PinnedPanel />
                   <Profile />
                 </Route>
                 <Route exact path="/search">
+                  <TopLoader page="search" />
                   <NavBar />
-                  <PinnedPanel userdata={user} />
+                  <PinnedPanel />
                   <SearchPage />
                 </Route>
 
                 <Route exact path="/live/:username">
+                  <TopLoader page="public" />
                   <NavBar />
-                  <PinnedPanel userdata={user} />
+                  <PinnedPanel />
                   <PublicRoom />
                 </Route>
                 <Route exact path="/playback/:username/:video_id">
+                  <TopLoader page="playback" />
                   <NavBar />
-                  <PinnedPanel userdata={user} />
+                  <PinnedPanel />
                   <Playback />
                 </Route>
                 <Route exact path="/track/:username/:track_id">
+                  <TopLoader page="track" />
                   <NavBar />
-                  <PinnedPanel userdata={user} />
+                  <PinnedPanel />
                   <TrackPlayback />
                 </Route>
                 <Route exact path="/chat/:username">
+                  <TopLoader page="chatroom" />
                   <NavBar />
-                  <PinnedPanel userdata={user} />
+                  <PinnedPanel />
                   <ChatRoom />
                 </Route>
 
                 <Route exact path="/upload">
+                  <TopLoader page="upload" />
                   <NavBar />
-                  <PinnedPanel userdata={user} />
+                  <PinnedPanel />
                   <UploadPage />
                 </Route>
                 <Route exact path="/music">
+                  <TopLoader page="track" />
                   <NavBar />
-                  <PinnedPanel userdata={user} />
+                  <PinnedPanel />
                   <Track />
                 </Route>
                 <Route exact path="/nft">
+                  <TopLoader page="nft" />
                   <NavBar />
-                  <PinnedPanel userdata={user} />
+                  <PinnedPanel />
                   <NFTFeed />
                 </Route>
                 <Route exact path="/loader">
+                  <TopLoader page="loader" />
                   <NavBar />
-                  <PinnedPanel userdata={user} />
+                  <PinnedPanel />
                   <Loader />
                 </Route>
                 <Route exact path="/unlock">
+                  <TopLoader page="ticket" />
                   <NavBar />
-                  <PinnedPanel userdata={user} />
+                  <PinnedPanel />
                   <Ticket />
                 </Route>
 
@@ -202,8 +150,9 @@ export default function App() {
                 {/* <Route exact path="/streamer/:roomID" component={UserRoom} /> */}
 
                 <Route>
+                  <TopLoader page="pagenotfound" />
                   <NavBar />
-                  <PinnedPanel userdata={user} />
+                  <PinnedPanel />
                   <PageNotFound />
                 </Route>
               </Switch>
