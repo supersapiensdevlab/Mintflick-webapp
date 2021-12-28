@@ -11,7 +11,6 @@ const PinnedPanel = () => {
   const [pinnedData, setPinnedData] = useState([]);
 
   const getPinnedData = async (data) => {
-    console.log('data', data);
     for (let i = 0; i < data.length; i++) {
       await axios.get(`${process.env.REACT_APP_SERVER_URL}/user/${data[i]}`).then((value) => {
         setPinnedData((oldArray) => [...oldArray, value.data]);
@@ -20,12 +19,11 @@ const PinnedPanel = () => {
   };
 
   useEffect(() => {
-    if (JSON.parse(window.localStorage.getItem('pinned_user')).length > 0) {
-      console.log(JSON.parse(window.localStorage.getItem('pinned_user')));
-      getPinnedData(JSON.parse(window.localStorage.getItem('pinned_user')));
+    let data = JSON.parse(window.localStorage.getItem('pinned_user'));
+    if (data && data.length > 0) {
+      getPinnedData(data);
     } else {
       if (userdata) {
-        console.log(userdata.pinned);
         if (userdata.pinned) {
           window.localStorage.setItem('pinned_user', JSON.stringify(userdata.pinned));
           getPinnedData(userdata.pinned);
@@ -35,9 +33,6 @@ const PinnedPanel = () => {
     // eslint-disable-next-line
   }, []);
 
-  console.log(pinnedData);
-
-  ////console.log(pinnedData);
   return (
     <div className={` w-full fixed top-0 ${darkMode && 'dark'} z-2 -ml-1`}>
       <div

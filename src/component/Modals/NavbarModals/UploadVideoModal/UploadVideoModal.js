@@ -353,7 +353,7 @@ const UploadVideoModal = (props) => {
                             id="videoName"
                             value={video.videoName}
                             onChange={handleVideoInputs}
-                            className="focus:ring-dbeats-dark-primary border-0 dark:bg-dbeats-dark-primary ring-dbeats-dark-secondary  ring-0   flex-1 block w-full rounded-md sm:text-sm  "
+                            className="focus:ring-dbeats-dark-primary border dark:border-dbeats-alt border-gray-300 dark:bg-dbeats-dark-primary ring-dbeats-dark-secondary  ring-0   flex-1 block w-full rounded-md sm:text-sm  "
                             placeholder=""
                           />
                         </div>
@@ -369,10 +369,10 @@ const UploadVideoModal = (props) => {
                         >
                           Tags
                         </label>
-                        <div className="mt-1 flex rounded-md max-w-sm shadow-sm text-black">
+                        <div className="mt-1 flex border dark:border-dbeats-alt border-gray-300 rounded-md max-w-sm shadow-sm text-black">
                           <Chips
-                            theme={theme(darkMode)[0]}
-                            chipTheme={chipTheme(darkMode)[0]}
+                            theme={theme({ darkMode })[0]}
+                            chipTheme={chipTheme({ darkMode })[0]}
                             value={tags}
                             onChange={handleVideoTags}
                             suggestions={suggestions}
@@ -413,7 +413,7 @@ const UploadVideoModal = (props) => {
                           rows={3}
                           value={video.description}
                           onChange={handleVideoInputs}
-                          className="dark:placeholder-gray-600 focus:ring-dbeats-dark-primary border-0 dark:bg-dbeats-dark-primary ring-dbeats-dark-secondary  ring-0   flex-1 block w-full rounded-md sm:text-sm  "
+                          className="dark:placeholder-gray-600 focus:ring-dbeats-dark-primary border dark:border-dbeats-alt border-gray-300 dark:bg-dbeats-dark-primary ring-dbeats-dark-secondary  ring-0   flex-1 block w-full rounded-md sm:text-sm  "
                           placeholder="Any Behind the scenes you'll like your Audience to know!"
                         />
                       </div>

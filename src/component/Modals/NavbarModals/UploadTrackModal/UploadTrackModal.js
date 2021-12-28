@@ -567,7 +567,7 @@ const UploadTrackModal = (props) => {
                             id="trackName"
                             value={track.trackName}
                             onChange={handleInputs}
-                            className="focus:ring-dbeats-dark-primary border-0 dark:bg-dbeats-dark-primary ring-dbeats-dark-secondary  ring-0   flex-1 block w-full rounded-md sm:text-sm  "
+                            className="focus:ring-dbeats-dark-primary border dark:border-dbeats-alt border-gray-300 dark:bg-dbeats-dark-primary ring-dbeats-dark-secondary  ring-0   flex-1 block w-full rounded-md sm:text-sm  "
                             placeholder=""
                           />
                         </div>
@@ -581,10 +581,10 @@ const UploadTrackModal = (props) => {
                         >
                           Tags
                         </label>
-                        <div className="mt-1 flex rounded-md shadow-sm">
+                        <div className="mt-1 flex border dark:border-dbeats-alt border-gray-300 rounded-md shadow-sm">
                           <Chips
-                            theme={theme(darkMode)[0]}
-                            chipTheme={chipTheme(darkMode)[0]}
+                            theme={theme({ darkMode })[0]}
+                            chipTheme={chipTheme({ darkMode })[0]}
                             value={tags}
                             onChange={handleVideoTags}
                             suggestions={suggestions}
@@ -642,7 +642,7 @@ const UploadTrackModal = (props) => {
                             id="isrc"
                             value={track.isrc}
                             onChange={handleInputs}
-                            className=" dark:placeholder-dbeats-dark-alt    focus:ring-dbeats-dark-primary border-0 dark:bg-dbeats-dark-primary ring-dbeats-dark-secondary  ring-0   flex-1 block w-full rounded-md sm:text-sm  "
+                            className=" dark:placeholder-dbeats-dark-alt    focus:ring-dbeats-dark-primary border dark:border-dbeats-alt border-gray-300 dark:bg-dbeats-dark-primary ring-dbeats-dark-secondary  ring-0   flex-1 block w-full rounded-md sm:text-sm  "
                             placeholder="eg. XX-XXX-YY-ZZZZZ"
                           />
                         </div>
@@ -662,7 +662,7 @@ const UploadTrackModal = (props) => {
                             placeholder="eg. T-123.456.789.C"
                             value={track.iswc}
                             onChange={handleInputs}
-                            className=" dark:placeholder-dbeats-dark-alt    focus:ring-dbeats-dark-primary border-0 dark:bg-dbeats-dark-primary ring-dbeats-dark-secondary  ring-0   flex-1 block w-full rounded-md sm:text-sm  "
+                            className=" dark:placeholder-dbeats-dark-alt    focus:ring-dbeats-dark-primary border dark:border-dbeats-alt border-gray-300 dark:bg-dbeats-dark-primary ring-dbeats-dark-secondary  ring-0   flex-1 block w-full rounded-md sm:text-sm  "
                           />
                         </div>
                       </div>
@@ -682,7 +682,7 @@ const UploadTrackModal = (props) => {
                           rows={3}
                           value={track.description}
                           onChange={handleInputs}
-                          className="dark:placeholder-dbeats-dark-alt focus:ring-dbeats-dark-primary border-0 dark:bg-dbeats-dark-primary ring-dbeats-dark-secondary  ring-0   flex-1 block w-full rounded-md sm:text-sm  "
+                          className="dark:placeholder-dbeats-dark-alt focus:ring-dbeats-dark-primary border dark:border-dbeats-alt border-gray-300 dark:bg-dbeats-dark-primary ring-dbeats-dark-secondary  ring-0   flex-1 block w-full rounded-md sm:text-sm  "
                           placeholder="Any Behind the scenes you'll like your Audience to know!"
                         />
                       </div>

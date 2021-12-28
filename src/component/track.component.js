@@ -59,7 +59,7 @@ export default function Track() {
     await axios
       .get(`${process.env.REACT_APP_SERVER_URL}/user/${user.username}/favorites`)
       .then((value) => {
-        setFavorites(value.data.favorite_tracks);
+        setFavorites(value.data);
         //console.log('Favorites fetched!');
       });
   };
@@ -202,13 +202,40 @@ export default function Track() {
     }, 1000);
   }
 
-  const playAudio = async (id, artwork, title, author) => {
+  const playAudiusAudio = async (id, artwork, title, author) => {
     if (!firstPlayed) {
       setFirstPlay(true);
     }
     getDBeatsTracks();
     let url = `https://discoveryprovider.audius.co/v1/tracks/${id}/stream`;
 
+    if (url !== songDetails.songLink) {
+      state.play = true;
+      clearTimeout(timex);
+      startTimer(id);
+      let details = {
+        id: id,
+        songLink: url,
+        artwork: artwork,
+        songTitle: title,
+        author: author,
+        playing: true,
+      };
+      setDetails(details);
+      setPlayId(id);
+      //console.log('NEW SONG');
+    } else {
+      pauseResume();
+    }
+  };
+
+  const playUserAudio = async (id, link, artwork, title, author) => {
+    if (!firstPlayed) {
+      setFirstPlay(true);
+    }
+    getDBeatsTracks();
+
+    let url = link;
     if (url !== songDetails.songLink) {
       state.play = true;
       clearTimeout(timex);
@@ -343,7 +370,7 @@ export default function Track() {
                         >
                           <div
                             onClick={() =>
-                              playAudio(
+                              playAudiusAudio(
                                 todo.id,
                                 todo.artwork['150x150'],
                                 todo.title,
@@ -467,7 +494,7 @@ export default function Track() {
                               <div className=" sm:flex ">
                                 <button
                                   onClick={() =>
-                                    playAudio(
+                                    playAudiusAudio(
                                       todo.id,
                                       todo.artwork['150x150'],
                                       todo.title,
@@ -545,7 +572,7 @@ export default function Track() {
                     <div
                       id="tracks-section"
                       className={` text-gray-200  md:w-2/3 mx-auto  py-2 w-full  px-5 my-0 `}
-                      key={todo.id}
+                      key={todo.trackId}
                     >
                       {/* header */}
                       <div className="  ">
@@ -560,18 +587,19 @@ export default function Track() {
                             <div className="opacity-80  h-max w-max mx-auto rounded-full  absolute    sm:hidden hover:opacity-100    cursor-pointer mr-2   text-center  text-white    hover:scale-95 transform transition-all">
                               <i
                                 onClick={() =>
-                                  playAudio(
-                                    todo.id,
+                                  playUserAudio(
+                                    todo.trackId,
+                                    todo.link,
                                     todo.artwork['150x150'],
-                                    todo.title,
+                                    todo.trackName,
                                     todo.user.name,
                                   )
                                 }
-                                name={todo.id}
+                                name={todo.trackId}
                                 align="center"
                                 style={{ marginLeft: '55%' }}
                                 className={`${
-                                  state.play && playId === todo.id
+                                  state.play && playId === todo.trackId
                                     ? 'fa-pause-circle'
                                     : 'fa-play-circle'
                                 } fas text-6xl   text-center  `}
@@ -585,10 +613,6 @@ export default function Track() {
                               <h4 className="playlist  mt-0  uppercase text-gray-500 tracking-widest text-sm ">
                                 {todo.genre}
                               </h4>
-                              <p className="font-semibold text-gray-500">
-                                {Math.floor(todo.duration / 60)}:
-                                {todo.duration - Math.floor(todo.duration / 60) * 60}
-                              </p>
                             </div>
 
                             <p
@@ -604,8 +628,9 @@ export default function Track() {
                               <div className=" sm:flex hidden">
                                 <button
                                   onClick={() =>
-                                    playAudio(
+                                    playUserAudio(
                                       todo.trackId,
+                                      todo.link,
                                       todo.trackImage,
                                       todo.trackName,
                                       todo.trackName,
@@ -614,20 +639,20 @@ export default function Track() {
                                   name={todo.trackId}
                                   className="  cursor-pointer mr-2 uppercase font-bold  bg-gradient-to-r from-green-400 to-blue-500   text-white block py-2 px-10   hover:scale-95 transform transition-all"
                                 >
-                                  {`${state.play && playId === todo.id ? 'Pause' : 'Play'}`}
+                                  {`${state.play && playId === todo.trackId ? 'Pause' : 'Play'}`}
                                 </button>
                                 {user ? (
                                   <button
                                     onClick={
                                       favorites
-                                        ? favorites.indexOf(todo.id) > -1
-                                          ? () => removeFavorite(todo.id)
-                                          : () => setFavorite(todo.id)
+                                        ? favorites.indexOf(todo.trackId) > -1
+                                          ? () => removeFavorite(todo.trackId)
+                                          : () => setFavorite(todo.trackId)
                                         : null
                                     }
                                     className={`${
                                       favorites
-                                        ? favorites.indexOf(todo.id) > -1
+                                        ? favorites.indexOf(todo.trackId) > -1
                                           ? 'text-red-900'
                                           : 'text-gray-600 hover:text-red-300'
                                         : false
