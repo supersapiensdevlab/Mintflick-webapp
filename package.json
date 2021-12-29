@@ -66,6 +66,10 @@
     "web3.storage": "^3.3.2",
     "web3modal": "^1.9.4",
     "webpack": "^4.42.0"
+<<<<<<< HEAD
+=======
+
+>>>>>>> 3a257a81a1cd15f0fbe6ca613e2d3d4c53459ad3
   },
   "scripts": {
     "start": "craco --max_old_space_size=50000 start",

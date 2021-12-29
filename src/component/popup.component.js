@@ -5,7 +5,7 @@ export default function PopUp() {
   return (
     <Popup
       trigger={
-        <div className="cursor-pointer dark:hover:bg-dbeats-dark-secondary px-2 transition-all  justify-center w-full  py-2 text-sm font-medium hover:text-white   text-gray-600  rounded-full bg-opacity-20 hover:bg-opacity-30  ">
+        <div className="cursor-pointer dark:hover:bg-dbeats-dark-secondary px-2 transition-all  justify-center w-full  py-2 text-sm font-medium hover:text-white   text-gray-600   bg-opacity-20 hover:bg-opacity-30  ">
           {' '}
           <svg
             height="25"
@@ -31,12 +31,12 @@ export default function PopUp() {
       contentStyle={{ border: 'none' }}
       arrow={false}
     >
-      <div className="  md:w-56 w-40 bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none ">
+      <div className="  md:w-56 w-40 bg-white divide-y divide-gray-100   shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none ">
         <div className="menu-item">
           <button
             className={`
                bg-violet-500 text-black
-               group flex rounded-md items-center w-full px-2 py-2 text-sm`}
+               group flex   items-center w-full px-2 py-2 text-sm`}
           >
             <EditActiveIcon className="w-5 h-5 mr-2" aria-hidden="true" />
             Edit
@@ -46,7 +46,7 @@ export default function PopUp() {
           <button
             className={`
                bg-violet-500 text-black
-               group flex rounded-md items-center w-full px-2 py-2 text-sm`}
+               group flex   items-center w-full px-2 py-2 text-sm`}
           >
             <DuplicateActiveIcon className="w-5 h-5 mr-2" aria-hidden="true" />
             Duplicate
@@ -56,7 +56,7 @@ export default function PopUp() {
           <button
             className={`
                bg-violet-500 text-black
-               group flex rounded-md items-center w-full px-2 py-2 text-sm`}
+               group flex   items-center w-full px-2 py-2 text-sm`}
           >
             <ArchiveActiveIcon className="w-5 h-5 mr-2" aria-hidden="true" />
             Archive
@@ -66,7 +66,7 @@ export default function PopUp() {
           <button
             className={`
                bg-violet-500 text-black
-               group flex rounded-md items-center w-full px-2 py-2 text-sm`}
+               group flex   items-center w-full px-2 py-2 text-sm`}
           >
             <MoveActiveIcon className="w-5 h-5 mr-2" aria-hidden="true" />
             Move
@@ -76,7 +76,7 @@ export default function PopUp() {
           <button
             className={`
                bg-violet-500 text-black
-               group flex rounded-md items-center w-full px-2 py-2 text-sm`}
+               group flex   items-center w-full px-2 py-2 text-sm`}
           >
             <DeleteActiveIcon className="w-5 h-5 mr-2 text-violet-400" aria-hidden="true" />
             Delete

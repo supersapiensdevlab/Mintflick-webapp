@@ -1,4 +1,4 @@
-FROM node:16.6.2
+FROM node:alpine
 
 
 # Install app dependencies
@@ -18,5 +18,5 @@ WORKDIR /usr/src/app
 # Bundle app source
 COPY . .
 
-EXPOSE 3000
-CMD ["npm", "run", "start"]
+EXPOSE 5000
+CMD ["npm", "run", "start"] 
