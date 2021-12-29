@@ -8,8 +8,8 @@ FROM node:alpine
 # where available (npm@5+)
 #COPY package*.json ./
 # If you are building your code for production
-# RUN npm ci --only=production
-
+# RUN npm ci --only=production 
+RUN rm -rf /tmp/node_modules
 ADD package.json /tmp/package.json
 #ADD package-lock.json /tmp/package-lock.json
 RUN cd /tmp && npm i --force
