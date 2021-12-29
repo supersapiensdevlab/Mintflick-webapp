@@ -249,7 +249,7 @@ const Home = () => {
                   </div>
                   <div id="display_playback_videos" className="2xl:px-4 lg:px-3 px-1">
                     <div className="  ">
-                      <h4 className=" font-bold 2xl:pl-3 pl-3 2xl:pt-1 lg:pt-0 pt-2 pb-4 dark:text-gray-200">
+                      <h4 className=" font-bold 2xl:pl-5 pl-5 2xl:pt-1 lg:pt-0 pt-2 pb-4 dark:text-gray-200 text-gray-900">
                         Trending
                       </h4>
                       <div className="">

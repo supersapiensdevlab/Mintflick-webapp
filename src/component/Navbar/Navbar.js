@@ -238,37 +238,28 @@ const NavBar = () => {
           outerContainerId={'outer-container'}
           isOpen={showOpen}
           onStateChange={isMenuOpen}
-          className={`bg-white dark:bg-dbeats-dark-primary`}
+          className={`bg-white dark:bg-dbeats-dark-primary `}
           width={window.innerWidth >= '1536' ? '16.5rem' : '12rem'}
         >
           <div className="pt-5 bg-transparent hidden w-0"></div>
-          <div className={classes.menu_items}>
+          <div className={`${classes.menu_items} dark:hover:bg-dbeats-dark-alt hover:bg-blue-50`}>
             <Link
-              className="text-black 2xl:text-xl lg:text-md text-bold dark:text-white"
+              className="text-black 2xl:text-xl lg:text-md text-bold dark:text-white "
               id="home"
               to="/"
             >
-              <i id={classes.menu_item} className="fa fa-fw fa-home" />
-              <span className={classes.menu_item_name}> Home </span>
+              <i id={classes.menu_item} className="fa  fa-home" />
+              <span className={classes.menu_item_name}>Home</span>
             </Link>
           </div>
-          <div className={classes.menu_items}>
+
+          <div className={`${classes.menu_items} dark:hover:bg-dbeats-dark-alt hover:bg-blue-50`}>
             <Link
-              className="text-black 2xl:text-xl lg:text-md text-bold dark:text-white"
-              id="about"
-              to="#/about"
-            >
-              <i id={classes.menu_item} className="fas fa-compass" />
-              <span className={classes.menu_item_name}> Explorer </span>
-            </Link>
-          </div>
-          <div className={classes.menu_items}>
-            <Link
-              className="text-black 2xl:text-xl lg:text-md text-bold dark:text-white"
+              className="text-black 2xl:text-xl lg:text-md text-bold dark:text-white  "
               id="contact"
               to="/music"
             >
-              <i id={classes.menu_item} className="fas fa-cogs" />
+              <i id={classes.menu_item} className="fas fa-music" />
               <span className={classes.menu_item_name}>Music </span>
             </Link>
           </div>
@@ -287,7 +278,7 @@ const NavBar = () => {
           )} */}
           {user ? (
             <div
-              className={`${classes.menu_item_logout} text-black 2xl:text-xl lg:text-md text-bold dark:text-white`}
+              className={`${classes.menu_item_logout} text-black 2xl:text-xl lg:text-md text-bold dark:text-white dark:hover:bg-dbeats-dark-alt hover:bg-blue-50`}
               onClick={handleLogout}
             >
               <i id={classes.menu_item} className="fas fa-door-open" />
@@ -323,7 +314,7 @@ const NavBar = () => {
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-7 w-7 lg:h-5  2xl:h-7 2xl:w-7 self-center"
+                className="h-7 w-7 lg:h-5  2xl:h-7 2xl:w-7 self-center  "
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -365,7 +356,7 @@ const NavBar = () => {
               </Link>
               <p
                 className="px-2 -ml-3.5 flex pb-0.5 mt-1 text-sm text-white dark:text-dbeats-light 
-              bg-dbeats-light dark:bg-dbeats-alt border dark:border-dbeats-light font-semibold rounded-lg"
+              bg-dbeats-light dark:bg-dbeats-alt border border-white dark:border-dbeats-light font-semibold rounded-lg"
               >
                 beta
               </p>

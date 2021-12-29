@@ -65,7 +65,7 @@ const PlayBackCard = (props) => {
               src={props.playbackUserData.videos[index].videoImage}
               height={200}
               width={200}
-              className="object-cover  h-52 w-full absolute top-0 z-500 hidden"
+              className="object-cover  h-52 w-full absolute top-0 z-500 hidden "
               alt={props.playbackUserData.videos[index].videoName}
               placeholderSrc={dbeatsLogoBnW}
             />
@@ -86,7 +86,7 @@ const PlayBackCard = (props) => {
               </Link>
               <div className="w-full flex  justify-between ">
                 <div>
-                  <span className=" text-base font-semibold dark:text-gray-200 mb-2">
+                  <span className=" text-base font-semibold dark:text-gray-200 mb-2   text-gray-900">
                     {props.playbackUserData.videos[index].videoName.slice(0, 45)}
                     {props.playbackUserData.videos[index].videoName.length > 45 ? '...' : ''}
                   </span>
