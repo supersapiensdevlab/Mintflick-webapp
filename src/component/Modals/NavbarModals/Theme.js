@@ -48,8 +48,8 @@ export function theme({ darkMode }) {
       },
       suggestionHighlighted: {
         borderRadius: '6px',
-        background: !darkMode ? '#4f46e5' : '#fff',
-        color: darkMode ? '#101010' : '#fff',
+        background: !darkMode ? '#eee' : '#fff',
+        color: '#101010',
         cursor: 'pointer',
       },
       sectionContainer: {},
