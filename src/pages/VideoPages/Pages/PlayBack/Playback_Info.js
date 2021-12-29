@@ -456,22 +456,23 @@ const PlayBackInfo = (props) => {
             </Helmet> */}
           <div
             className={`${darkMode && 'dark'}  grid sm:grid-cols-1 lg:grid-cols-3 grid-flow-row 
-            2xl:pt-3 lg:pt-0 lg:pb-50 2xl:mt-14 mt-10 
-             lg:mt-12 lg:ml-11  
+              lg:pb-50  
+               sm:ml-20 
+               mt-16
              bg-gradient-to-b from-blue-50 via-blue-50 to-white  
              dark:bg-gradient-to-b dark:from-dbeats-dark-secondary  
              dark:to-dbeats-dark-primary`}
           >
             <div className=" lg:col-span-2 dark:bg-dbeats-dark-alt text-black dark:text-white">
-              <div className="self-center 2xl:px-12 lg:px-5 w-screen lg:w-full 2xl:mt-1 lg:mt-2 mt-2.5">
+              <div className="self-center   bg-black ">
                 {userData ? <VideoPlayer playbackUrl={playbackUrl} creatorData={userData} /> : null}
               </div>
-              <div className="2xl:mx-7 2xl:px-7 lg:px-2 lg:mx-4 px-3 dark:bg-dbeats-dark-alt">
-                <div className="lg:flex flex-row justify-between lg:my-2 my-1  ">
+              <div className="2xl:mx-7 sm:p-2 p-3   dark:bg-dbeats-dark-alt">
+                <div className="lg:flex flex-row justify-between  ">
                   <div className="2xl:py-4 lg:py-2">
                     <div className=" w-full text-left mt-0" style={{ padding: '0px' }}>
                       {userData ? (
-                        <p className="font-semibold 2xl:text-xl lg:text-md pb-4">
+                        <p className="font-semibold 2xl:text-xl lg:text-md ">
                           {userData.videos[props.video_id].videoName}
                         </p>
                       ) : null}
@@ -506,7 +507,7 @@ const PlayBackInfo = (props) => {
                             href="/signup"
                             className="bg-dbeats-light  p-1 2xl:text-lg lg:text-sm text-md  rounded-sm 2xl:px-4 px-4 lg:px-2 mr-3 font-semibold text-white "
                           >
-                            <span>Login to Subscribe and Become a SuperFan</span>
+                            <span>Login to Subscribe & Become a SuperFan</span>
                           </a>
                         )}
                       </div>
@@ -515,7 +516,7 @@ const PlayBackInfo = (props) => {
                   <div className="2xl:text-2xl lg:text-md 2xl:py-4 lg:py-2 py-2 flex justify-around">
                     <div className="  text-center lg:mx-3">
                       <button className="border-0 bg-transparent" onClick={handleShow}>
-                        <i className="fas fa-share opacity-50 mx-2"></i>
+                        <i className="fas fa-share-alt opacity-50 mx-2"></i>
                       </button>
                       <br />
                       <p className="2xl:text-base  text-base lg:text-sm"> SHARE</p>
@@ -573,7 +574,7 @@ const PlayBackInfo = (props) => {
                     <Menu
                       as="div"
                       className="relative inline-block text-left"
-                      style={{ zIndex: 100 }}
+                      style={{ zIndex: 50 }}
                     >
                       <div style={{ zIndex: 50 }}>
                         <Menu.Button>
@@ -589,13 +590,13 @@ const PlayBackInfo = (props) => {
                         leaveFrom="transform opacity-100 scale-100"
                         leaveTo="transform opacity-0 scale-95"
                       >
-                        <Menu.Items className="absolute right-0 w-56 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                        <Menu.Items className="  dark:bg-opacity-10 backdrop-filter  backdrop-blur-md absolute right-0 w-56  origin-top-right bg-white dark:bg-dbeats-dark-primary dark:text-gray-50 divide-y divide-gray-100   shadow   focus:outline-none">
                           <div className="px-1 py-1 ">
-                            <Menu.Item className="w-full text-gray-700 text-left text-lg pl-2 hover:text-white hover:bg-dbeats-light">
+                            <Menu.Item className="w-full text-gray-700 dark:text-gray-50 text-left text-lg pl-2 hover:text-white hover:bg-dbeats-light">
                               <button>Edit</button>
                             </Menu.Item>
                             {user ? (
-                              <Menu.Item className="w-full text-gray-700 text-left text-lg pl-2 hover:text-white hover:bg-dbeats-light">
+                              <Menu.Item className="w-full text-gray-700 dark:text-gray-50 text-left text-lg pl-2 hover:text-white hover:bg-dbeats-light">
                                 <button
                                   onClick={() => {
                                     handleShowPlaylist();
@@ -607,19 +608,6 @@ const PlayBackInfo = (props) => {
                             ) : (
                               <> </>
                             )}
-                          </div>
-                          <div className="px-1 py-1">
-                            <Menu.Item className="w-full text-gray-700 text-left text-lg pl-2 hover:text-white hover:bg-dbeats-light">
-                              <button>Archive</button>
-                            </Menu.Item>
-                            <Menu.Item className="w-full text-gray-700 text-left text-lg pl-2 hover:text-white hover:bg-dbeats-light">
-                              <button>Move</button>
-                            </Menu.Item>
-                          </div>
-                          <div className="px-1 py-1">
-                            <Menu.Item className="w-full text-gray-700 text-left text-lg pl-2 hover:text-white hover:bg-dbeats-light">
-                              <button>Delete</button>
-                            </Menu.Item>
                           </div>
                         </Menu.Items>
                       </Transition>
@@ -638,7 +626,7 @@ const PlayBackInfo = (props) => {
                 ) : null}
                 <div className="bg-blue-50">
                   <iframe
-                    className="w-full p-0 m-0 h-88 2xl:h-88 lg:h-88 mb-40"
+                    className="w-full p-0 m-0 h-88 2xl:h-88 lg:h-88 sm:mb-36"
                     title="comment"
                     src="https://theconvo.space/embed/dt?threadId=KIGZUnR4RzXDFheXoOwo"
                     allowtransparency="true"
@@ -647,7 +635,7 @@ const PlayBackInfo = (props) => {
                 </div>
               </div>
             </div>
-            <div className="  w-full pb-32 2xl:pt-6 pt-5 col-span-1 px-5 lg:pt-4 dark:bg-dbeats-dark-alt text-black  dark:text-white">
+            <div className="  w-full pb-32  pt-2 col-span-1 sm:px-5 px-3  bg-opacity-30 bg-white sm:dark:bg-dbeats-dark-secondary dark:bg-dbeats-dark-alt text-black  dark:text-white">
               <div className=" w-full  grid grid-cols-1 grid-flow-row gap-3  ">
                 {arrayData.map((value, index) => {
                   return <RecommendedCard key={index} value={value} darkMode={darkMode} />;
