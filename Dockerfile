@@ -1,7 +1,7 @@
-FROM node:alpine
+FROM node:16
 
 
-# Install app dependencies
+# Install app dependencieshttps://github.com/supersapiensdevlab/dbeats-frontend/blob/main/Dockerfile
 # A wildcard is used to ensure both package.json AND package-lock.json are copied
 # where available (npm@5+)
 #COPY package*.json ./
