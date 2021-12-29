@@ -1,6 +1,4 @@
-
 FROM node:alpine
-
 
 
 # Install app dependencies
@@ -8,11 +6,11 @@ FROM node:alpine
 # where available (npm@5+)
 #COPY package*.json ./
 # If you are building your code for production
-# RUN npm ci --only=production 
-RUN rm -rf /tmp/node_modules
+# RUN npm ci --only=production
+
 ADD package.json /tmp/package.json
 #ADD package-lock.json /tmp/package-lock.json
-RUN cd /tmp && npm i --force
+RUN cd /tmp && npm install -g npm@8.3.0 && npm i --force
 RUN mkdir -p /usr/src/app && cp -a /tmp/node_modules /usr/src/app/
 # Create app directory
 WORKDIR /usr/src/app
@@ -20,5 +18,5 @@ WORKDIR /usr/src/app
 # Bundle app source
 COPY . .
 
-EXPOSE 3000
+EXPOSE 5000
 CMD ["npm", "run", "start"] 
