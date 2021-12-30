@@ -2,51 +2,57 @@
 apiVersion: 'v1'
 kind: 'ConfigMap'
 metadata:
-  name: 'dbeatsfront-config-vib5'
+  name: 'nginx-2-config-jj6c'
   namespace: 'default'
   labels:
-    app: 'dbeatsfront'
+    app: 'nginx-2'
 data:
+  SKIP_PREFLIGHT_CHECK: 'true'
   REACT_APP_SERVER_URL: 'https://server.dbeats.live'
 ---
 apiVersion: 'apps/v1'
 kind: 'Deployment'
 metadata:
-  name: 'dbeatsfront'
+  name: 'nginx-2'
   namespace: 'default'
   labels:
-    app: 'dbeatsfront'
+    app: 'nginx-2'
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: 'dbeatsfront'
+      app: 'nginx-2'
   template:
     metadata:
       labels:
-        app: 'dbeatsfront'
+        app: 'nginx-2'
     spec:
       containers:
         - name: 'dbeats-frontend-1'
           image: 'gcr.io/hazel-champion-334507/github.com/supersapiensdevlab/dbeats-frontend:$SHORT_SHA'
           env:
+            - name: 'SKIP_PREFLIGHT_CHECK'
+              valueFrom:
+                configMapKeyRef:
+                  key: 'SKIP_PREFLIGHT_CHECK'
+                  name: 'nginx-2-config-jj6c'
             - name: 'REACT_APP_SERVER_URL'
               valueFrom:
                 configMapKeyRef:
                   key: 'REACT_APP_SERVER_URL'
-                  name: 'dbeatsfront-config-vib5'
+                  name: 'nginx-2-config-jj6c'
 ---
 apiVersion: 'autoscaling/v2beta1'
 kind: 'HorizontalPodAutoscaler'
 metadata:
-  name: 'dbeatsfront-hpa-yrnl'
+  name: 'nginx-2-hpa-ltli'
   namespace: 'default'
   labels:
-    app: 'dbeatsfront'
+    app: 'nginx-2'
 spec:
   scaleTargetRef:
     kind: 'Deployment'
-    name: 'dbeatsfront'
+    name: 'nginx-2'
     apiVersion: 'apps/v1'
   minReplicas: 1
   maxReplicas: 5

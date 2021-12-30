@@ -1,9 +1,1 @@
-steps:
-  - name: 'gcr.io/cloud-builders/docker'
-    args: [
-        'build',
-        '--tag=gcr.io/hazel-champion-334507/github.com/supersapiensdevlab/dbeats-frontend:f9fcdc3',
-        '.',
-      ] # build from Dockerfile
-images: ['gcr.io/hazel-champion-334507/github.com/supersapiensdevlab/dbeats-frontend:f9fcdc3'] # push tagged images to Container Registry
-timeout: '1200s' # extend timeout for build to 20 minutes
+ 
