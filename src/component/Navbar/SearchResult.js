@@ -44,7 +44,7 @@ const SearchResult = () => {
                       {data.usernameData.map((value, i) => {
                         return (
                           <SplideSlide className=" md:px-5 " key={i}>
-                            <Link href={`/profile/${value.username}`}>
+                            <Link to={`/profile/${value.username}`}>
                               <img
                                 className="mx-auto  h-32 w-32 rounded-full self-center  cursor-pointer"
                                 src={value.profile_image ? value.profile_image : logo}

@@ -122,7 +122,7 @@ const UploadVideoModal = (props) => {
 
   const onVideoFileChange = (e) => {
     if (e.target.name === 'videoFile') {
-      setVideo({ ...video, videoFile: e.target.files[0] });
+      video.videoFile = e.target.files[0];
 
       let videoName = e.target.files[0].name.replace(/\.[^/.]+$/, '');
       document.getElementById('videoName').value = videoName;
@@ -153,81 +153,79 @@ const UploadVideoModal = (props) => {
   const PostData = async (e) => {
     props.setLoader(false);
     e.preventDefault();
-    if (e.target.value === 'Upload Video') {
-      const {
-        videoName,
-        videoImage,
-        videoFile,
-        category,
-        ratings,
-        tags,
-        description,
-        allowAttribution,
-        commercialUse,
-        derivativeWorks,
-      } = video;
-      storeWithProgress(e.target.value).then(() => {
-        let formData = new FormData(); // Currently empty
-        formData.append('userName', user.username);
-        formData.append('userImage', user.profile_image);
+    const {
+      videoName,
+      videoImage,
+      videoFile,
+      category,
+      ratings,
+      tags,
+      description,
+      allowAttribution,
+      commercialUse,
+      derivativeWorks,
+    } = video;
+    storeWithProgress(e.target.value).then(() => {
+      let formData = new FormData(); // Currently empty
+      formData.append('userName', user.username);
+      formData.append('userImage', user.profile_image);
 
-        formData.append('videoName', videoName);
+      formData.append('videoName', videoName);
 
-        tags.forEach((tag) => formData.append('tags', tag));
+      tags.forEach((tag) => formData.append('tags', tag));
 
-        formData.append('description', description);
+      formData.append('description', description);
 
-        formData.append('category', category);
-        formData.append('ratings', ratings);
-        formData.append('allowAttribution', allowAttribution);
-        formData.append('commercialUse', commercialUse);
-        formData.append('derivativeWorks', derivativeWorks);
+      formData.append('category', category);
+      formData.append('ratings', ratings);
+      formData.append('allowAttribution', allowAttribution);
+      formData.append('commercialUse', commercialUse);
+      formData.append('derivativeWorks', derivativeWorks);
 
-        formData.append('videoFile', videoFile, videoFile.name);
-        formData.append('videoImage', videoImage, videoImage.name);
-        formData.append('videoHash', video.cid);
+      formData.append('videoFile', videoFile, videoFile.name);
+      formData.append('videoImage', videoImage, videoImage.name);
+      formData.append('videoHash', video.cid);
 
-        if (
-          video.videoFile.length !== 0 &&
-          video.videoImage.length !== 0 &&
-          video.videoName.length !== 0
-        ) {
-          axios
-            .post(`${process.env.REACT_APP_SERVER_URL}/upload_video`, formData, {
-              headers: {
-                'content-type': 'multipart/form-data',
-              },
-            })
-            .then(() => {
-              setVideo({
-                videoName: '',
-                videoImage: '',
-                videoFile: '',
-                category: '',
-                ratings: '',
-                tags: [],
-                description: '',
-                allowAttribution: '',
-                commercialUse: '',
-                derivativeWorks: '',
-              });
-              props.setLoader(true);
-              props.handleCloseVideoUpload();
-            })
-            .catch((error) => {
-              console.log(error);
+      if (
+        video.videoFile.length !== 0 &&
+        video.videoImage.length !== 0 &&
+        video.videoName.length !== 0
+      ) {
+        axios
+          .post(`${process.env.REACT_APP_SERVER_URL}/upload_video`, formData, {
+            headers: {
+              'content-type': 'multipart/form-data',
+            },
+          })
+          .then(() => {
+            setVideo({
+              videoName: '',
+              videoImage: '',
+              videoFile: '',
+              category: '',
+              ratings: '',
+              tags: [],
+              description: '',
+              allowAttribution: '',
+              commercialUse: '',
+              derivativeWorks: '',
             });
-        } else {
-          Noty.closeAll();
-          new Noty({
-            type: 'error',
-            text: 'Choose Video File & Fill other Details',
-            theme: 'metroui',
-            layout: 'bottomRight',
-          }).show();
-        }
-      });
-    }
+            props.setLoader(true);
+            props.handleCloseVideoUpload();
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      } else {
+        Noty.closeAll();
+        new Noty({
+          type: 'error',
+          text: 'Choose Video File & Fill other Details',
+          theme: 'metroui',
+          layout: 'bottomRight',
+        }).show();
+      }
+    });
   };
 
   return (
@@ -503,7 +501,7 @@ const UploadVideoModal = (props) => {
                 px-3 2xl:text-lg rounded  border-dbeats-light border
                 lg:text-md text-md my-auto font-semibold px-3 bg-transparent
                 dark:text-white `}
-              disabled={video.videoImage === '' || video.videoFile === ''}
+              disabled={!videoUpload || !videoImageUpload}
             ></input>
             <div
               className="animate-spin rounded-full h-7 w-7 ml-3 border-t-2 border-b-2 bg-gradient-to-r from-green-400 to-blue-500 "

@@ -531,7 +531,6 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                         .slice(0)
                         .reverse()
                         .map((playlist, i) => {
-                          ////console.log(playbackUser)
                           return (
                             <>
                               <div key={i} className="">

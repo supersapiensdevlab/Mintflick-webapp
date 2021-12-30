@@ -25,10 +25,6 @@
   border-radius: 5px;
 }
 
-video {
-  background: #fff;
-}
-
 .info_localDisplay_controls {
   margin-top: -65px;
   display: flex;

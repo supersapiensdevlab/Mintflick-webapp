@@ -36,7 +36,10 @@ const PlaylistCard = (props) => {
       {/* <a href={`/playback/${props.videoData.username}/0`}> */}
       {props.playlistData.data.trackId ? (
         <div className={`cursor-pointer 2xl:h-48 lg:h-32 md:h-36 h-44 dark:bg-black w-full `}>
-          <Link to={`/track/${props.playlistData.username}/${props.playlistData.index}`}>
+          <Link
+            to={`/track/${props.playlistData.username}/${props.playlistData.index}`}
+            onClick={() => audio.pause()}
+          >
             <img
               src={props.playlistData.data.trackImage}
               alt=""

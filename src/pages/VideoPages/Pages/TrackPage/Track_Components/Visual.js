@@ -23,7 +23,7 @@ const Waves = ({ src, isPlaying, currentTime, setIsPlaying, setHidden }) => {
       );
     }
     // eslint-disable-next-line
-  }, []);
+  }, [waveformRef]);
 
   useEffect(() => {
     if (wavesurfer) {

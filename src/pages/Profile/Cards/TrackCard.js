@@ -44,7 +44,7 @@ const TrackCard = (props) => {
         >
           <Link
             to={{
-              pathname: `/track/${props.username}/${props.index}`,
+              pathname: `/track/${props.username}/${props.track.trackId}`,
             }}
             onClick={() => {
               window.sessionStorage.setItem('Track_Array', JSON.stringify(''));

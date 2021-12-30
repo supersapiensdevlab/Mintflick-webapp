@@ -19,7 +19,7 @@ const NewPlaylist = (props) => {
     if (props.datatype === 'video') {
       data = {
         playlistname: playlist,
-        data: props.data.videos[props.id],
+        data: props.data.videos,
         username: user.username,
         playlistUsername: props.data.username,
         playlistDataIndex: props.id,
@@ -27,7 +27,7 @@ const NewPlaylist = (props) => {
     } else {
       data = {
         playlistname: playlist,
-        data: props.data.tracks[props.id],
+        data: props.data.tracks,
         username: user.username,
         playlistUsername: props.data.username,
         playlistDataIndex: props.id,
@@ -93,7 +93,7 @@ export const Playlist = (props) => {
     if (props.datatype === 'video') {
       data = {
         playlistname: playlistTitle,
-        data: props.data.videos[props.id],
+        data: props.data.videos,
         username: user.username,
         playlistUsername: props.data.username,
         playlistDataIndex: props.id,
@@ -101,7 +101,7 @@ export const Playlist = (props) => {
     } else {
       data = {
         playlistname: playlistTitle,
-        data: props.data.tracks[props.id],
+        data: props.data.tracks,
         username: user.username,
         playlistUsername: props.data.username,
         playlistDataIndex: props.id,

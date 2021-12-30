@@ -157,7 +157,7 @@ const Home = () => {
                         if (i < 5) {
                           return (
                             <div key={i} className="flex items-center pb-4">
-                              <Link to={`/profile/${track.username}/music`}>
+                              <Link to={`/track/${track.username}/${track.trackId}`}>
                                 <img
                                   src={track.profile_image !== '' ? track.profile_image : logo}
                                   alt=""
