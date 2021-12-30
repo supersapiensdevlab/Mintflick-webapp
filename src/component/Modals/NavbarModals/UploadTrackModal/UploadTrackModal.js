@@ -411,6 +411,7 @@ const UploadTrackModal = (props) => {
               tokenId: '',
               mintTrxHash: '',
             });
+            setUploading(0);
             props.setLoader(true);
             props.handleCloseTrackUpload();
             Noty.closeAll();

@@ -210,6 +210,7 @@ const UploadVideoModal = (props) => {
               commercialUse: '',
               derivativeWorks: '',
             });
+            setUploading(0);
             props.setLoader(true);
             props.handleCloseVideoUpload();
           })

@@ -313,14 +313,16 @@ const AnnouncementModal = (props) => {
                   )}
                 </div>
 
-                <div className="mx-2  flex  items-center w-full justify-between">
+                <div className="px-2 flex  items-center w-full justify-between dark:bg-dbeats-dark-secondary">
                   <div className="flex items-center">
                     <div className="mx-2">
                       <input
                         type="text"
                         placeholder="Enter Event Link(Optional)"
                         onChange={handleLinkChange}
-                        className=" w-64 h-8 my-1 rounded-sm lg:text-sm 2xl:text-md border border-gray-200"
+                        className=" w-64 h-8 my-1 rounded-sm sm:text-sm lg:text-sm 2xl:text-md
+                        focus:ring-dbeats-dark-primary border dark:border-dbeats-alt border-gray-300 
+                        dark:bg-dbeats-dark-primary ring-dbeats-dark-secondary ring-0 flex-1 block "
                       />
                     </div>
                     <div className="mx-2">
