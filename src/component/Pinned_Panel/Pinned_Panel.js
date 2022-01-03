@@ -59,9 +59,6 @@ const PinnedPanel = () => {
                     alt=""
                     className=" 2xl:w-14 2xl:h-14 lg:h-10 lg:w-10 rounded-full hover:shadow hover:scale-95 transform transition-all"
                   />{' '}
-                  {/* <div className="bg-red-500 rounded-full shadow  h-6 w-6 text-sm self-center text-center font-semibold  absolute -bottom-2  -right-1 dark:border-dbeats-dark-primary  border-red-300 border-2 text-white  ">
-                    2
-                  </div> */}
                 </Link>
               </OverlayTrigger>
             </div>
@@ -71,7 +68,7 @@ const PinnedPanel = () => {
         <div className="flex justify-center cursor-pointer  ">
           <Link
             className="2xl:w-14 2xl:h-14 lg:h-10 lg:w-10  my-2 rounded-full hover:shadow hover:scale-95 transition-all transform  relative bg-blue-300 dark:bg-dbeats-dark-alt "
-            to={userdata ? `/profile/${userdata.username}/subscribed_channels` : `/signup`}
+            to={userdata ? `/profile/${userdata.username}/following` : `/signup`}
           >
             <div className="w-max mx-auto 2xl:mt-3.5 lg:mt-1.5">
               <i className="fas fa-plus 2xl:text-lg lg:text-sm text-center text-white dark:text-blue-200"></i>
