@@ -422,17 +422,14 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                 <div className=" sm:px-5  pb-5">
                   {postsData && postsData.length > 0 ? (
                     <div>
-                      {postsData
-                        .slice(0)
-                        .reverse()
-                        .map((post, i) => {
-                          ////console.log(playbackUser)
-                          return (
-                            <div key={i}>
-                              <AnnouncementCard post={post} index={i} username={user.username} />
-                            </div>
-                          );
-                        })}
+                      {postsData.map((post, i) => {
+                        ////console.log(playbackUser)
+                        return (
+                          <div key={i}>
+                            <AnnouncementCard post={post} index={i} username={user.username} />
+                          </div>
+                        );
+                      })}
                     </div>
                   ) : (
                     <p className="2xl:text-lg lg:text-sm dark:text-white">No Posts till now</p>

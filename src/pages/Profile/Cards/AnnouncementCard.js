@@ -2,21 +2,31 @@ import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import ReactPlayer from 'react-player';
 import { Link } from 'react-router-dom';
-import { detectURLs } from '../../../component/uploadHelperFunction';
+import { detectURLs, linkify } from '../../../component/uploadHelperFunction';
+import { ShareModal } from '../../../component/Modals/ShareModal/ShareModal';
 import classes from '../Profile.module.css';
 
 moment().format();
 
 const AnnouncementCard = (props) => {
-  //console.log(props);
   const [playing, setPlaying] = useState(false);
 
   const [showImage, setShowImage] = useState(true);
   const [seeMore, setSeeMore] = useState(false);
+  const [announcement, setAnnouncement] = useState('');
   const [showLinkPreview, setShowLinkPreview] = useState(false);
 
   const [time, setTime] = useState(null);
   const [linkData, setLinkData] = useState(null);
+
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  const text = 'Copy Link To Clipboard';
+  const [buttonText, setButtonText] = useState(text);
+
+  let sharable_data = `${process.env.REACT_APP_CLIENT_URL}/profile/${props.username}/posts`;
 
   const handleMouseMove = () => {
     setPlaying(true);
@@ -41,9 +51,13 @@ const AnnouncementCard = (props) => {
       setTime(moment(Math.floor(props.post.timestamp)).fromNow());
     }
 
+    setAnnouncement(props.post.announcement);
+
     if (props.post.announcement && !props.post.post_image) {
       let url = detectURLs(props.post.announcement);
       if (url && url.length > 0) {
+        let data = linkify(props.post.announcement);
+        setAnnouncement(data);
         setLinkData(props.post.linkpreview_data);
         setShowLinkPreview(true);
       } else {
@@ -76,10 +90,13 @@ const AnnouncementCard = (props) => {
           onMouseLeave={hanldeMouseLeave}
         >
           <Link
-            to={props.post.link}
+            to={{
+              pathname: props.post.link,
+            }}
             target="_blank"
             rel="noopener noreferrer"
-            style={props.post.link === '' ? { pointerEvents: 'none' } : null}
+            style={!props.post.link ? { cursor: 'default' } : null}
+            onClick={!props.post.link ? (e) => e.preventDefault() : null}
           >
             {showImage ? (
               <>
@@ -126,20 +143,15 @@ const AnnouncementCard = (props) => {
                   className={`${!seeMore ? 'line-clamp-4' : ''} mr-2  `}
                   style={{ wordBreak: 'break-words' }}
                 >
-                  {props.post.announcement.split('\n').map(function (item) {
-                    return (
-                      <>
-                        {item}
-                        <br />
-                      </>
-                    );
+                  {announcement.split('\n').map(function (item) {
+                    return <div dangerouslySetInnerHTML={{ __html: item }}></div>;
                   })}
                   {}
                 </p>
 
-                {props.post.announcement.split(/\r\n|\r|\n/).length > 6 ? (
+                {announcement.split(/\r\n|\r|\n/).length > 3 ? (
                   <span
-                    className="cursor-pointer text-base hover:underline text-gray-600"
+                    className="cursor-pointer text-base hover:underline text-gray-600 mt-2"
                     onClick={() => setSeeMore(!seeMore)}
                   >
                     {seeMore ? 'see less' : 'see more'}
@@ -149,7 +161,7 @@ const AnnouncementCard = (props) => {
             </div>
             <div>
               <div className="2xl:text-2xl lg:text-lg text-gray-500 ">
-                <button className="px-1">
+                <button className="px-1" onClick={handleShow}>
                   <i className="fas fa-share-alt hover:text-dbeats-light"></i>
                 </button>
               </div>
@@ -157,6 +169,13 @@ const AnnouncementCard = (props) => {
           </p>
         </div>
       </div>
+      <ShareModal
+        show={show}
+        handleClose={handleClose}
+        sharable_data={sharable_data}
+        copybuttonText={buttonText}
+        setCopyButtonText={setButtonText}
+      />
     </div>
   );
 };

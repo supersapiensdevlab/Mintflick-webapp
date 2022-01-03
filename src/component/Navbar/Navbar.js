@@ -205,7 +205,9 @@ const NavBar = () => {
     return (
       <div className="h-full my-1">
         <Link
-          to={`https://beta.dbeats.live/profile/${data.username}/posts`}
+          to={{
+            pathname: `${process.env.REACT_APP_CLIENT_URL}/profile/${data.username}/posts`,
+          }}
           target="_blank"
           rel="noopener noreferrer"
           className="grid grid-cols-4 justify-center p-2 dark:bg-dbeats-dark-alt dark:hover:bg-dbeats-dark-secondary dark:text-white text-gray-500"
@@ -217,6 +219,20 @@ const NavBar = () => {
                 alt="announcement_info"
                 className="h-full w-auto rounded-sm"
               />
+            </div>
+          ) : null}
+          {!data.post_image && data.linkpreview_data ? (
+            <div className="h-20 col-span-1 rounded-sm bg-gray-700 flex justify-center">
+              <img
+                src={data.linkpreview_data.image.url}
+                alt="announcement_info"
+                className="h-full w-auto rounded-sm"
+              />
+            </div>
+          ) : null}
+          {!data.post_image && !data.linkpreview_data && data.post_video ? (
+            <div className="h-20 col-span-1 rounded-sm bg-gray-700 flex justify-center">
+              <img src={CircleLogo} alt="announcement_info" className="h-full w-auto rounded-sm" />
             </div>
           ) : null}
           <div className="col-span-3 rounded-sm ">

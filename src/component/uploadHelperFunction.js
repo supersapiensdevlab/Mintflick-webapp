@@ -8,6 +8,13 @@ export function makeStorageClient() {
 }
 
 export function detectURLs(message) {
-  var urlRegex = /(((https?:\/\/)|(www\.))[^\s]+)/g;
+  const urlRegex = /(((https?:\/\/)|(www\.))[^\s]+)/g;
   return message.match(urlRegex);
+}
+
+export function linkify(text) {
+  const urlRegex = /(https?:\/\/[^\s]+)/g;
+  return text.replace(urlRegex, (url) => {
+    return `<u><a href="${url}" target="_blank">${url}</a><u>`;
+  });
 }

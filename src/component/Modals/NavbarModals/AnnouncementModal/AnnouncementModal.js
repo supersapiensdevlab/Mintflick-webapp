@@ -32,6 +32,7 @@ const AnnouncementModal = (props) => {
 
   const [linkPreviewUrl, setLinkPreviewUrl] = useState(null);
   const [linkPreviewData, setLinkPreviewData] = useState(null);
+  const [uploading, setUploading] = useState(0);
 
   const handleInputChange = (e) => {
     e.preventDefault();
@@ -172,6 +173,7 @@ const AnnouncementModal = (props) => {
     const onStoredChunk = (size) => {
       uploaded += size;
       const pct = totalSize / uploaded;
+      setUploading(10 - pct);
       console.log(`Uploading... ${pct.toFixed(2)}% complete`);
     };
 
@@ -249,6 +251,7 @@ const AnnouncementModal = (props) => {
           });
           setPostImage(null);
           props.setShowAnnouncement(false);
+          setUploading(0);
           props.setLoader(true);
         })
         .catch((error) => {
@@ -350,7 +353,7 @@ const AnnouncementModal = (props) => {
                           document.getElementById('post_announcement_video').click();
                         }}
                       ></i>
-                      <div className="mx-2 mb-1">
+                      <div className="mx-2 mb-1 w-20 truncate">
                         {announcement.postVideo ? announcement.postVideo.name : null}
                       </div>
                       <input
@@ -365,11 +368,28 @@ const AnnouncementModal = (props) => {
                       />
                     </div>
                   </div>
-                  <div>
+                  <div className="flex items-center">
+                    <div className=" mx-5 flex items-center w-56">
+                      <input
+                        type="range"
+                        value={uploading}
+                        min="0"
+                        max="10"
+                        hidden={props.loader}
+                        className="appearance-none cursor-pointer w-full h-3 bg-green-400 
+                font-white rounded-full slider-thumb  backdrop-blur-md"
+                      />
+                      <p className="mx-2 text-base font-medium text-white" hidden={props.loader}>
+                        {Math.round(uploading * 10)}%
+                      </p>
+                    </div>
                     <button
                       type="submit"
                       onClick={handleAnnouncement}
-                      className=" 2xl:my-3 lg:my-2 mr-5 bg-white px-1 2xl:py-2  py-1 2xl:text-md lg:text-sm  font-semibold bg-dbeats-light  transform transition delay-50 duration-300 ease-in-out hover:scale-105 text-white border-0 lg:w-28 2xl:w-48 w-24 rounded-sm cursor-pointer "
+                      className=" 2xl:my-3 lg:my-2 mr-1 bg-white px-1 2xl:py-2  py-1 2xl:text-md lg:text-sm  
+                      font-semibold bg-dbeats-light  transform transition 
+                      delay-50 duration-300 ease-in-out hover:scale-105 text-white border-0 
+                      lg:w-24 2xl:w-28 w-24 rounded-sm cursor-pointer "
                     >
                       POST
                     </button>
