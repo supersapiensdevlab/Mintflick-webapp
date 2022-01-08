@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import ReactPlayer from 'react-player';
-import classes from '../Profile.module.css';
+import { Link } from 'react-router-dom';
 import { ShareModal } from '../../../component/Modals/ShareModal/ShareModal';
+import classes from '../Profile.module.css';
 
 const ReactionCard = (props) => {
   const [playing, setPlaying] = useState(false);
@@ -15,7 +16,6 @@ const ReactionCard = (props) => {
   };
 
   const [show, setShow] = useState(false);
-  //console.log(show);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
@@ -62,7 +62,7 @@ const ReactionCard = (props) => {
         <div
           className={`cursor-pointer lg:h-32 2xl:h-48 md:h-40 h-44 lg:w-1/3 w-full  my-auto dark:bg-dbeats-dark-primary`}
         >
-          <a href={`/playback/${props.playbackUserData.link}`}>
+          <Link to={`/playback/${props.playbackUserData.link}`}>
             <ReactPlayer
               width="100%"
               height="100%"
@@ -75,7 +75,7 @@ const ReactionCard = (props) => {
               onMouseMove={handleMouseMove}
               onMouseLeave={hanldeMouseLeave}
             />
-          </a>
+          </Link>
         </div>
         <div className="col-start-1 row-start-3 py-2 px-5 w-full">
           <p className="text-black text-sm font-medium dark:text-gray-100">

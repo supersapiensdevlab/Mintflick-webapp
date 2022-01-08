@@ -8,6 +8,7 @@ import Modal from 'react-awesome-modal';
 import { Container, Row } from 'react-bootstrap';
 import Lottie from 'react-lottie';
 import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import superfluid from '../../../../assets/images/superfluid-black.svg';
 import { ShareModal } from '../../../../component/Modals/ShareModal/ShareModal';
 import VideoPlayer from '../../../../component/VideoPlayer/VideoPlayer';
@@ -227,12 +228,12 @@ const PublicInfo = (props) => {
                         <span>{subscribeButtonText}</span>
                       </button>
                     ) : (
-                      <a
-                        href="/signup"
+                      <Link
+                        to="/signup"
                         className="bg-dbeats-light p-1 text-lg rounded-sm px-4 mr-3 font-semibold text-white "
                       >
                         <span>Login</span>
-                      </a>
+                      </Link>
                     )}
                     <button className="bg-dbeats-light    p-1 text-lg rounded-sm px-4 mr-3 font-semibold text-white ">
                       <i className="fas fa-dice-d20  mr-1 cursor-pointer"></i>

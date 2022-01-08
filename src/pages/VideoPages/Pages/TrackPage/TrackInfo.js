@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { Playlist } from '../../../../component/Modals/PlaylistModals/PlaylistModal';
 import AudioPlayer from './Track_Components/AudioPlayer';
 import TrackCard from './Track_Components/TrackCard';
@@ -24,7 +24,21 @@ const TrackInfo = () => {
 
   const get_User = async () => {
     await axios.get(`${process.env.REACT_APP_SERVER_URL}/user/${username}`).then((value) => {
-      setUserData(value.data);
+      let trackdata = {
+        username: '',
+        tracks: {},
+      };
+
+      for (let i = 0; i < value.data.tracks.length; i++) {
+        if (value.data.tracks[i].trackId === track_id) {
+          trackdata = {
+            username: value.data.username,
+            tracks: value.data.tracks[i],
+          };
+        }
+      }
+      setUserData(trackdata);
+
       for (let i = 0; i < user.my_playlists.length; i++) {
         let getdata = user.my_playlists[i].playlistdata;
         console.log('getdata', getdata);
@@ -96,7 +110,7 @@ const TrackInfo = () => {
                   text-transparent bg-clip-text bg-gradient-to-r 
                   from-green-400 to-blue-500"
                   >
-                    {userData.tracks[track_id].trackName}
+                    {userData.tracks.trackName}
                   </p>
                   <button
                     onClick={handleShowPlaylist}
@@ -106,14 +120,19 @@ const TrackInfo = () => {
                     Add to Playlist
                   </button>
                 </div>
-                <p className="mt-0  mb-1 md:mb-2   text-gray-600 tracking-widest  text-lg flex font-semibold">
-                  {userData.username}
-                </p>
+                <Link to={`/profile/${userData.username}/music`}>
+                  <p
+                    className="mt-0  mb-1 md:mb-2 cursor-pointer hover:underline text-gray-600 hover:text-gray-400 
+                tracking-widest  text-lg flex font-semibold"
+                  >
+                    {userData.username}
+                  </p>
+                </Link>
               </>
             ) : null}
           </div>
           <div className="self-center lg:pr-4 lg:w-full lg:mt-3 mt-0.5">
-            {userData ? <AudioPlayer userData={userData.tracks[track_id]} /> : null}
+            {userData ? <AudioPlayer userData={userData.tracks} /> : null}
           </div>
         </div>
 
@@ -126,7 +145,7 @@ const TrackInfo = () => {
                 <div key={index}>
                   <TrackCard
                     track={value.tracks[trackid]}
-                    index={trackid}
+                    index={value.tracks[trackid].trackId}
                     username={value.username}
                   />
                 </div>

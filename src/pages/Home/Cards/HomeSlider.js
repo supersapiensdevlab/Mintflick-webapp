@@ -1,6 +1,7 @@
 import React from 'react';
-import { StackedCarousel, ResponsiveContainer } from 'react-stacked-center-carousel';
 import ReactPlayer from 'react-player';
+import { Link } from 'react-router-dom';
+import { ResponsiveContainer, StackedCarousel } from 'react-stacked-center-carousel';
 
 const ResponsiveCarousel = (props) => {
   const ref = React.useRef(ResponsiveContainer);
@@ -49,9 +50,9 @@ const Slide = function (StackedCarouselSlideProps) {
   const { data, dataIndex } = StackedCarouselSlideProps;
   const value = data[dataIndex];
   return (
-    <a
+    <Link
       className="w-screen h-full bg-gray-300 dark:bg-dbeats-dark-primary py-2 px-0 lg:py-0 lg:w-max lg:h-96 md:h-96 flex mx-auto shadow-xl dark:shadow-3xl"
-      href={`/live/${value.username}/`}
+      to={`/live/${value.username}/`}
     >
       <span className="fixed bg-red-600 text-white px-1 mx-2 my-2 rounded-sm font-semibold z-50">
         {' '}
@@ -71,7 +72,7 @@ const Slide = function (StackedCarouselSlideProps) {
       {/* <div className="p-5 self-center">
           <p className="font-bold">{value.name}</p>
         </div> */}
-    </a>
+    </Link>
   );
 };
 

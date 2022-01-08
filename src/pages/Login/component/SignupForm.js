@@ -16,6 +16,7 @@ const SignupForm = ({
   const [form_email, setEmail] = useState('');
 
   const [invalidEmail, setInvalidEmail] = useState(false);
+  const [existingValue, setExistingValue] = useState(null);
 
   const [showPassword, setShowPassword] = useState(true);
   const seePass = useRef();
@@ -34,6 +35,7 @@ const SignupForm = ({
   };
 
   const handleEmailChange = (e) => {
+    setExistingValue(null);
     if (EmailValidation(e.target.value)) {
       setInvalidEmail(false);
       setEmail(e.target.value);
@@ -60,38 +62,6 @@ const SignupForm = ({
   // Create a Stream Profile
   const createStream = async () => {
     setLoader(false);
-    let streamData = {
-      name: `${form_name}`,
-      profiles: [
-        {
-          name: '720p',
-          bitrate: 2000000,
-          fps: 30,
-          width: 1280,
-          height: 720,
-        },
-        {
-          name: '480p',
-          bitrate: 1000000,
-          fps: 30,
-          width: 854,
-          height: 480,
-        },
-        {
-          name: '360p',
-          bitrate: 500000,
-          fps: 30,
-          width: 640,
-          height: 360,
-        },
-      ],
-    };
-
-    const stream = await axios({
-      method: 'POST',
-      url: `${process.env.REACT_APP_SERVER_URL}/create_stream`,
-      data: streamData,
-    });
 
     let walletId = '';
     if (provider) {
@@ -106,9 +76,7 @@ const SignupForm = ({
       email: form_email,
       password: password,
       wallet_id: walletId,
-      livepeer_data: stream.data,
     };
-    console.log(userData);
 
     axios({
       method: 'post',
@@ -116,8 +84,12 @@ const SignupForm = ({
       data: userData,
     })
       .then(function (response) {
-        window.localStorage.setItem('user', JSON.stringify(response.data));
-        window.location.href = '/';
+        if (response.data === 'Email' || response.data === 'Username') {
+          setExistingValue(response.data);
+        } else {
+          window.localStorage.setItem('user', JSON.stringify(response.data));
+          window.location.href = '/';
+        }
       })
       .catch(function (error) {
         console.log(error);
@@ -154,14 +126,34 @@ const SignupForm = ({
           <p className={`${invalidEmail ? '2xl:text-sm lg:text-xs  text-red-500 mb-1' : 'hidden'}`}>
             Please Enter Valid Email
           </p>
+          {existingValue === 'Email' ? (
+            <p
+              className={`${
+                existingValue ? '2xl:text-sm lg:text-xs  text-red-500 ml-1 -mt-1' : 'hidden'
+              }`}
+            >
+              Email already exists
+            </p>
+          ) : null}
         </>
-        <input
-          className="self-center my-2 rounded w-full mx-5  lg:h-8 2xl:h-10   border-0   dark:bg-dbeats-dark-primary bg-gray-100 text-gray-900 lg:text-xs 2xl:text-lg dark:text-white focus:ring-dbeats-light"
-          type="text"
-          placeholder="Username"
-          onChange={(e) => handleUsernameChange(e)}
-          required
-        />
+        <>
+          <input
+            className="self-center my-2 rounded w-full mx-5  lg:h-8 2xl:h-10   border-0   dark:bg-dbeats-dark-primary bg-gray-100 text-gray-900 lg:text-xs 2xl:text-lg dark:text-white focus:ring-dbeats-light"
+            type="text"
+            placeholder="Username"
+            onChange={(e) => handleUsernameChange(e)}
+            required
+          />
+          {existingValue === 'Username' ? (
+            <p
+              className={`${
+                existingValue ? '2xl:text-sm lg:text-xs  text-red-500 ml-1 -mt-1' : 'hidden'
+              }`}
+            >
+              Username already exists
+            </p>
+          ) : null}
+        </>
         <div className="flex items-center w-full">
           <div className="w-full">
             <input

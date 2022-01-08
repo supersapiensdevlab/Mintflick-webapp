@@ -19,7 +19,6 @@ const AnnouncementModal = (props) => {
   //const [postImage, setPostImage] = useState(null);
   const [postImage, setPostImage] = useState(null);
   const [showLinkPreview, setShowLinkPreview] = useState(false);
-
   const [announcement, setAnnouncement] = useState({
     announcementText: '',
     postImage: null,
@@ -31,16 +30,18 @@ const AnnouncementModal = (props) => {
     mintTrxHash: '',
   });
 
+  const [linkPreviewUrl, setLinkPreviewUrl] = useState(null);
   const [linkPreviewData, setLinkPreviewData] = useState(null);
+  const [uploading, setUploading] = useState(0);
 
   const handleInputChange = (e) => {
     e.preventDefault();
     let value = e.target.value;
     setAnnouncement({ ...announcement, announcementText: value });
     let url = detectURLs(value);
-    //getLinkPreview(url[url.length - 1]).then((data) => setLinkPreviewData(data));
+    //getLinkPreview(url[url.length - 1]).then((data) => setLinkPreviewUrl(data));
     if (url && url.length > 0) {
-      setLinkPreviewData(url[url.length - 1]);
+      setLinkPreviewUrl(url[url.length - 1]);
       setShowLinkPreview(true);
     } else {
       setShowLinkPreview(false);
@@ -172,6 +173,7 @@ const AnnouncementModal = (props) => {
     const onStoredChunk = (size) => {
       uploaded += size;
       const pct = totalSize / uploaded;
+      setUploading(10 - pct);
       console.log(`Uploading... ${pct.toFixed(2)}% complete`);
     };
 
@@ -197,6 +199,7 @@ const AnnouncementModal = (props) => {
 
         formData.append('eventlink', announcement.event_link);
         formData.append('announcementHash', announcement.cid);
+        formData.append('previewData', JSON.stringify(linkPreviewData));
 
         console.log('anu', announcement);
 
@@ -231,6 +234,7 @@ const AnnouncementModal = (props) => {
       formData.append('postVideo', announcement.postVideo);
       formData.append('timestamp', moment().toDate().getTime());
       formData.append('eventlink', announcement.event_link);
+      formData.append('previewData', JSON.stringify(linkPreviewData));
 
       axios
         .post(`${process.env.REACT_APP_SERVER_URL}/user/announcement`, formData, {
@@ -247,6 +251,7 @@ const AnnouncementModal = (props) => {
           });
           setPostImage(null);
           props.setShowAnnouncement(false);
+          setUploading(0);
           props.setLoader(true);
         })
         .catch((error) => {
@@ -284,16 +289,17 @@ const AnnouncementModal = (props) => {
                     placeholder="Enter Announcement Details"
                     onChange={(e) => handleInputChange(e)}
                   ></textarea>
-                  {showLinkPreview ? (
+                  {showLinkPreview && !postImage ? (
                     <>
                       <LinkPreview
-                        linkurl={linkPreviewData}
+                        linkurl={linkPreviewUrl}
                         setShowLinkPreview={setShowLinkPreview}
+                        setLinkPreviewData={setLinkPreviewData}
                       />
                     </>
                   ) : (
                     <>
-                      {postImage && !linkPreviewData ? (
+                      {postImage ? (
                         <div className="">
                           <img
                             src={postImage}
@@ -310,14 +316,16 @@ const AnnouncementModal = (props) => {
                   )}
                 </div>
 
-                <div className="mx-2  flex  items-center w-full justify-between">
+                <div className="px-2 flex  items-center w-full justify-between dark:bg-dbeats-dark-secondary">
                   <div className="flex items-center">
                     <div className="mx-2">
                       <input
                         type="text"
                         placeholder="Enter Event Link(Optional)"
                         onChange={handleLinkChange}
-                        className=" w-64 h-8 my-1 rounded-sm lg:text-sm 2xl:text-md border border-gray-200"
+                        className=" w-64 h-8 my-1 rounded-sm sm:text-sm lg:text-sm 2xl:text-md
+                        focus:ring-dbeats-dark-primary border dark:border-dbeats-alt border-gray-300 
+                        dark:bg-dbeats-dark-primary ring-dbeats-dark-secondary ring-0 flex-1 block "
                       />
                     </div>
                     <div className="mx-2">
@@ -345,7 +353,7 @@ const AnnouncementModal = (props) => {
                           document.getElementById('post_announcement_video').click();
                         }}
                       ></i>
-                      <div className="mx-2 mb-1">
+                      <div className="mx-2 mb-1 w-20 truncate">
                         {announcement.postVideo ? announcement.postVideo.name : null}
                       </div>
                       <input
@@ -360,11 +368,28 @@ const AnnouncementModal = (props) => {
                       />
                     </div>
                   </div>
-                  <div>
+                  <div className="flex items-center">
+                    <div className=" mx-5 flex items-center w-56">
+                      <input
+                        type="range"
+                        value={uploading}
+                        min="0"
+                        max="10"
+                        hidden={props.loader}
+                        className="appearance-none cursor-pointer w-full h-3 bg-green-400 
+                font-white rounded-full slider-thumb  backdrop-blur-md"
+                      />
+                      <p className="mx-2 text-base font-medium text-white" hidden={props.loader}>
+                        {Math.round(uploading * 10)}%
+                      </p>
+                    </div>
                     <button
                       type="submit"
                       onClick={handleAnnouncement}
-                      className=" 2xl:my-3 lg:my-2 mr-5 bg-white px-1 2xl:py-2  py-1 2xl:text-md lg:text-sm  font-semibold bg-dbeats-light  transform transition delay-50 duration-300 ease-in-out hover:scale-105 text-white border-0 lg:w-28 2xl:w-48 w-24 rounded-sm cursor-pointer "
+                      className=" 2xl:my-3 lg:my-2 mr-1 bg-white px-1 2xl:py-2  py-1 2xl:text-md lg:text-sm  
+                      font-semibold bg-dbeats-light  transform transition 
+                      delay-50 duration-300 ease-in-out hover:scale-105 text-white border-0 
+                      lg:w-24 2xl:w-28 w-24 rounded-sm cursor-pointer "
                     >
                       POST
                     </button>

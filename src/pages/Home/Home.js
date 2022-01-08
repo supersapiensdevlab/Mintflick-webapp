@@ -3,12 +3,13 @@ import React, { useEffect, useState } from 'react';
 import Carousel from 'react-grid-carousel';
 import Lottie from 'react-lottie';
 import { useSelector } from 'react-redux';
-import personImg from '../../assets/images/profile.svg';
+import logo from '../..//assets/images/logo.svg';
 import animationData from '../../lotties/gamers.json';
 import ResponsiveCarousel from './Cards/HomeSlider';
 import LiveCard from './Cards/LiveCard';
 import PlayBackCard from './Cards/PlayBackCard';
 // import {Helmet} from "react-helmet";
+import { Link } from 'react-router-dom';
 
 const Home = () => {
   const [activeStreams, setActiveStreams] = useState([]);
@@ -16,6 +17,9 @@ const Home = () => {
   const darkMode = useSelector((darkmode) => darkmode.toggleDarkMode);
 
   const [arrayData, setArrayData] = useState([]);
+
+  const [latestVideo, setLatestVideo] = useState([]);
+  const [latestTrack, setLatestTrack] = useState([]);
 
   const user = JSON.parse(window.localStorage.getItem('user'));
   const defaultOptions = {
@@ -26,13 +30,7 @@ const Home = () => {
       preserveAspectRatio: 'xMidYMid slice',
     },
   };
-  const recommend_channels = [
-    { name: 'shroud' },
-    { name: 'shroud' },
-    { name: 'shroud' },
-    { name: 'shroud' },
-    { name: 'shroud' },
-  ];
+  const [latestUploads, setLatestUploads] = useState(null);
 
   useEffect(() => {
     let slidesValue = [];
@@ -55,12 +53,36 @@ const Home = () => {
   }, []);
 
   const fetchData = async () => {
-    const fileRes = await axios.get(`${process.env.REACT_APP_SERVER_URL}/`);
-    for (let i = 0; i < fileRes.data.array.length; i++) {
-      if (fileRes.data.array[i].videos && fileRes.data.array[i].videos.length > 0) {
-        if (user ? fileRes.data.array[i].username !== user.username : true)
-          setArrayData((prevState) => [...prevState, fileRes.data.array[i]]);
+    const fileRes = await axios.get(`${process.env.REACT_APP_SERVER_URL}/user`);
+    for (let i = 0; i < fileRes.data.length; i++) {
+      if (fileRes.data[i].videos && fileRes.data[i].videos.length > 0) {
+        if (user ? fileRes.data[i].username !== user.username : true)
+          setArrayData((prevState) => [...prevState, fileRes.data[i]]);
       }
+    }
+
+    const fetchUploads = await axios.get(`${process.env.REACT_APP_SERVER_URL}/trending`);
+    if (fetchUploads.data.latest_videos) {
+      let data = [];
+      let fetchedData = fetchUploads.data.latest_videos.reverse();
+      for (let i = 0; i < fetchedData.length; i++) {
+        if (!data.some((el) => el.username === fetchedData[i].username)) {
+          data.push(fetchedData[i]);
+        }
+      }
+      setLatestVideo(data);
+      setLatestUploads(true);
+    }
+    if (fetchUploads.data.latest_tracks) {
+      let data = [];
+      let fetchedData = fetchUploads.data.latest_tracks.reverse();
+      for (let i = 0; i < fetchedData.length; i++) {
+        if (!data.some((el) => el.username === fetchedData[i].username)) {
+          data.push(fetchedData[i]);
+        }
+      }
+      setLatestTrack(data);
+      setLatestUploads(true);
     }
   };
 
@@ -81,44 +103,96 @@ const Home = () => {
               id="recommended_channel"
               className="w-full  pt-8 h-full lg:col-span-1 hidden  lg:block sm:hidden mt-4  bg-gradient-to-b from-blue-50 via-blue-50 to-white  dark:bg-gradient-to-b dark:from-dbeats-dark-secondary  dark:to-dbeats-dark-primary"
             >
-              <div className="2xl:px-8 2xl:pt-10 lg:px-3 lg:pt-6 ">
-                <h5 className="font-semibold 2xl:text-base lg:text-xs dark:text-gray-200">
-                  {' '}
-                  Latest mints
-                </h5>
-                {recommend_channels.map((channel, i) => {
-                  return (
-                    <div key={i} className="flex pb-2 pt-2">
-                      <img
-                        src={personImg}
-                        alt=""
-                        className="2xl:w-14 2xl:h-14 lg:h-10 lg:w-10 rounded-full mr-2 bg-gray-100 self-center"
-                      />
-                      <div>
-                        <span className="dark:text-gray-200 2xl:text-sm lg:text-xs">
-                          {' '}
-                          Counter Strike{' '}
-                        </span>
-                        <span className="  2xl:text-sm lg:text-xs text-gray-400   flex">
-                          {' '}
-                          {channel.name}{' '}
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-4 w-4  items-center self-center justify-center text-blue-500 mx-1"
-                            viewBox="0 0 20 20"
-                            fill="currentColor"
-                          >
-                            <path
-                              fillRule="evenodd"
-                              d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                              clipRule="evenodd"
-                            />
-                          </svg>
-                        </span>
-                      </div>
+              <div className="2xl:pl-8 2xl:pt-8 lg:pl-4 lg:pt-4 ">
+                {latestUploads ? (
+                  <>
+                    <div>
+                      <h5 className="pb-2 font-semibold 2xl:text-base lg:text-xs dark:text-gray-200">
+                        {' '}
+                        Latest videos
+                      </h5>
+                      {latestVideo.map((video, i) => {
+                        if (i < 5) {
+                          return (
+                            <div key={i} className="flex items-center pb-4">
+                              <Link to={`/playback/${video.username}/${video.videoId}`}>
+                                <img
+                                  src={video.profile_image !== '' ? video.profile_image : logo}
+                                  alt=""
+                                  className="2xl:w-14 2xl:h-14 lg:h-10 lg:w-10 rounded-full bg-gray-100 self-center"
+                                />
+                              </Link>
+                              <div className="pl-3">
+                                <p className="truncate 2xl:w-40 lg:w-28 dark:text-gray-200 2xl:text-sm lg:text-xs">
+                                  {video.videoName}
+                                </p>
+                                <span className="  2xl:text-sm lg:text-xs text-gray-400   flex">
+                                  {' '}
+                                  {video.username}{' '}
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    className="h-4 w-4  items-center self-center justify-center text-blue-500 mx-1"
+                                    viewBox="0 0 20 20"
+                                    fill="currentColor"
+                                  >
+                                    <path
+                                      fillRule="evenodd"
+                                      d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                      clipRule="evenodd"
+                                    />
+                                  </svg>
+                                </span>
+                              </div>
+                            </div>
+                          );
+                        }
+                      })}
                     </div>
-                  );
-                })}
+                    <div>
+                      <h5 className="pb-2 font-semibold 2xl:text-base 2xl:pt-6 lg:pt-4 lg:text-xs dark:text-gray-200">
+                        {' '}
+                        Latest Musics
+                      </h5>
+                      {latestTrack.map((track, i) => {
+                        if (i < 5) {
+                          return (
+                            <div key={i} className="flex items-center pb-4">
+                              <Link to={`/track/${track.username}/${track.trackId}`}>
+                                <img
+                                  src={track.profile_image !== '' ? track.profile_image : logo}
+                                  alt=""
+                                  className="2xl:w-14 2xl:h-14 lg:h-10 lg:w-10 rounded-full bg-gray-100 self-center"
+                                />
+                              </Link>
+                              <div className="pl-3">
+                                <p className="truncate 2xl:w-40 lg:w-28 dark:text-gray-200 2xl:text-sm lg:text-xs">
+                                  {' '}
+                                  {track.trackName}
+                                </p>
+                                <span className="  2xl:text-sm lg:text-xs text-gray-400   flex">
+                                  {' '}
+                                  {track.username}{' '}
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    className="h-4 w-4  items-center self-center justify-center text-blue-500 mx-1"
+                                    viewBox="0 0 20 20"
+                                    fill="currentColor"
+                                  >
+                                    <path
+                                      fillRule="evenodd"
+                                      d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                      clipRule="evenodd"
+                                    />
+                                  </svg>
+                                </span>
+                              </div>
+                            </div>
+                          );
+                        }
+                      })}
+                    </div>
+                  </>
+                ) : null}
               </div>
             </div>
             {/* {classes.other_videos} */}
@@ -175,7 +249,7 @@ const Home = () => {
                   </div>
                   <div id="display_playback_videos" className="2xl:px-4 lg:px-3 px-1">
                     <div className="  ">
-                      <h4 className=" font-bold 2xl:pl-5 pl-3 2xl:pt-3 lg:pt-0 pt-3 pb-4 dark:text-gray-200">
+                      <h4 className=" font-bold 2xl:pl-5 pl-5 2xl:pt-1 lg:pt-0 pt-2 pb-4 dark:text-gray-200 text-gray-900">
                         Trending
                       </h4>
                       <div className="">

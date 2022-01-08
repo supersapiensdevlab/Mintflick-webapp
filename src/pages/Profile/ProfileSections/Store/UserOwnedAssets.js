@@ -1,16 +1,13 @@
-import { ethers } from 'ethers';
-import { useEffect, useState } from 'react';
-import React from 'react';
 import axios from 'axios';
+import { ethers } from 'ethers';
+import React, { useEffect, useState } from 'react';
+import { Image } from 'react-img-placeholder';
 import Web3Modal from 'web3modal';
-import maticLogo from '../../../../assets/graphics/polygon-matic-logo.svg';
-
-import { nftmarketaddress, nftaddress } from '../config';
-
 import Market from '../../../../artifacts/contracts/Market.sol/NFTMarket.json';
 import NFT from '../../../../artifacts/contracts/NFT.sol/NFT.json';
+import maticLogo from '../../../../assets/graphics/polygon-matic-logo.svg';
 import dbeatsLogoBnW from '../../../../assets/images/Logo/logo-blacknwhite.png';
-import { Image } from 'react-img-placeholder';
+import { nftaddress, nftmarketaddress } from '../config';
 
 const MyAssets = ({ resellOwnedItem }) => {
   const [nfts, setNfts] = useState([]);
@@ -117,6 +114,7 @@ const MyAssets = ({ resellOwnedItem }) => {
                       <img
                         className="h-5 w-5 ml-1 text-white self-center align-middle items-center"
                         src={maticLogo}
+                        alt="maticLogo"
                       ></img>
                     </span>
                   </div>

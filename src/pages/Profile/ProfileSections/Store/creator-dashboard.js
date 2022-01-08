@@ -7,7 +7,7 @@ import { useHistory } from 'react-router-dom';
 import Web3Modal from 'web3modal';
 import Market from '../../../../artifacts/contracts/Market.sol/NFTMarket.json';
 import NFT from '../../../../artifacts/contracts/NFT.sol/NFT.json';
-import { nftaddress, nftmarketaddress, rpc_url } from '../config';
+import { nftaddress, nftmarketaddress } from '../config';
 
 const client = ipfsHttpClient('https://ipfs.infura.io:5001/api/v0');
 
@@ -105,7 +105,7 @@ export default function CreateItem() {
           className="my-4 dark:text-white text-gray-900"
           onChange={onChange}
         />
-        {fileUrl && <img className="rounded mt-4" width="350" src={fileUrl} />}
+        {fileUrl && <img alt="file" className="rounded mt-4" width="350" src={fileUrl} />}
         <button
           onClick={createMarket}
           className="font-bold mt-4 bg-dbeats-light text-white rounded p-4 shadow-lg"

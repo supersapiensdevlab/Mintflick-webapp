@@ -11,9 +11,9 @@ import logo from '../../assets/images/white-logo.svg';
 import useWeb3Modal from '../../hooks/useWeb3Modal';
 import {
   AnnouncementModal,
-  UploadVideoModal,
-  UploadTrackModal,
   UploadNFTModal,
+  UploadTrackModal,
+  UploadVideoModal,
 } from '../Modals/NavbarModals';
 import Toggle from '../toggle.component';
 import classes from './Navbar.module.css';
@@ -119,17 +119,12 @@ const NavBar = () => {
       if (value.videos) {
         value.videos.map(async (video, index) => {
           if (video.videoName.toLowerCase().includes(searchWord.toLowerCase())) {
-            await axios
-              .get(`${process.env.REACT_APP_SERVER_URL}/user/${value.username}`)
-              .then((resData) => {
-                let data = {
-                  username: value.username,
-                  index: index,
-                  video: video,
-                  profile: resData.profile_image,
-                };
-                newVideoFilter.push(data);
-              });
+            let data = {
+              username: value.username,
+              index: index,
+              video: video,
+            };
+            newVideoFilter.push(data);
           }
           return 0;
         });
@@ -209,8 +204,10 @@ const NavBar = () => {
     console.log(data);
     return (
       <div className="h-full my-1">
-        <a
-          href={`https://beta.dbeats.live/profile/${data.username}/posts`}
+        <Link
+          to={{
+            pathname: `${process.env.REACT_APP_CLIENT_URL}/profile/${data.username}/posts`,
+          }}
           target="_blank"
           rel="noopener noreferrer"
           className="grid grid-cols-4 justify-center p-2 dark:bg-dbeats-dark-alt dark:hover:bg-dbeats-dark-secondary dark:text-white text-gray-500"
@@ -224,12 +221,26 @@ const NavBar = () => {
               />
             </div>
           ) : null}
+          {!data.post_image && data.linkpreview_data ? (
+            <div className="h-20 col-span-1 rounded-sm bg-gray-700 flex justify-center">
+              <img
+                src={data.linkpreview_data.image.url}
+                alt="announcement_info"
+                className="h-full w-auto rounded-sm"
+              />
+            </div>
+          ) : null}
+          {!data.post_image && !data.linkpreview_data && data.post_video ? (
+            <div className="h-20 col-span-1 rounded-sm bg-gray-700 flex justify-center">
+              <img src={CircleLogo} alt="announcement_info" className="h-full w-auto rounded-sm" />
+            </div>
+          ) : null}
           <div className="col-span-3 rounded-sm ">
             <p className="pl-2 line-clamp-3 text-sm font-semibold break-words">
               {data.announcement}
             </p>
           </div>
-        </a>
+        </Link>
       </div>
     );
   };
@@ -243,39 +254,30 @@ const NavBar = () => {
           outerContainerId={'outer-container'}
           isOpen={showOpen}
           onStateChange={isMenuOpen}
-          className={`bg-white dark:bg-dbeats-dark-primary`}
+          className={`bg-white dark:bg-dbeats-dark-primary `}
           width={window.innerWidth >= '1536' ? '16.5rem' : '12rem'}
         >
           <div className="pt-5 bg-transparent hidden w-0"></div>
-          <div className={classes.menu_items}>
-            <a
-              className="text-black 2xl:text-xl lg:text-md text-bold dark:text-white"
+          <div className={`${classes.menu_items} dark:hover:bg-dbeats-dark-alt hover:bg-blue-50`}>
+            <Link
+              className="text-black 2xl:text-xl lg:text-md text-bold dark:text-white "
               id="home"
-              href="/"
+              to="/"
             >
-              <i id={classes.menu_item} className="fa fa-fw fa-home" />
-              <span className={classes.menu_item_name}> Home </span>
-            </a>
+              <i id={classes.menu_item} className="fa  fa-home" />
+              <span className={classes.menu_item_name}>Home</span>
+            </Link>
           </div>
-          <div className={classes.menu_items}>
-            <a
-              className="text-black 2xl:text-xl lg:text-md text-bold dark:text-white"
-              id="about"
-              href="#/about"
-            >
-              <i id={classes.menu_item} className="fas fa-compass" />
-              <span className={classes.menu_item_name}> Explorer </span>
-            </a>
-          </div>
-          <div className={classes.menu_items}>
-            <a
-              className="text-black 2xl:text-xl lg:text-md text-bold dark:text-white"
+
+          <div className={`${classes.menu_items} dark:hover:bg-dbeats-dark-alt hover:bg-blue-50`}>
+            <Link
+              className="text-black 2xl:text-xl lg:text-md text-bold dark:text-white  "
               id="contact"
-              href="/music"
+              to="/music"
             >
-              <i id={classes.menu_item} className="fas fa-cogs" />
+              <i id={classes.menu_item} className="fas fa-music" />
               <span className={classes.menu_item_name}>Music </span>
-            </a>
+            </Link>
           </div>
           {/* {user ? (
             <div
@@ -292,7 +294,7 @@ const NavBar = () => {
           )} */}
           {user ? (
             <div
-              className={`${classes.menu_item_logout} text-black 2xl:text-xl lg:text-md text-bold dark:text-white`}
+              className={`${classes.menu_item_logout} text-black 2xl:text-xl lg:text-md text-bold dark:text-white dark:hover:bg-dbeats-dark-alt hover:bg-blue-50`}
               onClick={handleLogout}
             >
               <i id={classes.menu_item} className="fas fa-door-open" />
@@ -315,7 +317,10 @@ const NavBar = () => {
         className={` w-max fixed top-0 ${darkMode && 'dark'} z-50 `}
       >
         <div
-          className={`2xl:p-3 lg:p-2 p-3 w-screen shadow-sm z-50  absolute bg-white dark:bg-dbeats-dark-primary dark:text-gray-100  bg-opacity-60 dark:bg-opacity-90  dark:backdrop-filter  dark:backdrop-blur-md  backdrop-filter  backdrop-blur-md`}
+          className={`2xl:p-3 lg:p-2 p-3 w-screen shadow-sm z-50  absolute 
+          bg-white dark:bg-dbeats-dark-primary dark:text-gray-100  
+          bg-opacity-60 dark:bg-opacity-90  dark:backdrop-filter  
+          dark:backdrop-blur-md  backdrop-filter  backdrop-blur-md`}
         >
           <div className="flex w-full self-center">
             <div
@@ -325,7 +330,7 @@ const NavBar = () => {
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-7 w-7 lg:h-5  2xl:h-7 2xl:w-7 self-center"
+                className="h-7 w-7 lg:h-5  2xl:h-7 2xl:w-7 self-center  "
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -338,32 +343,41 @@ const NavBar = () => {
                 />
               </svg>
             </div>
-            <a href="/" className="  self-center cursor-pointer sm:flex hidden">
-              <img
-                src={logo}
-                alt="dbeats_logo"
-                className="h-10 lg:h-7 2xl:h-10 w-max dark:hidden"
-              ></img>
-              <img
-                src={logoDark}
-                alt="dbeats_logo"
-                className="h-10 lg:h-7 2xl:h-10 w-max hidden dark:block"
-              ></img>
-              <span className="mr-5 text-lg font-bold ml-2"> </span>
-            </a>
-            <a href="/" className="flex self-center cursor-pointer sm:hidden ">
-              <img
-                src={CircleLogo}
-                alt="dbeats_logo"
-                className="h-10 lg:h-7 2xl:h-10 w-max dark:hidden"
-              ></img>
-              <img
-                src={CircleLogo}
-                alt="dbeats_logo"
-                className="h-10 lg:h-7 2xl:h-10 w-max hidden dark:block"
-              ></img>
-              <span className="mr-5 text-lg font-bold ml-2"> </span>
-            </a>
+            <div className="flex items-center">
+              <Link to="/" className="  self-center cursor-pointer sm:flex hidden">
+                <img
+                  src={logo}
+                  alt="dbeats_logo"
+                  className="h-10 lg:h-7 2xl:h-10 w-max dark:hidden"
+                ></img>
+                <img
+                  src={logoDark}
+                  alt="dbeats_logo"
+                  className="h-10 lg:h-7 2xl:h-10 w-max hidden dark:block"
+                ></img>
+                <span className="mr-5 text-lg font-bold ml-2"> </span>
+              </Link>
+              <Link to="/" className="flex self-center cursor-pointer sm:hidden ">
+                <img
+                  src={CircleLogo}
+                  alt="dbeats_logo"
+                  className="h-10 lg:h-7 2xl:h-10 w-max dark:hidden"
+                ></img>
+                <img
+                  src={CircleLogo}
+                  alt="dbeats_logo"
+                  className="h-10 lg:h-7 2xl:h-10 w-max hidden dark:block"
+                ></img>
+                <span className="mr-5 text-lg font-bold ml-2"> </span>
+              </Link>
+              <p
+                className="px-2 -ml-3.5 flex pb-0.5 mt-1 text-sm text-white dark:text-dbeats-light 
+              bg-dbeats-light dark:bg-dbeats-alt border border-white dark:border-dbeats-light font-semibold rounded-lg"
+              >
+                beta
+              </p>
+            </div>
+
             <div className="w-2/3 sm:w-1/3 mx-auto  self-center ">
               <div className="  self-center rounded-full  flex bg-gray-100 dark:bg-dbeats-dark-primary">
                 <input
@@ -374,13 +388,13 @@ const NavBar = () => {
                   onChange={handleFilter}
                 ></input>
                 <Link
-                  to={{
-                    pathname: '/search',
-                  }}
+                  to={'/search'}
                   className="self-center text-gray-900"
                   onClick={() => {
+                    console.log('searchData : ', searchData);
                     setFilteredData([]);
                     setFilteredVideoData([]);
+
                     window.sessionStorage.setItem('searchResult', JSON.stringify(searchData));
                   }}
                 >
@@ -410,8 +424,8 @@ const NavBar = () => {
                   <>
                     {filteredVideoData.slice(0, 15).map((value, key) => {
                       return (
-                        <a
-                          href="/search"
+                        <Link
+                          to="/search"
                           key={key}
                           className="w-full h-10"
                           onClick={() => {
@@ -426,7 +440,7 @@ const NavBar = () => {
                           <div className="p-2 pl-3 dark:hover:bg-dbeats-dark-primary">
                             {value.video.videoName}{' '}
                           </div>
-                        </a>
+                        </Link>
                       );
                     })}
                   </>
@@ -435,8 +449,8 @@ const NavBar = () => {
                   <>
                     {filteredData.slice(0, 15).map((value, key) => {
                       return (
-                        <a
-                          href="/search"
+                        <Link
+                          to="/search"
                           key={key}
                           className="w-full h-10 "
                           onClick={() => {
@@ -451,7 +465,7 @@ const NavBar = () => {
                           <div className="p-2 pl-3 dark:hover:bg-dbeats-dark-primary">
                             {value.username}{' '}
                           </div>
-                        </a>
+                        </Link>
                       );
                     })}
                   </>
@@ -484,11 +498,13 @@ const NavBar = () => {
                     leaveFrom="transform opacity-100 scale-100"
                     leaveTo="transform opacity-0 scale-95"
                   >
-                    <Dropdown.Items className="absolute right-0   lg:mt-6 2xl:mt-8 origin-top-right  divide-y divide-gray-100 rounded-md shadow-lg  focus:outline-none w-max  ">
-                      <Dropdown.Item className="w-full text-gray-700 text-left 2xl:text-lg text-md lg:text-xs  flex lg:flex-row flex-col justify-between align-center  rounded-md   2xl:px-3 2xl:py-4 lg:px-2 lg:py-3 py-2 px-3  bg-white dark:bg-dbeats-dark-primary">
-                        <div className=" m-10  dark:text-white ">
+                    <Dropdown.Items className="absolute right-0 lg:mt-6 2xl:mt-8 origin-top-right  divide-y divide-gray-100 rounded-md shadow-lg  focus:outline-none w-max  ">
+                      <Dropdown.Item className="w-full  text-gray-700 text-left 2xl:text-lg text-md lg:text-xs  flex lg:flex-row flex-col justify-between align-center  rounded-md   2xl:px-3 2xl:py-4 lg:px-2 lg:py-3 py-2 px-3  bg-white dark:bg-dbeats-dark-primary">
+                        <div className=" m-10 font-bold dark:text-white ">
                           <button
-                            className="lg:mx-2 2xl:mx-3 mx-4 rounded hover:bg-dbeats-light border-dbeats-light border  dark:bg-dbeats-dark-alt 2xl:h-10 h-8 my-auto cursor-pointer px-3  hover:text-white dark:text-white dark:hover:bg-dbeats-light"
+                            className="lg:mx-2 2xl:mx-3 mx-4 rounded hover:bg-dbeats-light border-dbeats-light border  
+                            dark:bg-dbeats-dark-alt 2xl:h-10 h-8 my-auto font-semibold cursor-pointer px-3 
+                             hover:text-white dark:text-white dark:hover:bg-dbeats-light"
                             onClick={() => {
                               handleShowAnnouncement();
                               handleCloseVideoUpload();
@@ -500,7 +516,7 @@ const NavBar = () => {
                           </button>
 
                           <button
-                            className="lg:mx-2 2xl:mx-3 mx-4 rounded hover:bg-dbeats-light border-dbeats-light border  dark:bg-dbeats-dark-alt 2xl:h-10 h-8 my-auto cursor-pointer px-3  hover:text-white dark:text-white dark:hover:bg-dbeats-light"
+                            className="lg:mx-2 2xl:mx-3 mx-4 rounded hover:bg-dbeats-light border-dbeats-light border  dark:bg-dbeats-dark-alt 2xl:h-10 h-8 my-auto font-semibold cursor-pointer px-3  hover:text-white dark:text-white dark:hover:bg-dbeats-light"
                             onClick={() => {
                               handleCloseAnnouncement();
                               handleShowVideoUpload();
@@ -511,7 +527,7 @@ const NavBar = () => {
                             Upload Video
                           </button>
                           <button
-                            className="lg:mx-2 2xl:mx-3 mx-4 rounded hover:bg-dbeats-light border-dbeats-light border  dark:bg-dbeats-dark-alt 2xl:h-10 h-8 my-auto cursor-pointer px-3  hover:text-white dark:text-white dark:hover:bg-dbeats-light"
+                            className="lg:mx-2 2xl:mx-3 mx-4 rounded hover:bg-dbeats-light border-dbeats-light border  dark:bg-dbeats-dark-alt 2xl:h-10 h-8 my-auto font-semibold cursor-pointer px-3  hover:text-white dark:text-white dark:hover:bg-dbeats-light"
                             onClick={() => {
                               handleCloseAnnouncement();
                               handleShowTrackUpload();
@@ -528,7 +544,7 @@ const NavBar = () => {
                               handleCloseTrackUpload();
                               handleCloseAnnouncement();
                             }}
-                            className="lg:mx-2 2xl:mx-3 mx-4 rounded hover:bg-dbeats-light border-dbeats-light border  dark:bg-dbeats-dark-alt 2xl:h-10 h-8 my-auto cursor-pointer px-3  hover:text-white dark:text-white dark:hover:bg-dbeats-light"
+                            className="lg:mx-2 2xl:mx-3 mx-4 rounded hover:bg-dbeats-light border-dbeats-light border  dark:bg-dbeats-dark-alt 2xl:h-10 h-8 my-auto font-semibold cursor-pointer px-3  hover:text-white dark:text-white dark:hover:bg-dbeats-light"
                           >
                             Mint NFT
                           </button>
@@ -590,8 +606,8 @@ const NavBar = () => {
                     </Dropdown.Items>
                   </Transition>
                 </Dropdown>
-                <a
-                  href={`/streamer/${user.username}`}
+                <Link
+                  to={`/streamer/${user.username}`}
                   className="border-dbeats-light 2xl:border-1 invisible lg:visible text-dbeats-light hover:bg-dbeats-light hover:text-white rounded font-bold mx-2 "
                 >
                   <div className="flex lg:py-1 2xl:py-2.5 py-1.5 2xl:px-3 lg:px-2 px-1.5 hidden">
@@ -605,9 +621,9 @@ const NavBar = () => {
                     </svg>
                     <span className="self-center md:flex   lg:text-xs 2xl:text-lg ">Go Live</span>
                   </div>
-                </a>
-                <a
-                  href={`/profile/${user.username}`}
+                </Link>
+                <Link
+                  to={`/profile/${user.username}`}
                   className="shadow-sm 2xl:h-10  2xl:w-10 self-center  h-7 w-7 bg-gradient-to-r from-dbeats-secondary-light to-dbeats-light text-white rounded-full font-bold mx-2 flex"
                 >
                   <svg
@@ -622,17 +638,17 @@ const NavBar = () => {
                       clipRule="evenodd"
                     />
                   </svg>
-                </a>
+                </Link>
               </div>
             ) : (
-              <a
-                href="/signup"
+              <Link
+                to="/signup"
                 className="shadow-sm px-2  2xl:px-3 lg:px-1.5 2xl:py-1 lg:py-0.5 bg-gradient-to-r from-dbeats-secondary-light to-dbeats-light dark:bg-gradient-to-r 
                 dark:from-dbeats-secondary-light dark:to-dbeats-light text-white rounded font-bold ml-2 md:mx-2 md:ml-0 flex"
               >
                 <i className="fas fa-sign-in-alt text-xs lg:text-sm 2xl:text-lg self-center mr-2 hidden md:block"></i>
                 <span className="self-center text-sm lg:text-xs 2xl:text-lg">SignUp</span>
-              </a>
+              </Link>
             )}
           </div>
         </div>

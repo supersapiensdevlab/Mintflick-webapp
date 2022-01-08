@@ -37,7 +37,7 @@ const RecommendedCard = (props) => {
       <div className="pl-3 text-sm 2xl:text-sm lg:text-xs w-full">
         {/* <p className="text-2xl font-semibold mb-0">{props.value.videos[0].videoName.slice(0, 30) + " ..."}</p> */}
         <span>{props.value.name}</span>
-        <i className="ml-1 fas fa-check-circle h-4 w-4 text-xs"></i>
+        <i className="ml-1 fas fa-check-circle h-4 w-4"></i>
         <p>
           <span className="text-sm 2xl:text-sm lg:text-xs font-semibold mr-2">55K views</span>
           <span>1 Month Ago</span>

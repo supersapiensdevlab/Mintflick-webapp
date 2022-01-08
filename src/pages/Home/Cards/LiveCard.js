@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import ReactPlayer from 'react-player';
+import { Link } from 'react-router-dom';
 import person from '../../../assets/images/profile.svg';
 import classes from '../Home.module.css';
 
@@ -17,7 +18,7 @@ const LiveCard = (props) => {
   return (
     <div className="w-full h-auto  ">
       <div className=" cursor-pointer ">
-        <a href={`/live/${props.username}/`}>
+        <Link to={`/live/${props.username}/`}>
           <span className="fixed bg-red-600 text-white px-1 mx-1 my-1 rounded-sm font-semibold">
             {' '}
             Live{' '}
@@ -36,7 +37,7 @@ const LiveCard = (props) => {
             onMouseMove={handleMouseMove}
             onMouseLeave={hanldeMouseLeave}
           />
-        </a>
+        </Link>
       </div>
       <div className="col-start-1 row-start-3 pb-2 pt-2  ">
         <p className="flex items-center text-black text-sm font-medium  ">

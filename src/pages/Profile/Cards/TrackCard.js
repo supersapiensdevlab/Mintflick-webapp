@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { ShareModal } from '../../../component/Modals/ShareModal/ShareModal';
 
 const TrackCard = (props) => {
   //console.log(props);
@@ -8,6 +9,15 @@ const TrackCard = (props) => {
 
   // eslint-disable-next-line no-unused-vars
   const [audio, setAudio] = useState(new Audio(props.track.link));
+
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  const text = 'Copy Link To Clipboard';
+  const [buttonText, setButtonText] = useState(text);
+
+  let sharable_data = `${process.env.REACT_APP_CLIENT_URL}/track/${props.username}/${props.index}`;
 
   useEffect(() => {
     if (!play) {
@@ -34,7 +44,7 @@ const TrackCard = (props) => {
         >
           <Link
             to={{
-              pathname: `/track/${props.username}/${props.index}`,
+              pathname: `/track/${props.username}/${props.track.trackId}`,
             }}
             onClick={() => {
               window.sessionStorage.setItem('Track_Array', JSON.stringify(''));
@@ -57,7 +67,9 @@ const TrackCard = (props) => {
                 {props.track.genre}
               </h4>
               <div className="">
-                <p className="2xl:text-2xl lg:text-md md:text-lg font-semibold">{props.track.trackName}</p>
+                <p className="2xl:text-2xl lg:text-md md:text-lg font-semibold">
+                  {props.track.trackName}
+                </p>
                 <div className="flex">
                   <p className="2xl:text-lg lg:text-xs text-gray-500 mr-2 mt-1">
                     {props.username}&nbsp;
@@ -68,7 +80,7 @@ const TrackCard = (props) => {
             </div>
             <div>
               <div className="2xl:text-2xl lg:text-lg text-gray-500 ">
-                <button className="px-1">
+                <button className="px-1" onClick={handleShow}>
                   <i className="fas fa-share-alt hover:text-dbeats-light"></i>
                 </button>
               </div>
@@ -86,6 +98,13 @@ const TrackCard = (props) => {
           </div>
         </div>
       </div>
+      <ShareModal
+        show={show}
+        handleClose={handleClose}
+        sharable_data={sharable_data}
+        copybuttonText={buttonText}
+        setCopyButtonText={setButtonText}
+      />
     </div>
   );
 };

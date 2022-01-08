@@ -1,14 +1,22 @@
 import { Splide, SplideSlide } from '@splidejs/react-splide';
 import '@splidejs/splide/dist/css/themes/splide-default.min.css';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import logo from '../../assets/images/logo.svg';
 import CarouselCard from '../../pages/Profile/Cards/CarouselCard';
 
 const SearchResult = () => {
   const darkMode = useSelector((state) => state.toggleDarkMode);
-  const data = JSON.parse(window.sessionStorage.getItem('searchResult'));
+  const [data, setData] = useState(null);
   //console.log(data);
+
+  useEffect(() => {
+    setData(JSON.parse(window.sessionStorage.getItem('searchResult')));
+
+    // eslint-disable-next-line
+  }, [JSON.parse(window.sessionStorage.getItem('searchResult'))]);
+
   return (
     <div id="outer-container" className="h-full ">
       <div id="page-wrap" className={`${darkMode && 'dark'}  `}>
@@ -36,13 +44,13 @@ const SearchResult = () => {
                       {data.usernameData.map((value, i) => {
                         return (
                           <SplideSlide className=" md:px-5 " key={i}>
-                            <a href={`/profile/${value.username}`}>
+                            <Link to={`/profile/${value.username}`}>
                               <img
-                                className="mx-auto   self-center  cursor-pointer"
-                                src={value.profile}
+                                className="mx-auto  h-32 w-32 rounded-full self-center  cursor-pointer"
+                                src={value.profile_image ? value.profile_image : logo}
                                 alt={`Profile ${i}`}
                               />
-                            </a>
+                            </Link>
                             <p className="dark:text-white lg:text-xs 2xl:text-lg text-xs">
                               {value.username.slice(0, 10) + '..'}
                             </p>

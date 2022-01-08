@@ -8,6 +8,7 @@ import { Container, Row } from 'react-bootstrap';
 import Lottie from 'react-lottie';
 import Modal from 'react-modal';
 import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import superfluid from '../../../../assets/images/superfluid-black.svg';
 import { Playlist } from '../../../../component/Modals/PlaylistModals/PlaylistModal';
 import { ShareModal } from '../../../../component/Modals/ShareModal/ShareModal';
@@ -18,12 +19,13 @@ import animationDataNotFound from '../../../../lotties/error-animation.json';
 import animationData from '../../../../lotties/fans.json';
 import animationDataGiraffee from '../../../../lotties/giraffee.json';
 import RecommendedCard from './RecommendedCard';
+
 // import {Helmet} from "react-helmet";
 
 moment().format();
 
 const PlayBackInfo = (props) => {
-  let sharable_data = `${process.env.REACT_APP_CLIENT_URL}/playback/${props.stream_id}/${props.video_id}`;
+  let sharable_data = `${process.env.REACT_APP_CLIENT_URL}/playback/${props.video_username}/${props.video_id}`;
   const darkMode = useSelector((darkmode) => darkmode.toggleDarkMode);
 
   const [showSubscriptionModal, setshowSubscriptionModal] = useState(false);
@@ -70,15 +72,17 @@ const PlayBackInfo = (props) => {
     },
   };
 
-  //const [videoUsername, setVideoUsername] = useState('');
-
   const user = JSON.parse(window.localStorage.getItem('user'));
 
   const [playbackUrl, setPlaybackUrl] = useState('');
 
   const [loader, setLoader] = useState(true);
+
   const [userData, setUserData] = useState(null);
-  const [videoData, setVideoData] = useState(false);
+  const [footerData, setFooterData] = useState(null);
+  const [videoData, setVideoData] = useState(null);
+  const [videoPresent, setVideoPresent] = useState(false);
+
   const [notFound, setNotFound] = useState(false);
   const [userNotFound, setUserNotFound] = useState(false);
 
@@ -163,68 +167,57 @@ const PlayBackInfo = (props) => {
   };
 
   const get_User = async () => {
-    await axios.get(`${process.env.REACT_APP_SERVER_URL}/user/${props.stream_id}`).then((value) => {
-      console.log(value);
-      if (value.data === '') {
-        setUserNotFound(true);
-        return;
-      }
-      setUserData(value.data);
-      if (value.data.videos.length - 1 < parseInt(props.video_id)) {
-        setNotFound(true);
-        return;
-      } else {
-        setVideoData(true);
-      }
-      convertTimestampToTime(value.data.videos[props.video_id]);
-      for (let i = 0; i < value.data.follower_count.length; i++) {
-        if (user ? value.data.follower_count[i] === user.username : false) {
-          setSubscribeButtonText('Unsubscribe');
-          break;
+    await axios
+      .get(`${process.env.REACT_APP_SERVER_URL}/user/${props.video_username}`)
+      .then((value) => {
+        if (value.data === '') {
+          setUserNotFound(true);
+          return;
         }
-      }
 
-      //setVideoUsername(value.data.username);
-      setPlaybackUrl(`${value.data.videos[props.video_id].link}`);
+        setFooterData(value.data);
 
-      let reactionData = {
-        videousername: value.data.username,
-        videoname: `${props.stream_id}/${props.video_id}`,
-        videolink: `${value.data.videos[props.video_id].link}`,
-      };
-      //console.log('reaction: ', reactionData);
+        let fetchedVideoData;
+        for (let i = 0; i < value.data.videos.length; i++) {
+          if (value.data.videos[i].videoId === props.video_id) {
+            fetchedVideoData = value.data.videos[i];
+            setVideoData(value.data.videos[i]);
 
-      axios({
-        method: 'POST',
-        url: `${process.env.REACT_APP_SERVER_URL}/user/getreactions`,
-        headers: {
-          'content-type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-        },
-        data: reactionData,
-      })
-        .then(function (response) {
-          //console.log(response);
-          setLike(response.data.reaction.like.length);
-          setDislike(response.data.reaction.dislike.length);
-          setAngry(response.data.reaction.angry.length);
-          setHappy(response.data.reaction.happy.length);
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
+            let video_data = {
+              username: value.data.username,
+              videos: value.data.videos[i],
+            };
+            setUserData(video_data);
+            break;
+          }
+        }
 
-      if (user) {
-        reactionData = {
-          username: `${user.username}`,
+        if (!fetchedVideoData) {
+          setNotFound(true);
+          return;
+        } else {
+          setVideoPresent(true);
+        }
+        convertTimestampToTime(fetchedVideoData);
+        for (let i = 0; i < value.data.follower_count.length; i++) {
+          if (user ? value.data.follower_count[i] === user.username : false) {
+            setSubscribeButtonText('Unsubscribe');
+            break;
+          }
+        }
+
+        setPlaybackUrl(`${fetchedVideoData.link}`);
+
+        let reactionData = {
           videousername: value.data.username,
-          videoname: `${props.stream_id}/${props.video_id}`,
-          videolink: `${value.data.videos[props.video_id].link}`,
+          videoname: `${props.video_username}/${props.video_id}`,
+          videolink: `${fetchedVideoData.link}`,
         };
+        //console.log('reaction: ', reactionData);
 
         axios({
           method: 'POST',
-          url: `${process.env.REACT_APP_SERVER_URL}/user/getuserreaction`,
+          url: `${process.env.REACT_APP_SERVER_URL}/user/getreactions`,
           headers: {
             'content-type': 'application/json',
             'Access-Control-Allow-Origin': '*',
@@ -232,30 +225,58 @@ const PlayBackInfo = (props) => {
           data: reactionData,
         })
           .then(function (response) {
-            ////console.log(response.data);
-            setUserreact(response.data);
+            //console.log(response);
+            setLike(response.data.reaction.like.length);
+            setDislike(response.data.reaction.dislike.length);
+            setAngry(response.data.reaction.angry.length);
+            setHappy(response.data.reaction.happy.length);
           })
           .catch(function (error) {
             console.log(error);
           });
-      }
-    });
+
+        if (user) {
+          reactionData = {
+            username: `${user.username}`,
+            videousername: value.data.username,
+            videoname: `${props.video_username}/${props.video_id}`,
+            videolink: `${fetchedVideoData.link}`,
+          };
+
+          axios({
+            method: 'POST',
+            url: `${process.env.REACT_APP_SERVER_URL}/user/getuserreaction`,
+            headers: {
+              'content-type': 'application/json',
+              'Access-Control-Allow-Origin': '*',
+            },
+            data: reactionData,
+          })
+            .then(function (response) {
+              ////console.log(response.data);
+              setUserreact(response.data);
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+        }
+      });
 
     ////console.log(value.data)
   };
 
   const fetchData = async () => {
-    const fileRes = await axios.get(`${process.env.REACT_APP_SERVER_URL}/`);
-    for (let i = 0; i < fileRes.data.array.length; i++) {
-      if (fileRes.data.array[i].videos) {
-        if (user ? fileRes.data.array[i].username === user.username : false) {
+    const fileRes = await axios.get(`${process.env.REACT_APP_SERVER_URL}/user`);
+    for (let i = 0; i < fileRes.data.length; i++) {
+      if (fileRes.data[i].videos) {
+        if (user ? fileRes.data[i].username === user.username : false) {
           continue;
         }
         if (
-          fileRes.data.array[i].username !== props.stream_id &&
-          fileRes.data.array[i].videos.length > 0
+          fileRes.data[i].username !== props.video_username &&
+          fileRes.data[i].videos.length > 0
         ) {
-          setArrayData((prevState) => [...prevState, fileRes.data.array[i]]);
+          setArrayData((prevState) => [...prevState, fileRes.data[i]]);
         }
       }
     }
@@ -264,7 +285,7 @@ const PlayBackInfo = (props) => {
   };
 
   // //console.log('userData', userData);
-  // //console.log(userData ? userData.videos[props.video_id].link : '');
+  // //console.log(userData ? videoData.link : '');
 
   const handlereaction = (videoprops) => {
     if (!user) {
@@ -276,9 +297,9 @@ const PlayBackInfo = (props) => {
         reactusername: `${user.username}`,
         videousername: `${userData.username}`,
         reaction: videoprops,
-        videostreamid: `${props.stream_id}`,
+        videostreamid: `${props.video_username}`,
         videoindex: `${props.video_id}`,
-        videolink: `${userData.videos[props.video_id].link}`,
+        videolink: `${videoData.link}`,
       };
 
       if (videoprops === 'like') {
@@ -320,9 +341,9 @@ const PlayBackInfo = (props) => {
         videousername: `${userData.username}`,
         newreaction: videoprops,
         oldreaction: userreact,
-        videostreamid: `${props.stream_id}`,
+        videostreamid: `${props.video_username}`,
         videoindex: `${props.video_id}`,
-        videolink: `${userData.videos[props.video_id].link}`,
+        videolink: `${videoData.link}`,
       };
 
       if (videoprops === userreact) {
@@ -393,7 +414,7 @@ const PlayBackInfo = (props) => {
     let value = JSON.parse(window.localStorage.getItem('user'));
     ////console.log(value);
 
-    if (user ? value.username === props.stream_id : false) {
+    if (user ? value.username === props.video_username : false) {
       setPrivate(true);
     } else {
       setPrivate(false);
@@ -440,18 +461,14 @@ const PlayBackInfo = (props) => {
     //const details = await carol2.details();
     //console.log(details.cfa.flows.outFlows[0]);
   };
-  if (userData) {
-    console.log(userData.videos[props.video_id]);
-    console.log(playbackUrl);
-  }
   return (
     <>
-      {videoData ? (
+      {videoPresent ? (
         <div>
           {/* <Helmet>
-              <meta property="og:title"              content={userData.videos[props.video_id].videoName} />
-              <meta property="og:description"        content={`<div style='font-size:20px; font-weight:500;color:green;'>${userData.videos[props.video_id].description}</div>`} />
-              <meta property="og:image"              content={`${userData.videos[props.video_id].videoImage}`} />
+              <meta property="og:title"              content={videoData.videoName} />
+              <meta property="og:description"        content={`<div style='font-size:20px; font-weight:500;color:green;'>${videoData.description}</div>`} />
+              <meta property="og:image"              content={`${videoData.videoImage}`} />
               
             </Helmet> */}
           <div
@@ -464,8 +481,10 @@ const PlayBackInfo = (props) => {
              dark:to-dbeats-dark-primary`}
           >
             <div className=" lg:col-span-2 dark:bg-dbeats-dark-alt text-black dark:text-white">
-              <div className="self-center   bg-black ">
-                {userData ? <VideoPlayer playbackUrl={playbackUrl} creatorData={userData} /> : null}
+              <div className="self-center bg-black">
+                {footerData ? (
+                  <VideoPlayer playbackUrl={playbackUrl} creatorData={footerData} />
+                ) : null}
               </div>
               <div className="2xl:mx-7 sm:p-2 p-3   dark:bg-dbeats-dark-alt">
                 <div className="lg:flex flex-row justify-between  ">
@@ -473,7 +492,7 @@ const PlayBackInfo = (props) => {
                     <div className=" w-full text-left mt-0" style={{ padding: '0px' }}>
                       {userData ? (
                         <p className="font-semibold 2xl:text-xl lg:text-md ">
-                          {userData.videos[props.video_id].videoName}
+                          {userData.videos.videoName}
                         </p>
                       ) : null}
                       {time ? (
@@ -503,12 +522,12 @@ const PlayBackInfo = (props) => {
                             </button>
                           </div>
                         ) : (
-                          <a
-                            href="/signup"
+                          <Link
+                            to="/signup"
                             className="bg-dbeats-light  p-1 2xl:text-lg lg:text-sm text-md  rounded-sm 2xl:px-4 px-4 lg:px-2 mr-3 font-semibold text-white "
                           >
                             <span>Login to Subscribe & Become a SuperFan</span>
-                          </a>
+                          </Link>
                         )}
                       </div>
                     ) : null}
@@ -614,13 +633,11 @@ const PlayBackInfo = (props) => {
                     </Menu>
                   </div>
                 </div>
-                {userData ? (
+                {videoData ? (
                   <div className="w-full">
                     <hr />
                     <h4 className="py-2 lg:text-sm 2xl:text-lg">Description : </h4>
-                    <p className="pb-2 lg:text-sm 2xl:text-lg">
-                      {userData.videos[props.video_id].description}
-                    </p>
+                    <p className="pb-2 lg:text-sm 2xl:text-lg">{videoData.description}</p>
                     <hr />
                   </div>
                 ) : null}
@@ -775,12 +792,12 @@ const PlayBackInfo = (props) => {
                   </h2>
                 </Row>
                 <Row>
-                  <a
-                    href="/signup"
+                  <Link
+                    to="/signup"
                     className="block mx-auto 2xl:p-2 p-2 lg:p-1 mt-4 mb-2 2xl:w-96 lg:w-72 w-full lg:text-md 2xl:text-lg  text-white text-center font-semibold rounded-lg bg-dbeats-light"
                   >
                     Login
-                  </a>
+                  </Link>
                 </Row>
               </Container>
             </div>

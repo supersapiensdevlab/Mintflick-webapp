@@ -1,7 +1,7 @@
-import React from 'react';
-import ReactPlayer from 'react-player';
 import { Menu, Transition } from '@headlessui/react';
-import { Fragment, useState } from 'react';
+import React, { Fragment, useState } from 'react';
+import ReactPlayer from 'react-player';
+import { Link } from 'react-router-dom';
 
 const LiveCard = (props) => {
   const [playing, setPlaying] = useState(false);
@@ -17,7 +17,7 @@ const LiveCard = (props) => {
   return (
     <div className="flex w-full">
       <div className="cursor-pointer">
-        <a href={`/live/${props.value.username}/`}>
+        <Link to={`/live/${props.value.username}/`}>
           <ReactPlayer
             className="justify-self-center"
             width="12rem"
@@ -30,7 +30,7 @@ const LiveCard = (props) => {
             onMouseLeave={hanldeMouseLeave}
             muted={true}
           />
-        </a>
+        </Link>
       </div>
       <div className="pl-3 text-sm w-full">
         {/* <p className="text-2xl font-semibold mb-0">{props.value.videos[0].videoName.slice(0, 30) + " ..."}</p> */}

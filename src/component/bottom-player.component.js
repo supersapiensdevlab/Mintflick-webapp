@@ -102,7 +102,7 @@ const BottomBar = ({ songDetails, playing, firstPlayed, setState }) => {
           leaveTo="transform   opacity-0 -translate-y-full"
         >
           <div className={`${firstPlayed ? 'block' : 'hidden'}  `}>
-            <span className="dark:bg-dbeats-dark pb-2 dark:bg-opacity-60">
+            <span className="bg-white pb-2 bg-opacity-80 dark:bg-dbeats-dark pb-2 dark:bg-opacity-60">
               <input
                 ref={progressRef}
                 type="range"
@@ -123,7 +123,7 @@ const BottomBar = ({ songDetails, playing, firstPlayed, setState }) => {
                   <img
                     id="album-artwork"
                     src={songDetails.artwork}
-                    className=" lg:mr-4 mr-1 h-full w-20   "
+                    className=" lg:mr-4 mr-1 h-20 w-20   "
                     alt=""
                   ></img>
                   <div className="flex flex-col lg:flex-row lg:justify-between lg:w-full">
@@ -138,8 +138,8 @@ const BottomBar = ({ songDetails, playing, firstPlayed, setState }) => {
               </audio> */}
 
                     <div className="flex items-center md:self-center lg:justify-center w-full  ">
-                      <div className="text-white lg:text-lg text-sm pr-3">
-                        <span className="range-value text-white" ref={lableRef}></span>
+                      <div className="text-dbeats-alt dark:text-white lg:text-lg text-sm pr-3">
+                        <span className="range-value " ref={lableRef}></span>
                         <span> / {duration && !isNaN(duration) && calculateTime(duration)}</span>
                       </div>
                       <div

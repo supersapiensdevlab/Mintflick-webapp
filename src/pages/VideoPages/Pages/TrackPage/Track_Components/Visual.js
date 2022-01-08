@@ -23,7 +23,7 @@ const Waves = ({ src, isPlaying, currentTime, setIsPlaying, setHidden }) => {
       );
     }
     // eslint-disable-next-line
-  }, []);
+  }, [waveformRef]);
 
   useEffect(() => {
     if (wavesurfer) {
@@ -78,7 +78,7 @@ const Waves = ({ src, isPlaying, currentTime, setIsPlaying, setHidden }) => {
 
   return (
     <>
-      <div ref={waveformRef} className="z-0"></div>
+      <div ref={waveformRef} className="-z-1"></div>
     </>
   );
 };

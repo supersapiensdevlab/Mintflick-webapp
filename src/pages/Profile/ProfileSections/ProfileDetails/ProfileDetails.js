@@ -2,6 +2,8 @@ import { Tab } from '@headlessui/react';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import Carousel from 'react-grid-carousel';
+import { Route, Switch, useHistory } from 'react-router';
+import { Link } from 'react-router-dom';
 import person from '../../../../assets/images/profile.svg';
 import background from '../../../../assets/images/wallpaper.jpg';
 import {
@@ -25,6 +27,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
   const [subscribeLoader, setSubscribeLoader] = useState(true);
 
   const handleShow = () => setShow(true);
+  const navigate = useHistory();
 
   const [showUploadCoverImage, setShowUploadCoverImage] = useState(false);
   const [showUploadProfileImage, setShowUploadProfileImage] = useState(false);
@@ -45,30 +48,6 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
 
   useEffect(() => {
     let value = JSON.parse(window.localStorage.getItem('user'));
-    let tabno = tabname;
-    switch (tabno) {
-      case 'announcements':
-        setTabIndex(0);
-        break;
-      case 'videos':
-        setTabIndex(1);
-        break;
-      case 'music':
-        setTabIndex(2);
-        break;
-      case 'playlists':
-        setTabIndex(3);
-        break;
-      case 'reposts':
-        setTabIndex(4);
-        break;
-      case 'subscribed_channels':
-        setTabIndex(5);
-        break;
-      default:
-        setTabIndex(0);
-    }
-    // //console.log(value);
     if (value) {
       if (value.username === urlUsername) {
         setSharable_data(`${process.env.REACT_APP_CLIENT_URL}/profile/${value.username}`);
@@ -105,7 +84,36 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
       setPrivate(false);
     }
     // eslint-disable-next-line
-  }, []);
+  }, [urlUsername]);
+
+  useEffect(() => {
+    let tabno = tabname;
+    switch (tabno) {
+      case 'posts':
+        setTabIndex(0);
+        break;
+      case 'videos':
+        setTabIndex(1);
+        break;
+      case 'music':
+        setTabIndex(2);
+        break;
+      case 'activity':
+        setTabIndex(3);
+        break;
+      case 'playlists':
+        setTabIndex(4);
+        break;
+      case 'following':
+        break;
+      case 'followers':
+        break;
+      default:
+        navigate.push(`/profile/${urlUsername}/posts`);
+        setTabIndex(0);
+    }
+    // eslint-disable-next-line
+  }, [tabname]);
 
   const get_User = async () => {
     await axios.get(`${process.env.REACT_APP_SERVER_URL}/user/${urlUsername}`).then((value) => {
@@ -261,30 +269,34 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
       <Tab
         className={({ selected }) =>
           classNames(
-            'w-full py-2.5 text-sm leading-5 font-semibold text-gray-400 2xl:text-lg lg:text-xs ',
+            'w-full  text-sm leading-5 font-semibold text-gray-400 2xl:text-lg lg:text-xs ',
             selected
               ? 'text-dbeats-light font-bold border-b-2 border-dbeats-light'
               : 'hover:bg-black/[0.12]  dark:hover:text-gray-100 hover:text-gray-700',
           )
         }
       >
-        {text}
+        <Link to={`/profile/${urlUsername}/${text.toLowerCase()}`}>
+          <div className="w-full py-2.5 font-semibold text-gray-400 2xl:text-lg lg:text-xs ">
+            {text}
+          </div>
+        </Link>
       </Tab>
     );
   };
 
   return (
     <div className={`${darkMode && 'dark'}   h-max lg:col-span-5 col-span-6 w-full   `}>
-      <div id="display_details" className="   h-full">
+      <div id="display_details" className="h-full 2xl:pt-16 lg:pt-12">
         <div className="bg-white dark:bg-dbeats-dark-primary 2xl:pb-3 lg:pb-2">
           {privateUser ? (
             <div
-              className="ml-2 mt-2 absolute dark:bg-dbeats-dark-alt dark:hover:bg-dbeats-dark hover:bg-white
-              hover:text-dbeats-light dark:hover:text-white rounded-full z-2 text-white dark:text-gray-400"
+              className="ml-2 mt-2 absolute dark:bg-dbeats-dark-alt dark:hover:bg-dbeats-dark dark:text-gray-400 hover:bg-gray-200
+          hover:text-dbeats-light dark:hover:text-white text-dbeats-light bg-white  rounded-full z-2 w-7 h-7 items-center"
             >
               <i
-                className="fas fa-pen 2xl:p-3 lg:p-1.5 
-                cursor-pointer"
+                className="fas fa-pen p-1.5 
+       cursor-pointer align-middle items-center  "
                 onClick={() => setShowUploadCoverImage(true)}
               ></i>
             </div>
@@ -355,7 +367,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                         hover:text-dbeats-light dark:hover:text-white text-dbeats-light bg-white  rounded-full z-2 -mt-4 -mr-2 w-7 h-7 items-center"
                           >
                             <i
-                              className="fas fa-pen  2xl:p-2.5 lg:p-1.5 
+                              className="fas fa-pen p-1.5 
                      cursor-pointer align-middle items-center  "
                               onClick={() => setShowUploadProfileImage(true)}
                             ></i>
@@ -368,25 +380,28 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                   </div>
 
                   <div className="lg:grid lg:grid-flow-rows lg:grid-cols-3  font-bold 2xl:text-xl lg:text-sm text-gray-20 lg:gap-4 flex justify-between items-center mb-2 md:mb-5">
-                    <div className="mx-auto 2xl:px-4 px-2 flex flex-col lg:flex-row justify-center items-center">
-                      <div className=" w-full mr-2 flex justify-center">
-                        {user.videos ? user.videos.length : 0}{' '}
-                      </div>
-                      <div className="2xl:text-sm lg:text-xs">VIDEOS</div>
-                    </div>
                     <div className="mx-auto lg:px-4 px-2 flex flex-col lg:flex-row justify-center items-center">
                       <div className=" w-full mr-2 flex justify-center ">
                         {/*{user.subscribers ? <>{user.subscribers.length}</> : 0}{" "}*/}
                         {followers}{' '}
                       </div>
-                      <div className="2xl:text-sm lg:text-xs">FOLLOWERS</div>
+
+                      <Link to={`/profile/${urlUsername}/followers`}>
+                        <div className="cursor-pointer 2xl:text-sm lg:text-xs hover:underline hover:text-gray-50">
+                          FOLLOWERS
+                        </div>
+                      </Link>
                     </div>
                     <div className="mx-auto lg:px-4 px-2 flex flex-col lg:flex-row justify-center items-center">
                       <div className=" w-full mr-2 flex justify-center ">
                         {/*{user.subscribed ? <>{user.subscribed.length}</> : 0}{" "}*/}
                         {following}{' '}
                       </div>
-                      <div className="2xl:text-sm lg:text-xs">FOLLOWING</div>
+                      <Link to={`/profile/${urlUsername}/following`}>
+                        <div className="cursor-pointer 2xl:text-sm lg:text-xs hover:underline hover:text-gray-50">
+                          FOLLOWING
+                        </div>
+                      </Link>
                     </div>
                   </div>
                 </div>
@@ -402,8 +417,8 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
               })}
             </Tab.List>
 
-            <Tab.Panels className="dark:bg-dbeats-dark-primary text-gray-900  ">
-              <Tab.Panel className="">
+            <Switch>
+              <Route path={`/profile/:username/posts`}>
                 <div className=" sm:px-5  pb-5">
                   {postsData && postsData.length > 0 ? (
                     <div>
@@ -420,121 +435,135 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                     <p className="2xl:text-lg lg:text-sm dark:text-white">No Posts till now</p>
                   )}
                 </div>
-              </Tab.Panel>
-              <Tab.Panel className="">
+              </Route>
+
+              <Route path={`/profile/:username/videos`}>
                 <div className=" sm:px-5  pb-5">
                   {user.videos && user.videos.length > 0 ? (
                     <div>
-                      {user.videos.map((playbackUser, i) => {
-                        ////console.log(playbackUser)
-                        return (
-                          <div key={i}>
-                            <CarouselCard
-                              videono={i}
-                              playbackUserData={playbackUser}
-                              index={i}
-                              username={user.username}
-                              type="video"
-                            />
-                          </div>
-                        );
-                      })}
+                      {user.videos
+                        .slice(0)
+                        .reverse()
+                        .map((playbackUser, i) => {
+                          ////console.log(playbackUser)
+                          return (
+                            <div key={i}>
+                              <CarouselCard
+                                videono={i}
+                                playbackUserData={playbackUser}
+                                index={user.videos.length - 1 - i}
+                                username={user.username}
+                                type="video"
+                              />
+                            </div>
+                          );
+                        })}
                     </div>
                   ) : (
                     <p className="2xl:text-lg lg:text-sm dark:text-white">No Videos till now</p>
                   )}
                 </div>
-              </Tab.Panel>
+              </Route>
 
-              <Tab.Panel className="">
+              <Route path={`/profile/:username/music`}>
                 <div className="sm:px-5  pb-5">
                   {user.tracks && user.tracks.length > 0 ? (
                     <div className="w-full">
-                      {user.tracks.map((track, i) => {
-                        ////console.log(playbackUser)
-                        return (
-                          <div key={i} className="w-full">
-                            <TrackCard
-                              trackno={i}
-                              track={track}
-                              index={i}
-                              username={user.username}
-                            />
-                          </div>
-                        );
-                      })}
+                      {user.tracks
+                        .slice(0)
+                        .reverse()
+                        .map((track, i) => {
+                          ////console.log(playbackUser)
+                          return (
+                            <div key={i} className="w-full">
+                              <TrackCard
+                                trackno={i}
+                                track={track}
+                                index={i}
+                                username={user.username}
+                              />
+                            </div>
+                          );
+                        })}
                     </div>
                   ) : (
                     <p className="2xl:text-lg lg:text-sm dark:text-white">No Music till now</p>
                   )}
                 </div>
-              </Tab.Panel>
+              </Route>
 
-              <Tab.Panel>
+              <Route path={`/profile/:username/activity`}>
                 <div className=" sm:px-5  pb-5">
                   {user.your_reactions.length > 0 ? (
                     <div>
-                      {user.your_reactions.map((playbackUser, i) => {
-                        ////console.log(playbackUser)
-                        return (
-                          <div key={i} className="">
-                            <ReactionCard
-                              reactno={i}
-                              playbackUserData={playbackUser}
-                              index={i}
-                              username={user.username}
-                              type="video"
-                            />
-                          </div>
-                        );
-                      })}
+                      {user.your_reactions
+                        .slice(0)
+                        .reverse()
+                        .map((playbackUser, i) => {
+                          ////console.log(playbackUser)
+                          return (
+                            <div key={i} className="">
+                              <ReactionCard
+                                reactno={i}
+                                playbackUserData={playbackUser}
+                                index={i}
+                                username={user.username}
+                                type="video"
+                              />
+                            </div>
+                          );
+                        })}
                     </div>
                   ) : (
                     <p className="2xl:text-lg lg:text-sm dark:text-white">No Latest Activity</p>
                   )}
                 </div>
-              </Tab.Panel>
+              </Route>
 
-              <Tab.Panel className="">
+              <Route path={`/profile/:username/playlists`}>
                 <div className="px-2 2xl:pt-5 lg:pt-2 pb-5">
                   {user.my_playlists && user.my_playlists.length > 0 ? (
                     <div>
-                      {user.my_playlists.map((playlist, i) => {
-                        ////console.log(playbackUser)
-                        return (
-                          <>
-                            <div key={i} className="">
-                              <h2 className="dark:text-white font-bold 2xl:text-2xl lg:text-lg text-md ml-2 my-2">
-                                {playlist.playlistname}
-                              </h2>
-                              <div>
-                                <Carousel cols={4}>
-                                  {playlist.playlistdata.map((data, i) => {
-                                    return (
-                                      <Carousel.Item key={i}>
-                                        <PlaylistCard playlistData={data} />
-                                      </Carousel.Item>
-                                    );
-                                  })}
-                                </Carousel>
+                      {user.my_playlists
+                        .slice(0)
+                        .reverse()
+                        .map((playlist, i) => {
+                          return (
+                            <>
+                              <div key={i} className="">
+                                <h2 className="dark:text-white font-bold 2xl:text-2xl lg:text-lg text-md ml-2 my-2">
+                                  {playlist.playlistname}
+                                </h2>
+                                <div>
+                                  <Carousel cols={4}>
+                                    {playlist.playlistdata.map((data, i) => {
+                                      return (
+                                        <Carousel.Item key={i}>
+                                          <PlaylistCard playlistData={data} />
+                                        </Carousel.Item>
+                                      );
+                                    })}
+                                  </Carousel>
+                                </div>
                               </div>
-                            </div>
-                            <hr className="2xl:my-7 lg:my-3 opacity-30" />
-                          </>
-                        );
-                      })}
+                              <hr className="2xl:my-7 lg:my-3 opacity-30" />
+                            </>
+                          );
+                        })}
                     </div>
                   ) : (
                     <p className="2xl:text-lg lg:text-sm dark:text-white">No Existing PlayLists</p>
                   )}
                 </div>
-              </Tab.Panel>
+              </Route>
 
-              {privateUser ? (
-                <Tab.Panel className="px-5 2xl:pt-10 lg:pt-5 pb-5">
-                  <h2 className="text-white opacity-40">
-                    Pinned Channels will be shown on left sidebar.
-                  </h2>
+              <Route path={`/profile/:username/following`}>
+                <div className="pt-4 pl-4">
+                  {privateUser ? (
+                    <h2 className="text-white opacity-40">
+                      Pinned Channels will be shown on left sidebar.
+                    </h2>
+                  ) : null}
                   <div className=" grid grid-cols-2 sm:grid-cols-4 grid-flow-row ">
                     {user.followee_count ? (
                       <div>
@@ -543,20 +572,26 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                           return (
                             <div
                               key={i}
-                              className="flex 2xl:text-lg lg:text-sm text-md shadow  w-full  lg:w-full   my-3 lg:my-2.5 py-2 rounded dark:hover:bg-dbeats-dark-alt dark:bg-dbeats-dark-secondary dark:text-gray-100 "
+                              className="flex 2xl:text-lg lg:text-sm text-md shadow pl-4 w-full  lg:w-full   my-3 lg:my-2.5 py-2 rounded dark:hover:bg-dbeats-dark-alt dark:bg-dbeats-dark-secondary dark:text-gray-100 "
                             >
-                              {pinnedData.indexOf(following) > -1 ? (
-                                <i
-                                  className="fas fa-thumbtack mx-3 my-auto 2xl:text-xl lg:text-md cursor-pointer "
-                                  onClick={() => UnPinningUser(following)}
-                                ></i>
-                              ) : (
-                                <i
-                                  className="fas fa-thumbtack mx-3 my-auto 2xl:text-xl lg:text-md  opacity-20 hover:opacity-100 cursor-pointer -rotate-45 transform"
-                                  onClick={() => PinningUser(following)}
-                                ></i>
-                              )}
-                              <h2>{following}</h2>
+                              {privateUser ? (
+                                <>
+                                  {pinnedData.indexOf(following) > -1 ? (
+                                    <i
+                                      className="fas fa-thumbtack mx-3 my-auto 2xl:text-xl lg:text-md cursor-pointer "
+                                      onClick={() => UnPinningUser(following)}
+                                    ></i>
+                                  ) : (
+                                    <i
+                                      className="fas fa-thumbtack mx-3 my-auto 2xl:text-xl lg:text-md  opacity-20 hover:opacity-100 cursor-pointer -rotate-45 transform"
+                                      onClick={() => PinningUser(following)}
+                                    ></i>
+                                  )}
+                                </>
+                              ) : null}
+                              <Link to={`/profile/${following}/posts`}>
+                                <h2 className="hover:underline">{following}</h2>
+                              </Link>
                             </div>
                           );
                         })}
@@ -565,9 +600,36 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                       <p className="2xl:text-lg lg:text-sm dark:text-white">0 Subscribed</p>
                     )}
                   </div>
-                </Tab.Panel>
-              ) : null}
-            </Tab.Panels>
+                </div>
+              </Route>
+
+              <Route path={`/profile/:username/followers`}>
+                <div className="pt-4 pl-4">
+                  {privateUser ? <h2 className="text-white opacity-40">Users You Follow</h2> : null}
+                  <div className=" grid grid-cols-2 sm:grid-cols-4 grid-flow-row ">
+                    {user.follower_count ? (
+                      <div>
+                        {user.follower_count.map((follower, i) => {
+                          ////console.log(playbackUser)
+                          return (
+                            <div
+                              key={i}
+                              className="flex 2xl:text-lg lg:text-sm text-md shadow  w-full  lg:w-full pl-4  my-3 lg:my-2.5 py-2 rounded dark:hover:bg-dbeats-dark-alt dark:bg-dbeats-dark-secondary dark:text-gray-100 "
+                            >
+                              <Link to={`/profile/${follower}/posts`}>
+                                <h2 className="hover:underline">{follower}</h2>
+                              </Link>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    ) : (
+                      <p className="2xl:text-lg lg:text-sm dark:text-white">0 Subscribed</p>
+                    )}
+                  </div>
+                </div>
+              </Route>
+            </Switch>
           </Tab.Group>
         </div>
       </div>

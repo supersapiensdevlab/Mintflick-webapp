@@ -41,7 +41,11 @@ const UploadVideoModal = (props) => {
   const [selectedCommercialUse, setSelectedCommercialUse] = useState(commercialUse[0]);
   const [selectedDerivativeWorks, setSelectedDerivativeWorks] = useState(derivativeWorks[0]);
   const [selectedCategory, setSelectedCategory] = useState(category[0]);
+  const [uploading, setUploading] = useState(0);
   const [tags, setTags] = useState([]);
+
+  const [videoUpload, setVideoUpload] = useState(false);
+  const [videoImageUpload, setVideoImageUpload] = useState(false);
 
   const [video, setVideo] = useState({
     videoName: '',
@@ -104,7 +108,8 @@ const UploadVideoModal = (props) => {
     const onStoredChunk = (size) => {
       uploaded += size;
       const pct = totalSize / uploaded;
-      console.log(`Uploading... ${pct.toFixed(2)}% complete`);
+      setUploading(10 - pct);
+      console.log(`Uploading... ${pct}% complete`);
     };
 
     // makeStorageClient returns an authorized Web3.Storage client instance
@@ -118,15 +123,18 @@ const UploadVideoModal = (props) => {
   const onVideoFileChange = (e) => {
     if (e.target.name === 'videoFile') {
       video.videoFile = e.target.files[0];
-      var trckName = e.target.files[0].name.replace(/\.[^/.]+$/, '');
-      document.getElementById('videoName').value = trckName;
-      video.videoName = trckName;
-      document.getElementById('video-label').textContent = trckName;
+
+      let videoName = e.target.files[0].name.replace(/\.[^/.]+$/, '');
+      document.getElementById('videoName').value = videoName;
+
+      setVideo({ ...video, videoName: videoName });
+      document.getElementById('video-label').textContent = videoName;
+      setVideoUpload(true);
     } else if (e.target.name === 'videoImage') {
-      video.videoImage = e.target.files[0];
-      console.log(e.target.files[0]);
-      var videoImage = e.target.files[0].name.replace(/\.[^/.]+$/, '');
+      setVideo({ ...video, videoImage: e.target.files[0] });
+      let videoImage = e.target.files[0].name.replace(/\.[^/.]+$/, '');
       document.getElementById('video-thumbnail-label').textContent = videoImage;
+      setVideoImageUpload(true);
     }
   };
 
@@ -145,80 +153,80 @@ const UploadVideoModal = (props) => {
   const PostData = async (e) => {
     props.setLoader(false);
     e.preventDefault();
-    if (e.target.value === 'Upload Video') {
-      const {
-        videoName,
-        videoImage,
-        videoFile,
-        category,
-        ratings,
-        tags,
-        description,
-        allowAttribution,
-        commercialUse,
-        derivativeWorks,
-      } = video;
-      storeWithProgress(e.target.value).then(() => {
-        let formData = new FormData(); // Currently empty
-        formData.append('userName', user.username);
+    const {
+      videoName,
+      videoImage,
+      videoFile,
+      category,
+      ratings,
+      tags,
+      description,
+      allowAttribution,
+      commercialUse,
+      derivativeWorks,
+    } = video;
+    storeWithProgress(e.target.value).then(() => {
+      let formData = new FormData(); // Currently empty
+      formData.append('userName', user.username);
+      formData.append('userImage', user.profile_image);
 
-        formData.append('videoName', videoName);
+      formData.append('videoName', videoName);
 
-        tags.forEach((tag) => formData.append('tags', tag));
+      tags.forEach((tag) => formData.append('tags', tag));
 
-        formData.append('description', description);
+      formData.append('description', description);
 
-        formData.append('category', category);
-        formData.append('ratings', ratings);
-        formData.append('allowAttribution', allowAttribution);
-        formData.append('commercialUse', commercialUse);
-        formData.append('derivativeWorks', derivativeWorks);
+      formData.append('category', category);
+      formData.append('ratings', ratings);
+      formData.append('allowAttribution', allowAttribution);
+      formData.append('commercialUse', commercialUse);
+      formData.append('derivativeWorks', derivativeWorks);
 
-        formData.append('videoFile', videoFile, videoFile.name);
-        formData.append('videoImage', videoImage, videoImage.name);
-        formData.append('videoHash', video.cid);
+      formData.append('videoFile', videoFile, videoFile.name);
+      formData.append('videoImage', videoImage, videoImage.name);
+      formData.append('videoHash', video.cid);
 
-        if (
-          video.videoFile.length !== 0 &&
-          video.videoImage.length !== 0 &&
-          video.videoName.length !== 0
-        ) {
-          axios
-            .post(`${process.env.REACT_APP_SERVER_URL}/upload-video`, formData, {
-              headers: {
-                'content-type': 'multipart/form-data',
-              },
-            })
-            .then(() => {
-              setVideo({
-                videoName: '',
-                videoImage: '',
-                videoFile: '',
-                category: '',
-                ratings: '',
-                tags: [],
-                description: '',
-                allowAttribution: '',
-                commercialUse: '',
-                derivativeWorks: '',
-              });
-              props.setLoader(true);
-              props.handleCloseVideoUpload();
-            })
-            .catch((error) => {
-              console.log(error);
+      if (
+        video.videoFile.length !== 0 &&
+        video.videoImage.length !== 0 &&
+        video.videoName.length !== 0
+      ) {
+        axios
+          .post(`${process.env.REACT_APP_SERVER_URL}/upload_video`, formData, {
+            headers: {
+              'content-type': 'multipart/form-data',
+            },
+          })
+          .then(() => {
+            setVideo({
+              videoName: '',
+              videoImage: '',
+              videoFile: '',
+              category: '',
+              ratings: '',
+              tags: [],
+              description: '',
+              allowAttribution: '',
+              commercialUse: '',
+              derivativeWorks: '',
             });
-        } else {
-          Noty.closeAll();
-          new Noty({
-            type: 'error',
-            text: 'Choose Video File & Fill other Details',
-            theme: 'metroui',
-            layout: 'bottomRight',
-          }).show();
-        }
-      });
-    }
+            setUploading(0);
+            props.setLoader(true);
+            props.handleCloseVideoUpload();
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      } else {
+        Noty.closeAll();
+        new Noty({
+          type: 'error',
+          text: 'Choose Video File & Fill other Details',
+          theme: 'metroui',
+          layout: 'bottomRight',
+        }).show();
+      }
+    });
   };
 
   return (
@@ -272,14 +280,14 @@ const UploadVideoModal = (props) => {
                             id="file-upload3"
                             type="file"
                             name="videoImage"
-                            accept=".jpg,.png,.jpeg"
+                            accept=".jpg,.png,.jpeg,.gif,.webp"
                             onChange={onVideoFileChange}
                             className="sr-only "
                           />
                         </label>
                         <p className="pl-1"> </p>
                       </div>
-                      <p className="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
+                      <p className="text-xs text-gray-400">PNG, JPG, GIF</p>
                     </div>
                   </div>
                 </div>
@@ -320,7 +328,7 @@ const UploadVideoModal = (props) => {
                         </label>
                         <p className="pl-1"></p>
                       </div>
-                      <p className="text-xs text-gray-500">Mp4, MKV, MOV, AVI up to 250MB</p>
+                      <p className="text-xs text-gray-400">Mp4, MKV, MOV, AVI</p>
                     </div>
                   </div>
                 </div>
@@ -344,7 +352,7 @@ const UploadVideoModal = (props) => {
                             id="videoName"
                             value={video.videoName}
                             onChange={handleVideoInputs}
-                            className="focus:ring-dbeats-dark-primary border-0 dark:bg-dbeats-dark-primary ring-dbeats-dark-secondary  ring-0   flex-1 block w-full rounded-md sm:text-sm  "
+                            className="focus:ring-dbeats-dark-primary border dark:border-dbeats-alt border-gray-300 dark:bg-dbeats-dark-primary ring-dbeats-dark-secondary  ring-0   flex-1 block w-full rounded-md sm:text-sm  "
                             placeholder=""
                           />
                         </div>
@@ -360,10 +368,10 @@ const UploadVideoModal = (props) => {
                         >
                           Tags
                         </label>
-                        <div className="mt-1 flex rounded-md max-w-sm shadow-sm text-black">
+                        <div className="mt-1 flex border dark:border-dbeats-alt border-gray-300 rounded-md max-w-sm shadow-sm text-black">
                           <Chips
-                            theme={theme(darkMode)[0]}
-                            chipTheme={chipTheme(darkMode)[0]}
+                            theme={theme({ darkMode })[0]}
+                            chipTheme={chipTheme({ darkMode })[0]}
                             value={tags}
                             onChange={handleVideoTags}
                             suggestions={suggestions}
@@ -404,7 +412,7 @@ const UploadVideoModal = (props) => {
                           rows={3}
                           value={video.description}
                           onChange={handleVideoInputs}
-                          className="dark:placeholder-dbeats-dark-alt focus:ring-dbeats-dark-primary border-0 dark:bg-dbeats-dark-primary ring-dbeats-dark-secondary  ring-0   flex-1 block w-full rounded-md sm:text-sm  "
+                          className="dark:placeholder-gray-600 focus:ring-dbeats-dark-primary border dark:border-dbeats-alt border-gray-300 dark:bg-dbeats-dark-primary ring-dbeats-dark-secondary  ring-0   flex-1 block w-full rounded-md sm:text-sm  "
                           placeholder="Any Behind the scenes you'll like your Audience to know!"
                         />
                       </div>
@@ -468,17 +476,33 @@ const UploadVideoModal = (props) => {
           </div>
 
           <div className="lg:px-4 2xl:py-3 lg:py-1 lg:text-right text-center sm:px-6 flex justify-end items-center">
+            <div className=" mx-5 flex items-center w-64">
+              <input
+                type="range"
+                value={uploading}
+                min="0"
+                max="10"
+                hidden={props.loader}
+                className="appearance-none cursor-pointer w-full h-3 bg-green-400 
+                font-white rounded-full slider-thumb  backdrop-blur-md"
+              />
+              <p className="mx-2 text-base font-medium text-white" hidden={props.loader}>
+                {Math.round(uploading * 10)}%
+              </p>
+            </div>
+
             <input
               type="submit"
               onClick={PostData}
               value="Upload Video"
-              className="inline-flex justify-center 2xl:py-2 py-1 lg:px-5 
-                px-3 border border-transparent shadow-sm 2xl:text-lg 
-                lg:text-md text-md font-bold rounded-md text-white 
-                bg-gradient-to-r from-green-400 to-blue-500 hover:bg-indigo-700 
-                transform transition delay-50 duration-300 ease-in-out 
-                hover:scale-105 focus:outline-none focus:ring-0 focus:ring-offset-2 
-                focus:ring-blue-500"
+              className={`${
+                videoUpload && videoImageUpload ? 'cursor-pointer hover:bg-dbeats-light' : ''
+              } 
+               flex justify-center 2xl:py-2 py-1 lg:px-5 
+                px-3 2xl:text-lg rounded  border-dbeats-light border
+                lg:text-md text-md my-auto font-semibold px-3 bg-transparent
+                dark:text-white `}
+              disabled={!videoUpload || !videoImageUpload}
             ></input>
             <div
               className="animate-spin rounded-full h-7 w-7 ml-3 border-t-2 border-b-2 bg-gradient-to-r from-green-400 to-blue-500 "

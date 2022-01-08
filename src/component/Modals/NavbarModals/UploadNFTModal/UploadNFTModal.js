@@ -1,7 +1,7 @@
 import React from 'react';
 import Modal from 'react-modal';
 import { useSelector } from 'react-redux';
-//import CreatorDashboard from '../../../../pages/Profile/ProfileSections/Store/creator-dashboard';
+import CreatorDashboard from '../../../../pages/Profile/ProfileSections/Store/creator-dashboard';
 
 const UploadNFTModal = (props) => {
   const darkMode = useSelector((state) => state.toggleDarkMode);
@@ -22,7 +22,7 @@ const UploadNFTModal = (props) => {
             <i className="fas fa-times cursor-pointer"></i>
           </div>
         </h2>
-        {/* <CreatorDashboard></CreatorDashboard> */}
+        <CreatorDashboard></CreatorDashboard>
       </Modal>
     </div>
   );

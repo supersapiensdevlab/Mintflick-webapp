@@ -5,6 +5,7 @@ import FastRewindIcon from '@material-ui/icons/FastRewind';
 import PauseIcon from '@material-ui/icons/Pause';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import React from 'react';
+import { Link } from 'react-router-dom';
 import personImg from '../../../assets/images/profile.svg';
 import classes from './Footer.module.css';
 
@@ -56,14 +57,14 @@ const Footer = (props) => {
             alt="img"
           ></img>
           <div className=" flex lg:block flex-row my-auto 2xl:pt-3 lg:pt-1">
-            <a
-              href={` /profile/${props.creatorData.username}`}
+            <Link
+              to={`/profile/${props.creatorData.username}`}
               className="no-underline cursor-pointer text-black hover:no-underline"
             >
               <span className="2xl:text-2xl lg:text-md font-semibold dark:text-white">
                 {props.creatorData.name}
               </span>
-            </a>
+            </Link>
             <p className="hidden lg:block lg:text-sm 2xl:text-lg">{props.creatorData.username}</p>
           </div>
           <i className="fas fa-info-circle block mt-3 2xl:mt-5 lg:mt-4 ml-3 2xl:text-lg lg:text-md text-dbeats-light hidden"></i>

@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import ReactPlayer from 'react-player';
-//import { useHistory } from "react-router-dom";
 import person from '../../../assets/images/profile.svg';
+import { Link } from 'react-router-dom';
 
 const PlaylistCard = (props) => {
   const [playing, setPlaying] = useState(false);
-
-  //let history = useHistory();
 
   const handleMouseMove = () => {
     setPlaying(true);
@@ -38,7 +36,10 @@ const PlaylistCard = (props) => {
       {/* <a href={`/playback/${props.videoData.username}/0`}> */}
       {props.playlistData.data.trackId ? (
         <div className={`cursor-pointer 2xl:h-48 lg:h-32 md:h-36 h-44 dark:bg-black w-full `}>
-          <a href={`/track/${props.playlistData.username}/${props.playlistData.index}`}>
+          <Link
+            to={`/track/${props.playlistData.username}/${props.playlistData.index}`}
+            onClick={() => audio.pause()}
+          >
             <img
               src={props.playlistData.data.trackImage}
               alt=""
@@ -46,14 +47,14 @@ const PlaylistCard = (props) => {
               onMouseMove={handleMouseMove}
               onMouseLeave={hanldeMouseLeave}
             />
-          </a>
+          </Link>
         </div>
       ) : (
         <div
           className={`flex items-center justify-center cursor-pointer 2xl:h-48 lg:h-32 md:h-36 h-44 dark:bg-black w-full`}
         >
-          <a
-            href={`/playback/${props.playlistData.username}/${props.playlistData.index}`}
+          <Link
+            to={`/playback/${props.playlistData.username}/${props.playlistData.data.videoId}`}
             className="2xl:h-48 lg:h-32 md:h-36 h-44"
           >
             <ReactPlayer
@@ -67,11 +68,10 @@ const PlaylistCard = (props) => {
               onMouseMove={handleMouseMove}
               onMouseLeave={hanldeMouseLeave}
             />
-          </a>
+          </Link>
         </div>
       )}
 
-      {/* </a> */}
       <div className="col-start-1 row-start-3 pb-2 pt-2">
         <p className="flex   text-black text-sm font-medium">
           <img

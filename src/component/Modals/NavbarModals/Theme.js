@@ -4,7 +4,8 @@ export function theme({ darkMode }) {
       chipsContainer: {
         display: 'flex',
         position: 'relative',
-        backgroundColor: !darkMode ? '#101010' : '#fff',
+        backgroundColor: darkMode ? '#101010' : '#fff',
+        color: !darkMode ? '#101010' : '#fff',
         font: '14px',
         minHeight: 24,
         width: '17rem',
@@ -23,8 +24,8 @@ export function theme({ darkMode }) {
         minWidth: '20px',
         padding: 5,
         margin: '2px',
-        backgroundColor: !darkMode ? '#151515' : '#fff',
-        color: darkMode ? '#151515' : '#fff',
+        backgroundColor: darkMode ? '#151515' : '#fff',
+        color: !darkMode ? '#151515' : '#fff',
       },
       suggestionsContainer: {},
       suggestionsList: {
@@ -33,8 +34,8 @@ export function theme({ darkMode }) {
         left: 0,
         top: '100%',
         width: '100%',
-        backgroundColor: !darkMode ? '#101010' : '#fff',
-        color: darkMode ? '#101010' : '#fff',
+        backgroundColor: darkMode ? '#101010' : '#fff',
+        color: !darkMode ? '#101010' : '#fff',
         listStyle: 'none',
         padding: 0,
         margin: 0,
@@ -47,7 +48,9 @@ export function theme({ darkMode }) {
       },
       suggestionHighlighted: {
         borderRadius: '6px',
-        background: !darkMode ? '#4f46e5' : '#fff',
+        background: !darkMode ? '#eee' : '#fff',
+        color: '#101010',
+        cursor: 'pointer',
       },
       sectionContainer: {},
       sectionTitle: {},
@@ -60,8 +63,8 @@ export function chipTheme({ darkMode }) {
     {
       chip: {
         padding: 5,
-        background: !darkMode ? '#151515' : '#ccc',
-        color: darkMode ? '#101010' : '#fff',
+        background: darkMode ? '#151515' : '#ccc',
+        color: !darkMode ? '#101010' : '#fff',
         margin: '2.5px 5px 2.5px 2.5px',
         borderRadius: 3,
         cursor: 'default',

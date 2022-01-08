@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react';
 import Chips from 'react-chips';
 import Modal from 'react-modal';
 import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import Dropdown from '../../../dropdown.component';
 import { makeStorageClient } from '../../../uploadHelperFunction';
 import { chipTheme, theme } from '../Theme';
@@ -51,7 +52,15 @@ const UploadTrackModal = (props) => {
   const [selectedAttribution, setSelectedAttribution] = useState(attribution[0]);
   const [selectedCommercialUse, setSelectedCommercialUse] = useState(commercialUse[0]);
   const [selectedDerivativeWorks, setSelectedDerivativeWorks] = useState(derivativeWorks[0]);
+  const [uploading, setUploading] = useState(0);
+
   const [tags, setTags] = useState([]);
+
+  const [trackUpload, setTrackUpload] = useState(false);
+  const [trackImageUpload, setTrackImageUpload] = useState(false);
+
+  const [invalidISRC, setInvalidISRC] = useState(false);
+  const [invalidISWC, setInvalidISWC] = useState(false);
 
   const [track, setTrack] = useState({
     trackName: '',
@@ -84,7 +93,19 @@ const UploadTrackModal = (props) => {
     name = e.target.name;
     value = e.target.value;
 
-    setTrack({ ...track, [name]: value });
+    if (name !== 'isrc' && name !== 'iswc') {
+      setTrack({ ...track, [name]: value });
+    } else {
+      if (name === 'isrc') {
+        let reg = /^[A-Z]{2}-?\w{3}-?\d{2}-?\d{5}$/g;
+        value.match(reg) ? setInvalidISRC(false) : setInvalidISRC(true);
+      } else {
+        let reg = /^T-?\d{3}.?\d{3}.?\d{3}-?\d/g;
+        value.match(reg) ? setInvalidISWC(false) : setInvalidISWC(true);
+      }
+
+      setTrack({ ...track, [name]: value });
+    }
   };
 
   const fetchSuggestions = (value) => {
@@ -247,6 +268,7 @@ const UploadTrackModal = (props) => {
     const onStoredChunk = (size) => {
       uploaded += size;
       const pct = totalSize / uploaded;
+      setUploading(10 - pct);
       console.log(`Uploading... ${pct.toFixed(2)}% complete`);
     };
 
@@ -267,10 +289,12 @@ const UploadTrackModal = (props) => {
       document.getElementById('trackName').value = trckName;
       track.trackName = trckName;
       document.getElementById('audio-label').textContent = trckName;
+      setTrackUpload(true);
     } else if (e.target.name === 'trackImage') {
       track.trackImage = e.target.files[0];
       var trcImage = e.target.files[0].name.replace(/\.[^/.]+$/, '');
       document.getElementById('audio-thumbnail-label').textContent = trcImage;
+      setTrackImageUpload(true);
     }
   };
 
@@ -338,6 +362,7 @@ const UploadTrackModal = (props) => {
     storeWithProgress(e.target.value).then(() => {
       let formData = new FormData(); // Currently empty
       formData.append('userName', user.username);
+      formData.append('userImage', user.profile_image);
       formData.append('trackName', trackName);
       formData.append('genre', genre);
       formData.append('mood', mood);
@@ -360,7 +385,7 @@ const UploadTrackModal = (props) => {
         track.cid.length !== 0
       ) {
         axios
-          .post(`${process.env.REACT_APP_SERVER_URL}/upload`, formData, {
+          .post(`${process.env.REACT_APP_SERVER_URL}/upload_music`, formData, {
             headers: {
               'content-type': 'multipart/form-data',
             },
@@ -386,6 +411,7 @@ const UploadTrackModal = (props) => {
               tokenId: '',
               mintTrxHash: '',
             });
+            setUploading(0);
             props.setLoader(true);
             props.handleCloseTrackUpload();
             Noty.closeAll();
@@ -476,14 +502,14 @@ const UploadTrackModal = (props) => {
                             type="file"
                             required
                             name="trackImage"
-                            accept=".jpg,.png,.jpeg"
+                            accept=".jpg,.png,.jpeg,.gif,.webp"
                             onChange={onFileChange}
                             className="sr-only "
                           />
                         </label>
                         <p className="pl-1"> </p>
                       </div>
-                      <p className="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
+                      <p className="text-xs text-gray-500">PNG, JPG, GIF</p>
                     </div>
                   </div>
                 </div>
@@ -525,7 +551,7 @@ const UploadTrackModal = (props) => {
                         </label>
                         <p className="pl-1"></p>
                       </div>
-                      <p className="text-xs text-gray-500">MP3 up to 10MB</p>
+                      <p className="text-xs text-gray-500">MP3</p>
                     </div>
                   </div>
                 </div>
@@ -565,7 +591,7 @@ const UploadTrackModal = (props) => {
                             id="trackName"
                             value={track.trackName}
                             onChange={handleInputs}
-                            className="focus:ring-dbeats-dark-primary border-0 dark:bg-dbeats-dark-primary ring-dbeats-dark-secondary  ring-0   flex-1 block w-full rounded-md sm:text-sm  "
+                            className="focus:ring-dbeats-dark-primary border dark:border-dbeats-alt border-gray-300 dark:bg-dbeats-dark-primary ring-dbeats-dark-secondary  ring-0   flex-1 block w-full rounded-md sm:text-sm  "
                             placeholder=""
                           />
                         </div>
@@ -579,10 +605,10 @@ const UploadTrackModal = (props) => {
                         >
                           Tags
                         </label>
-                        <div className="mt-1 flex rounded-md shadow-sm">
+                        <div className="mt-1 flex border dark:border-dbeats-alt border-gray-300 rounded-md shadow-sm">
                           <Chips
-                            theme={theme(darkMode)[0]}
-                            chipTheme={chipTheme(darkMode)[0]}
+                            theme={theme({ darkMode })[0]}
+                            chipTheme={chipTheme({ darkMode })[0]}
                             value={tags}
                             onChange={handleVideoTags}
                             suggestions={suggestions}
@@ -633,16 +659,32 @@ const UploadTrackModal = (props) => {
                         >
                           Track ISRC
                         </label>
-                        <div className="mt-1 flex rounded-md shadow-sm">
+                        <div className="mt-1 rounded-md shadow-sm">
                           <input
                             type="text"
                             name="isrc"
                             id="isrc"
                             value={track.isrc}
                             onChange={handleInputs}
-                            className=" dark:placeholder-dbeats-dark-alt    focus:ring-dbeats-dark-primary border-0 dark:bg-dbeats-dark-primary ring-dbeats-dark-secondary  ring-0   flex-1 block w-full rounded-md sm:text-sm  "
-                            placeholder="eg. XX-XXX-YY-ZZZZZ"
+                            className={`dark:placeholder-gray-600  
+                            border dark:bg-dbeats-dark-primary ring-dbeats-dark-secondary
+                            ${
+                              invalidISRC
+                                ? 'border-red-500 focus:ring-red-800'
+                                : 'focus:ring-dbeats-dark-primary  border-gray-300 dark:border-dbeats-alt '
+                            }
+                            ring-0   flex-1 block w-full rounded-md sm:text-sm  "
+                            placeholder="eg. XX-XXX-YY-ZZZZZ`}
                           />
+                          <p
+                            className={`${
+                              invalidISRC
+                                ? '2xl:text-sm lg:text-xs pt-1 text-red-500 mb-1'
+                                : 'hidden'
+                            }`}
+                          >
+                            Please Enter Valid ISRC
+                          </p>
                         </div>
                       </div>
                       <div className="col-span-4 sm:col-span-4">
@@ -652,7 +694,7 @@ const UploadTrackModal = (props) => {
                         >
                           Track ISWC
                         </label>
-                        <div className="mt-1 flex rounded-md shadow-sm">
+                        <div className="mt-1 rounded-md shadow-sm">
                           <input
                             type="text"
                             name="iswc"
@@ -660,8 +702,25 @@ const UploadTrackModal = (props) => {
                             placeholder="eg. T-123.456.789.C"
                             value={track.iswc}
                             onChange={handleInputs}
-                            className=" dark:placeholder-dbeats-dark-alt    focus:ring-dbeats-dark-primary border-0 dark:bg-dbeats-dark-primary ring-dbeats-dark-secondary  ring-0   flex-1 block w-full rounded-md sm:text-sm  "
+                            className={`dark:placeholder-gray-600  
+                            border dark:bg-dbeats-dark-primary ring-dbeats-dark-secondary
+                            ${
+                              invalidISWC
+                                ? 'border-red-500 focus:ring-red-800'
+                                : 'focus:ring-dbeats-dark-primary  border-gray-300 dark:border-dbeats-alt '
+                            }
+                            ring-0   flex-1 block w-full rounded-md sm:text-sm  "
+                            placeholder="eg. XX-XXX-YY-ZZZZZ`}
                           />
+                          <p
+                            className={`${
+                              invalidISWC
+                                ? '2xl:text-sm lg:text-xs pt-1 text-red-500 mb-1'
+                                : 'hidden'
+                            }`}
+                          >
+                            Please Enter Valid ISWC
+                          </p>
                         </div>
                       </div>
                     </div>
@@ -680,7 +739,7 @@ const UploadTrackModal = (props) => {
                           rows={3}
                           value={track.description}
                           onChange={handleInputs}
-                          className="dark:placeholder-dbeats-dark-alt focus:ring-dbeats-dark-primary border-0 dark:bg-dbeats-dark-primary ring-dbeats-dark-secondary  ring-0   flex-1 block w-full rounded-md sm:text-sm  "
+                          className="dark:placeholder-gray-600 focus:ring-dbeats-dark-primary border dark:border-dbeats-alt border-gray-300 dark:bg-dbeats-dark-primary ring-dbeats-dark-secondary  ring-0   flex-1 block w-full rounded-md sm:text-sm  "
                           placeholder="Any Behind the scenes you'll like your Audience to know!"
                         />
                       </div>
@@ -744,28 +803,44 @@ const UploadTrackModal = (props) => {
           </div>
 
           <div className="lg:px-4 2xl:py-3 lg:py-2 lg:pt-3 lg:text-right text-center flex justify-end items-center">
-            <a
+            <div className=" mx-5 flex items-center w-64">
+              <input
+                type="range"
+                value={uploading}
+                min="0"
+                max="10"
+                hidden={props.loader}
+                className="appearance-none cursor-pointer w-full h-3 bg-green-400 
+                font-white rounded-full slider-thumb  backdrop-blur-md"
+              />
+              <p className="mx-2 text-base font-medium text-white" hidden={props.loader}>
+                {Math.round(uploading * 10)}%
+              </p>
+            </div>
+            <Link
               className="text-sm font-medium dark:text-gray-100 text-gray-700 px-2"
               id="nftAddress"
               target="_blank"
-              href="/"
+              to="/"
             >
               NFT
-            </a>
+            </Link>
             <input
               type="submit"
               onClick={PostData}
               value="Upload Audio"
-              className="cursor-pointer inline-flex 
-                self-center justify-center 2xl:py-2 py-1 
-                lg:px-5 px-3 border border-transparent 
-                shadow-sm 2xl:text-lg text-md lg:text-sm 
-                font-bold rounded-md text-white bg-gradient-to-r 
-                from-green-400 to-blue-500 hover:bg-indigo-700 
-                transform transition delay-50 duration-300 
-                ease-in-out hover:scale-105 focus:outline-none 
-                focus:ring-0 focus:ring-offset-2 
-                focus:ring-blue-500"
+              className={`${
+                trackUpload && trackImageUpload && !invalidISRC && !invalidISWC
+                  ? 'cursor-pointer hover:bg-dbeats-light'
+                  : ''
+              } 
+               flex justify-center 2xl:py-2 py-1 lg:px-5 
+                px-3 2xl:text-lg rounded  border-dbeats-light border
+                lg:text-md text-md my-auto font-semibold px-3 bg-transparent
+                dark:text-white `}
+              disabled={
+                track.trackImage === '' || track.trackFile === '' || invalidISRC || invalidISWC
+              }
             ></input>
             <div
               className="animate-spin rounded-full h-7 w-7 ml-3 border-t-2 border-b-2 bg-gradient-to-r from-green-400 to-blue-500 "

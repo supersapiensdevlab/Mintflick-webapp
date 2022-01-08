@@ -2,15 +2,15 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import personImg from '../../assets/images/profile.svg';
 
-const PinnedPanel = (props) => {
+const PinnedPanel = () => {
   const darkMode = useSelector((state) => state.toggleDarkMode);
-  ////console.log(props);
+  const userdata = JSON.parse(window.localStorage.getItem('user'));
   const [pinnedData, setPinnedData] = useState([]);
 
   const getPinnedData = async (data) => {
-    console.log('data', data);
     for (let i = 0; i < data.length; i++) {
       await axios.get(`${process.env.REACT_APP_SERVER_URL}/user/${data[i]}`).then((value) => {
         setPinnedData((oldArray) => [...oldArray, value.data]);
@@ -19,26 +19,24 @@ const PinnedPanel = (props) => {
   };
 
   useEffect(() => {
-    if (JSON.parse(window.localStorage.getItem('pinned_user'))) {
-      getPinnedData(JSON.parse(window.localStorage.getItem('pinned_user')));
+    let data = JSON.parse(window.localStorage.getItem('pinned_user'));
+    if (data && data.length > 0) {
+      getPinnedData(data);
     } else {
-      if (props.userdata) {
-        if (props.userdata.pinned) {
-          window.localStorage.setItem('pinned_user', JSON.stringify(props.userdata.pinned));
-          getPinnedData(props.userdata.pinned);
+      if (userdata) {
+        if (userdata.pinned) {
+          window.localStorage.setItem('pinned_user', JSON.stringify(userdata.pinned));
+          getPinnedData(userdata.pinned);
         }
       }
     }
     // eslint-disable-next-line
   }, []);
 
-  console.log(pinnedData);
-
-  ////console.log(pinnedData);
   return (
     <div className={` w-full fixed top-0 ${darkMode && 'dark'} z-2 -ml-1`}>
       <div
-        className={`hidden lg:block pt-16 bg-white w-max shadow  z-10 h-full fixed dark:bg-dbeats-dark-primary 2xl:px-3 lg:px-2  dark:text-gray-100  flex flex-col justify-center `}
+        className={`hidden 2xl:block lg:block 2xl:pt-16 lg:pt-14 bg-white w-max shadow  z-10 h-full fixed dark:bg-dbeats-dark-primary 2xl:px-3 lg:px-2  dark:text-gray-100  flex flex-col justify-center `}
       >
         {/* Subscribed User Avatar */}
         {pinnedData.map((pinnedUser, i) => {
@@ -55,32 +53,27 @@ const PinnedPanel = (props) => {
                   </Tooltip>
                 }
               >
-                <a href={`/profile/${pinnedUser.username}/`} className=" my-2 relative">
+                <Link to={`/profile/${pinnedUser.username}/`} className=" my-2 relative">
                   <img
                     src={pinnedUser.profile_image ? pinnedUser.profile_image : personImg}
                     alt=""
                     className=" 2xl:w-14 2xl:h-14 lg:h-10 lg:w-10 rounded-full hover:shadow hover:scale-95 transform transition-all"
                   />{' '}
-                  {/* <div className="bg-red-500 rounded-full shadow  h-6 w-6 text-sm self-center text-center font-semibold  absolute -bottom-2  -right-1 dark:border-dbeats-dark-primary  border-red-300 border-2 text-white  ">
-                    2
-                  </div> */}
-                </a>
+                </Link>
               </OverlayTrigger>
             </div>
           );
         })}
 
         <div className="flex justify-center cursor-pointer  ">
-          <a
+          <Link
             className="2xl:w-14 2xl:h-14 lg:h-10 lg:w-10  my-2 rounded-full hover:shadow hover:scale-95 transition-all transform  relative bg-blue-300 dark:bg-dbeats-dark-alt "
-            href={
-              props.userdata ? `/profile/${props.userdata.username}/subscribed_channels` : `/signup`
-            }
+            to={userdata ? `/profile/${userdata.username}/following` : `/signup`}
           >
             <div className="w-max mx-auto 2xl:mt-3.5 lg:mt-1.5">
               <i className="fas fa-plus 2xl:text-lg lg:text-sm text-center text-white dark:text-blue-200"></i>
             </div>
-          </a>
+          </Link>
         </div>
       </div>
     </div>
