@@ -58,7 +58,7 @@ const ChannelSection = (props) => {
         <div className="2xl:px-5 lg:px-0 2xl:pt-10 lg:pt-5 fixed ">
           <h5 className="font-semibold text-base dark:text-gray-200 w-full 2xl:text-lg lg:text-sm relative pl-2">
             {' '}
-            {props.user.name}&apos;s Channels
+            {props.user.username}&apos;s Channels
             {props.privateUser ? (
               <i
                 className="fas fa-plus    cursor-pointer rounded p-2 -top-1 hover:text-white dark:hover:bg-dbeats-dark-secondary hover:bg-dbeats-light ml-2 dark:hover:text-dbeats-light"

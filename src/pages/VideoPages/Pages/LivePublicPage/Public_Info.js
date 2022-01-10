@@ -209,7 +209,9 @@ const PublicInfo = (props) => {
       >
         <div className=" lg:col-span-2">
           <div className="self-center lg:px-8 w-screen lg:w-full lg:mt-3 mt-0.5">
-            {userData ? <VideoPlayer playbackUrl={playbackUrl} creatorData={userData} /> : null}
+            {userData ? (
+              <VideoPlayer playbackUrl={playbackUrl} creatorData={userData} footer={true} />
+            ) : null}
           </div>
 
           <div className="lg:mx-7 lg:px-7 px-3">

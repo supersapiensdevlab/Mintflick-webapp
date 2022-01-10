@@ -21,6 +21,7 @@ import NewPassword from './pages/Login/NewPassword';
 import Profile from './pages/Profile/Profile';
 import ChatRoom from './pages/Profile/ProfileSections/ChatRoom/ChatRoom';
 import Ticket from './pages/Profile/ProfileSections/Ticket/Ticket';
+import UserRoomPage from './pages/VideoPages/Pages/GoLive_UserPage/UserRoomPage';
 import PublicRoom from './pages/VideoPages/Pages/LivePublicPage/PublicRoomPage';
 import Playback from './pages/VideoPages/Pages/PlayBack/PlaybackRoomPage';
 import TrackPlayback from './pages/VideoPages/Pages/TrackPage/TrackInfo';
@@ -147,7 +148,12 @@ export default function App() {
                 <Route exact path="/reset/:token" component={NewPassword} />
                 {/* <Route exact path="/" component={LandingPage} /> */}
                 {/* <Route exact path="/home" component={VideoHome} />  */}
-                {/* <Route exact path="/streamer/:roomID" component={UserRoom} /> */}
+                <Route exact path="/streamer/:roomID">
+                  <TopLoader page="streaming" />
+                  <NavBar />
+                  <PinnedPanel />
+                  <UserRoomPage />
+                </Route>
 
                 <Route>
                   <TopLoader page="pagenotfound" />

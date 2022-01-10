@@ -483,7 +483,7 @@ const PlayBackInfo = (props) => {
             <div className=" lg:col-span-2 dark:bg-dbeats-dark-alt text-black dark:text-white">
               <div className="self-center bg-black">
                 {footerData ? (
-                  <VideoPlayer playbackUrl={playbackUrl} creatorData={footerData} />
+                  <VideoPlayer playbackUrl={playbackUrl} creatorData={footerData} footer={true} />
                 ) : null}
               </div>
               <div className="2xl:mx-7 sm:p-2 p-3   dark:bg-dbeats-dark-alt">

@@ -137,16 +137,14 @@ const UserInfo = () => {
 
   return (
     <Fragment className={`${darkMode && 'dark'}`}>
-      <div className="flex flex-col lg:grid lg:grid-cols-3 pb-64 pt-16 bg-gradient-to-b from-blue-50 via-blue-50 to-white  dark:bg-gradient-to-b dark:from-dbeats-dark-secondary  dark:to-dbeats-dark-primary">
-        <div className=" h-auto w-full lg:w-full lg:col-span-2 self-center ">
-          <VideoPlayer
-            playbackUrl={playbackUrl}
-            creatorData={user}
-            className="rounded h-full w-full"
-          />
+      <div className="grid sm:grid-cols-1 lg:grid-cols-3 grid-flow-row pt-3 pb-50 2xl:mt-10 lg:mt-4 lg:ml-12  bg-gradient-to-b from-blue-50 via-blue-50 to-white  dark:bg-gradient-to-b dark:from-dbeats-dark-secondary  dark:to-dbeats-dark-primary">
+        <div className="lg:col-span-2 2xl:ml-8 lg:ml-2 2xl:mt-4 lg:mt-6 self-center w-screen lg:w-full dark:bg-black">
+          {user ? (
+            <VideoPlayer playbackUrl={playbackUrl} creatorData={user} footer={false} />
+          ) : null}
         </div>
-        <div className="text-sm mx-auto ">
-          <div className="bg-white w-80  lg:w-full  p-5 rounded text-sm sm:lg:text-xl shadow mt-8  lg:ml-0 ">
+        <div className="text-sm mx-auto col-span-1  2xl:mt-12 lg:mt-0">
+          <div className="bg-white w-80  2xl:w-full  p-5 rounded text-sm sm:lg:text-xl shadow mt-8  lg:ml-0 ">
             <div className="pb-2">
               <span className="font-semibold">Streamer Name : </span>
               <p>{user.name}</p>
@@ -205,7 +203,7 @@ const UserInfo = () => {
 
       <Modal
         isOpen={showDestinationModal}
-        className="h-max lg:w-max w-5/6  mx-auto lg:mt-40 mt-28 shadow-xl bg-white"
+        className="h-max lg:w-max w-5/6  mx-auto 2xl:mt-40 lg:mt-16 mt-28 shadow-xl bg-white"
       >
         <h2 className="grid grid-cols-5 justify-items-center rounded-t-xl w-full dark:rounded-t-sm text-2xl py-4 dark:bg-dbeats-dark-alt bg-white dark:text-white">
           <div className="col-span-4 pl-14 text-lg lg:text-2xl">Add Multistream Platforms</div>
@@ -267,7 +265,7 @@ const UserInfo = () => {
 
       <Modal
         isOpen={modalShow}
-        className="h-max lg:w-1/2 w-5/6 mx-auto lg:mt-48 mt-24 shadow-xl bg-white"
+        className="h-max lg:w-1/2 w-5/6 mx-auto 2xl:mt-48 lg:mt-16  mt-24 shadow-xl bg-white"
       >
         <h2 className="grid grid-cols-5 justify-items-center rounded-t-xl w-full dark:rounded-t-sm text-2xl py-4 dark:bg-dbeats-dark-alt bg-white dark:text-white">
           <div className="col-span-4 pl-14 text-lg lg:text-2xl">
@@ -305,7 +303,7 @@ const UserInfo = () => {
 
       <Modal
         isOpen={showStreamModal}
-        className="h-max lg:w-1/3 w-5/6 mx-auto mt-24 shadow-xl bg-white"
+        className="h-max lg:w-1/3 w-5/6 mx-auto 2xl:mt-24 lg:mt-16 mt-24 shadow-xl bg-white"
       >
         <h2 className="grid grid-cols-5 justify-items-center rounded-t-xl w-full dark:rounded-t-sm text-2xl py-4 dark:bg-dbeats-dark-alt bg-white dark:text-white">
           <div className="col-span-4 pl-14 text-lg lg:text-2xl">{multiStreamValue.title}</div>

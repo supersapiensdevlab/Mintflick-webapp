@@ -205,30 +205,32 @@ function VideoPlayer(props) {
           )}
         </div>
       </Container>
-      <Footer
-        onSeek={handleSeekChange}
-        onSeekMouseDown={handleSeekMouseDown}
-        onSeekMouseUp={handleSeekMouseUp}
-        onDuration={handleDuration}
-        onRewind={handleRewind}
-        onPlayPause={handlePlayPause}
-        onFastForward={handleFastForward}
-        playing={playing}
-        played={played}
-        elapsedTime={elapsedTime}
-        totalDuration={totalDuration}
-        onMute={hanldeMute}
-        muted={muted}
-        onVolumeChange={handleVolumeChange}
-        onVolumeSeekDown={handleVolumeSeekDown}
-        onChangeDispayFormat={handleDisplayFormat}
-        playbackRate={playbackRate}
-        onPlaybackRateChange={handlePlaybackRate}
-        onToggleFullScreen={toggleFullScreen}
-        volume={volume}
-        creatorData={props.creatorData}
-        className="lg:-ml-12 "
-      />
+      {props.footer ? (
+        <Footer
+          onSeek={handleSeekChange}
+          onSeekMouseDown={handleSeekMouseDown}
+          onSeekMouseUp={handleSeekMouseUp}
+          onDuration={handleDuration}
+          onRewind={handleRewind}
+          onPlayPause={handlePlayPause}
+          onFastForward={handleFastForward}
+          playing={playing}
+          played={played}
+          elapsedTime={elapsedTime}
+          totalDuration={totalDuration}
+          onMute={hanldeMute}
+          muted={muted}
+          onVolumeChange={handleVolumeChange}
+          onVolumeSeekDown={handleVolumeSeekDown}
+          onChangeDispayFormat={handleDisplayFormat}
+          playbackRate={playbackRate}
+          onPlaybackRateChange={handlePlaybackRate}
+          onToggleFullScreen={toggleFullScreen}
+          volume={volume}
+          creatorData={props.creatorData}
+          className="lg:-ml-12 "
+        />
+      ) : null}
     </>
   );
 }
