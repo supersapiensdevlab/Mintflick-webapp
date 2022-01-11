@@ -4,28 +4,60 @@ import { Spinner } from 'react-bootstrap';
 import Modal from 'react-modal';
 import { useSelector } from 'react-redux';
 import { MultiStreamData } from '../../../../assets/Data';
+import Dropdown from '../../../../component/dropdown.component';
+import { makeStorageClient } from '../../../../component/uploadHelperFunction';
 import VideoPlayer from '../../../../component/VideoPlayer/VideoPlayer';
 import classes from '../Info.module.css';
 
 const UserInfo = () => {
-  const [userStreams, setUserStreams] = useState([]);
-
   const user = JSON.parse(window.localStorage.getItem('user'));
   const darkMode = useSelector((darkmode) => darkmode.toggleDarkMode);
-
   const [playbackUrl, setPlaybackUrl] = useState('');
   const [StreamKey, setKey] = useState('');
   const [loader, setLoader] = useState(true);
-  //const [name, setName] = useState("");
+
+  //Modal
   const [modalShow, setModalShow] = useState(false);
   const [showStreamModal, setShowStreamModal] = useState(false);
   const [showDestinationModal, setShowDestinationModal] = useState(false);
-  //const [selected, setSelected] = React.useState(false);
 
+  //MultiStreams
+  const [userStreams, setUserStreams] = useState([]);
   const [multiStreamValue, setMultiStreamValue] = useState({});
-
   const [multiStreamConnected, setMultiStreamConnected] = useState([]);
   const [patchStream, setPatchStream] = useState([]);
+
+  //Recording
+  const [recording, setRecording] = useState(false);
+  const [newRecord, setNewRecord] = useState(0);
+  const [recordUrl, setRecordUrl] = useState('');
+
+  //nft video
+  const category = [
+    'Autos & Vehicles',
+    ' Music',
+    'Pets & Animals',
+    'Sports',
+    'Travel & Events',
+    'Gaming',
+    'People & Blogs',
+    'Comedy',
+    'Entertainment',
+    'News & Politics',
+    ' Howto & Style',
+    'Education',
+    'Science & Technology',
+    'Nonprofits & Activism',
+  ];
+  const [selectedCategory, setSelectedCategory] = useState(category[0]);
+  const [recordvideo, setRecordVideo] = useState({
+    videoName: '',
+    videoFile: null,
+    category: '',
+    description: '',
+    price: '',
+    royality: '',
+  });
 
   useEffect(() => {
     if (user.multistream_platform) {
@@ -44,13 +76,14 @@ const UserInfo = () => {
     setUserStreams(user.livepeer_data);
     // eslint-disable-next-line
   }, []);
-  ////console.log(multiStreamConnected)
 
+  //set Stream Key
   const handleChange = (e) => {
     e.preventDefault();
     setKey(e.target.value);
   };
 
+  //add Stream Platform
   const addStreamingPlatform = async (props) => {
     setLoader(false);
     let postData = {
@@ -76,6 +109,7 @@ const UserInfo = () => {
     setLoader(true);
   };
 
+  //create Mutlistream
   const createMultiStream = async () => {
     ////console.log(patchStream);
 
@@ -118,6 +152,7 @@ const UserInfo = () => {
     setShowStreamModal(false);
   };
 
+  //edit platform
   const editPlatform = (value, index) => {
     if (value.selected === 1) {
       let newArr = [...multiStreamConnected];
@@ -133,6 +168,100 @@ const UserInfo = () => {
       setPatchStream((oldArray) => [...oldArray, newArr[index]]);
       setMultiStreamConnected(newArr);
     }
+  };
+
+  //Recording
+  const [recorder, setRecorder] = useState(null);
+  const [stream, setStream] = useState(null);
+  const [chunks, setChunks] = useState([]);
+
+  async function storeWithProgress() {
+    const onRootCidReady = (cid) => {
+      recordvideo.cid = cid;
+    };
+
+    const blob = new Blob([JSON.stringify(recordvideo)], { type: 'application/json' });
+
+    const files = [recordvideo.videoFile, new File([blob], 'meta.json')];
+    const totalSize = recordvideo.videoFile.size;
+    let uploaded = 0;
+    const onStoredChunk = (size) => {
+      uploaded += size;
+      const pct = totalSize / uploaded;
+      //setUploading(10 - pct);
+      console.log(`Uploading... ${pct}% complete`);
+    };
+
+    const client = makeStorageClient();
+    return client.put(files, { onRootCidReady, onStoredChunk });
+  }
+
+  const startRecording = async () => {
+    setNewRecord(0);
+    setRecordVideo({
+      videoName: '',
+      videoFile: null,
+      category: '',
+      description: '',
+      price: '',
+      royality: '',
+    });
+
+    let data = await navigator.mediaDevices.getDisplayMedia({
+      video: { mediaSource: 'screen' },
+    });
+    setStream(data);
+    if (data) {
+      setRecording(true);
+    }
+
+    let recorderdata = new MediaRecorder(data);
+    setRecorder(recorderdata);
+
+    recorderdata.ondataavailable = (e) => chunks.push(e.data);
+    recorderdata.onstop = (e) => {
+      const completeBlob = new Blob(chunks, { type: chunks[0].type });
+
+      setRecordUrl(URL.createObjectURL(completeBlob));
+      setRecording(false);
+      setNewRecord(1);
+    };
+
+    recorderdata.start();
+  };
+
+  const stopRecording = () => {
+    setRecording(false);
+    setNewRecord(1);
+    recorder.stop();
+    stream.getVideoTracks()[0].stop();
+  };
+
+  //video functions
+  const handleVideoInputs = (e) => {
+    let name = e.target.name;
+    let value = e.target.value;
+    setRecordVideo({ ...recordvideo, [name]: value });
+  };
+
+  useEffect(() => {
+    setRecordVideo({
+      ...recordvideo,
+      category: selectedCategory,
+    });
+    // eslint-disable-next-line
+  }, [selectedCategory]);
+
+  useEffect(() => {
+    if (recordvideo.videoFile !== null) {
+      storeWithProgress();
+    }
+    // eslint-disable-next-line
+  }, [recordvideo.videoFile]);
+
+  const mintNFT = () => {
+    const videoFile = new File(chunks, `${recordvideo.videoName}.webm`, { type: chunks[0].type });
+    setRecordVideo({ ...recordvideo, videoFile: videoFile });
   };
 
   return (
@@ -197,9 +326,149 @@ const UserInfo = () => {
                 </div>
               </div>
             </div>
+            <>
+              <hr width="95%" className="mt-2 mb-4" />
+              <p className="text-md">To create NFT start Recording</p>
+              <div className="flex justify-between items-center w-full pt-2 text-white">
+                <button
+                  className={`text-center rounded-md w-full 
+                    ${recording ? 'bg-green-300' : 'bg-green-600'} mx-2 py-2`}
+                  disabled={recording}
+                  onClick={startRecording}
+                >
+                  Start Recording
+                </button>
+                <button
+                  className={`text-center rounded-md w-full 
+                    ${!recording ? 'bg-red-300' : 'bg-red-600'} mx-2 py-2`}
+                  disabled={!recording}
+                  onClick={stopRecording}
+                >
+                  Stop Recording
+                </button>
+              </div>
+            </>
           </div>
         </div>
       </div>
+      {newRecord === 1 ? (
+        <div className="flex justify-between m-6 py-6 px-10 bg-dbeats-dark-secondary">
+          <div className="w-full flex justify-center">
+            <video src={recordUrl} width="90%" height="90%" controls />
+          </div>
+          <div className="w-full">
+            <div className="space-y-6 text-gray-500 dark:text-gray-100">
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-1">
+                <div className="col-span-1 sm:col-span-1">
+                  <label
+                    htmlFor="videoName"
+                    className="block 2xl:text-sm text-sm lg:text-xs font-medium dark:text-gray-100 text-gray-700"
+                  >
+                    Video Title
+                  </label>
+                  <div className="mt-1 flex rounded-md shadow-sm">
+                    <input
+                      type="text"
+                      name="videoName"
+                      id="videoName"
+                      value={recordvideo.videoName}
+                      onChange={handleVideoInputs}
+                      className="focus:ring-dbeats-dark-primary border dark:border-dbeats-alt border-gray-300 dark:bg-dbeats-dark-primary ring-dbeats-dark-secondary  ring-0   flex-1 block w-full rounded-md sm:text-sm  "
+                      placeholder=""
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-8 gap-6 sm:grid-cols-8">
+                <div className="lg:col-span-4 col-span-8 sm:col-span-4">
+                  <label
+                    htmlFor="videoName"
+                    className="block mr-2 2xl:text-sm text-sm lg:text-xs font-medium dark:text-gray-100 text-gray-700"
+                  >
+                    Royality
+                  </label>
+                  <div className="mt-1 flex rounded-md shadow-sm">
+                    <input
+                      type="text"
+                      name="royality"
+                      id="royality"
+                      value={recordvideo.royality}
+                      onChange={handleVideoInputs}
+                      className="focus:ring-dbeats-dark-primary border dark:border-dbeats-alt border-gray-300 dark:bg-dbeats-dark-primary ring-dbeats-dark-secondary  ring-0   flex-1 block w-full rounded-md sm:text-sm  "
+                      placeholder=""
+                    />
+                  </div>
+                </div>
+                <div className="lg:col-span-4 col-span-8  sm:col-span-4">
+                  <label
+                    htmlFor="videoName"
+                    className="block mr-2 2xl:text-sm text-sm lg:text-xs font-medium dark:text-gray-100 text-gray-700"
+                  >
+                    Pricing
+                  </label>
+                  <div className="mt-1 flex rounded-md shadow-sm">
+                    <input
+                      type="text"
+                      name="price"
+                      id="price"
+                      value={recordvideo.price}
+                      onChange={handleVideoInputs}
+                      className="focus:ring-dbeats-dark-primary border dark:border-dbeats-alt border-gray-300 dark:bg-dbeats-dark-primary ring-dbeats-dark-secondary  ring-0   flex-1 block w-full rounded-md sm:text-sm  "
+                      placeholder=""
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="grid grid-cols-8 gap-6 sm:grid-cols-8">
+                <div className="lg:col-span-4 col-span-8  sm:col-span-4">
+                  <label
+                    htmlFor="company-website"
+                    className="block 2xl:text-sm text-sm lg:text-xs font-medium dark:text-gray-100 text-gray-700"
+                  >
+                    Category
+                  </label>
+                  <div className="flex rounded-md shadow-sm">
+                    <Dropdown
+                      data={category}
+                      setSelected={setSelectedCategory}
+                      getSelected={selectedCategory}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="">
+                <label
+                  htmlFor="description"
+                  className="block 2xl:text-sm text-sm lg:text-xs font-medium dark:text-gray-100 text-gray-700"
+                >
+                  Description
+                </label>
+                <div className="mt-1">
+                  <textarea
+                    id="videoDescription"
+                    name="description"
+                    rows={3}
+                    value={recordvideo.description}
+                    onChange={handleVideoInputs}
+                    className="dark:placeholder-gray-600 focus:ring-dbeats-dark-primary border dark:border-dbeats-alt border-gray-300 dark:bg-dbeats-dark-primary ring-dbeats-dark-secondary  ring-0   flex-1 block w-full rounded-md sm:text-sm  "
+                    placeholder="Any Behind the scenes you'll like your Audience to know!"
+                  />
+                </div>
+              </div>
+              <div className="float-right pt-20 flex items-center">
+                <div
+                  onClick={mintNFT}
+                  className="w-max font-bold cursor-pointer px-12 nowrap py-2 rounded-md text-md text-white bg-dbeats-light"
+                >
+                  Mint NFT
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : null}
 
       <Modal
         isOpen={showDestinationModal}
