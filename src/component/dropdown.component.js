@@ -88,7 +88,7 @@ const Dropdown = ({ data, setSelected, getSelected }) => {
     <Listbox value={selectedItem} onChange={setSelectedItem}>
       {({ open }) => (
         <>
-          <div className="mt-1 relative w-full z-50">
+          <div className="mt-1 relative w-full">
             <Listbox.Button className="relative w-full text-black dark:text-white bg-white dark:bg-dbeats-dark-primary  rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm lg:text-xs 2xl:text-sm">
               <span className="flex items-center">
                 <span className="ml-3 block truncate">{selectedItem}</span>

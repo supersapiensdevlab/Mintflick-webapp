@@ -184,14 +184,14 @@ const Login = () => {
                 </div>
               )}
             </div>
-            <div className="self-center text-center 2xl:mt-0 lg:mt-0 2xl:text-lg lg:text-sm dark:text-gray-500 font-semibold opacity-50">
+            {/* <div className="self-center text-center 2xl:mt-0 lg:mt-0 2xl:text-lg lg:text-sm dark:text-gray-500 font-semibold opacity-50">
               powered by{' '}
               <img
                 src={moralisLogo}
                 alt="moralisLogo"
                 className="2xl:h-10 lg:h-8 h-9 rounded w-max  self-center mx-auto bg-blue-50 dark:bg-white p-2 dark:bg-opacity-75"
               ></img>
-            </div>
+            </div> */}
           </main>
         </div>
       </div>

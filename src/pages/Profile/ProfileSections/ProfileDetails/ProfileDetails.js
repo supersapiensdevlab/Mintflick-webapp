@@ -315,7 +315,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                       <span className="font-bold 2xl:text-3xl lg:text-xl md:text-xl mr-3 ">
                         {user.name}
                       </span>
-                      {!privateUser ? (
+                      {myData && !privateUser ? (
                         <button
                           href="#"
                           className="flex items-center no-underline cursor-pointer border-dbeats-light border-1  
