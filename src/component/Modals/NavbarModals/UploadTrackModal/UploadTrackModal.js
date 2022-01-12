@@ -492,7 +492,7 @@ const UploadTrackModal = (props) => {
                       <div className="flex  text-sm text-gray-600 justify-center ">
                         <label
                           htmlFor="file-upload"
-                          className="text-center  relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-blue-500 focus-within:outline-none focus-within:ring-0 focus-within:ring-offset-2 focus-within:ring-blue-500"
+                          className="text-center  relative cursor-pointer bg-white rounded-md font-medium text-dbeats-light hover:text-blue-500 focus-within:outline-none focus-within:ring-0 focus-within:ring-offset-2 focus-within:ring-blue-500"
                         >
                           <p className="text-center px-2 truncate w-32" id="audio-thumbnail-label">
                             Choose Album Art
@@ -534,7 +534,7 @@ const UploadTrackModal = (props) => {
                       <div className="flex text-sm text-gray-600">
                         <label
                           htmlFor="file-upload2"
-                          className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-blue-500 focus-within:outline-none focus-within:ring-0 focus-within:ring-offset-2 focus-within:ring-blue-500"
+                          className="relative cursor-pointer bg-white rounded-md font-medium text-dbeats-light hover:text-blue-500 focus-within:outline-none focus-within:ring-0 focus-within:ring-offset-2 focus-within:ring-blue-500"
                         >
                           <span className="p-2 truncate w-32" id="audio-label">
                             Choose Audio file
@@ -564,7 +564,7 @@ const UploadTrackModal = (props) => {
                           id="is_nft"
                           name="isNFT"
                           type="checkbox"
-                          className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
+                          className="focus:ring-dbeats-light h-4 w-4 text-dbeats-light border-gray-300 rounded"
                         />
                         <p className="px-3">Mint NFT</p>
                       </div>

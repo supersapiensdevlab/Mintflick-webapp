@@ -189,7 +189,7 @@
 //                   <div className="flex  justify-start">
 //                     <div
 //                       onClick={() => setOpen(!open)}
-//                       className=" p-2 my-2 cursor-pointer mx-auto dark:hover:bg-gray-800 dark:hover:text-white hover:bg-gray-100  rounded-md   inline-flex items-center justify-center text-gray-400  focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
+//                       className=" p-2 my-2 cursor-pointer mx-auto dark:hover:bg-gray-800 dark:hover:text-white hover:bg-gray-100  rounded-md   inline-flex items-center justify-center text-gray-400  focus:outline-none focus:ring-2 focus:ring-inset focus:ring-dbeats-light"
 //                     >
 //                       <svg
 //                         xmlns="http://www.w3.org/2000/svg"

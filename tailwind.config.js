@@ -76,10 +76,12 @@ module.exports = {
       },
       fontFamily: {
         'proxima-reg': ['Proxima', 'Arial', 'sans-serif'],
+        GTWalsheimPro: ['GTWalsheimPro', 'Arial', 'sans-serif'],
       },
       colors: {
+        'dbeats-white': '#fcfdfe',
         'dbeats-alt': '#061720',
-        'dbeats-secondary-light': '#3EAEFF',
+        'dbeats-secondary-light': '#00AEFF',
         'dbeats-dark': '#000',
         'dbeats-light': '#00d3ff',
         'dbeats-dark-primary': '#101010',

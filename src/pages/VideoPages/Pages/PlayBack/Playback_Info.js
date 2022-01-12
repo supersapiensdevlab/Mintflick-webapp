@@ -448,14 +448,15 @@ const PlayBackInfo = (props) => {
     const carol2 = sf.user({
       address: walletAddress[0],
 
-      // fDAIx token, which is a test Super Token on Goerli network
-      token: '0xF2d68898557cCb2Cf4C10c3Ef2B034b2a69DAD00',
+      // fDAIx token, which is a test Super Token on Goerli network  0xF2d68898557cCb2Cf4C10c3Ef2B034b2a69DAD00
+      //MATICx Tokens 0x96B82B65ACF7072eFEb00502F45757F254c2a0D4
+      token: '0x96B82B65ACF7072eFEb00502F45757F254c2a0D4',
     });
-
+    let finalAmount = 385802469135 * amount;
     await carol2.flow({
-      recipient: '0xF976A17dE1945C6977725aE289A1c2EA5d036789',
+      recipient: '0x7095b5921592D02C446C2C7bEF145D441Ab270ff',
       // This flow rate is equivalent to 1 tokens per month, for a token with 18 decimals.
-      flowRate: 385802469135 * amount,
+      flowRate: finalAmount.toString(),
     });
 
     //const details = await carol2.details();
@@ -720,10 +721,10 @@ const PlayBackInfo = (props) => {
                   <Row>
                     <div className="grid grid-cols-6 2xl:gap-4 lg:gap-2 w-full   self-center">
                       <button
-                        onClick={() => testFlow(10)}
+                        onClick={() => testFlow('1')}
                         className="  h-max shadow text-center col-span-6 lg:col-span-2   2xl:w-full w-full lg:w-60  mx-auto p-2 2xl:p-2 lg:p-1  text-black dark:text-white font-semibold hover:rounded   border dark:bg-dbeats-dark-alt border-dbeats-light hover:shadow-none transition-all transform hover:scale-99 hover:bg-dbeats-light "
                       >
-                        <span className="font-bold 2xl:text-2xl lg:text-sm">10 DAI</span>
+                        <span className="font-bold 2xl:text-2xl lg:text-sm">1 MATICx</span>
                         <br></br>
                         <span className="2xl:text-2xl lg:text-sm">PER MONTH</span>
                         <br></br>
@@ -733,10 +734,10 @@ const PlayBackInfo = (props) => {
                         </p>
                       </button>
                       <button
-                        onClick={() => testFlow(30)}
+                        onClick={() => testFlow('3')}
                         className="  shadow text-center col-span-6 lg:col-span-2   2xl:w-full w-full lg:w-60  mx-auto p-2 2xl:p-2 lg:p-1     text-black dark:text-white font-semibold   border dark:bg-dbeats-dark-alt border-dbeats-light hover:shadow-none transition-all transform hover:scale-99 hover:bg-dbeats-light "
                       >
-                        <span className="font-bold 2xl:text-2xl lg:text-sm">30 DAI</span>
+                        <span className="font-bold 2xl:text-2xl lg:text-sm">3 MATICx</span>
                         <br></br>
                         <span className="2xl:text-2xl lg:text-sm">PER MONTH</span>
                         <br></br>
@@ -746,10 +747,10 @@ const PlayBackInfo = (props) => {
                         </span>
                       </button>
                       <button
-                        onClick={() => testFlow(20)}
+                        onClick={() => testFlow('2')}
                         className="block shadow text-center col-span-6 lg:col-span-2   2xl:w-full w-full lg:w-60  mx-auto p-2 2xl:p-2 lg:p-1   text-black dark:text-white font-semibold   border dark:bg-dbeats-dark-alt border-dbeats-light hover:shadow-none transition-all transform hover:scale-99 hover:bg-dbeats-light "
                       >
-                        <span className="font-bold 2xl:text-2xl lg:text-sm">20 DAI</span>
+                        <span className="font-bold 2xl:text-2xl lg:text-sm">2 MATICx</span>
                         <br></br>
                         <span className="2xl:text-2xl lg:text-sm">PER MONTH</span>
                         <br></br>

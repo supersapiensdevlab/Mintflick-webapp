@@ -206,8 +206,9 @@ const UserInfo = () => {
       price: '',
       royality: '',
     });
-
+    setChunks([]);
     let data = await navigator.mediaDevices.getDisplayMedia({
+      audio: true,
       video: { mediaSource: 'screen' },
     });
     setStream(data);

@@ -271,7 +271,7 @@ const UploadVideoModal = (props) => {
                       <div className="flex justify-center text-sm text-gray-600 ">
                         <label
                           htmlFor="file-upload3"
-                          className="text-center relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-blue-500 focus-within:outline-none focus-within:ring-0 focus-within:ring-offset-2 focus-within:ring-blue-500"
+                          className="text-center relative cursor-pointer bg-white rounded-md font-medium text-dbeats-light hover:text-blue-500 focus-within:outline-none focus-within:ring-0 focus-within:ring-offset-2 focus-within:ring-blue-500"
                         >
                           <span id="video-thumbnail-label" className="truncate w-32">
                             Choose Video Thumbnail
@@ -312,7 +312,7 @@ const UploadVideoModal = (props) => {
                       <div className="flex text-sm text-gray-600 justify-center">
                         <label
                           htmlFor="file-upload4"
-                          className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-blue-500 focus-within:outline-none focus-within:ring-0 focus-within:ring-offset-2 focus-within:ring-blue-500"
+                          className="relative cursor-pointer bg-white rounded-md font-medium text-dbeats-light hover:text-blue-500 focus-within:outline-none focus-within:ring-0 focus-within:ring-offset-2 focus-within:ring-blue-500"
                         >
                           <p className="truncate w-32 " id="video-label">
                             Choose Video file

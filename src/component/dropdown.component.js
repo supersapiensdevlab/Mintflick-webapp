@@ -88,8 +88,8 @@ const Dropdown = ({ data, setSelected, getSelected }) => {
     <Listbox value={selectedItem} onChange={setSelectedItem}>
       {({ open }) => (
         <>
-          <div className="mt-1 relative w-full">
-            <Listbox.Button className="relative w-full text-black dark:text-white bg-white dark:bg-dbeats-dark-primary  rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm lg:text-xs 2xl:text-sm">
+          <div className="mt-1 relative w-max">
+            <Listbox.Button className="relative w-full text-black dark:text-white bg-white dark:bg-dbeats-dark-primary  rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-dbeats-light focus:border-dbearing-dbeats-light sm:text-sm lg:text-xs 2xl:text-sm">
               <span className="flex items-center">
                 <span className="ml-3 block truncate">{selectedItem}</span>
               </span>
@@ -111,7 +111,7 @@ const Dropdown = ({ data, setSelected, getSelected }) => {
                     key={id}
                     className={({ active }) =>
                       classNames(
-                        active ? 'text-white bg-indigo-600' : 'dark:text-white',
+                        active ? 'text-white bg-dbeats-light' : 'dark:text-white',
                         'cursor-default select-none relative py-2 pl-3 pr-9',
                       )
                     }
@@ -133,7 +133,7 @@ const Dropdown = ({ data, setSelected, getSelected }) => {
                         {selected ? (
                           <span
                             className={classNames(
-                              active ? 'text-white' : 'text-indigo-600',
+                              active ? 'text-white' : 'text-dbeats-light',
                               'absolute inset-y-0 right-0 flex items-center pr-4',
                             )}
                           >

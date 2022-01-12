@@ -7,6 +7,11 @@
   src: local('Proxima'), url(./assets/fonts/reg/ProximaNova-Regular.otf) format('otf');
 }
 
+@font-face {
+  font-family: 'GTWalsheimPro';
+  src: local('GTWalsheimPro'), url(./assets/fonts/font/GTWalsheimPro-Regular.ttf) format('ttf');
+}
+
 html {
   overflow-x: hidden;
 }
@@ -23,4 +28,8 @@ html {
 
 .sc-bwzfXH .bhRnqO {
   top: calc(30% - 17.5px) !important;
+}
+
+.close-thik:after {
+  content: '✖'; /* UTF-8 symbol */
 }
