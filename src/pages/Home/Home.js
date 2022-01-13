@@ -139,7 +139,7 @@ const Home = () => {
                                   <img
                                     src={video.videoImage !== '' ? video.videoImage : logo}
                                     alt=""
-                                    className=" w-full h-full bg-gray-100 self-center"
+                                    className=" w-auto h-32 bg-gray-100 mx-auto"
                                   />
                                 </Link>
                                 <div className="py-3">
