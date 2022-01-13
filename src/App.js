@@ -18,6 +18,7 @@ import TopLoader from './hooks/TopLoader';
 import VideoHome from './pages/Home/Home';
 import Login from './pages/Login/Login';
 import NewPassword from './pages/Login/NewPassword';
+import VerifyEmail from './pages/Login/VerifyEmail';
 import Profile from './pages/Profile/Profile';
 import ChatRoom from './pages/Profile/ProfileSections/ChatRoom/ChatRoom';
 import Ticket from './pages/Profile/ProfileSections/Ticket/Ticket';
@@ -146,6 +147,7 @@ export default function App() {
                 </Route>
 
                 <Route exact path="/reset/:token" component={NewPassword} />
+                <Route exact path="/verifyemail/:token" component={VerifyEmail} />
                 {/* <Route exact path="/" component={LandingPage} /> */}
                 {/* <Route exact path="/home" component={VideoHome} />  */}
                 <Route exact path="/streamer/:roomID">
