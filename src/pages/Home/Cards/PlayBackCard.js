@@ -92,7 +92,7 @@ const PlayBackCard = (props) => {
               {props.playbackUserData.videos[index].videoName.length > 45 ? '...' : ''}
             </span>
           </div>
-          <div className={`cursor-pointer w-full   dark:bg-dbeats-dark-primary bg-black `}>
+          <div className={`cursor-pointer w-full h-96  dark:bg-black bg-black `}>
             <Link
               to={`/playback/${props.playbackUserData.username}/${props.playbackUserData.videos[index].videoId}`}
               className=" "

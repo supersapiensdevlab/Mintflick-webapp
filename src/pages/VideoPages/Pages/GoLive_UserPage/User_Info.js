@@ -207,6 +207,7 @@ const UserInfo = () => {
       royality: '',
     });
     setChunks([]);
+
     let data = await navigator.mediaDevices.getDisplayMedia({
       audio: true,
       video: { mediaSource: 'screen' },
@@ -355,7 +356,14 @@ const UserInfo = () => {
       {newRecord === 1 ? (
         <div className="flex justify-between m-6 py-6 px-10 bg-dbeats-dark-secondary">
           <div className="w-full flex justify-center">
-            <video src={recordUrl} width="90%" height="90%" controls />
+            <video
+              src={recordUrl}
+              width="90%"
+              height="90%"
+              controls
+              autoPlay={true}
+              muted={false}
+            />
           </div>
           <div className="w-full">
             <div className="space-y-6 text-gray-500 dark:text-gray-100">

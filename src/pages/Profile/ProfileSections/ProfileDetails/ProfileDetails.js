@@ -10,6 +10,7 @@ import {
   UploadCoverImageModal,
   UploadProfileImageModal,
 } from '../../../../component/Modals/ImageUploadModal/ImageUploadModal';
+import ProfileUpdateModal from '../../../../component/Modals/ProfileUpdate/ProfileUpdate';
 import AnnouncementCard from '../../Cards/AnnouncementCard';
 import CarouselCard from '../../Cards/CarouselCard';
 import PlaylistCard from '../../Cards/PlaylistCard';
@@ -24,9 +25,14 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
 
   const [privateUser, setPrivate] = useState(true);
   const [loader, setLoader] = useState(true);
+  const [isMailVerified, setIsMailVerified] = useState(false);
   const [subscribeLoader, setSubscribeLoader] = useState(true);
 
   const handleShow = () => setShow(true);
+  const [showUpdate, setShowUpdate] = useState(false);
+  const handleShowUpdate = () => setShowUpdate(true);
+  const handleCloseUpdate = () => setShowUpdate(false);
+
   const navigate = useHistory();
 
   const [showUploadCoverImage, setShowUploadCoverImage] = useState(false);
@@ -54,6 +60,8 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
         setPrivate(true);
         setFollowers(value.follower_count.length);
         setFollowing(value.followee_count.length);
+        setIsMailVerified(value.is_mail_verified);
+
         if (value.pinned) {
           setPinnedData(value.pinned);
         }
@@ -131,6 +139,8 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
       setSharable_data(`${process.env.REACT_APP_CLIENT_URL}/profile/${value.data.username}`);
       setFollowers(value.data.follower_count.length);
       setFollowing(value.data.followee_count.length);
+      setIsMailVerified(value.data.is_mail_verified);
+
       if (value.data.cover_image && value.data.cover_image !== '') {
         setCoverImage(value.data.cover_image);
       } else {
@@ -257,6 +267,21 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
       });
   };
 
+  const SendVerificationMail = () => {
+    let data = { email: user.email };
+    axios({
+      method: 'POST',
+      url: `${process.env.REACT_APP_SERVER_URL}/user/send_verify_email`,
+      data: data,
+    })
+      .then(() => {
+        setIsMailVerified(true);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
   const NavTabs = ['Posts', 'Videos', 'Music', 'Activity', 'Playlists']; //, 'Subscribed Channels'
 
   const NavTabsTitle = ({ text }) => {
@@ -288,6 +313,35 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
   return (
     <div className={`${darkMode && 'dark'}   h-max lg:col-span-5 col-span-6 w-full   `}>
       <div id="display_details" className="h-full 2xl:pt-16 lg:pt-12">
+        {!isMailVerified ? (
+          <div
+            class="bg-red-100 border-t-4 border-red-500 rounded-b text-red-900 px-4 py-2 shadow-md"
+            role="alert"
+          >
+            <div class="flex items-center justify-between px-4">
+              <div className="flex items-center">
+                <div class="py-1">
+                  <svg
+                    class="fill-current h-6 w-6 text-red-500 mr-4"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
+                  >
+                    <path d="M2.93 17.07A10 10 0 1 1 17.07 2.93 10 10 0 0 1 2.93 17.07zm12.73-1.41A8 8 0 1 0 4.34 4.34a8 8 0 0 0 11.32 11.32zM9 11V9h2v6H9v-4zm0-6h2v2H9V5z" />
+                  </svg>
+                </div>
+                <div>
+                  <p class="font-bold">Please verify your Email</p>
+                </div>
+              </div>
+              <div
+                className="w-30 bg-red-500 rounded-md cursor-pointer text-white px-4 py-2 font-semibold"
+                onClick={SendVerificationMail}
+              >
+                Send Verification Mail
+              </div>
+            </div>
+          </div>
+        ) : null}
         <div className="bg-white dark:bg-dbeats-dark-primary 2xl:pb-3 lg:pb-2">
           {privateUser ? (
             <div
@@ -343,6 +397,18 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                       >
                         <i className="fas fa-share-alt self-center mr-2 "></i> SHARE
                       </button>
+                      {privateUser ? (
+                        <button
+                          onClick={handleShowUpdate}
+                          className="no-underline border text-dbeats-dark-alt 
+                        cursor-pointer dark:border-white border-1 dark:border-opacity-20  dark:text-gray-200 
+                        hover:bg-dbeats-light hover:text-white 
+                        dark:hover:text-white rounded font-bold mr-1 
+                        flex self-center   py-1 2xl:px-3 lg:px-1.5  text-xs 2xl:text-lg  px-2"
+                        >
+                          <i className="fas fa-pen self-center mr-2 "></i> Edit
+                        </button>
+                      ) : null}
                     </div>
                     <span className="font-semibold 2xl:text-lg lg:text-sm opacity-60">
                       @{user.username}
@@ -648,6 +714,12 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
         setProfileImage={setProfileImage}
         loader={loader}
         setLoader={setLoader}
+        darkMode={darkMode}
+      />
+      <ProfileUpdateModal
+        show={showUpdate}
+        handleClose={handleCloseUpdate}
+        userData={user}
         darkMode={darkMode}
       />
     </div>
