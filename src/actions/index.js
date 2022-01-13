@@ -10,3 +10,10 @@ export const toggleDarkMode = (value) => {
     payload: value,
   };
 };
+
+export const toggleUserType = (value) => {
+  return {
+    type: 'USERTYPETOGGLE',
+    payload: value,
+  };
+};

@@ -16,6 +16,8 @@ import UploadPage from './component/switcher.component';
 import Track from './component/track.component';
 import TopLoader from './hooks/TopLoader';
 import VideoHome from './pages/Home/Home';
+import GamerHome from './pages/Home/Home-gamer';
+
 import Login from './pages/Login/Login';
 import NewPassword from './pages/Login/NewPassword';
 import VerifyEmail from './pages/Login/VerifyEmail';
@@ -26,6 +28,7 @@ import UserRoomPage from './pages/VideoPages/Pages/GoLive_UserPage/UserRoomPage'
 import PublicRoom from './pages/VideoPages/Pages/LivePublicPage/PublicRoomPage';
 import Playback from './pages/VideoPages/Pages/PlayBack/PlaybackRoomPage';
 import TrackPlayback from './pages/VideoPages/Pages/TrackPage/TrackInfo';
+import OnboardingModal from './component/Modals/OnboardingModal/OnboardingModal';
 
 export default function App() {
   let user = JSON.parse(window.localStorage.getItem('user'));
@@ -58,18 +61,24 @@ export default function App() {
     // eslint-disable-next-line
   }, []);
 
+  const userType = useSelector((state) => state.toggleUserType);
+  //dispatch(toggleUserType(userType));
   return (
     <>
       <Router>
         <div className={`${darkMode && 'dark'}  `}>
           <div className=" h-full  dark:bg-gradient-to-b dark:from-dbeats-dark-primary  dark:to-dbeats-dark-primary   ">
             <div className=" ">
+              {/* {userType !== null ? '' : <OnboardingModal></OnboardingModal>} */}
+              <OnboardingModal></OnboardingModal>
               <Switch>
                 <Route exact path="/">
                   <TopLoader page="home" />
                   <NavBar />
                   <PinnedPanel />
-                  <VideoHome />
+                  {userType === 0 ? <GamerHome /> : null}
+                  {userType === 1 ? <VideoHome /> : null}
+                  {userType === 2 ? <VideoHome /> : null}
                 </Route>
                 <Route exact path="/signup">
                   <TopLoader page="signup" />

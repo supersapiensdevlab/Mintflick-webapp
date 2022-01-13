@@ -315,14 +315,14 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
       <div id="display_details" className="h-full 2xl:pt-16 lg:pt-12">
         {!isMailVerified ? (
           <div
-            class="bg-red-100 border-t-4 border-red-500 rounded-b text-red-900 px-4 py-2 shadow-md"
+            className="bg-red-100 border-t-4 border-red-500 rounded-b text-red-900 px-4 py-2 shadow-md"
             role="alert"
           >
-            <div class="flex items-center justify-between px-4">
+            <div className="flex items-center justify-between px-4">
               <div className="flex items-center">
-                <div class="py-1">
+                <div className="py-1">
                   <svg
-                    class="fill-current h-6 w-6 text-red-500 mr-4"
+                    className="fill-current h-6 w-6 text-red-500 mr-4"
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 20 20"
                   >
@@ -330,7 +330,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                   </svg>
                 </div>
                 <div>
-                  <p class="font-bold">Please verify your Email</p>
+                  <p className="font-bold">Please verify your Email</p>
                 </div>
               </div>
               <div
@@ -366,7 +366,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                 <div className="  flex flex-col lg:flex-row justify-between   md:mt-20  mt-40  sm:-mt-24 text-gray-400   dark:bg-dbeats-dark-primary bg-white dark:backdrop-filter dark:backdrop-blur dark:bg-opacity-80  backdrop-filter  backdrop-blur  bg-opacity-90">
                   <div className="dark:text-white  text-dbeats-dark-alt 2xl:py-4 lg:py-2.5    md:py-3 lg:mx-0 px-10 lg:px-10 md:px-4 ">
                     <div className="flex w-max lg:pt-0 items-center ">
-                      <span className="font-bold 2xl:text-3xl lg:text-xl md:text-xl mr-3 font-GTWalsheimPro">
+                      <span className="font-bold 2xl:text-xl lg:text-xl md:text-xl mr-3 font-GTWalsheimPro">
                         {user.name}
                       </span>
                       {myData && !privateUser ? (

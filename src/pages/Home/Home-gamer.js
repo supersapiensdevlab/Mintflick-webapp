@@ -7,7 +7,7 @@ import logo from '../..//assets/images/logo.svg';
 import animationData from '../../lotties/gamers.json';
 import ResponsiveCarousel from './Cards/HomeSlider';
 import LiveCard from './Cards/LiveCard';
-import PlayBackCard from './Cards/PlayBackCard';
+import PlayBackCardGamer from './Cards/PlayBackCard-gamer';
 // import {Helmet} from "react-helmet";
 import { Link } from 'react-router-dom';
 import Dropdown from '../../component/dropdown.component';
@@ -294,15 +294,18 @@ const Home = () => {
                         </h4>
                       </div>
                       <FeedbackForm />
-                      <div className="">
+                      <Carousel cols={4}>
                         {arrayData.map((playbackUser, i) => {
                           return (
-                            <div key={i}>
-                              <PlayBackCard darkMode={darkMode} playbackUserData={playbackUser} />
-                            </div>
+                            <Carousel.Item key={i}>
+                              <PlayBackCardGamer
+                                darkMode={darkMode}
+                                playbackUserData={playbackUser}
+                              />
+                            </Carousel.Item>
                           );
                         })}
-                      </div>
+                      </Carousel>
                     </div>
                   </div>
                 </div>
