@@ -106,10 +106,16 @@ const LoginForm = ({
         <div className="flex justify-center ">
           <button
             onClick={handleLogin}
-            className="flex justify-center w-full  mx-3   flex my-3 py-2 2xl:px-24 lg:px-10 2xl:text-lg lg:text-sm  text-dbeats-light 
+            className={`flex justify-center w-full  mx-3   flex my-3 py-2 2xl:px-24 lg:px-10 2xl:text-lg lg:text-sm  text-dbeats-light 
                         dark:text-white font-bold bg-dbeats-light bg-opacity-5 
-                        hover:text-white hover:bg-dbeats-light border  
-                        transition-all border-dbeats-light hover:scale-99 transform rounded relative"
+                        ${
+                          form_username === '' || form_password === ''
+                            ? ''
+                            : 'hover:text-white hover:bg-dbeats-light border border-dbeats-light hover:scale-99 transform'
+                        }              
+                         
+                        transition-all  rounded relative`}
+            disabled={form_username === '' || form_password === ''}
           >
             SIGN IN
             <div
