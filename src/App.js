@@ -29,6 +29,7 @@ import PublicRoom from './pages/VideoPages/Pages/LivePublicPage/PublicRoomPage';
 import Playback from './pages/VideoPages/Pages/PlayBack/PlaybackRoomPage';
 import TrackPlayback from './pages/VideoPages/Pages/TrackPage/TrackInfo';
 import OnboardingModal from './component/Modals/OnboardingModal/OnboardingModal';
+import ResetWallet from './pages/Login/ResetWallet';
 
 export default function App() {
   let user = JSON.parse(window.localStorage.getItem('user'));
@@ -70,9 +71,10 @@ export default function App() {
           <div className=" h-full  dark:bg-gradient-to-b dark:from-dbeats-dark-primary  dark:to-dbeats-dark-primary   ">
             <div className=" ">
               {/* {userType !== null ? '' : <OnboardingModal></OnboardingModal>} */}
-              <OnboardingModal></OnboardingModal>
+
               <Switch>
                 <Route exact path="/">
+                  <OnboardingModal />
                   <TopLoader page="home" />
                   <NavBar />
                   <PinnedPanel />
@@ -156,6 +158,7 @@ export default function App() {
                 </Route>
 
                 <Route exact path="/reset/:token" component={NewPassword} />
+                <Route exact path="/resetwallet/:token" component={ResetWallet} />
                 <Route exact path="/verifyemail/:token" component={VerifyEmail} />
                 {/* <Route exact path="/" component={LandingPage} /> */}
                 {/* <Route exact path="/home" component={VideoHome} />  */}

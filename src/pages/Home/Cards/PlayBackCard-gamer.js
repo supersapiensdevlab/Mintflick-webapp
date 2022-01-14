@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import maticLogo from '../../../assets/graphics/polygon-matic-logo.svg';
 import dbeatsLogoBnW from '../../../assets/images/Logo/logo-blacknwhite.png';
 import person from '../../../assets/images/profile.svg';
+import { ReactComponent as Verified } from '../../../assets/icons/verified-account.svg';
 
 moment().format();
 
@@ -46,7 +47,6 @@ const PlayBackCard = (props) => {
           >
             <Link
               to={`/playback/${props.playbackUserData.username}/${props.playbackUserData.videos[index].videoId}`}
-              className=" "
             >
               <ReactPlayer
                 width="100%"
@@ -92,12 +92,17 @@ const PlayBackCard = (props) => {
                   </span>
                   <br />
                   <div className="w-full   ">
-                    <Link
-                      to={`/profile/${props.playbackUserData.username}/`}
-                      className="2xl:text-sm lg:text-xs text-sm text-gray-500  mb-2"
-                    >
-                      {props.playbackUserData.name}
-                    </Link>{' '}
+                    <div className="flex items-center">
+                      <Link
+                        to={`/profile/${props.playbackUserData.username}/`}
+                        className="2xl:text-sm lg:text-xs text-sm text-gray-500"
+                      >
+                        {props.playbackUserData.username}
+                      </Link>
+                      {props.playbackUserData.is_verified ? (
+                        <Verified className="h-4 w-4  items-center self-center justify-center text-dbeats-light mx-1" />
+                      ) : null}
+                    </div>
                     <div className="2xl:text-sm lg:text-xs text-sm text-gray-500 pr-2 flex  ">
                       {time}
                     </div>

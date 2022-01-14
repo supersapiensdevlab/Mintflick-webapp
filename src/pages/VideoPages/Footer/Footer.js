@@ -7,6 +7,8 @@ import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import personImg from '../../../assets/images/profile.svg';
+import { ReactComponent as Verified } from '../../../assets/icons/verified-account.svg';
+
 import classes from './Footer.module.css';
 
 const PrettoSlider = withStyles({
@@ -65,7 +67,12 @@ const Footer = (props) => {
                 {props.creatorData.name}
               </span>
             </Link>
-            <p className="hidden lg:block lg:text-sm 2xl:text-lg">{props.creatorData.username}</p>
+            <div className="flex items-center">
+              <p className="hidden lg:block lg:text-sm 2xl:text-lg">{props.creatorData.username}</p>
+              {props.creatorData.is_verified ? (
+                <Verified className="h-4 w-4  items-center self-center justify-center text-dbeats-light mx-1" />
+              ) : null}
+            </div>
           </div>
           <i className="fas fa-info-circle block mt-3 2xl:mt-5 lg:mt-4 ml-3 2xl:text-lg lg:text-md text-dbeats-light hidden"></i>
         </div>

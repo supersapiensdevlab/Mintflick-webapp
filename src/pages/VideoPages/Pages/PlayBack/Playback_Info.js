@@ -408,6 +408,7 @@ const PlayBackInfo = (props) => {
   //const handlePlaylist = () => {};
 
   useEffect(() => {
+    setArrayData([]);
     get_User();
 
     fetchData();
@@ -420,7 +421,7 @@ const PlayBackInfo = (props) => {
       setPrivate(false);
     }
     // eslint-disable-next-line
-  }, []);
+  }, [props.video_id]);
 
   useEffect(() => {
     const timer = setTimeout(() => {

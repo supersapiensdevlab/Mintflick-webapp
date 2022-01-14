@@ -6,6 +6,7 @@ import { Route, Switch, useHistory } from 'react-router';
 import { Link } from 'react-router-dom';
 import person from '../../../../assets/images/profile.svg';
 import background from '../../../../assets/images/wallpaper.jpg';
+import { ReactComponent as Verified } from '../../../../assets/icons/verified-account.svg';
 import {
   UploadCoverImageModal,
   UploadProfileImageModal,
@@ -26,6 +27,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
   const [privateUser, setPrivate] = useState(true);
   const [loader, setLoader] = useState(true);
   const [isMailVerified, setIsMailVerified] = useState(false);
+  const [isVerified, setIsVerified] = useState(false);
   const [subscribeLoader, setSubscribeLoader] = useState(true);
 
   const handleShow = () => setShow(true);
@@ -49,6 +51,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
   const [postsData, setPostsData] = useState(null);
 
   const [buttonText, setButtonText] = useState('Subscribe');
+  const [displayName, setDisplayName] = useState(user.name);
 
   const myData = JSON.parse(window.localStorage.getItem('user'));
 
@@ -61,6 +64,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
         setFollowers(value.follower_count.length);
         setFollowing(value.followee_count.length);
         setIsMailVerified(value.is_mail_verified);
+        setIsVerified(value.is_verified);
 
         if (value.pinned) {
           setPinnedData(value.pinned);
@@ -140,6 +144,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
       setFollowers(value.data.follower_count.length);
       setFollowing(value.data.followee_count.length);
       setIsMailVerified(value.data.is_mail_verified);
+      setIsVerified(value.data.is_verified);
 
       if (value.data.cover_image && value.data.cover_image !== '') {
         setCoverImage(value.data.cover_image);
@@ -313,7 +318,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
   return (
     <div className={`${darkMode && 'dark'}   h-max lg:col-span-5 col-span-6 w-full   `}>
       <div id="display_details" className="h-full 2xl:pt-16 lg:pt-12">
-        {!isMailVerified ? (
+        {!isMailVerified && privateUser ? (
           <div
             className="bg-red-100 border-t-4 border-red-500 rounded-b text-red-900 px-4 py-2 shadow-md"
             role="alert"
@@ -367,7 +372,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                   <div className="dark:text-white  text-dbeats-dark-alt 2xl:py-4 lg:py-2.5    md:py-3 lg:mx-0 px-10 lg:px-10 md:px-4 ">
                     <div className="flex w-max lg:pt-0 items-center ">
                       <span className="font-bold 2xl:text-xl lg:text-xl md:text-xl mr-3 font-GTWalsheimPro">
-                        {user.name}
+                        {displayName}
                       </span>
                       {myData && !privateUser ? (
                         <button
@@ -410,9 +415,14 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                         </button>
                       ) : null}
                     </div>
-                    <span className="font-semibold 2xl:text-lg lg:text-sm opacity-60">
-                      @{user.username}
-                    </span>
+                    <div className="flex items-center">
+                      <span className="font-semibold 2xl:text-lg lg:text-sm opacity-60">
+                        @{user.username}
+                      </span>
+                      {isVerified ? (
+                        <Verified className="h-5 w-5  items-center self-center justify-center text-dbeats-light mx-1" />
+                      ) : null}
+                    </div>
                   </div>
 
                   <div className="2xl::w-56 lg:w-44 w-full flex justify-center z-1 -mt-48  md:-mt-36 lg:-mt-20 2xl:-mt-24 mb-24 md:mb-8 2xl:mb-0 xl:mb-0 lg:mb-0  sm:-mt-24">
@@ -721,6 +731,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
         handleClose={handleCloseUpdate}
         userData={user}
         darkMode={darkMode}
+        setDisplayName={setDisplayName}
       />
     </div>
   );
