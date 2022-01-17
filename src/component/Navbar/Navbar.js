@@ -610,7 +610,7 @@ const NavBar = () => {
                   to={`/streamer/${user.username}`}
                   className="border-dbeats-light 2xl:border-1 invisible lg:visible text-dbeats-light hover:bg-dbeats-light hover:text-white rounded font-bold mx-2 "
                 >
-                  <div className="flex lg:py-1 2xl:py-2.5 py-1.5 2xl:px-3 lg:px-2 px-1.5 hidden">
+                  <div className="flex lg:py-1 2xl:py-2.5 py-1.5 2xl:px-3 lg:px-2 px-1.5 ">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       className="h-5 w-5 lg:self-center mt-1 lg:mt-0 md:mr-2"

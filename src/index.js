@@ -6,6 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import axios from 'axios';
 import Noty from 'noty';
 import mojs from '@mojs/core';
+import '@themesberg/flowbite';
 
 //import Home from "./component/home.component";
 

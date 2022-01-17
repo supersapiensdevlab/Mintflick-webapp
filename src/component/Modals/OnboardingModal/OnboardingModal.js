@@ -69,7 +69,9 @@ export default function Example() {
                         }}
                         className="bg-dbeats-dark-primary text-dbeats-white h-48 sm:w-48 cursor-pointer p-5 rounded border hover:border-dbeats-light border-opacity-20 transition-all duration-200 "
                       >
-                        <p className="text-5xl">🕹️</p>
+                        <span role="img" className="text-5xl">
+                          🕹️
+                        </span>
                         <div className=" rounded  font-bold cursor-pointer  mt-2">GAMER</div>
                         <p className="text-xs sm:text-sm text-gray-400">
                           Best experience for streamers & Gaming Audience.
@@ -82,7 +84,9 @@ export default function Example() {
                         }}
                         className="bg-dbeats-dark-primary text-dbeats-white h-48 sm:w-48 cursor-pointer p-5 rounded border hover:border-dbeats-light border-opacity-20 transition-all duration-200 "
                       >
-                        <p className="text-5xl">🤳🏽</p>
+                        <span role="img" className="text-5xl">
+                          🤳🏽
+                        </span>
                         <div className=" rounded  font-bold cursor-pointer  mt-2">INFLUENCER</div>
                         <p className="text-xs sm:text-sm text-gray-400">
                           Your web2 Social media Experience on web3 Dose.
@@ -95,7 +99,9 @@ export default function Example() {
                         }}
                         className="bg-dbeats-dark-primary text-dbeats-white h-48 sm:w-48 cursor-pointer p-5 rounded border hover:border-dbeats-light border-opacity-20 transition-all duration-200 "
                       >
-                        <p className="text-5xl">📚</p>
+                        <span role="img" className="text-5xl">
+                          📚
+                        </span>
                         <div className=" rounded  font-bold cursor-pointer  mt-2">BLOGGER</div>
                         <p className="text-xs sm:text-sm text-gray-400">
                           For the Love of reading exciting articles & blogs

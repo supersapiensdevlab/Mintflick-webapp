@@ -114,7 +114,7 @@ const PublicInfo = (props) => {
     for (let i = 0; i < fileRes.data.length; i++) {
       if (user ? fileRes.data[i].username !== user.username : true) {
         await axios
-          .get(`${process.env.REACT_APP_SERVER_URL}/user/get_user_by_id/${fileRes.data[i].id}`)
+          .get(`${process.env.REACT_APP_SERVER_URL}/user/getuser_by_id/${fileRes.data[i].id}`)
           .then((response) => {
             if (response.data) {
               setArrayData((prevState) => [...prevState, response.data]);
@@ -297,14 +297,14 @@ const PublicInfo = (props) => {
               </div>
             </div>
             {userData ? (
-              <div className="w-full">
+              <div className="w-full dark:text-dbeats-white">
                 <hr />
                 <h4 className="py-2">Description : </h4>
                 <p className="pb-2">{userData.name}</p>
                 <hr />
               </div>
             ) : null}
-            <div className={`${classes.comment_section}`}>
+            <div className={`${classes.comment_section} hidden`}>
               <iframe
                 className="w-full p-0 m-0 h-60 lg:h-88"
                 title="comment"

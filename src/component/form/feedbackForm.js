@@ -64,14 +64,14 @@ const FeedbackForm = () => {
                     required
                     type="text"
                     name="feedback"
-                    className="mt-1 px-3 py-2 bg-white border shadow-sm border-gray-300 placeholder-gray-400 focus:outline-none focus:border-dbeats-light focus:ring-dbeats-light block    w-full rounded sm:text-sm focus:ring-1"
+                    className="mt-1 px-3 py-2 text-gray-900 dark:text-dbeats-white dark:bg-dbeats-dark-secondary bg-white border shadow-sm border-gray-300 placeholder-gray-400 focus:outline-none focus:border-dbeats-light focus:ring-dbeats-light block    w-full rounded sm:text-sm focus:ring-1"
                     placeholder="Tell us more"
                   />
                   <input
                     type="email"
                     name="email"
                     required
-                    className="mt-1 px-3 py-2 bg-white border shadow-sm border-gray-300 placeholder-gray-400 focus:outline-none focus:border-dbeats-light focus:ring-dbeats-light block    w-full rounded sm:text-sm focus:ring-1"
+                    className="mt-1 px-3 py-2 text-gray-900 dark:text-dbeats-white dark:bg-dbeats-dark-secondary bg-white border shadow-sm border-gray-300 placeholder-gray-400 focus:outline-none focus:border-dbeats-light focus:ring-dbeats-light block    w-full rounded sm:text-sm focus:ring-1"
                     placeholder="Your Email (optional)"
                   />
                 </p>

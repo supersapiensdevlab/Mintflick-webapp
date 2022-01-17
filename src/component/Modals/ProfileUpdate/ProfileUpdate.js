@@ -164,7 +164,7 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
               onClick={UpdateData}
               className={`
                flex justify-center 2xl:py-2 py-1 lg:px-5 
-                px-3 2xl:text-lg rounded  border-dbeats-light border
+                 rounded  border-dbeats-light border
                 lg:text-md text-md my-auto font-semibold px-3 bg-transparent
                 dark:text-white
                 ${

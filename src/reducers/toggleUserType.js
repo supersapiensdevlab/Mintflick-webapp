@@ -4,8 +4,7 @@ const toggleDarkMode = (state = initialState, action) => {
   switch (action.type) {
     case 'USERTYPETOGGLE':
       if (action.payload) {
-        state = action.payload;
-        return state;
+        return action.payload;
       } else {
         return state;
       }

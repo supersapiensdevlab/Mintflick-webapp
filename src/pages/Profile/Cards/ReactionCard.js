@@ -41,7 +41,7 @@ const ReactionCard = (props) => {
     }
     // eslint-disable-next-line
   }, []);
-
+  console.log('PROPS DATA: ', props.playbackUserData);
   useEffect(() => {
     const timer = setTimeout(() => {
       setButtonText(text);
@@ -69,7 +69,7 @@ const ReactionCard = (props) => {
               playing={playing}
               muted={false}
               volume={0.5}
-              url={props.playbackUserData.video.link}
+              url={props.playbackUserData.link}
               controls={false}
               className={classes.cards_videos}
               onMouseMove={handleMouseMove}
@@ -81,14 +81,15 @@ const ReactionCard = (props) => {
           <p className="text-black text-sm font-medium dark:text-gray-100">
             <div className="px-2">
               <p className="2xl:text-2xl md:text-lg lg:text-lg font-semibold">
-                {props.playbackUserData.video.videoName} &nbsp;
+                {console.log('PROPS DATA: ', props.playbackUserData)}
+                {/* {props.playbackUserData.video.videoName} &nbsp; */}
                 <button className="px-1" onClick={handleShow}>
                   <i className="fas fa-share-alt text-gray-500 hover:text-dbeats-light"></i>
                 </button>
               </p>
 
               <p className="text-xs  md:text-sm lg:text-xs text-gray-400 mt-1">
-                {props.playbackUserData.video.description}
+                {/* {props.playbackUserData.video.description} */}
               </p>
             </div>
             <hr className="my-3 opacity-20" />

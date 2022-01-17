@@ -262,20 +262,20 @@ const UserInfo = () => {
   }, [recordvideo.videoFile]);
 
   const mintNFT = () => {
-    const videoFile = new File(chunks, `${recordvideo.videoName}.webm`, { type: chunks[0].type });
+    const videoFile = new File(chunks, `${recordvideo.videoName}.webm`, { type: 'video/webm' });
     setRecordVideo({ ...recordvideo, videoFile: videoFile });
   };
 
   return (
     <Fragment className={`${darkMode && 'dark'}`}>
       <div className="grid sm:grid-cols-1 lg:grid-cols-3 grid-flow-row pt-3 pb-50 2xl:mt-10 lg:mt-4 lg:ml-12  bg-gradient-to-b from-blue-50 via-blue-50 to-white  dark:bg-gradient-to-b dark:from-dbeats-dark-secondary  dark:to-dbeats-dark-primary">
-        <div className="lg:col-span-2 2xl:ml-8 lg:ml-2 2xl:mt-4 lg:mt-6 self-center w-screen lg:w-full dark:bg-black">
+        <div className="lg:col-span-2 2xl:ml-8 lg:ml-2 2xl:mt-6 lg:mt-6 self-center w-screen lg:w-full dark:bg-dbeats-dark-primary border border-dbeats-light border-opacity-40 rounded p-5">
           {user ? (
             <VideoPlayer playbackUrl={playbackUrl} creatorData={user} footer={false} />
           ) : null}
         </div>
         <div className="text-sm mx-auto col-span-1  2xl:mt-12 lg:mt-0">
-          <div className="bg-white w-80  2xl:w-full  p-5 rounded text-sm sm:lg:text-xl shadow mt-8  lg:ml-0 ">
+          <div className="bg-white dark:bg-dbeats-dark-primary dark:text-dbeats-white w-80 border border-dbeats-light border-opacity-40  2xl:w-full  p-5 rounded text-sm sm:lg:text-xl shadow mt-8  lg:ml-0 ">
             <div className="pb-2">
               <span className="font-semibold">Streamer Name : </span>
               <p>{user.name}</p>
@@ -292,9 +292,21 @@ const UserInfo = () => {
               <span className="font-semibold">Streamer Key : </span>
               <p>{userStreams.streamKey}</p>
             </div>
-            <div className="pb-2  break-words">
+            <div className="pb-2  break-words hidden">
               <span className="font-semibold">Playback URL : </span>
               <p>{playbackUrl}</p>
+            </div>
+            <div className="pb-2  break-words">
+              <span className="font-semibold">Live URL : </span>
+              <p>
+                <a
+                  href={`https://dbeats.live/live/${user.username}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  https://dbeats.live/live/{user.username}
+                </a>
+              </p>
             </div>
             <hr width="95%" className="mt-2 mb-4" />
             <div>

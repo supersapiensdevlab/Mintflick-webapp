@@ -51,7 +51,7 @@ const Home = () => {
     axios.get(`${process.env.REACT_APP_SERVER_URL}/get_activeusers`).then(async (repos) => {
       for (let i = 0; i < repos.data.length; i++) {
         await axios
-          .get(`${process.env.REACT_APP_SERVER_URL}/user/get_user_by_id/${repos.data[i].id}`)
+          .get(`${process.env.REACT_APP_SERVER_URL}/user/getuser_by_id/${repos.data[i].id}`)
           .then((value) => {
             if (value.data !== '') setActiveStreams((prevState) => [...prevState, value.data]);
 

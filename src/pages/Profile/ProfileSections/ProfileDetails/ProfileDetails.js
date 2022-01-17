@@ -12,6 +12,8 @@ import {
   UploadProfileImageModal,
 } from '../../../../component/Modals/ImageUploadModal/ImageUploadModal';
 import ProfileUpdateModal from '../../../../component/Modals/ProfileUpdate/ProfileUpdate';
+import ProfileSettingsModal from '../../../../component/Modals/ProfileUpdate/ProfileSettingsModal';
+
 import AnnouncementCard from '../../Cards/AnnouncementCard';
 import CarouselCard from '../../Cards/CarouselCard';
 import PlaylistCard from '../../Cards/PlaylistCard';
@@ -34,6 +36,10 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
   const [showUpdate, setShowUpdate] = useState(false);
   const handleShowUpdate = () => setShowUpdate(true);
   const handleCloseUpdate = () => setShowUpdate(false);
+
+  const [showSettings, setshowSettings] = useState(true);
+  const handleshowSettings = () => setshowSettings(true);
+  const handleCloseSettings = () => setshowSettings(false);
 
   const navigate = useHistory();
 
@@ -287,7 +293,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
       });
   };
 
-  const NavTabs = ['Posts', 'Videos', 'Music', 'Activity', 'Playlists']; //, 'Subscribed Channels'
+  const NavTabs = ['Posts', 'Videos', 'Music', 'Playlists']; //, 'Subscribed Channels'
 
   const NavTabsTitle = ({ text }) => {
     if (text === 'Subscribed Channels') {
@@ -412,6 +418,18 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                         flex self-center   py-1 2xl:px-3 lg:px-1.5  text-xs 2xl:text-lg  px-2"
                         >
                           <i className="fas fa-pen self-center mr-2 "></i> Edit
+                        </button>
+                      ) : null}
+                      {privateUser ? (
+                        <button
+                          onClick={handleshowSettings}
+                          className="no-underline border text-dbeats-dark-alt 
+                        cursor-pointer dark:border-white border-1 dark:border-opacity-20  dark:text-gray-200 
+                        hover:bg-dbeats-light hover:text-white 
+                        dark:hover:text-white rounded font-bold mr-1 
+                        flex self-center   py-1 2xl:px-3 lg:px-1.5  text-xs 2xl:text-lg  px-2"
+                        >
+                          <i className="fas fa-cog  self-center mr-2"></i> Settings
                         </button>
                       ) : null}
                     </div>
@@ -729,6 +747,13 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
       <ProfileUpdateModal
         show={showUpdate}
         handleClose={handleCloseUpdate}
+        userData={user}
+        darkMode={darkMode}
+        setDisplayName={setDisplayName}
+      />
+      <ProfileSettingsModal
+        show={showSettings}
+        handleClose={handleCloseSettings}
         userData={user}
         darkMode={darkMode}
         setDisplayName={setDisplayName}

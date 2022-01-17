@@ -1,6 +1,8 @@
 module.exports = {
   purge: ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'],
   darkMode: 'class', // or 'media' or 'class'
+
+  content: ['./node_modules/@themesberg/flowbite/**/*.js'],
   theme: {
     scale: {
       0: '0',
@@ -109,6 +111,7 @@ module.exports = {
     require('@tailwindcss/forms'),
     require('@tailwindcss/line-clamp'),
     require('tailwindcss-filters'),
+    require('@themesberg/flowbite/plugin'),
     require('tailwindcss-important')(),
   ],
 };
