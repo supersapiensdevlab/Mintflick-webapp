@@ -5,6 +5,7 @@ import Modal from 'react-modal';
 const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayName }) => {
   const [buttonText, setButtonText] = useState('Click Here');
   const [loader, setLoader] = useState(false);
+  const [existingValue, setExistingValue] = useState(null);
 
   const [newData, setNewData] = useState({
     name: userData.name,
@@ -14,6 +15,9 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
   const handleUserInputs = (e) => {
     let name = e.target.name;
     let value = e.target.value;
+    if (name === 'email') {
+      setExistingValue(null);
+    }
     setNewData({ ...newData, [name]: value });
   };
 
@@ -46,12 +50,16 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
       url: `${process.env.REACT_APP_SERVER_URL}/user/update`,
       data: data,
     })
-      .then(() => {
-        if (userData.name !== newData.name) {
-          setDisplayName(newData.name);
+      .then((res) => {
+        if (res.data === 'Invalid') {
+          setExistingValue(res.data);
+        } else {
+          if (userData.name !== newData.name) {
+            setDisplayName(newData.name);
+          }
+          handleClose();
         }
         setLoader(false);
-        handleClose();
       })
       .catch(function (error) {
         console.log(error);
@@ -124,7 +132,7 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
               >
                 Email
               </label>
-              <div className="mt-1 flex rounded-md shadow-sm">
+              <div className="mt-1 flex flex-col rounded-md shadow-sm">
                 <input
                   type="text"
                   name="email"
@@ -134,6 +142,15 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
                   className="focus:ring-dbeats-dark-primary border dark:border-dbeats-alt border-gray-300 dark:bg-dbeats-dark-primary ring-dbeats-dark-secondary  ring-0   flex-1 block w-full rounded-md sm:text-sm  "
                   placeholder=""
                 />
+                {existingValue === 'Invalid' ? (
+                  <p
+                    className={`${
+                      existingValue ? '2xl:text-sm lg:text-xs  text-red-500 ml-1 mt-1' : 'hidden'
+                    }`}
+                  >
+                    Email already exists
+                  </p>
+                ) : null}
               </div>
             </div>
           </div>
