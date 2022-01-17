@@ -12,6 +12,8 @@ import PlayBackCardGamer from './Cards/PlayBackCard-gamer';
 import { Link } from 'react-router-dom';
 import Dropdown from '../../component/dropdown.component';
 import FeedbackForm from '../../component/form/feedbackForm';
+import MainToolbar from '../../component/Toolbar/main-toolbar';
+
 import { ReactComponent as Verified } from '../../assets/icons/verified-account.svg';
 
 const Home = () => {
@@ -250,6 +252,7 @@ const Home = () => {
                       </h4>
                     </div>
                   </div>
+                  {user ? <MainToolbar></MainToolbar> : ''}
                   <div id="display_playback_videos" className="2xl:px-4 lg:px-3 px-1">
                     <div className="  ">
                       <div className="flex my-1">
@@ -259,16 +262,16 @@ const Home = () => {
                           setSelected={setSelectedCategory}
                           getSelected={selectedCategory}
                         />
-                        <h4 className=" font-bold   dark:text-gray-200 text-gray-900 p-2 cursor-pointer">
+                        <h4 className="  sm:text-sm lg:text-xs 2xl:text-sm self-center   dark:text-gray-200 text-gray-900 p-2 cursor-pointer dark:hover:bg-dbeats-dark-primary rounded mx-1 ">
                           All
                         </h4>
-                        <h4 className=" font-bold   dark:text-gray-200 text-gray-900 p-2 cursor-pointer">
+                        <h4 className="  sm:text-sm lg:text-xs 2xl:text-sm self-center   dark:text-gray-200 text-gray-900 p-2 cursor-pointer dark:hover:bg-dbeats-dark-primary rounded mx-1">
                           Videos
                         </h4>
-                        <h4 className=" font-bold   dark:text-gray-200 text-gray-900 p-2 cursor-pointer">
+                        <h4 className="  sm:text-sm lg:text-xs 2xl:text-sm self-center   dark:text-gray-200 text-gray-900 p-2 cursor-pointer dark:hover:bg-dbeats-dark-primary rounded mx-1">
                           Music
                         </h4>
-                        <h4 className=" font-bold   dark:text-gray-200 text-gray-900 p-2 cursor-pointer">
+                        <h4 className="   sm:text-sm lg:text-xs 2xl:text-sm self-center  dark:text-gray-200 text-gray-900 p-2 cursor-pointer dark:hover:bg-dbeats-dark-primary rounded mx-1">
                           Pictures
                         </h4>
                       </div>

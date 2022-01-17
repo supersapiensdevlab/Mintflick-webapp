@@ -518,9 +518,20 @@ const PlayBackInfo = (props) => {
                               ></div>
                             </button>
 
-                            <button className="bg-dbeats-light    p-1 2xl:text-lg lg:text-sm text-md  rounded-sm 2xl:px-4 px-4 lg:px-2 mr-3 font-semibold text-white ">
-                              <i className="fas fa-dice-d20  mr-1 cursor-pointer"></i>
-                              <span onClick={handleShowSubscriptionModal}>Become a SuperFan</span>
+                            <button
+                              onClick={handleShowSubscriptionModal}
+                              className={`${
+                                footerData.superfan_data ? '' : 'hidden'
+                              }bg-dbeats-light    p-1 2xl:text-lg lg:text-sm text-md  rounded-sm 2xl:px-4 px-4 lg:px-2 mr-3 font-semibold text-white  `}
+                            >
+                              <i
+                                className={`${
+                                  footerData.superfan_data ? '' : 'hidden'
+                                } fas fa-dice-d20  mr-1 cursor-pointer}`}
+                              ></i>
+                              <span className={`${footerData.superfan_data ? '' : 'hidden'}`}>
+                                Become a SuperFan
+                              </span>
                             </button>
                           </div>
                         ) : (
@@ -592,12 +603,8 @@ const PlayBackInfo = (props) => {
                       <p className="text-base"> {angry}</p>
                     </div>
 
-                    <Menu
-                      as="div"
-                      className="relative inline-block text-left"
-                      style={{ zIndex: 50 }}
-                    >
-                      <div style={{ zIndex: 50 }}>
+                    <Menu as="div" className="relative inline-block text-left">
+                      <div>
                         <Menu.Button>
                           <i className="fas fa-ellipsis-h opacity-50 mx-2"></i>
                         </Menu.Button>
@@ -688,7 +695,7 @@ const PlayBackInfo = (props) => {
 
               <div>
                 <Container className="px-4 pb-4 bg-gradient-to-b from-blue-50 via-blue-50 to-white  dark:bg-gradient-to-b dark:from-dbeats-dark-primary  dark:to-dbeats-dark-primary">
-                  <div className="relative grid grid-cols-6">
+                  <div className="relative grid grid-cols-6 hidden">
                     <div className="   col-span-2">
                       <Lottie
                         options={defaultOptions2}
@@ -719,57 +726,52 @@ const PlayBackInfo = (props) => {
                     Cancel
                   </button> */}
 
-                  <Row>
-                    <div className="grid grid-cols-6 2xl:gap-4 lg:gap-2 w-full   self-center">
-                      <button
-                        onClick={() => testFlow('1')}
-                        className="  h-max shadow text-center col-span-6 lg:col-span-2   2xl:w-full w-full lg:w-60  mx-auto p-2 2xl:p-2 lg:p-1  text-black dark:text-white font-semibold hover:rounded   border dark:bg-dbeats-dark-alt border-dbeats-light hover:shadow-none transition-all transform hover:scale-99 hover:bg-dbeats-light "
-                      >
-                        <span className="font-bold 2xl:text-2xl lg:text-sm">1 MATICx</span>
-                        <br></br>
-                        <span className="2xl:text-2xl lg:text-sm">PER MONTH</span>
-                        <br></br>
-                        <p className="2xl:text-sm lg:text-xs font-thin text-gray-800 dark:text-gray-300">
-                          Fans who contribute at this level get my thanks and access to recipes and
-                          flash fiction.{' '}
-                        </p>
-                      </button>
-                      <button
-                        onClick={() => testFlow('3')}
-                        className="  shadow text-center col-span-6 lg:col-span-2   2xl:w-full w-full lg:w-60  mx-auto p-2 2xl:p-2 lg:p-1     text-black dark:text-white font-semibold   border dark:bg-dbeats-dark-alt border-dbeats-light hover:shadow-none transition-all transform hover:scale-99 hover:bg-dbeats-light "
-                      >
-                        <span className="font-bold 2xl:text-2xl lg:text-sm">3 MATICx</span>
-                        <br></br>
-                        <span className="2xl:text-2xl lg:text-sm">PER MONTH</span>
-                        <br></br>
-                        <span className="2xl:text-sm lg:text-xs font-thin text-gray-800 dark:text-gray-300">
-                          You get all the goodies, my thanks, written content, and you will see
-                          concept art for my Video Content before it goes public..{' '}
-                        </span>
-                      </button>
-                      <button
-                        onClick={() => testFlow('2')}
-                        className="block shadow text-center col-span-6 lg:col-span-2   2xl:w-full w-full lg:w-60  mx-auto p-2 2xl:p-2 lg:p-1   text-black dark:text-white font-semibold   border dark:bg-dbeats-dark-alt border-dbeats-light hover:shadow-none transition-all transform hover:scale-99 hover:bg-dbeats-light "
-                      >
-                        <span className="font-bold 2xl:text-2xl lg:text-sm">2 MATICx</span>
-                        <br></br>
-                        <span className="2xl:text-2xl lg:text-sm">PER MONTH</span>
-                        <br></br>
-                        <span className="2xl:text-sm lg:text-xs font-thin text-gray-800 dark:text-gray-300">
-                          Fans who contribute at this level get my thanks and access to recipes and
-                          flash fiction.{' '}
-                        </span>
-                      </button>
-                    </div>
-                  </Row>
-                  <Row className="self-center text-center mt-5 dark:text-gray-500 font-semibold 2xl:text-lg lg:text-sm">
-                    powered by{' '}
-                    <img
-                      src={superfluid}
-                      alt="superfluid"
-                      className="2xl:h-10 lg:h-8 rounded w-max  self-center mx-auto bg-white p-2 dark:bg-opacity-75"
-                    ></img>
-                  </Row>
+                  <div className="grid grid-cols-3 2xl:gap-4 lg:gap-2 w-full   self-center">
+                    <button
+                      onClick={() => testFlow(footerData.superfan_data.price)}
+                      className="block shadow text-center col-span-1      2xl:w-max w-max px-5 lg:w-60  mx-auto py-2     text-black dark:text-white font-semibold   border dark:bg-dbeats-dark-alt hover:border-dbeats-light hover:shadow-none transition-all transform hover:scale-99 hover:bg-dbeats-light "
+                    >
+                      <span className="font-bold 2xl:text-2xl lg:text-sm">
+                        {footerData.superfan_data.price} DBEATx
+                      </span>
+
+                      <span className="  lg:text-sm">/per second</span>
+                      <br></br>
+
+                      <p className="2xl:text-sm lg:text-xs font-thin text-gray-800 dark:text-gray-300">
+                        {footerData.superfan_data.perks}
+                      </p>
+                    </button>
+                    <button
+                      onClick={() => testFlow(footerData.superfan_data.price2)}
+                      className="  shadow text-center col-span-1     2xl:w-max w-max px-5 lg:w-60  mx-auto py-2       text-black dark:text-white font-semibold   border dark:bg-dbeats-dark-alt hover:border-dbeats-light hover:shadow-none transition-all transform hover:scale-99 hover:bg-dbeats-light "
+                    >
+                      <span className="font-bold 2xl:text-2xl lg:text-sm">
+                        {footerData.superfan_data.price2} DBEATx
+                      </span>
+
+                      <span className="  lg:text-sm">/per second</span>
+                      <br></br>
+                      <span className="2xl:text-sm lg:text-xs font-thin text-gray-800 dark:text-gray-300">
+                        {footerData.superfan_data.perks2}
+                      </span>
+                    </button>
+                    <button
+                      onClick={() => testFlow(footerData.superfan_data.price3)}
+                      className="block shadow text-center col-span-1     2xl:w-max w-max px-5 lg:w-60  mx-auto py-2     text-black dark:text-white font-semibold   border dark:bg-dbeats-dark-alt hover:border-dbeats-light hover:shadow-none transition-all transform hover:scale-99 hover:bg-dbeats-light "
+                    >
+                      <span className="font-bold 2xl:text-2xl lg:text-sm">
+                        {footerData.superfan_data.price3} DBEATx
+                      </span>
+
+                      <span className="  lg:text-sm">/per second</span>
+                      <br></br>
+
+                      <span className="2xl:text-sm lg:text-xs font-thin text-gray-800 dark:text-gray-300">
+                        {footerData.superfan_data.perks3}
+                      </span>
+                    </button>
+                  </div>
                 </Container>
               </div>
             </div>

@@ -7,17 +7,18 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
   const [loader, setLoader] = useState(false);
 
   const [newData, setNewData] = useState({
-    plan: '',
-    perks: '',
-    price: '',
-    plan2: '',
-    perks2: '',
-    price2: '',
-    plan3: '',
-    perks3: '',
-    price3: '',
+    plan: userData.superfan_data.plan,
+    perks: userData.superfan_data.perks,
+    price: userData.superfan_data.price,
+    plan2: userData.superfan_data.plan2,
+    perks2: userData.superfan_data.perks2,
+    price2: userData.superfan_data.price2,
+    plan3: userData.superfan_data.plan3,
+    perks3: userData.superfan_data.perks3,
+    price3: userData.superfan_data.price3,
   });
 
+  console.log('userData', userData.superfan_data);
   const [currentPlan, setPlan] = useState('first');
 
   const handleNewPlan = (e) => {
@@ -55,7 +56,7 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
     })
       .then((res) => {
         setLoader(false);
-        //handleClose();
+        handleClose();
         console.log(res);
       })
       .catch(function (error) {
@@ -205,6 +206,9 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
                       <div className="tooltip-arrow" data-popper-arrow></div>
                     </div>
                   </div>
+                  <p className="text-center bg-dbeats-dark-alt self-center dark:text-gray-500">
+                    Choose a card to edit
+                  </p>
                   <div className="grid sm:grid-cols-3 grid-cols-1 gap-6 bg-gray-50 dark:bg-dbeats-dark-alt  align-middle justify-center row-auto p-3">
                     <form
                       name="first"
@@ -212,9 +216,9 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
                       onClick={handleNewPlan}
                       className={` ${
                         currentPlan === 'first'
-                          ? 'dark:border-dbeats-white'
-                          : 'dark:border-dbeats-dark-primary'
-                      }  border-dashed border-2  border-gray-500 self-center dark:bg-dbeats-dark-secondary bg-white 
+                          ? 'dark:border-dbeats-light  shadow-md '
+                          : 'dark:border-dbeats-dark-primary border-dashed'
+                      }   border-2  border-gray-500 self-center dark:bg-dbeats-dark-secondary bg-white 
                      h-48 rounded align-middle text-center cursor-pointer`}
                     >
                       {' '}
@@ -255,9 +259,9 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
                       onClick={handleNewPlan}
                       className={` ${
                         currentPlan === 'second'
-                          ? 'dark:border-dbeats-white'
-                          : 'dark:border-dbeats-dark-primary'
-                      }  border-dashed border-2  border-gray-500 self-center dark:bg-dbeats-dark-secondary bg-white 
+                          ? 'dark:border-dbeats-light  shadow-md '
+                          : 'dark:border-dbeats-dark-primary border-dashed'
+                      }    border-2  border-gray-500 self-center dark:bg-dbeats-dark-secondary bg-white 
                      h-48 rounded align-middle text-center cursor-pointer`}
                     >
                       {' '}
@@ -298,9 +302,9 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
                       onClick={handleNewPlan}
                       className={` ${
                         currentPlan === 'third'
-                          ? 'dark:border-dbeats-white'
-                          : 'dark:border-dbeats-dark-primary'
-                      }  border-dashed border-2  border-gray-500 self-center dark:bg-dbeats-dark-secondary bg-white 
+                          ? 'dark:border-dbeats-light  shadow-md '
+                          : 'dark:border-dbeats-dark-primary border-dashed'
+                      }    border-2  border-gray-500 self-center dark:bg-dbeats-dark-secondary bg-white 
                      h-48 rounded align-middle text-center cursor-pointer`}
                     >
                       {' '}

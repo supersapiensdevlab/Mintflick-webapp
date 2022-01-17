@@ -9,12 +9,7 @@ import logoDark from '../../assets/images/dark-logo.svg';
 import CircleLogo from '../../assets/images/dbeats-logo.png';
 import logo from '../../assets/images/white-logo.svg';
 import useWeb3Modal from '../../hooks/useWeb3Modal';
-import {
-  AnnouncementModal,
-  UploadNFTModal,
-  UploadTrackModal,
-  UploadVideoModal,
-} from '../Modals/NavbarModals';
+
 import Toggle from '../toggle.component';
 import classes from './Navbar.module.css';
 
@@ -28,32 +23,12 @@ const NavBar = () => {
 
   const wrapperRef = useRef(null);
 
-  //Popup
-  const [showAnnouncement, setShowAnnouncement] = useState(false);
-  const handleCloseAnnouncement = () => setShowAnnouncement(false);
-  const handleShowAnnouncement = () => setShowAnnouncement(true);
-
-  const [showVideoUpload, setShowVideoUpload] = useState(false);
-  const handleCloseVideoUpload = () => setShowVideoUpload(false);
-  const handleShowVideoUpload = () => setShowVideoUpload(true);
-
-  const [showTrackUpload, setShowTrackUpload] = useState(false);
-  const handleCloseTrackUpload = () => setShowTrackUpload(false);
-  const handleShowTrackUpload = () => setShowTrackUpload(true);
-
-  const [showNFTUpload, setShowNFTUpload] = useState(false);
-  const handleCloseNFTUpload = () => setShowNFTUpload(false);
-  const handleShowNFTUpload = () => setShowNFTUpload(true);
-
   const dispatch = useDispatch();
   const darkMode = useSelector((state) => state.toggleDarkMode);
 
   const [alluser, setAllUser] = useState([]);
   const [filterResultDisplay, setFilterResultDisplay] = useState(true);
   const [newNotification, setNewNotification] = useState(0);
-
-  //Loader
-  const [loader, setLoader] = useState(true);
 
   //  Modal
   const [showOpen, setOnOpen] = useState(false);
@@ -378,12 +353,12 @@ const NavBar = () => {
               </p>
             </div>
 
-            <div className="w-2/3 sm:w-1/3 mx-auto  self-center ">
-              <div className="  self-center rounded-full  flex bg-gray-100 dark:bg-dbeats-dark-primary">
+            <div className="w-2/3 sm:w-1/3 mx-auto  self-center dark:focus:ring-dbeats-light">
+              <div className="dark:focus:ring-dbeats-light  self-center rounded-full  flex bg-gray-100 dark:bg-dbeats-dark-primary">
                 <input
                   type="text"
                   placeholder="Search"
-                  className="w-full lg:h-8 2xl:h-10 h-10 rounded-full border-0 bg-gray-100 self-center focus:ring-0  px-5 dark:bg-dbeats-dark-secondary"
+                  className="dark:focus:ring-dbeats-light   w-full lg:h-8 2xl:h-10 h-10 rounded-full border-0 bg-gray-100 self-center    px-5 dark:bg-dbeats-dark-secondary"
                   value={wordEntered}
                   onChange={handleFilter}
                 ></input>
@@ -399,20 +374,7 @@ const NavBar = () => {
                   }}
                 >
                   {' '}
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="2xl:h-6 2xl:w-6 lg:h-5 lg:w-5 h-6 w-6 self-center mx-3 "
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="#aaa"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                    />
-                  </svg>
+                  <i className="fas fa-search text-gray-500 hover:text-dbeats-light self-center mx-3 text-lg"></i>
                 </Link>
               </div>
               <div
@@ -472,22 +434,11 @@ const NavBar = () => {
                 )}
               </div>
             </div>
-            {user ? (
-              <div className="flex items-center 2xl:mr-3 lg:mr-2">
-                <Dropdown as="div" className="relative inline-block text-left mr-2 self-center">
+            {/* {user ? (
+              <div className="flex items-center  ">
+                <Dropdown as="div" className="relative inline-block text-left  self-center">
                   <Dropdown.Button className="flex h-full items-center">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="2xl:h-7 2xl:w-7 w-5 h-5 text-dbeats-light"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
+                    <i className="fas fa-plus text-dbeats-light hover:text-dbeats-secondary-light"></i>
                   </Dropdown.Button>
                   <Transition
                     as={Fragment}
@@ -554,20 +505,24 @@ const NavBar = () => {
                   </Transition>
                 </Dropdown>
               </div>
-            ) : null}
+            ) : null} */}
             {user ? (
               <div id="login-btn" className="flex items-center">
-                <Dropdown as="div" className="relative inline-block text-left  self-center">
+                <Link
+                  to={`/streamer/${user.username}`}
+                  className="border-dbeats-light 2xl:border-1   text-dbeats-light hover:bg-dbeats-light hover:text-white rounded font-bold mx-2 "
+                >
+                  <div className="flex lg:py-1   py-1.5 2xl:px-3 lg:px-2 px-1.5 ">
+                    <i className="fas fa-video self-center md:mr-2"></i>
+                    <span className="self-center     lg:text-xs 2xl:text-lg md:flex hidden">
+                      Go Live
+                    </span>
+                  </div>
+                </Link>
+                <Dropdown as="div" className="relative inline-block text-left  self-center mr-1">
                   <Dropdown.Button className="flex h-full items-center">
                     <div onClick={handleNotification}>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="2xl:h-7 2xl:w-7 w-5 h-5 text-dbeats-light cursor-pointer z-50 self-center  "
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                      >
-                        <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
-                      </svg>
+                      <i className="fas fa-bell text-dbeats-light text-lg hover:text-dbeats-secondary-light"></i>
                       {newNotification > 0 ? (
                         <div
                           className="bg-red-500 rounded-full shadow  
@@ -606,25 +561,10 @@ const NavBar = () => {
                     </Dropdown.Items>
                   </Transition>
                 </Dropdown>
-                <Link
-                  to={`/streamer/${user.username}`}
-                  className="border-dbeats-light 2xl:border-1 invisible lg:visible text-dbeats-light hover:bg-dbeats-light hover:text-white rounded font-bold mx-2 "
-                >
-                  <div className="flex lg:py-1 2xl:py-2.5 py-1.5 2xl:px-3 lg:px-2 px-1.5 ">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5 lg:self-center mt-1 lg:mt-0 md:mr-2"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                    >
-                      <path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z" />
-                    </svg>
-                    <span className="self-center md:flex   lg:text-xs 2xl:text-lg ">Go Live</span>
-                  </div>
-                </Link>
+
                 <Link
                   to={`/profile/${user.username}`}
-                  className="shadow-sm 2xl:h-10  2xl:w-10 self-center  h-7 w-7 bg-gradient-to-r from-dbeats-secondary-light to-dbeats-light text-white rounded-full font-bold mx-2 flex"
+                  className="shadow-sm 2xl:h-10  2xl:w-10 self-center  h-7 w-7 bg-dbeats-light hover:bg-dbeats-secondary-light text-white rounded-full font-bold mx-2 flex"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -647,45 +587,12 @@ const NavBar = () => {
                 dark:from-dbeats-secondary-light dark:to-dbeats-light text-white rounded font-bold ml-2 md:mx-2 md:ml-0 flex"
               >
                 <i className="fas fa-sign-in-alt text-xs lg:text-sm 2xl:text-lg self-center mr-2 hidden md:block"></i>
-                <span className="self-center text-sm lg:text-xs 2xl:text-lg">SignUp</span>
+                <span className="self-center text-sm lg:text-xs 2xl:text-lg">Signup</span>
               </Link>
             )}
           </div>
         </div>
       </div>
-      <AnnouncementModal
-        showAnnouncement={showAnnouncement}
-        setShowAnnouncement={setShowAnnouncement}
-        handleCloseAnnouncement={handleCloseAnnouncement}
-        handleShowAnnouncement={handleShowAnnouncement}
-        loader={loader}
-        setLoader={setLoader}
-      />
-      <UploadVideoModal
-        showVideoUpload={showVideoUpload}
-        setShowVideoUpload={setShowVideoUpload}
-        handleCloseVideoUpload={handleCloseVideoUpload}
-        handleShowVideoUpload={handleShowVideoUpload}
-        loader={loader}
-        setLoader={setLoader}
-      />
-      <UploadTrackModal
-        showTrackUpload={showTrackUpload}
-        setShowTrackUpload={setShowTrackUpload}
-        handleCloseTrackUpload={handleCloseTrackUpload}
-        handleShowTrackUpload={handleShowTrackUpload}
-        loader={loader}
-        setLoader={setLoader}
-      />
-
-      <UploadNFTModal
-        showNFTUpload={showNFTUpload}
-        setShowNFTUpload={setShowNFTUpload}
-        handleCloseNFTUpload={handleCloseNFTUpload}
-        handleShowNFTUpload={handleShowNFTUpload}
-        loader={loader}
-        setLoader={setLoader}
-      />
     </>
   );
 };

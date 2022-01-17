@@ -37,7 +37,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
   const handleShowUpdate = () => setShowUpdate(true);
   const handleCloseUpdate = () => setShowUpdate(false);
 
-  const [showSettings, setshowSettings] = useState(true);
+  const [showSettings, setshowSettings] = useState(false);
   const handleshowSettings = () => setshowSettings(true);
   const handleCloseSettings = () => setshowSettings(false);
 
