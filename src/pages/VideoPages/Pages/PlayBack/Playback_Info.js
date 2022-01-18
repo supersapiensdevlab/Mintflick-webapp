@@ -725,53 +725,56 @@ const PlayBackInfo = (props) => {
                   >
                     Cancel
                   </button> */}
+                  {footerData.superfan_data ? (
+                    <div className="grid grid-cols-3 2xl:gap-4 lg:gap-2 w-full   self-center">
+                      <button
+                        onClick={() => testFlow(footerData.superfan_data.price)}
+                        className="block shadow text-center col-span-1      2xl:w-max w-max px-5 lg:w-60  mx-auto py-2     text-black dark:text-white font-semibold   border dark:bg-dbeats-dark-alt hover:border-dbeats-light hover:shadow-none transition-all transform hover:scale-99 hover:bg-dbeats-light "
+                      >
+                        <span className="font-bold 2xl:text-2xl lg:text-sm">
+                          {footerData.superfan_data.price} DBEATx
+                        </span>
 
-                  <div className="grid grid-cols-3 2xl:gap-4 lg:gap-2 w-full   self-center">
-                    <button
-                      onClick={() => testFlow(footerData.superfan_data.price)}
-                      className="block shadow text-center col-span-1      2xl:w-max w-max px-5 lg:w-60  mx-auto py-2     text-black dark:text-white font-semibold   border dark:bg-dbeats-dark-alt hover:border-dbeats-light hover:shadow-none transition-all transform hover:scale-99 hover:bg-dbeats-light "
-                    >
-                      <span className="font-bold 2xl:text-2xl lg:text-sm">
-                        {footerData.superfan_data.price} DBEATx
-                      </span>
+                        <span className="  lg:text-sm">/per second</span>
+                        <br></br>
 
-                      <span className="  lg:text-sm">/per second</span>
-                      <br></br>
+                        <p className="2xl:text-sm lg:text-xs font-thin text-gray-800 dark:text-gray-300">
+                          {footerData.superfan_data.perks}
+                        </p>
+                      </button>
+                      <button
+                        onClick={() => testFlow(footerData.superfan_data.price2)}
+                        className="  shadow text-center col-span-1     2xl:w-max w-max px-5 lg:w-60  mx-auto py-2       text-black dark:text-white font-semibold   border dark:bg-dbeats-dark-alt hover:border-dbeats-light hover:shadow-none transition-all transform hover:scale-99 hover:bg-dbeats-light "
+                      >
+                        <span className="font-bold 2xl:text-2xl lg:text-sm">
+                          {footerData.superfan_data.price2} DBEATx
+                        </span>
 
-                      <p className="2xl:text-sm lg:text-xs font-thin text-gray-800 dark:text-gray-300">
-                        {footerData.superfan_data.perks}
-                      </p>
-                    </button>
-                    <button
-                      onClick={() => testFlow(footerData.superfan_data.price2)}
-                      className="  shadow text-center col-span-1     2xl:w-max w-max px-5 lg:w-60  mx-auto py-2       text-black dark:text-white font-semibold   border dark:bg-dbeats-dark-alt hover:border-dbeats-light hover:shadow-none transition-all transform hover:scale-99 hover:bg-dbeats-light "
-                    >
-                      <span className="font-bold 2xl:text-2xl lg:text-sm">
-                        {footerData.superfan_data.price2} DBEATx
-                      </span>
+                        <span className="  lg:text-sm">/per second</span>
+                        <br></br>
+                        <span className="2xl:text-sm lg:text-xs font-thin text-gray-800 dark:text-gray-300">
+                          {footerData.superfan_data.perks2}
+                        </span>
+                      </button>
+                      <button
+                        onClick={() => testFlow(footerData.superfan_data.price3)}
+                        className="block shadow text-center col-span-1     2xl:w-max w-max px-5 lg:w-60  mx-auto py-2     text-black dark:text-white font-semibold   border dark:bg-dbeats-dark-alt hover:border-dbeats-light hover:shadow-none transition-all transform hover:scale-99 hover:bg-dbeats-light "
+                      >
+                        <span className="font-bold 2xl:text-2xl lg:text-sm">
+                          {footerData.superfan_data.price3} DBEATx
+                        </span>
 
-                      <span className="  lg:text-sm">/per second</span>
-                      <br></br>
-                      <span className="2xl:text-sm lg:text-xs font-thin text-gray-800 dark:text-gray-300">
-                        {footerData.superfan_data.perks2}
-                      </span>
-                    </button>
-                    <button
-                      onClick={() => testFlow(footerData.superfan_data.price3)}
-                      className="block shadow text-center col-span-1     2xl:w-max w-max px-5 lg:w-60  mx-auto py-2     text-black dark:text-white font-semibold   border dark:bg-dbeats-dark-alt hover:border-dbeats-light hover:shadow-none transition-all transform hover:scale-99 hover:bg-dbeats-light "
-                    >
-                      <span className="font-bold 2xl:text-2xl lg:text-sm">
-                        {footerData.superfan_data.price3} DBEATx
-                      </span>
+                        <span className="  lg:text-sm">/per second</span>
+                        <br></br>
 
-                      <span className="  lg:text-sm">/per second</span>
-                      <br></br>
-
-                      <span className="2xl:text-sm lg:text-xs font-thin text-gray-800 dark:text-gray-300">
-                        {footerData.superfan_data.perks3}
-                      </span>
-                    </button>
-                  </div>
+                        <span className="2xl:text-sm lg:text-xs font-thin text-gray-800 dark:text-gray-300">
+                          {footerData.superfan_data.perks3}
+                        </span>
+                      </button>
+                    </div>
+                  ) : (
+                    ''
+                  )}
                 </Container>
               </div>
             </div>

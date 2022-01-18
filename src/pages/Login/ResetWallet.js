@@ -57,7 +57,7 @@ const ResetWallet = () => {
             <div className="  w-full transition-all">
               <div className="flex flex-col justify-center   text-lg px-5 pt-2 lg:pt-0">
                 <div className="self-center  2xl:text-2xl lg:text-lg text-xl font-bold text-gray-900 dark:text-white">
-                  Reset Password
+                  Reset Wallet
                 </div>
 
                 <input type="text" hidden={true} />
@@ -65,7 +65,7 @@ const ResetWallet = () => {
                 <input
                   className="self-center my-2 rounded w-full mx-5  lg:h-8 2xl:h-10   border-0   dark:bg-dbeats-dark-primary bg-gray-100 text-gray-900 lg:text-xs 2xl:text-lg dark:text-white focus:ring-dbeats-light"
                   type="text"
-                  placeholder="Wallet"
+                  placeholder="New Wallet Address"
                   onChange={(e) => handleWalletChange(e)}
                   required
                 />
@@ -79,7 +79,7 @@ const ResetWallet = () => {
                           
                           `}
                     type="text"
-                    placeholder="Confirm Wallet"
+                    placeholder="Confirm Wallet Address"
                     onChange={(e) => handleConfirmWalletChange(e)}
                     required
                   />
@@ -88,7 +88,7 @@ const ResetWallet = () => {
                       confirmWalletCheck ? '2xl:text-sm lg:text-xs  text-red-500 mb-1' : 'hidden'
                     }`}
                   >
-                    Confirm Wallet doesn&apos;t match Wallet
+                    Confirm Wallet doesn&apos;t match
                   </p>
                 </>
                 <div className="flex justify-center">
