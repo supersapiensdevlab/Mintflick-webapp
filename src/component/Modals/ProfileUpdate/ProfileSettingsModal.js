@@ -4,21 +4,22 @@ import Modal from 'react-modal';
 import { Image } from 'react-img-placeholder';
 import dbeatsLogoBnW from '../../../assets/images/Logo/logo-blacknwhite.png';
 import maticLogo from '../../../assets/graphics/polygon-matic-logo.svg';
+import { useEffect } from 'react';
 
 const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayName }) => {
   // const [buttonText, setButtonText] = useState('Click Here');
   const [loader, setLoader] = useState(false);
 
   const [newData, setNewData] = useState({
-    plan: userData.superfan_data.plan,
-    perks: userData.superfan_data.perks,
-    price: userData.superfan_data.price,
-    plan2: userData.superfan_data.plan2,
-    perks2: userData.superfan_data.perks2,
-    price2: userData.superfan_data.price2,
-    plan3: userData.superfan_data.plan3,
-    perks3: userData.superfan_data.perks3,
-    price3: userData.superfan_data.price3,
+    plan: '',
+    perks: '',
+    price: '',
+    plan2: '',
+    perks2: '',
+    price2: '',
+    plan3: '',
+    perks3: '',
+    price3: '',
   });
 
   //console.log('userData', userData.superfan_data);
@@ -67,6 +68,22 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
         console.log(error);
       });
   };
+
+  useEffect(() => {
+    if (userData.superfan_data) {
+      setNewData({
+        plan: userData.superfan_data.plan,
+        perks: userData.superfan_data.perks,
+        price: userData.superfan_data.price,
+        plan2: userData.superfan_data.plan2,
+        perks2: userData.superfan_data.perks2,
+        price2: userData.superfan_data.price2,
+        plan3: userData.superfan_data.plan3,
+        perks3: userData.superfan_data.perks3,
+        price3: userData.superfan_data.price3,
+      });
+    }
+  }, [userData.superfan_data]);
 
   return (
     <Modal
@@ -227,6 +244,16 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
                      h-max rounded-md align-middle text-center cursor-pointer `}
                     >
                       {' '}
+                      <input
+                        className="form-check-input appearance-none rounded-full h-4 w-4 border
+                         border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 
+                         focus:outline-none  transition m-2 duration-200   align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
+                        type="radio"
+                        checked={currentPlan === 'first'}
+                        name="first"
+                        onClick={handleNewPlan}
+                        id="flexRadioDefault1"
+                      ></input>{' '}
                       <p
                         className={`${
                           !newData.plan
@@ -289,7 +316,17 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
                       }   border   border-gray-500 self-center dark:bg-dbeats-dark-secondary bg-white 
                      h-max rounded-md align-middle text-center cursor-pointer `}
                     >
-                      {' '}
+                      <input
+                        className="form-check-input appearance-none rounded-full h-4 w-4 border
+                         border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 
+                         focus:outline-none transition m-2 duration-200   align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
+                        type="radio"
+                        checked={currentPlan === 'second'}
+                        id="flexRadioDefault2"
+                        name="second"
+                        onClick={handleNewPlan}
+                      ></input>
+
                       <p
                         className={`${
                           !newData.plan2
@@ -353,6 +390,16 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
                      h-max rounded-md align-middle text-center cursor-pointer `}
                     >
                       {' '}
+                      <input
+                        className="form-check-input appearance-none rounded-full h-4 w-4 border
+                         border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 
+                         focus:outline-none transition m-2 duration-200   align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
+                        type="radio"
+                        name="third"
+                        onClick={handleNewPlan}
+                        checked={currentPlan === 'third'}
+                        id="flexRadioDefault3"
+                      ></input>{' '}
                       <p
                         className={`${
                           !newData.plan3

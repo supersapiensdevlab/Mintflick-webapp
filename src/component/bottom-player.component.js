@@ -123,7 +123,7 @@ const BottomBar = ({ songDetails, playing, firstPlayed, setState }) => {
                   <img
                     id="album-artwork"
                     src={songDetails.artwork}
-                    className=" lg:mr-4 mr-1 h-20 w-20   "
+                    className=" lg:mr-4 mr-1 h-20 w-20 self-center align-middle  "
                     alt=""
                   ></img>
                   <div className="flex flex-col lg:flex-row lg:justify-between lg:w-full">

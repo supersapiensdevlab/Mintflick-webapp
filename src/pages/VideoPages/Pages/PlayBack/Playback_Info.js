@@ -466,7 +466,7 @@ const PlayBackInfo = (props) => {
         nonce: '0x00', // ignored by MetaMask
         // gasPrice: '0x09184e72a000', // customizable by user during MetaMask confirmation.
         // gas: '0x2710', // customizable by user during MetaMask confirmation.
-        to: '0x0000000000000000000000000000000000000000', // Required except during contract publications.
+        to: '0x2ab2Ce5e3830d1d212009e57ec74BB0B1A51Ab3e', // Required except during contract publications.
         from: window.ethereum.selectedAddress, // must match user's active address.
         value: Number(donationAmountInWei).toString(16), // Only required to send ether to the recipient from the initiating external account.
         data: '0x7f7465737432000000000000000000000000000000000000000000000000000000600057', // Optional, but used for defining smart contract creation and interaction.
@@ -515,8 +515,8 @@ const PlayBackInfo = (props) => {
                 ) : null}
               </div>
               <div className="2xl:mx-7 sm:p-2 p-3   dark:bg-dbeats-dark-alt">
-                <div className="lg:flex flex-row justify-between  ">
-                  <div className="2xl:py-4 lg:py-2">
+                <div className=" flex  ">
+                  <div className="2xl:py-4 lg:py-2 w-full">
                     <div className=" w-full text-left mt-0" style={{ padding: '0px' }}>
                       {userData ? (
                         <p className="font-semibold 2xl:text-xl lg:text-md ">
@@ -524,7 +524,7 @@ const PlayBackInfo = (props) => {
                         </p>
                       ) : null}
                       {time ? (
-                        <p className="font-semibold 2xl:text-lg lg:text-xs text-md text-gray-400 pb-4">
+                        <p className="  2xl:text-lg lg:text-xs text-md text-gray-400 pb-4">
                           {time}
                         </p>
                       ) : null}
@@ -532,9 +532,9 @@ const PlayBackInfo = (props) => {
                     {!privateUser ? (
                       <div>
                         {user ? (
-                          <div className="flex items-center ">
+                          <div className="flex items-center   w-full">
                             <button
-                              className="flex items-center bg-dbeats-light p-1 2xl:text-lg lg:text-sm text-md rounded-sm 2xl:px-4 px-4 lg:px-2 mr-3 font-semibold text-white "
+                              className="flex items-center dark:bg-dbeats-dark-primary border border-dbeats-light dark:hover:bg-dbeats-light p-1 2xl:text-lg lg:text-sm text-md rounded-sm 2xl:px-4 px-4 lg:px-2 mr-3 font-semibold text-white "
                               onClick={trackFollowers}
                             >
                               <span>{subscribeButtonText}</span>
@@ -546,17 +546,14 @@ const PlayBackInfo = (props) => {
 
                             <button
                               onClick={handleShowSubscriptionModal}
-                              className={`${
-                                footerData.superfan_data ? '' : 'hidden'
-                              }bg-dbeats-light    p-1 2xl:text-lg lg:text-sm text-md  rounded-sm 2xl:px-4 px-4 lg:px-2 mr-3 font-semibold text-white  `}
+                              className={
+                                footerData.superfan_data
+                                  ? ' dark:bg-dbeats-dark-primary border border-dbeats-light dark:hover:bg-dbeats-light p-1 2xl:text-lg lg:text-sm text-md  rounded-sm 2xl:px-4 px-4 lg:px-2      mr-3 font-semibold text-white   '
+                                  : 'hidden'
+                              }
                             >
-                              <i
-                                className={`${
-                                  footerData.superfan_data ? '' : 'hidden'
-                                } fas fa-dice-d20  mr-1 cursor-pointer}`}
-                              ></i>
                               <span className={`${footerData.superfan_data ? '' : 'hidden'}`}>
-                                Become a SuperFan
+                                Become a Superfan
                               </span>
                             </button>
                           </div>
@@ -820,12 +817,14 @@ const PlayBackInfo = (props) => {
                         dark:bg-dbeats-dark-secondary rounded-lg p-4 mt-5"
                         >
                           <p className="font-bold text-lg text-center text-dbeats-light">
-                            {footerData.superfan_data.plan ? footerData.superfan_data.plan : 'Lite'}
+                            {footerData.superfan_data && footerData.superfan_data.plan
+                              ? footerData.superfan_data.plan
+                              : 'Lite'}
                           </p>
 
                           <Image
                             src={
-                              footerData.superfan_data.planImage
+                              footerData.superfan_data && footerData.superfan_data.planImage
                                 ? footerData.superfan_data.planImage
                                 : dbeatsLogoBnW
                             }
@@ -839,12 +838,16 @@ const PlayBackInfo = (props) => {
                             <>
                               <img className="h-6 w-6 self-center mr-1" src={maticLogo}></img>
                               <p className=" text-3xl font-bold   text-center dark:text-dbeats-white">
-                                {footerData.superfan_data.price}
+                                {footerData.superfan_data && footerData.superfan_data.price}
                               </p>
                             </>
                           </div>
                           <button
-                            onClick={() => handleDonation(footerData.superfan_data.price)}
+                            onClick={() =>
+                              handleDonation(
+                                footerData.superfan_data && footerData.superfan_data.price,
+                              )
+                            }
                             className="rounded-full block shadow text-center col-span-1  bg-white dark:bg-dbeats-dark-primary text-black dark:text-white  
                            2xl:w-max w-max px-5 lg:w-60  mx-auto py-2      font-semibold   border border-dbeats-light dark:border-dbeats-light dark:hover:border-dbeats-light  hover:border-dbeats-light hover:shadow-none 
                            transition-all transform hover:scale-99 hover:bg-dbeats-light dark:hover:bg-dbeats-light hover:text-white "
@@ -852,7 +855,7 @@ const PlayBackInfo = (props) => {
                             <span className="font-semibold text-md px-4 ">Join</span>
                           </button>
                           <p className="  text-gray-800 dark:text-gray-300 mt-4">
-                            {footerData.superfan_data.perks}
+                            {footerData.superfan_data && footerData.superfan_data.perks}
                           </p>
                         </div>
                         <div className="bg-dbeats-light  rounded-lg">
@@ -864,14 +867,14 @@ const PlayBackInfo = (props) => {
                         dark:bg-dbeats-dark-secondary rounded-lg p-4"
                           >
                             <p className="font-bold text-lg text-center text-dbeats-light">
-                              {footerData.superfan_data.plan2
+                              {footerData.superfan_data && footerData.superfan_data.plan2
                                 ? footerData.superfan_data.plan2
                                 : 'Lite'}
                             </p>
 
                             <Image
                               src={
-                                footerData.superfan_data.planImage
+                                footerData.superfan_data && footerData.superfan_data.planImage
                                   ? footerData.superfan_data.planImage
                                   : dbeatsLogoBnW
                               }
@@ -885,12 +888,16 @@ const PlayBackInfo = (props) => {
                               <>
                                 <img className="h-6 w-6 self-center mr-1" src={maticLogo}></img>
                                 <p className=" text-3xl font-bold   text-center dark:text-dbeats-white">
-                                  {footerData.superfan_data.price2}
+                                  {footerData.superfan_data && footerData.superfan_data.price2}
                                 </p>
                               </>
                             </div>
                             <button
-                              onClick={() => handleDonation(footerData.superfan_data.price2)}
+                              onClick={() =>
+                                handleDonation(
+                                  footerData.superfan_data && footerData.superfan_data.price2,
+                                )
+                              }
                               className="rounded-full block shadow text-center col-span-1  bg-white dark:bg-dbeats-dark-primary text-black dark:text-white  
                            2xl:w-max w-max px-5 lg:w-60  mx-auto py-2      font-semibold   border border-dbeats-light dark:border-dbeats-light dark:hover:border-dbeats-light  hover:border-dbeats-light hover:shadow-none 
                            transition-all transform hover:scale-99 hover:bg-dbeats-light dark:hover:bg-dbeats-light hover:text-white "
@@ -898,7 +905,7 @@ const PlayBackInfo = (props) => {
                               <span className="font-semibold text-md px-4 ">Join</span>
                             </button>
                             <p className="  text-gray-800 dark:text-gray-300 mt-4">
-                              {footerData.superfan_data.perks2}
+                              {footerData.superfan_data && footerData.superfan_data.perks2}
                             </p>
                           </div>
                         </div>
@@ -907,14 +914,14 @@ const PlayBackInfo = (props) => {
                         dark:bg-dbeats-dark-secondary rounded-lg p-4"
                         >
                           <p className="font-bold text-lg text-center text-dbeats-light">
-                            {footerData.superfan_data.plan3
+                            {footerData.superfan_data && footerData.superfan_data.plan3
                               ? footerData.superfan_data.plan3
                               : 'Lite'}
                           </p>
 
                           <Image
                             src={
-                              footerData.superfan_data.planImage
+                              footerData.superfan_data && footerData.superfan_data.planImage
                                 ? footerData.superfan_data.planImage
                                 : dbeatsLogoBnW
                             }
@@ -928,12 +935,16 @@ const PlayBackInfo = (props) => {
                             <>
                               <img className="h-6 w-6 self-center mr-1" src={maticLogo}></img>
                               <p className=" text-3xl font-bold   text-center dark:text-dbeats-white">
-                                {footerData.superfan_data.price3}
+                                {footerData.superfan_data && footerData.superfan_data.price3}
                               </p>
                             </>
                           </div>
                           <button
-                            onClick={() => handleDonation(footerData.superfan_data.price3)}
+                            onClick={() =>
+                              handleDonation(
+                                footerData.superfan_data && footerData.superfan_data.price3,
+                              )
+                            }
                             className="rounded-full block shadow text-center col-span-1  bg-white dark:bg-dbeats-dark-primary text-black dark:text-white  
                            2xl:w-max w-max px-5 lg:w-60  mx-auto py-2      font-semibold   border border-dbeats-light dark:border-dbeats-light dark:hover:border-dbeats-light  hover:border-dbeats-light hover:shadow-none 
                            transition-all transform hover:scale-99 hover:bg-dbeats-light dark:hover:bg-dbeats-light hover:text-white "
@@ -941,7 +952,7 @@ const PlayBackInfo = (props) => {
                             <span className="font-semibold text-md px-4 ">Join</span>
                           </button>
                           <p className="  text-gray-800 dark:text-gray-300 mt-4">
-                            {footerData.superfan_data.perks3}
+                            {footerData.superfan_data && footerData.superfan_data.perks3}
                           </p>
                         </div>
                       </div>
