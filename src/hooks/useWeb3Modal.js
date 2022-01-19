@@ -12,7 +12,7 @@ const NETWORK_NAME = 'mainnet';
 const useWeb3Modal = (config = {}) => {
   const [provider, setProvider] = useState();
   const [autoLoaded, setAutoLoaded] = useState(false);
-  const { autoLoad = false, NETWORK = NETWORK_NAME } = config;
+  const { autoLoad = true, NETWORK = NETWORK_NAME } = config;
 
   // Web3Modal also supports many other wallets.
   // You can see other options at https://github.com/Web3Modal/web3modal

@@ -33,3 +33,9 @@ html {
 .close-thik:after {
   content: '✖'; /* UTF-8 symbol */
 }
+
+/* Toggle B */
+input:checked ~ .dot {
+  transform: translateX(100%);
+  background-color: #00d3ff;
+}

@@ -5,20 +5,20 @@ import axios from 'axios';
 import moment from 'moment';
 import React, { Fragment, useEffect, useState } from 'react';
 import { Container, Row } from 'react-bootstrap';
-import Lottie from 'react-lottie';
 import Modal from 'react-modal';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import superfluid from '../../../../assets/images/superfluid-black.svg';
 import { Playlist } from '../../../../component/Modals/PlaylistModals/PlaylistModal';
 import { ShareModal } from '../../../../component/Modals/ShareModal/ShareModal';
 import PageNotFound from '../../../../component/PageNotFound/PageNotFound';
 import VideoPlayer from '../../../../component/VideoPlayer/VideoPlayer';
-import animationDataConfetti from '../../../../lotties/confetti.json';
 import animationDataNotFound from '../../../../lotties/error-animation.json';
-import animationData from '../../../../lotties/fans.json';
-import animationDataGiraffee from '../../../../lotties/giraffee.json';
 import RecommendedCard from './RecommendedCard';
+import dbeatsLogoBnW from '../../../../assets/images/Logo/logo-blacknwhite.png';
+
+import maticLogo from '../../../../assets/graphics/polygon-matic-logo.svg';
+import Web3 from 'web3';
+import { Image } from 'react-img-placeholder';
 
 // import {Helmet} from "react-helmet";
 
@@ -46,32 +46,6 @@ const PlayBackInfo = (props) => {
   const handleLoginClose = () => setShowLogin(false);
   const handleLoginShow = () => setShowLogin(true);
 
-  const defaultOptions = {
-    loop: true,
-    autoplay: false,
-    animationData: animationData,
-    rendererSettings: {
-      preserveAspectRatio: 'xMidYMid slice',
-    },
-  };
-  const defaultOptions2 = {
-    loop: true,
-    autoplay: false,
-    animationData: animationDataConfetti,
-    rendererSettings: {
-      preserveAspectRatio: 'xMidYMid slice',
-    },
-  };
-
-  const defaultOptions3 = {
-    loop: true,
-    autoplay: false,
-    animationData: animationDataGiraffee,
-    rendererSettings: {
-      preserveAspectRatio: 'xMidYMid slice',
-    },
-  };
-
   const user = JSON.parse(window.localStorage.getItem('user'));
 
   const [playbackUrl, setPlaybackUrl] = useState('');
@@ -90,6 +64,12 @@ const PlayBackInfo = (props) => {
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const [showBuyCrypto, setShowBuyCrypto] = useState(false);
+  const buyCrypto = () => setShowBuyCrypto(!showBuyCrypto);
+
+  const [showRecurring, setShowRecurring] = useState(false);
+  const toggleRecurring = () => setShowRecurring(!showRecurring);
 
   const [show, setShow] = useState(false);
 
@@ -463,6 +443,52 @@ const PlayBackInfo = (props) => {
     //const details = await carol2.details();
     //console.log(details.cfa.flows.outFlows[0]);
   };
+  const Web3 = require('web3');
+
+  const ethEnabled = async () => {
+    if (window.ethereum) {
+      await window.ethereum.send('eth_requestAccounts');
+      window.web3 = new Web3(window.ethereum);
+      console.log('web3 enabled');
+
+      return true;
+    }
+    console.log('web3 not enabled');
+
+    return false;
+  };
+
+  const handleDonation = async (amount) => {
+    const donationAmountInWei = amount * 1e18;
+
+    if (ethEnabled) {
+      const transactionParameters = {
+        nonce: '0x00', // ignored by MetaMask
+        // gasPrice: '0x09184e72a000', // customizable by user during MetaMask confirmation.
+        // gas: '0x2710', // customizable by user during MetaMask confirmation.
+        to: '0x0000000000000000000000000000000000000000', // Required except during contract publications.
+        from: window.ethereum.selectedAddress, // must match user's active address.
+        value: Number(donationAmountInWei).toString(16), // Only required to send ether to the recipient from the initiating external account.
+        data: '0x7f7465737432000000000000000000000000000000000000000000000000000000600057', // Optional, but used for defining smart contract creation and interaction.
+        chainId: '0x3', // Used to prevent transaction reuse across blockchains. Auto-filled by MetaMask.
+      };
+
+      var web3 = new Web3(window.ethereum);
+      var accounts = await web3.eth.getAccounts();
+      console.log(accounts[0]);
+
+      console.log('Amount in wei', donationAmountInWei);
+      console.log('Amount in HexaDecimal', Number(donationAmountInWei).toString(16));
+
+      // txHash is a hex string
+      // As with any RPC call, it may throw an error
+      const txHash = await window.ethereum.request({
+        method: 'eth_sendTransaction',
+        params: [transactionParameters],
+      });
+      console.log(txHash);
+    }
+  };
   return (
     <>
       {videoPresent ? (
@@ -678,10 +704,13 @@ const PlayBackInfo = (props) => {
           />
           <Modal
             isOpen={showSubscriptionModal}
-            className="h-max lg:w-max w-5/6 bg-white mx-auto 2xl:mt-60 lg:mt-20 mt-32 shadow "
+            className={`${darkMode && 'dark'}   mx-auto    mt-32 shadow `}
           >
-            <div className={`${darkMode && 'dark'} h-max w-max`}>
-              <h2 className="grid grid-cols-5 justify-items-center 2xl:text-2xl lg:text-md py-4 2xl:py-4 lg:py-2   text-center relative bg-gradient-to-b from-blue-50 via-blue-50 to-blue-50  dark:bg-gradient-to-b dark:from-dbeats-dark-primary  dark:to-dbeats-dark-primary">
+            <div className={`   mx-auto  bg-white dark:bg-dbeats-dark-primary w-max px-12`}>
+              <h2
+                className="grid grid-cols-5 justify-items-center 2xl:text-2xl lg:text-md py-4 2xl:py-4 lg:py-2   text-center relative 
+              bg-white dark:bg-dbeats-dark-primary    "
+              >
                 <div className="col-span-5    text-gray-900 dark:text-gray-100 font-bold">
                   SUPERFAN
                 </div>
@@ -694,30 +723,31 @@ const PlayBackInfo = (props) => {
               </h2>
 
               <div>
-                <Container className="px-4 pb-4 bg-gradient-to-b from-blue-50 via-blue-50 to-white  dark:bg-gradient-to-b dark:from-dbeats-dark-primary  dark:to-dbeats-dark-primary">
-                  <div className="relative grid grid-cols-6 hidden">
-                    <div className="   col-span-2">
-                      <Lottie
-                        options={defaultOptions2}
-                        height={window.innerWidth >= '1536' ? 200 : 150}
-                        width={window.innerWidth >= '1536' ? 500 : 300}
-                      />
-                    </div>
-                    <div className="col-span-2 ">
-                      <Lottie
-                        options={defaultOptions}
-                        height={window.innerWidth >= '1536' ? 200 : 150}
-                        width={window.innerWidth >= '1536' ? 300 : 200}
-                      />
-                    </div>
-                    <div className="   col-span-2">
-                      <Lottie
-                        options={defaultOptions3}
-                        height={window.innerWidth >= '1536' ? 200 : 150}
-                        width={window.innerWidth >= '1536' ? 500 : 300}
-                      />
-                    </div>
-                  </div>
+                <Container className="  px-4 pb-4    dark:bg-gradient-to-b dark:from-dbeats-dark-primary  dark:to-dbeats-dark-primary">
+                  <div className="flex items-center justify-center w-full mb-4">
+                    <label className="flex items-center cursor-pointer">
+                      <div className="mr-3 text-gray-700 dark:text-dbeats-white  font-medium ">
+                        One Time
+                      </div>
+
+                      <div className="relative">
+                        <input
+                          type="checkbox"
+                          id="toggleB"
+                          className="sr-only"
+                          onClick={toggleRecurring}
+                        />
+
+                        <div className="block bg-gray-600 w-14 h-8 rounded-full"></div>
+
+                        <div className="dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition"></div>
+                      </div>
+
+                      <div className="ml-3 text-gray-700 dark:text-dbeats-white  font-medium">
+                        Recurring
+                      </div>
+                    </label>
+                  </div>{' '}
                   {/* 
                   <button
                     onClick={handleCloseSubscriptionModal}
@@ -725,53 +755,226 @@ const PlayBackInfo = (props) => {
                   >
                     Cancel
                   </button> */}
-                  {footerData.superfan_data ? (
-                    <div className="grid grid-cols-3 2xl:gap-4 lg:gap-2 w-full   self-center">
-                      <button
-                        onClick={() => testFlow(footerData.superfan_data.price)}
-                        className="block shadow text-center col-span-1      2xl:w-max w-max px-5 lg:w-60  mx-auto py-2     text-black dark:text-white font-semibold   border dark:bg-dbeats-dark-alt hover:border-dbeats-light hover:shadow-none transition-all transform hover:scale-99 hover:bg-dbeats-light "
-                      >
-                        <span className="font-bold 2xl:text-2xl lg:text-sm">
-                          {footerData.superfan_data.price} DBEATx
-                        </span>
+                  {!showBuyCrypto ? (
+                    footerData.superfan_data && showRecurring ? (
+                      <p className="font-bold text-dbeats-light text-lg text-center self-center">
+                        COMING SOON!
+                      </p>
+                    ) : (
+                      //Enable this when you want to stream payment using Superfluid
+                      /*   {<div className="grid grid-cols-3 2xl:gap-4 lg:gap-2 w-full   self-center">
+                        <button
+                          onClick={() => testFlow(footerData.superfan_data.price)}
+                          className="block shadow text-center col-span-1  bg-white   dark:bg-dbeats-dark-alt text-black dark:text-white  
+                           2xl:w-max w-max px-5 lg:w-60  mx-auto py-2      font-semibold   border border-dbeats-light dark:border-dbeats-white dark:hover:border-dbeats-light rounded hover:border-dbeats-light hover:shadow-none 
+                           transition-all transform hover:scale-99 hover:bg-dbeats-light dark:hover:bg-dbeats-light hover:text-white "
+                        >
+                          <span className="font-bold 2xl:text-2xl lg:text-sm">
+                            {footerData.superfan_data.price} MATICx
+                          </span>
 
-                        <span className="  lg:text-sm">/per second</span>
-                        <br></br>
+                          <span className="  lg:text-sm">/per second</span>
+                          <br></br>
 
-                        <p className="2xl:text-sm lg:text-xs font-thin text-gray-800 dark:text-gray-300">
-                          {footerData.superfan_data.perks}
-                        </p>
-                      </button>
-                      <button
-                        onClick={() => testFlow(footerData.superfan_data.price2)}
-                        className="  shadow text-center col-span-1     2xl:w-max w-max px-5 lg:w-60  mx-auto py-2       text-black dark:text-white font-semibold   border dark:bg-dbeats-dark-alt hover:border-dbeats-light hover:shadow-none transition-all transform hover:scale-99 hover:bg-dbeats-light "
-                      >
-                        <span className="font-bold 2xl:text-2xl lg:text-sm">
-                          {footerData.superfan_data.price2} DBEATx
-                        </span>
+                          <p className="2xl:text-sm lg:text-xs font-thin text-gray-800 dark:text-gray-300">
+                            {footerData.superfan_data.perks}
+                          </p>
+                        </button>
+                        <button
+                          onClick={() => testFlow(footerData.superfan_data.price2)}
+                          className="  shadow text-center col-span-1     bg-white dark:bg-dbeats-dark-alt text-black dark:text-white  
+                         2xl:w-max w-max px-5 lg:w-60  mx-auto py-2        font-semibold   border border-dbeats-light dark:border-dbeats-white dark:hover:border-dbeats-light rounded hover:border-dbeats-light hover:shadow-none 
+                         transition-all transform hover:scale-99 hover:bg-dbeats-light dark:hover:bg-dbeats-light hover:text-white "
+                        >
+                          <span className="font-bold 2xl:text-2xl lg:text-sm">
+                            {footerData.superfan_data.price2} MATICx
+                          </span>
 
-                        <span className="  lg:text-sm">/per second</span>
-                        <br></br>
-                        <span className="2xl:text-sm lg:text-xs font-thin text-gray-800 dark:text-gray-300">
-                          {footerData.superfan_data.perks2}
-                        </span>
-                      </button>
-                      <button
-                        onClick={() => testFlow(footerData.superfan_data.price3)}
-                        className="block shadow text-center col-span-1     2xl:w-max w-max px-5 lg:w-60  mx-auto py-2     text-black dark:text-white font-semibold   border dark:bg-dbeats-dark-alt hover:border-dbeats-light hover:shadow-none transition-all transform hover:scale-99 hover:bg-dbeats-light "
-                      >
-                        <span className="font-bold 2xl:text-2xl lg:text-sm">
-                          {footerData.superfan_data.price3} DBEATx
-                        </span>
+                          <span className="  lg:text-sm">/per second</span>
+                          <br></br>
+                          <span className="2xl:text-sm lg:text-xs font-thin text-gray-800 dark:text-gray-300">
+                            {footerData.superfan_data.perks2}
+                          </span>
+                        </button>
+                        <button
+                          onClick={() => testFlow(footerData.superfan_data.price3)}
+                          className="block shadow text-center col-span-1 bg-white dark:bg-dbeats-dark-alt text-black dark:text-white  
+                           2xl:w-max w-max px-5 lg:w-60  mx-auto py-2      font-semibold   border border-dbeats-light dark:border-dbeats-white dark:hover:border-dbeats-light rounded hover:border-dbeats-light hover:shadow-none 
+                           transition-all transform hover:scale-99 hover:bg-dbeats-light dark:hover:bg-dbeats-light hover:text-white "
+                        >
+                          <span className="font-bold 2xl:text-2xl lg:text-sm">
+                            {footerData.superfan_data.price3} MATICx
+                          </span>
 
-                        <span className="  lg:text-sm">/per second</span>
-                        <br></br>
+                          <span className="  lg:text-sm">/per second</span>
+                          <br></br>
 
-                        <span className="2xl:text-sm lg:text-xs font-thin text-gray-800 dark:text-gray-300">
-                          {footerData.superfan_data.perks3}
-                        </span>
-                      </button>
-                    </div>
+                          <span className="2xl:text-sm lg:text-xs font-thin text-gray-800 dark:text-gray-300">
+                            {footerData.superfan_data.perks3}
+                          </span>
+                        </button>
+                      </div> }*/
+                      <div className="grid grid-cols-3 gap-4    self-center mx-5">
+                        <div
+                          className="w-52 h-max dark:border-dbeats-light border dark:border-opacity-40 
+                        dark:bg-dbeats-dark-secondary rounded-lg p-4 mt-5"
+                        >
+                          <p className="font-bold text-lg text-center text-dbeats-light">
+                            {footerData.superfan_data.plan ? footerData.superfan_data.plan : 'Lite'}
+                          </p>
+
+                          <Image
+                            src={
+                              footerData.superfan_data.planImage
+                                ? footerData.superfan_data.planImage
+                                : dbeatsLogoBnW
+                            }
+                            height={80}
+                            width={80}
+                            className="object-cover  h-24 w-24 mx-auto rounded-full  mt-1"
+                            alt=""
+                            placeholderSrc={dbeatsLogoBnW}
+                          />
+                          <div className=" flex text-2xl font-bold mx-auto justify-center  text-center mt-3 mb-2">
+                            <>
+                              <img className="h-6 w-6 self-center mr-1" src={maticLogo}></img>
+                              <p className=" text-3xl font-bold   text-center dark:text-dbeats-white">
+                                {footerData.superfan_data.price}
+                              </p>
+                            </>
+                          </div>
+                          <button
+                            onClick={() => handleDonation(footerData.superfan_data.price)}
+                            className="rounded-full block shadow text-center col-span-1  bg-white dark:bg-dbeats-dark-primary text-black dark:text-white  
+                           2xl:w-max w-max px-5 lg:w-60  mx-auto py-2      font-semibold   border border-dbeats-light dark:border-dbeats-light dark:hover:border-dbeats-light  hover:border-dbeats-light hover:shadow-none 
+                           transition-all transform hover:scale-99 hover:bg-dbeats-light dark:hover:bg-dbeats-light hover:text-white "
+                          >
+                            <span className="font-semibold text-md px-4 ">Join</span>
+                          </button>
+                          <p className="  text-gray-800 dark:text-gray-300 mt-4">
+                            {footerData.superfan_data.perks}
+                          </p>
+                        </div>
+                        <div className="bg-dbeats-light  rounded-lg">
+                          <p className="dark:text-white p-2 text-center mx-auto font-semibold">
+                            Most Popular
+                          </p>
+                          <div
+                            className="w-52 h-max  dark:border-dbeats-light border dark:border-opacity-40 
+                        dark:bg-dbeats-dark-secondary rounded-lg p-4"
+                          >
+                            <p className="font-bold text-lg text-center text-dbeats-light">
+                              {footerData.superfan_data.plan2
+                                ? footerData.superfan_data.plan2
+                                : 'Lite'}
+                            </p>
+
+                            <Image
+                              src={
+                                footerData.superfan_data.planImage
+                                  ? footerData.superfan_data.planImage
+                                  : dbeatsLogoBnW
+                              }
+                              height={80}
+                              width={80}
+                              className="object-cover  h-24 w-24 mx-auto rounded-full  mt-1"
+                              alt=""
+                              placeholderSrc={dbeatsLogoBnW}
+                            />
+                            <div className=" flex text-2xl font-bold mx-auto justify-center  text-center mt-3 mb-2">
+                              <>
+                                <img className="h-6 w-6 self-center mr-1" src={maticLogo}></img>
+                                <p className=" text-3xl font-bold   text-center dark:text-dbeats-white">
+                                  {footerData.superfan_data.price2}
+                                </p>
+                              </>
+                            </div>
+                            <button
+                              onClick={() => handleDonation(footerData.superfan_data.price2)}
+                              className="rounded-full block shadow text-center col-span-1  bg-white dark:bg-dbeats-dark-primary text-black dark:text-white  
+                           2xl:w-max w-max px-5 lg:w-60  mx-auto py-2      font-semibold   border border-dbeats-light dark:border-dbeats-light dark:hover:border-dbeats-light  hover:border-dbeats-light hover:shadow-none 
+                           transition-all transform hover:scale-99 hover:bg-dbeats-light dark:hover:bg-dbeats-light hover:text-white "
+                            >
+                              <span className="font-semibold text-md px-4 ">Join</span>
+                            </button>
+                            <p className="  text-gray-800 dark:text-gray-300 mt-4">
+                              {footerData.superfan_data.perks2}
+                            </p>
+                          </div>
+                        </div>
+                        <div
+                          className="w-52 h-max self-center dark:border-dbeats-light border dark:border-opacity-40 
+                        dark:bg-dbeats-dark-secondary rounded-lg p-4"
+                        >
+                          <p className="font-bold text-lg text-center text-dbeats-light">
+                            {footerData.superfan_data.plan3
+                              ? footerData.superfan_data.plan3
+                              : 'Lite'}
+                          </p>
+
+                          <Image
+                            src={
+                              footerData.superfan_data.planImage
+                                ? footerData.superfan_data.planImage
+                                : dbeatsLogoBnW
+                            }
+                            height={80}
+                            width={80}
+                            className="object-cover  h-24 w-24 mx-auto rounded-full  mt-1"
+                            alt=""
+                            placeholderSrc={dbeatsLogoBnW}
+                          />
+                          <div className=" flex text-2xl font-bold mx-auto justify-center  text-center mt-3 mb-2">
+                            <>
+                              <img className="h-6 w-6 self-center mr-1" src={maticLogo}></img>
+                              <p className=" text-3xl font-bold   text-center dark:text-dbeats-white">
+                                {footerData.superfan_data.price3}
+                              </p>
+                            </>
+                          </div>
+                          <button
+                            onClick={() => handleDonation(footerData.superfan_data.price3)}
+                            className="rounded-full block shadow text-center col-span-1  bg-white dark:bg-dbeats-dark-primary text-black dark:text-white  
+                           2xl:w-max w-max px-5 lg:w-60  mx-auto py-2      font-semibold   border border-dbeats-light dark:border-dbeats-light dark:hover:border-dbeats-light  hover:border-dbeats-light hover:shadow-none 
+                           transition-all transform hover:scale-99 hover:bg-dbeats-light dark:hover:bg-dbeats-light hover:text-white "
+                          >
+                            <span className="font-semibold text-md px-4 ">Join</span>
+                          </button>
+                          <p className="  text-gray-800 dark:text-gray-300 mt-4">
+                            {footerData.superfan_data.perks3}
+                          </p>
+                        </div>
+                      </div>
+                    )
+                  ) : (
+                    ''
+                  )}
+                  <button
+                    className="group text-center flex shadow hover:shadow-none   hover:border-purple-700 hover:border border border-transparent hover:scale-99  
+                    transition-all duration-200 transform  bg-white px-4 py-2 mb-2 self-center align-middle text-purple-700  rounded font-semibold mt-4 mx-auto"
+                    onClick={buyCrypto}
+                  >
+                    {!showBuyCrypto ? (
+                      <>
+                        Buy MATIC
+                        <img
+                          className="h-5 w-h-5 ml-1 mr-1 self-center align-middle items-center group-hover:bg-white  group-hover:text-white"
+                          src={maticLogo}
+                          alt="logo"
+                        ></img>
+                      </>
+                    ) : (
+                      'Cancel'
+                    )}
+                  </button>
+                  {showBuyCrypto ? (
+                    <iframe
+                      src="https://buy.moonpay.com/?apiKey=[your_api_key]"
+                      allow="accelerometer; autoplay; camera; gyroscope; payment"
+                      width="100%"
+                      height="400px"
+                      frameBorder="0"
+                    ></iframe>
                   ) : (
                     ''
                   )}
