@@ -19,6 +19,8 @@ import CarouselCard from '../../Cards/CarouselCard';
 import PlaylistCard from '../../Cards/PlaylistCard';
 import ReactionCard from '../../Cards/ReactionCard';
 import TrackCard from '../../Cards/TrackCard';
+import dbeatsLogoBnW from '../../../../assets/images/Logo/logo-blacknwhite.png';
+import { Image } from 'react-img-placeholder';
 
 const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow, darkMode }) => {
   const [pinnedData, setPinnedData] = useState([]);
@@ -449,10 +451,18 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                 lg:h-32 md:h-36 md:w-36 h-28 w-28 bg-white   
                 dark:bg-dbeats-dark-primary overflow-hidden rounded-full    z-500 "
                     >
-                      <img
+                      {/* <img
                         src={profileImage}
                         alt=""
-                        className="relative h-full w-full  align-middle items-center   rounded-full  z-500 "
+                        className="relative h-full w-full dark:bg-dbeats-dark-alt align-middle items-center   rounded-full  z-500 "
+                      /> */}
+                      <Image
+                        src={profileImage ? profileImage : dbeatsLogoBnW}
+                        height={80}
+                        width={80}
+                        className="relative h-full w-full dark:bg-dbeats-dark-alt align-middle items-center   rounded-full  z-500 "
+                        alt=""
+                        placeholderSrc={dbeatsLogoBnW}
                       />
                       {privateUser ? (
                         <div className="flex justify-end ">

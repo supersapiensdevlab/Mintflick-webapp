@@ -21,7 +21,7 @@ const FeedbackForm = () => {
         leaveFrom="transform opacity-100   "
         leaveTo="transform   opacity-0  "
       >
-        <div className="mb-4 border border-gray-100 dark:text-gray-50 dark:border-dbeats-light dark:border-opacity-10 bg-white dark:bg-dbeats-dark-primary lg:rounded md:rounded sm:rounded shadow-sm dark:shadow-md    text-dbeats-dark-primary p-4 rounded   md:w-2/3 dialog ">
+        <div className="mb-4 border border-gray-100 dark:text-gray-50 dark:border-dbeats-light dark:border-opacity-10 bg-white dark:bg-dbeats-dark-primary lg:rounded md:rounded sm:rounded shadow-sm dark:shadow-md    text-dbeats-dark-primary p-4 rounded   md:w-1/2 dialog ">
           {!showFeedback ? (
             <div>
               <div className="justify-between flex">

@@ -201,7 +201,7 @@ const Home = () => {
             {/* {classes.other_videos} */}
             <div className="pt-18 flex flex-col justify-between col-span-6  lg:col-span-5 h-full   bg-dbeats-white   dark:bg-dbeats-dark-secondary">
               <div>
-                <div id="display_videos" className="lg:my-5 lg:px-4 h-max hidden">
+                <div id="display_videos" className="lg:my-5 lg:px-4 h-max  ">
                   <div className=" lg:px-4 h-max">
                     {slides.length > 2 ? (
                       <div className=" ">
@@ -211,7 +211,7 @@ const Home = () => {
                   </div>
                 </div>
                 <div className=" 2xl:px-4 ">
-                  <div id="display_playback_videos" className=" 2xl:px-4 px-1 hidden">
+                  <div id="display_playback_videos" className=" 2xl:px-4 px-1  ">
                     <div>
                       <h4 className=" font-bold  2xl:pb-4 lg:pb-2">
                         {activeStreams ? (

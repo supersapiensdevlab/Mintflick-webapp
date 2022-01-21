@@ -3,7 +3,9 @@ import React, { useEffect, useState } from 'react';
 import Carousel from 'react-grid-carousel';
 import Lottie from 'react-lottie';
 import { useSelector } from 'react-redux';
-import logo from '../..//assets/images/logo.svg';
+import logo from '../../assets/images/logo.svg';
+import dbeatsLogoBnW from '../../assets/images/Logo/logo-blacknwhite.png';
+
 import animationData from '../../lotties/gamers.json';
 import ResponsiveCarousel from './Cards/HomeSlider';
 import LiveCard from './Cards/LiveCard';
@@ -125,64 +127,36 @@ const Home = () => {
                     <div>
                       <h5 className="p-2 font-semibold 2xl:text-base lg:text-xs text-dbeats-dark-primary dark:text-gray-200">
                         {' '}
-                        Latest videos
+                        Who to Follow
                       </h5>
                       {latestVideo.map((video, i) => {
                         if (i < 5) {
                           return (
-                            <div key={i} className="flex items-center pb-4">
-                              <div className="border border-gray-100 dark:text-gray-50 dark:border-dbeats-light dark:border-opacity-10 bg-white dark:bg-dbeats-dark-primary lg:rounded md:rounded sm:rounded shadow-sm dark:shadow-md    text-dbeats-dark-primary p-2 rounded   w-full dialog ">
-                                <Link to={`/playback/${video.username}/${video.videoId}`}>
+                            <div key={i} className="flex items-center pb-2">
+                              <div
+                                className="border flex border-gray-100 dark:text-gray-50 dark:border-dbeats-light dark:border-opacity-10 
+                              bg-white dark:bg-dbeats-dark-primary lg:rounded md:rounded sm:rounded shadow-sm dark:shadow-md    text-dbeats-dark-primary p-2 rounded    w-full  dialog "
+                              >
+                                <Link to={`/profile/${video.username}`}>
                                   <img
-                                    src={video.videoImage !== '' ? video.videoImage : logo}
+                                    src={
+                                      video.profile_image !== ''
+                                        ? video.profile_image
+                                        : dbeatsLogoBnW
+                                    }
                                     alt=""
-                                    className=" w-auto h-32 bg-gray-100 mx-auto"
+                                    className=" w-12  h-12   bg-gray-100 self-center rounded-full"
                                   />
                                 </Link>
-                                <div className="py-3">
-                                  <p className="truncate   text-dbeats-dark-primary dark:text-gray-200 2xl:font-bold lg:text-xs">
-                                    {video.videoName}
+                                <div className="pl-3">
+                                  <p className="truncate 2xl:w-40 lg:w-28 text-dbeats-dark-primary dark:text-gray-200 2xl:font-bold lg:text-xs">
+                                    {console.log(video)}
+                                    {video.name}
                                   </p>
                                   <span className="  2xl:text-sm lg:text-xs text-gray-400   flex">
                                     {' '}
                                     {video.username}{' '}
                                     {video.is_verified ? (
-                                      <Verified className="h-4 w-4  items-center self-center justify-center text-dbeats-light mx-1" />
-                                    ) : null}
-                                  </span>
-                                </div>
-                              </div>
-                            </div>
-                          );
-                        }
-                      })}
-                    </div>
-                    <div>
-                      <h5 className="pb-2 font-semibold 2xl:text-base   lg:text-xs text-dbeats-dark-primary dark:text-gray-200">
-                        {' '}
-                        Latest Musics
-                      </h5>
-                      {latestTrack.map((track, i) => {
-                        if (i < 5) {
-                          return (
-                            <div key={i} className="flex items-center pb-4">
-                              <div className="border flex border-gray-100 dark:text-gray-50 dark:border-dbeats-light dark:border-opacity-10 bg-white dark:bg-dbeats-dark-primary lg:rounded md:rounded sm:rounded shadow-sm dark:shadow-md    text-dbeats-dark-primary p-2 rounded    w-full  dialog ">
-                                <Link to={`/track/${track.username}/${track.trackId}`}>
-                                  <img
-                                    src={track.trackImage !== '' ? track.trackImage : logo}
-                                    alt=""
-                                    className=" w-20  h-20   bg-gray-100 self-center"
-                                  />
-                                </Link>
-                                <div className="pl-3">
-                                  <p className="truncate 2xl:w-40 lg:w-28 text-dbeats-dark-primary dark:text-gray-200 2xl:font-bold lg:text-xs">
-                                    {' '}
-                                    {track.trackName}
-                                  </p>
-                                  <span className="  2xl:text-sm lg:text-xs text-gray-400   flex">
-                                    {' '}
-                                    {track.username}{' '}
-                                    {track.is_verified ? (
                                       <Verified className="h-4 w-4  items-center self-center justify-center text-dbeats-light mx-1" />
                                     ) : null}
                                   </span>
@@ -203,7 +177,7 @@ const Home = () => {
             {/* {classes.other_videos} */}
             <div className="pt-18 flex flex-col justify-between col-span-6  lg:col-span-5 h-full   bg-dbeats-white   dark:bg-dbeats-dark-secondary">
               <div>
-                <div id="display_videos" className="lg:my-5 lg:px-4 h-max  ">
+                <div id="display_videos" className=" h-max  ">
                   <div className=" lg:px-4 h-max">
                     {slides.length > 2 ? (
                       <div className=" ">
@@ -213,7 +187,7 @@ const Home = () => {
                   </div>
                 </div>
                 <div className=" 2xl:px-4 ">
-                  <div id="display_playback_videos" className=" 2xl:px-4 px-1  ">
+                  <div id="display_playback_videos" className=" mb-2">
                     <div>
                       <h4 className=" font-bold  2xl:pb-4 lg:pb-2">
                         {activeStreams ? (
@@ -221,13 +195,13 @@ const Home = () => {
                           activeStreams.length > 5 ? (
                             <>
                               <p className="mb-3 w-max mx-auto   self-center text-center  drop-shadow text-2xl  font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-blue-500 dark:from-white dark:to-gray-800">
-                                <span className=" bg-red-900 animate-ping mr-2 rounded-full   inline-block  h-2 w-2 self-center ">
+                                <span className=" bg-red-900 animate-ping   rounded-full   inline-block  h-2 w-2 self-center ">
                                   &middot;
                                 </span>
                                 LIVE
                               </p>
                               <div className="">
-                                <Carousel cols={5}>
+                                <Carousel cols={4}>
                                   {activeStreams.map((liveUser, i) => {
                                     if (activeStreams.length <= 2 || i >= 5) {
                                       return (
@@ -253,7 +227,7 @@ const Home = () => {
                     </div>
                   </div>
                   {user ? <MainToolbar></MainToolbar> : ''}
-                  <div id="display_playback_videos" className="2xl:px-4 lg:px-3 px-1">
+                  <div id="display_playback_videos" className=" px-1 mx-2 my-1">
                     <div className="  ">
                       <div className="flex my-1">
                         <Dropdown

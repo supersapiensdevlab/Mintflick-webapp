@@ -32,8 +32,8 @@ const MainToolbar = () => {
     <>
       <div className="m-1  font-bold dark:text-white ">
         <button
-          className="text-gray-500 lg:mx-2 2xl:mx-3 mx-4 rounded hover:bg-dbeats-light border-dbeats-light border border-opacity-10 
-                            dark:bg-dbeats-dark-alt 2xl:h-10 h-8 my-auto font-semibold cursor-pointer px-3 
+          className="text-gray-500 lg:mx-2 2xl:mx-3 mx-2 rounded hover:bg-dbeats-light border-dbeats-light border border-opacity-10 
+                            dark:bg-dbeats-dark-alt 2xl:h-10 h-8 my-auto font-semibold cursor-pointer px-3 text-sm sm:text-base 
                              hover:text-white dark:text-white dark:hover:bg-dbeats-light"
           onClick={() => {
             handleShowAnnouncement();
@@ -46,7 +46,9 @@ const MainToolbar = () => {
         </button>
 
         <button
-          className="text-gray-500 lg:mx-2 2xl:mx-3 mx-4 rounded hover:bg-dbeats-light border-dbeats-light border  dark:bg-dbeats-dark-alt 2xl:h-10 h-8 my-auto border-opacity-10 font-semibold cursor-pointer px-3  hover:text-white dark:text-white dark:hover:bg-dbeats-light"
+          className="text-gray-500 lg:mx-2 2xl:mx-3 mx-2 rounded hover:bg-dbeats-light border-dbeats-light border  
+          dark:bg-dbeats-dark-alt 2xl:h-10 h-8 my-auto border-opacity-10 font-semibold cursor-pointer px-3  hover:text-white text-sm sm:text-base
+          dark:text-white dark:hover:bg-dbeats-light"
           onClick={() => {
             handleCloseAnnouncement();
             handleShowVideoUpload();
@@ -57,7 +59,9 @@ const MainToolbar = () => {
           Upload Video
         </button>
         <button
-          className="text-gray-500 lg:mx-2 2xl:mx-3 mx-4 rounded hover:bg-dbeats-light border-dbeats-light border  dark:bg-dbeats-dark-alt 2xl:h-10 h-8 my-auto border-opacity-10 font-semibold cursor-pointer px-3  hover:text-white dark:text-white dark:hover:bg-dbeats-light"
+          className="text-gray-500 lg:mx-2 2xl:mx-3 mx-2 rounded hover:bg-dbeats-light border-dbeats-light border  
+          dark:bg-dbeats-dark-alt 2xl:h-10 h-8 my-auto border-opacity-10 font-semibold cursor-pointer px-3  hover:text-white text-sm sm:text-base
+          dark:text-white dark:hover:bg-dbeats-light"
           onClick={() => {
             handleCloseAnnouncement();
             handleShowTrackUpload();
@@ -74,7 +78,9 @@ const MainToolbar = () => {
             handleCloseTrackUpload();
             handleCloseAnnouncement();
           }}
-          className="text-gray-500 lg:mx-2 2xl:mx-3 mx-4 rounded hover:bg-dbeats-light border-dbeats-light border  dark:bg-dbeats-dark-alt 2xl:h-10 h-8 my-auto border-opacity-10 font-semibold cursor-pointer px-3  hover:text-white dark:text-white dark:hover:bg-dbeats-light"
+          className="text-gray-500 lg:mx-2 2xl:mx-3 mx-2 rounded hover:bg-dbeats-light border-dbeats-light border  
+          dark:bg-dbeats-dark-alt 2xl:h-10 h-8 my-auto border-opacity-10 font-semibold cursor-pointer px-3  hover:text-white text-sm sm:text-base
+          dark:text-white dark:hover:bg-dbeats-light"
         >
           Mint NFT
         </button>

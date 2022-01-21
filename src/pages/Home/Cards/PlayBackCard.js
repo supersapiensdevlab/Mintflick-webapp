@@ -43,7 +43,8 @@ const PlayBackCard = (props) => {
         <div
           className={`${
             props.darkMode && 'dark'
-          }  mb-4 border border-gray-100 dark:text-gray-50 dark:border-dbeats-light dark:border-opacity-10 bg-white dark:bg-dbeats-dark-primary lg:rounded md:rounded sm:rounded shadow-sm dark:shadow-md    text-dbeats-dark-primary sm:p-4 rounded   md:w-2/3 dialog   w-full h-auto relative  `}
+          }  mb-4 border border-gray-100 dark:text-gray-50 dark:border-dbeats-light dark:border-opacity-10 bg-white dark:bg-dbeats-dark-primary 
+          lg:rounded md:rounded sm:rounded shadow-sm dark:shadow-md    text-dbeats-dark-primary sm:p-4 rounded   md:w-1/2 dialog    h-auto relative  `}
         >
           <div className="col-start-1 row-start-3 pb-2 pt-1  px-4 sm:px-0">
             <div className="flex   text-black text-sm font-medium mb-3">
