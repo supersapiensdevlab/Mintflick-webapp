@@ -32,7 +32,7 @@ const LiveCard = (props) => {
           />
         </Link>
       </div>
-      <div className="pl-3 text-sm w-full">
+      <div className="pl-3 text-sm w-full dark:text-dbeats-white">
         {/* <p className="text-2xl font-semibold mb-0">{props.value.videos[0].videoName.slice(0, 30) + " ..."}</p> */}
         <span>{props.value.name}</span>
         <i className="ml-1 fas fa-check-circle"></i>

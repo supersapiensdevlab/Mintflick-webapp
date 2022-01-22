@@ -11,6 +11,8 @@ import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import superfluid from '../../../../assets/images/superfluid-black.svg';
 import { ShareModal } from '../../../../component/Modals/ShareModal/ShareModal';
+import SuperfanModal from '../../../../component/Modals/SuperfanModal/superfan-modal';
+
 import VideoPlayer from '../../../../component/VideoPlayer/VideoPlayer';
 import animationDataConfetti from '../../../../lotties/confetti.json';
 import animationData from '../../../../lotties/fans.json';
@@ -19,19 +21,20 @@ import classes from '../Info.module.css';
 import LiveCard from './LiveCard';
 
 const PublicInfo = (props) => {
-  let sharable_data = `https://dbeats-demo.vercel.app /live/${props.stream_id}`;
+  let sharable_data = `${process.env.REACT_APP_SERVER_URL}/live/${props.stream_id}`;
   const darkMode = useSelector((darkmode) => darkmode.toggleDarkMode);
-  const [showSubscriptionModal, setshowSubscriptionModal] = useState(false);
 
-  const handleShowSubscriptionModal = () => setshowSubscriptionModal(true);
-  const handleCloseSubscriptionModal = () => setshowSubscriptionModal(false);
-  const [userData, setUserData] = useState(null);
+  const [userData, setUserData] = useState([]);
 
   const [privateUser, setPrivate] = useState(true);
 
   const user = JSON.parse(window.localStorage.getItem('user'));
 
   const [playbackUrl, setPlaybackUrl] = useState('');
+
+  const [showSubscriptionModal, setshowSubscriptionModal] = useState(false);
+  const handleCloseSubscriptionModal = () => setshowSubscriptionModal(false);
+  const handleShowSubscriptionModal = () => setshowSubscriptionModal(true);
 
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
@@ -110,19 +113,22 @@ const PublicInfo = (props) => {
   };
 
   const fetchData = async () => {
-    const fileRes = await axios.get(`${process.env.REACT_APP_SERVER_URL}/get_activeusers`);
+    const fileRes = await axios.get(`${process.env.REACT_APP_SERVER_URL}/user`);
     for (let i = 0; i < fileRes.data.length; i++) {
-      if (user ? fileRes.data[i].username !== user.username : true) {
-        await axios
-          .get(`${process.env.REACT_APP_SERVER_URL}/user/getuser_by_id/${fileRes.data[i].id}`)
-          .then((response) => {
-            if (response.data) {
-              setArrayData((prevState) => [...prevState, response.data]);
-            }
-          });
+      if (fileRes.data[i].videos) {
+        if (user ? fileRes.data[i].username === user.username : false) {
+          continue;
+        }
+        if (
+          fileRes.data[i].username !== props.video_username &&
+          fileRes.data[i].videos.length > 0
+        ) {
+          setArrayData((prevState) => [...prevState, fileRes.data[i]]);
+        }
       }
     }
     ////console.log(fileRes, "Hi");
+    //await sf.initialize();
   };
 
   useEffect(() => {
@@ -136,39 +142,6 @@ const PublicInfo = (props) => {
     }
     // eslint-disable-next-line
   }, []);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setButtonText(text);
-    }, 2000);
-    return () => clearTimeout(timer);
-  }, [buttonText]);
-
-  const defaultOptions = {
-    loop: true,
-    autoplay: false,
-    animationData: animationData,
-    rendererSettings: {
-      preserveAspectRatio: 'xMidYMid slice',
-    },
-  };
-  const defaultOptions2 = {
-    loop: true,
-    autoplay: false,
-    animationData: animationDataConfetti,
-    rendererSettings: {
-      preserveAspectRatio: 'xMidYMid slice',
-    },
-  };
-
-  const defaultOptions3 = {
-    loop: true,
-    autoplay: false,
-    animationData: animationDataGiraffee,
-    rendererSettings: {
-      preserveAspectRatio: 'xMidYMid slice',
-    },
-  };
 
   const testFlow = async (amount) => {
     const walletAddress = await window.ethereum.request({
@@ -208,55 +181,76 @@ const PublicInfo = (props) => {
         }  grid sm:grid-cols-1 lg:grid-cols-3 grid-flow-row pt-3 pb-50 mt-10 lg:ml-12  bg-gradient-to-b from-blue-50 via-blue-50 to-white  dark:bg-gradient-to-b dark:from-dbeats-dark-secondary  dark:to-dbeats-dark-primary`}
       >
         <div className=" lg:col-span-2">
-          <div className="self-center lg:px-8 w-screen lg:w-full lg:mt-3 mt-0.5">
+          <div className="self-center lg:px-8 w-screen lg:w-full lg:mt-3 mt-0.5  ">
             {userData ? (
               <VideoPlayer playbackUrl={playbackUrl} creatorData={userData} footer={true} />
             ) : null}
           </div>
 
-          <div className="lg:mx-7 lg:px-7 px-3">
-            <div className="lg:flex flex-row justify-between lg:my-2 my-1  ">
-              <div className="py-4">
+          <div className="2xl:mx-7 sm:p-2 p-3   dark:bg-dbeats-dark-secondary">
+            <div className=" flex  ">
+              <div className="2xl:py-4 lg:py-2 w-full">
                 <div className=" w-full text-left mt-0" style={{ padding: '0px' }}>
-                  {userData ? <p className="font-semibold text-xl pb-4">{}</p> : null}
+                  {userData.superfan_data ? (
+                    <p className="font-semibold 2xl:text-xl lg:text-md ">
+                      {userData.videos.videoName}
+                    </p>
+                  ) : null}
+                  {/* {time ? (
+                    <p className="  2xl:text-lg lg:text-xs text-md text-gray-400 pb-4">{time}</p>
+                  ) : null} */}
                 </div>
                 {!privateUser ? (
                   <div>
                     {user ? (
-                      <button
-                        className="bg-dbeats-light p-1 text-lg rounded-sm px-4 mr-3 font-semibold text-white "
-                        onClick={trackFollowers}
-                      >
-                        <span>{subscribeButtonText}</span>
-                      </button>
+                      <div className="flex items-center   w-full">
+                        <button
+                          className="flex items-center dark:bg-dbeats-dark-primary border border-dbeats-light dark:hover:bg-dbeats-light p-1 2xl:text-lg lg:text-sm text-md rounded-sm 2xl:px-4 px-4 lg:px-2 mr-3 font-semibold text-white "
+                          onClick={trackFollowers}
+                        >
+                          <span>{subscribeButtonText}</span>
+                          {/* <div
+                            hidden={loader}
+                            className="w-4 h-4 ml-2 border-t-4 border-b-4 border-white rounded-full animate-spin"
+                          ></div> */}
+                        </button>
+
+                        <button
+                          onClick={handleShowSubscriptionModal}
+                          className={
+                            userData.superfan_data
+                              ? ' dark:bg-dbeats-dark-primary border border-dbeats-light dark:hover:bg-dbeats-light p-1 2xl:text-lg lg:text-sm text-md  rounded-sm 2xl:px-4 px-4 lg:px-2      mr-3 font-semibold text-white   '
+                              : 'hidden'
+                          }
+                        >
+                          <span className={`${userData.superfan_data ? '' : 'hidden'}`}>
+                            Become a Superfan
+                          </span>
+                        </button>
+                      </div>
                     ) : (
                       <Link
                         to="/signup"
-                        className="bg-dbeats-light p-1 text-lg rounded-sm px-4 mr-3 font-semibold text-white "
+                        className="bg-dbeats-light  p-1 2xl:text-lg lg:text-sm text-md  rounded-sm 2xl:px-4 px-4 lg:px-2 mr-3 font-semibold text-white "
                       >
-                        <span>Login</span>
+                        <span>Login to Subscribe & Become a SuperFan</span>
                       </Link>
                     )}
-                    <button className="bg-dbeats-light    p-1 text-lg rounded-sm px-4 mr-3 font-semibold text-white ">
-                      <i className="fas fa-dice-d20  mr-1 cursor-pointer"></i>
-                      <span onClick={handleShowSubscriptionModal}>Become a SuperFan</span>
-                    </button>
                   </div>
                 ) : null}
               </div>
-              <div className="text-2xl lg:py-4 py-2 flex justify-around">
+              <div className="2xl:text-2xl lg:text-md 2xl:py-4 lg:py-2 py-2 flex justify-around dark:text-dbeats-white">
                 <div className="  text-center lg:mx-3">
                   <button className="border-0 bg-transparent" onClick={handleShow}>
-                    <i className="fas fa-share opacity-50 mx-2"></i>
+                    <i className="fas fa-share-alt opacity-50 mx-2"></i>
                   </button>
+                  <br />
+                  <p className="2xl:text-base  text-base lg:text-sm"> SHARE</p>
                 </div>
-                <i className="fas fa-heart opacity-50 mx-2"></i>
-                <i className="fas fa-heart-broken opacity-50 mx-2"></i>
-                <i className="far fa-laugh-squint opacity-50 mx-2"></i>
-                <i className="far fa-angry opacity-50 mx-2"></i>
+
                 <Menu as="div" className="relative inline-block text-left">
                   <div>
-                    <Menu.Button className="">
+                    <Menu.Button>
                       <i className="fas fa-ellipsis-h opacity-50 mx-2"></i>
                     </Menu.Button>
                   </div>
@@ -269,49 +263,16 @@ const PublicInfo = (props) => {
                     leaveFrom="transform opacity-100 scale-100"
                     leaveTo="transform opacity-0 scale-95"
                   >
-                    <Menu.Items className="absolute right-0 w-56 mt-2 origin-top-right bg-white  divide-y divide-gray-100   shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                    <Menu.Items className="  dark:bg-opacity-10 backdrop-filter  backdrop-blur-md absolute right-0 w-56  origin-top-right bg-white dark:bg-dbeats-dark-primary dark:text-gray-50 divide-y divide-gray-100   shadow   focus:outline-none">
                       <div className="px-1 py-1 ">
-                        <Menu.Item className="w-full text-gray-700 text-left text-lg pl-2 hover:text-white hover:bg-dbeats-light">
-                          <button>Edit</button>
-                        </Menu.Item>
-                        <Menu.Item className="w-full text-gray-700 text-left text-lg pl-2 hover:text-white hover:bg-dbeats-light">
-                          <button>Duplicate</button>
-                        </Menu.Item>
-                      </div>
-                      <div>
-                        <Menu.Item className="w-full text-gray-700 text-left text-lg pl-2 hover:text-white hover:bg-dbeats-light">
-                          <button>Archive</button>
-                        </Menu.Item>
-                        <Menu.Item className="w-full text-gray-700 text-left text-lg pl-2 hover:text-white hover:bg-dbeats-light">
-                          <button>Move</button>
-                        </Menu.Item>
-                      </div>
-                      <div>
-                        <Menu.Item className="w-full text-gray-700 text-left text-lg pl-2 hover:text-white hover:bg-dbeats-light">
-                          <button>Delete</button>
+                        <Menu.Item className="w-full text-gray-700 dark:text-gray-50 text-left text-lg pl-2 hover:text-white hover:bg-dbeats-light">
+                          <button>Report</button>
                         </Menu.Item>
                       </div>
                     </Menu.Items>
                   </Transition>
                 </Menu>
               </div>
-            </div>
-            {userData ? (
-              <div className="w-full dark:text-dbeats-white">
-                <hr />
-                <h4 className="py-2">Description : </h4>
-                <p className="pb-2">{userData.name}</p>
-                <hr />
-              </div>
-            ) : null}
-            <div className={`${classes.comment_section} hidden`}>
-              <iframe
-                className="w-full p-0 m-0 h-60 lg:h-88"
-                title="comment"
-                src="https://theconvo.space/embed/dt?threadId=KIGZUnR4RzXDFheXoOwo"
-                allowtransparency="true"
-                loading="eager"
-              />
             </div>
           </div>
         </div>
@@ -331,100 +292,12 @@ const PublicInfo = (props) => {
         setCopyButtonText={setButtonText}
       />
 
-      <Modal
-        visible={showSubscriptionModal}
-        className="h-max w-max"
-        effect="fadeInUp"
-        aria-labelledby="contained-modal-title-vcenter "
-        centered
-      >
-        <div className={`${darkMode && 'dark'} h-max w-max`}>
-          <h2 className="grid grid-cols-5 justify-items-center text-2xl py-4   text-center relative bg-gradient-to-b from-blue-50 via-blue-50 to-blue-50  dark:bg-gradient-to-b dark:from-dbeats-dark-primary  dark:to-dbeats-dark-primary">
-            <div className="col-span-5    text-gray-900 dark:text-gray-100 font-bold">SUPERFAN</div>
-            <div
-              className="ml-5 cursor-pointer text-gray-900 dark:text-gray-100 dark:bg-dbeats-dark-primary absolute right-10 top-5"
-              onClick={handleCloseSubscriptionModal}
-            >
-              <i className="fas fa-times"></i>
-            </div>
-          </h2>
-
-          <div>
-            <Container className="px-4 pb-4 bg-gradient-to-b from-blue-50 via-blue-50 to-white  dark:bg-gradient-to-b dark:from-dbeats-dark-primary  dark:to-dbeats-dark-primary">
-              <div className="relative grid grid-cols-6">
-                <div className="   col-span-2">
-                  <Lottie options={defaultOptions2} height={200} width={500} />
-                </div>
-                <div className="col-span-2 ">
-                  <Lottie options={defaultOptions} height={200} width={300} />
-                </div>
-                <div className="   col-span-2">
-                  <Lottie options={defaultOptions3} height={200} width={500} />
-                </div>
-              </div>
-              {/* 
-                  <button
-                    onClick={handleCloseSubscriptionModal}
-                    className=" block text-center col-span-1 px-5 w-full  mx-auto p-2 mt-4 mb-2  text-dbeats-light font-semibold rounded-lg border  border-dbeats-light hover:border-white hover:text-white hover:bg-dbeats-dark-secondary transition-all transform hover:scale-95"
-                  >
-                    Cancel
-                  </button> */}
-
-              <Row>
-                <div className="grid grid-cols-6 gap-4 w-full   self-center">
-                  <button
-                    onClick={() => testFlow(10)}
-                    className="  h-max shadow text-center col-span-6 lg:col-span-2   w-full  mx-auto p-2   text-black dark:text-white font-semibold hover:rounded   border dark:bg-dbeats-dark-alt border-dbeats-light hover:shadow-none transition-all transform hover:scale-99 hover:bg-dbeats-light "
-                  >
-                    <span className="font-bold text-2xl">10 DAI</span>
-                    <br></br>
-                    <span>PER MONTH</span>
-                    <br></br>
-                    <p className="text-sm font-thin text-gray-800 dark:text-gray-300">
-                      Fans who contribute at this level get my thanks and access to recipes and
-                      flash fiction.{' '}
-                    </p>
-                  </button>
-                  <button
-                    onClick={() => testFlow(30)}
-                    className="  shadow text-center col-span-6 lg:col-span-2   w-full  mx-auto p-2    text-black dark:text-white font-semibold   border dark:bg-dbeats-dark-alt border-dbeats-light hover:shadow-none transition-all transform hover:scale-99 hover:bg-dbeats-light "
-                  >
-                    <span className="font-bold text-2xl">30 DAI</span>
-                    <br></br>
-                    <span>PER MONTH</span>
-                    <br></br>
-                    <span className="text-sm font-thin text-gray-800 dark:text-gray-300">
-                      You get all the goodies, my thanks, written content, and you will see concept
-                      art for my Video Content before it goes public..{' '}
-                    </span>
-                  </button>
-                  <button
-                    onClick={() => testFlow(20)}
-                    className="block shadow text-center col-span-6 lg:col-span-2   w-full  mx-auto p-2  text-black dark:text-white font-semibold   border dark:bg-dbeats-dark-alt border-dbeats-light hover:shadow-none transition-all transform hover:scale-99 hover:bg-dbeats-light "
-                  >
-                    <span className="font-bold text-2xl">20 DAI</span>
-                    <br></br>
-                    <span>PER MONTH</span>
-                    <br></br>
-                    <span className="text-sm font-thin text-gray-800 dark:text-gray-300">
-                      Fans who contribute at this level get my thanks and access to recipes and
-                      flash fiction.{' '}
-                    </span>
-                  </button>
-                </div>
-              </Row>
-              <Row className="self-center text-center mt-5 dark:text-gray-500 font-semibold">
-                powered by{' '}
-                <img
-                  src={superfluid}
-                  alt="superfluid"
-                  className="h-10 rounded w-max  self-center mx-auto bg-white p-2 dark:bg-opacity-75"
-                ></img>
-              </Row>
-            </Container>
-          </div>
-        </div>
-      </Modal>
+      <SuperfanModal
+        userDataDetails={userData}
+        show={showSubscriptionModal}
+        handleClose={handleCloseSubscriptionModal}
+        className={`${darkMode && 'dark'}   mx-auto    mt-32 shadow `}
+      />
     </div>
   );
 };

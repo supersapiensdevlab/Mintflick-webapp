@@ -146,14 +146,14 @@ function VideoPlayer(props) {
 
   return (
     <>
-      <Container style={{ width: '100%' }}>
+      <Container style={{ width: '100%', height: '100%' }}>
         <div
           onMouseMove={handleMouseMove}
           onMouseLeave={hanldeMouseLeave}
           onClick={handleClickEvent}
           onDoubleClick={toggleFullScreen}
           ref={playerContainerRef}
-          className="relative w-full 2xl:h-120 lg:h-110 h-52"
+          className="relative w-full 2xl:h-120 lg:h-110 xs:h-100 min-h-full"
         >
           <ReactPlayer
             ref={playerRef}
