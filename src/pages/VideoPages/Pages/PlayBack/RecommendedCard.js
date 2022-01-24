@@ -4,6 +4,7 @@ import React, { Fragment, useEffect, useState } from 'react';
 import ReactPlayer from 'react-player';
 import { Link } from 'react-router-dom';
 import { ReactComponent as Verified } from '../../../../assets/icons/verified-account.svg';
+import { Playlist } from '../../../../component/Modals/PlaylistModals/PlaylistModal';
 
 moment().format();
 
@@ -12,6 +13,12 @@ const RecommendedCard = (props) => {
   const [index, setIndex] = useState(0);
 
   const [time, setTime] = useState(null);
+
+  // For Add To Playlist
+  const [userData,setUserData] = useState(null);
+  const [showPlaylist, setShowPlaylist] = useState(false);
+  const handleClosePlaylist = () => setShowPlaylist(false);
+  const handleShowPlaylist = () => setShowPlaylist(true);
 
   const handleMouseMove = () => {
     setPlaying(true);
@@ -25,6 +32,10 @@ const RecommendedCard = (props) => {
   useEffect(() => {
     let ind = props.value.videos.length - 1;
     setIndex(ind);
+    setUserData({
+      username:props.value.username,
+      videos:props.value.videos[ind]
+    })
 
     if (props.value.videos && props.value.videos.length > 0) {
       let videotime = props.value.videos[ind].time;
@@ -80,30 +91,28 @@ const RecommendedCard = (props) => {
           leaveTo="transform opacity-0 scale-95"
         >
           <Menu.Items className="absolute right-0 w-56 mt-2 origin-top-right bg-white divide-y divide-gray-100   shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-            <div className="px-1 py-1 ">
-              <Menu.Item className="w-full text-gray-700 text-left text-lg pl-2 hover:text-white hover:bg-dbeats-light">
-                <button>Edit</button>
-              </Menu.Item>
-              <Menu.Item className="w-full text-gray-700 text-left text-lg pl-2 hover:text-white hover:bg-dbeats-light">
-                <button>Duplicate</button>
-              </Menu.Item>
-            </div>
             <div className="px-1 py-1">
               <Menu.Item className="w-full text-gray-700 text-left text-lg pl-2 hover:text-white hover:bg-dbeats-light">
-                <button>Archive</button>
-              </Menu.Item>
-              <Menu.Item className="w-full text-gray-700 text-left text-lg pl-2 hover:text-white hover:bg-dbeats-light">
-                <button>Move</button>
-              </Menu.Item>
-            </div>
-            <div className="px-1 py-1">
-              <Menu.Item className="w-full text-gray-700 text-left text-lg pl-2 hover:text-white hover:bg-dbeats-light">
-                <button>Delete</button>
+                <button onClick={()=>{
+                   handleShowPlaylist();               
+                }}>Add to Playlist</button>
               </Menu.Item>
             </div>
           </Menu.Items>
         </Transition>
       </Menu>
+
+      {userData && userData.videos ? (
+            <Playlist
+              showPlaylist={showPlaylist}
+              setShowPlaylist={setShowPlaylist}
+              handleClosePlaylist={handleClosePlaylist}
+              handleShowPlaylist={handleShowPlaylist}
+              data={userData}
+              id={userData.videos.videoId}
+              datatype="video"
+            />
+          ) : null}
     </div>
   );
 };

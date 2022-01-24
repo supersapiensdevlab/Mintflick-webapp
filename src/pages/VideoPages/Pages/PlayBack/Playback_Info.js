@@ -66,6 +66,8 @@ const PlayBackInfo = (props) => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
+
+
   const [showBuyCrypto, setShowBuyCrypto] = useState(false);
   const buyCrypto = () => setShowBuyCrypto(!showBuyCrypto);
 
@@ -598,9 +600,6 @@ const PlayBackInfo = (props) => {
                       >
                         <Menu.Items className="  dark:bg-opacity-10 backdrop-filter  backdrop-blur-md absolute right-0 w-56  origin-top-right bg-white dark:bg-dbeats-dark-primary dark:text-gray-50 divide-y divide-gray-100   shadow   focus:outline-none">
                           <div className="px-1 py-1 ">
-                            <Menu.Item className="w-full text-gray-700 dark:text-gray-50 text-left text-lg pl-2 hover:text-white hover:bg-dbeats-light">
-                              <button>Edit</button>
-                            </Menu.Item>
                             {user ? (
                               <Menu.Item className="w-full text-gray-700 dark:text-gray-50 text-left text-lg pl-2 hover:text-white hover:bg-dbeats-light">
                                 <button
@@ -642,7 +641,7 @@ const PlayBackInfo = (props) => {
             <div className="  w-full pb-32  pt-2 col-span-1 sm:px-5 px-3  bg-opacity-30 bg-white sm:dark:bg-dbeats-dark-secondary dark:bg-dbeats-dark-alt text-black  dark:text-white">
               <div className=" w-full  grid grid-cols-1 grid-flow-row gap-3  ">
                 {arrayData.map((value, index) => {
-                  return <RecommendedCard key={index} value={value} darkMode={darkMode} />;
+                  return <RecommendedCard key={index} value={value} darkMode={darkMode}  handleShowPlaylist = {handleShowPlaylist}   />;
                 })}
               </div>
             </div>

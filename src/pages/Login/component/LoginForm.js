@@ -41,14 +41,17 @@ const LoginForm = ({
       data: userData,
     })
       .then((response) => {
-        if (response.data) {
+        if(response.data == 'invalidpassword'){
+          setInvalidPassword(true);
+        }
+        else if (response.data) {
           //console.log(response.data);
           Cookies.set('jwtToken', response.data.jwtToken, { expires: 7 });
           window.localStorage.setItem('user', JSON.stringify(response.data.username));
           //window.location.reload();
           window.location.href = '/';
         } else {
-          setInvalidPassword(true);
+          setInvalidUsername(true);
         }
       })
       .catch(function () {
