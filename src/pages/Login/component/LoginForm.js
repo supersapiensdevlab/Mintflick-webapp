@@ -27,7 +27,7 @@ const LoginForm = ({
     setInvalidPassword(false);
     setPassword(e.target.value);
   };
-
+  //This function handles User Login
   const handleLogin = () => {
     setLoader(false);
     const userData = {
