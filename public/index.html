@@ -33,14 +33,6 @@
       href=" https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/1.8.10/tailwind.min.css"
     />
 
-    <script>
-      (function (d, s) {
-        var js = d.createElement(s),
-          sc = d.getElementsByTagName(s)[0];
-        js.src = 'https://paywall.unlock-protocol.com/static/unlock.latest.min.js';
-        sc.parentNode.insertBefore(js, sc);
-      })(document, 'script');
-    </script>
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/favicon.ico" />
     <!--
       manifest.json provides metadata used when your web app is installed on a
@@ -60,23 +52,29 @@
     <script src="https://cdn.tailwindcss.com/"></script>
 
     <title>DBeats</title>
-  </head>
-  <body className="font-proxima-reg   ">
     <script>
       var unlockProtocolConfig = {
-        network: 4,
         locks: {
-          '0x74Bb04781E361d554A31d57503f36810C95D067F': {
-            network: 4,
-            name: 'Dbeats-Event',
+          '0xB0114bbDCe17e0AF91b2Be32916a1e236cf6034F': {
+            name: 'The Unlock Members lock',
           },
         },
-        icon: 'https://unlock-protocol.com/static/images/svg/unlock-word-mark.svg',
+        icon: 'https://unlock-protocol.com/images/svg/unlock-word-mark.svg',
         callToAction: {
-          default: 'Purchase tickets before you can join the event!',
+          default: 'Please Unlock things!',
         },
       };
     </script>
+    <script>
+      (function (d, s) {
+        var js = d.createElement(s),
+          sc = d.getElementsByTagName(s)[0];
+        js.src = 'https://cdn.jsdelivr.net/npm/@unlock-protocol/unlock-js@0.20.4/lib/index.min.js';
+        sc.parentNode.insertBefore(js, sc);
+      })(document, 'script');
+    </script>
+  </head>
+  <body className="font-proxima-reg   ">
     <noscript>You need to enable JavaScript to run this app.</noscript>
 
     <div

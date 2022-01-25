@@ -1,8 +1,7 @@
 import { Web3Provider } from '@ethersproject/providers';
 import SuperfluidSDK from '@superfluid-finance/js-sdk';
-import moment from 'moment';
 import React, { useState } from 'react';
-import { Container, Row } from 'react-bootstrap';
+import { Container } from 'react-bootstrap';
 import Modal from 'react-modal';
 import { useSelector } from 'react-redux';
 
@@ -12,7 +11,11 @@ import maticLogo from '../../../assets/graphics/polygon-matic-logo.svg';
 
 import { Image } from 'react-img-placeholder';
 
+import validateTransaction from './validate';
+
 const SuperfanModal = ({ show, handleClose, userDataDetails }) => {
+  var Web3HttpProvider = require('web3-providers-http');
+
   const darkMode = useSelector((darkmode) => darkmode.toggleDarkMode);
 
   const [showBuyCrypto, setShowBuyCrypto] = useState(false);
@@ -21,10 +24,10 @@ const SuperfanModal = ({ show, handleClose, userDataDetails }) => {
   const [showRecurring, setShowRecurring] = useState(false);
   const toggleRecurring = () => setShowRecurring(!showRecurring);
 
-  const text = 'Copy Link To Clipboard';
-  const [buttonText, setButtonText] = useState(text);
-
-  const [subscribeButtonText, setSubscribeButtonText] = useState('Subscribe');
+  const [txInitiated, settxInitiated] = useState(false);
+  const [txSuccess, settxSuccess] = useState(false);
+  const [currentBlockNumber, setcurrentBlockNumber] = useState(null);
+  const [minimumBlockConfirmations] = useState(25);
 
   const testFlow = async (amount) => {
     const walletAddress = await window.ethereum.request({
@@ -72,7 +75,12 @@ const SuperfanModal = ({ show, handleClose, userDataDetails }) => {
     return false;
   };
 
+  var initialHash = [];
   const handleDonation = async (amount) => {
+    settxInitiated(false);
+    settxSuccess(false);
+    setcurrentBlockNumber(null);
+
     const donationAmountInWei = amount * 1e18;
 
     if (ethEnabled) {
@@ -89,6 +97,7 @@ const SuperfanModal = ({ show, handleClose, userDataDetails }) => {
 
       var web3 = new Web3(window.ethereum);
       var accounts = await web3.eth.getAccounts();
+
       console.log(accounts[0]);
 
       console.log('Amount in wei', donationAmountInWei);
@@ -100,7 +109,81 @@ const SuperfanModal = ({ show, handleClose, userDataDetails }) => {
         method: 'eth_sendTransaction',
         params: [transactionParameters],
       });
+      initialHash = txHash;
       console.log(txHash);
+
+      ////////////////////////////////////////////////////////////////////////////////
+
+      // Instantiate subscription object
+      const subscription = web3.eth.subscribe('newBlockHeaders');
+      // Subscribe to pending transactions
+      subscription
+        .subscribe((error, result) => {
+          if (error) console.log(error, result);
+        })
+        .on('data', async (data) => {
+          try {
+            console.log('Transaction hash is: ' + data['hash'] + '\n');
+            settxInitiated(true);
+            // Initiate transaction confirmation
+            confirmEtherTransaction(data['hash']);
+
+            // Unsubscribe from pending transactions.
+            subscription.unsubscribe();
+          } catch (error) {
+            console.log(error);
+          }
+        });
+
+      ////////////////////////////////////////////////////////////////////////////////
+    }
+
+    async function getConfirmations(txHash) {
+      try {
+        // Instantiate web3 with HttpProvider
+        const web3 = new Web3(window.ethereum);
+
+        console.log('Getting transaction details with Hash', initialHash);
+        // Get transaction details
+        const trx = await web3.eth.getTransactionReceipt(initialHash);
+        console.log('User Transaction has a blockNumber', trx['blockNumber']);
+
+        console.log('Getting current block number');
+
+        // Get current block number
+        const currentBlock = await web3.eth.getBlockNumber().then((blockNumber) => {
+          console.log('Current block number is: ' + blockNumber);
+          return blockNumber;
+        });
+
+        // When transaction is unconfirmed, its block number is null.
+        // In this case we return 0 as number of confirmations
+        return trx['blockNumber'] === null ? 0 : currentBlock - trx['blockNumber'];
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    function confirmEtherTransaction(txHash, confirmations = minimumBlockConfirmations) {
+      setTimeout(async () => {
+        console.log('Initiating transaction confirmation');
+        // Get current number of confirmations and compare it with sought-for value
+        const trxConfirmations = await getConfirmations(txHash);
+
+        console.log(
+          'Transaction with hash ' + txHash + ' has ' + trxConfirmations + ' confirmation(s)',
+        );
+        setcurrentBlockNumber(trxConfirmations);
+        if (trxConfirmations >= confirmations) {
+          // Handle confirmation event according to your business logic
+
+          console.log('Transaction with hash ' + txHash + ' has been successfully confirmed');
+          settxSuccess(true);
+          return;
+        }
+        // Recursive call
+        return confirmEtherTransaction(txHash, confirmations);
+      }, 5 * 1000);
     }
   };
 
@@ -391,6 +474,18 @@ const SuperfanModal = ({ show, handleClose, userDataDetails }) => {
                 height="400px"
                 frameBorder="0"
               ></iframe>
+            ) : (
+              ''
+            )}
+            {txInitiated && !txSuccess && currentBlockNumber === null ? (
+              <p className="dark:text-dbeats-light text-center">Transaction Initiated...</p>
+            ) : txInitiated && currentBlockNumber < minimumBlockConfirmations && !txSuccess ? (
+              <p className="dark:text-dbeats-light text-center">
+                Waiting for {minimumBlockConfirmations - currentBlockNumber} of{' '}
+                {minimumBlockConfirmations} Block confirmations
+              </p>
+            ) : txSuccess ? (
+              <p className="dark:text-dbeats-light text-center">Transaction Successfull</p>
             ) : (
               ''
             )}
