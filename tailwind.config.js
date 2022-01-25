@@ -51,7 +51,9 @@ module.exports = {
       backdropBlur: {
         lg: '20px',
       },
-
+      maxHeight: {
+        125: '43rem',
+      },
       grayscale: { 50: '50%', 75: '75%' },
       width: {
         250: '250px',
@@ -64,6 +66,7 @@ module.exports = {
         90: '90px',
         110: '28rem',
         120: '42rem',
+        125: '43rem',
         150: '150px',
         200: '200px',
         180: '180px',

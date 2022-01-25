@@ -150,7 +150,6 @@ const Home = () => {
                                 </Link>
                                 <div className="pl-3">
                                   <p className="truncate 2xl:w-40 lg:w-28 text-dbeats-dark-primary dark:text-gray-200 2xl:font-bold lg:text-xs">
-                                    {console.log(video)}
                                     {video.name}
                                   </p>
                                   <span className="  2xl:text-sm lg:text-xs text-gray-400   flex">

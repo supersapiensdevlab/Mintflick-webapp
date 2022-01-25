@@ -185,7 +185,7 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
                   <div className="bg-gray-50 dark:bg-dbeats-dark-alt px-4 pb-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                     <dt className="text-sm font-medium text-gray-500 dark:text-dbeats-white   self-center align-middle ">
                       Pricing<br></br>
-                      <span className="font-mono"> (DBEATx/second)</span>
+                      <span className="font-mono"> (MATIC)</span>
                     </dt>
                     <dd className="  text-sm text-gray-900 dark:text-gray-100 sm:mt-0 sm:col-span-2">
                       <div className="  flex rounded-md shadow-sm">

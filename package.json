@@ -30,6 +30,7 @@
     "draftjs-to-html": "^0.9.1",
     "ethers": "^5.5.2",
     "express": "^4.17.1",
+    "get-video-duration": "^4.0.0",
     "gun": "^0.2020.1235",
     "hardhat": "^2.7.1",
     "ipfs-http-client": "^50.1.2",
@@ -95,7 +96,7 @@
     "not dead",
     "not op_mini all"
   ],
-  "proxy": "http://localhost:5000",
+   
   "devDependencies": {
     "autoprefixer": "^9.8.6",
     "postcss": "^7.0.36",
