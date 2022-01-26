@@ -133,7 +133,7 @@ const Profile = () => {
               />
               <Switch>
                 <Route path={`/profile/:username/text`}>
-                  <ChatRoom userp={user}></ChatRoom>
+                  <ChatRoom userp={user} privateUser={privateUser}></ChatRoom>
                 </Route>
                 <Route path={`/profile/:username/store`}>
                   <NFTStore NFTData={NFTData} />

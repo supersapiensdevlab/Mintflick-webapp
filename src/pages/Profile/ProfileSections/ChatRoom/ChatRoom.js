@@ -1,66 +1,53 @@
-import Gun from 'gun';
+
 import React, { useEffect, useReducer, useRef, useState } from 'react';
 import './chatroom.css';
-
-//console.log('lslsls');
-// create the initial state to hold the messages
-const initialState = {
-  messages: [],
-};
-
-// Create a reducer that will update the messages array
-function reducer(state, message) {
-  return {
-    messages: [...state.messages, message],
-  };
-}
-
+import io from 'socket.io-client';
 function ChatRoom(props) {
   // to get loggedin user from   localstorage
   const user = JSON.parse(window.localStorage.getItem('user'));
-  const gun = Gun({
-    peers: [`${process.env.REACT_APP_SERVER_URL}/gun`],
-  });
+
 
   const chatRef = useRef(null);
   // the form state manages the form input for creating a new message
   const [formState, setForm] = useState({
     message: '',
   });
-
-  // initialize the reducer & state for holding the messages array
-  const [state, dispatch] = useReducer(reducer, initialState);
-
-  // when the app loads, fetch the current messages and load them into the state
-  // this also subscribes to new data as it changes and updates the local state
+  const [messages,setMessages] = useState([])
+  const [currentSocket, setCurrentSocket] = useState(null)
 
   useEffect(() => {
     // initialize gun locally
     if (user) {
-      const messages = gun.get('messages').get(props.userp.username);
-      messages.map().once((m) => {
-        dispatch({
-          username: m.username,
-          message: m.message,
-          createdAt: m.createdAt,
-        });
+      const socket = io(process.env.REACT_APP_SERVER_URL);
+      setCurrentSocket(socket)
+      socket.emit('joinroom',{user_id:user._id,room_id:props.userp._id})
+      socket.on('init',(msgs)=>{
+        setMessages(msgs);
         chatRef.current.scrollIntoView({ behavior: 'smooth' });
-      }, true);
+      })
+      socket.on('message2',(msg)=>{
+        setMessages(prevArray => [...prevArray, msg])
+        chatRef.current.scrollIntoView({ behavior: 'smooth' });
+      })
     } else {
       window.history.replaceState({}, 'Home', '/');
     }
     // eslint-disable-next-line
+    return () => { socket.disconnect() }
   }, []);
 
   // set a new message in gun, update the local state to reset the form field
   function saveMessage(e) {
     e.preventDefault();
-    const messages = gun.get('messages').get(props.userp.username);
-    messages.set({
-      username: user.username,
-      message: formState.message,
-      createdAt: Date.now(),
-    });
+    let chat = {
+      room_id:props.userp._id,
+      user_id:user._id,
+      username:user.username,
+      profile_image:user.profile_image,
+      type:'text',
+      message:formState.message
+    }
+    currentSocket.emit('chatMessage',chat)
     setForm({
       message: '',
     });
@@ -74,23 +61,9 @@ function ChatRoom(props) {
   return (
     <div className="text-gray-400	 box-border px-5 h-max lg:col-span-5 col-span-6 w-full mt-16 dark:bg-dbeats-dark-primary">
       <div className="overflow-hidden">
-        {/* <header className="chat-header">
-          <h1>
-            <i className="fas fa-smile" /> ChatCord
-          </h1>
-          <a onClick={() => (window.location.href = '/')} className="btn">
-            Leave Room
-          </a>
-        </header> */}
         <main className="chat-container-height">
-          {/* <div className="chat-sidebar">
-            <h3>
-              <i className="fas fa-comments" /> Room Name:
-            </h3>
-            <h2 id="room-name">{props.userp.username}</h2>
-          </div> */}
           <div className="p-2 chat-height overflow-y-scroll	">
-            {state.messages.map((message) => (
+            {messages.map((message) => (
               <div
                 className="px-6 p-2 flex items-center	rounded-xl dark: bg-dbeats-dark-secondary	mb-2"
                 key={message.createdAt}
@@ -101,7 +74,7 @@ function ChatRoom(props) {
                     width="50px"
                     className="rounded-full"
                     alt="profile"
-                    src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png"
+                    src={message.profile_image}
                   />
                 </div>
                 <div className="p-1">
