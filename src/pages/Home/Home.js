@@ -108,16 +108,14 @@ const Home = () => {
         <meta property="og:image"              content="https://beta.dbeats.live/favicon.ico" />
       </Helmet> */}
       <div className={`${darkMode && 'dark'} `}>
-        <div id="outer-container" className="h-full  ">
+        <div className="h-full w-2/3 ">
           <div
-            id="page-wrap"
-            className={`${darkMode && 'dark'} grid 2xl:pl-16 lg:pl-14 grid-cols-6 `}
+            className={`${
+              darkMode && 'dark'
+            } dbeats-grid  dark:bg-dbeats-dark-primary  gap-2 sm:px-14`}
           >
-            <div
-              id="recommended_channel"
-              className="w-full  pt-18  h-full lg:col-span-1 hidden  lg:block sm:hidden   bg-dbeats-white  dark:bg-dbeats-dark-secondary"
-            >
-              <div className="2xl:pl-8  lg:pl-4  ">
+            <div className="w-full  pt-18  h-full      hidden  md:block sm:hidden    ">
+              <div className=" ">
                 {latestUploads ? (
                   <>
                     <div>
@@ -129,7 +127,7 @@ const Home = () => {
                         if (i < 5) {
                           return (
                             <div key={i} className="flex items-center pb-4">
-                              <div className="border border-gray-100 dark:text-gray-50 dark:border-dbeats-light dark:border-opacity-10 bg-white dark:bg-dbeats-dark-primary lg:rounded md:rounded sm:rounded shadow-sm dark:shadow-md    text-dbeats-dark-primary p-2 rounded   w-full dialog ">
+                              <div className=" dark:text-gray-50      border-opacity-30 nm-flat-dbeats-dark-primary shadow-sm dark:shadow-md    text-dbeats-dark-primary p-2 rounded-xl   w-full ">
                                 <Link to={`/playback/${video.username}/${video.videoId}`}>
                                   <img
                                     src={video.videoImage !== '' ? video.videoImage : logo}
@@ -164,7 +162,7 @@ const Home = () => {
                         if (i < 5) {
                           return (
                             <div key={i} className="flex items-center pb-4">
-                              <div className="border flex border-gray-100 dark:text-gray-50 dark:border-dbeats-light dark:border-opacity-10 bg-white dark:bg-dbeats-dark-primary lg:rounded md:rounded sm:rounded shadow-sm dark:shadow-md    text-dbeats-dark-primary p-2 rounded    w-full  dialog ">
+                              <div className="border flex border-gray-100 dark:text-gray-50 dark:border-dbeats-light dark:border-opacity-30 bg-white dark:bg-dbeats-dark-primary lg:rounded md:rounded sm:rounded shadow-sm dark:shadow-md    text-dbeats-dark-primary p-2 rounded    w-full  dialog ">
                                 <Link to={`/track/${track.username}/${track.trackId}`}>
                                   <img
                                     src={track.trackImage !== '' ? track.trackImage : logo}
@@ -199,7 +197,7 @@ const Home = () => {
               </div>
             </div>
             {/* {classes.other_videos} */}
-            <div className="pt-18 flex flex-col justify-between col-span-6  lg:col-span-5 h-full   bg-dbeats-white   dark:bg-dbeats-dark-secondary">
+            <div className="pt-18 flex flex-col justify-between   h-full      ">
               <div>
                 <div id="display_videos" className="lg:my-5 lg:px-4 h-max  ">
                   <div className=" lg:px-4 h-max">
@@ -211,7 +209,7 @@ const Home = () => {
                   </div>
                 </div>
                 <div className=" 2xl:px-4 ">
-                  <div id="display_playback_videos" className=" 2xl:px-4 px-1  ">
+                  <div id="display_playback_videos" className=" 2xl:px-4  ">
                     <div>
                       <h4 className=" font-bold  2xl:pb-4 lg:pb-2">
                         {activeStreams ? (
@@ -250,7 +248,7 @@ const Home = () => {
                       </h4>
                     </div>
                   </div>
-                  <div id="display_playback_videos" className="2xl:px-4 lg:px-3 px-1">
+                  <div id="display_playback_videos" className="2xl:px-4 lg:px-3  ">
                     <div className="  ">
                       <div className="flex my-1">
                         <Dropdown
@@ -273,7 +271,7 @@ const Home = () => {
                         </h4>
                       </div>
                       <FeedbackForm />
-                      <div className="">
+                      <div className="my-2">
                         {arrayData.map((playbackUser, i) => {
                           return (
                             <div key={i}>
@@ -293,6 +291,88 @@ const Home = () => {
                 <h3 className="text-black   capitalize text-center proxima-reg dark:text-white dark:text-opacity-20">
                   Developed by Creators for the Creators on a Decentralised Web
                 </h3>
+              </div>
+            </div>
+            <div className="w-full  pt-18  h-full    hidden  lg:block sm:hidden    ">
+              <div className=" ">
+                {latestUploads ? (
+                  <>
+                    <div>
+                      <h5 className="p-2 font-semibold 2xl:text-base lg:text-xs text-dbeats-dark-primary dark:text-gray-200">
+                        {' '}
+                        Latest videos
+                      </h5>
+                      {latestVideo.map((video, i) => {
+                        if (i < 5) {
+                          return (
+                            <div key={i} className="flex items-center pb-4">
+                              <div className="border-2   dark:text-gray-50    border-dbeats-dark-alt   dark:border-opacity-30 nm-flat-dbeats-dark-primary shadow-sm dark:shadow-md    text-dbeats-dark-primary p-2 rounded-xl   w-full ">
+                                <Link to={`/playback/${video.username}/${video.videoId}`}>
+                                  <img
+                                    src={video.videoImage !== '' ? video.videoImage : logo}
+                                    alt=""
+                                    className=" w-auto h-32 bg-gray-100 mx-auto"
+                                  />
+                                </Link>
+                                <div className="py-3">
+                                  <p className="truncate   text-dbeats-dark-primary dark:text-gray-200 2xl:font-bold lg:text-xs">
+                                    {video.videoName}
+                                  </p>
+                                  <span className="  2xl:text-sm lg:text-xs text-gray-400   flex">
+                                    {' '}
+                                    {video.username}{' '}
+                                    {video.is_verified ? (
+                                      <Verified className="h-4 w-4  items-center self-center justify-center text-dbeats-light mx-1" />
+                                    ) : null}
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        }
+                      })}
+                    </div>
+                    <div>
+                      <h5 className="pb-2 font-semibold 2xl:text-base   lg:text-xs text-dbeats-dark-primary dark:text-gray-200">
+                        {' '}
+                        Latest Musics
+                      </h5>
+                      {latestTrack.map((track, i) => {
+                        if (i < 5) {
+                          return (
+                            <div key={i} className="flex items-center pb-4">
+                              <div className="border flex border-gray-100 dark:text-gray-50 dark:border-dbeats-light dark:border-opacity-30 bg-white dark:bg-dbeats-dark-primary lg:rounded md:rounded sm:rounded shadow-sm dark:shadow-md    text-dbeats-dark-primary p-2 rounded    w-full  dialog ">
+                                <Link to={`/track/${track.username}/${track.trackId}`}>
+                                  <img
+                                    src={track.trackImage !== '' ? track.trackImage : logo}
+                                    alt=""
+                                    className=" w-20  h-20   bg-gray-100 self-center"
+                                  />
+                                </Link>
+                                <div className="pl-3">
+                                  <p className="truncate 2xl:w-40 lg:w-28 text-dbeats-dark-primary dark:text-gray-200 2xl:font-bold lg:text-xs">
+                                    {' '}
+                                    {track.trackName}
+                                  </p>
+                                  <span className="  2xl:text-sm lg:text-xs text-gray-400   flex">
+                                    {' '}
+                                    {track.username}{' '}
+                                    {track.is_verified ? (
+                                      <Verified className="h-4 w-4  items-center self-center justify-center text-dbeats-light mx-1" />
+                                    ) : null}
+                                  </span>
+                                  <p className="truncate 2xl:w-40 lg:w-28 text-dbeats-dark-primary dark:text-gray-200 2xl:font-bold lg:text-xs">
+                                    {' '}
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        }
+                      })}
+                    </div>
+                  </>
+                ) : null}
               </div>
             </div>
           </div>

@@ -53,6 +53,9 @@ module.exports = {
       },
       maxHeight: {
         125: '43rem',
+        90: '90px',
+        110: '28rem',
+        120: '42rem',
       },
       grayscale: { 50: '50%', 75: '75%' },
       width: {
@@ -90,7 +93,7 @@ module.exports = {
         'dbeats-dark': '#000',
         'dbeats-light': '#00d3ff',
         'dbeats-dark-primary': '#101010',
-        'dbeats-dark-alt': '#1c1c1c',
+        'dbeats-dark-alt': '#343434',
         'dbeats-dark-secondary': '#181818',
       },
     },
@@ -116,5 +119,7 @@ module.exports = {
     require('tailwindcss-filters'),
     require('@themesberg/flowbite/plugin'),
     require('tailwindcss-important')(),
+
+    require('tailwindcss-neumorphism'),
   ],
 };

@@ -39,3 +39,8 @@ input:checked ~ .dot {
   transform: translateX(100%);
   background-color: #00d3ff;
 }
+
+.dbeats-grid {
+  display: grid;
+  grid-template-columns: 1.5fr 3.2fr 1.8fr;
+}

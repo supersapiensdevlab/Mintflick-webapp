@@ -41,13 +41,88 @@ const PlayBackCard = (props) => {
     <>
       {props.playbackUserData.videos && props.playbackUserData.videos.length > 0 ? (
         <div
-          className={`${
-            props.darkMode && 'dark'
-          }  mb-4 border border-gray-100 dark:text-gray-50 dark:border-dbeats-light dark:border-opacity-10 bg-white dark:bg-dbeats-dark-primary 
-          lg:rounded md:rounded sm:rounded shadow-sm dark:shadow-md    text-dbeats-dark-primary sm:p-4 rounded   md:w-1/2 dialog    h-auto relative  `}
+          className={`${props.darkMode && 'dark'} my-3  dark:text-gray-50 
+           shadow-sm dark:shadow-md      nm-flat-dbeats-dark-primary      text-dbeats-dark-primary   rounded-xl   relative   `}
         >
-          <div className="col-start-1 row-start-3 pb-2 pt-1  px-4 sm:px-0">
-            <div className="flex   text-black text-sm font-medium mb-3">
+          <div className="   rounded-xl">
+            <div className=" pb-4 ">
+              <div className="flex   text-black text-sm font-medium   px-4  py-3">
+                <Link to={`/profile/${props.playbackUserData.username}/`} className="mr-4">
+                  <img
+                    src={
+                      props.playbackUserData.profile_image
+                        ? props.playbackUserData.profile_image
+                        : person
+                    }
+                    alt=""
+                    className="2xl:w-16 2xl:h-14 w-16 h-14 lg:w-7 lg:h-7 rounded-full    self-start"
+                  />
+                </Link>
+                <div className="w-full flex  justify-between mt-2">
+                  <div>
+                    <div className="w-full self-center  ">
+                      <Link
+                        to={`/profile/${props.playbackUserData.username}/`}
+                        className="2xl:text-sm lg:text-xs text-sm text-gray-500  mb-2"
+                      >
+                        {props.playbackUserData.name}
+                      </Link>{' '}
+                      <div className="2xl:text-sm lg:text-xs text-sm text-gray-500 pr-2 flex  ">
+                        {time}
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <div className="hidden rounded-md group w-max ml-2 p-2   justify-center  cursor-pointer   nm-flat-dbeats-dark-primary   hover:nm-inset-dbeats-dark-primary           items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out ">
+                      <span className="  text-black dark:text-white mx-1 flex ">
+                        <img
+                          className="h-7 w-7 p-1  mr-1   text-white self-center align-middle items-center rounded-full     "
+                          src={maticLogo}
+                          alt="logo"
+                        ></img>
+                        <p className="self-center mx-2"> 200</p>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <span className=" text-base  dark:text-gray-200   text-gray-900 px-4  ">
+                {props.playbackUserData.videos[index].videoName.slice(0, 45)}
+                {props.playbackUserData.videos[index].videoName.length > 45 ? '...' : ''}
+              </span>
+            </div>
+            <div
+              className={`cursor-pointer w-full 2xl:h-max lg:h-max md:h-max xs:h-max min-h-full   dark:bg-black bg-black `}
+            >
+              <Link
+                to={`/playback/${props.playbackUserData.username}/${props.playbackUserData.videos[index].videoId}`}
+                className=" "
+              >
+                <ReactPlayer
+                  className=" "
+                  width="100%"
+                  height="100%"
+                  playing={playing}
+                  muted={false}
+                  volume={0.5}
+                  url={props.playbackUserData.videos[index].link}
+                  controls={false}
+                  onMouseMove={handleMouseMove}
+                  onMouseLeave={hanldeMouseLeave}
+                />
+              </Link>
+
+              <Image
+                src={props.playbackUserData.videos[index].videoImage}
+                height={200}
+                width={200}
+                className="object-cover  h-52 w-full absolute top-0 z-500 hidden "
+                alt={props.playbackUserData.videos[index].videoName}
+                placeholderSrc={dbeatsLogoBnW}
+              />
+            </div>
+            <div className="flex   text-black text-sm font-medium   px-4  py-3">
               <Link to={`/profile/${props.playbackUserData.username}/`} className="mr-4">
                 <img
                   src={
@@ -56,12 +131,12 @@ const PlayBackCard = (props) => {
                       : person
                   }
                   alt=""
-                  className="2xl:w-16 2xl:h-16 w-16 h-16 lg:w-7 lg:h-7 rounded-full    self-start"
+                  className="2xl:w-16 2xl:h-14 w-16 h-16 lg:w-7 lg:h-7 rounded-full    self-start"
                 />
               </Link>
               <div className="w-full flex  justify-between mt-2">
                 <div>
-                  <div className="w-full   ">
+                  <div className="w-full self-center  ">
                     <Link
                       to={`/profile/${props.playbackUserData.username}/`}
                       className="2xl:text-sm lg:text-xs text-sm text-gray-500  mb-2"
@@ -69,56 +144,24 @@ const PlayBackCard = (props) => {
                       {props.playbackUserData.name}
                     </Link>{' '}
                     <div className="2xl:text-sm lg:text-xs text-sm text-gray-500 pr-2 flex  ">
-                      {time}
+                      owner
                     </div>
                   </div>
                 </div>
                 <div>
-                  <div className="  w-max ml-2 p-2   justify-center  cursor-pointer  dark:bg-dbeats-dark-secondary  hover:bg-opacity-25 dark:hover:bg-opacity-80 dark:backdrop-blur-md  backdrop-filter  backdrop-blur-md hover:bg-gray-200  dark:hover:bg-dbeats-dark-primary   grad flex items-center   font-medium   dark:hover:text-white      transform-gpu  transition-all duration-300 ease-in-out ">
-                    <span className="  text-black dark:text-white mx-1 flex ">
-                      200
+                  <div className=" rounded-3xl group w-max ml-2 p-1  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-primary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out ">
+                    <span className="  text-black dark:text-white  flex p-1 rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-secondary">
                       <img
-                        className="h-5 w-5 ml-1 text-white self-center align-middle items-center"
+                        className="h-7 w-7 p-1  mr-1   text-white self-center align-middle items-center rounded-full     "
                         src={maticLogo}
                         alt="logo"
                       ></img>
+                      <p className="self-center mx-2"> 200</p>
                     </span>
                   </div>
                 </div>
               </div>
             </div>
-
-            <span className=" text-base  dark:text-gray-200   text-gray-900">
-              {props.playbackUserData.videos[index].videoName.slice(0, 45)}
-              {props.playbackUserData.videos[index].videoName.length > 45 ? '...' : ''}
-            </span>
-          </div>
-          <div className={`cursor-pointer w-full h-96  dark:bg-black bg-black `}>
-            <Link
-              to={`/playback/${props.playbackUserData.username}/${props.playbackUserData.videos[index].videoId}`}
-              className=" "
-            >
-              <ReactPlayer
-                width="100%"
-                height="100%"
-                playing={playing}
-                muted={false}
-                volume={0.5}
-                url={props.playbackUserData.videos[index].link}
-                controls={false}
-                onMouseMove={handleMouseMove}
-                onMouseLeave={hanldeMouseLeave}
-              />
-            </Link>
-
-            <Image
-              src={props.playbackUserData.videos[index].videoImage}
-              height={200}
-              width={200}
-              className="object-cover  h-52 w-full absolute top-0 z-500 hidden "
-              alt={props.playbackUserData.videos[index].videoName}
-              placeholderSrc={dbeatsLogoBnW}
-            />
           </div>
         </div>
       ) : null}
