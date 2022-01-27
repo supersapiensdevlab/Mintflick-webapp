@@ -13,7 +13,8 @@ function ChatRoom(props) {
   });
   const [messages, setMessages] = useState([]);
   const [currentSocket, setCurrentSocket] = useState(null);
-let currentDate = null;
+  const dates = new Set();
+
   useEffect(() => {
     // initialize gun locally
     if (user) {
@@ -24,7 +25,7 @@ let currentDate = null;
         setMessages(msgs);
         chatRef.current.scrollIntoView({ behavior: 'smooth' });
       });
-      socket.on('message2', (msg) => {
+      socket.on('message', (msg) => {
         setMessages((prevArray) => [...prevArray, msg]);
         chatRef.current.scrollIntoView({ behavior: 'smooth' });
       });
@@ -32,26 +33,34 @@ let currentDate = null;
       window.history.replaceState({}, 'Home', '/');
     }
     // eslint-disable-next-line
-
   }, []);
 
   // set a new message in gun, update the local state to reset the form field
   function saveMessage(e) {
     e.preventDefault();
-    let chat = {
-      room_id: props.userp._id,
-      user_id: user._id,
-      username: user.username,
-      profile_image: user.profile_image,
-      type: 'text',
-      message: formState.message,
+    let room = {
+      room_admin:props.userp._id,
+      chat:{
+        user_id: user._id,
+        username: user.username,
+        profile_image: user.profile_image,
+        type: 'text',
+        message: formState.message,
+        createdAt:Date.now()
+      }
     };
-    currentSocket.emit('chatMessage', chat);
+    currentSocket.emit('chatMessage', room);
     setForm({
       message: '',
     });
   }
+  const renderDate = (chat, dateNum) => {
+    const timestampDate = new Date(chat.createdAt);
+    // Add to Set so it does not render again
+    dates.add(dateNum);
 
+    return <p className="text-center text-sm">{timestampDate.toDateString()}</p>;
+  };
   // update the form state as the user types
   function onChange(e) {
     setForm({ ...formState, [e.target.name]: e.target.value });
@@ -64,29 +73,14 @@ let currentDate = null;
           <div className="p-2 chat-height overflow-y-scroll	">
             {messages
               ? messages.map((message) => {
-                  const d = new Date(message.createdAt.toString());
-                  let od ;
-                  let dis = null;
-                  if (currentDate == null) {
-                    currentDate = d.toDateString()
-                    dis = d.toDateString();
-                  }else{
-                   od  = new Date(currentDate);
-                    if(d>od){
-                      dis = d.toDateString();
-                      currentDate = d.toDateString()
-                    }else{
-                      dis = null;
-                    }
-                  }
+                  const dateNum = new Date(message.createdAt);
 
                   return (
-                    <>
-                    {dis}
-                      <div
-                        className="px-6 p-2 flex items-center	rounded-xl dark: bg-dbeats-dark-secondary	mb-2"
-                        key={message.createdAt}
-                      >
+                    <div key={message._id}>
+                      {dates.has(dateNum.toDateString())
+                        ? null
+                        : renderDate(message, dateNum.toDateString())}
+                      <div className="px-6 p-2 flex items-center	rounded-xl dark: bg-dbeats-dark-secondary	mb-2">
                         <div className="chat_message_profile">
                           <img
                             height="50px"
@@ -105,14 +99,18 @@ let currentDate = null;
                             }
                           >
                             {message.username}{' '}
-                            <span className="text-sm text-gray-300 font-light">
-                              {new Date(message.createdAt).toDateString()}
+                            <span className="text-xs text-gray-300 font-light">
+                              {new Date(message.createdAt).toLocaleString('en-US', {
+                                hour: '2-digit',
+                                minute: '2-digit',
+                                hour12: true,
+                              })}
                             </span>
                           </p>
                           <p className="text">{message.message}</p>
                         </div>
                       </div>
-                    </>
+                    </div>
                   );
                 })
               : '<></>'}
