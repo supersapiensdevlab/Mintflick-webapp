@@ -108,13 +108,13 @@ const Home = () => {
         <meta property="og:image"              content="https://beta.dbeats.live/favicon.ico" />
       </Helmet> */}
       <div className={`${darkMode && 'dark'} `}>
-        <div className="h-full w-2/3 ">
+        <div className="h-full w-2/3 mx-auto">
           <div
             className={`${
               darkMode && 'dark'
             } dbeats-grid  dark:bg-dbeats-dark-primary  gap-2 sm:px-14`}
           >
-            <div className="w-full  pt-18  h-full      hidden  md:block sm:hidden    ">
+            <div className="w-full  pt-18  h-full         ">
               <div className=" ">
                 {latestUploads ? (
                   <>
@@ -126,26 +126,34 @@ const Home = () => {
                       {latestVideo.map((video, i) => {
                         if (i < 5) {
                           return (
-                            <div key={i} className="flex items-center pb-4">
-                              <div className=" dark:text-gray-50      border-opacity-30 nm-flat-dbeats-dark-primary shadow-sm dark:shadow-md    text-dbeats-dark-primary p-2 rounded-xl   w-full ">
-                                <Link to={`/playback/${video.username}/${video.videoId}`}>
+                            <div key={i} className="flex items-center pb-4 text-center">
+                              <div className=" dark:text-gray-50      border-opacity-30 nm-flat-dbeats-dark-primary shadow-sm dark:shadow-md    text-dbeats-dark-primary rounded-xl   w-full ">
+                                <Link
+                                  className="static"
+                                  to={`/playback/${video.username}/${video.videoId}`}
+                                >
                                   <img
-                                    src={video.videoImage !== '' ? video.videoImage : logo}
+                                    src={user.profile_image !== '' ? user.profile_image : logo}
                                     alt=""
-                                    className=" w-auto h-32 bg-gray-100 mx-auto"
+                                    className=" w-full h-16 dark:bg-dbeats-dark-secondary  rounded-t-xl"
+                                  />
+                                  <img
+                                    src={user.profile_image !== '' ? user.profile_image : logo}
+                                    alt=""
+                                    className=" w-16 h-16   rounded-full absolute mx-auto -mt-8"
                                   />
                                 </Link>
                                 <div className="py-3">
                                   <p className="truncate   text-dbeats-dark-primary dark:text-gray-200 2xl:font-bold lg:text-xs">
-                                    {video.videoName}
-                                  </p>
-                                  <span className="  2xl:text-sm lg:text-xs text-gray-400   flex">
-                                    {' '}
-                                    {video.username}{' '}
-                                    {video.is_verified ? (
+                                    {user.name}
+                                    {user.is_verified ? (
                                       <Verified className="h-4 w-4  items-center self-center justify-center text-dbeats-light mx-1" />
                                     ) : null}
-                                  </span>
+                                  </p>
+                                  <p className="  2xl:text-sm lg:text-xs text-gray-400   flex text-center mx-auto">
+                                    {' '}
+                                    {user.username}{' '}
+                                  </p>
                                 </div>
                               </div>
                             </div>
