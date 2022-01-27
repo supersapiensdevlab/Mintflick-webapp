@@ -6,11 +6,13 @@ import { Link } from 'react-router-dom';
 import maticLogo from '../../../assets/graphics/polygon-matic-logo.svg';
 import dbeatsLogoBnW from '../../../assets/images/Logo/logo-blacknwhite.png';
 import person from '../../../assets/images/profile.svg';
+import axios from 'axios';
 
 moment().format();
 
 const PlayBackCard = (props) => {
   const [playing, setPlaying] = useState(false);
+  const user = JSON.parse(window.localStorage.getItem('user'));
 
   //let history = useHistory();
 
@@ -37,14 +39,77 @@ const PlayBackCard = (props) => {
     // eslint-disable-next-line
   }, []);
 
+  const [subscribeLoader, setSubscribeLoader] = useState(true);
+
+  const [buttonText, setButtonText] = useState('follow');
+  const [followers, setFollowers] = useState(0);
+
+  const trackFollowers = () => {
+    setSubscribeLoader(false);
+    if (buttonText === 'Login to Subscribe') {
+      window.location.href = '/signup';
+    }
+    //console.log(followers);
+    const followData = {
+      following: `${props.playbackUserData.username}`,
+      follower: `${user.username}`,
+    };
+
+    if (buttonText === 'follow') {
+      axios({
+        method: 'POST',
+        url: `${process.env.REACT_APP_SERVER_URL}/user/follow`,
+        headers: {
+          'content-type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+        },
+        data: followData,
+      })
+        .then(function (response) {
+          if (response) {
+            setButtonText('following');
+            setFollowers(followers + 1);
+            setSubscribeLoader(true);
+          } else {
+            alert('Invalid Login');
+          }
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    } else {
+      axios({
+        method: 'POST',
+        url: `${process.env.REACT_APP_SERVER_URL}/user/unfollow`,
+        headers: {
+          'content-type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+        },
+        data: followData,
+      })
+        .then(function (response) {
+          if (response) {
+            setButtonText('follow');
+            setFollowers(followers - 1);
+            setSubscribeLoader(true);
+          } else {
+            alert('Invalid Login');
+          }
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    }
+  };
+
   return (
     <>
       {props.playbackUserData.videos && props.playbackUserData.videos.length > 0 ? (
         <div
-          className={`${props.darkMode && 'dark'} my-3  dark:text-gray-50 
-           shadow-sm dark:shadow-md      nm-flat-dbeats-dark-primary      text-dbeats-dark-primary   rounded-xl   relative   `}
+          className={`${props.darkMode && 'dark'} my-4  dark:text-gray-50 
+           shadow-sm dark:shadow-md  p-0.5  sm:rounded-xl bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-primary-lg      text-dbeats-dark-primary    relative   `}
         >
-          <div className="   rounded-xl">
+          <div className="sm:rounded-xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary">
             <div className=" pb-4 ">
               <div className="flex   text-black text-sm font-medium   px-4  py-3">
                 <Link to={`/profile/${props.playbackUserData.username}/`} className="mr-4">
@@ -55,7 +120,7 @@ const PlayBackCard = (props) => {
                         : person
                     }
                     alt=""
-                    className="2xl:w-16 2xl:h-14 w-16 h-14 lg:w-7 lg:h-7 rounded-full    self-start"
+                    className="  w-16 h-14   sm:rounded-full    self-start"
                   />
                 </Link>
                 <div className="w-full flex  justify-between mt-2">
@@ -73,15 +138,33 @@ const PlayBackCard = (props) => {
                     </div>
                   </div>
                   <div>
-                    <div className="hidden rounded-md group w-max ml-2 p-2   justify-center  cursor-pointer   nm-flat-dbeats-dark-primary   hover:nm-inset-dbeats-dark-primary           items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out ">
-                      <span className="  text-black dark:text-white mx-1 flex ">
-                        <img
-                          className="h-7 w-7 p-1  mr-1   text-white self-center align-middle items-center rounded-full     "
-                          src={maticLogo}
-                          alt="logo"
-                        ></img>
-                        <p className="self-center mx-2"> 200</p>
-                      </span>
+                    <div
+                      onClick={trackFollowers}
+                      className="  rounded-3xl group w-max ml-2 p-0.5  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-secondary      hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
+                    >
+                      {props.playbackUserData.followee_count.map((followee) => {
+                        if (user) {
+                          if (followee === user.username) {
+                            setButtonText('following');
+                          }
+                        } else {
+                          setButtonText('login');
+                        }
+                      })}
+                      <div className="  h-full w-full text-black dark:text-white p-1 flex   rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:nm-inset-dbeats-dark-secondary ">
+                        <p className="self-center mx-2 flex">
+                          <span>
+                            {buttonText === 'follow' ? (
+                              <i className="fas fa-plus self-center mx-2"></i>
+                            ) : null}
+                            &nbsp;{buttonText}
+                          </span>
+                          <div
+                            hidden={subscribeLoader}
+                            className="w-3 h-3 ml-2 border-t-4 border-b-4 border-white rounded-full animate-spin"
+                          ></div>
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -131,7 +214,7 @@ const PlayBackCard = (props) => {
                       : person
                   }
                   alt=""
-                  className="2xl:w-16 2xl:h-14 w-16 h-16 lg:w-7 lg:h-7 rounded-full    self-start"
+                  className="w-16 h-14 sm:rounded-full    self-start"
                 />
               </Link>
               <div className="w-full flex  justify-between mt-2">
@@ -152,7 +235,7 @@ const PlayBackCard = (props) => {
                   <div className=" rounded-3xl group w-max ml-2 p-1  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-primary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out ">
                     <span className="  text-black dark:text-white  flex p-1 rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-secondary hover:nm-inset-dbeats-dark-secondary ">
                       <img
-                        className="h-7 w-7 p-1  mr-1   text-white self-center align-middle items-center rounded-full     "
+                        className="h-7 w-7 p-1  mr-1   text-white self-center align-middle items-center     "
                         src={maticLogo}
                         alt="logo"
                       ></img>

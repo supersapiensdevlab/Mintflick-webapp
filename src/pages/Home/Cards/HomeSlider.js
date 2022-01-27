@@ -10,7 +10,7 @@ const ResponsiveCarousel = (props) => {
       <ResponsiveContainer
         carouselRef={ref}
         render={(parentWidth, carouselRef) => {
-          let currentVisibleSlide = 5;
+          let currentVisibleSlide = 1;
           if (parentWidth <= 1440) currentVisibleSlide = 3;
           else if (parentWidth <= 1080) currentVisibleSlide = 1;
           return (
@@ -51,7 +51,7 @@ const Slide = function (StackedCarouselSlideProps) {
   const value = data[dataIndex];
   return (
     <Link
-      className="w-screen h-full bg-gray-300 dark:bg-dbeats-dark-primary py-2 px-0 lg:py-0 lg:w-max lg:h-96 md:h-96 flex mx-auto shadow-xl dark:shadow-3xl"
+      className="w-screen h-full bg-gray-300   nm-flat-dbeats-dark-primary-lg p-2 lg:w-max lg:h-96 md:h-96 flex mx-auto shadow-xl dark:shadow-3xl"
       to={`/live/${value.username}/`}
     >
       <span className="fixed bg-red-600 text-white px-1 mx-2 my-2 rounded-sm font-semibold z-50">

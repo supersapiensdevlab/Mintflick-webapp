@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import person from '../../assets/images/profile.svg';
 
 import {
   AnnouncementModal,
@@ -27,63 +29,93 @@ const MainToolbar = () => {
 
   //Loader
   const [loader, setLoader] = useState(true);
+  const user = JSON.parse(window.localStorage.getItem('user'));
 
   return (
     <>
-      <div className="m-1  font-bold dark:text-white ">
-        <button
-          className="text-gray-500 lg:mx-2 2xl:mx-3 mx-2 rounded hover:bg-dbeats-light border-dbeats-light border border-opacity-10 
-                            dark:bg-dbeats-dark-alt 2xl:h-10 h-8 my-auto font-semibold cursor-pointer px-3 text-sm sm:text-base 
-                             hover:text-white dark:text-white dark:hover:bg-dbeats-light"
-          onClick={() => {
-            handleShowAnnouncement();
-            handleCloseVideoUpload();
-            handleCloseTrackUpload();
-            handleCloseNFTUpload();
-          }}
-        >
-          Create Post
-        </button>
+      <div className="p-0.5 w-full  font-bold dark:text-white rounded-xl bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary nm-flat-dbeats-dark-primary-lg">
+        <div className=" p-2  font-bold dark:text-white rounded-xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary">
+          <div className="flex justify-between mb-2 px-2">
+            <Link to={`/profile/${user.username}`} className="mr-4">
+              <img
+                src={user.profile_image !== '' ? user.profile_image : person}
+                alt=""
+                className="  w-16 h-14   rounded-full    self-start"
+              />
+            </Link>
+            <input className="border-2 border-dbeats-dark-secondary rounded-3xl w-full nm-flat-dbeats-dark-primary  px-5 focus:nm-inset-dbeats-dark-primary"></input>
+          </div>
 
-        <button
-          className="text-gray-500 lg:mx-2 2xl:mx-3 mx-2 rounded hover:bg-dbeats-light border-dbeats-light border  
-          dark:bg-dbeats-dark-alt 2xl:h-10 h-8 my-auto border-opacity-10 font-semibold cursor-pointer px-3  hover:text-white text-sm sm:text-base
-          dark:text-white dark:hover:bg-dbeats-light"
-          onClick={() => {
-            handleCloseAnnouncement();
-            handleShowVideoUpload();
-            handleCloseTrackUpload();
-            handleCloseNFTUpload();
-          }}
-        >
-          Upload Video
-        </button>
-        <button
-          className="text-gray-500 lg:mx-2 2xl:mx-3 mx-2 rounded hover:bg-dbeats-light border-dbeats-light border  
-          dark:bg-dbeats-dark-alt 2xl:h-10 h-8 my-auto border-opacity-10 font-semibold cursor-pointer px-3  hover:text-white text-sm sm:text-base
-          dark:text-white dark:hover:bg-dbeats-light"
-          onClick={() => {
-            handleCloseAnnouncement();
-            handleShowTrackUpload();
-            handleCloseVideoUpload();
-            handleCloseNFTUpload();
-          }}
-        >
-          Upload Track
-        </button>
-        <button
-          onClick={() => {
-            handleShowNFTUpload();
-            handleCloseVideoUpload();
-            handleCloseTrackUpload();
-            handleCloseAnnouncement();
-          }}
-          className="text-gray-500 lg:mx-2 2xl:mx-3 mx-2 rounded hover:bg-dbeats-light border-dbeats-light border  
-          dark:bg-dbeats-dark-alt 2xl:h-10 h-8 my-auto border-opacity-10 font-semibold cursor-pointer px-3  hover:text-white text-sm sm:text-base
-          dark:text-white dark:hover:bg-dbeats-light"
-        >
-          Mint NFT
-        </button>
+          <div className=" flex justify-end px-2">
+            <div
+              onClick={() => {
+                handleShowAnnouncement();
+                handleCloseVideoUpload();
+                handleCloseTrackUpload();
+                handleCloseNFTUpload();
+              }}
+              className=" rounded-3xl group w-max ml-2 p-0.5  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-secondary       hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
+            >
+              <div className=" group h-full w-full text-black dark:text-white p-1 flex  rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:nm-inset-dbeats-dark-secondary ">
+                <i className="fas fa-camera self-center mx-2 text-white opacity-70 group-hover:opacity-100"></i>
+                <p className="self-center mx-2 text-white opacity-70 group-hover:opacity-100">
+                  Post
+                </p>
+              </div>
+            </div>
+
+            <div
+              onClick={() => {
+                handleCloseAnnouncement();
+                handleShowVideoUpload();
+                handleCloseTrackUpload();
+                handleCloseNFTUpload();
+              }}
+              className=" rounded-3xl group w-max ml-2 p-0.5  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-secondary      hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
+            >
+              <div className="  h-full w-full text-black dark:text-white p-1 flex  rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:nm-inset-dbeats-dark-secondary ">
+                <i className="fas fa-video self-center mx-2 text-white opacity-70 group-hover:opacity-100"></i>
+                <p className="self-center mx-2 text-white opacity-70 group-hover:opacity-100">
+                  Video
+                </p>
+              </div>
+            </div>
+
+            <div
+              onClick={() => {
+                handleCloseAnnouncement();
+                handleShowTrackUpload();
+                handleCloseVideoUpload();
+                handleCloseNFTUpload();
+              }}
+              className=" rounded-3xl group w-max ml-2 p-0.5  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-secondary      hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
+            >
+              <div className="  h-full w-full text-black dark:text-white p-1 flex  rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:nm-inset-dbeats-dark-secondary ">
+                <i className="fas fa-music self-center mx-2 text-white opacity-70 group-hover:opacity-100"></i>
+                <p className="self-center mx-2 text-white opacity-70 group-hover:opacity-100">
+                  Track
+                </p>
+              </div>
+            </div>
+
+            <div
+              onClick={() => {
+                handleShowNFTUpload();
+                handleCloseVideoUpload();
+                handleCloseTrackUpload();
+                handleCloseAnnouncement();
+              }}
+              className=" rounded-3xl group w-max ml-2 p-0.5  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-secondary      hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
+            >
+              <div className="  h-full w-full text-black dark:text-white p-1 flex  rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:nm-inset-dbeats-dark-secondary ">
+                <i className="fas fa-stroopwafel self-center mx-2 text-white opacity-70 group-hover:opacity-100"></i>
+                <p className="self-center mx-2 text-white opacity-70 group-hover:opacity-100">
+                  NFT
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
       <AnnouncementModal
         showAnnouncement={showAnnouncement}

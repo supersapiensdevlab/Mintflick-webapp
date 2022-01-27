@@ -56,6 +56,7 @@ module.exports = {
         90: '90px',
         110: '28rem',
         120: '42rem',
+        screen: '95vh',
       },
       grayscale: { 50: '50%', 75: '75%' },
       width: {
@@ -93,7 +94,7 @@ module.exports = {
         'dbeats-dark': '#000',
         'dbeats-light': '#00d3ff',
         'dbeats-dark-primary': '#101010',
-        'dbeats-dark-alt': '#343434',
+        'dbeats-dark-alt': '#1c1c1c',
         'dbeats-dark-secondary': '#181818',
       },
     },

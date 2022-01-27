@@ -18,7 +18,7 @@ const LiveCard = (props) => {
 
   return (
     <div className="w-full h-auto  ">
-      <div className=" cursor-pointer hover:border-dbeats-light border border-transparent">
+      <div className=" cursor-pointer hover:border-dbeats-light border border-transparent p-0.5 nm-flat-dbeats-dark-primary-lg  ">
         <Link to={`/live/${props.username}/`}>
           <span className="fixed bg-red-600 text-white px-1 mx-1 my-1 rounded-sm font-semibold">
             {' '}
@@ -34,7 +34,7 @@ const LiveCard = (props) => {
             volume={0.5}
             url={`https://cdn.livepeer.com/hls/${props.liveUserData.livepeer_data.playbackId}/index.m3u8`}
             controls={false}
-            className=" bg-gray-200 dark:bg-dbeats-dark-primary"
+            className=" bg-gray-200 dark:bg-dbeats-dark-primary  "
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
           />
