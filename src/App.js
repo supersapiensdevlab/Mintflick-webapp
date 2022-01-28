@@ -1,5 +1,8 @@
 import axios from 'axios';
 import React, { useEffect } from 'react';
+
+import { Redirect } from 'react-router-dom';
+
 import { useDispatch, useSelector } from 'react-redux';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import '../node_modules/noty/lib/noty.css';
@@ -9,7 +12,6 @@ import NavBar from '../src/component/Navbar/Navbar';
 import './App.css';
 import Loader from './component/Loader/Loader';
 import SearchPage from './component/Navbar/SearchResult';
-import NFTFeed from './component/nft.component';
 import PageNotFound from './component/PageNotFound/PageNotFound';
 import PinnedPanel from './component/Pinned_Panel/Pinned_Panel';
 import UploadPage from './component/switcher.component';
@@ -31,11 +33,66 @@ import TrackPlayback from './pages/VideoPages/Pages/TrackPage/TrackInfo';
 import OnboardingModal from './component/Modals/OnboardingModal/OnboardingModal';
 import ResetWallet from './pages/Login/ResetWallet';
 
+// components
+
+import AdminNavbar from './component/Navbar/AdminNavbar';
+import Sidebar from './component/Sidebar/Sidebar';
+import HeaderStats from './component/Headers/HeaderStats';
+import FooterAdmin from './component/Footers/FooterAdmin';
+
+// views
+
+import Dashboard from './views/admin/Dashboard.js';
+import Maps from './views/admin/Maps.js';
+import Settings from './views/admin/Settings.js';
+import Tables from './views/admin/Tables.js';
+
+import { useState } from 'react';
 export default function App() {
-  let user = JSON.parse(window.localStorage.getItem('user'));
+  const user = JSON.parse(window.localStorage.getItem('user'));
   const darkMode = useSelector((state) => state.toggleDarkMode);
   let darkmode = JSON.parse(window.localStorage.getItem('darkmode'));
   const dispatch = useDispatch();
+
+  const userType = useSelector((state) => state.toggleUserType);
+  //dispatch(toggleUserType(userType));
+
+  const [arrayData, setArrayData] = useState([]);
+
+  const [latestVideo, setLatestVideo] = useState([]);
+  const [latestTrack, setLatestTrack] = useState([]);
+  const [latestUploads, setLatestUploads] = useState(null);
+
+  const fetchData = async () => {
+    const fileRes = await axios.get(`${process.env.REACT_APP_SERVER_URL}/user`);
+    for (let i = 0; i < fileRes.data.length; i++) {
+      setArrayData((prevState) => [...prevState, fileRes.data[i]]);
+    }
+
+    const fetchUploads = await axios.get(`${process.env.REACT_APP_SERVER_URL}/trending`);
+    if (fetchUploads.data.latest_videos) {
+      let data = [];
+      let fetchedData = fetchUploads.data.latest_videos.reverse();
+      for (let i = 0; i < fetchedData.length; i++) {
+        if (!data.some((el) => el.username === fetchedData[i].username)) {
+          data.push(fetchedData[i]);
+        }
+      }
+      setLatestVideo(data);
+      setLatestUploads(true);
+    }
+    if (fetchUploads.data.latest_tracks) {
+      let data = [];
+      let fetchedData = fetchUploads.data.latest_tracks.reverse();
+      for (let i = 0; i < fetchedData.length; i++) {
+        if (!data.some((el) => el.username === fetchedData[i].username)) {
+          data.push(fetchedData[i]);
+        }
+      }
+      setLatestTrack(data);
+      setLatestUploads(true);
+    }
+  };
 
   useEffect(() => {
     if (user) {
@@ -59,16 +116,16 @@ export default function App() {
       }
     }
 
+    fetchData();
+
     // eslint-disable-next-line
   }, []);
 
-  const userType = useSelector((state) => state.toggleUserType);
-  //dispatch(toggleUserType(userType));
   return (
     <>
       <Router>
         <div className={`${darkMode && 'dark'}  `}>
-          <div className=" h-full  dark:bg-gradient-to-b dark:from-dbeats-dark-primary  dark:to-dbeats-dark-primary   ">
+          <div className=" ">
             <div className=" ">
               {/* {userType !== null ? '' : <OnboardingModal></OnboardingModal>} */}
 
@@ -138,12 +195,7 @@ export default function App() {
                   <PinnedPanel />
                   <Track />
                 </Route>
-                <Route exact path="/nft">
-                  <TopLoader page="nft" />
-                  <NavBar />
-                  <PinnedPanel />
-                  <NFTFeed />
-                </Route>
+
                 <Route exact path="/loader">
                   <TopLoader page="loader" />
                   <NavBar />
@@ -168,6 +220,51 @@ export default function App() {
                   <PinnedPanel />
                   <UserRoomPage />
                 </Route>
+
+                {/* ADMIN ROUTES */}
+
+                <div className="">
+                  <div className="relative ">
+                    <NavBar />
+                    {/* Header */}
+                    {(user && user.username === 'orion') ||
+                    (user && user.username === 'rishikeshk9') ? (
+                      <>
+                        <HeaderStats data={arrayData} />
+                        <div className="px-4 md:px-10 mx-auto w-full -m-24">
+                          <Switch>
+                            <Route
+                              path="/admin/dashboard"
+                              exact
+                              component={() => <Dashboard data={arrayData} />}
+                            />
+
+                            <Route
+                              path="/admin/maps"
+                              exact
+                              component={() => <Maps data={arrayData} />}
+                            />
+                            <Route
+                              path="/admin/settings"
+                              exact
+                              component={() => <Settings data={arrayData} />}
+                            />
+                            <Route
+                              path="/admin/tables"
+                              exact
+                              component={() => <Tables data={arrayData} />}
+                            />
+
+                            <Redirect from="/admin" to="/admin/dashboard" />
+                          </Switch>
+                          <FooterAdmin />
+                        </div>
+                      </>
+                    ) : (
+                      <Redirect from="/admin" to="/" />
+                    )}
+                  </div>
+                </div>
 
                 <Route>
                   <TopLoader page="pagenotfound" />

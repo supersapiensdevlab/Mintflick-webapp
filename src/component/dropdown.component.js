@@ -88,8 +88,8 @@ const Dropdown = ({ data, setSelected, getSelected }) => {
     <Listbox value={selectedItem} onChange={setSelectedItem}>
       {({ open }) => (
         <>
-          <div className="mt-1 relative w-max">
-            <Listbox.Button className="relative w-full text-black dark:text-white bg-white bg-gradient-to-br from-dbeats-dark-secondary to-bg-dbeats-dark-primary nm-flat-dbeats-dark-primary-lg hover:bg-dbeats-dark-alt cursor-pointer rounded  shadow-sm pl-3 pr-10 py-2 text-left   focus:outline-none focus:ring-1 focus:ring-dbeats-light focus:border-dbearing-dbeats-light sm:text-sm lg:text-xs 2xl:text-sm">
+          <div className="  relative w-max p-0.5 bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary nm-flat-dbeats-dark-primary-lg">
+            <Listbox.Button className="relative w-full text-black dark:text-white bg-white bg-gradient-to-br from-dbeats-dark-secondary to-bg-dbeats-dark-secondary  hover:nm-inset-dbeats-dark-secondary-lg cursor-pointer rounded  shadow-sm pl-3 pr-10 py-2 text-left   focus:outline-none focus:ring-1 focus:ring-dbeats-light focus:border-dbearing-dbeats-light sm:text-sm lg:text-xs 2xl:text-sm">
               <span className="flex items-center">
                 <span className="ml-3 block truncate">{selectedItem}</span>
               </span>

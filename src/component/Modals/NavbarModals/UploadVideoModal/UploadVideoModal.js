@@ -239,7 +239,7 @@ const UploadVideoModal = (props) => {
       }
     >
       <div className={`${darkMode && 'dark'} px-5 py-5 lg:px-3 lg:py-3 2xl:px-5 2xl:py-5 h-max`}>
-        <h2 className="grid grid-cols-5 justify-items-center 2xl:text-2xl text-lg 2xl:py-4 py-4 lg:py-3 dark:bg-dbeats-dark-alt bg-white dark:text-white">
+        <h2 className="grid grid-cols-5 justify-items-center 2xl:text-2xl text-lg 2xl:py-4 py-4 lg:py-3 dark:bg-dbeats-dark-primary bg-white dark:text-white">
           <div className="col-span-4 pl-14 ">Upload Video</div>
           <div className="mr-7 flex justify-end w-full" onClick={props.handleCloseVideoUpload}>
             <i className="fas fa-times cursor-pointer"></i>
@@ -247,7 +247,7 @@ const UploadVideoModal = (props) => {
         </h2>
         <hr />
         <form method="POST" encType="multipart/formdata">
-          <div className=" bg-white text-gray-500  dark:bg-dbeats-dark-alt dark:text-gray-100   shadow-sm rounded-lg  2xl:px-5 2xl:py-5  lg:px-2 lg:py-1 px-2 py-1 mb-5 lg:mb-2 2xl:mb-5 lg:max-h-full  max-h-96  overflow-y-auto overflow-hidden">
+          <div className=" bg-white text-gray-500  dark:bg-dbeats-dark-primary dark:text-gray-100   shadow-sm rounded-lg  2xl:px-5 2xl:py-5  lg:px-2 lg:py-1 px-2 py-1 mb-5 lg:mb-2 2xl:mb-5 lg:max-h-full  max-h-96  overflow-y-auto overflow-hidden">
             <div className="md:grid md:grid-cols-3 md:gap-6  ">
               <div className="md:col-span-1  ">
                 <div className="lg:mt-5 mt-0 md:col-span-2 2xl:p-5 lg:p-3 p-2">

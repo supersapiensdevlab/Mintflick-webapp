@@ -6,6 +6,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { toggleDarkMode } from '../../actions/index';
 import logoDark from '../../assets/images/dark-logo.svg';
+import CircleLogoDark from '../../assets/images/dark-logo-svg.svg';
+
 import CircleLogo from '../../assets/images/dbeats-logo.png';
 import logo from '../../assets/images/white-logo.svg';
 import useWeb3Modal from '../../hooks/useWeb3Modal';
@@ -300,7 +302,7 @@ const NavBar = () => {
           <div className="flex w-full self-center">
             <div
               id="side-bar"
-              className="mr-5 cursor-pointer  rounded  self-center"
+              className="mr-1 sm:mr-5 cursor-pointer  rounded  self-center"
               onClick={handleOnOpen}
             >
               <svg
@@ -330,7 +332,7 @@ const NavBar = () => {
                   alt="dbeats_logo"
                   className="h-10 lg:h-7 2xl:h-10 w-max hidden dark:block"
                 ></img>
-                <span className="mr-5 text-lg font-bold ml-2"> </span>
+                <span className="mr-5 text-lg font-bold   sm:ml-2"> </span>
               </Link>
               <Link to="/" className="flex self-center cursor-pointer sm:hidden ">
                 <img
@@ -339,21 +341,21 @@ const NavBar = () => {
                   className="h-10 lg:h-7 2xl:h-10 w-max dark:hidden"
                 ></img>
                 <img
-                  src={CircleLogo}
+                  src={CircleLogoDark}
                   alt="dbeats_logo"
-                  className="h-10 lg:h-7 2xl:h-10 w-max hidden dark:block"
+                  className="h-10 lg:h-7 2xl:h-10 w-max hidden dark:block  "
                 ></img>
-                <span className="mr-5 text-lg font-bold ml-2"> </span>
+                <span className="mr-5 text-lg font-bold   sm:ml-2"> </span>
               </Link>
               <p
-                className="px-2 -ml-3.5 flex pb-0.5 mt-1 text-sm text-white dark:text-dbeats-light 
+                className="px-2 -ml-3.5 flex pb-0.5 mt-1 text-xs text-white dark:text-dbeats-light 
               bg-dbeats-light dark:bg-dbeats-alt border border-white dark:border-dbeats-light font-semibold rounded-lg"
               >
                 beta
               </p>
             </div>
 
-            <div className="w-2/3 sm:w-1/3 mx-auto  self-center dark:focus:ring-dbeats-light">
+            <div className="w-2/5 sm:w-1/3 mx-auto  self-center dark:focus:ring-dbeats-light">
               <div className="dark:focus:ring-dbeats-light  self-center rounded-full  flex bg-gray-100 dark:bg-dbeats-dark-primary">
                 <input
                   type="text"
@@ -583,11 +585,15 @@ const NavBar = () => {
             ) : (
               <Link
                 to="/signup"
-                className="shadow-sm px-2  2xl:px-3 lg:px-1.5 2xl:py-1 lg:py-0.5 bg-gradient-to-r from-dbeats-secondary-light to-dbeats-light dark:bg-gradient-to-r 
-                dark:from-dbeats-secondary-light dark:to-dbeats-light text-white rounded font-bold ml-2 md:mx-2 md:ml-0 flex"
+                className="shadow-sm p-0.5 dark:bg-gradient-to-r 
+                dark:from-dbeats-secondary-light dark:to-dbeats-light  ml-2 md:mx-2 md:ml-0 transform-gpu  transition-all duration-300 ease-in-out my-1 
+                cursor-pointer relative inline-flex items-center justify-center   mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-3xl 
+                 bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-primary   hover:nm-inset-dbeats-dark-primary   hover:text-white dark:text-white  "
               >
-                <i className="fas fa-sign-in-alt text-xs lg:text-sm 2xl:text-lg self-center mr-2 hidden md:block"></i>
-                <span className="self-center text-sm lg:text-xs 2xl:text-lg">Signup</span>
+                <span className="relative px-5 py-2.5   bg-gradient-to-br from-dbeats-light to-dbeats-secondary-light hover:nm-inset-dbeats-secondary-light  rounded-3xl flex">
+                  <i className="fas fa-sign-in-alt text-xs lg:text-sm 2xl:text-lg self-center mr-2 hidden md:block align-middle"></i>{' '}
+                  signup
+                </span>
               </Link>
             )}
           </div>

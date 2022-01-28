@@ -120,7 +120,7 @@ const PlayBackCard = (props) => {
                         : person
                     }
                     alt=""
-                    className="  w-16 h-14   sm:rounded-full    self-start"
+                    className="  w-16 h-14    rounded-full    self-start"
                   />
                 </Link>
                 <div className="w-full flex  justify-between mt-2">
@@ -137,36 +137,28 @@ const PlayBackCard = (props) => {
                       </div>
                     </div>
                   </div>
-                  <div>
-                    <div
-                      onClick={trackFollowers}
-                      className="  rounded-3xl group w-max ml-2 p-0.5  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-secondary      hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
-                    >
-                      {props.playbackUserData.followee_count.map((followee) => {
-                        if (user) {
-                          if (followee === user.username) {
-                            setButtonText('following');
-                          }
-                        } else {
-                          setButtonText('login');
-                        }
-                      })}
-                      <div className="  h-full w-full text-black dark:text-white p-1 flex   rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:nm-inset-dbeats-dark-secondary ">
-                        <p className="self-center mx-2 flex">
-                          <span>
-                            {buttonText === 'follow' ? (
-                              <i className="fas fa-plus self-center mx-2"></i>
-                            ) : null}
-                            &nbsp;{buttonText}
-                          </span>
-                          <div
-                            hidden={subscribeLoader}
-                            className="w-3 h-3 ml-2 border-t-4 border-b-4 border-white rounded-full animate-spin"
-                          ></div>
-                        </p>
-                      </div>
+                  {/* Hiding Follow Button due to bugs 
+                <div>
+                  <div
+                    onClick={trackFollowers}
+                    className="  rounded-3xl group w-max ml-2 p-0.5  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-secondary      hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
+                  >
+                    <div className="  h-full w-full text-black dark:text-white p-1 flex   rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:nm-inset-dbeats-dark-secondary ">
+                      <p className="self-center mx-2 flex">
+                        <span>
+                          {buttonText === 'follow' ? (
+                            <i className="fas fa-plus self-center mx-2"></i>
+                          ) : null}
+                          &nbsp;{buttonText}
+                        </span>
+                        <div
+                          hidden={subscribeLoader}
+                          className="w-3 h-3 ml-2 border-t-4 border-b-4 border-white rounded-full animate-spin"
+                        ></div>
+                      </p>
                     </div>
                   </div>
+                </div> */}
                 </div>
               </div>
 

@@ -26,6 +26,7 @@
     "axios": "^0.21.1",
     "bcryptjs": "^2.4.3",
     "chai": "^4.3.4",
+    "chart.js": "^2.9.4",
     "decimal.js": "^3.0.0",
     "draftjs-to-html": "^0.9.1",
     "ethers": "^5.5.2",

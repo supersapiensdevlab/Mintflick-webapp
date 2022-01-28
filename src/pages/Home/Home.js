@@ -112,7 +112,7 @@ const Home = () => {
         <meta property="og:image"              content="https://beta.dbeats.live/favicon.ico" />
       </Helmet> */}
       <div className={`${darkMode && 'dark'} justify-center pt-18`}>
-        {activeStreams ? (
+        {activeStreams && activeStreams.length > 0 ? (
           <div className="   mx-20 my-4">
             <div id="display_videos" className="lg:my-5 lg:px-4  ">
               <div className=" lg:px-4 h-max">
@@ -235,50 +235,50 @@ const Home = () => {
                       setSelected={setSelectedCategory}
                       getSelected={selectedCategory}
                     />
-                    <div className="self-center sm:rounded-3xl group w-max ml-2 p-1  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-primary   hover:nm-inset-dbeats-dark-primary          flex items-center            transform-gpu  transition-all duration-300 ease-in-out ">
+                    <div className="self-center rounded-3xl group w-max mx-2 p-1   justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-primary   hover:nm-inset-dbeats-dark-primary          flex items-center            transform-gpu  transition-all duration-300 ease-in-out ">
                       <span
                         onClick={() => setSelectedFilter(filter[0])}
                         className={`${
                           selectedFilter === filter[0]
-                            ? 'nm-inset-dbeats-dark-primary dark:text-dbeats-light'
+                            ? 'nm-inset-dbeats-dark-secondary dark:text-dbeats-light'
                             : ''
-                        }  text-black dark:text-white  flex p-1 sm:rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-secondary`}
+                        }  text-black dark:text-white  flex p-1 rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-secondary`}
                       >
                         <p className="self-center mx-2">All</p>
                       </span>
                     </div>
-                    <div className="self-center sm:rounded-3xl group w-max ml-2 p-1  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-primary   hover:nm-inset-dbeats-dark-primary          flex items-center            transform-gpu  transition-all duration-300 ease-in-out ">
+                    <div className="self-center rounded-3xl group w-max ml-2 p-1  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-primary   hover:nm-inset-dbeats-dark-primary          flex items-center            transform-gpu  transition-all duration-300 ease-in-out ">
                       <span
                         onClick={() => setSelectedFilter(filter[1])}
                         className={`${
                           selectedFilter === filter[1]
-                            ? 'nm-inset-dbeats-dark-primary dark:text-dbeats-light'
+                            ? 'nm-inset-dbeats-dark-secondary dark:text-dbeats-light'
                             : ''
-                        }  text-black dark:text-white  flex p-1 sm:rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-secondary`}
+                        }  text-black dark:text-white  flex p-1 rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-secondary`}
                       >
                         <p className="self-center mx-2">Music</p>
                       </span>
                     </div>
-                    <div className="self-center sm:rounded-3xl group w-max ml-2 p-1  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-primary   hover:nm-inset-dbeats-dark-primary          flex items-center            transform-gpu  transition-all duration-300 ease-in-out ">
+                    <div className="self-center rounded-3xl group w-max ml-2 p-1  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-primary   hover:nm-inset-dbeats-dark-primary          flex items-center            transform-gpu  transition-all duration-300 ease-in-out ">
                       <span
                         onClick={() => setSelectedFilter(filter[2])}
                         className={`${
                           selectedFilter === filter[2]
-                            ? 'nm-inset-dbeats-dark-primary dark:text-dbeats-light'
+                            ? 'nm-inset-dbeats-dark-secondary dark:text-dbeats-light'
                             : ''
-                        }  text-black dark:text-white  flex p-1 sm:rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-secondary`}
+                        }  text-black dark:text-white  flex p-1 rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-secondary`}
                       >
                         <p className="self-center mx-2">Videos</p>
                       </span>
                     </div>
-                    <div className="self-center sm:rounded-3xl group w-max ml-2 p-1  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-primary   hover:nm-inset-dbeats-dark-primary          flex items-center            transform-gpu  transition-all duration-300 ease-in-out ">
+                    <div className="self-center rounded-3xl group w-max ml-2 p-1  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-primary   hover:nm-inset-dbeats-dark-primary          flex items-center            transform-gpu  transition-all duration-300 ease-in-out ">
                       <span
                         onClick={() => setSelectedFilter(filter[3])}
                         className={`${
                           selectedFilter === filter[3]
-                            ? 'nm-inset-dbeats-dark-primary dark:text-dbeats-light'
+                            ? 'nm-inset-dbeats-dark-secondary dark:text-dbeats-light'
                             : ''
-                        }  text-black dark:text-white  flex p-1 sm:rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-secondary`}
+                        }  text-black dark:text-white  flex p-1 rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-secondary`}
                       >
                         <p className="self-center mx-2">NFT</p>
                       </span>

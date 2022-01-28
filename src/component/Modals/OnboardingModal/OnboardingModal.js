@@ -51,61 +51,65 @@ export default function Example() {
             leaveFrom="opacity-300    "
             leaveTo="opacity-0    "
           >
-            <div className="inline-block align-bottom  bg-dbeats-dark-secondary  rounded-lg text-center overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full">
-              <div className="bg-white dark:bg-dbeats-dark-secondary px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+            <div className="inline-block align-bottom     rounded-lg text-center overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full">
+              <div className="   px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                 <div className="sm:flex sm:items-start">
                   <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-center  ">
                     <Dialog.Title
                       as="h3"
                       className="text-2xl leading-6 font-medium uppercase text-gray-900 dark:text-dbeats-light"
                     >
-                      Choose your Preference
+                      Choose your Pill
                     </Dialog.Title>
-                    <div className="grid grid-cols-3 gap-4 my-3  ">
+                    <div className="grid grid-cols-3 gap-4 my-5  ">
                       <div
                         onClick={() => {
                           dispatch(toggleUserType(0));
                           setOpen(false);
                         }}
-                        className="bg-dbeats-dark-primary text-dbeats-white h-48 sm:w-48 cursor-pointer p-5 rounded border hover:border-dbeats-light border-opacity-20 transition-all duration-200 "
                       >
-                        <span role="img" className="text-5xl">
-                          🕹️
-                        </span>
-                        <div className=" rounded  font-bold cursor-pointer  mt-2">GAMER</div>
-                        <p className="text-xs sm:text-sm text-gray-400">
-                          Best experience for streamers & Gaming Audience.
-                        </p>
+                        <div>
+                          <div className=" rounded-3xl group w-max ml-2 p-1  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-primary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out ">
+                            <span className="px-2  text-black dark:text-white  flex p-1 rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-secondary hover:nm-inset-dbeats-dark-secondary ">
+                              <span role="img" className="sm:text-3xl text-3xl">
+                                🕹️
+                              </span>
+                              <p className="self-center mx-2">GAMER</p>
+                            </span>
+                          </div>
+                        </div>
                       </div>
                       <div
                         onClick={() => {
                           dispatch(toggleUserType(1));
                           setOpen(false);
                         }}
-                        className="bg-dbeats-dark-primary text-dbeats-white h-48 sm:w-48 cursor-pointer p-5 rounded border hover:border-dbeats-light border-opacity-20 transition-all duration-200 "
                       >
-                        <span role="img" className="text-5xl">
-                          🤳🏽
-                        </span>
-                        <div className=" rounded  font-bold cursor-pointer  mt-2">INFLUENCER</div>
-                        <p className="text-xs sm:text-sm text-gray-400">
-                          Your web2 Social media Experience on web3 Dose.
-                        </p>
+                        <div>
+                          <div className=" rounded-3xl group w-max ml-2 p-1  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-primary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out ">
+                            <span className=" px-2 text-black dark:text-white  flex p-1 rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-secondary hover:nm-inset-dbeats-dark-secondary ">
+                              <span role="img" className="sm:text-3xl text-3xl ">
+                                🤳🏽
+                              </span>
+                              <p className="self-center mx-2">CREATOR</p>
+                            </span>
+                          </div>
+                        </div>
                       </div>
                       <div
                         onClick={() => {
                           dispatch(toggleUserType(2));
                           setOpen(false);
                         }}
-                        className="bg-dbeats-dark-primary text-dbeats-white h-48 sm:w-48 cursor-pointer p-5 rounded border hover:border-dbeats-light border-opacity-20 transition-all duration-200 "
                       >
-                        <span role="img" className="text-5xl">
-                          📚
-                        </span>
-                        <div className=" rounded  font-bold cursor-pointer  mt-2">BLOGGER</div>
-                        <p className="text-xs sm:text-sm text-gray-400">
-                          For the Love of reading exciting articles & blogs
-                        </p>
+                        <div className=" rounded-3xl group w-max ml-2 p-1  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-primary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out ">
+                          <span className=" px-2 text-black dark:text-white  flex p-1 rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-secondary hover:nm-inset-dbeats-dark-secondary ">
+                            <span role="img" className="sm:text-3xl text-3xl">
+                              📚
+                            </span>
+                            <p className="self-center mx-2">BLOGGER</p>
+                          </span>
+                        </div>
                       </div>
                     </div>
                     <div className="mt-2">

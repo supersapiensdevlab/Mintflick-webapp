@@ -14,11 +14,11 @@ const FeedbackForm = () => {
       <Transition
         show={showWelcome}
         as={Fragment}
-        enter="transition ease-in-out duration-100"
+        enter="transition ease-in-out duration-500"
         enterFrom="transform opacity-0    "
-        enterTo="transform opacity-100    "
-        leave="transition ease-in-out duration-100"
-        leaveFrom="transform opacity-100   "
+        enterTo="transform opacity-500    "
+        leave="transition ease-in-out duration-500"
+        leaveFrom="transform opacity-500   "
         leaveTo="transform   opacity-0  "
       >
         <div className="mb-4 border border-gray-100 dark:text-gray-50 dark:border-dbeats-light dark:border-opacity-10 bg-white nm-flat-dbeats-dark-primary  rounded-xl shadow-sm dark:shadow-md    text-dbeats-dark-primary p-4    dialog ">
