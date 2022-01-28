@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import person from '../../assets/images/profile.svg';
 
@@ -30,11 +30,23 @@ const MainToolbar = () => {
   //Loader
   const [loader, setLoader] = useState(true);
   const user = JSON.parse(window.localStorage.getItem('user'));
+  const [iceBreaker, setIceBreaker] = useState(['Hello World!']);
+
+  const questions = [
+    'how are you today?',
+    'how do you feel?',
+    'Hey! whats up?',
+    'how are you doing?',
+  ];
+
+  useEffect(() => {
+    setIceBreaker(questions[Math.floor(Math.random() * questions.length)]);
+  }, []);
 
   return (
     <>
-      <div className="p-0.5 w-full  font-bold dark:text-white rounded-xl bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary nm-flat-dbeats-dark-primary-lg">
-        <div className=" p-2  font-bold dark:text-white rounded-xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary">
+      <div className="p-0.5 w-full  font-bold dark:text-white sm:rounded-xl bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary nm-flat-dbeats-dark-primary-lg">
+        <div className=" p-2  font-bold dark:text-white sm:rounded-xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary">
           <div className="flex justify-between mb-2 px-2">
             <Link to={`/profile/${user.username}`} className="mr-4">
               <img
@@ -43,10 +55,13 @@ const MainToolbar = () => {
                 className="  w-16 h-14   rounded-full    self-start"
               />
             </Link>
-            <input className="border-2 border-dbeats-dark-secondary rounded-3xl w-full nm-flat-dbeats-dark-primary  px-5 focus:nm-inset-dbeats-dark-primary"></input>
+            <input
+              placeholder={iceBreaker}
+              className="border-2 border-dbeats-dark-secondary text-gray-200 rounded-3xl w-full nm-flat-dbeats-dark-primary placeholder-white placeholder-opacity-25 px-5 focus:nm-inset-dbeats-dark-primary "
+            ></input>
           </div>
 
-          <div className=" flex justify-end px-2">
+          <div className=" flex justify-end px-1">
             <div
               onClick={() => {
                 handleShowAnnouncement();
@@ -54,11 +69,11 @@ const MainToolbar = () => {
                 handleCloseTrackUpload();
                 handleCloseNFTUpload();
               }}
-              className=" rounded-3xl group w-max ml-2 p-0.5  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-secondary       hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
+              className=" rounded-3xl group w-max  p-0.5  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-secondary       hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
             >
               <div className=" group h-full w-full text-black dark:text-white p-1 flex  rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:nm-inset-dbeats-dark-secondary ">
                 <i className="fas fa-camera self-center mx-2 text-white opacity-70 group-hover:opacity-100"></i>
-                <p className="self-center mx-2 text-white opacity-70 group-hover:opacity-100">
+                <p className="self-center mx-2 text-white opacity-70 group-hover:opacity-100 sm:font-normal text-xs">
                   Post
                 </p>
               </div>
@@ -71,11 +86,11 @@ const MainToolbar = () => {
                 handleCloseTrackUpload();
                 handleCloseNFTUpload();
               }}
-              className=" rounded-3xl group w-max ml-2 p-0.5  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-secondary      hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
+              className=" rounded-3xl group w-max  p-0.5  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-secondary      hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
             >
               <div className="  h-full w-full text-black dark:text-white p-1 flex  rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:nm-inset-dbeats-dark-secondary ">
                 <i className="fas fa-video self-center mx-2 text-white opacity-70 group-hover:opacity-100"></i>
-                <p className="self-center mx-2 text-white opacity-70 group-hover:opacity-100">
+                <p className="self-center mx-2 text-white opacity-70 group-hover:opacity-100 sm:font-normal text-xs ">
                   Video
                 </p>
               </div>
@@ -88,11 +103,11 @@ const MainToolbar = () => {
                 handleCloseVideoUpload();
                 handleCloseNFTUpload();
               }}
-              className=" rounded-3xl group w-max ml-2 p-0.5  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-secondary      hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
+              className=" rounded-3xl group w-max  p-0.5  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-secondary      hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
             >
               <div className="  h-full w-full text-black dark:text-white p-1 flex  rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:nm-inset-dbeats-dark-secondary ">
                 <i className="fas fa-music self-center mx-2 text-white opacity-70 group-hover:opacity-100"></i>
-                <p className="self-center mx-2 text-white opacity-70 group-hover:opacity-100">
+                <p className="self-center mx-2 text-white opacity-70 group-hover:opacity-100 sm:font-normal text-xs">
                   Track
                 </p>
               </div>
@@ -105,11 +120,11 @@ const MainToolbar = () => {
                 handleCloseTrackUpload();
                 handleCloseAnnouncement();
               }}
-              className=" rounded-3xl group w-max ml-2 p-0.5  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-secondary      hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
+              className=" rounded-3xl group w-max  p-0.5  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-secondary      hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
             >
               <div className="  h-full w-full text-black dark:text-white p-1 flex  rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:nm-inset-dbeats-dark-secondary ">
                 <i className="fas fa-stroopwafel self-center mx-2 text-white opacity-70 group-hover:opacity-100"></i>
-                <p className="self-center mx-2 text-white opacity-70 group-hover:opacity-100">
+                <p className="self-center mx-2 text-white opacity-70 group-hover:opacity-100 sm:font-normal text-xs">
                   NFT
                 </p>
               </div>

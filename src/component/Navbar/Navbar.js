@@ -590,10 +590,12 @@ const NavBar = () => {
                 cursor-pointer relative inline-flex items-center justify-center   mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-3xl 
                  bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-primary   hover:nm-inset-dbeats-dark-primary   hover:text-white dark:text-white  "
               >
-                <span className="relative px-5 py-2.5   bg-gradient-to-br from-dbeats-light to-dbeats-secondary-light hover:nm-inset-dbeats-secondary-light  rounded-3xl flex">
-                  <i className="fas fa-sign-in-alt text-xs lg:text-sm 2xl:text-lg self-center mr-2 hidden md:block align-middle"></i>{' '}
-                  signup
-                </span>
+                <div className=" px-5 py-1   bg-gradient-to-br from-dbeats-light to-dbeats-secondary-light hover:nm-inset-dbeats-secondary-light  rounded-3xl flex self-center align-middle">
+                  <i className="fas fa-sign-in-alt text-xs lg:text-sm 2xl:text-lg self-center mr-2 hidden md:block align-middle justify-center"></i>{' '}
+                  <p className=" text-xs lg:text-sm 2xl:text-lg self-center mr-2 hidden md:block align-middle justify-center">
+                    signup
+                  </p>
+                </div>
               </Link>
             )}
           </div>

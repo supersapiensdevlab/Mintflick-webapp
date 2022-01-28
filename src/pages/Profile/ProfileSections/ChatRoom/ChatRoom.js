@@ -126,14 +126,14 @@ function ChatRoom(props) {
           </div>
         </main>
         {showEmojis && (
-              <div className='absolute bottom-16 xl:bottom-24'>
-                <Picker onEmojiClick={onEmojiClick} />
-              </div>
-            )}
+          <div className="absolute bottom-16 xl:bottom-24">
+            <Picker onEmojiClick={onEmojiClick} />
+          </div>
+        )}
         <div className="p-4 rounded-lg dark: bg-dbeats-dark-secondary">
           <form className="flex" id="chat-form" onSubmit={saveMessage}>
             <button onClick={() => setShowEmojis(!showEmojis)}>
-              <img className='w-8 h-8' src={emoji}></img>
+              <img className="w-8 h-8" src={emoji}></img>
             </button>
             <input
               className="flex-1 dark: bg-dbeats-dark-secondary border-0"

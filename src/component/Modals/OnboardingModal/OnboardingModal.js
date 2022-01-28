@@ -51,17 +51,17 @@ export default function Example() {
             leaveFrom="opacity-300    "
             leaveTo="opacity-0    "
           >
-            <div className="inline-block align-bottom     rounded-lg text-center overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full">
-              <div className="   px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+            <div className="inline-block align-bottom     rounded-lg text-center overflow-hidden  transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full">
+              <div className="   px-1 pt-5 pb-4 sm:p-6 sm:pb-4">
                 <div className="sm:flex sm:items-start">
-                  <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-center  ">
+                  <div className="mt-3 text-center sm:mt-0 sm:mx-4 sm:text-center  ">
                     <Dialog.Title
                       as="h3"
                       className="text-2xl leading-6 font-medium uppercase text-gray-900 dark:text-dbeats-light"
                     >
                       Choose your Pill
                     </Dialog.Title>
-                    <div className="grid grid-cols-3 gap-4 my-5  ">
+                    <div className="grid grid-cols-3 gap-2 my-5  ">
                       <div
                         onClick={() => {
                           dispatch(toggleUserType(0));
@@ -69,12 +69,12 @@ export default function Example() {
                         }}
                       >
                         <div>
-                          <div className=" rounded-3xl group w-max ml-2 p-1  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-primary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out ">
+                          <div className=" rounded-3xl group w-max   p-1  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-primary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out ">
                             <span className="px-2  text-black dark:text-white  flex p-1 rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-secondary hover:nm-inset-dbeats-dark-secondary ">
-                              <span role="img" className="sm:text-3xl text-3xl">
+                              <span role="img" className="sm:text-3xl text-2xl">
                                 🕹️
                               </span>
-                              <p className="self-center mx-2">GAMER</p>
+                              <p className="self-center mx-1 text-sm sm:text-base">GAMER</p>
                             </span>
                           </div>
                         </div>
@@ -86,12 +86,12 @@ export default function Example() {
                         }}
                       >
                         <div>
-                          <div className=" rounded-3xl group w-max ml-2 p-1  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-primary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out ">
+                          <div className=" rounded-3xl group w-max   p-1  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-primary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out ">
                             <span className=" px-2 text-black dark:text-white  flex p-1 rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-secondary hover:nm-inset-dbeats-dark-secondary ">
-                              <span role="img" className="sm:text-3xl text-3xl ">
+                              <span role="img" className="sm:text-3xl text-2xl ">
                                 🤳🏽
                               </span>
-                              <p className="self-center mx-2">CREATOR</p>
+                              <p className="self-center mx-1 text-sm sm:text-base">CREATOR</p>
                             </span>
                           </div>
                         </div>
@@ -102,12 +102,12 @@ export default function Example() {
                           setOpen(false);
                         }}
                       >
-                        <div className=" rounded-3xl group w-max ml-2 p-1  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-primary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out ">
+                        <div className=" rounded-3xl group w-max  p-1  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-primary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out ">
                           <span className=" px-2 text-black dark:text-white  flex p-1 rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-secondary hover:nm-inset-dbeats-dark-secondary ">
-                            <span role="img" className="sm:text-3xl text-3xl">
+                            <span role="img" className="sm:text-3xl text-2xl">
                               📚
                             </span>
-                            <p className="self-center mx-2">BLOGGER</p>
+                            <p className="self-center mx-1 text-sm sm:text-base">BLOGGER</p>
                           </span>
                         </div>
                       </div>

@@ -89,11 +89,11 @@ const Dropdown = ({ data, setSelected, getSelected }) => {
       {({ open }) => (
         <>
           <div className="  relative w-max p-0.5 bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary nm-flat-dbeats-dark-primary-lg">
-            <Listbox.Button className="relative w-full text-black dark:text-white bg-white bg-gradient-to-br from-dbeats-dark-secondary to-bg-dbeats-dark-secondary  hover:nm-inset-dbeats-dark-secondary-lg cursor-pointer rounded  shadow-sm pl-3 pr-10 py-2 text-left   focus:outline-none focus:ring-1 focus:ring-dbeats-light focus:border-dbearing-dbeats-light sm:text-sm lg:text-xs 2xl:text-sm">
+            <Listbox.Button className="relative w-full text-black dark:text-white   bg-gradient-to-br from-dbeats-dark-secondary to-bg-dbeats-dark-secondary  hover:nm-inset-dbeats-dark-secondary-lg cursor-pointer rounded  shadow-sm pl-3 pr-10 py-2 text-left   focus:outline-none focus:ring-1 focus:ring-dbeats-light focus:border-dbearing-dbeats-light sm:text-sm lg:text-xs 2xl:text-sm">
               <span className="flex items-center">
-                <span className="ml-3 block truncate">{selectedItem}</span>
+                <span className="ml-2 sm:ml-3 block truncate">{selectedItem}</span>
               </span>
-              <span className="ml-3 absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+              <span className="ml-2 sm:ml-3 absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
                 <SelectorIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
               </span>
             </Listbox.Button>

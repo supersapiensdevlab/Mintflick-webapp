@@ -206,7 +206,7 @@ const PlayBackCard = (props) => {
                       : person
                   }
                   alt=""
-                  className="w-16 h-14 sm:rounded-full    self-start"
+                  className="w-16 h-14 rounded-full    self-start"
                 />
               </Link>
               <div className="w-full flex  justify-between mt-2">
