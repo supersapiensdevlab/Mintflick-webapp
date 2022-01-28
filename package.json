@@ -29,6 +29,7 @@
     "chart.js": "^2.9.4",
     "decimal.js": "^3.0.0",
     "draftjs-to-html": "^0.9.1",
+    "emoji-picker-react": "^3.5.0",
     "ethers": "^5.5.2",
     "express": "^4.17.1",
     "get-video-duration": "^4.0.0",

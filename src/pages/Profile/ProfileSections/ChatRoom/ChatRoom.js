@@ -1,7 +1,8 @@
 import React, { useEffect, useReducer, useRef, useState } from 'react';
 import './chatroom.css';
 import io from 'socket.io-client';
-import moment from 'moment';
+import Picker from 'emoji-picker-react';
+import emoji from '../../../../assets/images/emoji.png';
 function ChatRoom(props) {
   // to get loggedin user from   localstorage
   const user = JSON.parse(window.localStorage.getItem('user'));
@@ -15,6 +16,13 @@ function ChatRoom(props) {
   const [currentSocket, setCurrentSocket] = useState(null);
   const dates = new Set();
 
+  const [showEmojis, setShowEmojis] = useState(false);
+
+  const onEmojiClick = (event, emojiObject) => {
+    setForm({
+      message: formState.message + emojiObject.emoji,
+    });
+  };
   useEffect(() => {
     // initialize gun locally
     if (user) {
@@ -39,15 +47,15 @@ function ChatRoom(props) {
   function saveMessage(e) {
     e.preventDefault();
     let room = {
-      room_admin:props.userp._id,
-      chat:{
+      room_admin: props.userp._id,
+      chat: {
         user_id: user._id,
         username: user.username,
         profile_image: user.profile_image,
         type: 'text',
         message: formState.message,
-        createdAt:Date.now()
-      }
+        createdAt: Date.now(),
+      },
     };
     currentSocket.emit('chatMessage', room);
     setForm({
@@ -117,8 +125,16 @@ function ChatRoom(props) {
             <div ref={chatRef} />
           </div>
         </main>
+        {showEmojis && (
+              <div className='absolute bottom-16 xl:bottom-24'>
+                <Picker onEmojiClick={onEmojiClick} />
+              </div>
+            )}
         <div className="p-4 rounded-lg dark: bg-dbeats-dark-secondary">
           <form className="flex" id="chat-form" onSubmit={saveMessage}>
+            <button onClick={() => setShowEmojis(!showEmojis)}>
+              <img className='w-8 h-8' src={emoji}></img>
+            </button>
             <input
               className="flex-1 dark: bg-dbeats-dark-secondary border-0"
               onChange={onChange}
