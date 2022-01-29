@@ -264,31 +264,45 @@ const AnnouncementModal = (props) => {
   return (
     <Modal
       isOpen={props.showAnnouncement}
-      className={
+      className={`${
         darkMode
-          ? 'h-max lg:w-1/2 w-5/6 mx-auto  lg:mt-20 2xl:mt-40 mt-24   rounded-xl z-500'
-          : 'h-max lg:w-1/2 w-5/6 mx-auto  lg:mt-20 2xl:mt-40 mt-24 bg-gray-50 rounded-xl shadow-2xl bg-white  dark:bg-dbeats-dark-primary dark:text-gray-100  bg-opacity-60 dark:bg-opacity-90  dark:backdrop-filter  dark:backdrop-blur-md  backdrop-filter  backdrop-blur-md '
+          ? '     rounded-xl z-500'
+          : '           rounded-xl shadow-2xl    dark:bg-dbeats-dark-primary dark:text-gray-100 '
       }
+          h-max lg:w-1/3 w-full mx-auto lg:mt-20 2xl:mt-40 mt-24`}
     >
       <div className={`${darkMode && 'dark'} `}>
-        <div className=" rounded-xl dark:rounded-none  ">
-          <h2 className=" justify-items-center rounded-t-xl dark:rounded-t-sm font-bold 2xl:text-2xl text-lg py-3 dark:bg-dbeats-dark-alt bg-white dark:text-white   dark:bg-dbeats-dark-primary dark:text-gray-100  bg-opacity-60 dark:bg-opacity-90  dark:backdrop-filter  dark:backdrop-blur-md  backdrop-filter  backdrop-blur-md ">
-            <div className=" text-center font-bold">Post Details</div>
-            <i
-              className="fas fa-times cursor-pointer absolute -mt-6 ml-auto  right-0 mr-6"
+        <div className=" rounded-xl dark:rounded-none  px-12">
+          <div
+            className="w-full   px-6 rounded-t-xl dark:rounded-t-sm  text-lg  align-middle  py-3 
+          dark:bg-dbeats-dark-alt flex bg-white   justify-between    dark:text-gray-100 "
+          >
+            <p className=" self-center ">Create a post</p>
+
+            <div
               onClick={props.handleCloseAnnouncement}
-            ></i>
-          </h2>
-          <div className="h-full w-full flex align-center ">
-            <Container className="2xl:px-12 2xl:pb-4 rounded-b-xl dark:rounded-b-sm  lg:px-7 lg:pb-2 h-full px-4 w-full dark:bg-dbeats-dark-alt overflow-y-auto lg:overflow-hidden bg-white  dark:bg-dbeats-dark-primary dark:text-gray-100  bg-opacity-60 dark:bg-opacity-90  dark:backdrop-filter  dark:backdrop-blur-md  backdrop-filter  backdrop-blur-md ">
+              className=" rounded-3xl group w-max   p-1  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-secondary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
+            >
+              <span className="  text-black dark:text-white  flex p-1 rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:nm-inset-dbeats-dark-secondary ">
+                <p className="self-center mx-2">
+                  {' '}
+                  <i className="fas fa-times"></i>{' '}
+                </p>
+              </span>
+            </div>
+          </div>
+          <div className="h-full w-full  align-center ">
+            <Container className=" 2xl:pb-4 rounded-b-xl dark:rounded-b-sm  lg:px-7 lg:pb-2 h-full px-4 w-full dark:bg-dbeats-dark-alt overflow-y-auto lg:overflow-hidden bg-white   dark:text-gray-100 ">
               <div className="align-center bg-gray-100 h-full dark:bg-dbeats-dark-alt">
-                <div className={`${classes.view_container} lg:h-72 2xl:h-96 h-48 overflow-y-auto`}>
-                  <textarea
-                    className={`${classes.textarea_container} h-5/6 w-full 
-                     lg:text-sm 2xl:text-lg border-b border-gray-300 dark:bg-dbeats-dark-secondary`}
-                    placeholder="Enter Announcement Details"
-                    onChange={(e) => handleInputChange(e)}
-                  ></textarea>
+                <div className={`${classes.view_container} lg:h-72 2xl:h-96 h-80 overflow-y-auto`}>
+                  <div className="p-1 nm-flat-dbeats-dark-secondary h-5/6 w-full">
+                    <textarea
+                      className={`${classes.textarea_container} w-full h-full
+                     lg:text-sm 2xl:text-lg border-b border-gray-300  placeholder-white placeholder-opacity-25 nm-flat-dbeats-dark-primary`}
+                      placeholder={`NFT of thoughts...`}
+                      onChange={(e) => handleInputChange(e)}
+                    ></textarea>
+                  </div>
                   {showLinkPreview && !postImage ? (
                     <>
                       <LinkPreview
@@ -300,35 +314,41 @@ const AnnouncementModal = (props) => {
                   ) : (
                     <>
                       {postImage ? (
-                        <div className="">
+                        <div className=" text-right">
+                          <button
+                            className="px-4 pt-2 text-white text-opacity-25 justify-end text-right hover:text-opacity-60"
+                            onClick={() => setPostImage(null)}
+                          >
+                            Remove
+                          </button>
                           <img
                             src={postImage}
                             alt="display"
                             height="150px"
                             width="100%"
-                            className="p-4"
+                            className="px-4"
                           />
                         </div>
                       ) : (
-                        <span className="text-gray-400 text-md ml-4 ">Image Preview</span>
+                        <></>
                       )}
                     </>
                   )}
                 </div>
 
-                <div className="px-2 flex  items-center w-full justify-between dark:bg-dbeats-dark-secondary">
-                  <div className="flex items-center">
-                    <div className="mx-2">
-                      <input
-                        type="text"
-                        placeholder="Enter Event Link(Optional)"
-                        onChange={handleLinkChange}
-                        className=" w-64 h-8 my-1 rounded-sm sm:text-sm lg:text-sm 2xl:text-md
-                        focus:ring-dbeats-dark-primary border dark:border-dbeats-alt border-gray-300 
-                        dark:bg-dbeats-dark-primary ring-dbeats-dark-secondary ring-0 flex-1 block "
-                      />
-                    </div>
-                    <div className="mx-2">
+                <div className="px-2 mt-1 mb-2 py-2 items-center w-full   dark:bg-dbeats-dark-secondary">
+                  <div className="mx-2">
+                    <input
+                      type="text"
+                      placeholder="Enter Event Link(Optional)"
+                      onChange={handleLinkChange}
+                      className=" w-64 h-max my-2 py-2 rounded-sm sm:text-sm lg:text-sm 2xl:text-md
+                        focus:ring-dbeats-dark-primary border dark:border-dbeats-dark-alt border-gray-300 
+                        dark:bg-dbeats-dark-primary ring-dbeats-dark-secondary ring-0 flex-1 block nm-flat-dbeats-dark-secondary"
+                    />
+                  </div>
+                  <div className="flex items-center mx-4">
+                    <div className=" ">
                       <i
                         className="far fa-images text-xl cursor-pointer opacity-40 hover:opacity-100"
                         onClick={() => {
@@ -368,31 +388,38 @@ const AnnouncementModal = (props) => {
                       />
                     </div>
                   </div>
-                  <div className="flex items-center">
-                    <div className=" mx-5 flex items-center w-56">
+                  <div className=" mx-2 flex justify-end  ">
+                    <div className=" mx-5  items-center  hidden">
                       <input
                         type="range"
                         value={uploading}
                         min="0"
                         max="10"
                         hidden={props.loader}
-                        className="appearance-none cursor-pointer w-full h-3 bg-green-400 
-                font-white rounded-full slider-thumb  backdrop-blur-md"
+                        className="appearance-none cursor-pointer w-full h-3 bg-green-400 font-white rounded-full slider-thumb  backdrop-blur-md"
                       />
                       <p className="mx-2 text-base font-medium text-white" hidden={props.loader}>
                         {Math.round(uploading * 10)}%
                       </p>
                     </div>
-                    <button
+
+                    <div
                       type="submit"
                       onClick={handleAnnouncement}
-                      className=" 2xl:my-3 lg:my-2 mr-1 bg-white px-1 2xl:py-2  py-1 2xl:text-md lg:text-sm  
-                      font-semibold bg-dbeats-light  transform transition 
-                      delay-50 duration-300 ease-in-out hover:scale-105 text-white border-0 
-                      lg:w-24 2xl:w-28 w-24 rounded-sm cursor-pointer "
+                      className="  transform-gpu  transition-all duration-300 ease-in-out mt-3 
+                      cursor-pointer relative inline-flex items-center justify-center p-1 mb-2 
+                      mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-3xl  
+                      bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  
+                      nm-flat-dbeats-dark-secondary   hover:nm-inset-dbeats-dark-secondary   hover:text-white dark:text-white  "
                     >
-                      POST
-                    </button>
+                      <span
+                        className="relative px-5 py-2.5   
+                      bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-secondary-dark-primary 
+                      hover:nm-inset-dbeats-secondary-light  rounded-3xl transition-all duration-300"
+                      >
+                        Post
+                      </span>
+                    </div>
                     <div
                       className="animate-spin rounded-full h-7 w-7 ml-3 border-t-2 border-b-2 bg-gradient-to-r from-green-400 to-blue-500 "
                       hidden={props.loader}

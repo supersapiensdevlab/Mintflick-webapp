@@ -55,7 +55,14 @@ const MainToolbar = () => {
                 className="  w-16 h-14   rounded-full    self-start"
               />
             </Link>
+
             <input
+              onClick={() => {
+                handleShowAnnouncement();
+                handleCloseVideoUpload();
+                handleCloseTrackUpload();
+                handleCloseNFTUpload();
+              }}
               placeholder={iceBreaker}
               className="border-2 border-dbeats-dark-secondary text-gray-200 rounded-3xl w-full nm-flat-dbeats-dark-primary placeholder-white placeholder-opacity-25 px-5 focus:nm-inset-dbeats-dark-primary "
             ></input>

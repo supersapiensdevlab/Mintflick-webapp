@@ -23,6 +23,7 @@
     "@truffle/contract": "^4.2.3",
     "@unlock-protocol/unlock-js": "^0.20.4",
     "@walletconnect/web3-provider": "^1.0.8",
+    "autoprefixer": "^9.8.8",
     "axios": "^0.21.1",
     "bcryptjs": "^2.4.3",
     "chai": "^4.3.4",
@@ -44,6 +45,7 @@
     "moralis": "^0.0.25",
     "nft.storage": "^3.3.0",
     "noty": "^3.2.0-beta-deprecated",
+    "postcss": "^7.0.39",
     "react": "^17.0.2",
     "react-awesome-modal": "^2.0.5",
     "react-bootstrap": "^1.6.3",
@@ -68,6 +70,7 @@
     "reactjs-popup": "^2.0.5",
     "screenfull": "^5.1.0",
     "socket.io-client": "^4.4.1",
+    "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.2.17",
     "tailwindcss-filters": "^3.0.0",
     "tailwindcss-important": "^1.0.0",
     "tailwindcss-neumorphism": "^0.1.0",
@@ -102,9 +105,6 @@
     "not op_mini all"
   ],
   "devDependencies": {
-    "autoprefixer": "^9.8.6",
-    "postcss": "^7.0.36",
-    "prettier": "^2.4.1",
-    "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.2.7"
+    "prettier": "^2.4.1"
   }
 }
