@@ -112,7 +112,9 @@ const AnnouncementCard = (props) => {
                 {!props.post.post_image && showLinkPreview && linkData ? (
                   <>
                     <img
-                      src={linkData.image.url}
+                      src={
+                        linkData && linkData.image && linkData.image.url ? linkData.image.url : null
+                      }
                       alt="announcement_info"
                       className="mx-auto h-full w-auto"
                     />
