@@ -26,7 +26,7 @@ function ChatRoom(props) {
   useEffect(() => {
     // initialize gun locally
     if (user) {
-      const socket = io(process.env.REACT_APP_SERVER_URL);
+      const socket = io("https://dbeats-chat.herokuapp.com/");
       setCurrentSocket(socket);
       socket.emit('joinroom', { user_id: user._id, room_id: props.userp._id });
       socket.on('init', (msgs) => {
@@ -65,8 +65,15 @@ function ChatRoom(props) {
   const renderDate = (chat, dateNum) => {
     const timestampDate = new Date(chat.createdAt);
     // Add to Set so it does not render again
+    const today = new Date(Date.now());
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
     dates.add(dateNum);
-
+    if (timestampDate.toDateString() == today.toDateString()) {
+      return <p className="text-center text-sm">Today</p>;
+    } else if (timestampDate.toDateString() == yesterday.toDateString()) {
+      return <p className="text-center text-sm">Yesterday</p>;
+    }
     return <p className="text-center text-sm">{timestampDate.toDateString()}</p>;
   };
   // update the form state as the user types
@@ -144,7 +151,7 @@ function ChatRoom(props) {
               type="text"
               placeholder="Enter Message"
               required
-              autoComplete={false}
+              autoComplete="false"
             />
             <button type="submit" className="cursor-pointer px-4 py-2 dark: bg-dbeats-dark-primary">
               <i className="fas fa-paper-plane" /> Send
