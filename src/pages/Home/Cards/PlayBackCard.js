@@ -26,14 +26,10 @@ const PlayBackCard = (props) => {
 
   const [time, setTime] = useState(null);
 
-  const [index, setIndex] = useState(0);
-
   useEffect(() => {
-    let ind = props.playbackUserData.videos.length - 1;
-    setIndex(ind);
-    if (props.playbackUserData.videos && props.playbackUserData.videos.length > 0) {
-      let videotime = props.playbackUserData.videos[ind].time;
-      const timestamp = new Date(videotime * 1000); // This would be the timestamp you want to format
+    if (props.playbackUserData) {
+      let videotime = props.playbackUserData.time;
+      const timestamp = new Date(videotime); // This would be the timestamp you want to format
       setTime(moment(timestamp).fromNow());
     }
     // eslint-disable-next-line
@@ -51,7 +47,7 @@ const PlayBackCard = (props) => {
     }
     //console.log(followers);
     const followData = {
-      following: `${props.playbackUserData.username}`,
+      following: `${props.playbackUserData.user.username}`,
       follower: `${user.username}`,
     };
 
@@ -104,19 +100,20 @@ const PlayBackCard = (props) => {
 
   return (
     <>
-      {props.playbackUserData.videos && props.playbackUserData.videos.length > 0 ? (
+      {props.playbackUserData ? (
         <div
           className={`${props.darkMode && 'dark'} my-4  dark:text-gray-50 
            shadow-sm dark:shadow-md  p-0.5  sm:rounded-xl bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-primary-lg      text-dbeats-dark-primary    relative   `}
         >
+          {console.log(props.playbackUserData)}
           <div className="sm:rounded-xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary">
             <div className=" pb-4 ">
               <div className="flex   text-black text-sm font-medium   px-4  py-3">
-                <Link to={`/profile/${props.playbackUserData.username}/`} className="mr-4">
+                <Link to={`/profile/${props.playbackUserData.user.username}/`} className="mr-4">
                   <img
                     src={
-                      props.playbackUserData.profile_image
-                        ? props.playbackUserData.profile_image
+                      props.playbackUserData.user.profile_image
+                        ? props.playbackUserData.user.profile_image
                         : person
                     }
                     alt=""
@@ -127,14 +124,18 @@ const PlayBackCard = (props) => {
                   <div>
                     <div className="w-full self-center  ">
                       <Link
-                        to={`/profile/${props.playbackUserData.username}/`}
+                        to={`/profile/${props.playbackUserData.user.username}/`}
                         className="2xl:text-sm lg:text-xs text-sm text-gray-500  mb-2"
                       >
-                        {props.playbackUserData.name}
+                        <div className="flex align-middle">
+                          <p className="text-white mr-1">{props.playbackUserData.user.name}</p>
+                          &middot;<p className="text-white ml-1 text-opacity-40">{time}</p>
+                        </div>
+
+                        <p className="text-white text-opacity-40">
+                          {props.playbackUserData.user.username}
+                        </p>
                       </Link>{' '}
-                      <div className="2xl:text-sm lg:text-xs text-sm text-gray-500 pr-2 flex  ">
-                        {time}
-                      </div>
                     </div>
                   </div>
                   {/* Hiding Follow Button due to bugs 
@@ -162,16 +163,16 @@ const PlayBackCard = (props) => {
                 </div>
               </div>
 
-              <span className=" text-base  dark:text-gray-200   text-gray-900 px-4  ">
-                {props.playbackUserData.videos[index].videoName.slice(0, 45)}
-                {props.playbackUserData.videos[index].videoName.length > 45 ? '...' : ''}
-              </span>
+              <div className=" text-base  dark:text-gray-200   text-gray-900 px-4  ">
+                {props.playbackUserData.title.slice(0, 45)}
+                {props.playbackUserData.title.length > 45 ? '...' : ''}
+              </div>
             </div>
             <div
               className={`cursor-pointer w-full 2xl:h-max lg:h-max md:h-max xs:h-max min-h-full   dark:bg-black bg-black `}
             >
               <Link
-                to={`/playback/${props.playbackUserData.username}/${props.playbackUserData.videos[index].videoId}`}
+                to={`/playback/${props.playbackUserData.user.username}/${props.playbackUserData.videoId}`}
                 className=" "
               >
                 <ReactPlayer
@@ -181,28 +182,19 @@ const PlayBackCard = (props) => {
                   playing={playing}
                   muted={false}
                   volume={0.5}
-                  url={props.playbackUserData.videos[index].link}
+                  url={props.playbackUserData.link}
                   controls={false}
                   onMouseMove={handleMouseMove}
                   onMouseLeave={hanldeMouseLeave}
                 />
               </Link>
-
-              <Image
-                src={props.playbackUserData.videos[index].videoImage}
-                height={200}
-                width={200}
-                className="object-cover  h-52 w-full absolute top-0 z-500 hidden "
-                alt={props.playbackUserData.videos[index].videoName}
-                placeholderSrc={dbeatsLogoBnW}
-              />
             </div>
             <div className="flex   text-black text-sm font-medium   px-4  py-3">
-              <Link to={`/profile/${props.playbackUserData.username}/`} className="mr-4">
+              <Link to={`/profile/${props.playbackUserData.user.username}/`} className="mr-4">
                 <img
                   src={
-                    props.playbackUserData.profile_image
-                      ? props.playbackUserData.profile_image
+                    props.playbackUserData.user.profile_image
+                      ? props.playbackUserData.user.profile_image
                       : person
                   }
                   alt=""
@@ -213,10 +205,10 @@ const PlayBackCard = (props) => {
                 <div>
                   <div className="w-full self-center  ">
                     <Link
-                      to={`/profile/${props.playbackUserData.username}/`}
+                      to={`/profile/${props.playbackUserData.user.username}/`}
                       className="2xl:text-sm lg:text-xs text-sm text-gray-500  mb-2"
                     >
-                      {props.playbackUserData.name}
+                      {props.playbackUserData.user.name}
                     </Link>{' '}
                     <div className="2xl:text-sm lg:text-xs text-sm text-gray-500 pr-2 flex  ">
                       owner

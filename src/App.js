@@ -131,12 +131,13 @@ export default function App() {
 
               <Switch>
                 <Route exact path="/">
-                  <OnboardingModal />
+                  {/* <OnboardingModal /> */}
                   <TopLoader page="home" />
                   <NavBar />
                   <PinnedPanel />
-                  {userType === 0 ? <GamerHome /> : null}
-                  {userType === 1 ? <VideoHome /> : null}
+                  {userType === 0 ? <VideoHome /> : null}
+
+                  {userType === 1 ? <GamerHome /> : null}
                   {userType === 2 ? <VideoHome /> : null}
                 </Route>
                 <Route exact path="/signup">

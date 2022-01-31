@@ -80,17 +80,24 @@ const Home = () => {
     }
 
     const fetchUploads = await axios.get(`${process.env.REACT_APP_SERVER_URL}/trending`);
-    if (fetchUploads.data.latest_videos) {
+    if (fetchUploads.data) {
+      console.log(fetchUploads.data.length);
       let data = [];
-      let fetchedData = fetchUploads.data.latest_videos.reverse();
+      let fetchedData = fetchUploads.data.reverse();
+      console.log(fetchedData.length);
+
       for (let i = 0; i < fetchedData.length; i++) {
         if (!data.some((el) => el.username === fetchedData[i].username)) {
           data.push(fetchedData[i]);
         }
       }
       setLatestVideo(data);
+      {
+        console.log(data);
+      }
       setLatestUploads(true);
     }
+
     if (fetchUploads.data.latest_tracks) {
       let data = [];
       let fetchedData = fetchUploads.data.latest_tracks.reverse();
@@ -286,7 +293,14 @@ const Home = () => {
                   </div>
 
                   <div className="my-2">
-                    {arrayData.map((playbackUser, i) => {
+                    {/* {arrayData.map((playbackUser, i) => {
+                      return (
+                        <div key={i}>
+                          <PlayBackCard darkMode={darkMode} playbackUserData={playbackUser} />
+                        </div>
+                      );
+                    })} */}
+                    {latestVideo.map((playbackUser, i) => {
                       return (
                         <div key={i}>
                           <PlayBackCard darkMode={darkMode} playbackUserData={playbackUser} />
