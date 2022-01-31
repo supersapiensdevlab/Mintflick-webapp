@@ -61,6 +61,8 @@ function ChatRoom(props) {
     setForm({
       message: '',
     });
+    setShowEmojis(false)
+
   }
   const renderDate = (chat, dateNum) => {
     const timestampDate = new Date(chat.createdAt);
@@ -137,11 +139,12 @@ function ChatRoom(props) {
             <Picker onEmojiClick={onEmojiClick} />
           </div>
         )}
-        <div className="p-4 rounded-lg dark: bg-dbeats-dark-secondary">
-          <form className="flex" id="chat-form" onSubmit={saveMessage}>
-            <button onClick={() => setShowEmojis(!showEmojis)}>
+        <div className="flex p-4 rounded-lg dark: bg-dbeats-dark-secondary">
+        <button onClick={() => setShowEmojis(!showEmojis)}>
               <img className="w-8 h-8" src={emoji}></img>
             </button>
+          <form className="" id="chat-form" onSubmit={saveMessage}>
+
             <input
               className="flex-1 dark: bg-dbeats-dark-secondary border-0"
               onChange={onChange}
