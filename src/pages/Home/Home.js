@@ -80,20 +80,17 @@ const Home = () => {
     }
 
     const fetchUploads = await axios.get(`${process.env.REACT_APP_SERVER_URL}/trending`);
-    if (fetchUploads.data) {
-      console.log(fetchUploads.data.length);
-      let data = [];
-      let fetchedData = fetchUploads.data.reverse();
-      console.log(fetchedData.length);
+    console.log(fetchUploads.data.trending);
+    if (fetchUploads.data.trending) {
+      let trending = [];
+      let fetchedData = fetchUploads.data.trending.reverse();
 
       for (let i = 0; i < fetchedData.length; i++) {
-        if (!data.some((el) => el.username === fetchedData[i].username)) {
-          data.push(fetchedData[i]);
-        }
+        trending.push(fetchedData[i]);
       }
-      setLatestVideo(data);
+      setLatestVideo(trending);
       {
-        console.log(data);
+        console.log(trending);
       }
       setLatestUploads(true);
     }
@@ -293,6 +290,10 @@ const Home = () => {
                   </div>
 
                   <div className="my-2">
+                    <div
+                      className="mt-10 animate-spin rounded-full h-7 w-7 mx-auto border-t-2 border-b-2 bg-gradient-to-r from-green-400 to-blue-500 "
+                      hidden={latestVideo.length > 0 ? true : false}
+                    ></div>{' '}
                     {/* {arrayData.map((playbackUser, i) => {
                       return (
                         <div key={i}>
@@ -313,11 +314,11 @@ const Home = () => {
 
               <div className="bottom-0  ">
                 <div className="LottieButton opacity-10   ">
-                  <Lottie options={defaultOptions} height={200} width={300} />
+                  <Lottie options={defaultOptions} height={150} width={225} />
                 </div>
-                <h3 className="text-black   capitalize text-center proxima-reg dark:text-white dark:text-opacity-20">
+                <p className="text-black   capitalize text-center proxima-reg dark:text-white dark:text-opacity-20">
                   Developed by Creators for the Creators on a Decentralised Web
-                </h3>
+                </p>
               </div>
             </div>
 

@@ -29,7 +29,7 @@ const PlayBackCard = (props) => {
   useEffect(() => {
     if (props.playbackUserData) {
       let videotime = props.playbackUserData.time;
-      const timestamp = new Date(videotime); // This would be the timestamp you want to format
+      const timestamp = new Date(videotime * 1000); // This would be the timestamp you want to format
       setTime(moment(timestamp).fromNow());
     }
     // eslint-disable-next-line
@@ -129,7 +129,10 @@ const PlayBackCard = (props) => {
                       >
                         <div className="flex align-middle">
                           <p className="text-white mr-1">{props.playbackUserData.user.name}</p>
-                          &middot;<p className="text-white ml-1 text-opacity-40">{time}</p>
+                          &middot;
+                          <p className="text-white ml-1 text-opacity-40 text-xs self-center align-middle">
+                            {time}
+                          </p>
                         </div>
 
                         <p className="text-white text-opacity-40">
