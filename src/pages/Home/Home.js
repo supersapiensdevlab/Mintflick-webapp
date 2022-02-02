@@ -80,7 +80,7 @@ const Home = () => {
     }
 
     const fetchUploads = await axios.get(`${process.env.REACT_APP_SERVER_URL}/trending`);
-    console.log(fetchUploads.data.trending);
+    // console.log(fetchUploads.data.trending);
     if (fetchUploads.data.trending) {
       let trending = [];
       let fetchedData = fetchUploads.data.trending.reverse();

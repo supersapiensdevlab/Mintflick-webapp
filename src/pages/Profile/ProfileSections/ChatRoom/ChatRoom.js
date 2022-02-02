@@ -4,6 +4,8 @@ import io from 'socket.io-client';
 import Picker from 'emoji-picker-react';
 import emoji from '../../../../assets/images/emoji.png';
 import reply from '../../../../assets/images/reply.svg';
+import person from '../../../../assets/images/profile.svg';
+
 function ChatRoom(props) {
   // to get loggedin user from   localstorage
   const user = JSON.parse(window.localStorage.getItem('user'));
@@ -92,7 +94,7 @@ function ChatRoom(props) {
   };
 
   return (
-    <div className="text-gray-400	 box-border px-5 h-max lg:col-span-5 col-span-6 w-full mt-16 dark:bg-dbeats-dark-primary">
+    <div className="text-gray-400	 box-border px-2 h-max lg:col-span-5 col-span-6 w-full mt-16 dark:bg-dbeats-dark-primary">
       <div className="overflow-hidden">
         <main className="chat-container-height">
           <div className="p-2 chat-height overflow-y-scroll	">
@@ -102,56 +104,60 @@ function ChatRoom(props) {
 
                   return (
                     <div key={message._id}>
-                      {dates.has(dateNum.toDateString())
-                        ? null
-                        : renderDate(message, dateNum.toDateString())}
-                      <div className=" px-3 p-2 	rounded-xl dark: bg-dbeats-dark-secondary	mb-2 inline-block">
-                        {message.reply_to?(
-                          <div className='ml-14 pl-2 py-1 border-l-2 border-dbeats-light rounded-xl dark: bg-dbeats-dark-primary'>
-                             <p
-                            className={
-                              message.reply_to.username === user.username
-                                ? 'text-sm  mb-1  text-blue-400'
-                                : 'text-sm  mb-1 text-white	'
-                            }
-                          > {message.reply_to.username}</p>
-                          <p className="text-xs">{message.reply_to.message}</p>
+                      {dates.has(dateNum.toDateString()) ? null : (
+                        <p className="my-1 rounded-3xl bg-dbeats-dark-secondary px-3 py-1 block w-max mx-auto">
+                          {renderDate(message, dateNum.toDateString())}
+                        </p>
+                      )}
+                      <div className=" px-3 p-2 rounded	 dark: bg-dbeats-dark-secondary	my-1 inline-block shadow">
+                        {message.reply_to ? (
+                          <div className="group  px-3 py-2 border-l-2 border-dbeats-light  dark: nm-inset-dbeats-dark-primary">
+                            <p
+                              className={
+                                message.reply_to.username === user.username
+                                  ? 'text-sm  mb-1  text-dbeats-light'
+                                  : 'text-sm  mb-1 text-white	'
+                              }
+                            >
+                              {' '}
+                              {message.reply_to.username}
+                            </p>
+                            <p className="text-xs">{message.reply_to.message}</p>
                           </div>
-                        ):null}
-                        <div className='inline-flex items-center'>
-                        <div className="chat_message_profile pr-2">
-                          <img
-                            height="50px"
-                            width="50px"
-                            className="rounded-full"
-                            alt="profile"
-                            src={message.profile_image}
-                          />
-                        </div>
-                        <div className="p-1">
-                          <p
-                            className={
-                              message.username === user.username
-                                ? 'text-base font-bold mb-1  text-blue-400'
-                                : 'text-base font-bold mb-1 text-white	'
-                            }
-                          >
-                            {message.username}{' '}
-                            <span className="text-xs text-gray-300 font-light">
-                              {new Date(message.createdAt).toLocaleString('en-US', {
-                                hour: '2-digit',
-                                minute: '2-digit',
-                                hour12: true,
-                              })}
-                            </span>
-                          </p>
-                          <p className="text">{message.message}</p>
-                        </div>
-                        <img
-                          onClick={() => onreply(message)}
-                          src={reply}
-                          className="ml-2 w-4 h-4"
-                        ></img>
+                        ) : null}
+                        <div className="inline-flex items-center group">
+                          <div className="chat_message_profile pr-2">
+                            <img
+                              height="50px"
+                              width="50px"
+                              className="rounded-full"
+                              alt="profile"
+                              src={message.profile_image ? message.profile_image : person}
+                            />
+                          </div>
+                          <div className="p-1 mt-1">
+                            <p
+                              className={
+                                message.username === user.username
+                                  ? 'text-base font-bold   text-dbeats-light'
+                                  : 'text-base font-bold  text-white	'
+                              }
+                            >
+                              {message.username}{' '}
+                              <span className="text-xs text-gray-300 font-light">
+                                {new Date(message.createdAt).toLocaleString('en-US', {
+                                  hour: '2-digit',
+                                  minute: '2-digit',
+                                  hour12: true,
+                                })}
+                              </span>
+                            </p>
+                            <p className="text">{message.message}</p>
+                          </div>
+                          <i
+                            onClick={() => onreply(message)}
+                            className=" opacity-0 group-hover:opacity-100 fas fa-reply ml-2 w-4 h-4 cursor-pointer text-dbeats-white text-opacity-40 hover:text-opacity-100"
+                          ></i>
                         </div>
                       </div>
                     </div>
@@ -162,7 +168,7 @@ function ChatRoom(props) {
           </div>
         </main>
         {showEmojis && (
-          <div className="absolute bottom-16 xl:bottom-24">
+          <div className="absolute bottom-16 xl:bottom-24 shadow-none">
             <Picker onEmojiClick={onEmojiClick} />
           </div>
         )}
@@ -183,7 +189,7 @@ function ChatRoom(props) {
                   <p
                     className={
                       formState.replyto.username === user.username
-                        ? 'text-base font-bold mb-1  text-blue-400'
+                        ? 'text-base font-bold mb-1  text-dbeats-light'
                         : 'text-base font-bold mb-1 text-white	'
                     }
                   >
@@ -213,23 +219,27 @@ function ChatRoom(props) {
               <img className="w-8 h-8" src={emoji}></img>
             </button>
             <form className="flex" id="chat-form" onSubmit={saveMessage}>
-              <input
-                className="flex-grow dark: bg-dbeats-dark-secondary border-0"
-                onChange={onChange}
-                name="message"
-                value={formState.message}
-                id="msg"
-                type="text"
-                placeholder="Enter Message"
-                required
-                autoComplete="false"
-              />
-              <button
-                type="submit"
-                className="cursor-pointer px-4 py-2 dark: bg-dbeats-dark-primary"
-              >
-                <i className="fas fa-paper-plane" /> Send
-              </button>
+              <div className="p-1 nm-flat-dbeats-dark-secondary mx-3 focus:nm-inset-dbeats-dark-secondary">
+                <input
+                  className="flex-grow dark: bg-dbeats-dark-primary border-0  focus:border-dbeats-dark-alt focus:ring-0 focus:nm-inset-dbeats-dark-primary"
+                  onChange={onChange}
+                  name="message"
+                  value={formState.message}
+                  id="msg"
+                  type="text"
+                  placeholder="Enter Message"
+                  required
+                  autoComplete="false"
+                />
+              </div>
+              <div className="p-1 rounded-3xl nm-flat-dbeats-dark-secondary">
+                <button
+                  type="submit"
+                  className="cursor-pointer px-4 py-2 dark: bg-dbeats-dark-primary rounded-3xl"
+                >
+                  <i className="fas fa-paper-plane mr-1" /> Send
+                </button>
+              </div>
             </form>
           </div>
         </div>

@@ -19,12 +19,12 @@ store.subscribe(() =>
     function (config) {
       Noty.closeAll();
       // Do something before request is sent
-      new Noty({
-        type: 'info',
-        text: 'Please Wait',
-        theme: 'metroui',
-        layout: 'bottomRight',
-      }).show();
+      // new Noty({
+      //   type: 'info',
+      //   text: 'Please Wait',
+      //   theme: 'metroui',
+      //   layout: 'bottomRight',
+      // }).show();
       return config;
     },
     function (error) {

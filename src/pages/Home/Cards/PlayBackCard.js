@@ -105,7 +105,6 @@ const PlayBackCard = (props) => {
           className={`${props.darkMode && 'dark'} my-4  dark:text-gray-50 
            shadow-sm dark:shadow-md  p-0.5  sm:rounded-xl bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-primary-lg      text-dbeats-dark-primary    relative   `}
         >
-          {console.log(props.playbackUserData)}
           <div className="sm:rounded-xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary">
             <div className=" pb-4 ">
               <div className="flex   text-black text-sm font-medium   px-4  py-3">
