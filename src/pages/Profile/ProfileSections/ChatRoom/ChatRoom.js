@@ -349,7 +349,7 @@ function ChatRoom(props) {
               <i className="pl-2 text-2xl fas fa-paperclip"></i>
             </button>
 
-            <form className="flex" id="chat-form" onSubmit={saveMessage}>
+            <form className="flex items-center" id="chat-form" onSubmit={saveMessage}>
               <div className="p-1 nm-flat-dbeats-dark-secondary mx-3 focus:nm-inset-dbeats-dark-secondary">
                 <input
                   className="flex-grow dark: bg-dbeats-dark-primary border-0  focus:border-dbeats-dark-alt focus:ring-0 focus:nm-inset-dbeats-dark-primary"
@@ -367,11 +367,15 @@ function ChatRoom(props) {
                 <button
                   disabled={uploadingFile}
                   type="submit"
-                  className="cursor-pointer px-4 py-2 dark: bg-dbeats-dark-primary rounded-3xl"
+                  className="px-4 py-2 dark: bg-dbeats-dark-primary rounded-3xl"
                 >
                   <i className="fas fa-paper-plane mr-1" /> Send
                 </button>
               </div>
+              <div
+              className="animate-spin rounded-full h-7 w-7 ml-3 border-t-2 border-b-2 bg-gradient-to-r from-green-400 to-blue-500 "
+              hidden={!uploadingFile}
+            ></div>
             </form>
           </div>
         </div>
