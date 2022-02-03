@@ -5,6 +5,7 @@ import Picker from 'emoji-picker-react';
 import emoji from '../../../../assets/images/emoji.png';
 import reply from '../../../../assets/images/reply.svg';
 import person from '../../../../assets/images/profile.svg';
+import { makeStorageClient } from '../../../../component/uploadHelperFunction';
 
 function ChatRoom(props) {
   // to get loggedin user from   localstorage
@@ -16,19 +17,26 @@ function ChatRoom(props) {
     message: '',
     replyto: null,
   });
+
+  const imageInput = useRef();
+  const soundInput = useRef();
+  const videoInput = useRef();
+  const fileInput = useRef();
+
   const [messages, setMessages] = useState([]);
   const [currentSocket, setCurrentSocket] = useState(null);
   const dates = new Set();
-
+  const [selectedFile, setSelectedFile] = useState(null);
   const [showEmojis, setShowEmojis] = useState(false);
-
+  const [showAttachmentDropdown, setShowAttachmentDropdown] = useState(false);
+  const [uploadingFile, setUploadingFile] = useState(false);
   const onEmojiClick = (event, emojiObject) => {
     setForm({ ...formState, message: formState.message + emojiObject.emoji });
   };
   useEffect(() => {
     // initialize gun locally
     if (user) {
-      // https://dbeats-chat.herokuapp.com/
+      // https://dbeats-chat.herokuapp.com
       const socket = io('https://dbeats-chat.herokuapp.com');
       setCurrentSocket(socket);
       socket.emit('joinroom', { user_id: user._id, room_id: props.userp._id });
@@ -49,6 +57,52 @@ function ChatRoom(props) {
   // set a new message in gun, update the local state to reset the form field
   function saveMessage(e) {
     e.preventDefault();
+    console.log(selectedFile.file);
+    if (selectedFile) {
+      setUploadingFile(true);
+      storeWithProgress(selectedFile.file)
+        .then((cid) => {
+          setUploadingFile(false);
+          console.log('https://ipfs.io/ipfs/' + cid + '/' + selectedFile.file[0].name);
+          let room = {
+            room_admin: props.userp._id,
+            chat: {
+              user_id: user._id,
+              username: user.username,
+              profile_image: user.profile_image,
+              type: 'image',
+              message: formState.message,
+              createdAt: Date.now(),
+              url: 'https://ipfs.io/ipfs/' + cid + '/' + selectedFile.file[0].name,
+            },
+          };
+          if (formState.replyto) {
+            room.chat.reply_to = formState.replyto;
+          }
+          currentSocket.emit('chatMessage', room);
+          setForm({
+            message: '',
+            replyto: null,
+          });
+          setShowEmojis(false);
+          setShowAttachmentDropdown(false);
+          setSelectedFile(null);
+         
+        })
+        .catch((err) => {
+          console.log(err);
+          setForm({
+            message: '',
+            replyto: null,
+          });
+          setUploadingFile(false);
+          setShowEmojis(false);
+          setShowAttachmentDropdown(false);
+          setSelectedFile(null);
+         
+        });
+        return;
+    }
     let room = {
       room_admin: props.userp._id,
       chat: {
@@ -92,6 +146,36 @@ function ChatRoom(props) {
   const onreply = (message) => {
     setForm({ ...formState, replyto: message });
   };
+  const onFileChange = (event) => {
+    // Update the state
+    setSelectedFile({
+      type: 'image',
+      file: event.target.files,
+      localurl: URL.createObjectURL(event.target.files[0]),
+    });
+    setShowAttachmentDropdown(false);
+  };
+
+  async function storeWithProgress(files) {
+    // show the root cid as soon as it's ready
+    const onRootCidReady = (cid) => {};
+    const file = [files[0]];
+    const totalSize = files[0].size;
+    let uploaded = 0;
+    const onStoredChunk = (size) => {
+      uploaded += size;
+      const pct = totalSize / uploaded;
+      // setUploading(10 - pct);
+      // console.log(`Uploading... ${pct}% complete`);
+    };
+
+    // makeStorageClient returns an authorized Web3.Storage client instance
+    const client = makeStorageClient();
+
+    // client.put will invoke our callbacks during the upload
+    // and return the root cid when the upload completes
+    return client.put(file, { onRootCidReady, onStoredChunk });
+  }
 
   return (
     <div className="text-gray-400	 box-border px-2 h-max lg:col-span-5 col-span-6 w-full mt-16 dark:bg-dbeats-dark-primary">
@@ -125,12 +209,19 @@ function ChatRoom(props) {
                             <p className="text-xs">{message.reply_to.message}</p>
                           </div>
                         ) : null}
+                        {message.type=='image'?(
+                          <div className='w-250'>
+                          <img src={message.url}></img>
+                          <a href={message.url} download target="_blank">Download</a>
+                          </div>
+                        ):null}
                         <div className="inline-flex items-center group">
-                          <div className="chat_message_profile pr-2">
+                          <div className="chat_message_profile pr-2 h-12 w-12">
                             <img
                               height="50px"
                               width="50px"
                               className="rounded-full"
+                              style={{ width: 'auto', maxWidth: '50px' }}
                               alt="profile"
                               src={message.profile_image ? message.profile_image : person}
                             />
@@ -172,6 +263,31 @@ function ChatRoom(props) {
             <Picker onEmojiClick={onEmojiClick} />
           </div>
         )}
+        {showAttachmentDropdown && (
+          <div className=" ml-5 absolute bottom-16 xl:bottom-24 shadow-none w-60  bg-dbeats-dark-alt">
+            <ul>
+              <input
+                id="image"
+                type="file"
+                accept=".jpg,.png,.jpeg,.gif,.webp"
+                onChange={onFileChange}
+                className="hidden"
+                ref={imageInput}
+              />
+              <li
+                onClick={() => {
+                  imageInput.current.click();
+                }}
+                className="hover:bg-dbeats-dark-primary cursor-pointer"
+              >
+                Image
+              </li>
+              <li className="hover:bg-dbeats-dark-primary cursor-pointer">Sound</li>
+              <li className="hover:bg-dbeats-dark-primary cursor-pointer">File</li>
+            </ul>
+          </div>
+        )}
+
         <div className="p-4 rounded-lg dark: bg-dbeats-dark-secondary">
           {formState.replyto ? (
             <div className="px-3 p-2 flex items-center	justify-between rounded-xl dark: bg-dbeats-dark-secondary	mb-2">
@@ -214,10 +330,26 @@ function ChatRoom(props) {
               </button>
             </div>
           ) : null}
+          {selectedFile ? (
+            <div className="flex justify-between">
+              <img src={selectedFile.localurl} className="w-24 h-24"></img>
+              <button
+                onClick={() => {
+                  setSelectedFile(null);
+                }}
+              >
+                <i className="fas fa-times"></i>
+              </button>
+            </div>
+          ) : null}
           <div className="flex">
             <button onClick={() => setShowEmojis(!showEmojis)}>
-              <img className="w-8 h-8" src={emoji}></img>
+              <i className="far fa-laugh text-2xl"></i>
             </button>
+            <button onClick={() => setShowAttachmentDropdown(!showAttachmentDropdown)}>
+              <i className="pl-2 text-2xl fas fa-paperclip"></i>
+            </button>
+
             <form className="flex" id="chat-form" onSubmit={saveMessage}>
               <div className="p-1 nm-flat-dbeats-dark-secondary mx-3 focus:nm-inset-dbeats-dark-secondary">
                 <input
@@ -234,6 +366,7 @@ function ChatRoom(props) {
               </div>
               <div className="p-1 rounded-3xl nm-flat-dbeats-dark-secondary">
                 <button
+                  disabled={uploadingFile}
                   type="submit"
                   className="cursor-pointer px-4 py-2 dark: bg-dbeats-dark-primary rounded-3xl"
                 >
