@@ -57,7 +57,6 @@ function ChatRoom(props) {
   // set a new message in gun, update the local state to reset the form field
   function saveMessage(e) {
     e.preventDefault();
-    console.log(selectedFile.file);
     if (selectedFile) {
       setUploadingFile(true);
       storeWithProgress(selectedFile.file)
