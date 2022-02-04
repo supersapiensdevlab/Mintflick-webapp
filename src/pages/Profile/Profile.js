@@ -129,7 +129,7 @@ const Profile = () => {
               <ChannelSection
                 privateUser={privateUser}
                 user={user}
-                className="md:invisible lg:visible"
+                className="md:visible invisible"
               />
               <Switch>
                 <Route path={`/profile/:username/text`}>

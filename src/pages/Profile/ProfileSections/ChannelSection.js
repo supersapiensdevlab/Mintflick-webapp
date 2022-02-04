@@ -40,7 +40,7 @@ const ChannelSection = (props) => {
     <div
       className={`${
         darkMode && 'dark'
-      } 2xl:pl-3 h-full  hidden lg:block  bg-gradient-to-b from-blue-50 via-blue-50 to-white  dark:bg-gradient-to-b dark:from-dbeats-dark-secondary  dark:to-dbeats-dark-primary`}
+      }  px-3 h-full mt-4 hidden md:block  bg-gradient-to-b from-blue-50 via-blue-50 to-white  dark:bg-gradient-to-b dark:from-dbeats-dark-secondary  dark:to-dbeats-dark-primary`}
     >
       <div
         id="recommended_channel"
@@ -61,7 +61,7 @@ const ChannelSection = (props) => {
             {props.user.username}&apos;s Channels
             {props.privateUser ? (
               <i
-                className="fas fa-plus    cursor-pointer rounded p-2 -top-1 hover:text-white dark:hover:bg-dbeats-dark-secondary hover:bg-dbeats-light ml-2 dark:hover:text-dbeats-light"
+                className="fas fa-plus    cursor-pointer rounded p-2 -top-1 hover:text-white dark:hover:bg-dbeats-dark-alt hover:bg-dbeats-light ml-2 dark:hover:text-dbeats-light"
                 onClick={handleShowChannelModal}
               ></i>
             ) : (
@@ -74,7 +74,7 @@ const ChannelSection = (props) => {
               <div key={i} className="  2xl:pb-2 2xl:pt-2 lg:my-1 lg:mt-3 2xl:mt-0">
                 <div>
                   <Link to={`/profile/${props.user.username}/${channel.type}`}>
-                    <div className="text-gray-600   cursor-pointer 2xl:text-base lg:text-xs dark:text-gray-200 hover:text-white w-full justify-between self-center hover:bg-dbeats-light dark:hover:bg-dbeats-dark-secondary dark:hover:text-dbeats-light  rounded 2xl:p-2 lg:p-1.5 relative">
+                    <div className="text-gray-600   cursor-pointer 2xl:text-base lg:text-xs dark:text-gray-200 hover:text-white w-full justify-between self-center hover:bg-dbeats-light dark:hover:bg-dbeats-dark-alt dark:hover:text-dbeats-light  rounded 2xl:p-2 lg:p-1.5 relative">
                       {' '}
                       {channel.type === 'text' ? <i className="fas fa-hashtag mr-2"></i> : ''}
                       {channel.type === 'voice' ? (
@@ -193,7 +193,7 @@ const ChannelSection = (props) => {
                 <div className="grid grid-cols-3 gap-4 w-full">
                   <button
                     onClick={handleCloseChannelModal}
-                    className=" block text-center col-span-1 px-5 w-full  mx-auto p-2 mt-4 mb-2  text-dbeats-light font-semibold rounded-lg border  border-dbeats-light hover:border-white hover:text-white hover:bg-dbeats-dark-secondary transition-all transform hover:scale-95"
+                    className=" block text-center col-span-1 px-5 w-full  mx-auto p-2 mt-4 mb-2  text-dbeats-light font-semibold rounded-lg border  border-dbeats-light hover:border-white hover:text-white hover:bg-dbeats-dark-alt transition-all transform hover:scale-95"
                   >
                     Cancel
                   </button>

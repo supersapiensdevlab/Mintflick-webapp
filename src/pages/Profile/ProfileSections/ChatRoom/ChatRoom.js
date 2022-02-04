@@ -175,9 +175,9 @@ function ChatRoom(props) {
   }
 
   return (
-    <div className="text-gray-400	 box-border px-2 h-max lg:col-span-5 col-span-6 w-full mt-16 dark:bg-dbeats-dark-primary">
+    <div className="text-gray-400	 box-border px-2 h-max lg:col-span-5 col-span-6 w-full pt-16 dark:bg-dbeats-dark-primary">
       <div className="overflow-hidden">
-        <main className="chat-container-height">
+        <main className="chat-container-height sticky bottom-0">
           <div className="p-2 chat-height overflow-y-scroll	">
             {messages
               ? messages.map((message) => {
@@ -285,12 +285,12 @@ function ChatRoom(props) {
           </div>
         </main>
         {showEmojis && (
-          <div className="absolute bottom-16 xl:bottom-24 shadow-none">
+          <div className="absolute  bottom-40  shadow-none">
             <Picker onEmojiClick={onEmojiClick} />
           </div>
         )}
         {showAttachmentDropdown && (
-          <div className=" ml-5 absolute bottom-16 xl:bottom-24 shadow-none w-60  bg-dbeats-dark-alt">
+          <div className=" ml-5 absolute  bottom-40  shadow-none w-60 p-2 rounded-lg bg-dbeats-dark-alt">
             <ul>
               <input
                 name="image"
@@ -327,9 +327,15 @@ function ChatRoom(props) {
                 onClick={() => {
                   imageInput.current.click();
                 }}
-                className="hover:bg-dbeats-dark-primary cursor-pointer"
+                className="hover:bg-dbeats-dark-primary cursor-pointer p-2 px-4 hover:text-dbeats-light hover:nm-flat-dbeats-dark-secondary rounded-md"
               >
-                Image
+                <i className="fas fa-camera mr-2"></i>Image
+              </li>
+              <li className="hover:bg-dbeats-dark-primary cursor-pointer p-2 px-4 hover:text-dbeats-light hover:nm-flat-dbeats-dark-secondary rounded-md">
+                <i className="fas fa-music mr-2"></i>Sound
+              </li>
+              <li className="hover:bg-dbeats-dark-primary cursor-pointer p-2 px-4 hover:text-dbeats-light hover:nm-flat-dbeats-dark-secondary rounded-md">
+                <i className="fas fa-file mr-2"></i>File
               </li>
               <li
                 onClick={() => {
@@ -359,7 +365,7 @@ function ChatRoom(props) {
           </div>
         )}
 
-        <div className="p-4 rounded-lg dark: bg-dbeats-dark-secondary">
+        <div className="p-4 rounded-lg bg-dbeats-dark-secondary shadow-md">
           {formState.replyto ? (
             <div className="px-3 p-2 flex items-center	justify-between rounded-xl dark: bg-dbeats-dark-secondary	mb-2">
               <div className="flex">
@@ -434,34 +440,72 @@ function ChatRoom(props) {
             </div>
           ) : null}
           <div className="flex">
-            <button onClick={() => setShowEmojis(!showEmojis)}>
-              <i className="far fa-laugh text-2xl"></i>
-            </button>
-            <button onClick={() => setShowAttachmentDropdown(!showAttachmentDropdown)}>
-              <i className="pl-2 text-2xl fas fa-paperclip"></i>
-            </button>
+            <div
+              onClick={() => {
+                setShowAttachmentDropdown(
+                  showAttachmentDropdown ? !showAttachmentDropdown : showAttachmentDropdown,
+                );
+                setShowEmojis(!showEmojis);
+              }}
+              className=" rounded-3xl group w-max   p-1  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-secondary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
+            >
+              <span className="  text-black dark:text-white  flex p-1 rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:nm-inset-dbeats-dark-secondary ">
+                <p className="self-center mx-2">
+                  {' '}
+                  <i className="far fa-laugh text-2xl "></i>
+                </p>
+              </span>
+            </div>
+            <div
+              onClick={() => {
+                setShowAttachmentDropdown(!showAttachmentDropdown);
+                setShowEmojis(showEmojis ? !showEmojis : showEmojis);
+              }}
+              className=" rounded-3xl group w-max   p-1  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-secondary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
+            >
+              <span className="  text-black dark:text-white  flex p-1 rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:nm-inset-dbeats-dark-secondary ">
+                <p className="self-center mx-2">
+                  {' '}
+                  <i className="text-2xl fas fa-paperclip"></i>
+                </p>
+              </span>
+            </div>
 
             <form className="flex items-center" id="chat-form" onSubmit={saveMessage}>
-              <div className="p-1 nm-flat-dbeats-dark-secondary mx-3 focus:nm-inset-dbeats-dark-secondary">
+              <div className="rounded-md group w-max   p-1  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-secondary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out ">
+                {' '}
                 <input
-                  className="flex-grow dark: bg-dbeats-dark-primary border-0  focus:border-dbeats-dark-alt focus:ring-0 focus:nm-inset-dbeats-dark-primary"
                   onChange={onChange}
-                  name="message"
                   value={formState.message}
                   id="msg"
+                  name="message"
                   type="text"
                   placeholder="Enter Message"
                   required
                   autoComplete="false"
-                />
+                  className="rounded-md border-0 ring-0 focus:ring-0 focus:border-0 text-black dark:text-white  flex px-4 p-2  bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary group-hover:nm-inset-dbeats-dark-secondary focus:nm-inset-dbeats-dark-primary placeholder-white placeholder-opacity-25"
+                ></input>
               </div>
-              <div className="p-1 rounded-3xl nm-flat-dbeats-dark-secondary">
+
+              <div
+                className={`${
+                  uploadingFile || formState.message.length < 1
+                    ? 'text-opacity-25 text-white cursor-default'
+                    : 'hover:nm-inset-dbeats-dark-primary hover:text-dbeats-light'
+                }
+                  p-1 rounded-3xl nm-flat-dbeats-dark-secondary cursor-pointer  `}
+              >
                 <button
                   disabled={uploadingFile}
                   type="submit"
-                  className="px-4 py-2 dark: bg-dbeats-dark-primary rounded-3xl"
+                  className={`${
+                    uploadingFile || formState.message.length < 1
+                      ? 'dark:bg-dbeats-dark-primary'
+                      : 'bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:dark:nm-inset-dbeats-dark-primary'
+                  }  px-4 py-2  rounded-3xl group flex items-center justify-center  `}
                 >
-                  <i className="fas fa-paper-plane mr-1" /> Send
+                  <i className="fas fa-paper-plane mr-2" />
+                  <p className=" ">Send</p>
                 </button>
               </div>
               <div

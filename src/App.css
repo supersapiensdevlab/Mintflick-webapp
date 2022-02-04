@@ -200,15 +200,14 @@ Note: Beware of modifying this element as it can break the animations - you shou
 }
 
 ::-webkit-scrollbar-track {
-  border-radius: 50%;
-  background-color: #1c1c1c;
+  background-color: rgb(12, 12, 12);
 
-  border-left: 4px solid #1c1c1c;
-  border-right: 4px solid #1c1c1c;
+  border-left: 2px solid rgb(12, 12, 12);
+  border-right: 2px solid rgb(12, 12, 12);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgb(12, 12, 12);
+  background: #1c1c1c;
 }
 
 input:focus,
