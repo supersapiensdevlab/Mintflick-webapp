@@ -102,7 +102,7 @@ module.exports = {
   variants: {
     extend: {
       // ...
-      display: ['dark'],
+      display: ['dark', 'group-hover', 'hover'],
       animation: ['hover', 'focus'],
       backdropBlur: ['hover', 'focus'],
       backgroundColor: ['dark', 'hover', 'focus'],
@@ -112,6 +112,7 @@ module.exports = {
       padding: ['dark', 'hover', 'focus'],
       width: ['important'],
       height: ['important'],
+      visibility: ['group-hover'],
     },
   },
   plugins: [

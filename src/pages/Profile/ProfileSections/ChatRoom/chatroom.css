@@ -1,10 +1,6 @@
-
-
-.chat-height{
-	max-height: 75vh;
+.chat-height {
+  max-height: 83vh;
 }
-.chat-container-height{
-	height: 78vh;
+.chat-container-height {
+  height: 84vh;
 }
-
-

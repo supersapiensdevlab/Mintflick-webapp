@@ -7,6 +7,7 @@ import {
   UploadNFTModal,
   UploadTrackModal,
   UploadVideoModal,
+  PictureModal,
 } from '../Modals/NavbarModals';
 
 const MainToolbar = () => {
@@ -26,6 +27,10 @@ const MainToolbar = () => {
   const [showNFTUpload, setShowNFTUpload] = useState(false);
   const handleCloseNFTUpload = () => setShowNFTUpload(false);
   const handleShowNFTUpload = () => setShowNFTUpload(true);
+
+  const [showPictureModal, setShowPictureModal] = useState(false);
+  const handleClosePictureModal = () => setShowPictureModal(false);
+  const handleShowPictureModal = () => setShowPictureModal(true);
 
   //Loader
   const [loader, setLoader] = useState(true);
@@ -136,6 +141,24 @@ const MainToolbar = () => {
                 </p>
               </div>
             </div>
+
+            <div
+              onClick={() => {
+                handleShowPictureModal();
+                handleCloseVideoUpload();
+                handleCloseTrackUpload();
+                handleCloseAnnouncement();
+                handleCloseNFTUpload();
+              }}
+              className=" rounded-3xl group w-max  p-0.5  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-secondary      hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
+            >
+              <div className="  h-full w-full text-black dark:text-white p-1 flex  rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:nm-inset-dbeats-dark-secondary ">
+                <i className="fas fa-stroopwafel self-center mx-2 text-white opacity-70 group-hover:opacity-100"></i>
+                <p className="self-center mx-2 text-white opacity-70 group-hover:opacity-100 sm:font-normal text-xs">
+                  Photo
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -168,6 +191,14 @@ const MainToolbar = () => {
         setShowNFTUpload={setShowNFTUpload}
         handleCloseNFTUpload={handleCloseNFTUpload}
         handleShowNFTUpload={handleShowNFTUpload}
+        loader={loader}
+        setLoader={setLoader}
+      />{' '}
+      <PictureModal
+        showPictureModal={showPictureModal}
+        setShowPictureModal={setShowPictureModal}
+        handleClosePictureModal={handleClosePictureModal}
+        handleShowPictureModal={handleShowPictureModal}
         loader={loader}
         setLoader={setLoader}
       />{' '}

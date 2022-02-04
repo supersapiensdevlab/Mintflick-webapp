@@ -1,47 +1,114 @@
-// contracts/NFT.sol
-// SPDX-License-Identifier: MIT OR Apache-2.0
-pragma solidity ^0.8.3;
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.2;
 
-import '@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol';
-import '@openzeppelin/contracts/token/ERC721/ERC721.sol';
+import '@openzeppelin/contracts/token/ERC1155/ERC1155.sol';
+import '@openzeppelin/contracts/interfaces/IERC2981.sol';
 import '@openzeppelin/contracts/access/Ownable.sol';
-import '@openzeppelin/contracts/utils/Counters.sol';
+import '@openzeppelin/contracts/security/Pausable.sol';
+import '@openzeppelin/contracts/utils/Strings.sol';
+import '@openzeppelin/contracts/utils/ContextMixin.sol';
 
-import 'hardhat/console.sol';
+/// @custom:security-contact <security email address>
+contract DbeatsNFT is ERC1155, IERC2981, Ownable, Pausable, ContextMixin {
+    using Strings for uint256;
+    string public name;
+    string public symbol;
+    address private _recipient;
 
-contract NFT is ERC721URIStorage {
-    using Counters for Counters.Counter;
-    Counters.Counter private _tokenIds;
-    address contractAddress;
-    address public artist;
-    address public txFeeToken;
-    uint256 public txFeeAmount;
-    mapping(address => bool) public excludedList;
-
-    constructor(address marketplaceAddress) ERC721('Metaverse Tokens', 'METT') {
-        contractAddress = marketplaceAddress;
+    constructor() ERC1155('') {
+        name = 'Dbeats NFT';
+        symbol = 'DNFT';
+        _recipient = owner();
     }
 
-    function createToken(string memory tokenURI) public returns (uint256) {
-        _tokenIds.increment();
-        uint256 newItemId = _tokenIds.current();
-        _mint(msg.sender, newItemId);
-        _setTokenURI(newItemId, tokenURI);
-        setApprovalForAll(contractAddress, true);
-        return newItemId;
+    function pause() public onlyOwner {
+        _pause();
     }
 
-    function transferToken(
+    function unpause() public onlyOwner {
+        _unpause();
+    }
+
+    function mint(
+        address account,
+        uint256 id,
+        uint256 amount,
+        bytes memory data
+    ) public onlyOwner {
+        _mint(account, id, amount, data);
+    }
+
+    function mintBatch(
+        address to,
+        uint256[] memory ids,
+        uint256[] memory amounts,
+        bytes memory data
+    ) public onlyOwner {
+        _mintBatch(to, ids, amounts, data);
+    }
+
+    function _beforeTokenTransfer(
+        address operator,
         address from,
         address to,
-        uint256 tokenId
-    ) external {
-        require(ownerOf(tokenId) == from, 'From address must be token owner');
-        _transfer(from, to, tokenId);
+        uint256[] memory ids,
+        uint256[] memory amounts,
+        bytes memory data
+    ) internal override whenNotPaused {
+        super._beforeTokenTransfer(operator, from, to, ids, amounts, data);
     }
 
-    function checkRoyalties(address _contract) internal returns (bool) {
-        bool success = IERC165(_contract).supportsInterface(_INTERFACE_ID_ERC2981);
-        return success;
+    /** @dev URI override for OpenSea traits compatibility. */
+
+    function uri(uint256 tokenId) public view override returns (string memory) {
+        // Tokens minted above the supply cap will not have associated metadata.
+        require(tokenId >= 1, 'ERC1155Metadata: URI query for nonexistent token');
+        return string(abi.encodePacked(_uriBase, Strings.toString(tokenId), '.json'));
+    }
+
+    /** @dev EIP2981 royalties implementation. */
+
+    // Maintain flexibility to modify royalties recipient (could also add basis points).
+    function _setRoyalties(address newRecipient) internal {
+        require(newRecipient != address(0), 'Royalties: new recipient is the zero address');
+        _recipient = newRecipient;
+    }
+
+    function setRoyalties(address newRecipient) external onlyOwner {
+        _setRoyalties(newRecipient);
+    }
+
+    // EIP2981 standard royalties return.
+    function royaltyInfo(uint256 _tokenId, uint256 _salePrice)
+        external
+        view
+        override
+        returns (address receiver, uint256 royaltyAmount)
+    {
+        return (_recipient, (_salePrice * 1000) / 10000);
+    }
+
+    // EIP2981 standard Interface return. Adds to ERC1155 and ERC165 Interface returns.
+    function supportsInterface(bytes4 interfaceId)
+        public
+        view
+        virtual
+        override(ERC1155, IERC165)
+        returns (bool)
+    {
+        return (interfaceId == type(IERC2981).interfaceId || super.supportsInterface(interfaceId));
+    }
+
+    /** @dev Meta-transactions override for OpenSea. */
+
+    function _msgSender() internal view override returns (address) {
+        return ContextMixin.msgSender();
+    }
+
+    /** @dev Contract-level metadata for OpenSea. */
+
+    // Update for collection-specific metadata.
+    function contractURI() public pure returns (string memory) {
+        return 'ipfs://bafkreigpykz4r3z37nw7bfqh7wvly4ann7woll3eg5256d2i5huc5wrrdq'; // Contract-level metadata for ParkPics
     }
 }
