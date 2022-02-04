@@ -150,7 +150,7 @@ const MainToolbar = () => {
                 handleCloseAnnouncement();
                 handleCloseNFTUpload();
               }}
-              className=" rounded-3xl group w-max  p-0.5  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-secondary      hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
+              className="hidden rounded-3xl group w-max  p-0.5  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-secondary      hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
             >
               <div className="  h-full w-full text-black dark:text-white p-1 flex  rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:nm-inset-dbeats-dark-secondary ">
                 <i className="fas fa-stroopwafel self-center mx-2 text-white opacity-70 group-hover:opacity-100"></i>

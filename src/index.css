@@ -42,5 +42,5 @@ input:checked ~ .dot {
 
 .dbeats-grid {
   display: grid;
-  grid-template-columns: 1.5fr 3.2fr 1.8fr;
+  grid-template-columns: 1.6fr 3.2fr 1.8fr;
 }
