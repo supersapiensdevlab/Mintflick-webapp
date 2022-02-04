@@ -209,9 +209,12 @@ function ChatRoom(props) {
                         {message.type == 'image' ? (
                           <div className="w-250">
                             <img src={message.url}></img>
-                            <a 
-                             className="text-opacity-25 text-white hover:text-opacity-100 "
-                            href={message.url} download target="_blank">
+                            <a
+                              className="text-opacity-25 text-white hover:text-opacity-100 "
+                              href={message.url}
+                              download
+                              target="_blank"
+                            >
                               Download
                             </a>
                           </div>
@@ -219,27 +222,30 @@ function ChatRoom(props) {
                         {message.type == 'sound' ? (
                           <div className="w-250 ml-3 p-2 border border-dbeats-light rounded-md">
                             <i class="fas fa-music text-4xl text-dbeats-light"></i>
-                            <p className='text-gray-400 text-xs'><a href={message.url} download target="_blank">
-                              Download
-                            </a>
+                            <p className="text-gray-400 text-xs">
+                              <a href={message.url} download target="_blank">
+                                Download
+                              </a>
                             </p>
                           </div>
                         ) : null}
                         {message.type == 'video' ? (
                           <div className="w-250 ml-3 p-2 border border-dbeats-light rounded-md">
                             <i class="fas fa-video text-4xl text-dbeats-light"></i>
-                            <p className='text-gray-400 text-xs'><a href={message.url} download target="_blank">
-                              Download
-                            </a>
+                            <p className="text-gray-400 text-xs">
+                              <a href={message.url} download target="_blank">
+                                Download
+                              </a>
                             </p>
                           </div>
                         ) : null}
                         {message.type == 'file' ? (
                           <div className="w-250 ml-3 p-2 border border-dbeats-light rounded-md">
                             <i class="fas fa-file text-4xl text-dbeats-light"></i>
-                            <p className='text-gray-400 text-xs'><a href={message.url} download target="_blank">
-                              Download
-                            </a>
+                            <p className="text-gray-400 text-xs">
+                              <a href={message.url} download target="_blank">
+                                Download
+                              </a>
                             </p>
                           </div>
                         ) : null}
@@ -333,35 +339,29 @@ function ChatRoom(props) {
               >
                 <i className="fas fa-camera mr-2"></i>Image
               </li>
-              <li className="hover:bg-dbeats-dark-primary cursor-pointer p-2 px-4 hover:text-dbeats-light hover:nm-flat-dbeats-dark-secondary rounded-md">
-                <i className="fas fa-music mr-2"></i>Sound
-              </li>
-              <li className="hover:bg-dbeats-dark-primary cursor-pointer p-2 px-4 hover:text-dbeats-light hover:nm-flat-dbeats-dark-secondary rounded-md">
-                <i className="fas fa-file mr-2"></i>File
-              </li>
               <li
                 onClick={() => {
                   soundInput.current.click();
                 }}
-                className="hover:bg-dbeats-dark-primary cursor-pointer"
+                className="hover:bg-dbeats-dark-primary cursor-pointer p-2 px-4 hover:text-dbeats-light hover:nm-flat-dbeats-dark-secondary rounded-md"
               >
-                Sound
+                <i className="fas fa-music mr-2"></i>Sound
               </li>
               <li
                 onClick={() => {
                   videoInput.current.click();
                 }}
-                className="hover:bg-dbeats-dark-primary cursor-pointer"
+                className="hover:bg-dbeats-dark-primary cursor-pointer p-2 px-4 hover:text-dbeats-light hover:nm-flat-dbeats-dark-secondary rounded-md"
               >
-                Video
+                <i className="fas fa-video mr-2"></i>Video
               </li>
               <li
                 onClick={() => {
                   fileInput.current.click();
                 }}
-                className="hover:bg-dbeats-dark-primary cursor-pointer"
+                className="hover:bg-dbeats-dark-primary cursor-pointer p-2 px-4 hover:text-dbeats-light hover:nm-flat-dbeats-dark-secondary rounded-md"
               >
-                File
+                <i className="fas fa-file mr-2"></i>File
               </li>
             </ul>
           </div>
@@ -442,7 +442,7 @@ function ChatRoom(props) {
             </div>
           ) : null}
           <div className="flex">
-          <div
+            <div
               onClick={() => {
                 setShowAttachmentDropdown(
                   showAttachmentDropdown ? !showAttachmentDropdown : showAttachmentDropdown,
@@ -474,7 +474,7 @@ function ChatRoom(props) {
             </div>
 
             <form className="flex items-center" id="chat-form" onSubmit={saveMessage}>
-            <div className="rounded-md group w-max   p-1  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-secondary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out ">
+              <div className="rounded-md group w-max   p-1  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-secondary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out ">
                 {' '}
                 <input
                   onChange={onChange}
