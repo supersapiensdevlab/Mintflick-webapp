@@ -69,7 +69,7 @@ function ChatRoom(props) {
               user_id: user._id,
               username: user.username,
               profile_image: user.profile_image,
-              type: 'image',
+              type: selectedFile.type,
               message: formState.message,
               createdAt: Date.now(),
               url: 'https://ipfs.io/ipfs/' + cid + '/' + selectedFile.file[0].name,
@@ -86,7 +86,6 @@ function ChatRoom(props) {
           setShowEmojis(false);
           setShowAttachmentDropdown(false);
           setSelectedFile(null);
-         
         })
         .catch((err) => {
           console.log(err);
@@ -98,9 +97,8 @@ function ChatRoom(props) {
           setShowEmojis(false);
           setShowAttachmentDropdown(false);
           setSelectedFile(null);
-         
         });
-        return;
+      return;
     }
     let room = {
       room_admin: props.userp._id,
@@ -148,7 +146,7 @@ function ChatRoom(props) {
   const onFileChange = (event) => {
     // Update the state
     setSelectedFile({
-      type: 'image',
+      type: event.target.name,
       file: event.target.files,
       localurl: URL.createObjectURL(event.target.files[0]),
     });
@@ -208,12 +206,41 @@ function ChatRoom(props) {
                             <p className="text-xs">{message.reply_to.message}</p>
                           </div>
                         ) : null}
-                        {message.type=='image'?(
-                          <div className='w-250'>
-                          <img src={message.url}></img>
-                          <a href={message.url} download target="_blank">Download</a>
+                        {message.type == 'image' ? (
+                          <div className="w-250">
+                            <img src={message.url}></img>
+                            <a href={message.url} download target="_blank">
+                              Download
+                            </a>
                           </div>
-                        ):null}
+                        ) : null}
+                        {message.type == 'sound' ? (
+                          <div className="w-250 ml-3 p-2 border border-dbeats-light rounded-md">
+                            <i class="fas fa-music text-4xl text-dbeats-light"></i>
+                            <p className='text-gray-400 text-xs'><a href={message.url} download target="_blank">
+                              Download
+                            </a>
+                            </p>
+                          </div>
+                        ) : null}
+                        {message.type == 'video' ? (
+                          <div className="w-250 ml-3 p-2 border border-dbeats-light rounded-md">
+                            <i class="fas fa-video text-4xl text-dbeats-light"></i>
+                            <p className='text-gray-400 text-xs'><a href={message.url} download target="_blank">
+                              Download
+                            </a>
+                            </p>
+                          </div>
+                        ) : null}
+                        {message.type == 'file' ? (
+                          <div className="w-250 ml-3 p-2 border border-dbeats-light rounded-md">
+                            <i class="fas fa-file text-4xl text-dbeats-light"></i>
+                            <p className='text-gray-400 text-xs'><a href={message.url} download target="_blank">
+                              Download
+                            </a>
+                            </p>
+                          </div>
+                        ) : null}
                         <div className="inline-flex items-center group">
                           <div className="chat_message_profile pr-2 h-12 w-12">
                             <img
@@ -266,12 +293,35 @@ function ChatRoom(props) {
           <div className=" ml-5 absolute bottom-16 xl:bottom-24 shadow-none w-60  bg-dbeats-dark-alt">
             <ul>
               <input
-                id="image"
+                name="image"
                 type="file"
                 accept=".jpg,.png,.jpeg,.gif,.webp"
                 onChange={onFileChange}
                 className="hidden"
                 ref={imageInput}
+              />
+              <input
+                name="sound"
+                type="file"
+                accept=".mp3, .weba"
+                onChange={onFileChange}
+                className="hidden"
+                ref={soundInput}
+              />
+              <input
+                name="video"
+                type="file"
+                accept=".mp4, .mkv, .mov, .avi"
+                onChange={onFileChange}
+                className="hidden"
+                ref={videoInput}
+              />
+              <input
+                name="file"
+                type="file"
+                onChange={onFileChange}
+                className="hidden"
+                ref={fileInput}
               />
               <li
                 onClick={() => {
@@ -281,8 +331,30 @@ function ChatRoom(props) {
               >
                 Image
               </li>
-              <li className="hover:bg-dbeats-dark-primary cursor-pointer">Sound</li>
-              <li className="hover:bg-dbeats-dark-primary cursor-pointer">File</li>
+              <li
+                onClick={() => {
+                  soundInput.current.click();
+                }}
+                className="hover:bg-dbeats-dark-primary cursor-pointer"
+              >
+                Sound
+              </li>
+              <li
+                onClick={() => {
+                  videoInput.current.click();
+                }}
+                className="hover:bg-dbeats-dark-primary cursor-pointer"
+              >
+                Video
+              </li>
+              <li
+                onClick={() => {
+                  fileInput.current.click();
+                }}
+                className="hover:bg-dbeats-dark-primary cursor-pointer"
+              >
+                File
+              </li>
             </ul>
           </div>
         )}
@@ -331,7 +403,27 @@ function ChatRoom(props) {
           ) : null}
           {selectedFile ? (
             <div className="flex justify-between">
-              <img src={selectedFile.localurl} className="w-24 h-24"></img>
+              {selectedFile.type == 'image' && (
+                <img src={selectedFile.localurl} className="w-24 h-24"></img>
+              )}
+              {selectedFile.type == 'sound' && (
+                <div className="ml-3 p-2 border border-dbeats-light rounded-md">
+                  <i class="fas fa-music text-3xl text-dbeats-light"></i>
+                  <p className="text-gray-400 text-xs">{selectedFile.file[0].name}</p>
+                </div>
+              )}
+              {selectedFile.type == 'video' && (
+                <div className="ml-3 p-2 border border-dbeats-light rounded-md">
+                  <i class="fas fa-video text-3xl text-dbeats-light"></i>
+                  <p className="text-gray-400 text-xs">{selectedFile.file[0].name}</p>
+                </div>
+              )}
+              {selectedFile.type == 'file' && (
+                <div className="ml-3 p-2 border border-dbeats-light rounded-md">
+                  <i class="fas fa-file text-3xl text-dbeats-light"></i>
+                  <p className="text-gray-400 text-xs">{selectedFile.file[0].name}</p>
+                </div>
+              )}
               <button
                 onClick={() => {
                   setSelectedFile(null);
@@ -373,9 +465,9 @@ function ChatRoom(props) {
                 </button>
               </div>
               <div
-              className="animate-spin rounded-full h-7 w-7 ml-3 border-t-2 border-b-2 bg-gradient-to-r from-green-400 to-blue-500 "
-              hidden={!uploadingFile}
-            ></div>
+                className="animate-spin rounded-full h-7 w-7 ml-3 border-t-2 border-b-2 bg-gradient-to-r from-green-400 to-blue-500 "
+                hidden={!uploadingFile}
+              ></div>
             </form>
           </div>
         </div>
