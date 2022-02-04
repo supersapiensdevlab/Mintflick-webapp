@@ -209,7 +209,9 @@ function ChatRoom(props) {
                         {message.type == 'image' ? (
                           <div className="w-250">
                             <img src={message.url}></img>
-                            <a href={message.url} download target="_blank">
+                            <a 
+                             className="text-opacity-25 text-white hover:text-opacity-100 "
+                            href={message.url} download target="_blank">
                               Download
                             </a>
                           </div>
@@ -290,7 +292,7 @@ function ChatRoom(props) {
           </div>
         )}
         {showAttachmentDropdown && (
-          <div className=" ml-5 absolute  bottom-40  shadow-none w-60 p-2 rounded-lg bg-dbeats-dark-alt">
+          <div className="ml-5 absolute  bottom-40  shadow-none w-60 p-2 rounded-lg bg-dbeats-dark-alt">
             <ul>
               <input
                 name="image"
@@ -440,7 +442,7 @@ function ChatRoom(props) {
             </div>
           ) : null}
           <div className="flex">
-            <div
+          <div
               onClick={() => {
                 setShowAttachmentDropdown(
                   showAttachmentDropdown ? !showAttachmentDropdown : showAttachmentDropdown,
@@ -472,7 +474,7 @@ function ChatRoom(props) {
             </div>
 
             <form className="flex items-center" id="chat-form" onSubmit={saveMessage}>
-              <div className="rounded-md group w-max   p-1  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-secondary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out ">
+            <div className="rounded-md group w-max   p-1  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-secondary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out ">
                 {' '}
                 <input
                   onChange={onChange}
