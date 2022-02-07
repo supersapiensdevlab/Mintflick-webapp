@@ -2,11 +2,10 @@ import React, { useEffect, useReducer, useRef, useState } from 'react';
 import './chatroom.css';
 import io from 'socket.io-client';
 import Picker from 'emoji-picker-react';
-import emoji from '../../../../assets/images/emoji.png';
-import reply from '../../../../assets/images/reply.svg';
 import person from '../../../../assets/images/profile.svg';
 import { makeStorageClient } from '../../../../component/uploadHelperFunction';
-
+import prettyBytes from 'pretty-bytes';
+import ReactAudioPlayer from 'react-audio-player';
 function ChatRoom(props) {
   // to get loggedin user from   localstorage
   const user = JSON.parse(window.localStorage.getItem('user'));
@@ -73,6 +72,7 @@ function ChatRoom(props) {
               message: formState.message,
               createdAt: Date.now(),
               url: 'https://ipfs.io/ipfs/' + cid + '/' + selectedFile.file[0].name,
+              size: selectedFile.size,
             },
           };
           if (formState.replyto) {
@@ -182,7 +182,7 @@ function ChatRoom(props) {
             {messages
               ? messages.map((message) => {
                   const dateNum = new Date(message.createdAt);
-
+                  let size = 0;
                   return (
                     <div key={message._id}>
                       {dates.has(dateNum.toDateString()) ? null : (
@@ -209,6 +209,8 @@ function ChatRoom(props) {
                         {message.type == 'image' ? (
                           <div className="w-250">
                             <img src={message.url}></img>
+                            <p className="text-gray-400 text-xs">{message.url.split('/').pop()}</p>
+                            <p className="text-gray-400 text-xs">Size: {prettyBytes(size)}</p>
                             <a
                               className="text-opacity-25 text-white hover:text-opacity-100 "
                               href={message.url}
@@ -220,8 +222,20 @@ function ChatRoom(props) {
                           </div>
                         ) : null}
                         {message.type == 'sound' ? (
-                          <div className="w-250 ml-3 p-2 border border-dbeats-light rounded-md">
-                            <i class="fas fa-music text-4xl text-dbeats-light"></i>
+                          <div className=" ml-3 p-2 border border-dbeats-light rounded-md">
+                            <div className="flex items-center">
+                              <i className="fas fa-music text-4xl text-dbeats-light"></i>
+                              {/* <AudioPlayer
+                                autoPlay={false}
+                                src={message.url}
+                                onPlay={(e) => console.log('onPlay')}
+                                // other props here
+                                style={{}}
+                              /> */}
+                              <ReactAudioPlayer style={{backgroundColor:'#0000'}} src={message.url}  controls />
+                            </div>
+                            <p className="text-gray-400 text-xs">{message.url.split('/').pop()}</p>
+                            <p className="text-gray-400 text-xs">Size: {prettyBytes(size)}</p>
                             <p className="text-gray-400 text-xs">
                               <a href={message.url} download target="_blank">
                                 Download
@@ -231,7 +245,9 @@ function ChatRoom(props) {
                         ) : null}
                         {message.type == 'video' ? (
                           <div className="w-250 ml-3 p-2 border border-dbeats-light rounded-md">
-                            <i class="fas fa-video text-4xl text-dbeats-light"></i>
+                            <i className="fas fa-video text-4xl text-dbeats-light"></i>
+                            <p className="text-gray-400 text-xs">{message.url.split('/').pop()}</p>
+                            <p className="text-gray-400 text-xs">Size: {prettyBytes(size)}</p>
                             <p className="text-gray-400 text-xs">
                               <a href={message.url} download target="_blank">
                                 Download
@@ -241,7 +257,9 @@ function ChatRoom(props) {
                         ) : null}
                         {message.type == 'file' ? (
                           <div className="w-250 ml-3 p-2 border border-dbeats-light rounded-md">
-                            <i class="fas fa-file text-4xl text-dbeats-light"></i>
+                            <i className="fas fa-file text-4xl text-dbeats-light"></i>
+                            <p className="text-gray-400 text-xs">{message.url.split('/').pop()}</p>
+                            <p className="text-gray-400 text-xs">Size: {prettyBytes(size)}</p>
                             <p className="text-gray-400 text-xs">
                               <a href={message.url} download target="_blank">
                                 Download
@@ -416,19 +434,19 @@ function ChatRoom(props) {
               )}
               {selectedFile.type == 'sound' && (
                 <div className="ml-3 p-2 border border-dbeats-light rounded-md">
-                  <i class="fas fa-music text-3xl text-dbeats-light"></i>
+                  <i className="fas fa-music text-3xl text-dbeats-light"></i>
                   <p className="text-gray-400 text-xs">{selectedFile.file[0].name}</p>
                 </div>
               )}
               {selectedFile.type == 'video' && (
                 <div className="ml-3 p-2 border border-dbeats-light rounded-md">
-                  <i class="fas fa-video text-3xl text-dbeats-light"></i>
+                  <i className="fas fa-video text-3xl text-dbeats-light"></i>
                   <p className="text-gray-400 text-xs">{selectedFile.file[0].name}</p>
                 </div>
               )}
               {selectedFile.type == 'file' && (
                 <div className="ml-3 p-2 border border-dbeats-light rounded-md">
-                  <i class="fas fa-file text-3xl text-dbeats-light"></i>
+                  <i className="fas fa-file text-3xl text-dbeats-light"></i>
                   <p className="text-gray-400 text-xs">{selectedFile.file[0].name}</p>
                 </div>
               )}
