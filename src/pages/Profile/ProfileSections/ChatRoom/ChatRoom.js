@@ -385,7 +385,7 @@ function ChatRoom(props) {
           </div>
         )}
 
-        <div className="p-4 rounded-lg bg-dbeats-dark-secondary shadow-md">
+        <div className="py-4 md:px-4 rounded-lg bg-dbeats-dark-secondary shadow-md">
           {formState.replyto ? (
             <div className="px-3 p-2 flex items-center	justify-between rounded-xl dark: bg-dbeats-dark-secondary	mb-2">
               <div className="flex">
@@ -459,7 +459,7 @@ function ChatRoom(props) {
               </button>
             </div>
           ) : null}
-          <div className="flex">
+          <div className="flex justify-start ">
             <div
               onClick={() => {
                 setShowAttachmentDropdown(
@@ -470,9 +470,9 @@ function ChatRoom(props) {
               className=" rounded-3xl group w-max   p-1  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-secondary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
             >
               <span className="  text-black dark:text-white  flex p-1 rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:nm-inset-dbeats-dark-secondary ">
-                <p className="self-center mx-2">
+                <p className="self-center md:mx-2">
                   {' '}
-                  <i className="far fa-laugh text-2xl "></i>
+                  <i className="far fa-laugh text-base md:text-2xl"></i>
                 </p>
               </span>
             </div>
@@ -484,15 +484,15 @@ function ChatRoom(props) {
               className=" rounded-3xl group w-max   p-1  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-secondary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
             >
               <span className="  text-black dark:text-white  flex p-1 rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:nm-inset-dbeats-dark-secondary ">
-                <p className="self-center mx-2">
+                <p className="self-center md:mx-2">
                   {' '}
-                  <i className="text-2xl fas fa-paperclip"></i>
+                  <i className="text-base md:text-2xl fas fa-paperclip"></i>
                 </p>
               </span>
             </div>
 
-            <form className="flex items-center" id="chat-form" onSubmit={saveMessage}>
-              <div className="rounded-md group w-max   p-1  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-secondary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out ">
+            <form className="flex flex-grow" id="chat-form" onSubmit={saveMessage}>
+              <div className="flex-grow rounded-md group w-max   p-1  mx-1  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-secondary   hover:nm-inset-dbeats-dark-primary           font-medium          transform-gpu  transition-all duration-300 ease-in-out ">
                 {' '}
                 <input
                   onChange={onChange}
@@ -503,7 +503,7 @@ function ChatRoom(props) {
                   placeholder="Enter Message"
                   required
                   autoComplete="false"
-                  className="rounded-md border-0 ring-0 focus:ring-0 focus:border-0 text-black dark:text-white  flex px-4 p-2  bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary group-hover:nm-inset-dbeats-dark-secondary focus:nm-inset-dbeats-dark-primary placeholder-white placeholder-opacity-25"
+                  className="w-full rounded-md border-0 ring-0 focus:ring-0 focus:border-0 text-black dark:text-white md:px-4 p-2  bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary group-hover:nm-inset-dbeats-dark-secondary focus:nm-inset-dbeats-dark-primary placeholder-white placeholder-opacity-25"
                 ></input>
               </div>
 
@@ -525,7 +525,7 @@ function ChatRoom(props) {
                   }  px-4 py-2  rounded-3xl group flex items-center justify-center  `}
                 >
                   <i className="fas fa-paper-plane mr-2" />
-                  <p className=" ">Send</p>
+                  <p className="hidden md:inline">Send</p>
                 </button>
               </div>
               <div

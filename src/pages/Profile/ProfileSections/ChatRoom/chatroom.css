@@ -4,3 +4,6 @@
 .chat-container-height {
   height: 84vh;
 }
+.flex-grow{
+  flex-grow: 2;
+}
