@@ -222,8 +222,8 @@ function ChatRoom(props) {
                           </div>
                         ) : null}
                         {message.type == 'sound' ? (
-                          <div className=" ml-3 p-2 border border-dbeats-light rounded-md">
-                            <div className="flex items-center">
+                          <div className=" md:ml-3 p-2 border border-dbeats-light rounded-md">
+                            <div className="md:flex items-center">
                               <i className="fas fa-music text-4xl text-dbeats-light"></i>
                               {/* <AudioPlayer
                                 autoPlay={false}
@@ -232,7 +232,7 @@ function ChatRoom(props) {
                                 // other props here
                                 style={{}}
                               /> */}
-                              <ReactAudioPlayer style={{backgroundColor:'#0000'}} src={message.url}  controls />
+                              <ReactAudioPlayer className='w-full md:w-44' src={message.url}  controls />
                             </div>
                             <p className="text-gray-400 text-xs">{message.url.split('/').pop()}</p>
                             <p className="text-gray-400 text-xs">Size: {prettyBytes(size)}</p>
@@ -492,7 +492,7 @@ function ChatRoom(props) {
             </div>
 
             <form className="flex flex-grow" id="chat-form" onSubmit={saveMessage}>
-              <div className="flex-grow rounded-md group w-max   p-1  mx-1  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-secondary   hover:nm-inset-dbeats-dark-primary           font-medium          transform-gpu  transition-all duration-300 ease-in-out ">
+              <div className="flex-grow rounded-md group w-fit  p-1  mx-1  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-secondary   hover:nm-inset-dbeats-dark-primary           font-medium          transform-gpu  transition-all duration-300 ease-in-out ">
                 {' '}
                 <input
                   onChange={onChange}
