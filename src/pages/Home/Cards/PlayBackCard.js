@@ -174,7 +174,7 @@ const PlayBackCard = (props) => {
               className={`cursor-pointer w-full 2xl:h-max lg:h-max md:h-max xs:h-max min-h-full   dark:bg-black bg-black `}
             >
               <Link
-                to={`/playback/${props.playbackUserData.user.username}/${props.playbackUserData.videoId}`}
+                to={`/playback/${props.playbackUserData.user.username}/${props.playbackUserData.id}`}
                 className=" "
               >
                 <ReactPlayer
