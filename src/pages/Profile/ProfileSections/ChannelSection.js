@@ -44,7 +44,7 @@ const ChannelSection = (props) => {
     >
       <div
         id="recommended_channel"
-        className="w-full h-full   pt-8 lg:col-span-1 hidden  lg:block sm:hidden  "
+        className="w-full h-full   pt-8 lg:col-span-1 hidden lg:block sm:hidden  "
       >
         {/* <div className="relative">
           <img src={background} alt="background"></img>

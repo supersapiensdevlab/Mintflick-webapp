@@ -14,6 +14,9 @@ import Dropdown from '../../component/dropdown.component';
 import FeedbackForm from '../../component/form/feedbackForm';
 import { ReactComponent as Verified } from '../../assets/icons/verified-account.svg';
 import MainToolbar from '../../component/Toolbar/main-toolbar';
+import maticLogo from '../../assets/graphics/polygon-matic-logo.svg';
+import Modal from 'react-modal';
+Modal.setAppElement('#root');
 
 const Home = () => {
   const [activeStreams, setActiveStreams] = useState([]);
@@ -36,6 +39,39 @@ const Home = () => {
   };
   const [latestUploads, setLatestUploads] = useState(null);
 
+  const [ad, setAd] = useState({
+    adName: '',
+    adImage: '',
+    adImageFile: '',
+    category: '',
+    ratings: '',
+    tags: '',
+    description: '',
+    allowAttribution: '',
+    commercialUse: '',
+    derivativeWorks: '',
+  });
+
+  const onVideoFileChange = (e) => {
+    if (e.target.name === 'adImageFile') {
+      ad.adImageFile = e.target.files[0];
+      var adName = e.target.files[0].name.replace(/\.[^/.]+$/, '');
+
+      ad.adName = adName;
+      document.getElementById('ad-label').textContent = adName;
+
+      if (e.target.files && e.target.files[0]) {
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+          document.getElementById('adImage').src = e.target.result;
+          document.getElementById('adImage').style.display = 'block';
+        };
+        reader.readAsDataURL(e.target.files[0]);
+      }
+    }
+  };
+
   const category = [
     'Trending',
     'Latest',
@@ -49,6 +85,32 @@ const Home = () => {
 
   const filter = ['All', 'Music', 'Gaming', 'Movies', 'Videos', 'NFT'];
   const [selectedFilter, setSelectedFilter] = useState(filter[0]);
+
+  const customStyles = {
+    content: {
+      top: '50%',
+      left: '50%',
+      right: 'auto',
+      bottom: 'auto',
+      marginRight: '-50%',
+      transform: 'translate(-50%, -50%)',
+      background: '#181818',
+    },
+  };
+
+  const [modalIsOpen, setIsOpen] = React.useState(false);
+
+  function openModal() {
+    setIsOpen(true);
+  }
+
+  function afterOpenModal() {
+    // references are now sync'd and can be accessed.
+  }
+
+  function closeModal() {
+    setIsOpen(false);
+  }
 
   useEffect(() => {
     let slidesValue = [];
@@ -327,36 +389,32 @@ const Home = () => {
                 <div className="mb-4 ">
                   <>
                     <div>
-                      <div className="flex items-center  text-center bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-secondary p-0.5  sm:rounded-xl nm-flat-dbeats-dark-primary">
-                        <div className=" dark:text-gray-50  pb-4    border-opacity-30  shadow-sm dark:shadow-md  bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary  text-dbeats-dark-primary sm:rounded-xl   w-full ">
-                          <div className="flex items-center h-max w-full justify-center">
-                            <div className="max-w-xs">
-                              <div className="   sm:rounded-lg py-3">
-                                <Link
-                                  className="relative align-middle   justify-items-center items-center nm-flat-dbeats-dark-primary"
-                                  to={`/profile/${user.username}`}
-                                >
-                                  <div className="photo-wrapper p-2">
-                                    <img
-                                      className="w-24 h-24 sm:rounded-full mx-auto"
-                                      src={user.profile_image !== '' ? user.profile_image : logo}
-                                      alt="John Doe"
-                                    />
-                                  </div>
-                                </Link>
-                                <div className="p-2">
-                                  <p className="truncate   text-center flex justify-center  text-dbeats-dark-primary dark:text-gray-200 2xl:font-bold lg:text-sm">
-                                    {user.name}
-                                    {user.is_verified ? (
-                                      <Verified className="h-4 w-4  items-center self-center justify-center text-dbeats-light mx-1" />
-                                    ) : null}
-                                  </p>
-                                  <p className="  2xl:text-sm lg:text-xs text-gray-400 text-center ">
-                                    {' '}
-                                    {user.username}{' '}
-                                  </p>
+                      <div className=" flex items-center  text-center bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-secondary p-0.5  sm:rounded-xl nm-flat-dbeats-dark-primary">
+                        <div className="  dark:text-gray-50     border-opacity-30  shadow-sm dark:shadow-md  bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary  text-dbeats-dark-primary sm:rounded-xl   w-full ">
+                          <div className="  flex items-center h-max w-full justify-center">
+                            <div className="  max-w-xs sm:rounded-xl ">
+                              <img
+                                className="  h-full w-full sm:rounded-xl "
+                                src="https://via.placeholder.com/400x250"
+                                alt="avatar"
+                              />
 
-                                  <div className="text-center my-3"></div>
+                              <div className="flex align-middle justify-center items-center">
+                                <p className="text-white text-opacity-40 mx-1">
+                                  rent this billboard
+                                </p>
+                                <div className="my-3 rounded-3xl group w-max ml-2 p-1  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-primary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out ">
+                                  <span
+                                    onClick={openModal}
+                                    className="  text-black dark:text-white  flex p-1 rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-secondary hover:nm-inset-dbeats-dark-secondary "
+                                  >
+                                    <img
+                                      className="h-7 w-7 p-1  mr-1   text-white self-center align-middle items-center     "
+                                      src={maticLogo}
+                                      alt="logo"
+                                    ></img>
+                                    <p className="self-center mx-2"> 200</p>
+                                  </span>
                                 </div>
                               </div>
                             </div>
@@ -371,6 +429,52 @@ const Home = () => {
           </div>
         </div>
       </div>
+      <Modal
+        isOpen={modalIsOpen}
+        onAfterOpen={afterOpenModal}
+        onRequestClose={closeModal}
+        style={customStyles}
+        contentLabel="Example Modal"
+      >
+        <div className="  p-3 text-white">
+          <button onClick={closeModal}>close</button>
+
+          <div className="flex text-sm text-gray-600 ">
+            <label
+              htmlFor="file-upload3"
+              className="px-2 text-center relative cursor-pointer bg-white rounded-md font-medium text-dbeats-light hover:text-blue-500 focus-within:outline-none focus-within:ring-0 focus-within:ring-offset-2 focus-within:ring-blue-500"
+            >
+              <span id="ad-label" className="text-center">
+                Choose Ad Image
+              </span>
+              <input
+                id="file-upload3"
+                type="file"
+                name="adImageFile"
+                accept=".jpg,.png,.jpeg"
+                onChange={onVideoFileChange}
+                className="sr-only "
+              />
+            </label>
+            <p className="pl-1"> </p>
+          </div>
+
+          <>
+            <img id="adImage" className="w-max h-52 mt-2 hidden"></img>
+
+            <div className="  my-3 rounded-3xl group w-max ml-2 p-1  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-primary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out ">
+              <span className="  text-white    flex p-1 rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-secondary hover:nm-inset-dbeats-dark-secondary ">
+                <img
+                  className="h-7 w-7 p-1  mr-1   text-white self-center align-middle items-center     "
+                  src={maticLogo}
+                  alt="logo"
+                ></img>
+                <p className="self-center mx-2 ">200</p>
+              </span>
+            </div>
+          </>
+        </div>
+      </Modal>
     </>
   );
 };
