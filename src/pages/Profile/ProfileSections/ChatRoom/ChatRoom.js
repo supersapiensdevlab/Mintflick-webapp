@@ -6,8 +6,7 @@ import person from '../../../../assets/images/profile.svg';
 import { makeStorageClient } from '../../../../component/uploadHelperFunction';
 import prettyBytes from 'pretty-bytes';
 import ReactAudioPlayer from 'react-audio-player';
-import ReactPlayer from 'react-player/lazy';
-import ReactHlsPlayer from 'react-hls-player';
+
 
 function ChatRoom(props) {
   // to get loggedin user from   localstorage
