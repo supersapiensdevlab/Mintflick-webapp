@@ -6,6 +6,9 @@ import person from '../../../../assets/images/profile.svg';
 import { makeStorageClient } from '../../../../component/uploadHelperFunction';
 import prettyBytes from 'pretty-bytes';
 import ReactAudioPlayer from 'react-audio-player';
+import ReactPlayer from 'react-player/lazy';
+import ReactHlsPlayer from 'react-hls-player';
+
 function ChatRoom(props) {
   // to get loggedin user from   localstorage
   const user = JSON.parse(window.localStorage.getItem('user'));
@@ -232,7 +235,11 @@ function ChatRoom(props) {
                                 // other props here
                                 style={{}}
                               /> */}
-                              <ReactAudioPlayer className='w-full md:w-44' src={message.url}  controls />
+                              <ReactAudioPlayer
+                                className="w-full md:w-44"
+                                src={message.url}
+                                controls
+                              />
                             </div>
                             <p className="text-gray-400 text-xs">{message.url.split('/').pop()}</p>
                             <p className="text-gray-400 text-xs">Size: {prettyBytes(size)}</p>
@@ -287,6 +294,11 @@ function ChatRoom(props) {
                               }
                             >
                               {message.username}{' '}
+                              {message.type == 'live' ? (
+                                <span className="text-white bg-red-500 rounded-md font-normal px-2 mx-1 text-sm">
+                                  LIVE
+                                </span>
+                              ) : null}
                               <span className="text-xs text-gray-300 font-light">
                                 {new Date(message.createdAt).toLocaleString('en-US', {
                                   hour: '2-digit',
@@ -296,6 +308,16 @@ function ChatRoom(props) {
                               </span>
                             </p>
                             <p className="text">{message.message}</p>
+                            {message.type == 'live' ? (
+                            //   <ReactHlsPlayer
+                            //   src={`https://cdn.livepeer.com/hls/${props.userp.livepeer_data.playbackId}/index.m3u8`}
+                            //   autoPlay={false}
+                            //   controls={true}
+                            //   width="100%"
+                            //   height="auto"
+                            // />
+                            <div></div>
+                            ) : null}
                           </div>
                           <i
                             onClick={() => onreply(message)}
