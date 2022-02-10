@@ -309,7 +309,7 @@ function ChatRoom(props) {
                             <p className="text">{message.message}</p>
                             {message.type == 'live' ? (
                               <a href={`https://dbeats.live/live/${props.userp.username}`}>
-                              {message.url?(<img src={message.url} className='max-h-96 max-w-sm'></img>):(<h1 className='text-center text-4xl font-bold text-dbeats-light'>I am Live</h1>)}
+                              {message.url?(<img src={message.url} className='w-full max-h-96 max-w-sm'></img>):(<h1 className='text-center text-4xl font-bold text-dbeats-light'>I am Live</h1>)}
                             </a>
                             ) : null}
                           </div>
