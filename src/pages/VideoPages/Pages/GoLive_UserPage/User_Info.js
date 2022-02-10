@@ -375,7 +375,7 @@ const UserInfo = () => {
             <div className='mb-4'>
               <h1 className="text-bold">Thumbnail </h1>
               {selectedFile?<img src={selectedFile.localurl} className="max-h-110"></img>:user.thumbnail?<img src={user.thumbnail} className="max-h-110"></img>:null}
-              <form className="flex" onSubmit={uploadThumbnail}>
+              <form className="flex items-center" onSubmit={uploadThumbnail}>
                 <input
                   name="image"
                   type="file"

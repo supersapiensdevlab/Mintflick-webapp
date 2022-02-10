@@ -7,7 +7,6 @@ import { makeStorageClient } from '../../../../component/uploadHelperFunction';
 import prettyBytes from 'pretty-bytes';
 import ReactAudioPlayer from 'react-audio-player';
 
-
 function ChatRoom(props) {
   // to get loggedin user from   localstorage
   const user = JSON.parse(window.localStorage.getItem('user'));
@@ -308,7 +307,7 @@ function ChatRoom(props) {
                             </p>
                             <p className="text">{message.message}</p>
                             {message.type == 'live' ? (
-                              <a href={`https://dbeats.live/live/${props.userp.username}`}>
+                              <a href={`https://dbeats.live/live/${props.userp.username}`}  target="__blank">
                               {message.url?(<img src={message.url} className='w-full max-h-96 max-w-sm'></img>):(<h1 className='text-center text-4xl font-bold text-dbeats-light'>I am Live</h1>)}
                             </a>
                             ) : null}
