@@ -80,24 +80,32 @@ export default function CreateItem() {
   return (
     <div className={`${darkMode && 'dark'}  flex justify-center  `}>
       <div className="w-full flex flex-col px-5 pb-5">
-        <input
-          required={true}
-          placeholder="Asset Name"
-          className="mt-8 border rounded p-4 dark:bg-dbeats-dark-secondary dark:text-white"
-          onChange={(e) => updateFormInput({ ...formInput, name: e.target.value })}
-        />
-        <textarea
-          required={true}
-          placeholder="Asset Description"
-          className="mt-2 border rounded p-4 dark:bg-dbeats-dark-secondary dark:text-white"
-          onChange={(e) => updateFormInput({ ...formInput, description: e.target.value })}
-        />
-        <input
-          required={true}
-          placeholder="Asset Price in MATIC"
-          className="mt-2 border rounded p-4 dark:bg-dbeats-dark-secondary dark:text-white"
-          onChange={(e) => updateFormInput({ ...formInput, price: e.target.value })}
-        />
+        <div className="p-0.5 nm-flat-dbeats-dark-secondary rounded-md mt-8">
+          {' '}
+          <input
+            required={true}
+            placeholder="Asset Name"
+            className=" border-0 rounded-md p-4 bg-dbeats-dark-primary dark:text-white w-full ring-0"
+            onChange={(e) => updateFormInput({ ...formInput, name: e.target.value })}
+          />
+        </div>
+        <div className="p-0.5 mt-2 nm-flat-dbeats-dark-secondary rounded-md">
+          <textarea
+            required={true}
+            placeholder="Asset Description"
+            className=" border-0 rounded-md p-4 bg-dbeats-dark-primary dark:text-white w-full h-full ring-0"
+            onChange={(e) => updateFormInput({ ...formInput, description: e.target.value })}
+          />
+        </div>
+        <div className="p-0.5 mt-2 nm-flat-dbeats-dark-secondary rounded-md">
+          {' '}
+          <input
+            required={true}
+            placeholder="Asset Price in MATIC"
+            className="  border-0 rounded-md p-4 bg-dbeats-dark-primary dark:text-white w-full ring-0"
+            onChange={(e) => updateFormInput({ ...formInput, price: e.target.value })}
+          />
+        </div>
         <input
           required={true}
           type="file"
@@ -106,12 +114,33 @@ export default function CreateItem() {
           onChange={onChange}
         />
         {fileUrl && <img alt="file" className="rounded mt-4" width="350" src={fileUrl} />}
-        <button
-          onClick={createMarket}
-          className="font-bold mt-4 bg-dbeats-light text-white rounded p-4 shadow-lg"
-        >
-          Mint NFT
-        </button>
+        <div className="justify-end items-end content-end">
+          <div
+            type="submit"
+            onClick={createMarket}
+            className="  transform-gpu  transition-all duration-300 ease-in-out mt-3 
+                      cursor-pointer relative inline-flex items-center justify-center p-1 mb-2 
+                      mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-3xl  
+                      bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  
+                      nm-flat-dbeats-dark-secondary   hover:nm-inset-dbeats-dark-secondary   hover:text-white dark:text-white  "
+          >
+            <span
+              className="relative px-5 py-2.5   
+                      bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-secondary-dark-primary 
+                      hover:nm-inset-dbeats-secondary-light  rounded-3xl transition-all duration-300"
+            >
+              Mint NFT
+            </span>
+          </div>
+        </div>
+        {/* <div className="rounded-full p-1 nm-flat-dbeats-dark-alt  mt-4 w-max">
+          <button
+            onClick={createMarket}
+            className="rounded-full  font-bold  bg-dbeats-dark-secondary hover:nm-inset-dbeats-secondary-light text-white   p-4 shadow-lg w-full h-full"
+          >
+            Mint NFT
+          </button>
+        </div> */}
       </div>
     </div>
   );

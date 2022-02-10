@@ -266,13 +266,13 @@ const AnnouncementModal = (props) => {
       isOpen={props.showAnnouncement}
       className={`${
         darkMode
-          ? '     rounded-xl z-500'
-          : '           rounded-xl shadow-2xl    dark:bg-dbeats-dark-primary dark:text-gray-100 '
+          ? '     rounded-xl z-500 border-0 ring-0'
+          : '           rounded-xl shadow-2xl  border-0 ring-0  dark:bg-dbeats-dark-primary dark:text-gray-100 '
       }
-          h-max lg:w-1/3 w-full mx-auto lg:mt-20 2xl:mt-40 mt-24`}
+          h-max lg:w-1/3 w-full mx-auto lg:mt-20 2xl:mt-40 mt-24 border-0 ring-0`}
     >
-      <div className={`${darkMode && 'dark'} `}>
-        <div className=" rounded-xl dark:rounded-none  px-12">
+      <div className={`${darkMode && 'dark'} border-0 ring-0 `}>
+        <div className=" rounded-xl dark:rounded-none   ">
           <div
             className="w-full   px-6 rounded-t-xl dark:rounded-t-sm  text-lg  align-middle  py-3 
           dark:bg-dbeats-dark-alt flex bg-white   justify-between    dark:text-gray-100 "

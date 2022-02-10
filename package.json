@@ -52,6 +52,8 @@
     "react-bootstrap": "^1.6.3",
     "react-burger-menu": "^3.0.6",
     "react-chips": "^0.8.0",
+    "react-comments": "^0.0.0",
+    "react-comments-section": "^1.0.7",
     "react-copy-to-clipboard": "^5.0.4",
     "react-dom": "^17.0.2",
     "react-draft-wysiwyg": "^1.14.7",

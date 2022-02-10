@@ -100,16 +100,15 @@ const UploadVideoModal = (props) => {
       //console.log('uploading files with cid:', cid);
       video.cid = cid;
     };
-    const blob = new Blob([JSON.stringify(video)], { type: 'application/json' });
 
-    const files = [video.videoFile, video.videoImage, new File([blob], 'meta.json')];
+    const files = [video.videoFile, video.videoImage];
     const totalSize = video.videoFile.size;
     let uploaded = 0;
     const onStoredChunk = (size) => {
       uploaded += size;
       const pct = totalSize / uploaded;
       setUploading(10 - pct);
-      console.log(`Uploading... ${pct}% complete`);
+      console.log(`Uploading... ${Math.min(pct * 100, 100).toFixed(2)}% complete`);
     };
 
     // makeStorageClient returns an authorized Web3.Storage client instance
@@ -165,7 +164,42 @@ const UploadVideoModal = (props) => {
       commercialUse,
       derivativeWorks,
     } = video;
-    storeWithProgress(e.target.value).then(() => {
+    storeWithProgress(e.target.value).then(async () => {
+      var ts = Math.round(new Date().getTime() / 1000);
+
+      //Standard Metadata supported by OpenSea
+      let metadata = {
+        image: 'https://ipfs.io/ipfs/' + video.cid + '/' + video.videoImage.name,
+
+        external_url: 'https://ipfs.io/ipfs/' + video.cid + '/' + video.videoFile.name,
+
+        description: video.description,
+
+        name: video.videoName,
+
+        attributes: [
+          {
+            display_type: 'date',
+            trait_type: 'birthday',
+            value: ts,
+          },
+          {
+            trait_type: 'Category',
+            value: video.category,
+          },
+        ],
+
+        animation_url: 'https://ipfs.io/ipfs/' + video.cid + '/' + video.videoFile.name,
+      };
+
+      const blob = new Blob([JSON.stringify(metadata)], { type: 'application/json' });
+
+      const files = [new File([blob], 'meta.json')];
+      const client = makeStorageClient();
+      const cid = await client.put(files);
+      console.log('stored files with cid:', cid);
+
+      console.log('meta', cid);
       let formData = new FormData(); // Currently empty
       formData.append('userName', user.username);
       formData.append('userImage', user.profile_image);
@@ -185,6 +219,8 @@ const UploadVideoModal = (props) => {
       formData.append('videoFile', videoFile, videoFile.name);
       formData.append('videoImage', videoImage, videoImage.name);
       formData.append('videoHash', video.cid);
+
+      formData.append('meta_url', cid); // meta_url is the IPFS hash of the meta.json file
 
       if (
         video.videoFile.length !== 0 &&
@@ -234,25 +270,33 @@ const UploadVideoModal = (props) => {
       isOpen={props.showVideoUpload}
       className={
         darkMode
-          ? 'h-max lg:w-max w-5/6 mx-auto 2xl:mt-32 lg:mt-16 mt-20 bg-dbeats-dark-primary rounded-xl'
+          ? 'h-max lg:w-max w-5/6 mx-auto 2xl:mt-32 lg:mt-16 mt-20 bg-dbeats-dark-secondary rounded-xl'
           : 'h-max lg:w-max w-5/6 mx-auto 2xl:mt-32 lg:mt-16 mt-20 bg-gray-50 rounded-xl shadow-2xl'
       }
     >
       <div className={`${darkMode && 'dark'} px-5 py-5 lg:px-3 lg:py-3 2xl:px-5 2xl:py-5 h-max`}>
-        <h2 className="grid grid-cols-5 justify-items-center 2xl:text-2xl text-lg 2xl:py-4 py-4 lg:py-3 dark:bg-dbeats-dark-primary bg-white dark:text-white">
+        <h2 className="grid grid-cols-5 justify-items-center 2xl:text-2xl text-lg 2xl:py-4 py-4 lg:py-3 dark:bg-dbeats-dark-secondary bg-white dark:text-white">
           <div className="col-span-4 pl-14 ">Upload Video</div>
-          <div className="mr-7 flex justify-end w-full" onClick={props.handleCloseVideoUpload}>
-            <i className="fas fa-times cursor-pointer"></i>
+          <div
+            onClick={props.handleCloseVideoUpload}
+            className=" rounded-3xl group w-max   p-1  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-secondary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
+          >
+            <span className="  text-black dark:text-white  flex p-1 rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:nm-inset-dbeats-dark-secondary ">
+              <p className="self-center mx-2">
+                {' '}
+                <i className="fas fa-times"></i>{' '}
+              </p>
+            </span>
           </div>
         </h2>
         <hr />
         <form method="POST" encType="multipart/formdata">
-          <div className=" bg-white text-gray-500  dark:bg-dbeats-dark-primary dark:text-gray-100   shadow-sm rounded-lg  2xl:px-5 2xl:py-5  lg:px-2 lg:py-1 px-2 py-1 mb-5 lg:mb-2 2xl:mb-5 lg:max-h-full  max-h-96  overflow-y-auto overflow-hidden">
+          <div className=" bg-white text-gray-500  dark:bg-dbeats-dark-secondary dark:text-gray-100   shadow-sm rounded-lg  2xl:px-5 2xl:py-5  lg:px-2 lg:py-1 px-2 py-1 mb-5 lg:mb-2 2xl:mb-5 lg:max-h-full  max-h-96  overflow-y-auto overflow-hidden">
             <div className="md:grid md:grid-cols-3 md:gap-6  ">
               <div className="md:col-span-1  ">
                 <div className="lg:mt-5 mt-0 md:col-span-2 2xl:p-5 lg:p-3 p-2">
                   <label className="block 2xl:text-sm text-sm lg:text-xs font-medium text-gray-700"></label>
-                  <div className="flex justify-center px-6 2xl:py-6 lg:py-4 py-6 border-2 border-gray-300 border-dashed rounded-md">
+                  <div className="flex justify-center px-6 2xl:py-6 lg:py-4 py-6 border-0 nm-inset-dbeats-dark-primary rounded-md">
                     <div className="space-y-1 text-center ">
                       <svg
                         className="mx-auto h-12 w-12 text-gray-400"
@@ -293,7 +337,7 @@ const UploadVideoModal = (props) => {
                 </div>
                 <div className="2xl:mt-5 lg:mt-1 mt-0 md:col-span-2 2xl:p-5 lg:p-3 p-2">
                   <label className="block 2xl:text-sm text-sm lg:text-xs font-medium text-gray-700"></label>
-                  <div className=" mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+                  <div className=" mt-1 flex justify-center px-6 pt-5 pb-6 border-0 nm-inset-dbeats-dark-primary rounded-md">
                     <div className="space-y-1 text-center ">
                       <svg
                         className="mx-auto h-12 w-12 text-gray-400"
@@ -341,18 +385,18 @@ const UploadVideoModal = (props) => {
                       <div className="col-span-1 sm:col-span-1">
                         <label
                           htmlFor="videoName"
-                          className="block 2xl:text-sm text-sm lg:text-xs font-medium dark:text-gray-100 text-gray-700"
+                          className="block 2xl:text-sm text-sm lg:text-xs font-medium dark:text-gray-100 text-gray-700 "
                         >
                           Video Title
                         </label>
-                        <div className="mt-1 flex rounded-md shadow-sm">
+                        <div className="mt-1 flex rounded-md shadow-sm nm-flat-dbeats-dark-secondary  p-0.5">
                           <input
                             type="text"
                             name="videoName"
                             id="videoName"
                             value={video.videoName}
                             onChange={handleVideoInputs}
-                            className="focus:ring-dbeats-dark-primary border dark:border-dbeats-alt border-gray-300 dark:bg-dbeats-dark-primary ring-dbeats-dark-secondary  ring-0   flex-1 block w-full rounded-md sm:text-sm  "
+                            className="focus:nm-inset-dbeats-dark-primary  border-0 bg-dbeats-dark-primary  ring-0   flex-1 block w-full rounded-md sm:text-sm  "
                             placeholder=""
                           />
                         </div>
@@ -401,19 +445,19 @@ const UploadVideoModal = (props) => {
                     <div className="">
                       <label
                         htmlFor="description"
-                        className="block 2xl:text-sm text-sm lg:text-xs font-medium dark:text-gray-100 text-gray-700"
+                        className="block 2xl:text-sm text-sm lg:text-xs font-medium dark:text-gray-100 text-gray-700 rounded-md"
                       >
                         Description
                       </label>
-                      <div className="mt-1">
+                      <div className="mt-1 nm-flat-dbeats-dark-secondary  p-0.5 rounded-md">
                         <textarea
                           id="videoDescription"
                           name="description"
                           rows={3}
                           value={video.description}
                           onChange={handleVideoInputs}
-                          className="dark:placeholder-gray-600 focus:ring-dbeats-dark-primary border dark:border-dbeats-alt border-gray-300 dark:bg-dbeats-dark-primary ring-dbeats-dark-secondary  ring-0   flex-1 block w-full rounded-md sm:text-sm  "
-                          placeholder="Any Behind the scenes you'll like your Audience to know!"
+                          className="dark:placeholder-gray-600 focus:nm-inset-dbeats-dark-primary border-0  bg-dbeats-dark-primary  ring-0   flex-1 block w-full rounded-md sm:text-sm  "
+                          placeholder="short & sweet description of the video"
                         />
                       </div>
                     </div>

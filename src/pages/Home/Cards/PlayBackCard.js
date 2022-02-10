@@ -180,7 +180,7 @@ const PlayBackCard = (props) => {
               <ReactPlayer
                 className="w-full h-full max-h-screen "
                 width="100%"
-                height="512px"
+                height="480px"
                 playing={true}
                 muted={true}
                 volume={0.5}
@@ -232,6 +232,24 @@ const PlayBackCard = (props) => {
                     </span>
                   </div>
                 </div>
+              </div>
+            </div>
+            <div className="grid grid-cols-3 border-t border-opacity-20 mx-2">
+              <div className="flex text-white  items-center justify-center text-sm font-medium  text-center px-4  py-3">
+                <p className="w-full mt-2 text-center cursor-pointer opacity-50 hover:opacity-100">
+                  <i className="fas fa-heart mr-2"></i>
+                  Like
+                </p>
+              </div>
+              <div className="flex text-white  items-center justify-center text-sm font-medium  text-center px-4  py-3">
+                <p className="w-full mt-2 text-center cursor-pointer opacity-50 hover:opacity-100">
+                  <i className="fas fa-share mr-2"></i>Share
+                </p>
+              </div>
+              <div className="flex  text-white  items-center justify-center text-sm font-medium  text-center px-4  py-3">
+                <p className="w-full mt-2 text-center cursor-pointer opacity-50 hover:opacity-100 flex items-center justify-center">
+                  <i className="fas fa-flag mr-2"></i> Report
+                </p>
               </div>
             </div>
           </div>

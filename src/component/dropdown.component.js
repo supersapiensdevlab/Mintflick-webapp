@@ -88,8 +88,8 @@ const Dropdown = ({ data, setSelected, getSelected }) => {
     <Listbox value={selectedItem} onChange={setSelectedItem}>
       {({ open }) => (
         <>
-          <div className="  relative w-max p-0.5 bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary nm-flat-dbeats-dark-primary-lg">
-            <Listbox.Button className="relative w-full text-black dark:text-white   bg-gradient-to-br from-dbeats-dark-secondary to-bg-dbeats-dark-secondary  hover:nm-inset-dbeats-dark-secondary-lg cursor-pointer rounded  shadow-sm pl-3 pr-10 py-2 text-left   focus:outline-none focus:ring-1 focus:ring-dbeats-light focus:border-dbearing-dbeats-light sm:text-sm lg:text-xs 2xl:text-sm">
+          <div className="  relative w-max p-0.5  nm-flat-dbeats-dark-secondary rounded-md">
+            <Listbox.Button className="relative w-full text-black dark:text-white   bg-dbeats-dark-primary  hover:nm-inset-dbeats-dark-primary-lg cursor-pointer rounded-md  shadow-sm pl-3 pr-10 py-2 text-left   focus:outline-none focus:ring-0 focus:ring-dbeats-light focus:border-dbearing-dbeats-light sm:text-sm lg:text-xs 2xl:text-sm">
               <span className="flex items-center">
                 <span className="ml-2 sm:ml-3 block truncate">{selectedItem}</span>
               </span>
@@ -105,7 +105,7 @@ const Dropdown = ({ data, setSelected, getSelected }) => {
               leaveFrom="opacity-100"
               leaveTo="opacity-0"
             >
-              <Listbox.Options className="absolute z-10 mt-1 w-full dark:text-white  bg-white dark:bg-dbeats-dark-primary shadow-lg max-h-56 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm lg:text-xs 2xl:text-sm">
+              <Listbox.Options className="absolute z-10 mt-1 w-full dark:text-white  bg-white dark:bg-dbeats-dark-primary shadow-lg max-h-56 rounded-md py-1 text-base ring-0 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm lg:text-xs 2xl:text-sm">
                 {data.map((value, id) => (
                   <Listbox.Option
                     key={id}

@@ -451,7 +451,7 @@ const UploadTrackModal = (props) => {
       isOpen={props.showTrackUpload}
       className={
         darkMode
-          ? 'h-max lg:w-max w-5/6 mt-20 mx-auto 2xl:mt-24 lg:mt-14 bg-dbeats-dark-primary rounded-xl '
+          ? 'h-max lg:w-max w-5/6 mt-20 mx-auto 2xl:mt-24 lg:mt-14 bg-dbeats-dark-secondary rounded-xl '
           : 'h-max lg:w-max w-5/6 mt-20 mx-auto 2xl:mt-24 lg:mt-14 bg-gray-50 rounded-xl shadow-2xl'
       }
     >
@@ -460,15 +460,23 @@ const UploadTrackModal = (props) => {
           darkMode && 'dark'
         } font-proxima-reg z-100  transition duration-1000 ease-in-out mx-auto p-5 lg:p-2 2xl:p-5`}
       >
-        <h2 className="grid grid-cols-5 justify-items-center 2xl:text-2xl text-lg 2xl:py-4 py-4 lg:py-2 dark:bg-dbeats-dark-alt bg-white dark:text-white">
+        <h2 className="grid grid-cols-5 justify-items-center 2xl:text-2xl text-lg 2xl:py-4 py-4 lg:py-2 dark:bg-dbeats-dark-secondary bg-white dark:text-white">
           <div className="col-span-4 pl-14">Upload Track</div>
-          <div className="mr-7 flex justify-end w-full" onClick={props.handleCloseTrackUpload}>
-            <i className="fas fa-times cursor-pointer"></i>
+          <div
+            onClick={props.handleCloseTrackUpload}
+            className=" rounded-3xl group w-max   p-1  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-secondary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
+          >
+            <span className="  text-black dark:text-white  flex p-1 rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:nm-inset-dbeats-dark-secondary ">
+              <p className="self-center mx-2">
+                {' '}
+                <i className="fas fa-times"></i>{' '}
+              </p>
+            </span>
           </div>
         </h2>
         <hr />
         <form method="POST" encType="multipart/formdata">
-          <div className=" bg-white text-gray-500  dark:bg-dbeats-dark-alt dark:text-gray-100   shadow-sm rounded-lg  2xl:px-5 2xl:py-5 lg:py-2 lg:px-2 px-2 py-1 mb-5 lg:mb-0 2xl:mb-5 lg:max-h-full  max-h-96  overflow-y-auto overflow-hidden">
+          <div className=" bg-white text-gray-500  dark:bg-dbeats-dark-secondary dark:text-gray-100   shadow-sm rounded-lg  2xl:px-5 2xl:py-5 lg:py-2 lg:px-2 px-2 py-1 mb-5 lg:mb-0 2xl:mb-5 lg:max-h-full  max-h-96  overflow-y-auto overflow-hidden">
             <div className="md:grid md:grid-cols-3 md:gap-6  mt-5 lg:mt-0 2xl:mt-5 ">
               <div className="md:col-span-1  ">
                 <div className="lg:mt-0 2xl:mt-5 mt-0 md:col-span-2 2xl:p-5 lg:p-3 p-2  ">
@@ -555,22 +563,6 @@ const UploadTrackModal = (props) => {
                     </div>
                   </div>
                 </div>
-                <div className="2xl:mt-5 mt-0 md:col-span-2 2xl:p-5 lg:p-3 p-2   ">
-                  <label className="block 2xl:text-sm text-sm lg:text-xs font-medium text-gray-700"></label>
-                  <div className=" mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
-                    <div className="space-y-1 text-center ">
-                      <div className="flex text-sm text-gray-600">
-                        <input
-                          id="is_nft"
-                          name="isNFT"
-                          type="checkbox"
-                          className="focus:ring-dbeats-light h-4 w-4 text-dbeats-light border-gray-300 rounded"
-                        />
-                        <p className="px-3">Mint NFT</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
               </div>
 
               <div className="2xl:mt-5 lg:mt-1 mt-0 md:col-span-2">
@@ -584,14 +576,14 @@ const UploadTrackModal = (props) => {
                         >
                           Track Name
                         </label>
-                        <div className="mt-1 flex rounded-md shadow-sm">
+                        <div className="mt-1 flex shadow-sm p-0.5 nm-flat-dbeats-dark-secondary rounded-md">
                           <input
                             type="text"
                             name="trackName"
                             id="trackName"
                             value={track.trackName}
                             onChange={handleInputs}
-                            className="focus:ring-dbeats-dark-primary border dark:border-dbeats-alt border-gray-300 dark:bg-dbeats-dark-primary ring-dbeats-dark-secondary  ring-0   flex-1 block w-full rounded-md sm:text-sm  "
+                            className=" focus:nm-inset-dbeats-dark-primary  border-0 bg-dbeats-dark-primary   ring-0   flex-1 block w-full rounded-md sm:text-sm  "
                             placeholder=""
                           />
                         </div>
@@ -659,7 +651,7 @@ const UploadTrackModal = (props) => {
                         >
                           Track ISRC
                         </label>
-                        <div className="mt-1 rounded-md shadow-sm">
+                        <div className="mt-1   shadow-sm p-0.5 nm-flat-dbeats-dark-secondary rounded-md">
                           <input
                             type="text"
                             name="isrc"
@@ -667,11 +659,11 @@ const UploadTrackModal = (props) => {
                             value={track.isrc}
                             onChange={handleInputs}
                             className={`dark:placeholder-gray-600  
-                            border dark:bg-dbeats-dark-primary ring-dbeats-dark-secondary
+                            focus:nm-inset-dbeats-dark-primary  border-0 bg-dbeats-dark-primary
                             ${
                               invalidISRC
                                 ? 'border-red-500 focus:ring-red-800'
-                                : 'focus:ring-dbeats-dark-primary  border-gray-300 dark:border-dbeats-alt '
+                                : 'focus:ring-dbeats-dark-secondary  border-gray-300 dark:border-dbeats-alt '
                             }
                             ring-0   flex-1 block w-full rounded-md sm:text-sm  "
                             placeholder="eg. XX-XXX-YY-ZZZZZ`}
@@ -679,7 +671,7 @@ const UploadTrackModal = (props) => {
                           <p
                             className={`${
                               invalidISRC
-                                ? '2xl:text-sm lg:text-xs pt-1 text-red-500 mb-1'
+                                ? '2xl:text-sm lg:text-xs pt-1 text-red-500 mb-1 ml-1'
                                 : 'hidden'
                             }`}
                           >
@@ -694,7 +686,7 @@ const UploadTrackModal = (props) => {
                         >
                           Track ISWC
                         </label>
-                        <div className="mt-1 rounded-md shadow-sm">
+                        <div className="mt-1 rounded-md shadow-sm p-0.5 nm-flat-dbeats-dark-secondary ">
                           <input
                             type="text"
                             name="iswc"
@@ -703,11 +695,11 @@ const UploadTrackModal = (props) => {
                             value={track.iswc}
                             onChange={handleInputs}
                             className={`dark:placeholder-gray-600  
-                            border dark:bg-dbeats-dark-primary ring-dbeats-dark-secondary
+                            border-0  bg-dbeats-dark-primary focus:nm-inset-dbeats-dark-primary
                             ${
                               invalidISWC
                                 ? 'border-red-500 focus:ring-red-800'
-                                : 'focus:ring-dbeats-dark-primary  border-gray-300 dark:border-dbeats-alt '
+                                : 'focus:ring-dbeats-dark-secondary  border-gray-300 dark:border-dbeats-alt '
                             }
                             ring-0   flex-1 block w-full rounded-md sm:text-sm  "
                             placeholder="eg. XX-XXX-YY-ZZZZZ`}
@@ -732,14 +724,14 @@ const UploadTrackModal = (props) => {
                       >
                         Description
                       </label>
-                      <div className="mt-1">
+                      <div className="mt-1 p-0.5 nm-flat-dbeats-dark-secondary rounded-md">
                         <textarea
                           id="description"
                           name="description"
                           rows={3}
                           value={track.description}
                           onChange={handleInputs}
-                          className="dark:placeholder-gray-600 focus:ring-dbeats-dark-primary border dark:border-dbeats-alt border-gray-300 dark:bg-dbeats-dark-primary ring-dbeats-dark-secondary  ring-0   flex-1 block w-full rounded-md sm:text-sm  "
+                          className="dark:placeholder-gray-600 focus:nm-inset-dbeats-dark-primary focus:border-0 border-0 border-gray-300 bg-dbeats-dark-primary   ring-0   flex-1 block w-full rounded-md sm:text-sm  "
                           placeholder="Any Behind the scenes you'll like your Audience to know!"
                         />
                       </div>
@@ -835,13 +827,14 @@ const UploadTrackModal = (props) => {
                   : ''
               } 
                flex justify-center 2xl:py-2 py-1 lg:px-5 
-                px-3 2xl:text-lg rounded  border-dbeats-light border
+                  2xl:text-lg rounded  border-dbeats-light border
                 lg:text-md text-md my-auto font-semibold px-3 bg-transparent
                 dark:text-white `}
               disabled={
                 track.trackImage === '' || track.trackFile === '' || invalidISRC || invalidISWC
               }
             ></input>
+
             <div
               className="animate-spin rounded-full h-7 w-7 ml-3 border-t-2 border-b-2 bg-gradient-to-r from-green-400 to-blue-500 "
               hidden={props.loader}
