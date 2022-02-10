@@ -308,7 +308,7 @@ function ChatRoom(props) {
                             </p>
                             <p className="text">{message.message}</p>
                             {message.type == 'live' ? (
-                              <a href={`${process.env.REACT_APP_CLIENT_URL}/live/${props.userp.username}`}>
+                              <a href={`https://dbeats.live/live/${props.userp.username}`}>
                               {message.url?(<img src={message.url} className='w-full max-h-96 max-w-sm'></img>):(<h1 className='text-center text-4xl font-bold text-dbeats-light'>I am Live</h1>)}
                             </a>
                             ) : null}
