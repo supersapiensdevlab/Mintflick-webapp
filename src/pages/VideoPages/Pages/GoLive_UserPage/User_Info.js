@@ -32,6 +32,10 @@ const UserInfo = () => {
   const [newRecord, setNewRecord] = useState(0);
   const [recordUrl, setRecordUrl] = useState('');
 
+  // Thumbnail
+  const [uploadingFile, setUploadingFile] = useState(false);
+  const [selectedFile, setSelectedFile] = useState(null);
+
   //nft video
   const category = [
     'Autos & Vehicles',
@@ -266,6 +270,65 @@ const UserInfo = () => {
     setRecordVideo({ ...recordvideo, videoFile: videoFile });
   };
 
+  // Thumbnail
+  const onFileChange = (event) => {
+    // Update the state
+    setSelectedFile({
+      file: event.target.files,
+      localurl: URL.createObjectURL(event.target.files[0]),
+    });
+  };
+  async function uploadThumbnail(e) {
+    e.preventDefault();
+    if (selectedFile) {
+      setUploadingFile(true);
+      storeWithProgress(selectedFile.file)
+        .then(async (cid) => {
+          setUploadingFile(false);
+          console.log('https://ipfs.io/ipfs/' + cid + '/' + selectedFile.file[0].name);
+          const data = {
+            url:'https://ipfs.io/ipfs/' + cid + '/' + selectedFile.file[0].name,
+            username:user.username
+          }
+          const res = await axios({
+            method: 'POST',
+            url: `${process.env.REACT_APP_SERVER_URL}/user/uploadThumbnail`,
+            data: data,
+          });
+          if(res.data == 'success'){
+              axios.get(`${process.env.REACT_APP_SERVER_URL}/user/${user.username}`).then((value) => {
+                window.localStorage.setItem('user', JSON.stringify(value.data));
+              });
+          }
+        })
+        .catch((err) => {
+          setUploadingFile(false);
+          console.log(err);
+          setSelectedFile(null);
+        });
+      return;
+    }
+  }
+  async function storeWithProgress(files) {
+    // show the root cid as soon as it's ready
+    const onRootCidReady = (cid) => {};
+    const file = [files[0]];
+    const totalSize = files[0].size;
+    let uploaded = 0;
+    const onStoredChunk = (size) => {
+      uploaded += size;
+      const pct = totalSize / uploaded;
+      // setUploading(10 - pct);
+      // console.log(`Uploading... ${pct}% complete`);
+    };
+
+    // makeStorageClient returns an authorized Web3.Storage client instance
+    const client = makeStorageClient();
+
+    // client.put will invoke our callbacks during the upload
+    // and return the root cid when the upload completes
+    return client.put(file, { onRootCidReady, onStoredChunk });
+  }
   return (
     <Fragment className={`${darkMode && 'dark'}`}>
       <div className="grid sm:grid-cols-1 lg:grid-cols-3 grid-flow-row pt-3 pb-50 2xl:mt-10 lg:mt-4 lg:ml-12  bg-gradient-to-b from-blue-50 via-blue-50 to-white  dark:bg-gradient-to-b dark:from-dbeats-dark-secondary  dark:to-dbeats-dark-primary">
@@ -308,7 +371,35 @@ const UserInfo = () => {
                 </a>
               </p>
             </div>
-            <hr width="95%" className="mt-2 mb-4" />
+            <hr width="95%" className="mt-2 mb-2" />
+            <div className='mb-4'>
+              <h1 className="text-bold">Thumbnail </h1>
+              {selectedFile?<img src={selectedFile.localurl} className="max-h-110"></img>:user.thumbnail?<img src={user.thumbnail} className="max-h-110"></img>:null}
+              <form className="flex" onSubmit={uploadThumbnail}>
+                <input
+                  name="image"
+                  type="file"
+                  accept=".jpg,.png,.jpeg,.gif,.webp"
+                  required={true}
+                  onChange={onFileChange}
+                />
+                <button
+                  disabled={uploadingFile}
+                  type="submit"
+                  className={`${
+                    uploadingFile
+                      ? 'dark:bg-dbeats-dark-primary'
+                      : 'bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:dark:nm-inset-dbeats-dark-primary'
+                  }  px-4 py-2  rounded-3xl group flex items-center justify-center  `}
+                >
+                  <p className="hidden md:inline">Upload</p>
+                </button>
+                <div
+                  className="animate-spin rounded-full h-7 w-7 ml-3 border-t-2 border-b-2 bg-gradient-to-r from-green-400 to-blue-500 "
+                  hidden={!uploadingFile}
+                ></div>
+              </form>
+            </div>
             <div>
               <div className="flex flex-col">
                 <button
