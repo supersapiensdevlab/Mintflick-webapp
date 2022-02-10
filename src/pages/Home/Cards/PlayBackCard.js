@@ -175,21 +175,24 @@ const PlayBackCard = (props) => {
             >
               <Link
                 to={`/playback/${props.playbackUserData.user.username}/${props.playbackUserData.id}`}
-                className=" "
-              >
-                <ReactPlayer
-                  className=" "
-                  width="100%"
-                  height="100%"
-                  playing={playing}
-                  muted={false}
-                  volume={0.5}
-                  url={props.playbackUserData.link}
-                  controls={false}
-                  onMouseMove={handleMouseMove}
-                  onMouseLeave={hanldeMouseLeave}
-                />
-              </Link>
+                className="h-full "
+              ></Link>
+              <ReactPlayer
+                className="w-full h-full max-h-screen "
+                width="100%"
+                height="512px"
+                playing={true}
+                muted={true}
+                volume={0.5}
+                light={props.playbackUserData.artwork}
+                url={props.playbackUserData.link}
+                controls={true}
+              />
+              <img
+                src={props.playbackUserData.artwork}
+                className="w-full h-full max-h-screen hidden"
+              ></img>
+              <p>{console.log(props.playbackUserData)}</p>
             </div>
             <div className="flex   text-black text-sm font-medium   px-4  py-3">
               <Link to={`/profile/${props.playbackUserData.user.username}/`} className="mr-4">
@@ -200,10 +203,10 @@ const PlayBackCard = (props) => {
                       : person
                   }
                   alt=""
-                  className="w-16 h-14 rounded-full    self-start"
+                  className="w-16 h-14 rounded-full self-start"
                 />
               </Link>
-              <div className="w-full flex  justify-between mt-2">
+              <div className="w-full flex justify-between mt-2">
                 <div>
                   <div className="w-full self-center  ">
                     <Link
