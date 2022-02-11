@@ -67,8 +67,6 @@ function ChatRoom(props) {
             room_admin: props.userp._id,
             chat: {
               user_id: user._id,
-              username: user.username,
-              profile_image: user.profile_image,
               type: selectedFile.type,
               message: formState.message,
               createdAt: Date.now(),
