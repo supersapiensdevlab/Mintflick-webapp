@@ -3,17 +3,18 @@ import './chatroom.css';
 import io from 'socket.io-client';
 import Picker from 'emoji-picker-react';
 import person from '../../../../assets/images/profile.svg';
-import { makeStorageClient } from '../../../../component/uploadHelperFunction';
+import { detectURLs, makeStorageClient } from '../../../../component/uploadHelperFunction';
 import prettyBytes from 'pretty-bytes';
 import ReactAudioPlayer from 'react-audio-player';
 import LoadingBar from 'react-top-loading-bar';
+import LinkPreview from '../../../../component/Modals/NavbarModals/AnnouncementModal/LinkPreview';
 
 function ChatRoom(props) {
   // to get loggedin user from   localstorage
   const user = JSON.parse(window.localStorage.getItem('user'));
 
   const chatRef = useRef(null);
-  const loadingRef = useRef(null)
+  const loadingRef = useRef(null);
   // the form state manages the form input for creating a new message
   const [formState, setForm] = useState({
     message: '',
@@ -32,6 +33,11 @@ function ChatRoom(props) {
   const [showEmojis, setShowEmojis] = useState(false);
   const [showAttachmentDropdown, setShowAttachmentDropdown] = useState(false);
   const [uploadingFile, setUploadingFile] = useState(false);
+
+  // Smart Links
+  const [showLinkPreview, setShowLinkPreview] = useState(false);
+  const [linkPreviewData, setLinkPreviewData] = useState(null);
+
   const onEmojiClick = (event, emojiObject) => {
     setForm({ ...formState, message: formState.message + emojiObject.emoji });
   };
@@ -44,7 +50,7 @@ function ChatRoom(props) {
       setCurrentSocket(socket);
       socket.emit('joinroom', { user_id: user._id, room_id: props.userp._id });
       socket.on('init', (msgs) => {
-        loadingRef.current.complete()
+        loadingRef.current.complete();
         setMessages(msgs);
         chatRef.current.scrollIntoView({ behavior: 'smooth' });
       });
@@ -177,6 +183,13 @@ function ChatRoom(props) {
     return client.put(file, { onRootCidReady, onStoredChunk });
   }
 
+  // FOr Links
+  // use whatever you want here
+  const URL_REGEX =
+    /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/;
+  const renderText = (txt) =>
+    txt.split(' ').map((part) => (URL_REGEX.test(part) ? <a href={part}>{part} </a> : part + ' '));
+
   return (
     <div className="text-gray-400	 box-border px-2 h-max lg:col-span-5 col-span-6 w-full pt-16 dark:bg-dbeats-dark-primary">
       <LoadingBar ref={loadingRef} color="#00d3ff" shadow={true} />
@@ -187,6 +200,8 @@ function ChatRoom(props) {
               ? messages.map((message) => {
                   const dateNum = new Date(message.createdAt);
                   let size = 0;
+                  let urls = detectURLs(message.message);
+                  let urlstext = renderText(message.message);
                   return (
                     <div key={message._id}>
                       {dates.has(dateNum.toDateString()) ? null : (
@@ -308,12 +323,34 @@ function ChatRoom(props) {
                                 })}
                               </span>
                             </p>
-                            <p className="text">{message.message}</p>
+                            <p className="text">{urlstext}</p>
                             {message.type == 'live' ? (
-                              <a href={`https://dbeats.live/live/${props.userp.username}`}  target="__blank">
-                              {message.url?(<img src={message.url} className='w-full max-h-96 max-w-sm'></img>):(<h1 className='text-center text-4xl font-bold text-dbeats-light'>I am Live</h1>)}
-                            </a>
+                              <a
+                                href={`https://dbeats.live/live/${props.userp.username}`}
+                                target="__blank"
+                              >
+                                {message.url ? (
+                                  <img src={message.url} className="w-full max-h-96 max-w-sm"></img>
+                                ) : (
+                                  <h1 className="text-center text-4xl font-bold text-dbeats-light">
+                                    I am Live
+                                  </h1>
+                                )}
+                              </a>
                             ) : null}
+
+                            {urls &&
+                              urls.map((u) => {
+                                return (
+                                  <a href={u}>
+                                    <LinkPreview
+                                      linkurl={u}
+                                      setShowLinkPreview={setShowLinkPreview}
+                                      setLinkPreviewData={setLinkPreviewData}
+                                    />
+                                  </a>
+                                );
+                              })}
                           </div>
                           <i
                             onClick={() => onreply(message)}
