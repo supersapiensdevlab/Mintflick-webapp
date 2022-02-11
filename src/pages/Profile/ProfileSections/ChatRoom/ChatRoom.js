@@ -6,12 +6,14 @@ import person from '../../../../assets/images/profile.svg';
 import { makeStorageClient } from '../../../../component/uploadHelperFunction';
 import prettyBytes from 'pretty-bytes';
 import ReactAudioPlayer from 'react-audio-player';
+import LoadingBar from 'react-top-loading-bar';
 
 function ChatRoom(props) {
   // to get loggedin user from   localstorage
   const user = JSON.parse(window.localStorage.getItem('user'));
 
   const chatRef = useRef(null);
+  const loadingRef = useRef(null)
   // the form state manages the form input for creating a new message
   const [formState, setForm] = useState({
     message: '',
@@ -36,11 +38,13 @@ function ChatRoom(props) {
   useEffect(() => {
     // initialize gun locally
     if (user) {
+      loadingRef.current.continuousStart();
       // https://dbeats-chat.herokuapp.com
       const socket = io('https://dbeats-chat.herokuapp.com');
       setCurrentSocket(socket);
       socket.emit('joinroom', { user_id: user._id, room_id: props.userp._id });
       socket.on('init', (msgs) => {
+        loadingRef.current.complete()
         setMessages(msgs);
         chatRef.current.scrollIntoView({ behavior: 'smooth' });
       });
@@ -175,6 +179,7 @@ function ChatRoom(props) {
 
   return (
     <div className="text-gray-400	 box-border px-2 h-max lg:col-span-5 col-span-6 w-full pt-16 dark:bg-dbeats-dark-primary">
+      <LoadingBar ref={loadingRef} color="#00d3ff" shadow={true} />
       <div className="overflow-hidden">
         <main className="chat-container-height sticky bottom-0">
           <div className="p-2 chat-height overflow-y-scroll	">
