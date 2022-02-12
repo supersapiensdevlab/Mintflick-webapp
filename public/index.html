@@ -6,16 +6,10 @@
     <meta charset="utf-8" />
     <link rel="icon" href="%PUBLIC_URL%/dbeats.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
-    <meta
-      property="og:title"
-      content="<div style='display:flex;align-items:center'>
-        <img src='https://beta.dbeats.live/favicon.ico' style='border-radius:10px' height='25px' width='25px'></img>
-        <span style='padding-left:4px'>DBeats</span>
-    </div>"
-    />
+    <meta property="og:title" content="DBeats" />
     <meta
       property="og:description"
-      content="<div style='font-size:16px; font-weight:400;'>Live Streaming Videos 🎥, Music &#127926; & NFT Marketplace on Web3🚀</div>"
+      content=" Live Streaming Videos 🎥, Social Media &#127926; & NFT Marketplace on Web3🚀 "
     />
     <meta
       property="og:image"
@@ -40,46 +34,50 @@
     -->
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
 
-    <script src="https://unpkg.com/react/umd/react.production.min.js" crossorigin></script>
+    <!-- Unlock snippet -->
+    <script>
+      (function (d, s) {
+        var js = d.createElement(s),
+          sc = d.getElementsByTagName(s)[0];
+        js.src = 'https://paywall.unlock-protocol.com/static/unlock.1.0.min.js';
+        sc.parentNode.insertBefore(js, sc);
+      })(document, 'script');
+    </script>
 
-    <script src="https://unpkg.com/react-dom/umd/react-dom.production.min.js" crossorigin></script>
-
-    <script
-      src="https://unpkg.com/react-bootstrap@next/dist/react-bootstrap.min.js"
-      crossorigin
-    ></script>
-
-    <title>DBeats</title>
+    <!-- Unlock Configuration -->
     <script>
       var unlockProtocolConfig = {
+        network: 4,
         locks: {
-          '0xB0114bbDCe17e0AF91b2Be32916a1e236cf6034F': {
-            name: 'The Unlock Members lock',
+          '0xA93AF06edF3A57BFEDB3e72107e9308aC4C7B72d': {
+            name: 'A rinkeby lock',
           },
         },
-        icon: 'https://unlock-protocol.com/images/svg/unlock-word-mark.svg',
+        icon: 'https://unlock-protocol.com/static/images/svg/unlock-word-mark.svg',
         callToAction: {
           default: 'Please Unlock things!',
         },
       };
     </script>
-    <script>
-      (function (d, s) {
-        var js = d.createElement(s),
-          sc = d.getElementsByTagName(s)[0];
-        js.src = 'https://cdn.jsdelivr.net/npm/@unlock-protocol/unlock-js@0.20.4/lib/index.min.js';
-        sc.parentNode.insertBefore(js, sc);
-      })(document, 'script');
-    </script>
+
+    <title>DBeats</title>
+
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-H8XD37BBFG"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
+      function gtag() {
+        dataLayer.push(arguments);
+      }
       gtag('js', new Date());
 
       gtag('config', 'G-H8XD37BBFG');
     </script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/jdenticon@3.1.1/dist/jdenticon.min.js"
+      integrity="sha384-l0/0sn63N3mskDgRYJZA6Mogihu0VY3CusdLMiwpJ9LFPklOARUcOiWEIGGmFELx"
+      crossorigin="anonymous"
+    ></script>
   </head>
   <body className="font-proxima-reg   ">
     <noscript>You need to enable JavaScript to run this app.</noscript>
@@ -99,9 +97,4 @@
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
   </body>
-  <script
-    src="https://cdn.jsdelivr.net/npm/jdenticon@3.1.1/dist/jdenticon.min.js"
-    integrity="sha384-l0/0sn63N3mskDgRYJZA6Mogihu0VY3CusdLMiwpJ9LFPklOARUcOiWEIGGmFELx"
-    crossorigin="anonymous"
-  ></script>
 </html>

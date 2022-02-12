@@ -8,7 +8,6 @@ import logo from '../..//assets/images/logo.svg';
 export default function ProfileCard({ user }) {
   return (
     <>
-      {console.log(user)}
       {user ? (
         <div className="mb-4 ">
           <>
@@ -62,7 +61,7 @@ export default function ProfileCard({ user }) {
                         <div className="grid grid-cols-3 gap-4">
                           <div className="text-center">
                             <p className="text-gray-400 text-center 2xl:font-bold lg:text-sm">
-                              All Posts
+                              Owns
                             </p>
                           </div>
                           <div className="text-center">

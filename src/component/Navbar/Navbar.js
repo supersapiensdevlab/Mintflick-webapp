@@ -566,20 +566,9 @@ const NavBar = () => {
 
                 <Link
                   to={`/profile/${user.username}`}
-                  className="shadow-sm 2xl:h-10  2xl:w-10 self-center  h-7 w-7 bg-dbeats-light hover:bg-dbeats-secondary-light text-white rounded-full font-bold mx-2 flex"
+                  className="shadow-sm 2xl:h-10  2xl:w-10 self-center  h-7 w-7 p-0.5 nm-flat-dbeats-dark-primary hover:nm-inset-dbeats-dark-primary text-white rounded-full font-bold mx-2 flex"
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="2xl:h-7 2xl:w-7  h-5 w-5  mx-auto self-center"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
+                  <img src={user.profile_image} className=" mx-auto self-center rounded-full"></img>
                 </Link>
               </div>
             ) : (

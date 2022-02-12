@@ -7,6 +7,7 @@ import axios from 'axios';
 import Noty from 'noty';
 import mojs from '@mojs/core';
 import '@themesberg/flowbite';
+import * as serviceWorker from './serviceWorker';
 
 //import Home from "./component/home.component";
 
@@ -157,6 +158,7 @@ ReactDOM.render(
     <App />
   </Provider>,
   document.getElementById('root'),
+  serviceWorker.unregister(),
 );
 
 // If you want to start measuring performance in your app, pass a function

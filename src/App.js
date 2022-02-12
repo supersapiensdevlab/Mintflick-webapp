@@ -25,18 +25,15 @@ import NewPassword from './pages/Login/NewPassword';
 import VerifyEmail from './pages/Login/VerifyEmail';
 import Profile from './pages/Profile/Profile';
 import ChatRoom from './pages/Profile/ProfileSections/ChatRoom/ChatRoom';
-import Ticket from './pages/Profile/ProfileSections/Ticket/Ticket';
+//import Ticket from './pages/Profile/ProfileSections/Ticket/Ticket';
 import UserRoomPage from './pages/VideoPages/Pages/GoLive_UserPage/UserRoomPage';
 import PublicRoom from './pages/VideoPages/Pages/LivePublicPage/PublicRoomPage';
 import Playback from './pages/VideoPages/Pages/PlayBack/PlaybackRoomPage';
 import TrackPlayback from './pages/VideoPages/Pages/TrackPage/TrackInfo';
-import OnboardingModal from './component/Modals/OnboardingModal/OnboardingModal';
 import ResetWallet from './pages/Login/ResetWallet';
 
 // components
 
-import AdminNavbar from './component/Navbar/AdminNavbar';
-import Sidebar from './component/Sidebar/Sidebar';
 import HeaderStats from './component/Headers/HeaderStats';
 import FooterAdmin from './component/Footers/FooterAdmin';
 
@@ -48,6 +45,9 @@ import Settings from './views/admin/Settings.js';
 import Tables from './views/admin/Tables.js';
 
 import { useState } from 'react';
+
+import Ticket from './Ticket.js';
+
 export default function App() {
   const user = JSON.parse(window.localStorage.getItem('user'));
   const darkMode = useSelector((state) => state.toggleDarkMode);
@@ -139,6 +139,9 @@ export default function App() {
 
                   {userType === 1 ? <GamerHome /> : null}
                   {userType === 2 ? <VideoHome /> : null}
+                </Route>
+                <Route exact path="/ticket">
+                  <Ticket></Ticket>
                 </Route>
                 <Route exact path="/signup">
                   <TopLoader page="signup" />

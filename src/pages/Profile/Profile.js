@@ -10,8 +10,7 @@ import ChannelSection from './ProfileSections/ChannelSection';
 import ChatRoom from './ProfileSections/ChatRoom/ChatRoom';
 import ProfileDetails from './ProfileSections/ProfileDetails/ProfileDetails';
 import NFTStore from './ProfileSections/Store/NFT_Store';
-import Ticket from './ProfileSections/Ticket/Ticket';
-
+import Ticket from '../../Ticket';
 const Profile = () => {
   // For Routing
   let match = useRouteMatch();
