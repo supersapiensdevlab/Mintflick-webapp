@@ -300,7 +300,7 @@ const Home = () => {
               <div className=" ">
                 <FeedbackForm className="z-500" />
               </div>
-              <p className="text-white  px-2 my-1">Recommended Channels</p>
+              <p className="text-white  px-2 my-1">Verified Creators</p>
 
               {verifiedUser
                 ? verifiedUser.map((verifieduser, i) => {

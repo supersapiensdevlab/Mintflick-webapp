@@ -67,44 +67,43 @@ export default function ProfileCard({ user }) {
 
   return (
     <>
-      {user ? (
-        <div className="mb-4 ">
-          <>
-            <div>
-              <div className=" flex items-center  text-center bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-secondary p-0.5  sm:rounded-xl nm-flat-dbeats-dark-primary">
-                <div className="  dark:text-gray-50     border-opacity-30  shadow-sm dark:shadow-md  bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary  text-dbeats-dark-primary sm:rounded-xl   w-full ">
-                  <div className="  flex items-center h-max w-full justify-center">
-                    <div className="   sm:rounded-xl ">
-                      <img
-                        className="  h-full w-full sm:rounded-t-xl "
-                        src="https://dummyimage.com/600x400/000/fff"
-                        alt="avatar"
-                      />
+      <div className="mb-4 ">
+        <>
+          <div>
+            <div className=" flex items-center  text-center bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-secondary p-0.5  sm:rounded-xl nm-flat-dbeats-dark-primary">
+              <div className="  dark:text-gray-50     border-opacity-30  shadow-sm dark:shadow-md  bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary  text-dbeats-dark-primary sm:rounded-xl   w-full ">
+                <div className="  flex items-center h-max w-full justify-center">
+                  <div className="   sm:rounded-xl ">
+                    <img
+                      className="  h-full w-full sm:rounded-t-xl "
+                      src="https://dummyimage.com/600x400/000/fff"
+                      alt="avatar"
+                    />
 
-                      <div className="flex align-middle justify-center items-center">
-                        <p className="text-white text-opacity-40 mx-1">rent this billboard</p>
-                        <div className="my-3 rounded-3xl group w-max ml-2 p-1  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-primary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out ">
-                          <span
-                            onClick={openModal}
-                            className="  text-black dark:text-white  flex p-1 rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-secondary hover:nm-inset-dbeats-dark-secondary "
-                          >
-                            <img
-                              className="h-7 w-7 p-1  mr-1   text-white self-center align-middle items-center     "
-                              src={maticLogo}
-                              alt="logo"
-                            ></img>
-                            <p className="self-center mx-2"> 200</p>
-                          </span>
-                        </div>
+                    <div className="flex align-middle justify-center items-center">
+                      <p className="text-white text-opacity-40 mx-1">rent this billboard</p>
+                      <div className="my-3 rounded-3xl group w-max ml-2 p-1  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-primary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out ">
+                        <span
+                          onClick={openModal}
+                          className="  text-black dark:text-white  flex p-1 rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-secondary hover:nm-inset-dbeats-dark-secondary "
+                        >
+                          <img
+                            className="h-7 w-7 p-1  mr-1   text-white self-center align-middle items-center     "
+                            src={maticLogo}
+                            alt="logo"
+                          ></img>
+                          <p className="self-center mx-2"> 200</p>
+                        </span>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </>
-        </div>
-      ) : null}
+          </div>
+        </>
+      </div>
+
       <Modal
         isOpen={modalIsOpen}
         onAfterOpen={afterOpenModal}
