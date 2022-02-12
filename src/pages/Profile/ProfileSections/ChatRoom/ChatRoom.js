@@ -7,7 +7,7 @@ import { detectURLs, makeStorageClient } from '../../../../component/uploadHelpe
 import prettyBytes from 'pretty-bytes';
 import ReactAudioPlayer from 'react-audio-player';
 import LoadingBar from 'react-top-loading-bar';
-import LinkPreview from '../../../../component/Modals/NavbarModals/AnnouncementModal/LinkPreview';
+import ChatLinkPreview from './ChatLinkPreview';
 
 function ChatRoom(props) {
   // to get loggedin user from   localstorage
@@ -52,7 +52,9 @@ function ChatRoom(props) {
       socket.on('init', (msgs) => {
         loadingRef.current.complete();
         setMessages(msgs);
-        chatRef.current.scrollIntoView({ behavior: 'smooth' });
+        setTimeout(()=>{
+          chatRef.current.scrollIntoView({ behavior: 'smooth' });
+        },1500)
       });
       socket.on('message', (msg) => {
         setMessages((prevArray) => [...prevArray, msg]);
@@ -191,11 +193,11 @@ function ChatRoom(props) {
     txt.split(' ').map((part) => (URL_REGEX.test(part) ? <a href={part}>{part} </a> : part + ' '));
 
   return (
-    <div className="text-gray-400	 box-border px-2 h-max lg:col-span-5 col-span-6 w-full pt-16 dark:bg-dbeats-dark-primary">
+    <div className="text-gray-400 	 box-border px-2 h-max lg:col-span-5 col-span-6 w-full pt-16 dark:bg-dbeats-dark-primary">
       <LoadingBar ref={loadingRef} color="#00d3ff" shadow={true} />
       <div className="overflow-hidden">
         <main className="chat-container-height sticky bottom-0">
-          <div className="p-2 chat-height overflow-y-scroll	">
+          <div className="p-2 chat-height overflow-y-scroll	overflow-x-hidden">
             {messages
               ? messages.map((message) => {
                   const dateNum = new Date(message.createdAt);
@@ -343,7 +345,7 @@ function ChatRoom(props) {
                               urls.map((u) => {
                                 return (
                                   <a href={u}>
-                                    <LinkPreview
+                                    <ChatLinkPreview
                                       linkurl={u}
                                       setShowLinkPreview={setShowLinkPreview}
                                       setLinkPreviewData={setLinkPreviewData}
