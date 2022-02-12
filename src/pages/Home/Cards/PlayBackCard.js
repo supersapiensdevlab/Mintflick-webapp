@@ -192,7 +192,6 @@ const PlayBackCard = (props) => {
                 src={props.playbackUserData.artwork}
                 className="w-full h-full max-h-screen hidden"
               ></img>
-              <p>{console.log(props.playbackUserData)}</p>
             </div>
             <div className="flex   text-black text-sm font-medium   px-4  py-3">
               <Link to={`/profile/${props.playbackUserData.user.username}/`} className="mr-4">

@@ -54,11 +54,13 @@ const PinnedPanel = () => {
                 }
               >
                 <Link to={`/profile/${pinnedUser.username}/`} className=" my-2 relative">
-                  <img
-                    src={pinnedUser.profile_image ? pinnedUser.profile_image : personImg}
-                    alt=""
-                    className=" 2xl:w-14 2xl:h-14 lg:h-10 lg:w-10 rounded-full hover:shadow hover:scale-95 transform transition-all"
-                  />{' '}
+                  <div className="p-0.5 nm-flat-dbeats-dark-secondary rounded-full hover:nm-inset-dbeats-dark-secondary">
+                    <img
+                      src={pinnedUser.profile_image ? pinnedUser.profile_image : personImg}
+                      alt=""
+                      className=" 2xl:w-14 2xl:h-14 lg:h-10 lg:w-10 rounded-full hover:shadow hover:scale-99 transform transition-all"
+                    />{' '}
+                  </div>
                 </Link>
               </OverlayTrigger>
             </div>
@@ -67,10 +69,10 @@ const PinnedPanel = () => {
 
         <div className="flex justify-center cursor-pointer  ">
           <Link
-            className="2xl:w-14 2xl:h-14 lg:h-10 lg:w-10  my-2 rounded-full hover:shadow hover:scale-95 transition-all transform  relative bg-blue-300 dark:bg-dbeats-dark-alt "
+            className="2xl:w-14 2xl:h-14 lg:h-10 lg:w-10  my-2 rounded-full hover:shadow hover:scale-99 transition-all transform  relative nm-flat-dbeats-dark-secondary hover:nm-inset-dbeats-dark-secondary "
             to={userdata ? `/profile/${userdata.username}/following` : `/signup`}
           >
-            <div className="w-max mx-auto 2xl:mt-3.5 lg:mt-1.5">
+            <div className="w-max mx-auto 2xl:mt-3.5 lg:mt-1.5 ">
               <i className="fas fa-plus 2xl:text-lg lg:text-sm text-center text-white dark:text-blue-200"></i>
             </div>
           </Link>
