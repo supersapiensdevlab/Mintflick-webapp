@@ -8,6 +8,7 @@ import prettyBytes from 'pretty-bytes';
 import ReactAudioPlayer from 'react-audio-player';
 import LoadingBar from 'react-top-loading-bar';
 import ChatLinkPreview from './ChatLinkPreview';
+import InfiniteScroll from 'react-infinite-scroller';
 
 function ChatRoom(props) {
   // to get loggedin user from   localstorage
@@ -38,6 +39,11 @@ function ChatRoom(props) {
   const [showLinkPreview, setShowLinkPreview] = useState(false);
   const [linkPreviewData, setLinkPreviewData] = useState(null);
 
+  // For Pagination
+  const [totalPages, setTotalpages] = useState(0);
+  const [currentPage, setCurrentpage] = useState(0);
+  const [loadingOldChats,setLoadingOldChats] = useState(false);
+
   const onEmojiClick = (event, emojiObject) => {
     setForm({ ...formState, message: formState.message + emojiObject.emoji });
   };
@@ -46,15 +52,28 @@ function ChatRoom(props) {
     if (user) {
       loadingRef.current.continuousStart();
       // https://dbeats-chat.herokuapp.com
-      const socket = io('https://dbeats-chat.herokuapp.com');
+      const socket = io('http://localhost:80');
       setCurrentSocket(socket);
       socket.emit('joinroom', { user_id: user._id, room_id: props.userp._id });
       socket.on('init', (msgs) => {
         loadingRef.current.complete();
-        setMessages(msgs);
-        setTimeout(()=>{
+        setMessages(msgs.chats);
+        setTotalpages(msgs.totalPages);
+        setCurrentpage(msgs.currentPage);
+        setTimeout(() => {
           chatRef.current.scrollIntoView({ behavior: 'smooth' });
-        },1500)
+        }, 1500);
+      });
+      socket.on('getmore', (msgs) => {
+
+        // loadingRef.current.complete();
+        setMessages((prevArray) => [...msgs.chats,...prevArray]);
+        setTotalpages(msgs.totalPages);
+        setCurrentpage(msgs.currentPage);
+        setLoadingOldChats(false);
+        // setTimeout(() => {
+        //   chatRef.current.scrollIntoView({ behavior: 'smooth' });
+        // }, 1500);
       });
       socket.on('message', (msg) => {
         setMessages((prevArray) => [...prevArray, msg]);
@@ -198,173 +217,210 @@ function ChatRoom(props) {
       <div className="overflow-hidden">
         <main className="chat-container-height sticky bottom-0">
           <div className="p-2 chat-height overflow-y-scroll	overflow-x-hidden">
-            {messages
-              ? messages.map((message) => {
-                  const dateNum = new Date(message.createdAt);
-                  let size = 0;
-                  let urls = detectURLs(message.message);
-                  let urlstext = renderText(message.message);
-                  return (
-                    <div key={message._id}>
-                      {dates.has(dateNum.toDateString()) ? null : (
-                        <p className="my-1 rounded-3xl bg-dbeats-dark-secondary px-3 py-1 block w-max mx-auto">
-                          {renderDate(message, dateNum.toDateString())}
-                        </p>
-                      )}
-                      <div className=" px-3 p-2 rounded	 dark: bg-dbeats-dark-secondary	my-1 inline-block shadow">
-                        {message.reply_to ? (
-                          <div className="group  px-3 py-2 border-l-2 border-dbeats-light  dark: nm-inset-dbeats-dark-primary">
-                            <p
-                              className={
-                                message.reply_to.username === user.username
-                                  ? 'text-sm  mb-1  text-dbeats-light'
-                                  : 'text-sm  mb-1 text-white	'
-                              }
-                            >
-                              {' '}
-                              {message.reply_to.username}
-                            </p>
-                            <p className="text-xs">{message.reply_to.message}</p>
-                          </div>
-                        ) : null}
-                        {message.type == 'image' ? (
-                          <div className="w-250">
-                            <img src={message.url}></img>
-                            <p className="text-gray-400 text-xs">{message.url.split('/').pop()}</p>
-                            <p className="text-gray-400 text-xs">Size: {prettyBytes(size)}</p>
-                            <a
-                              className="text-opacity-25 text-white hover:text-opacity-100 "
-                              href={message.url}
-                              download
-                              target="_blank"
-                            >
-                              Download
-                            </a>
-                          </div>
-                        ) : null}
-                        {message.type == 'sound' ? (
-                          <div className=" md:ml-3 p-2 border border-dbeats-light rounded-md">
-                            <div className="md:flex items-center">
-                              <i className="fas fa-music text-4xl text-dbeats-light"></i>
-                              {/* <AudioPlayer
+            <InfiniteScroll
+              pageStart={0}
+              loadMore={() => {
+                if(currentSocket && currentPage>0 && !loadingOldChats){
+                  setLoadingOldChats(true);
+                currentSocket.emit("loadmore", { user_id: user._id, room_id: props.userp._id ,page_no:currentPage-1});
+                setCurrentpage(currentPage-1)
+              }
+              }}
+              hasMore={()=>{
+                if(currentPage>0){
+                  return true;
+                }else{
+                  return false;
+                }
+              }}
+              loader={
+                <div className="loader" key={0}>
+                  Loading ...
+                </div>
+              }
+              useWindow={false}
+              isReverse={true}
+            >
+              {messages
+                ? messages.map((message) => {
+                  console.log(message)
+                    const dateNum = new Date(message.createdAt);
+                    let size = 0;
+                    let urls = detectURLs(message.message);
+                    let urlstext = renderText(message.message);
+                    return (
+                      <div key={message._id}>
+                        {dates.has(dateNum.toDateString()) ? null : (
+                          <p className="my-1 rounded-3xl bg-dbeats-dark-secondary px-3 py-1 block w-max mx-auto">
+                            {renderDate(message, dateNum.toDateString())}
+                          </p>
+                        )}
+                        <div className=" px-3 p-2 rounded	 dark: bg-dbeats-dark-secondary	my-1 inline-block shadow">
+                          {message.reply_to ? (
+                            <div className="group  px-3 py-2 border-l-2 border-dbeats-light  dark: nm-inset-dbeats-dark-primary">
+                              <p
+                                className={
+                                  message.reply_to.username === user.username
+                                    ? 'text-sm  mb-1  text-dbeats-light'
+                                    : 'text-sm  mb-1 text-white	'
+                                }
+                              >
+                                {' '}
+                                {message.reply_to.username}
+                              </p>
+                              <p className="text-xs">{message.reply_to.message}</p>
+                            </div>
+                          ) : null}
+                          {message.type == 'image' ? (
+                            <div className="w-250">
+                              <img src={message.url}></img>
+                              <p className="text-gray-400 text-xs">
+                                {message.url.split('/').pop()}
+                              </p>
+                              <p className="text-gray-400 text-xs">Size: {prettyBytes(size)}</p>
+                              <a
+                                className="text-opacity-25 text-white hover:text-opacity-100 "
+                                href={message.url}
+                                download
+                                target="_blank"
+                              >
+                                Download
+                              </a>
+                            </div>
+                          ) : null}
+                          {message.type == 'sound' ? (
+                            <div className=" md:ml-3 p-2 border border-dbeats-light rounded-md">
+                              <div className="md:flex items-center">
+                                <i className="fas fa-music text-4xl text-dbeats-light"></i>
+                                {/* <AudioPlayer
                                 autoPlay={false}
                                 src={message.url}
                                 onPlay={(e) => console.log('onPlay')}
                                 // other props here
                                 style={{}}
                               /> */}
-                              <ReactAudioPlayer
-                                className="w-full md:w-44"
-                                src={message.url}
-                                controls
+                                <ReactAudioPlayer
+                                  className="w-full md:w-44"
+                                  src={message.url}
+                                  controls
+                                />
+                              </div>
+                              <p className="text-gray-400 text-xs">
+                                {message.url.split('/').pop()}
+                              </p>
+                              <p className="text-gray-400 text-xs">Size: {prettyBytes(size)}</p>
+                              <p className="text-gray-400 text-xs">
+                                <a href={message.url} download target="_blank">
+                                  Download
+                                </a>
+                              </p>
+                            </div>
+                          ) : null}
+                          {message.type == 'video' ? (
+                            <div className="w-250 ml-3 p-2 border border-dbeats-light rounded-md">
+                              <i className="fas fa-video text-4xl text-dbeats-light"></i>
+                              <p className="text-gray-400 text-xs">
+                                {message.url.split('/').pop()}
+                              </p>
+                              <p className="text-gray-400 text-xs">Size: {prettyBytes(size)}</p>
+                              <p className="text-gray-400 text-xs">
+                                <a href={message.url} download target="_blank">
+                                  Download
+                                </a>
+                              </p>
+                            </div>
+                          ) : null}
+                          {message.type == 'file' ? (
+                            <div className="w-250 ml-3 p-2 border border-dbeats-light rounded-md">
+                              <i className="fas fa-file text-4xl text-dbeats-light"></i>
+                              <p className="text-gray-400 text-xs">
+                                {message.url.split('/').pop()}
+                              </p>
+                              <p className="text-gray-400 text-xs">Size: {prettyBytes(size)}</p>
+                              <p className="text-gray-400 text-xs">
+                                <a href={message.url} download target="_blank">
+                                  Download
+                                </a>
+                              </p>
+                            </div>
+                          ) : null}
+                          <div className="inline-flex items-start group">
+                            <div className="chat_message_profile pr-2 pt-2 h-12 w-12">
+                              <img
+                                height="50px"
+                                width="50px"
+                                className="rounded-full"
+                                style={{ width: 'auto', maxWidth: '50px' }}
+                                alt="profile"
+                                src={message.profile_image ? message.profile_image : person}
                               />
                             </div>
-                            <p className="text-gray-400 text-xs">{message.url.split('/').pop()}</p>
-                            <p className="text-gray-400 text-xs">Size: {prettyBytes(size)}</p>
-                            <p className="text-gray-400 text-xs">
-                              <a href={message.url} download target="_blank">
-                                Download
-                              </a>
-                            </p>
-                          </div>
-                        ) : null}
-                        {message.type == 'video' ? (
-                          <div className="w-250 ml-3 p-2 border border-dbeats-light rounded-md">
-                            <i className="fas fa-video text-4xl text-dbeats-light"></i>
-                            <p className="text-gray-400 text-xs">{message.url.split('/').pop()}</p>
-                            <p className="text-gray-400 text-xs">Size: {prettyBytes(size)}</p>
-                            <p className="text-gray-400 text-xs">
-                              <a href={message.url} download target="_blank">
-                                Download
-                              </a>
-                            </p>
-                          </div>
-                        ) : null}
-                        {message.type == 'file' ? (
-                          <div className="w-250 ml-3 p-2 border border-dbeats-light rounded-md">
-                            <i className="fas fa-file text-4xl text-dbeats-light"></i>
-                            <p className="text-gray-400 text-xs">{message.url.split('/').pop()}</p>
-                            <p className="text-gray-400 text-xs">Size: {prettyBytes(size)}</p>
-                            <p className="text-gray-400 text-xs">
-                              <a href={message.url} download target="_blank">
-                                Download
-                              </a>
-                            </p>
-                          </div>
-                        ) : null}
-                        <div className="inline-flex items-center group">
-                          <div className="chat_message_profile pr-2 h-12 w-12">
-                            <img
-                              height="50px"
-                              width="50px"
-                              className="rounded-full"
-                              style={{ width: 'auto', maxWidth: '50px' }}
-                              alt="profile"
-                              src={message.profile_image ? message.profile_image : person}
-                            />
-                          </div>
-                          <div className="p-1 mt-1">
-                            <p
-                              className={
-                                message.username === user.username
-                                  ? 'text-base font-bold   text-dbeats-light'
-                                  : 'text-base font-bold  text-white	'
-                              }
-                            >
-                              {message.username}{' '}
-                              {message.type == 'live' ? (
-                                <span className="text-white bg-red-500 rounded-md font-normal px-2 mx-1 text-sm">
-                                  LIVE
-                                </span>
-                              ) : null}
-                              <span className="text-xs text-gray-300 font-light">
-                                {new Date(message.createdAt).toLocaleString('en-US', {
-                                  hour: '2-digit',
-                                  minute: '2-digit',
-                                  hour12: true,
-                                })}
-                              </span>
-                            </p>
-                            <p className="text">{urlstext}</p>
-                            {message.type == 'live' ? (
-                              <a
-                                href={`https://dbeats.live/live/${props.userp.username}`}
-                                target="__blank"
+                            <div className="p-1 mt-1">
+                              <p
+                                className={
+                                  message.username === user.username
+                                    ? 'text-base font-bold   text-dbeats-light'
+                                    : 'text-base font-bold  text-white	'
+                                }
                               >
-                                {message.url ? (
-                                  <img src={message.url} className="w-full max-h-96 max-w-sm"></img>
-                                ) : (
-                                  <h1 className="text-center text-4xl font-bold text-dbeats-light">
-                                    I am Live
-                                  </h1>
-                                )}
-                              </a>
-                            ) : null}
+                                {message.username}{' '}
+                                {message.type == 'live' ? (
+                                  <span className="text-white bg-red-500 rounded-md font-normal px-2 mx-1 text-sm">
+                                    LIVE
+                                  </span>
+                                ) : null}
+                                <span className="text-xs text-gray-300 font-light">
+                                  {new Date(message.createdAt).toLocaleString('en-US', {
+                                    hour: '2-digit',
+                                    minute: '2-digit',
+                                    hour12: true,
+                                  })}
+                                </span>
+                              </p>
+                              <p className="text">{urlstext}</p>
+                              {message.type == 'live' ? (
+                                <a
+                                  href={`https://dbeats.live/live/${props.userp.username}`}
+                                  target="__blank"
+                                >
+                                  {message.url ? (
+                                    <img
+                                      src={message.url}
+                                      className="w-full max-h-96 max-w-sm"
+                                    ></img>
+                                  ) : (
+                                    <h1 className="text-center text-4xl font-bold text-dbeats-light">
+                                      I am Live
+                                    </h1>
+                                  )}
+                                </a>
+                              ) : null}
 
-                            {urls &&
-                              urls.map((u) => {
-                                return (
-                                  <a href={u}>
-                                    <ChatLinkPreview
-                                      linkurl={u}
-                                      setShowLinkPreview={setShowLinkPreview}
-                                      setLinkPreviewData={setLinkPreviewData}
-                                    />
-                                  </a>
-                                );
-                              })}
+                              {urls &&
+                                urls.map((u) => {
+                                  return (
+                                    <a href={u}>
+                                      <ChatLinkPreview
+                                        linkurl={u}
+                                        setShowLinkPreview={setShowLinkPreview}
+                                        setLinkPreviewData={setLinkPreviewData}
+                                      />
+                                    </a>
+                                  );
+                                })}
+                            </div>
+                            <i
+                              onClick={() => onreply(message)}
+                              className=" opacity-0 group-hover:opacity-100 fas fa-reply ml-2 w-4 h-4 cursor-pointer text-dbeats-white text-opacity-40 hover:text-opacity-100"
+                            ></i>
                           </div>
-                          <i
-                            onClick={() => onreply(message)}
-                            className=" opacity-0 group-hover:opacity-100 fas fa-reply ml-2 w-4 h-4 cursor-pointer text-dbeats-white text-opacity-40 hover:text-opacity-100"
-                          ></i>
                         </div>
                       </div>
-                    </div>
-                  );
-                })
-              : '<></>'}
-            <div ref={chatRef} />
+                    );
+                  })
+                : '<></>'}
+              <div ref={chatRef} />
+            </InfiniteScroll>
           </div>
         </main>
         {showEmojis && (
