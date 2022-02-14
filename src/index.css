@@ -3,17 +3,35 @@
 @tailwind utilities;
 
 @font-face {
-  font-family: 'Proxima';
-  src: local('Proxima'), url(./assets/fonts/reg/ProximaNova-Regular.otf) format('otf');
+  font-family: 'Gilroy';
+  src: local('Gilroy-Regular'), url(./assets/fonts/Gilroy-Font/Gilroy-Regular.woff) format('woff');
+  /* other formats include: 'woff2', 'truetype, 'opentype',
+                            'embedded-opentype', and 'svg' */
 }
 
 @font-face {
-  font-family: 'GTWalsheimPro';
-  src: local('GTWalsheimPro'), url(./assets/fonts/font/GTWalsheimPro-Regular.ttf) format('ttf');
+  font-family: 'Gilroy-Bold';
+  src: local('Gilroy-Bold'), url(./assets/fonts/Gilroy-Font/Gilroy-Bold.woff) format('woff');
+  /* other formats include: 'woff2', 'truetype, 'opentype',
+                            'embedded-opentype', and 'svg' */
 }
 
 html {
   overflow-x: hidden;
+  font-family: 'Gilroy', Arial, serif;
+}
+
+p {
+  font-family: 'Gilroy', Arial, serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Gilroy-Bold', Arial, serif;
 }
 
 @media only screen and (max-width: 640px) {

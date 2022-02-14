@@ -21,7 +21,7 @@ import classes from '../Info.module.css';
 import LiveCard from './LiveCard';
 
 const PublicInfo = (props) => {
-  let sharable_data = `${process.env.REACT_APP_SERVER_URL}/live/${props.stream_id}`;
+  let sharable_data = `${process.env.REACT_APP_CLIENT_URL}/live/${props.stream_id}`;
   const darkMode = useSelector((darkmode) => darkmode.toggleDarkMode);
 
   const [userData, setUserData] = useState([]);
@@ -202,7 +202,7 @@ const PublicInfo = (props) => {
                 </div>
                 {!privateUser ? (
                   <div>
-                    {user ? (
+                    {userData ? (
                       <div className="flex items-center   w-full">
                         <button
                           className="flex items-center dark:bg-dbeats-dark-primary border border-dbeats-light dark:hover:bg-dbeats-light p-1 2xl:text-lg lg:text-sm text-md rounded-sm 2xl:px-4 px-4 lg:px-2 mr-3 font-semibold text-white "
@@ -219,11 +219,15 @@ const PublicInfo = (props) => {
                           onClick={handleShowSubscriptionModal}
                           className={
                             userData.superfan_data
-                              ? ' dark:bg-dbeats-dark-primary border border-dbeats-light dark:hover:bg-dbeats-light p-1 2xl:text-lg lg:text-sm text-md  rounded-sm 2xl:px-4 px-4 lg:px-2      mr-3 font-semibold text-white   '
+                              ? ' flex dark:bg-dbeats-dark-primary border border-dbeats-light dark:hover:bg-dbeats-light p-1 2xl:text-lg lg:text-sm text-md  rounded-sm 2xl:px-4 px-4 lg:px-2      mr-3 font-semibold text-white   '
                               : 'hidden'
                           }
                         >
-                          <span className={`${userData.superfan_data ? '' : 'hidden'}`}>
+                          <span
+                            className={`${
+                              userData.superfan_data ? '' : 'hidden'
+                            } whitespace-nowrap flex`}
+                          >
                             Become a Superfan
                           </span>
                         </button>
@@ -231,9 +235,11 @@ const PublicInfo = (props) => {
                     ) : (
                       <Link
                         to="/signup"
-                        className="bg-dbeats-light  p-1 2xl:text-lg lg:text-sm text-md  rounded-sm 2xl:px-4 px-4 lg:px-2 mr-3 font-semibold text-white "
+                        className="bg-dbeats-light flex  p-1 2xl:text-lg lg:text-sm text-md  rounded-sm 2xl:px-4 px-4 lg:px-2 mr-3 font-semibold text-white "
                       >
-                        <span>Login to Subscribe & Become a SuperFan</span>
+                        <span className="whitespace-nowrap flex">
+                          Login to Subscribe & Become a SuperFan
+                        </span>
                       </Link>
                     )}
                   </div>
@@ -263,7 +269,7 @@ const PublicInfo = (props) => {
                     leaveFrom="transform opacity-100 scale-100"
                     leaveTo="transform opacity-0 scale-95"
                   >
-                    <Menu.Items className="  dark:bg-opacity-10 backdrop-filter  backdrop-blur-md absolute right-0 w-56  origin-top-right bg-white dark:bg-dbeats-dark-primary dark:text-gray-50 divide-y divide-gray-100   shadow   focus:outline-none">
+                    <Menu.Items className="   absolute right-0 w-56  origin-top-right bg-white dark:bg-dbeats-dark-primary dark:text-gray-50 divide-y divide-gray-100   shadow   focus:outline-none">
                       <div className="px-1 py-1 ">
                         <Menu.Item className="w-full text-gray-700 dark:text-gray-50 text-left text-lg pl-2 hover:text-white hover:bg-dbeats-light">
                           <button>Report</button>

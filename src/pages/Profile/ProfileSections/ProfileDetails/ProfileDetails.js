@@ -325,10 +325,10 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
 
   return (
     <div className={`${darkMode && 'dark'}   h-max lg:col-span-5 col-span-6 w-full   `}>
-      <div id="display_details" className="h-full 2xl:pt-16 lg:pt-12">
+      <div id="display_details" className="h-full 2xl:pt-16 lg:pt-12 pt-16">
         {!isMailVerified && privateUser ? (
           <div
-            className="bg-red-100 border-t-4 border-red-500 rounded-b text-red-900 px-4 py-2 shadow-md"
+            className="bg-dbeats-dark-primary border-t-2 border-red-500 rounded-b text-red-900 px-4 py-2  shadow-md"
             role="alert"
           >
             <div className="flex items-center justify-between px-4">
@@ -347,7 +347,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                 </div>
               </div>
               <div
-                className="w-30 bg-red-500 rounded-md cursor-pointer text-white px-4 py-2 font-semibold"
+                className="w-30 bg-dbeats-dark-alt rounded  cursor-pointer text-red-500 px-4 py-1    hover:bg-red-500 hover:text-white"
                 onClick={SendVerificationMail}
               >
                 Send Verification Mail
