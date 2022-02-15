@@ -26,6 +26,11 @@ function ChatRoom(props) {
   const soundInput = useRef();
   const videoInput = useRef();
   const fileInput = useRef();
+  // For reply click ref
+  const messageRef = useRef([]);
+  function scrollTo(id) {
+    messageRef.current[id].scrollIntoView();
+  }
 
   const [messages, setMessages] = useState([]);
   const [currentSocket, setCurrentSocket] = useState(null);
@@ -42,7 +47,7 @@ function ChatRoom(props) {
   // For Pagination
   const [totalPages, setTotalpages] = useState(0);
   const [currentPage, setCurrentpage] = useState(0);
-  const [loadingOldChats,setLoadingOldChats] = useState(false);
+  const [loadingOldChats, setLoadingOldChats] = useState(false);
 
   const onEmojiClick = (event, emojiObject) => {
     setForm({ ...formState, message: formState.message + emojiObject.emoji });
@@ -52,7 +57,7 @@ function ChatRoom(props) {
     if (user) {
       loadingRef.current.continuousStart();
       // https://dbeats-chat.herokuapp.com
-      const socket = io('https://dbeats-chat.herokuapp.com');
+      const socket = io('http://localhost:80');
       setCurrentSocket(socket);
       socket.emit('joinroom', { user_id: user._id, room_id: props.userp._id });
       socket.on('init', (msgs) => {
@@ -61,13 +66,12 @@ function ChatRoom(props) {
         setTotalpages(msgs.totalPages);
         setCurrentpage(msgs.currentPage);
         setTimeout(() => {
-          chatRef.current.scrollIntoView({ behavior: 'smooth' });
-        }, 1500);
+          chatRef.current.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'nearest' });
+        }, 1000);
       });
       socket.on('getmore', (msgs) => {
-
         // loadingRef.current.complete();
-        setMessages((prevArray) => [...msgs.chats,...prevArray]);
+        setMessages((prevArray) => [...msgs.chats, ...prevArray]);
         setTotalpages(msgs.totalPages);
         setCurrentpage(msgs.currentPage);
         setLoadingOldChats(false);
@@ -220,36 +224,32 @@ function ChatRoom(props) {
             <InfiniteScroll
               pageStart={0}
               loadMore={() => {
-                if(currentSocket && currentPage>0 && !loadingOldChats){
+                if (currentSocket && currentPage > 0 && !loadingOldChats) {
                   setLoadingOldChats(true);
-                currentSocket.emit("loadmore", { user_id: user._id, room_id: props.userp._id ,page_no:currentPage-1});
-                setCurrentpage(currentPage-1)
-              }
-              }}
-              hasMore={()=>{
-                if(currentPage>0){
-                  return true;
-                }else{
-                  return false;
+                  currentSocket.emit('loadmore', {
+                    user_id: user._id,
+                    room_id: props.userp._id,
+                    page_no: currentPage - 1,
+                  });
                 }
               }}
+              hasMore={currentPage > 0}
               loader={
-                <div className="loader" key={0}>
-                  Loading ...
+                <div className="flex justify-center">
+                  <div className="text-center animate-spin rounded-full h-7 w-7 ml-3 border-t-2 border-b-2 bg-gradient-to-r from-green-400 to-blue-500 "></div>
                 </div>
               }
               useWindow={false}
               isReverse={true}
             >
               {messages
-                ? messages.map((message) => {
-                  console.log(message)
+                ? messages.map((message, index) => {
                     const dateNum = new Date(message.createdAt);
                     let size = 0;
                     let urls = detectURLs(message.message);
                     let urlstext = renderText(message.message);
                     return (
-                      <div key={message._id}>
+                      <div key={message._id} ref={(el) => (messageRef.current[index] = el)}>
                         {dates.has(dateNum.toDateString()) ? null : (
                           <p className="my-1 rounded-3xl bg-dbeats-dark-secondary px-3 py-1 block w-max mx-auto">
                             {renderDate(message, dateNum.toDateString())}
@@ -257,18 +257,35 @@ function ChatRoom(props) {
                         )}
                         <div className=" px-3 p-2 rounded	 dark: bg-dbeats-dark-secondary	my-1 inline-block shadow">
                           {message.reply_to ? (
-                            <div className="group  px-3 py-2 border-l-2 border-dbeats-light  dark: nm-inset-dbeats-dark-primary">
-                              <p
-                                className={
-                                  message.reply_to.username === user.username
-                                    ? 'text-sm  mb-1  text-dbeats-light'
-                                    : 'text-sm  mb-1 text-white	'
-                                }
-                              >
-                                {' '}
-                                {message.reply_to.username}
-                              </p>
-                              <p className="text-xs">{message.reply_to.message}</p>
+                            <div className="flex justify-between items-center group  px-3 py-2 border-l-2 border-dbeats-light  dark: nm-inset-dbeats-dark-primary">
+                              <div className="">
+                                
+                                <p
+                                  className={
+                                    message.reply_to.username === user.username
+                                      ? 'text-sm  mb-1  text-dbeats-light'
+                                      : 'text-sm  mb-1 text-white	'
+                                  }
+                                >
+                                  {' '}
+                                  {message.reply_to.username}
+                                </p>
+                                <p className="text-xs">{message.reply_to.message}</p>
+                              </div>
+                              <div className='p-2'>
+                                {message.reply_to.type == 'image' && (
+                                  <i class="fas fa-image text-2xl text-dbeats-light"></i>
+                                )}
+                                {message.reply_to.type == 'sound' && (
+                                  <i class="fas fa-music text-2xl text-dbeats-light"></i>
+                                )}
+                                {message.reply_to.type == 'video' && (
+                                  <i class="fas fa-video text-2xl text-dbeats-light"></i>
+                                )}
+                                {message.reply_to.type == 'file' && (
+                                  <i class="fas fa-file text-2xl text-dbeats-light"></i>
+                                )}
+                              </div>
                             </div>
                           ) : null}
                           {message.type == 'image' ? (
@@ -397,9 +414,9 @@ function ChatRoom(props) {
                               ) : null}
 
                               {urls &&
-                                urls.map((u) => {
+                                urls.map((u,index) => {
                                   return (
-                                    <a href={u}>
+                                    <a href={u} key={index}>
                                       <ChatLinkPreview
                                         linkurl={u}
                                         setShowLinkPreview={setShowLinkPreview}
@@ -411,7 +428,7 @@ function ChatRoom(props) {
                             </div>
                             <i
                               onClick={() => onreply(message)}
-                              className=" opacity-0 group-hover:opacity-100 fas fa-reply ml-2 w-4 h-4 cursor-pointer text-dbeats-white text-opacity-40 hover:text-opacity-100"
+                              className="pt-8  opacity-0 group-hover:opacity-100 fas fa-reply ml-2 w-4 h-4 cursor-pointer text-dbeats-white text-opacity-40 hover:text-opacity-100"
                             ></i>
                           </div>
                         </div>
