@@ -287,18 +287,18 @@ const UserInfo = () => {
           setUploadingFile(false);
           console.log('https://ipfs.io/ipfs/' + cid + '/' + selectedFile.file[0].name);
           const data = {
-            url:'https://ipfs.io/ipfs/' + cid + '/' + selectedFile.file[0].name,
-            username:user.username
-          }
+            url: 'https://ipfs.io/ipfs/' + cid + '/' + selectedFile.file[0].name,
+            username: user.username,
+          };
           const res = await axios({
             method: 'POST',
             url: `${process.env.REACT_APP_SERVER_URL}/user/uploadThumbnail`,
             data: data,
           });
-          if(res.data == 'success'){
-              axios.get(`${process.env.REACT_APP_SERVER_URL}/user/${user.username}`).then((value) => {
-                window.localStorage.setItem('user', JSON.stringify(value.data));
-              });
+          if (res.data == 'success') {
+            axios.get(`${process.env.REACT_APP_SERVER_URL}/user/${user.username}`).then((value) => {
+              window.localStorage.setItem('user', JSON.stringify(value.data));
+            });
           }
         })
         .catch((err) => {
@@ -337,8 +337,8 @@ const UserInfo = () => {
             <VideoPlayer playbackUrl={playbackUrl} creatorData={user} footer={false} />
           ) : null}
         </div>
-        <div className="text-sm mx-auto col-span-1  2xl:mt-12 lg:mt-0">
-          <div className="bg-white dark:bg-dbeats-dark-primary dark:text-dbeats-white w-80 border border-dbeats-light border-opacity-40  2xl:w-full  p-5 rounded text-sm sm:lg:text-xl shadow mt-8  lg:ml-0 ">
+        <div className="text-sm mx-auto col-span-1  2xl:mt-10 lg:mt-4 mb-6">
+          <div className="bg-white dark:bg-dbeats-dark-primary dark:text-dbeats-white w-80 border border-dbeats-light border-opacity-40  2xl:w-full  p-5 rounded text-sm sm:lg:text-xl shadow mt-6  lg:ml-0 ">
             <div className="pb-2">
               <span className="font-semibold">Streamer Name : </span>
               <p>{user.name}</p>
@@ -372,9 +372,13 @@ const UserInfo = () => {
               </p>
             </div>
             <hr width="95%" className="mt-2 mb-2" />
-            <div className='mb-4'>
+            <div className="mb-4">
               <h1 className="text-bold">Thumbnail </h1>
-              {selectedFile?<img src={selectedFile.localurl} className="max-h-110"></img>:user.thumbnail?<img src={user.thumbnail} className="max-h-110"></img>:null}
+              {selectedFile ? (
+                <img src={selectedFile.localurl} className="max-h-72"></img>
+              ) : user.thumbnail ? (
+                <img src={user.thumbnail} className="max-h-110"></img>
+              ) : null}
               <form className="flex items-center" onSubmit={uploadThumbnail}>
                 <input
                   name="image"

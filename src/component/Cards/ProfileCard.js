@@ -41,8 +41,8 @@ export default function ProfileCard({ user }) {
                             />
                           </div>
                           <button className=" my-2 items-center align-middle text-center nm-flat-dbeats-dark-primary w-28 rounded-3xl p-1 hover:nm-inset-dbeats-dark-primary">
-                            <div className="items-center  align-middle text-center bg-dbeats-dark-secondary rounded-3xl hover:nm-inset-dbeats-dark-secondary">
-                              <i className="fas fa-user-plus mr-1 text-xs text-center"></i>follow
+                            <div className="items-center  align-middle text-center bg-dbeats-secondary-light rounded-3xl hover:nm-inset-dbeats-light">
+                              follow
                             </div>
                           </button>
                         </Link>

@@ -212,7 +212,7 @@ const PlayBackCard = (props) => {
                       to={`/profile/${props.playbackUserData.user.username}/`}
                       className="2xl:text-sm lg:text-xs text-sm text-gray-500  mb-2"
                     >
-                      {props.playbackUserData.user.name}
+                      <h4>{props.playbackUserData.user.name} </h4>
                     </Link>{' '}
                     <div className="2xl:text-sm lg:text-xs text-sm text-gray-500 pr-2 flex  ">
                       owner
