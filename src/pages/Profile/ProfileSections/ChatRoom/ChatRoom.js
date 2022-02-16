@@ -455,8 +455,10 @@ function ChatRoom(props) {
                     );
                   })
                 : '<></>'}
-              <div ref={chatRef} />
+            
             </InfiniteScroll>
+            <i onClick={()=>{chatRef.current.scrollIntoView({ behavior: 'smooth' });}} class="fas fa-angle-double-down text-xl text-dbeats-light fixed right-4 bottom-24 px-4 py-2 rounded-full bg-dbeats-dark-secondary xl:text-2xl xl:right-8 cursor-pointer"></i>
+              <div ref={chatRef} />
           </div>
         </main>
         {showEmojis && (
