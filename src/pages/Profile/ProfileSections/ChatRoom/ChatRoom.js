@@ -26,13 +26,31 @@ function ChatRoom(props) {
   const soundInput = useRef();
   const videoInput = useRef();
   const fileInput = useRef();
+  
   // For reply click ref
+  const scrollTop = useRef(null);
   const messageRef = useRef([]);
+  const [goToMessage,setGoToMessage] = useState(false);
   function scrollTo(id) {
-    messageRef.current[id].scrollIntoView();
+    setGoToMessage(id);
   }
 
+
+
   const [messages, setMessages] = useState([]);
+  useEffect(()=>{
+    if(goToMessage){
+      if(messageRef.current[goToMessage]){
+        console.log('scrolling to '+goToMessage)
+        messageRef.current[goToMessage].scrollIntoView();
+        setGoToMessage(false);
+      }else{
+        console.log('loading chats ')
+        scrollTop.current.scrollIntoView();
+      }
+    }
+    console.log('out of ifs')
+  },[messages,goToMessage])
   const [currentSocket, setCurrentSocket] = useState(null);
   const dates = new Set();
   const [selectedFile, setSelectedFile] = useState(null);
@@ -221,6 +239,7 @@ function ChatRoom(props) {
       <div className="overflow-hidden">
         <main className="chat-container-height sticky bottom-0">
           <div className="p-2 chat-height overflow-y-scroll	overflow-x-hidden">
+            <div ref={scrollTop}></div>
             <InfiniteScroll
               pageStart={0}
               loadMore={() => {
@@ -249,7 +268,7 @@ function ChatRoom(props) {
                     let urls = detectURLs(message.message);
                     let urlstext = renderText(message.message);
                     return (
-                      <div key={message._id} ref={(el) => (messageRef.current[index] = el)}>
+                      <div key={message._id} ref={(el) => (messageRef.current[message._id] = el)}>
                         {dates.has(dateNum.toDateString()) ? null : (
                           <p className="my-1 rounded-3xl bg-dbeats-dark-secondary px-3 py-1 block w-max mx-auto">
                             {renderDate(message, dateNum.toDateString())}
@@ -257,7 +276,7 @@ function ChatRoom(props) {
                         )}
                         <div className=" px-3 p-2 rounded	 dark: bg-dbeats-dark-secondary	my-1 inline-block shadow">
                           {message.reply_to ? (
-                            <div className="flex justify-between items-center group  px-3 py-2 border-l-2 border-dbeats-light  dark: nm-inset-dbeats-dark-primary">
+                            <div onClick={()=> scrollTo(message.reply_to._id)} className="cursor-pointer flex justify-between items-center group  px-3 py-2 border-l-2 border-dbeats-light  dark: nm-inset-dbeats-dark-primary">
                               <div className="">
                                 
                                 <p
