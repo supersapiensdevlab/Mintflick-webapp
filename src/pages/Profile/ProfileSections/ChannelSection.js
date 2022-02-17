@@ -40,7 +40,7 @@ const ChannelSection = (props) => {
     <div
       className={`${
         darkMode && 'dark'
-      }  px-3 h-full mt-4 hidden md:block  bg-gradient-to-b from-blue-50 via-blue-50 to-white  dark:bg-gradient-to-b dark:from-dbeats-dark-secondary  dark:to-dbeats-dark-primary`}
+      }  px-3 h-full pt-4 hidden md:block  bg-gradient-to-b from-blue-50 via-blue-50 to-white  dark:bg-gradient-to-b dark:from-dbeats-dark-secondary  dark:to-dbeats-dark-primary`}
     >
       <div
         id="recommended_channel"
