@@ -104,6 +104,9 @@ function ChatRoom(props) {
     } else {
       window.history.replaceState({}, 'Home', '/');
     }
+    return () => {
+      currentSocket.disconnect();
+    };
     // eslint-disable-next-line
   }, []);
 
@@ -234,11 +237,11 @@ function ChatRoom(props) {
     txt.split(' ').map((part) => (URL_REGEX.test(part) ? <a href={part}>{part} </a> : part + ' '));
 
   return (
-    <div className="text-gray-400 	 box-border px-2 h-max lg:col-span-5 col-span-6 w-full pt-16 dark:bg-dbeats-dark-primary">
+    <div className="text-gray-400 	 box-border px-2 h-max lg:col-span-5 col-span-6 w-full dark:bg-dbeats-dark-primary">
       <LoadingBar ref={loadingRef} color="#00d3ff" shadow={true} />
-      <div className="overflow-hidden">
-        <main className="chat-container-height sticky bottom-0">
-          <div className="p-2 chat-height overflow-y-scroll	overflow-x-hidden">
+      <div className="full-height">
+        <main className=" pt-16 chat-container-height sticky bottom-0">
+          <div className="    p-2 chat-height overflow-y-scroll	overflow-x-hidden">
             <div ref={scrollTop}></div>
             <InfiniteScroll
               pageStart={0}
@@ -413,7 +416,7 @@ function ChatRoom(props) {
                                   })}
                                 </span>
                               </p>
-                              <p className="text">{urlstext}</p>
+                              <p className="text whitespace-pre-line">{urlstext}</p>
                               {message.type == 'live' ? (
                                 <a
                                   href={`https://dbeats.live/live/${props.userp.username}`}
@@ -536,7 +539,7 @@ function ChatRoom(props) {
           </div>
         )}
 
-        <div className="py-4 md:px-4 rounded-lg bg-dbeats-dark-secondary shadow-md">
+        <div className="chat-input-height py-4 md:px-4 rounded-lg bg-dbeats-dark-secondary shadow-md">
           {formState.replyto ? (
             <div className="px-3 p-2 flex items-center	justify-between rounded-xl dark: bg-dbeats-dark-secondary	mb-2">
               <div className="flex">
@@ -645,17 +648,18 @@ function ChatRoom(props) {
             <form className="flex flex-grow" id="chat-form" onSubmit={saveMessage}>
               <div className="flex-grow rounded-md group w-fit  p-1  mx-1  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-secondary   hover:nm-inset-dbeats-dark-primary           font-medium          transform-gpu  transition-all duration-300 ease-in-out ">
                 {' '}
-                <input
+                <textarea
                   onChange={onChange}
                   value={formState.message}
                   id="msg"
+                  rows={1}
                   name="message"
                   type="text"
                   placeholder="Enter Message"
                   required
                   autoComplete="false"
                   className="w-full rounded-md border-0 ring-0 focus:ring-0 focus:border-0 text-black dark:text-white md:px-4 p-2  bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary group-hover:nm-inset-dbeats-dark-secondary focus:nm-inset-dbeats-dark-primary placeholder-white placeholder-opacity-25"
-                ></input>
+                ></textarea>
               </div>
 
               <div

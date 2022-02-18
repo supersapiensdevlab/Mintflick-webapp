@@ -100,7 +100,7 @@ const PlayBackCard = (props) => {
 
   return (
     <>
-      {props.playbackUserData ? (
+      {props.playbackUserData.user ? (
         <div
           className={`${props.darkMode && 'dark'} my-4  dark:text-gray-50 
            shadow-sm dark:shadow-md  p-0.5  sm:rounded-xl bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-primary-lg      text-dbeats-dark-primary    relative   `}
