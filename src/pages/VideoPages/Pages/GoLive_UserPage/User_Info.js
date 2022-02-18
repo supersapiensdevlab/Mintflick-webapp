@@ -20,6 +20,7 @@ const UserInfo = () => {
   const [modalShow, setModalShow] = useState(false);
   const [showStreamModal, setShowStreamModal] = useState(false);
   const [showDestinationModal, setShowDestinationModal] = useState(false);
+  const [showPriceModal, setShowPriceModal] = useState(false);
 
   //MultiStreams
   const [userStreams, setUserStreams] = useState([]);
@@ -329,6 +330,8 @@ const UserInfo = () => {
     // and return the root cid when the upload completes
     return client.put(file, { onRootCidReady, onStoredChunk });
   }
+
+  console.log(multiStreamConnected.length);
   return (
     <Fragment className={`${darkMode && 'dark'}`}>
       <div className="grid sm:grid-cols-1 lg:grid-cols-3 grid-flow-row pt-3 pb-50 2xl:mt-10 lg:mt-4 lg:ml-12  bg-gradient-to-b from-blue-50 via-blue-50 to-white  dark:bg-gradient-to-b dark:from-dbeats-dark-secondary  dark:to-dbeats-dark-primary">
@@ -410,7 +413,11 @@ const UserInfo = () => {
                   variant="primary"
                   className="bg-gradient-to-r from-dbeats-secondary-light to-dbeats-light text-white rounded font-bold px-4 py-3 lg:text-lg w-full"
                   type="button"
-                  onClick={() => setShowDestinationModal(true)}
+                  onClick={
+                    multiStreamConnected.length > 2
+                      ? () => setShowPriceModal(true)
+                      : () => setShowDestinationModal(true)
+                  }
                 >
                   Add MultiStreaming Platforms
                 </button>
@@ -740,6 +747,21 @@ const UserInfo = () => {
             </div>
           </div>
         </main>
+      </Modal>
+
+      <Modal
+        isOpen={showPriceModal}
+        className="h-max lg:w-1/2 w-5/6 mx-auto 2xl:mt-80 lg:mt-36  mt-24 shadow-xl bg-white"
+      >
+        <h2 className="grid grid-cols-5 justify-items-center rounded-t-xl w-full dark:rounded-t-sm text-2xl py-4 dark:bg-dbeats-dark-alt bg-white dark:text-white">
+          <div className="col-span-4 pl-14 text-lg lg:text-2xl text-center">
+            Adding more than 3 Restreaming platforms is charged at $0.003/min/ platform
+          </div>
+          <div className="mr-7 flex justify-end w-full" onClick={() => setShowPriceModal(false)}>
+            <i className="fas fa-times cursor-pointer mr-3"></i>
+          </div>
+        </h2>
+        <hr />
       </Modal>
     </Fragment>
   );
