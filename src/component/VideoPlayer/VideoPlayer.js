@@ -1,5 +1,6 @@
 import Container from '@material-ui/core/Container';
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import ReactPlayer from 'react-player';
 import screenful from 'screenfull';
 import Footer from '../../pages/VideoPages/Footer/Footer';
@@ -144,6 +145,7 @@ function ValueLabelComponent(props) {
 }
 
 function VideoPlayer(props) {
+  const location = useLocation();
   const classes = useStyles();
   const [showControls, setShowControls] = useState(false);
   // const [count, setCount] = useState(0);
@@ -303,6 +305,21 @@ function VideoPlayer(props) {
           ref={playerContainerRef}
           className="relative w-full 2xl:h-125 lg:h-110 md:h-120 xs:h-100 min-h-full"
         >
+          {location.pathname.includes('streamer') || location.pathname.includes('live') ? (
+            <>
+              {props.creatorData.livepeer_data && props.creatorData.livepeer_data.isActive ? (
+                <div className="px-4 py-1 rounded-lg bg-red-900 absolute right-3 top-3">
+                  <p className="text-white text-center">live</p>
+                </div>
+              ) : (
+                <div className="px-4 py-1 rounded-lg bg-gray-400 bg-opacity-40 absolute right-3 top-3">
+                  <p className="text-white text-center">offline</p>
+                </div>
+              )}
+            </>
+          ) : (
+            <></>
+          )}
           <ReactPlayer
             ref={playerRef}
             width="100%"
