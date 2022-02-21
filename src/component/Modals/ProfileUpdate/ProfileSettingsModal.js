@@ -23,7 +23,7 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
   });
 
   //console.log('userData', userData.superfan_data);
-  const [currentPlan, setPlan] = useState('first');
+  const [currentPlan, setPlan] = useState('silver');
 
   const handleNewPlan = (e) => {
     let name = e.target.name;
@@ -32,15 +32,15 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
   };
 
   const handleUserInputs = (e) => {
-    if (currentPlan === 'first') {
+    if (currentPlan === 'silver') {
       let name = e.target.name;
       let value = e.target.value;
       setNewData({ ...newData, [name]: value });
-    } else if (currentPlan === 'second') {
+    } else if (currentPlan === 'gold') {
       let name = e.target.name + '2';
       let value = e.target.value;
       setNewData({ ...newData, [name]: value });
-    } else if (currentPlan === 'third') {
+    } else if (currentPlan === 'platinum') {
       let name = e.target.name + '3';
       let value = e.target.value;
       setNewData({ ...newData, [name]: value });
@@ -144,11 +144,11 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
                           placeholder="Plan Name"
                           onChange={handleUserInputs}
                           value={
-                            currentPlan === 'first'
+                            currentPlan === 'silver'
                               ? newData.plan
-                              : currentPlan === 'second'
+                              : currentPlan === 'gold'
                               ? newData.plan2
-                              : currentPlan === 'third'
+                              : currentPlan === 'platinum'
                               ? newData.plan3
                               : ''
                           }
@@ -168,11 +168,11 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
                           id="perks"
                           placeholder="Perks"
                           value={
-                            currentPlan === 'first'
+                            currentPlan === 'silver'
                               ? newData.perks
-                              : currentPlan === 'second'
+                              : currentPlan === 'gold'
                               ? newData.perks2
-                              : currentPlan === 'third'
+                              : currentPlan === 'platinum'
                               ? newData.perks3
                               : ''
                           }
@@ -197,11 +197,11 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
                           max="1000"
                           onChange={handleUserInputs}
                           value={
-                            currentPlan === 'first'
+                            currentPlan === 'silver'
                               ? newData.price
-                              : currentPlan === 'second'
+                              : currentPlan === 'gold'
                               ? newData.price2
-                              : currentPlan === 'third'
+                              : currentPlan === 'platinum'
                               ? newData.price3
                               : ''
                           }
@@ -233,11 +233,11 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
 
                   <div className="grid sm:grid-cols-3 grid-cols-1 gap-6 bg-gray-50 dark:bg-dbeats-dark-alt  align-middle justify-center row-auto p-3">
                     <form
-                      name="first"
-                      id="first"
+                      name="silver"
+                      id="silver"
                       onClick={handleNewPlan}
                       className={` ${
-                        currentPlan === 'first'
+                        currentPlan === 'silver'
                           ? 'dark:border-dbeats-light  shadow-md '
                           : 'dark:border-dbeats-dark-primary border-dashed'
                       }   border   border-gray-500 self-center dark:bg-dbeats-dark-secondary bg-white 
@@ -249,8 +249,8 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
                          border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 
                          focus:outline-none  transition m-2 duration-200   align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
                         type="radio"
-                        checked={currentPlan === 'first'}
-                        name="first"
+                        checked={currentPlan === 'silver'}
+                        name="silver"
                         onClick={handleNewPlan}
                         id="flexRadioDefault1"
                       ></input>{' '}
@@ -267,7 +267,7 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
                         src={dbeatsLogoBnW}
                         height={80}
                         width={80}
-                        className="object-cover  h-24 w-24 mx-auto rounded-full  mt-1"
+                        className="object-cover  h-24 w-24 mx-auto rounded-full  mt-1 hidden"
                         alt=""
                         placeholderSrc={dbeatsLogoBnW}
                       />
@@ -310,7 +310,7 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
                       id="second"
                       onClick={handleNewPlan}
                       className={` ${
-                        currentPlan === 'second'
+                        currentPlan === 'gold'
                           ? 'dark:border-dbeats-light  shadow-md '
                           : 'dark:border-dbeats-dark-primary border-dashed'
                       }   border   border-gray-500 self-center dark:bg-dbeats-dark-secondary bg-white 
@@ -321,9 +321,9 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
                          border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 
                          focus:outline-none transition m-2 duration-200   align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
                         type="radio"
-                        checked={currentPlan === 'second'}
+                        checked={currentPlan === 'gold'}
                         id="flexRadioDefault2"
-                        name="second"
+                        name="gold"
                         onClick={handleNewPlan}
                       ></input>
 
@@ -340,7 +340,7 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
                         src={dbeatsLogoBnW}
                         height={80}
                         width={80}
-                        className="object-cover  h-24 w-24 mx-auto rounded-full  mt-1"
+                        className="object-cover  h-24 w-24 mx-auto rounded-full  mt-1 hidden"
                         alt=""
                         placeholderSrc={dbeatsLogoBnW}
                       />
@@ -379,11 +379,11 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
                     </form>
 
                     <form
-                      name="third"
-                      id="third"
+                      name="platinum"
+                      id="platinum"
                       onClick={handleNewPlan}
                       className={` ${
-                        currentPlan === 'third'
+                        currentPlan === 'platinum'
                           ? 'dark:border-dbeats-light  shadow-md '
                           : 'dark:border-dbeats-dark-primary border-dashed'
                       }   border   border-gray-500 self-center dark:bg-dbeats-dark-secondary bg-white 
@@ -395,9 +395,9 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
                          border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 
                          focus:outline-none transition m-2 duration-200   align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
                         type="radio"
-                        name="third"
+                        name="platinum"
                         onClick={handleNewPlan}
-                        checked={currentPlan === 'third'}
+                        checked={currentPlan === 'platinum'}
                         id="flexRadioDefault3"
                       ></input>{' '}
                       <p
@@ -413,7 +413,7 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
                         src={dbeatsLogoBnW}
                         height={80}
                         width={80}
-                        className="object-cover  h-24 w-24 mx-auto rounded-full  mt-1"
+                        className="object-cover  h-24 w-24 mx-auto rounded-full  mt-1 hidden"
                         alt=""
                         placeholderSrc={dbeatsLogoBnW}
                       />
