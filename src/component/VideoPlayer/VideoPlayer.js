@@ -308,11 +308,11 @@ function VideoPlayer(props) {
           {location.pathname.includes('streamer') || location.pathname.includes('live') ? (
             <>
               {props.creatorData.livepeer_data && props.creatorData.livepeer_data.isActive ? (
-                <div className="px-4 py-1 rounded-lg bg-red-900 absolute right-3 top-3">
+                <div className="px-4 py-1 rounded  bg-red-800 absolute right-3 top-3">
                   <p className="text-white text-center">live</p>
                 </div>
               ) : (
-                <div className="px-4 py-1 rounded-lg bg-gray-400 bg-opacity-40 absolute right-3 top-3">
+                <div className="px-4 py-1 rounded  bg-gray-400 bg-opacity-40 absolute right-3 top-3">
                   <p className="text-white text-center">offline</p>
                 </div>
               )}
@@ -337,7 +337,7 @@ function VideoPlayer(props) {
             config={{
               file: {
                 attributes: {
-                  crossorigin: 'anonymous',
+                  crossOrigin: 'anonymous',
                 },
               },
             }}
