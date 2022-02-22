@@ -18,6 +18,8 @@ import maticLogo from '../../assets/graphics/polygon-matic-logo.svg';
 import Modal from 'react-modal';
 import ProfileCard from '../../component/Cards/ProfileCard';
 import Billboard from '../../component/Billboard/Billboard-Card';
+import { Splide, SplideSlide } from '@splidejs/react-splide';
+import '@splidejs/splide/dist/css/themes/splide-skyblue.min.css';
 
 Modal.setAppElement('#root');
 
@@ -44,6 +46,11 @@ const Home = () => {
     },
   };
   const [latestUploads, setLatestUploads] = useState(null);
+
+  Splide.defaults = {
+    type: 'loop',
+    perPage: 2,
+  };
 
   const category = [
     'Trending',
@@ -279,6 +286,7 @@ const Home = () => {
                       return (
                         <div key={i}>
                           <PlayBackCard darkMode={darkMode} playbackUserData={playbackUser} />
+                          {i % 2 == 0 ? <Billboard user={user}></Billboard> : null}
                         </div>
                       );
                     })}
@@ -300,17 +308,31 @@ const Home = () => {
               <div className=" ">
                 <FeedbackForm className="z-500" />
               </div>
-              <h4 className="text-white  px-2 my-1">Recommended Creators</h4>
 
-              {verifiedUser
-                ? verifiedUser.map((verifieduser, i) => {
-                    return (
-                      <div key={i}>
-                        <ProfileCard user={verifieduser}></ProfileCard>
-                      </div>
-                    );
-                  })
-                : null}
+              <div className="sticky top-20">
+                <h4 className="text-white  px-2 my-1 ">Recommended Creators</h4>
+
+                <Splide
+                  options={{
+                    type: 'loop',
+                    gap: '1rem',
+                    autoplay: true,
+                    pauseOnHover: false,
+                    arrows: true,
+                    interval: 3000,
+                  }}
+                >
+                  {verifiedUser
+                    ? verifiedUser.map((verifieduser, i) => {
+                        return (
+                          <SplideSlide className="px-2" key={i} data-splide-interval="1000">
+                            <ProfileCard user={verifieduser}></ProfileCard>
+                          </SplideSlide>
+                        );
+                      })
+                    : null}
+                </Splide>
+              </div>
             </div>
           </div>
         </div>

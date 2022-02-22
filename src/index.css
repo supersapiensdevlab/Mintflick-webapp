@@ -58,7 +58,9 @@ input:checked ~ .dot {
   background-color: #00d3ff;
 }
 
-.dbeats-grid {
-  display: grid;
-  grid-template-columns: 1.6fr 3.2fr 1.8fr;
+.rdrDefinedRangesWrapper {
+  font-size: 12px;
+  width: 226px;
+  border-right: solid 1px #eff2f7;
+  background: #f00;
 }
