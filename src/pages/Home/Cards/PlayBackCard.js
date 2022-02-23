@@ -227,7 +227,7 @@ const PlayBackCard = (props) => {
                         src={maticLogo}
                         alt="logo"
                       ></img>
-                      <p className="self-center mx-2"> 200</p>
+                      <p className="self-center mx-2">200</p>
                     </span>
                   </div>
                 </div>

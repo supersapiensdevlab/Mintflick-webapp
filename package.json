@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@craco/craco": "^5.9.0",
+    "@date-io/date-fns": "^2.13.1",
     "@ethersproject/contracts": "^5.4.1",
     "@fortawesome/react-fontawesome": "^0.1.15",
     "@headlessui/react": "^1.4.0",
@@ -28,6 +29,7 @@
     "bcryptjs": "^2.4.3",
     "chai": "^4.3.4",
     "chart.js": "^2.9.4",
+    "date-fns": "^2.0.0-beta.5",
     "decimal.js": "^3.0.0",
     "draftjs-to-html": "^0.9.1",
     "emoji-picker-react": "^3.5.0",
@@ -56,6 +58,7 @@
     "react-comments": "^0.0.0",
     "react-comments-section": "^1.0.7",
     "react-copy-to-clipboard": "^5.0.4",
+    "react-date-range": "^1.4.0",
     "react-dom": "^17.0.2",
     "react-draft-wysiwyg": "^1.14.7",
     "react-easy-crop": "^3.5.3",
