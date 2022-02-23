@@ -20,6 +20,8 @@ import animationDataGiraffee from '../../../../lotties/giraffee.json';
 import ChatRoom from '../../../Profile/ProfileSections/ChatRoom/ChatRoom';
 import classes from '../Info.module.css';
 import LiveCard from './LiveCard';
+import person from '../../../../assets/images/profile.svg';
+import moment from 'moment';
 
 const PublicInfo = (props) => {
   let sharable_data = `${process.env.REACT_APP_CLIENT_URL}/live/${props.stream_id}`;
@@ -30,6 +32,7 @@ const PublicInfo = (props) => {
   const [privateUser, setPrivate] = useState(true);
 
   const user = JSON.parse(window.localStorage.getItem('user'));
+  const [time, setTime] = useState(null);
 
   const [playbackUrl, setPlaybackUrl] = useState('');
 
@@ -52,6 +55,7 @@ const PublicInfo = (props) => {
       following: `${userData.username}`,
       follower: `${user.username}`,
     };
+
     if (subscribeButtonText === 'Subscribe') {
       setSubscribeButtonText('Unsubscribe');
       axios({
@@ -136,12 +140,18 @@ const PublicInfo = (props) => {
     get_User();
     fetchData();
     let value = JSON.parse(window.localStorage.getItem('user'));
-    console.log(userData)
-    console.log(user)
+    console.log(userData);
+    console.log(user);
     if (user ? value.username === props.stream_id : false) {
       setPrivate(true);
     } else {
       setPrivate(false);
+    }
+
+    if (props.playbackUserData) {
+      let videotime = props.playbackUserData.time;
+      const timestamp = new Date(videotime * 1000); // This would be the timestamp you want to format
+      setTime(moment(timestamp).fromNow());
     }
     // eslint-disable-next-line
   }, []);
@@ -206,35 +216,94 @@ const PublicInfo = (props) => {
                 {!privateUser ? (
                   <div>
                     {userData ? (
-                      <div className="flex items-center   w-full">
-                        <button
-                          className="flex items-center dark:bg-dbeats-dark-primary border border-dbeats-light dark:hover:bg-dbeats-light p-1 2xl:text-lg lg:text-sm text-md rounded-sm 2xl:px-4 px-4 lg:px-2 mr-3 font-semibold text-white "
-                          onClick={trackFollowers}
-                        >
-                          <span>{subscribeButtonText}</span>
-                          {/* <div
+                      <>
+                        {' '}
+                        <div className="flex   text-black text-sm font-medium   px-4  py-3">
+                          <Link to={`/profile/${user.username}/`} className="mr-4">
+                            <img
+                              src={user.profile_image ? user.profile_image : person}
+                              alt=""
+                              className="  w-16 h-14    rounded-full    self-start"
+                            />
+                          </Link>
+                          <div className="w-full flex  justify-between mt-2">
+                            <div>
+                              <div className="w-full self-center  ">
+                                <Link
+                                  to={`/profile/${user.username}/`}
+                                  className="2xl:text-sm lg:text-xs text-sm text-gray-500  mb-2"
+                                >
+                                  <div className="flex align-middle">
+                                    <h3 className="text-white mr-1 text-lg tracking-wider">
+                                      {user.name}
+                                    </h3>
+                                    &middot;
+                                    <p className="text-white ml-1 text-opacity-40 text-xs self-center align-middle">
+                                      {time}
+                                    </p>
+                                  </div>
+
+                                  <p className="text-white text-opacity-40">{user.username}</p>
+                                </Link>{' '}
+                              </div>
+                            </div>
+                            {/* Hiding Follow Button due to bugs 
+                <div>
+                  <div
+                    onClick={trackFollowers}
+                    className="  rounded-3xl group w-max ml-2 p-0.5  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-secondary      hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
+                  >
+                    <div className="  h-full w-full text-black dark:text-white p-1 flex   rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:nm-inset-dbeats-dark-secondary ">
+                      <p className="self-center mx-2 flex">
+                        <span>
+                          {buttonText === 'follow' ? (
+                            <i className="fas fa-plus self-center mx-2"></i>
+                          ) : null}
+                          &nbsp;{buttonText}
+                        </span>
+                        <div
+                          hidden={subscribeLoader}
+                          className="w-3 h-3 ml-2 border-t-4 border-b-4 border-white rounded-full animate-spin"
+                        ></div>
+                      </p>
+                    </div>
+                  </div>
+                </div> */}
+                          </div>
+                        </div>
+                        <div className="flex items-center   w-full">
+                          {subscribeButtonText === 'Subscribe' ? (
+                            <button
+                              id="subscribeButton"
+                              className="flex items-center dark:bg-dbeats-dark-primary border border-dbeats-light dark:hover:bg-dbeats-light p-1 2xl:text-lg lg:text-sm text-md rounded-sm 2xl:px-4 px-4 lg:px-2 mr-3 font-semibold text-white "
+                              onClick={trackFollowers}
+                            >
+                              <span>{subscribeButtonText}</span>
+                              {/* <div
                             hidden={loader}
                             className="w-4 h-4 ml-2 border-t-4 border-b-4 border-white rounded-full animate-spin"
                           ></div> */}
-                        </button>
+                            </button>
+                          ) : null}
 
-                        <button
-                          onClick={handleShowSubscriptionModal}
-                          className={
-                            userData.superfan_data
-                              ? ' flex dark:bg-dbeats-dark-primary border border-dbeats-light dark:hover:bg-dbeats-light p-1 2xl:text-lg lg:text-sm text-md  rounded-sm 2xl:px-4 px-4 lg:px-2      mr-3 font-semibold text-white   '
-                              : 'hidden'
-                          }
-                        >
-                          <span
-                            className={`${
-                              userData.superfan_data ? '' : 'hidden'
-                            } whitespace-nowrap flex`}
+                          <button
+                            onClick={handleShowSubscriptionModal}
+                            className={
+                              userData.superfan_data
+                                ? ' flex dark:bg-dbeats-dark-primary border border-dbeats-light dark:hover:bg-dbeats-light p-1 2xl:text-lg lg:text-sm text-md  rounded-sm 2xl:px-4 px-4 lg:px-2      mr-3 font-semibold text-white   '
+                                : 'hidden'
+                            }
                           >
-                            Become a Superfan
-                          </span>
-                        </button>
-                      </div>
+                            <span
+                              className={`${
+                                userData.superfan_data ? '' : 'hidden'
+                              } whitespace-nowrap flex`}
+                            >
+                              Become a Superfan
+                            </span>
+                          </button>
+                        </div>
+                      </>
                     ) : (
                       <Link
                         to="/signup"
