@@ -286,7 +286,7 @@ const Home = () => {
                       return (
                         <div key={i}>
                           <PlayBackCard darkMode={darkMode} playbackUserData={playbackUser} />
-                          {i % 2 == 0 ? <Billboard user={user}></Billboard> : null}
+                          {i % 3 == 0 ? <Billboard user={user}></Billboard> : null}
                         </div>
                       );
                     })}
@@ -318,8 +318,8 @@ const Home = () => {
                     gap: '1rem',
                     autoplay: true,
                     pauseOnHover: false,
-                    arrows: true,
-                    interval: 3000,
+                    arrows: false,
+                    interval: 300,
                   }}
                 >
                   {verifiedUser

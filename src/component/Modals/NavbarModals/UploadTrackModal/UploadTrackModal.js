@@ -446,14 +446,26 @@ const UploadTrackModal = (props) => {
     });
   };
 
+  const customStyles = {
+    content: {
+      top: '50%',
+      left: '50%',
+      right: 'auto',
+      bottom: 'auto',
+      marginRight: '-50%',
+      transform: 'translate(-50%, -50%)',
+      background: '#181818',
+    },
+  };
   return (
     <Modal
       isOpen={props.showTrackUpload}
-      className={
-        darkMode
-          ? 'h-max lg:w-max w-5/6 mt-20 mx-auto 2xl:mt-24 lg:mt-14 bg-dbeats-dark-secondary rounded-xl '
-          : 'h-max lg:w-max w-5/6 mt-20 mx-auto 2xl:mt-24 lg:mt-14 bg-gray-50 rounded-xl shadow-2xl'
-      }
+      style={customStyles}
+      // className={
+      //   darkMode
+      //     ? 'h-max lg:w-max w-5/6 mt-20 mx-auto 2xl:mt-24 lg:mt-14 bg-dbeats-dark-secondary rounded-xl '
+      //     : 'h-max lg:w-max w-5/6 mt-20 mx-auto 2xl:mt-24 lg:mt-14 bg-gray-50 rounded-xl shadow-2xl'
+      // }
     >
       <div
         className={`${
@@ -474,7 +486,7 @@ const UploadTrackModal = (props) => {
             </span>
           </div>
         </h2>
-        <hr />
+
         <form method="POST" encType="multipart/formdata">
           <div className=" bg-white text-gray-500  dark:bg-dbeats-dark-secondary dark:text-gray-100   shadow-sm rounded-lg  2xl:px-5 2xl:py-5 lg:py-2 lg:px-2 px-2 py-1 mb-5 lg:mb-0 2xl:mb-5 lg:max-h-full  max-h-96  overflow-y-auto overflow-hidden">
             <div className="md:grid md:grid-cols-3 md:gap-6  mt-5 lg:mt-0 2xl:mt-5 ">

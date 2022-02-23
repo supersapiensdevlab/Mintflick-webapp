@@ -261,173 +261,185 @@ const AnnouncementModal = (props) => {
     console.log(announcement);
   };
 
+  const customStyles = {
+    content: {
+      top: '50%',
+      left: '50%',
+      right: 'auto',
+      bottom: 'auto',
+      marginRight: '-50%',
+      transform: 'translate(-50%, -50%)',
+      background: '#181818',
+    },
+  };
+
   return (
     <Modal
       isOpen={props.showAnnouncement}
-      className={`${
-        darkMode
-          ? '     rounded-xl z-500 border-0 ring-0'
-          : '           rounded-xl shadow-2xl  border-0 ring-0  dark:bg-dbeats-dark-primary dark:text-gray-100 '
-      }
-          h-max lg:w-1/3 w-full mx-auto lg:mt-20 2xl:mt-40 mt-24 border-0 ring-0`}
+      style={customStyles}
+      // className={`${
+      //   darkMode
+      //     ? '     rounded-xl z-500 border-0 ring-0'
+      //     : '           rounded-xl shadow-2xl  border-0 ring-0  dark:bg-dbeats-dark-primary dark:text-gray-100 '
+      // }
+      //     h-max lg:w-1/3 w-full mx-auto lg:mt-20 2xl:mt-40 mt-24 border-0 ring-0`}
     >
       <div className={`${darkMode && 'dark'} border-0 ring-0 `}>
-        <div className=" rounded-xl dark:rounded-none   ">
-          <div
-            className="w-full   px-6 rounded-t-xl dark:rounded-t-sm  text-lg  align-middle  py-3 
+        <div
+          className="w-full   px-6 rounded-t-xl dark:rounded-t-sm  text-lg  align-middle  py-3 
           dark:bg-dbeats-dark-alt flex bg-white   justify-between    dark:text-gray-100 "
+        >
+          <p className=" self-center ">Create a post</p>
+
+          <div
+            onClick={props.handleCloseAnnouncement}
+            className=" rounded-3xl group w-max   p-1  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-secondary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
           >
-            <p className=" self-center ">Create a post</p>
-
-            <div
-              onClick={props.handleCloseAnnouncement}
-              className=" rounded-3xl group w-max   p-1  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-secondary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
-            >
-              <span className="  text-black dark:text-white  flex p-1 rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:nm-inset-dbeats-dark-secondary ">
-                <p className="self-center mx-2">
-                  {' '}
-                  <i className="fas fa-times"></i>{' '}
-                </p>
-              </span>
-            </div>
+            <span className="  text-black dark:text-white  flex p-1 rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:nm-inset-dbeats-dark-secondary ">
+              <p className="self-center mx-2">
+                {' '}
+                <i className="fas fa-times"></i>{' '}
+              </p>
+            </span>
           </div>
-          <div className="h-full w-full  align-center ">
-            <Container className=" 2xl:pb-4 rounded-b-xl dark:rounded-b-sm  lg:px-7 lg:pb-2 h-full px-4 w-full dark:bg-dbeats-dark-alt overflow-y-auto lg:overflow-hidden bg-white   dark:text-gray-100 ">
-              <div className="align-center bg-gray-100 h-full dark:bg-dbeats-dark-alt">
-                <div className={`${classes.view_container} lg:h-72 2xl:h-96 h-80 overflow-y-auto`}>
-                  <div className="p-1 nm-flat-dbeats-dark-secondary h-5/6 w-full">
-                    <textarea
-                      className={`${classes.textarea_container} w-full h-full
+        </div>
+        <div className="h-full w-full  align-center ">
+          <Container className=" 2xl:pb-4 rounded-b-xl dark:rounded-b-sm  lg:px-7 lg:pb-2 h-full px-4 w-full dark:bg-dbeats-dark-alt overflow-y-auto lg:overflow-hidden bg-white   dark:text-gray-100 ">
+            <div className="align-center bg-gray-100 h-full dark:bg-dbeats-dark-alt">
+              <div className={`${classes.view_container} lg:h-72 2xl:h-96 h-80 overflow-y-auto`}>
+                <div className="p-1 nm-flat-dbeats-dark-secondary h-5/6 w-full">
+                  <textarea
+                    className={`${classes.textarea_container} w-full h-full
                      lg:text-sm 2xl:text-lg border-b border-gray-300  placeholder-white placeholder-opacity-25 nm-flat-dbeats-dark-primary`}
-                      placeholder={`NFT of thoughts...`}
-                      onChange={(e) => handleInputChange(e)}
-                    ></textarea>
-                  </div>
-                  {showLinkPreview && !postImage ? (
-                    <>
-                      <LinkPreview
-                        linkurl={linkPreviewUrl}
-                        setShowLinkPreview={setShowLinkPreview}
-                        setLinkPreviewData={setLinkPreviewData}
-                      />
-                    </>
-                  ) : (
-                    <>
-                      {postImage ? (
-                        <div className=" text-right">
-                          <button
-                            className="px-4 pt-2 text-white text-opacity-25 justify-end text-right hover:text-opacity-60"
-                            onClick={() => setPostImage(null)}
-                          >
-                            Remove
-                          </button>
-                          <img
-                            src={postImage}
-                            alt="display"
-                            height="150px"
-                            width="100%"
-                            className="px-4"
-                          />
-                        </div>
-                      ) : (
-                        <></>
-                      )}
-                    </>
-                  )}
+                    placeholder={`NFT of thoughts...`}
+                    onChange={(e) => handleInputChange(e)}
+                  ></textarea>
                 </div>
+                {showLinkPreview && !postImage ? (
+                  <>
+                    <LinkPreview
+                      linkurl={linkPreviewUrl}
+                      setShowLinkPreview={setShowLinkPreview}
+                      setLinkPreviewData={setLinkPreviewData}
+                    />
+                  </>
+                ) : (
+                  <>
+                    {postImage ? (
+                      <div className=" text-right">
+                        <button
+                          className="px-4 pt-2 text-white text-opacity-25 justify-end text-right hover:text-opacity-60"
+                          onClick={() => setPostImage(null)}
+                        >
+                          Remove
+                        </button>
+                        <img
+                          src={postImage}
+                          alt="display"
+                          height="150px"
+                          width="100%"
+                          className="px-4"
+                        />
+                      </div>
+                    ) : (
+                      <></>
+                    )}
+                  </>
+                )}
+              </div>
 
-                <div className="px-2 mt-1 mb-2 py-2 items-center w-full   dark:bg-dbeats-dark-secondary">
-                  <div className="mx-2">
-                    <input
-                      type="text"
-                      placeholder="Enter Event Link(Optional)"
-                      onChange={handleLinkChange}
-                      className=" w-64 h-max my-2 py-2 rounded-sm sm:text-sm lg:text-sm 2xl:text-md
+              <div className="px-2 mt-1 mb-2 py-2 items-center w-full   dark:bg-dbeats-dark-secondary">
+                <div className="mx-2">
+                  <input
+                    type="text"
+                    placeholder="Enter Event Link(Optional)"
+                    onChange={handleLinkChange}
+                    className=" w-64 h-max my-2 py-2 rounded-sm sm:text-sm lg:text-sm 2xl:text-md
                         focus:ring-dbeats-dark-primary border dark:border-dbeats-dark-alt border-gray-300 
                         dark:bg-dbeats-dark-primary ring-dbeats-dark-secondary ring-0 flex-1 block nm-flat-dbeats-dark-secondary"
+                  />
+                </div>
+                <div className="flex items-center mx-4">
+                  <div className=" ">
+                    <i
+                      className="far fa-images text-xl cursor-pointer opacity-40 hover:opacity-100"
+                      onClick={() => {
+                        document.getElementById('post_announcement_image').click();
+                      }}
+                    ></i>
+                    <input
+                      id="post_announcement_image"
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageChange}
+                      onClick={(event) => {
+                        event.target.value = null;
+                      }}
+                      style={{ display: 'none' }}
                     />
                   </div>
-                  <div className="flex items-center mx-4">
-                    <div className=" ">
-                      <i
-                        className="far fa-images text-xl cursor-pointer opacity-40 hover:opacity-100"
-                        onClick={() => {
-                          document.getElementById('post_announcement_image').click();
-                        }}
-                      ></i>
-                      <input
-                        id="post_announcement_image"
-                        type="file"
-                        accept="image/*"
-                        onChange={handleImageChange}
-                        onClick={(event) => {
-                          event.target.value = null;
-                        }}
-                        style={{ display: 'none' }}
-                      />
+                  <div className="mx-2 flex items-center">
+                    <i
+                      className="fas fa-video text-xl cursor-pointer opacity-40 hover:opacity-100"
+                      onClick={() => {
+                        document.getElementById('post_announcement_video').click();
+                      }}
+                    ></i>
+                    <div className="mx-2 mb-1 w-20 truncate">
+                      {announcement.postVideo ? announcement.postVideo.name : null}
                     </div>
-                    <div className="mx-2 flex items-center">
-                      <i
-                        className="fas fa-video text-xl cursor-pointer opacity-40 hover:opacity-100"
-                        onClick={() => {
-                          document.getElementById('post_announcement_video').click();
-                        }}
-                      ></i>
-                      <div className="mx-2 mb-1 w-20 truncate">
-                        {announcement.postVideo ? announcement.postVideo.name : null}
-                      </div>
-                      <input
-                        id="post_announcement_video"
-                        type="file"
-                        accept="video/*"
-                        onChange={handleVideoChange}
-                        onClick={(event) => {
-                          event.target.value = null;
-                        }}
-                        style={{ display: 'none' }}
-                      />
-                    </div>
+                    <input
+                      id="post_announcement_video"
+                      type="file"
+                      accept="video/*"
+                      onChange={handleVideoChange}
+                      onClick={(event) => {
+                        event.target.value = null;
+                      }}
+                      style={{ display: 'none' }}
+                    />
                   </div>
-                  <div className=" mx-2 flex justify-end  ">
-                    <div className=" mx-5  items-center  hidden">
-                      <input
-                        type="range"
-                        value={uploading}
-                        min="0"
-                        max="10"
-                        hidden={props.loader}
-                        className="appearance-none cursor-pointer w-full h-3 bg-green-400 font-white rounded-full slider-thumb  backdrop-blur-md"
-                      />
-                      <p className="mx-2 text-base font-medium text-white" hidden={props.loader}>
-                        {Math.round(uploading * 10)}%
-                      </p>
-                    </div>
+                </div>
+                <div className=" mx-2 flex justify-end  ">
+                  <div className=" mx-5  items-center  hidden">
+                    <input
+                      type="range"
+                      value={uploading}
+                      min="0"
+                      max="10"
+                      hidden={props.loader}
+                      className="appearance-none cursor-pointer w-full h-3 bg-green-400 font-white rounded-full slider-thumb  backdrop-blur-md"
+                    />
+                    <p className="mx-2 text-base font-medium text-white" hidden={props.loader}>
+                      {Math.round(uploading * 10)}%
+                    </p>
+                  </div>
 
-                    <div
-                      type="submit"
-                      onClick={handleAnnouncement}
-                      className="  transform-gpu  transition-all duration-300 ease-in-out mt-3 
+                  <div
+                    type="submit"
+                    onClick={handleAnnouncement}
+                    className="  transform-gpu  transition-all duration-300 ease-in-out mt-3 
                       cursor-pointer relative inline-flex items-center justify-center p-1 mb-2 
                       mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-3xl  
                       bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  
                       nm-flat-dbeats-dark-secondary   hover:nm-inset-dbeats-dark-secondary   hover:text-white dark:text-white  "
-                    >
-                      <span
-                        className="relative px-5 py-2.5   
+                  >
+                    <span
+                      className="relative px-5 py-2.5   
                       bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-secondary-dark-primary 
                       hover:nm-inset-dbeats-secondary-light  rounded-3xl transition-all duration-300"
-                      >
-                        Post
-                      </span>
-                    </div>
-                    <div
-                      className="animate-spin rounded-full h-7 w-7 ml-3 border-t-2 border-b-2 bg-gradient-to-r from-green-400 to-blue-500 "
-                      hidden={props.loader}
-                    ></div>
+                    >
+                      Post
+                    </span>
                   </div>
+                  <div
+                    className="animate-spin rounded-full h-7 w-7 ml-3 border-t-2 border-b-2 bg-gradient-to-r from-green-400 to-blue-500 "
+                    hidden={props.loader}
+                  ></div>
                 </div>
               </div>
-              {/* <Row className="w-full flex justify-center items-center">
+            </div>
+            {/* <Row className="w-full flex justify-center items-center">
                 <button
                   type="submit"
                   onClick={handleAnnouncement}
@@ -440,8 +452,7 @@ const AnnouncementModal = (props) => {
                   hidden={props.loader}
                 ></div>
               </Row> */}
-            </Container>
-          </div>
+          </Container>
         </div>
       </div>
     </Modal>
