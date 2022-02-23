@@ -17,6 +17,7 @@ import VideoPlayer from '../../../../component/VideoPlayer/VideoPlayer';
 import animationDataConfetti from '../../../../lotties/confetti.json';
 import animationData from '../../../../lotties/fans.json';
 import animationDataGiraffee from '../../../../lotties/giraffee.json';
+import ChatRoom from '../../../Profile/ProfileSections/ChatRoom/ChatRoom';
 import classes from '../Info.module.css';
 import LiveCard from './LiveCard';
 
@@ -24,7 +25,7 @@ const PublicInfo = (props) => {
   let sharable_data = `${process.env.REACT_APP_CLIENT_URL}/live/${props.stream_id}`;
   const darkMode = useSelector((darkmode) => darkmode.toggleDarkMode);
 
-  const [userData, setUserData] = useState([]);
+  const [userData, setUserData] = useState({});
 
   const [privateUser, setPrivate] = useState(true);
 
@@ -135,6 +136,8 @@ const PublicInfo = (props) => {
     get_User();
     fetchData();
     let value = JSON.parse(window.localStorage.getItem('user'));
+    console.log(userData)
+    console.log(user)
     if (user ? value.username === props.stream_id : false) {
       setPrivate(true);
     } else {
@@ -283,11 +286,7 @@ const PublicInfo = (props) => {
           </div>
         </div>
         <div className="  w-full col-span-1 px-5 mt-12">
-          <div className=" w-full grid grid-cols-1 grid-flow-row gap-3">
-            {arrayData.map((value, index) => {
-              return <LiveCard key={index} value={value} />;
-            })}
-          </div>
+          {userData.username && <ChatRoom userp={userData} privateUser={user}></ChatRoom>}
         </div>
       </div>
       <ShareModal
