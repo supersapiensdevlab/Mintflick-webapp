@@ -1,7 +1,6 @@
 import React from 'react';
 import Modal from 'react-modal';
 import { useSelector } from 'react-redux';
-import CreatorDashboard from '../../../../pages/Profile/ProfileSections/Store/creator-dashboard';
 
 const UploadNFTModal = (props) => {
   const darkMode = useSelector((state) => state.toggleDarkMode);
@@ -21,7 +20,7 @@ const UploadNFTModal = (props) => {
   return (
     <div className={`${darkMode && 'dark'} border-0 ring-0`}>
       <Modal
-        isOpen={props.showNFTUpload}
+        isOpen={props.isBidOpen}
         style={customStyles}
 
         // className={
@@ -31,9 +30,9 @@ const UploadNFTModal = (props) => {
         // }
       >
         <h2 className="grid grid-cols-5 justify-items-center 2xl:text-2xl text-lg  pt-10 align-middle  bg-transparent  text-white">
-          <div className="col-span-4 pl-14">Sell Digital Art</div>
+          <div className="col-span-4 pl-14">Make an offer</div>
           <div
-            onClick={props.handleCloseNFTUpload}
+            onClick={props.handleCloseBid}
             className=" rounded-3xl group w-max   p-1  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-secondary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
           >
             <span className="  text-black dark:text-white  flex p-1 rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:nm-inset-dbeats-dark-secondary ">
@@ -44,7 +43,7 @@ const UploadNFTModal = (props) => {
             </span>
           </div>
         </h2>
-        <CreatorDashboard></CreatorDashboard>
+        <p className="text-center text-dbeats-white">Coming Soon!</p>
       </Modal>
     </div>
   );

@@ -281,7 +281,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
   };
 
   const SendVerificationMail = () => {
-    let data = { email: user.email };
+    let data = { email: myData.email };
     axios({
       method: 'POST',
       url: `${process.env.REACT_APP_SERVER_URL}/user/send_verify_email`,

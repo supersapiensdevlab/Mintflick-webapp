@@ -11,9 +11,11 @@ import CircleLogoDark from '../../assets/images/dark-logo-svg.svg';
 import CircleLogo from '../../assets/images/dbeats-logo.png';
 import logo from '../../assets/images/white-logo.svg';
 import useWeb3Modal from '../../hooks/useWeb3Modal';
-
+import moment from 'moment';
 import Toggle from '../toggle.component';
 import classes from './Navbar.module.css';
+
+moment().format();
 
 const NavBar = () => {
   // eslint-disable-next-line no-unused-vars
@@ -38,6 +40,8 @@ const NavBar = () => {
   // Sidebar functions
   const handleOnOpen = () => setOnOpen(true);
   const isMenuOpen = (state) => setOnOpen(state.isOpen);
+
+  const [userLiveTime, setUserLiveTime] = useState(null);
 
   // Auth functions
   const handleLogout = () => {
@@ -177,15 +181,20 @@ const NavBar = () => {
     videoData: filteredVideoData,
   };
 
+  const convertTimestampToTime = (timeValue) => {
+    const timestamp = new Date(timeValue.timestamp); // This would be the timestamp you want to format
+    setUserLiveTime(moment(timestamp).fromNow());
+  };
+
   const NotificationContent = ({ data }) => {
-    console.log(data);
+    // console.log(data);
+    convertTimestampToTime(data);
     return (
       <div className="h-full my-1">
         <Link
           to={{
-            pathname: `${process.env.REACT_APP_CLIENT_URL}/profile/${data.username}/posts`,
+            pathname: data.link,
           }}
-          target="_blank"
           rel="noopener noreferrer"
           className="grid grid-cols-4 justify-center p-2 dark:bg-dbeats-dark-alt dark:hover:bg-dbeats-dark-secondary dark:text-white text-gray-500"
         >
@@ -212,11 +221,19 @@ const NavBar = () => {
               <img src={CircleLogo} alt="announcement_info" className="h-full w-auto rounded-sm" />
             </div>
           ) : null}
-          <div className="col-span-3 rounded-sm ">
-            <p className="pl-2 line-clamp-3 text-sm font-semibold break-words">
-              {data.announcement}
-            </p>
-          </div>
+          {data.announcement.includes('was') ? (
+            <div className="col-span-3 rounded-sm ">
+              <p className="pl-2 line-clamp-3 text-sm font-semibold break-words">
+                {data.announcement + ` ${userLiveTime} ago`}
+              </p>
+            </div>
+          ) : (
+            <div className="col-span-3 rounded-sm ">
+              <p className="pl-2 line-clamp-3 text-sm font-semibold break-words">
+                {data.announcement}
+              </p>
+            </div>
+          )}
         </Link>
       </div>
     );
