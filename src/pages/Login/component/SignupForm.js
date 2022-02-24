@@ -168,7 +168,7 @@ const SignupForm = ({
 
           <div onClick={handleSeePassword} className="flex items-center">
             <div className="cursor-pointer absolute -ml-8 self-center dark:text-white">
-              {showPassword ? <i class="far fa-eye-slash"></i> : <i class="fas fa-eye"></i>}
+              {showPassword ? <i className="far fa-eye-slash"></i> : <i className="fas fa-eye"></i>}
             </div>
           </div>
         </div>

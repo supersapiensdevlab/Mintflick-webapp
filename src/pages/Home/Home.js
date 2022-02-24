@@ -91,7 +91,7 @@ const Home = () => {
       }
 
       setverifiedUser(data);
-      console.log(data);
+      // console.log(data);
     });
   }, []);
 
