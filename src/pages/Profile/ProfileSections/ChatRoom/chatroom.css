@@ -15,3 +15,8 @@
 .chat-input-height{
   height: 80px;
 }
+.height-live {
+  height: -moz-calc(100% - 80px);
+  height: -webkit-calc(100% - 80px);
+  height: calc(100% - 80px);
+}

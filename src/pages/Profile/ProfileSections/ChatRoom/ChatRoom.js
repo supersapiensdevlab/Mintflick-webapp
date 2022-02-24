@@ -331,13 +331,6 @@ function ChatRoom(props) {
                             <div className=" md:ml-3 p-2 border border-dbeats-light rounded-md">
                               <div className="md:flex items-center">
                                 <i className="fas fa-music text-4xl text-dbeats-light"></i>
-                                {/* <AudioPlayer
-                                autoPlay={false}
-                                src={message.url}
-                                onPlay={(e) => console.log('onPlay')}
-                                // other props here
-                                style={{}}
-                              /> */}
                                 <ReactAudioPlayer
                                   className="w-full md:w-44"
                                   src={message.url}
