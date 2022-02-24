@@ -117,6 +117,24 @@ function LiveChat({userp,privateUser}) {
                     return (
                       <div key={message._id} ref={(el) => (messageRef.current[message._id] = el)}>
                         <div className=" px-3 p-2 rounded	 dark: bg-dbeats-dark-secondary	my-1 inline-block shadow">
+                        {message.reply_to ? (
+                            <div onClick={()=> scrollTo(message.reply_to._id)} className="cursor-pointer flex justify-between items-center group  px-3 py-2 border-l-2 border-dbeats-light  dark: nm-inset-dbeats-dark-primary">
+                              <div className="">
+                                
+                                <p
+                                  className={
+                                    message.reply_to.username === user.username
+                                      ? 'text-sm  mb-1  text-dbeats-light'
+                                      : 'text-sm  mb-1 text-white	'
+                                  }
+                                >
+                                  {' '}
+                                  {message.reply_to.username}
+                                </p>
+                                <p className="text-xs">{message.reply_to.message}</p>
+                              </div>
+                            </div>
+                          ) : null}
                           <div className="inline-flex items-start group">
                             <div className="chat_message_profile pr-2 pt-2 h-12 w-12">
                               <img
