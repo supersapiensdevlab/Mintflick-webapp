@@ -331,6 +331,8 @@ const UserInfo = () => {
     // and return the root cid when the upload completes
     return client.put(file, { onRootCidReady, onStoredChunk });
   }
+
+  // console.log(user);
   return (
     <Fragment className={`${darkMode && 'dark'}`}>
       <div className="grid sm:grid-cols-1 lg:grid-cols-3 grid-flow-row pt-3 pb-50 2xl:mt-10 lg:mt-4 lg:ml-12  bg-gradient-to-b from-blue-50 via-blue-50 to-white  dark:bg-gradient-to-b dark:from-dbeats-dark-secondary  dark:to-dbeats-dark-secondary">
