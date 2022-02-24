@@ -90,7 +90,9 @@ function LiveChat({userp,privateUser}) {
   function onChange(e) {
     setForm({ ...formState, [e.target.name]: e.target.value });
   }
-
+  function scrollTo(id) {
+    messageRef.current[id].scrollIntoView();
+  }
   const onreply = (message) => {
     setForm({ ...formState, replyto: message });
   };
