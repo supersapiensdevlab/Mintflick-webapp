@@ -17,8 +17,8 @@ const LiveCard = (props) => {
   };
 
   return (
-    <div className="w-full h-auto  ">
-      <div className=" cursor-pointer hover:border-dbeats-light border border-transparent p-0.5 nm-flat-dbeats-dark-primary-lg  ">
+    <div className="w-full h-auto min-h-full  ">
+      <div className=" cursor-pointer hover:border-dbeats-light border border-transparent  sm:p-0.5 nm-flat-dbeats-dark-secondary   rounded-md">
         <Link to={`/live/${props.username}/`}>
           <span className="fixed bg-red-600 text-white px-1 mx-1 my-1 rounded-sm font-semibold">
             {' '}
@@ -27,30 +27,34 @@ const LiveCard = (props) => {
 
           <ReactPlayer
             playing={true}
-            autoplay={true}
+            autoPlay={true}
             width="100%"
             height="100%"
             muted={true}
             volume={0.5}
             url={`https://cdn.livepeer.com/hls/${props.liveUserData.livepeer_data.playbackId}/index.m3u8`}
             controls={false}
-            className=" bg-gray-200 dark:bg-dbeats-dark-primary  "
+            className=" bg-gray-200 dark:bg-dbeats-dark-primary  rounded-md"
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
           />
-        </Link>
-      </div>
-      <div className="col-start-1 row-start-3 pb-2 pt-2 hidden ">
-        <p className="flex items-center text-black text-sm font-medium  ">
-          <img src={person} alt="" className="w-10 h-10 rounded-full mr-2 bg-gray-100  " />
-          <div>
-            <span className="text-sm font-semibold text-gray-500  ">
-              {props.liveUserData.username}
-            </span>
-            <br />
-            {/* <span className="text-xs text-gray-500">{props.playbackUserData.videos[props.index].description.slice(0,30)+"..."}</span> */}
+          <div className=" absolute bottom-0   px-3 py-4">
+            <div className="flex items-center text-black text-sm font-medium  ">
+              <img
+                src={props.liveUserData ? props.liveUserData.profile_image : person}
+                alt=""
+                className="w-10 h-10 rounded-full mr-2 bg-gray-100  "
+              />
+              <div>
+                <span className="text-sm font-semibold text-dbeats-white  ">
+                  {props.liveUserData.name}
+                </span>
+                <br />
+                {/* <span className="text-xs text-gray-500">{props.playbackUserData.videos[props.index].description.slice(0,30)+"..."}</span> */}
+              </div>
+            </div>
           </div>
-        </p>
+        </Link>
       </div>
     </div>
   );

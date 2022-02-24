@@ -16,6 +16,7 @@
     "@nomiclabs/hardhat-waffle": "^2.0.1",
     "@openzeppelin/contracts": "^4.4.0",
     "@splidejs/react-splide": "^0.4.4",
+    "@splidejs/splide-extension-auto-scroll": "^0.3.7",
     "@superfluid-finance/js-sdk": "^0.5.4",
     "@tailwindcss/forms": "^0.3.3",
     "@tailwindcss/line-clamp": "^0.2.2",

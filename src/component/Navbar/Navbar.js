@@ -232,6 +232,7 @@ const NavBar = () => {
               <p className="pl-2 line-clamp-3 text-sm font-semibold break-words">
                 {data.announcement}
               </p>
+              <p className="pl-2 line-clamp-3 text-xs font-normal break-words">{userLiveTime}</p>
             </div>
           )}
         </Link>
@@ -239,6 +240,18 @@ const NavBar = () => {
     );
   };
 
+  const EmptyNotificationContent = () => {
+    return (
+      <div className="h-full my-1">
+        <div
+          rel="noopener noreferrer"
+          className="grid grid-cols-4 justify-center p-2 dark:bg-dbeats-dark-alt dark:hover:bg-dbeats-dark-secondary dark:text-white text-gray-500"
+        >
+          <p>No new Notifications</p>
+        </div>
+      </div>
+    );
+  };
   return (
     <>
       <div className={`${darkMode && 'dark'}`}>
@@ -564,26 +577,37 @@ const NavBar = () => {
                     leaveTo="transform opacity-0 scale-95"
                   >
                     <Dropdown.Items
-                      className="absolute right-0 w-96 mt-2 origin-top-right 
-                    dark:bg-dbeats-dark-primary bg-white divide-y divide-gray-100 rounded-md shadow-lg 
+                      className="absolute right-0 w-96 mt-6 origin-top-right max-h-125 overflow-y-auto	overflow-x-hidden
+                    dark:bg-dbeats-dark-primary   divide-y divide-white divide-opacity-20 rounded-md shadow-lg 
                      focus:outline-none"
                     >
-                      {notification.map((value, i) => {
-                        return (
-                          <div className="px-1   " key={i}>
-                            <Dropdown.Item className="w-full h-full self-center dark:bg-dbeats-dark-primary">
-                              <NotificationContent data={value} />
-                            </Dropdown.Item>
-                          </div>
-                        );
-                      })}
+                      {notification.length > 0 ? (
+                        <>
+                          <p className="text-right px-4 py-2">clear all</p>
+                          {notification.map((value, i) => {
+                            return (
+                              <div className="px-1   " key={i}>
+                                <Dropdown.Item className="w-full h-full self-center dark:bg-dbeats-dark-primary">
+                                  <NotificationContent data={value} />
+                                </Dropdown.Item>
+                              </div>
+                            );
+                          })}
+                        </>
+                      ) : (
+                        <div className="px-1   ">
+                          <Dropdown.Item className="w-full h-full self-center  nm-flat-dbeats-dark-primary rounded">
+                            <EmptyNotificationContent />
+                          </Dropdown.Item>
+                        </div>
+                      )}
                     </Dropdown.Items>
                   </Transition>
                 </Dropdown>
 
                 <Link
                   to={`/profile/${user.username}`}
-                  className="shadow-sm 2xl:h-10  2xl:w-10 self-center  h-7 w-7 p-0.5 nm-flat-dbeats-dark-primary hover:nm-inset-dbeats-dark-primary text-white rounded-full font-bold mx-2 flex"
+                  className="shadow-sm 2xl:h-10  2xl:w-10 self-center  h-8 w-8 p-0.5 nm-flat-dbeats-dark-primary hover:nm-inset-dbeats-dark-primary text-white rounded-full font-bold mx-2 flex"
                 >
                   <img src={user.profile_image} className=" mx-auto self-center rounded-full"></img>
                 </Link>
