@@ -577,7 +577,7 @@ const NavBar = () => {
                     leaveTo="transform opacity-0 scale-95"
                   >
                     <Dropdown.Items
-                      className="absolute right-0 w-96 mt-6 origin-top-right max-h-125 overflow-y-auto	overflow-x-hidden
+                      className="absolute right-0 w-96 mt-6 origin-top-right max-h-125 overflow-y-scroll	overflow-x-hidden
                     dark:bg-dbeats-dark-primary   divide-y divide-white divide-opacity-20 rounded-md shadow-lg 
                      focus:outline-none"
                     >
