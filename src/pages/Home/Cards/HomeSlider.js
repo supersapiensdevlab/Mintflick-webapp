@@ -2,6 +2,7 @@ import React from 'react';
 import ReactPlayer from 'react-player';
 import { Link } from 'react-router-dom';
 import { ResponsiveContainer, StackedCarousel } from 'react-stacked-center-carousel';
+import person from '../../../assets/images/profile.svg';
 
 const ResponsiveCarousel = (props) => {
   const ref = React.useRef(ResponsiveContainer);
@@ -11,8 +12,9 @@ const ResponsiveCarousel = (props) => {
         carouselRef={ref}
         render={(parentWidth, carouselRef) => {
           let currentVisibleSlide = 1;
-          if (parentWidth <= 1440) currentVisibleSlide = 3;
-          else if (parentWidth <= 1080) currentVisibleSlide = 1;
+          if (parentWidth <= 1920) currentVisibleSlide = 5;
+          else if (parentWidth <= 1440) currentVisibleSlide = 3;
+          else if (parentWidth <= 720) currentVisibleSlide = 2;
           return (
             <StackedCarousel
               className=""
@@ -72,6 +74,20 @@ const Slide = function (StackedCarouselSlideProps) {
       {/* <div className="p-5 self-center">
           <p className="font-bold">{value.name}</p>
         </div> */}
+      <div className=" absolute bottom-0   px-3 py-4">
+        <div className="flex items-center text-black text-sm font-medium  ">
+          <img
+            src={value.profile_image ? value.profile_image : person}
+            alt=""
+            className="w-10 h-10 rounded-full mr-2 bg-gray-100  "
+          />
+          <div>
+            <span className="text-sm font-semibold text-dbeats-white  ">{value.name}</span>
+            <br />
+            {/* <span className="text-xs text-gray-500">{props.playbackUserData.videos[props.index].description.slice(0,30)+"..."}</span> */}
+          </div>
+        </div>
+      </div>
     </Link>
   );
 };

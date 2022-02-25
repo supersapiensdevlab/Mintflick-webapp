@@ -558,8 +558,8 @@ const NavBar = () => {
                       {newNotification > 0 ? (
                         <div
                           className="bg-red-500 rounded-full shadow  
-                        h-6 w-6 text-sm self-center text-center font-semibold  
-                        absolute -bottom-2  -right-2  
+                        h-4 w-4 text-xs self-center text-center font-semibold  
+                        absolute -top-1  -right-2  
                          text-white"
                         >
                           {newNotification}
