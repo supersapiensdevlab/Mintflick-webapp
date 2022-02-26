@@ -105,11 +105,11 @@ function LiveChat({userp,privateUser}) {
     txt.split(' ').map((part) => (URL_REGEX.test(part) ? <a href={part}>{part} </a> : part + ' '));
 
   return (
-    <div className="text-gray-400 height-live 	 box-border px-2 h-max lg:col-span-5 col-span-6 w-full dark:bg-dbeats-dark-primary">
+    <div className="text-gray-400 	 box-border px-2 h-max lg:col-span-5 col-span-6 w-full dark:bg-dbeats-dark-primary">
       <LoadingBar ref={loadingRef} color="#00d3ff" shadow={true} />
-      <div className="h-full">
-        <main className="h-110 2xl:h-120  sticky bottom-0">
-          <div className="   h-full	p-2 chat-height overflow-y-scroll	overflow-x-hidden">
+      <div className="relative" style={{height:'100vh'}}>
+        <main className="pt-16 chat-container-height-live sticky bottom-0">
+          <div className="  p-2 chat-height overflow-y-scroll	overflow-x-hidden">
             <div ref={scrollTop}></div>
               {messages
                 ? messages.map((message, index) => {
@@ -186,7 +186,7 @@ function LiveChat({userp,privateUser}) {
             <Picker onEmojiClick={onEmojiClick} />
           </div>
         )}
-        <div className="chat-input-height py-4 md:px-4 rounded-lg bg-dbeats-dark-secondary shadow-md">
+        <div className="absolute bottom-0 left-0 right-0 py-4 md:px-4 rounded-lg bg-dbeats-dark-secondary shadow-md">
           {formState.replyto ? (
             <div className="px-3 p-2 flex items-center	justify-between rounded-xl dark: bg-dbeats-dark-secondary	mb-2">
               <div className="flex">

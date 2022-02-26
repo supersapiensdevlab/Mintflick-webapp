@@ -188,13 +188,13 @@ const PublicInfo = (props) => {
     //console.log(details.cfa.flows.outFlows[0]);
   };
   return (
-    <div className="mt-10">
+    <div className="">
       <div
         className={`${
           darkMode && 'dark'
-        }  grid sm:grid-cols-1 lg:grid-cols-3 grid-flow-row pt-3 pb-50 mt-10 lg:ml-12  bg-gradient-to-b from-blue-50 via-blue-50 to-white  dark:bg-gradient-to-b dark:from-dbeats-dark-secondary  dark:to-dbeats-dark-primary`}
+        }  grid sm:grid-cols-1 lg:grid-cols-3 grid-flow-row  pb-50  lg:ml-12  bg-gradient-to-b from-blue-50 via-blue-50 to-white  dark:bg-gradient-to-b dark:from-dbeats-dark-secondary  dark:to-dbeats-dark-primary`}
       >
-        <div className=" lg:col-span-2">
+        <div className=" lg:col-span-2 pt-3 mt-10">
           <div className="self-center lg:px-8 w-screen lg:w-full lg:mt-3 mt-0.5  ">
             {userData ? (
               <VideoPlayer playbackUrl={playbackUrl} creatorData={userData} footer={true} />
@@ -355,7 +355,7 @@ const PublicInfo = (props) => {
             </div>
           </div>
         </div>
-        <div className="  w-full col-span-1 h-full">
+        <div className="  w-full col-span-1" style={{height:'100vh'}}>
           {userData.username && <LiveChat userp={userData} privateUser={user}></LiveChat>}
         </div>
       </div>
