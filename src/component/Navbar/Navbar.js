@@ -191,11 +191,8 @@ const NavBar = () => {
     convertTimestampToTime(data);
     return (
       <div className="h-full my-1">
-        <Link
-          to={{
-            pathname: data.link,
-          }}
-          rel="noopener noreferrer"
+        <a
+          href={`/live/${data.username}`}
           className="grid grid-cols-4 justify-center p-2 dark:bg-dbeats-dark-alt dark:hover:bg-dbeats-dark-secondary dark:text-white text-gray-500"
         >
           {data.post_image ? (
@@ -235,7 +232,7 @@ const NavBar = () => {
               <p className="pl-2 line-clamp-3 text-xs font-normal break-words">{userLiveTime}</p>
             </div>
           )}
-        </Link>
+        </a>
       </div>
     );
   };

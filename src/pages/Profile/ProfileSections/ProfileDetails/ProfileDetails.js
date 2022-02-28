@@ -129,7 +129,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
       case 'followers':
         break;
       default:
-        navigate.push(`/profile/${urlUsername}/posts`);
+        navigate.push(`/profile/${urlUsername}`);
         setTabIndex(0);
     }
     // eslint-disable-next-line
