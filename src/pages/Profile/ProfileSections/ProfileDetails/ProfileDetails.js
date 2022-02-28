@@ -380,7 +380,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                   <div className="dark:text-white  text-dbeats-dark-alt 2xl:py-4 lg:py-2.5    md:py-3 lg:mx-0 px-10 lg:px-10 md:px-4 ">
                     <div className="flex w-max lg:pt-0 items-center ">
                       <span className="font-bold 2xl:text-xl lg:text-xl md:text-xl mr-3 font-GTWalsheimPro">
-                        {displayName}
+                        {user.name}
                       </span>
                       {myData && !privateUser ? (
                         <button
