@@ -129,11 +129,13 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
       case 'followers':
         break;
       default:
-        navigate.push(`/profile/${urlUsername}`);
+        // navigate.push(`/profile/${urlUsername}`);
         setTabIndex(0);
     }
     // eslint-disable-next-line
   }, [tabname]);
+
+  console.log(navigate);
 
   const get_User = async () => {
     await axios.get(`${process.env.REACT_APP_SERVER_URL}/user/${urlUsername}`).then((value) => {
