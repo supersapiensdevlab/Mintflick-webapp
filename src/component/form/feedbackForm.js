@@ -2,6 +2,7 @@ import { Fragment } from 'react';
 import React, { useState } from 'react';
 import { Transition } from '@headlessui/react';
 import axios from 'axios';
+import Noty from 'noty';
 
 const FeedbackForm = () => {
   const [showFeedback, setShowFeedback] = useState(false);
@@ -31,9 +32,24 @@ const FeedbackForm = () => {
     })
       .then((response) => {
         console.log('success');
+        Noty.closeAll();
+        new Noty({
+          type: 'success',
+          text: 'We appreciate your valuable feedback',
+          theme: 'metroui',
+          layout: 'bottomRight',
+        }).show();
+        window.location.href = '/';
       })
       .catch((err) => {
         console.log(err);
+        Noty.closeAll();
+        new Noty({
+          type: 'error',
+          text: 'Feedback not submitted, kindly re-submit',
+          theme: 'metroui',
+          layout: 'bottomRight',
+        }).show();
       });
   };
 
