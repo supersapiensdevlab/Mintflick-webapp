@@ -163,7 +163,6 @@ const Controls = forwardRef(
             direction="row"
             alignItems="center"
             justify="space-between"
-            style
             style={{ padding: 16 }}
           >
             <Grid item>
