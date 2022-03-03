@@ -94,6 +94,8 @@ const PlayBackInfo = (props) => {
   // const sf = new SuperfluidSDK.Framework({
   //   ethers: new Web3Provider(window.ethereum),
   // });
+  console.log(user);
+  console.log(props);
 
   const trackFollowers = () => {
     setLoader(false);
@@ -419,6 +421,7 @@ const PlayBackInfo = (props) => {
         const videoDetails = {
           videousername: `${props.video_username}`,
           videoindex: `${props.video_id}`,
+          viewed_user: `${user.username}`,
         };
 
         axios({
@@ -505,7 +508,7 @@ const PlayBackInfo = (props) => {
                       ) : null}
                       {time ? (
                         <p className="  2xl:text-lg lg:text-xs text-md text-gray-400 pb-4">
-                          {userData.videos.views ? userData.videos.views : '0'} views{' '}
+                          {userData.videos.views ? userData.videos.views.length : '0'} views{' '}
                           <span className=" mx-1">&#183;</span>
                           {time}
                         </p>
