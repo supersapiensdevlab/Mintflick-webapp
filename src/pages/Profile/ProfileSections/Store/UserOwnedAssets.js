@@ -7,7 +7,7 @@ import Market from '../../../../artifacts/contracts/Market.sol/NFTMarket.json';
 import NFT from '../../../../artifacts/contracts/NFT.sol/NFT.json';
 import maticLogo from '../../../../assets/graphics/polygon-matic-logo.svg';
 import dbeatsLogoBnW from '../../../../assets/images/Logo/logo-blacknwhite.png';
-import { nftaddress, nftmarketaddress } from '../config';
+import { nftaddress, nftmarketaddress } from '../../../../functions/config';
 
 const MyAssets = ({ resellOwnedItem }) => {
   const [nfts, setNfts] = useState([]);
@@ -20,7 +20,6 @@ const MyAssets = ({ resellOwnedItem }) => {
   }, []);
   async function loadNFTs() {
     const web3Modal = new Web3Modal({
-      network: 'mainnet',
       cacheProvider: true,
     });
     const connection = await web3Modal.connect();
@@ -28,12 +27,12 @@ const MyAssets = ({ resellOwnedItem }) => {
     const signer = provider.getSigner();
 
     const marketContract = new ethers.Contract(nftmarketaddress, Market.abi, signer);
-    const tokenContract = new ethers.Contract(nftaddress, NFT.abi, provider);
+
     const data = await marketContract.fetchMyNFTs();
 
     const items = await Promise.all(
       data.map(async (i) => {
-        const tokenUri = await tokenContract.tokenURI(i.tokenId);
+        const tokenUri = await marketContract.tokenURI(i.tokenId);
         const meta = await axios.get(tokenUri);
         let price = ethers.utils.formatUnits(i.price.toString(), 'ether');
         let item = {
@@ -69,6 +68,7 @@ const MyAssets = ({ resellOwnedItem }) => {
               <div className="relative sm:mt-2 sm:mx-2 ">
                 <div className=" h-full w-full max-h-100 lg:h-56    sm:rounded-md overflow-hidden">
                   <Image
+                    onContextMenu={(e) => e.preventDefault()}
                     src={nft.image}
                     height={200}
                     width={200}

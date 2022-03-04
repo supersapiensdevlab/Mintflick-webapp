@@ -73,7 +73,7 @@
     "react-redux": "^7.2.4",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "^3.4.4",
+    "react-scripts": "4.0.3",
     "react-share": "^4.4.0",
     "react-stacked-center-carousel": "^1.0.3",
     "react-top-loading-bar": "^2.1.0",
@@ -116,7 +116,9 @@
   ],
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.0.4",
+    "eslint-plugin-react": "^7.29.3",
     "ethereum-waffle": "^3.4.0",
-    "prettier": "^2.4.1"
+    "prettier": "^2.4.1",
+    "react-error-overlay": "^6.0.9"
   }
 }

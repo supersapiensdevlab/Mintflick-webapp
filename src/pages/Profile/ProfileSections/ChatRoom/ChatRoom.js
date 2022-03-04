@@ -26,31 +26,29 @@ function ChatRoom(props) {
   const soundInput = useRef();
   const videoInput = useRef();
   const fileInput = useRef();
-  
+
   // For reply click ref
   const scrollTop = useRef(null);
   const messageRef = useRef([]);
-  const [goToMessage,setGoToMessage] = useState(false);
+  const [goToMessage, setGoToMessage] = useState(false);
   function scrollTo(id) {
     setGoToMessage(id);
   }
 
-
-
   const [messages, setMessages] = useState([]);
-  useEffect(()=>{
-    if(goToMessage){
-      if(messageRef.current[goToMessage]){
-        console.log('scrolling to '+goToMessage)
+  useEffect(() => {
+    if (goToMessage) {
+      if (messageRef.current[goToMessage]) {
+        console.log('scrolling to ' + goToMessage);
         messageRef.current[goToMessage].scrollIntoView();
         setGoToMessage(false);
-      }else{
-        console.log('loading chats ')
+      } else {
+        console.log('loading chats ');
         scrollTop.current.scrollIntoView();
       }
     }
-    console.log('out of ifs')
-  },[messages,goToMessage])
+    console.log('out of ifs');
+  }, [messages, goToMessage]);
   const [currentSocket, setCurrentSocket] = useState(null);
   const dates = new Set();
   const [selectedFile, setSelectedFile] = useState(null);
@@ -232,7 +230,7 @@ function ChatRoom(props) {
   // FOr Links
   // use whatever you want here
   const URL_REGEX =
-    /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/;
+    /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*)/;
   const renderText = (txt) =>
     txt.split(' ').map((part) => (URL_REGEX.test(part) ? <a href={part}>{part} </a> : part + ' '));
 
@@ -279,9 +277,11 @@ function ChatRoom(props) {
                         )}
                         <div className=" px-3 p-2 rounded	 dark: bg-dbeats-dark-secondary	my-1 inline-block shadow">
                           {message.reply_to ? (
-                            <div onClick={()=> scrollTo(message.reply_to._id)} className="cursor-pointer flex justify-between items-center group  px-3 py-2 border-l-2 border-dbeats-light  dark: nm-inset-dbeats-dark-primary">
+                            <div
+                              onClick={() => scrollTo(message.reply_to._id)}
+                              className="cursor-pointer flex justify-between items-center group  px-3 py-2 border-l-2 border-dbeats-light  dark: nm-inset-dbeats-dark-primary"
+                            >
                               <div className="">
-                                
                                 <p
                                   className={
                                     message.reply_to.username === user.username
@@ -294,18 +294,18 @@ function ChatRoom(props) {
                                 </p>
                                 <p className="text-xs">{message.reply_to.message}</p>
                               </div>
-                              <div className='p-2'>
+                              <div className="p-2">
                                 {message.reply_to.type == 'image' && (
-                                  <i class="fas fa-image text-2xl text-dbeats-light"></i>
+                                  <i className="fas fa-image text-2xl text-dbeats-light"></i>
                                 )}
                                 {message.reply_to.type == 'sound' && (
-                                  <i class="fas fa-music text-2xl text-dbeats-light"></i>
+                                  <i className="fas fa-music text-2xl text-dbeats-light"></i>
                                 )}
                                 {message.reply_to.type == 'video' && (
-                                  <i class="fas fa-video text-2xl text-dbeats-light"></i>
+                                  <i className="fas fa-video text-2xl text-dbeats-light"></i>
                                 )}
                                 {message.reply_to.type == 'file' && (
-                                  <i class="fas fa-file text-2xl text-dbeats-light"></i>
+                                  <i className="fas fa-file text-2xl text-dbeats-light"></i>
                                 )}
                               </div>
                             </div>
@@ -322,6 +322,7 @@ function ChatRoom(props) {
                                 href={message.url}
                                 download
                                 target="_blank"
+                                rel="noopener noreferrer"
                               >
                                 Download
                               </a>
@@ -342,7 +343,12 @@ function ChatRoom(props) {
                               </p>
                               <p className="text-gray-400 text-xs">Size: {prettyBytes(size)}</p>
                               <p className="text-gray-400 text-xs">
-                                <a href={message.url} download target="_blank">
+                                <a
+                                  href={message.url}
+                                  download
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                >
                                   Download
                                 </a>
                               </p>
@@ -356,7 +362,12 @@ function ChatRoom(props) {
                               </p>
                               <p className="text-gray-400 text-xs">Size: {prettyBytes(size)}</p>
                               <p className="text-gray-400 text-xs">
-                                <a href={message.url} download target="_blank">
+                                <a
+                                  href={message.url}
+                                  download
+                                  rel="noopener noreferrer"
+                                  target="_blank"
+                                >
                                   Download
                                 </a>
                               </p>
@@ -370,7 +381,12 @@ function ChatRoom(props) {
                               </p>
                               <p className="text-gray-400 text-xs">Size: {prettyBytes(size)}</p>
                               <p className="text-gray-400 text-xs">
-                                <a href={message.url} download target="_blank">
+                                <a
+                                  href={message.url}
+                                  download
+                                  rel="noopener noreferrer"
+                                  target="_blank"
+                                >
                                   Download
                                 </a>
                               </p>
@@ -429,7 +445,7 @@ function ChatRoom(props) {
                               ) : null}
 
                               {urls &&
-                                urls.map((u,index) => {
+                                urls.map((u, index) => {
                                   return (
                                     <a href={u} key={index}>
                                       <ChatLinkPreview
@@ -451,10 +467,14 @@ function ChatRoom(props) {
                     );
                   })
                 : '<></>'}
-            
             </InfiniteScroll>
-            <i onClick={()=>{chatRef.current.scrollIntoView({ behavior: 'smooth' });}} class="fas fa-angle-double-down text-xl text-dbeats-light fixed right-4 bottom-24 px-4 py-2 rounded-full bg-dbeats-dark-secondary xl:text-2xl xl:right-8 cursor-pointer"></i>
-              <div ref={chatRef} />
+            <i
+              onClick={() => {
+                chatRef.current.scrollIntoView({ behavior: 'smooth' });
+              }}
+              className="fas fa-angle-double-down text-xl text-dbeats-light fixed right-4 bottom-24 px-4 py-2 rounded-full bg-dbeats-dark-secondary xl:text-2xl xl:right-8 cursor-pointer"
+            ></i>
+            <div ref={chatRef} />
           </div>
         </main>
         {showEmojis && (

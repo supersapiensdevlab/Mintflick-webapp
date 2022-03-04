@@ -1,12 +1,11 @@
-import React, { useEffect, useReducer, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import '../../../Profile/ProfileSections/ChatRoom/chatroom.css';
 import io from 'socket.io-client';
 import Picker from 'emoji-picker-react';
 import person from '../../../../assets/images/profile.svg';
 import LoadingBar from 'react-top-loading-bar';
 
-
-function LiveChat({userp,privateUser}) {
+function LiveChat({ userp }) {
   // to get loggedin user from   localstorage
   const user = JSON.parse(window.localStorage.getItem('user'));
   const chatRef = useRef(null);
@@ -17,7 +16,6 @@ function LiveChat({userp,privateUser}) {
     replyto: null,
   });
 
-  
   // For reply click ref
   const scrollTop = useRef(null);
   const messageRef = useRef([]);
@@ -25,7 +23,6 @@ function LiveChat({userp,privateUser}) {
   const [messages, setMessages] = useState([]);
 
   const [currentSocket, setCurrentSocket] = useState(null);
-
 
   const [showEmojis, setShowEmojis] = useState(false);
 
@@ -53,7 +50,7 @@ function LiveChat({userp,privateUser}) {
         chatRef.current.scrollIntoView({ behavior: 'smooth' });
       });
     } else {
-    //   window.history.replaceState({}, 'Home', '/');
+      //   window.history.replaceState({}, 'Home', '/');
     }
     return () => {
       currentSocket.disconnect();
@@ -78,7 +75,7 @@ function LiveChat({userp,privateUser}) {
     if (formState.replyto) {
       room.chat.reply_to = formState.replyto;
     }
-    console.log(room)
+    console.log(room);
     currentSocket.emit('live_chatMessage', room);
     setForm({
       message: '',
@@ -100,85 +97,92 @@ function LiveChat({userp,privateUser}) {
   // FOr Links
   // use whatever you want here
   const URL_REGEX =
-    /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/;
+    /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*)/;
   const renderText = (txt) =>
     txt.split(' ').map((part) => (URL_REGEX.test(part) ? <a href={part}>{part} </a> : part + ' '));
 
   return (
     <div className="text-gray-400 	 box-border px-2 h-max lg:col-span-5 col-span-6 w-full dark:bg-dbeats-dark-primary">
       <LoadingBar ref={loadingRef} color="#00d3ff" shadow={true} />
-      <div className="relative" style={{height:'100vh'}}>
+      <div className="relative" style={{ height: '100vh' }}>
         <main className="pt-16 chat-container-height-live sticky bottom-0">
           <div className="  p-2 chat-height overflow-y-scroll	overflow-x-hidden">
             <div ref={scrollTop}></div>
-              {messages
-                ? messages.map((message, index) => {
-                    const dateNum = new Date(message.createdAt);
-                    let size = 0;
-                    let urlstext = renderText(message.message);
-                    return (
-                      <div key={message._id} ref={(el) => (messageRef.current[message._id] = el)}>
-                        <div className=" px-3 p-2 rounded	 dark: bg-dbeats-dark-secondary	my-1 inline-block shadow">
+            {messages
+              ? messages.map((message) => {
+                  //const dateNum = new Date(message.createdAt);
+                  //let size = 0;
+                  let urlstext = renderText(message.message);
+                  return (
+                    <div key={message._id} ref={(el) => (messageRef.current[message._id] = el)}>
+                      <div className=" px-3 p-2 rounded	 dark: bg-dbeats-dark-secondary	my-1 inline-block shadow">
                         {message.reply_to ? (
-                            <div onClick={()=> scrollTo(message.reply_to._id)} className="cursor-pointer flex justify-between items-center group  px-3 py-2 border-l-2 border-dbeats-light  dark: nm-inset-dbeats-dark-primary">
-                              <div className="">
-                                
-                                <p
-                                  className={
-                                    message.reply_to.username === user.username
-                                      ? 'text-sm  mb-1  text-dbeats-light'
-                                      : 'text-sm  mb-1 text-white	'
-                                  }
-                                >
-                                  {' '}
-                                  {message.reply_to.username}
-                                </p>
-                                <p className="text-xs">{message.reply_to.message}</p>
-                              </div>
-                            </div>
-                          ) : null}
-                          <div className="inline-flex items-start group">
-                            <div className="chat_message_profile pr-2 pt-2 h-12 w-12">
-                              <img
-                                height="50px"
-                                width="50px"
-                                className="rounded-full"
-                                style={{ width: 'auto', maxWidth: '50px' }}
-                                alt="profile"
-                                src={message.profile_image ? message.profile_image : person}
-                              />
-                            </div>
-                            <div className="p-1 mt-1">
+                          <div
+                            onClick={() => scrollTo(message.reply_to._id)}
+                            className="cursor-pointer flex justify-between items-center group  px-3 py-2 border-l-2 border-dbeats-light  dark: nm-inset-dbeats-dark-primary"
+                          >
+                            <div className="">
                               <p
                                 className={
-                                  message.username === user.username
-                                    ? 'text-base font-bold   text-dbeats-light'
-                                    : 'text-base font-bold  text-white	'
+                                  message.reply_to.username === user.username
+                                    ? 'text-sm  mb-1  text-dbeats-light'
+                                    : 'text-sm  mb-1 text-white	'
                                 }
                               >
-                                {message.username}{' '}
-                                <span className="text-xs text-gray-300 font-light">
-                                  {new Date(message.createdAt).toLocaleString('en-US', {
-                                    hour: '2-digit',
-                                    minute: '2-digit',
-                                    hour12: true,
-                                  })}
-                                </span>
+                                {' '}
+                                {message.reply_to.username}
                               </p>
-                              <p className="text whitespace-pre-line">{urlstext}</p>
+                              <p className="text-xs">{message.reply_to.message}</p>
                             </div>
-                            <i
-                              onClick={() => onreply(message)}
-                              className="pt-8  opacity-0 group-hover:opacity-100 fas fa-reply ml-2 w-4 h-4 cursor-pointer text-dbeats-white text-opacity-40 hover:text-opacity-100"
-                            ></i>
                           </div>
+                        ) : null}
+                        <div className="inline-flex items-start group">
+                          <div className="chat_message_profile pr-2 pt-2 h-12 w-12">
+                            <img
+                              height="50px"
+                              width="50px"
+                              className="rounded-full"
+                              style={{ width: 'auto', maxWidth: '50px' }}
+                              alt="profile"
+                              src={message.profile_image ? message.profile_image : person}
+                            />
+                          </div>
+                          <div className="p-1 mt-1">
+                            <p
+                              className={
+                                message.username === user.username
+                                  ? 'text-base font-bold   text-dbeats-light'
+                                  : 'text-base font-bold  text-white	'
+                              }
+                            >
+                              {message.username}{' '}
+                              <span className="text-xs text-gray-300 font-light">
+                                {new Date(message.createdAt).toLocaleString('en-US', {
+                                  hour: '2-digit',
+                                  minute: '2-digit',
+                                  hour12: true,
+                                })}
+                              </span>
+                            </p>
+                            <p className="text whitespace-pre-line">{urlstext}</p>
+                          </div>
+                          <i
+                            onClick={() => onreply(message)}
+                            className="pt-8  opacity-0 group-hover:opacity-100 fas fa-reply ml-2 w-4 h-4 cursor-pointer text-dbeats-white text-opacity-40 hover:text-opacity-100"
+                          ></i>
                         </div>
                       </div>
-                    );
-                  })
-                : '<></>'}
-            <i onClick={()=>{chatRef.current.scrollIntoView({ behavior: 'smooth' });}} class="fas fa-angle-double-down text-xl text-dbeats-light absolute right-4 bottom-10 px-4 py-2 rounded-full bg-dbeats-dark-secondary xl:text-2xl xl:right-8 cursor-pointer"></i>
-              <div ref={chatRef} />
+                    </div>
+                  );
+                })
+              : '<></>'}
+            <i
+              onClick={() => {
+                chatRef.current.scrollIntoView({ behavior: 'smooth' });
+              }}
+              className="fas fa-angle-double-down text-xl text-dbeats-light absolute right-4 bottom-10 px-4 py-2 rounded-full bg-dbeats-dark-secondary xl:text-2xl xl:right-8 cursor-pointer"
+            ></i>
+            <div ref={chatRef} />
           </div>
         </main>
         {showEmojis && (
@@ -261,7 +265,7 @@ function LiveChat({userp,privateUser}) {
 
               <div
                 className={`${
-                   formState.message.length < 1
+                  formState.message.length < 1
                     ? 'text-opacity-25 text-white cursor-default'
                     : 'hover:nm-inset-dbeats-dark-primary hover:text-dbeats-light'
                 }
@@ -270,7 +274,7 @@ function LiveChat({userp,privateUser}) {
                 <button
                   type="submit"
                   className={`${
-                     formState.message.length < 1
+                    formState.message.length < 1
                       ? 'dark:bg-dbeats-dark-primary'
                       : 'bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:dark:nm-inset-dbeats-dark-primary'
                   }  px-4 py-2  rounded-3xl group flex items-center justify-center  `}

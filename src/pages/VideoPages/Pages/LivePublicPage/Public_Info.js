@@ -3,26 +3,25 @@ import { Menu, Transition } from '@headlessui/react';
 import SuperfluidSDK from '@superfluid-finance/js-sdk';
 //import playimg from "../../../assets/images/telegram.png";
 import axios from 'axios';
+import moment from 'moment';
 import React, { Fragment, useEffect, useState } from 'react';
-import Modal from 'react-awesome-modal';
-import { Container, Row } from 'react-bootstrap';
-import Lottie from 'react-lottie';
+// import Modal from 'react-awesome-modal';
+// import { Container, Row } from 'react-bootstrap';
+// import Lottie from 'react-lottie';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import superfluid from '../../../../assets/images/superfluid-black.svg';
+import person from '../../../../assets/images/profile.svg';
+// import superfluid from '../../../../assets/images/superfluid-black.svg';
 import { ShareModal } from '../../../../component/Modals/ShareModal/ShareModal';
 import SuperfanModal from '../../../../component/Modals/SuperfanModal/superfan-modal';
-
 import VideoPlayer from '../../../../component/VideoPlayer/VideoPlayer';
-import animationDataConfetti from '../../../../lotties/confetti.json';
-import animationData from '../../../../lotties/fans.json';
-import animationDataGiraffee from '../../../../lotties/giraffee.json';
-import ChatRoom from '../../../Profile/ProfileSections/ChatRoom/ChatRoom';
-import classes from '../Info.module.css';
-import LiveCard from './LiveCard';
+// import animationDataConfetti from '../../../../lotties/confetti.json';
+// import animationData from '../../../../lotties/fans.json';
+// import animationDataGiraffee from '../../../../lotties/giraffee.json';
+// import ChatRoom from '../../../Profile/ProfileSections/ChatRoom/ChatRoom';
+// import classes from '../Info.module.css';
+// import LiveCard from './LiveCard';
 import LiveChat from './LiveChat';
-import person from '../../../../assets/images/profile.svg';
-import moment from 'moment';
 
 const PublicInfo = (props) => {
   let sharable_data = `${process.env.REACT_APP_CLIENT_URL}/live/${props.stream_id}`;
@@ -49,6 +48,7 @@ const PublicInfo = (props) => {
   const [buttonText, setButtonText] = useState(text);
   const [subscribeButtonText, setSubscribeButtonText] = useState('Subscribe');
 
+  // eslint-disable-next-line no-unused-vars
   const [arrayData, setArrayData] = useState([]);
 
   const trackFollowers = () => {
@@ -356,7 +356,7 @@ const PublicInfo = (props) => {
             </div>
           </div>
         </div>
-        <div className="  w-full col-span-1" style={{height:'100vh'}}>
+        <div className="  w-full col-span-1" style={{ height: '100vh' }}>
           {userData.username && <LiveChat userp={userData} privateUser={user}></LiveChat>}
         </div>
       </div>

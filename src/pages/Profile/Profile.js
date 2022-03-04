@@ -18,7 +18,7 @@ const Profile = () => {
   const tabname = params.tab;
   const urlUsername = params.username;
 
-  console.log(params);
+  //console.log(params);
   const [user, setUser] = useState(null);
   const [privateUser, setPrivate] = useState(true);
   const [notFound, setNotFound] = useState(false);
@@ -84,19 +84,20 @@ const Profile = () => {
       },
     })
       .then((response) => {
-        console.log(response);
+        //console.log(response);
         let nftData = null;
         //when using covalent api tweak the response to get metadata
         for (let i = 0; i < response.data.data.items.length; i++) {
           const value = response.data.data.items[i];
-          console.log(value.contract_address === '0x03160747b94be986261d9340d01128d4d5566383');
+
           if (value.contract_address === '0x03160747b94be986261d9340d01128d4d5566383') {
             console.log('thisruns');
+            console.log(value.contract_address);
             console.log(value.nft_data, value.contract_name);
             nftData = value.nft_data;
           }
         }
-        console.log(nftData);
+        console.log('NFTDATA:', nftData);
         //response.data.nfts for nftport;
         nftMedata = nftData;
       })
@@ -135,7 +136,7 @@ const Profile = () => {
                   <ChatRoom userp={user} privateUser={privateUser}></ChatRoom>
                 </Route>
                 <Route path={`/profile/:username/store`}>
-                  <NFTStore NFTData={NFTData} />
+                  <NFTStore />
                 </Route>
 
                 <Route exact path={`/profile/:username/event`} component={Ticket}></Route>

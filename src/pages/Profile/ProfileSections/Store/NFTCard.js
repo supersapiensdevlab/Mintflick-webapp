@@ -14,6 +14,7 @@ const NFTCard = ({ nft, buyNft }) => {
       <div className="relative sm:mt-2 sm:mx-2">
         <div className=" h-full w-full max-h-100 md:h-56    sm:rounded-md overflow-hidden">
           <Image
+            onContextMenu={(e) => e.preventDefault()}
             src={nft.image}
             height={200}
             width={200}
@@ -84,22 +85,31 @@ const NFTCard = ({ nft, buyNft }) => {
             className={`${!nameSeeMore ? 'line-clamp-2' : ''} mr-2 mt-1 `}
             style={{ wordBreak: 'break-words' }}
           >
-            {nft.name.split('\n').map(function (item) {
-              return (
-                <>
-                  {item}
-                  <br />
-                </>
-              );
-            })}
+            {nft ? (
+              <>
+                {nft.name.split('\n').map(function (item) {
+                  return (
+                    <>
+                      {item}
+                      <br />
+                    </>
+                  );
+                })}
+              </>
+            ) : null}
           </p>
-          {nft.name.split(/\r\n|\r|\n/).length > 1 ? (
-            <p
-              className="cursor-pointer text-md hover:underline text-gray-600  "
-              onClick={() => setNameSeeMore(!nameSeeMore)}
-            >
-              {nameSeeMore ? '...see less' : '...see more'}
-            </p>
+
+          {nft ? (
+            <>
+              {nft.name.split(/\r\n|\r|\n/).length > 1 ? (
+                <p
+                  className="cursor-pointer text-md hover:underline text-gray-600  "
+                  onClick={() => setNameSeeMore(!nameSeeMore)}
+                >
+                  {nameSeeMore ? '...see less' : '...see more'}
+                </p>
+              ) : null}{' '}
+            </>
           ) : null}
         </h1>
 

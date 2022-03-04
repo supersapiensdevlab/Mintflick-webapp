@@ -3,7 +3,6 @@ import axios from 'axios';
 import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
-import moralisLogo from '../../assets/images/moralis-light.svg';
 import useWeb3Modal from '../../hooks/useWeb3Modal';
 import ForgotPasswordForm from './component/ForgotPasswordForm';
 import LoginForm from './component/LoginForm';
