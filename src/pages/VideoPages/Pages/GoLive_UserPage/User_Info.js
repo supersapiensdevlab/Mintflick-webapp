@@ -108,6 +108,10 @@ const UserInfo = () => {
       method: 'post',
       url: `${process.env.REACT_APP_SERVER_URL}/user/add_multistream_platform`,
       data: postData,
+      headers: {
+        'content-type': 'application/json',
+        'auth-token':localStorage.getItem('authtoken')
+      },
     });
 
     setMultiStreamConnected([...multiStreamConnected, postData]);
@@ -296,6 +300,10 @@ const UserInfo = () => {
             method: 'POST',
             url: `${process.env.REACT_APP_SERVER_URL}/user/uploadThumbnail`,
             data: data,
+            headers: {
+              'content-type': 'application/json',
+              'auth-token':localStorage.getItem('authtoken')
+            },
           });
           if (res.data == 'success') {
             axios.get(`${process.env.REACT_APP_SERVER_URL}/user/${user.username}`).then((value) => {

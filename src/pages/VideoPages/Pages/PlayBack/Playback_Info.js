@@ -109,7 +109,7 @@ const PlayBackInfo = (props) => {
         url: `${process.env.REACT_APP_SERVER_URL}/user/follow`,
         headers: {
           'content-type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
+          'auth-token':localStorage.getItem('authtoken')
         },
         data: followData,
       })
@@ -130,7 +130,7 @@ const PlayBackInfo = (props) => {
         url: `${process.env.REACT_APP_SERVER_URL}/user/unfollow`,
         headers: {
           'content-type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
+          'auth-token':localStorage.getItem('authtoken')
         },
         data: followData,
       })
@@ -304,7 +304,7 @@ const PlayBackInfo = (props) => {
         url: `${process.env.REACT_APP_SERVER_URL}/user/reactions`,
         headers: {
           'content-type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
+          'auth-token':localStorage.getItem('authtoken')
         },
         data: reactionData,
       })
@@ -371,7 +371,7 @@ const PlayBackInfo = (props) => {
         url: `${process.env.REACT_APP_SERVER_URL}/user/removeuserreaction`,
         headers: {
           'content-type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
+          'auth-token':localStorage.getItem('authtoken')
         },
         data: reactionData,
       })
@@ -429,7 +429,7 @@ const PlayBackInfo = (props) => {
           url: `${process.env.REACT_APP_SERVER_URL}/user/views`,
           headers: {
             'content-type': 'application/json',
-            'Access-Control-Allow-Origin': '*',
+            'auth-token':localStorage.getItem('authtoken')
           },
           data: videoDetails,
         });

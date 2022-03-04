@@ -49,6 +49,10 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
       method: 'POST',
       url: `${process.env.REACT_APP_SERVER_URL}/user/update`,
       data: data,
+      headers: {
+        'content-type': 'application/json',
+        'auth-token':localStorage.getItem('authtoken')
+      },
     })
       .then((res) => {
         if (res.data === 'Invalid') {

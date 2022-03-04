@@ -74,6 +74,10 @@ const NavBar = () => {
         method: 'POST',
         url: `${process.env.REACT_APP_SERVER_URL}/user/seennotification`,
         data: data,
+        headers: {
+          'content-type': 'application/json',
+          'auth-token':localStorage.getItem('authtoken')
+        },
       })
         .then()
         .catch(function (error) {

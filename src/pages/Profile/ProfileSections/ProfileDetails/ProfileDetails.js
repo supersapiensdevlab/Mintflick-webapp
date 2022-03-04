@@ -197,7 +197,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
         url: `${process.env.REACT_APP_SERVER_URL}/user/follow`,
         headers: {
           'content-type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
+          'auth-token':localStorage.getItem('authtoken')
         },
         data: followData,
       })
@@ -219,7 +219,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
         url: `${process.env.REACT_APP_SERVER_URL}/user/unfollow`,
         headers: {
           'content-type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
+          'auth-token':localStorage.getItem('authtoken')
         },
         data: followData,
       })
@@ -248,6 +248,10 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
       method: 'POST',
       url: `${process.env.REACT_APP_SERVER_URL}/user/unpin`,
       data: UnPinningData,
+      headers: {
+        'content-type': 'application/json',
+        'auth-token':localStorage.getItem('authtoken')
+      },
     })
       .then(() => {
         let value = [];
@@ -273,6 +277,10 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
       method: 'POST',
       url: `${process.env.REACT_APP_SERVER_URL}/user/pinned`,
       data: PinningData,
+      headers: {
+        'content-type': 'application/json',
+        'auth-token':localStorage.getItem('authtoken')
+      },
     })
       .then(() => {
         setPinnedData((prevData) => [...prevData, pinnedUser]);
@@ -288,6 +296,10 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
       method: 'POST',
       url: `${process.env.REACT_APP_SERVER_URL}/user/send_verify_email`,
       data: data,
+      headers: {
+        'content-type': 'application/json',
+        'auth-token':localStorage.getItem('authtoken')
+      },
     })
       .then(() => {
         setIsMailVerified(true);

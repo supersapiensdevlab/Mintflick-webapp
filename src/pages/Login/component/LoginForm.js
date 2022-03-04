@@ -47,7 +47,8 @@ const LoginForm = ({
         else if (response.data) {
           //console.log(response.data);
           Cookies.set('jwtToken', response.data.jwtToken, { expires: 7 });
-          window.localStorage.setItem('user', JSON.stringify(response.data.username));
+          window.localStorage.setItem('user', JSON.stringify(response.data.user));
+          window.localStorage.setItem('authtoken', response.data.jwtToken);
           //window.location.reload();
           window.location.href = '/';
         } else {

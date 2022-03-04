@@ -64,9 +64,10 @@ const PublicInfo = (props) => {
         url: `${process.env.REACT_APP_SERVER_URL}/user/follow`,
         headers: {
           'content-type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
+          'auth-token':localStorage.getItem('authtoken')
         },
         data: followData,
+        
       })
         .then(function (response) {
           if (response) {
@@ -85,7 +86,7 @@ const PublicInfo = (props) => {
         url: `${process.env.REACT_APP_SERVER_URL}/user/unfollow`,
         headers: {
           'content-type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
+          'auth-token':localStorage.getItem('authtoken')
         },
         data: followData,
       })

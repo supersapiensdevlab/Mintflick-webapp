@@ -74,7 +74,8 @@ const Login = () => {
                   `${process.env.REACT_APP_SERVER_URL}/user/getuser_by_wallet/${provider.provider.selectedAddress}`,
                 )
                 .then((value) => {
-                  window.localStorage.setItem('user', JSON.stringify(value.data));
+                  window.localStorage.setItem('user', JSON.stringify(value.data.user));
+                  window.localStorage.setItem('authtoken', value.data.jwtToken);
                   window.location.href = '/';
                 });
             }

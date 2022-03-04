@@ -157,6 +157,10 @@ export default function Track() {
       method: 'post',
       url: `${process.env.REACT_APP_SERVER_URL}/user/favorite`,
       data: postData,
+      headers: {
+        'content-type': 'application/json',
+        'auth-token':localStorage.getItem('authtoken')
+      },
     });
     get_favorites();
     //console.log(result);
@@ -174,6 +178,10 @@ export default function Track() {
       method: 'post',
       url: `${process.env.REACT_APP_SERVER_URL}/user/unfavorite`,
       data: postData,
+      headers: {
+        'content-type': 'application/json',
+        'auth-token':localStorage.getItem('authtoken')
+      },
     });
     get_favorites();
     //console.log(result);

@@ -231,6 +231,7 @@ const UploadVideoModal = (props) => {
           .post(`${process.env.REACT_APP_SERVER_URL}/upload_video`, formData, {
             headers: {
               'content-type': 'multipart/form-data',
+              'auth-token':localStorage.getItem('authtoken')
             },
           })
           .then(() => {

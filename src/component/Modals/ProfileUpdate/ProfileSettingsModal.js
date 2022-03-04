@@ -58,6 +58,10 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
       method: 'POST',
       url: `${process.env.REACT_APP_SERVER_URL}/user/update-superfan`,
       data: data,
+      headers: {
+        'content-type': 'application/json',
+        'auth-token':localStorage.getItem('authtoken')
+      },
     })
       .then((res) => {
         setLoader(false);

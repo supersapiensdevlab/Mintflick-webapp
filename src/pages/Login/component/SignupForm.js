@@ -87,7 +87,8 @@ const SignupForm = ({
         if (response.data === 'Email' || response.data === 'Username') {
           setExistingValue(response.data);
         } else {
-          window.localStorage.setItem('user', JSON.stringify(response.data));
+          window.localStorage.setItem('user', JSON.stringify(response.data.user));
+          window.localStorage.setItem('authtoken', response.data.jwtToken);
           window.location.href = '/';
         }
       })

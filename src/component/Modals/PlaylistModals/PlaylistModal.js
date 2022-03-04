@@ -39,6 +39,10 @@ const NewPlaylist = (props) => {
       method: 'post',
       url: `${process.env.REACT_APP_SERVER_URL}/user/playlist`,
       data: data,
+      headers: {
+        'content-type': 'application/json',
+        'auth-token':localStorage.getItem('authtoken')
+      },
     });
 
     props.handleCloseNewPlaylist();
@@ -113,6 +117,10 @@ export const Playlist = (props) => {
       method: 'post',
       url: `${process.env.REACT_APP_SERVER_URL}/user/playlist`,
       data: data,
+      headers: {
+        'content-type': 'application/json',
+        'auth-token':localStorage.getItem('authtoken')
+      },
     });
 
     props.handleClosePlaylist();

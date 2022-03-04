@@ -208,6 +208,7 @@ const AnnouncementModal = (props) => {
             .post(`${process.env.REACT_APP_SERVER_URL}/user/announcement`, formData, {
               headers: {
                 'content-type': 'multipart/form-data',
+                'auth-token':localStorage.getItem('authtoken')
               },
             })
             .then(() => {
@@ -240,6 +241,7 @@ const AnnouncementModal = (props) => {
         .post(`${process.env.REACT_APP_SERVER_URL}/user/announcement`, formData, {
           headers: {
             'content-type': 'multipart/form-data',
+            'auth-token':localStorage.getItem('authtoken')
           },
         })
         .then(() => {
