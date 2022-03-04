@@ -62,6 +62,8 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
   const [displayName, setDisplayName] = useState(user.name);
 
   const myData = JSON.parse(window.localStorage.getItem('user'));
+  console.log(myData.username);
+  console.log(user.username);
 
   useEffect(() => {
     let value = JSON.parse(window.localStorage.getItem('user'));
@@ -197,7 +199,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
         url: `${process.env.REACT_APP_SERVER_URL}/user/follow`,
         headers: {
           'content-type': 'application/json',
-          'auth-token':localStorage.getItem('authtoken')
+          'auth-token': localStorage.getItem('authtoken'),
         },
         data: followData,
       })
@@ -219,7 +221,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
         url: `${process.env.REACT_APP_SERVER_URL}/user/unfollow`,
         headers: {
           'content-type': 'application/json',
-          'auth-token':localStorage.getItem('authtoken')
+          'auth-token': localStorage.getItem('authtoken'),
         },
         data: followData,
       })
@@ -250,7 +252,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
       data: UnPinningData,
       headers: {
         'content-type': 'application/json',
-        'auth-token':localStorage.getItem('authtoken')
+        'auth-token': localStorage.getItem('authtoken'),
       },
     })
       .then(() => {
@@ -279,7 +281,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
       data: PinningData,
       headers: {
         'content-type': 'application/json',
-        'auth-token':localStorage.getItem('authtoken')
+        'auth-token': localStorage.getItem('authtoken'),
       },
     })
       .then(() => {
@@ -298,7 +300,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
       data: data,
       headers: {
         'content-type': 'application/json',
-        'auth-token':localStorage.getItem('authtoken')
+        'auth-token': localStorage.getItem('authtoken'),
       },
     })
       .then(() => {

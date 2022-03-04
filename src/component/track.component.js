@@ -61,6 +61,9 @@ export default function Track() {
       .then((value) => {
         setFavorites(value.data);
         //console.log('Favorites fetched!');
+      })
+      .catch((err) => {
+        console.log(err);
       });
   };
 
@@ -82,15 +85,15 @@ export default function Track() {
 
   const getDBeatsTracks = async () => {
     let data = await axios
-      .get('/dbeats-music')
+      .get(`${process.env.REACT_APP_SERVER_URL}/dbeats-music`)
       .then(function (response) {
-        ////console.log(response.data.data);
+        console.log(response.data);
         return response.data;
       })
       .catch(function (error) {
         console.log(error);
       });
-    //console.log(data.data[0].tracks);
+    console.log(data.data[0].tracks);
     if (data.data[0]) {
       let tracksArray = [];
       tracksArray.push(data.data[0].tracks);
@@ -159,7 +162,7 @@ export default function Track() {
       data: postData,
       headers: {
         'content-type': 'application/json',
-        'auth-token':localStorage.getItem('authtoken')
+        'auth-token': localStorage.getItem('authtoken'),
       },
     });
     get_favorites();
@@ -180,7 +183,7 @@ export default function Track() {
       data: postData,
       headers: {
         'content-type': 'application/json',
-        'auth-token':localStorage.getItem('authtoken')
+        'auth-token': localStorage.getItem('authtoken'),
       },
     });
     get_favorites();

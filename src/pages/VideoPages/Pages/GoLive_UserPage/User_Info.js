@@ -110,7 +110,7 @@ const UserInfo = () => {
       data: postData,
       headers: {
         'content-type': 'application/json',
-        'auth-token':localStorage.getItem('authtoken')
+        'auth-token': localStorage.getItem('authtoken'),
       },
     });
 
@@ -301,8 +301,8 @@ const UserInfo = () => {
             url: `${process.env.REACT_APP_SERVER_URL}/user/uploadThumbnail`,
             data: data,
             headers: {
-              'content-type': 'application/json',
-              'auth-token':localStorage.getItem('authtoken')
+              'content-type': 'multipart/form-data',
+              'auth-token': localStorage.getItem('authtoken'),
             },
           });
           if (res.data == 'success') {
