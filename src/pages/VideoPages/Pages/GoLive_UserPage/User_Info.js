@@ -277,6 +277,26 @@ const UserInfo = () => {
   };
 
   // Thumbnail
+  async function storeThumbnail(files) {
+    // show the root cid as soon as it's ready
+    const onRootCidReady = (cid) => {};
+    const file = [files[0]];
+    const totalSize = files[0].size;
+    let uploaded = 0;
+    const onStoredChunk = (size) => {
+      uploaded += size;
+      const pct = totalSize / uploaded;
+      // setUploading(10 - pct);
+      // console.log(`Uploading... ${pct}% complete`);
+    };
+
+    // makeStorageClient returns an authorized Web3.Storage client instance
+    const client = makeStorageClient();
+
+    // client.put will invoke our callbacks during the upload
+    // and return the root cid when the upload completes
+    return client.put(file, { onRootCidReady, onStoredChunk });
+  }
   const onFileChange = (event) => {
     // Update the state
     setSelectedFile({
@@ -288,7 +308,7 @@ const UserInfo = () => {
     e.preventDefault();
     if (selectedFile) {
       setUploadingFile(true);
-      storeWithProgress(selectedFile.file)
+      storeThumbnail(selectedFile.file)
         .then(async (cid) => {
           setUploadingFile(false);
           console.log('https://ipfs.io/ipfs/' + cid + '/' + selectedFile.file[0].name);
@@ -301,7 +321,7 @@ const UserInfo = () => {
             url: `${process.env.REACT_APP_SERVER_URL}/user/uploadThumbnail`,
             data: data,
             headers: {
-              'content-type': 'multipart/form-data',
+              'content-type': 'application/json',
               'auth-token': localStorage.getItem('authtoken'),
             },
           });
