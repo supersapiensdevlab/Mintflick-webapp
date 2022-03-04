@@ -1,26 +1,19 @@
+import { Splide, SplideSlide } from '@splidejs/react-splide';
+import '@splidejs/splide/dist/css/themes/splide-skyblue.min.css';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import Carousel from 'react-grid-carousel';
 import Lottie from 'react-lottie';
+import Modal from 'react-modal';
 import { useSelector } from 'react-redux';
-import logo from '../..//assets/images/logo.svg';
+import Billboard from '../../component/Billboard/Billboard-Card';
+import ProfileCard from '../../component/Cards/ProfileCard';
+import Dropdown from '../../component/dropdown.component';
+import FeedbackForm from '../../component/form/feedbackForm';
+import MainToolbar from '../../component/Toolbar/main-toolbar';
 import animationData from '../../lotties/gamers.json';
 import ResponsiveCarousel from './Cards/HomeSlider';
 import LiveCard from './Cards/LiveCard';
 import PlayBackCard from './Cards/PlayBackCard';
-// import {Helmet} from "react-helmet";
-import { Link } from 'react-router-dom';
-import Dropdown from '../../component/dropdown.component';
-import FeedbackForm from '../../component/form/feedbackForm';
-import { ReactComponent as Verified } from '../../assets/icons/verified-account.svg';
-import MainToolbar from '../../component/Toolbar/main-toolbar';
-import maticLogo from '../../assets/graphics/polygon-matic-logo.svg';
-import Modal from 'react-modal';
-import ProfileCard from '../../component/Cards/ProfileCard';
-import Billboard from '../../component/Billboard/Billboard-Card';
-import { Splide, SplideSlide } from '@splidejs/react-splide';
-import '@splidejs/splide/dist/css/themes/splide-skyblue.min.css';
-import { AutoScroll } from '@splidejs/splide-extension-auto-scroll';
 
 Modal.setAppElement('#root');
 
@@ -386,7 +379,7 @@ const Home = () => {
                     ? verifiedUser.map((verifieduser, i) => {
                         return (
                           <SplideSlide className="px-2" key={i} data-splide-interval="1000">
-                            <ProfileCard key={i + verifiedUser.length} user={verifieduser} />
+                            <ProfileCard user={verifieduser} />
                           </SplideSlide>
                         );
                       })

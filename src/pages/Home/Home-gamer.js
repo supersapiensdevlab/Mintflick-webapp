@@ -3,20 +3,17 @@ import React, { useEffect, useState } from 'react';
 import Carousel from 'react-grid-carousel';
 import Lottie from 'react-lottie';
 import { useSelector } from 'react-redux';
-import logo from '../../assets/images/logo.svg';
+// import {Helmet} from "react-helmet";
+import { Link } from 'react-router-dom';
+import { ReactComponent as Verified } from '../../assets/icons/verified-account.svg';
 import dbeatsLogoBnW from '../../assets/images/Logo/logo-blacknwhite.png';
-
+import Dropdown from '../../component/dropdown.component';
+import FeedbackForm from '../../component/form/feedbackForm';
+import MainToolbar from '../../component/Toolbar/main-toolbar';
 import animationData from '../../lotties/gamers.json';
 import ResponsiveCarousel from './Cards/HomeSlider';
 import LiveCard from './Cards/LiveCard';
 import PlayBackCardGamer from './Cards/PlayBackCard-gamer';
-// import {Helmet} from "react-helmet";
-import { Link } from 'react-router-dom';
-import Dropdown from '../../component/dropdown.component';
-import FeedbackForm from '../../component/form/feedbackForm';
-import MainToolbar from '../../component/Toolbar/main-toolbar';
-
-import { ReactComponent as Verified } from '../../assets/icons/verified-account.svg';
 
 const Home = () => {
   const [activeStreams, setActiveStreams] = useState([]);

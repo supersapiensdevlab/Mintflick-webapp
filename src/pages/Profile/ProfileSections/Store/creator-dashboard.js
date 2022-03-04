@@ -6,8 +6,7 @@ import { useHistory } from 'react-router-dom';
 //import { useRouter } from 'next/router';
 import Web3Modal from 'web3modal';
 import Market from '../../../../artifacts/contracts/Market.sol/NFTMarket.json';
-import NFT from '../../../../artifacts/contracts/NFT.sol/NFT.json';
-import { nftaddress, nftmarketaddress } from '../config';
+import { nftmarketaddress } from '../../../../functions/config';
 
 const client = ipfsHttpClient('https://ipfs.infura.io:5001/api/v0');
 
@@ -24,6 +23,7 @@ export default function CreateItem() {
       const added = await client.add(file, {
         progress: (prog) => console.log(`received: ${prog}`),
       });
+      console.log('added', added);
       const url = `https://ipfs.infura.io/ipfs/${added.path}`;
       setFileUrl(url);
     } catch (error) {
@@ -41,6 +41,7 @@ export default function CreateItem() {
     });
     try {
       const added = await client.add(data);
+      console.log('added', added);
       const url = `https://ipfs.infura.io/ipfs/${added.path}`;
       /* after file is uploaded to IPFS, pass the URL to save it on Polygon */
       createSale(url);
@@ -58,22 +59,19 @@ export default function CreateItem() {
     const signer = provider.getSigner();
 
     /* next, create the item */
-    let contract = new ethers.Contract(nftaddress, NFT.abi, signer);
-    let transaction = await contract.createToken(url);
-    let tx = await transaction.wait();
-    let event = tx.events[0];
-    let value = event.args[2];
-    let tokenId = value.toNumber();
+    let contract = new ethers.Contract(nftmarketaddress, Market.abi, signer);
     const price = ethers.utils.parseUnits(formInput.price, 'ether');
 
-    /* then list the item for sale on the marketplace */
-    contract = new ethers.Contract(nftmarketaddress, Market.abi, signer);
-    let listingPrice = await contract.getListingPrice();
-    listingPrice = listingPrice.toString();
-    transaction = await contract.createMarketItem(nftaddress, tokenId, price, {
-      value: listingPrice,
-    });
+    let transaction = await contract.createToken(url, price);
     await transaction.wait();
+    //let event = tx.events[0];
+    //let value = event.args[2];
+    //let tokenId = value.toNumber();
+    // {
+    //   value: listingPrice,
+    // }
+    //transaction = await contract.createMarketItem(tokenId, price);
+    //await transaction.wait();
     history.push('/');
   }
 

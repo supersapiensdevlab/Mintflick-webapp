@@ -145,8 +145,8 @@ const AnnouncementCard = (props) => {
                   className={`${!seeMore ? 'line-clamp-4' : ''} mr-2  `}
                   style={{ wordBreak: 'break-words' }}
                 >
-                  {announcement.split('\n').map(function (item) {
-                    return <div dangerouslySetInnerHTML={{ __html: item }}></div>;
+                  {announcement.split('\n').map(function (item, key) {
+                    return <div key={key} dangerouslySetInnerHTML={{ __html: item }}></div>;
                   })}
                   {}
                 </p>

@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import Web3Modal from 'web3modal';
 import Market from '../../../../artifacts/contracts/Market.sol/NFTMarket.json';
 import NFT from '../../../../artifacts/contracts/NFT.sol/NFT.json';
-import { nftaddress, nftmarketaddress } from '../config';
+import { nftaddress, nftmarketaddress } from '../../../../functions/config';
 
 export default function CreatorDashboard() {
   const [nfts, setNfts] = useState([]);

@@ -1,6 +1,6 @@
-import { Web3Provider } from '@ethersproject/providers';
+//import { Web3Provider } from '@ethersproject/providers';
 import { Menu, Transition } from '@headlessui/react';
-import SuperfluidSDK from '@superfluid-finance/js-sdk';
+//import SuperfluidSDK from '@superfluid-finance/js-sdk';
 import axios from 'axios';
 import moment from 'moment';
 import React, { Fragment, useEffect, useState } from 'react';
@@ -14,12 +14,12 @@ import PageNotFound from '../../../../component/PageNotFound/PageNotFound';
 import VideoPlayer from '../../../../component/VideoPlayer/VideoPlayer';
 import animationDataNotFound from '../../../../lotties/error-animation.json';
 import RecommendedCard from './RecommendedCard';
-import dbeatsLogoBnW from '../../../../assets/images/Logo/logo-blacknwhite.png';
+//import dbeatsLogoBnW from '../../../../assets/images/Logo/logo-blacknwhite.png';
 import SuperfanModal from '../../../../component/Modals/SuperfanModal/superfan-modal';
 
-import maticLogo from '../../../../assets/graphics/polygon-matic-logo.svg';
-import Web3 from 'web3';
-import { Image } from 'react-img-placeholder';
+//import maticLogo from '../../../../assets/graphics/polygon-matic-logo.svg';
+//import Web3 from 'web3';
+//import { Image } from 'react-img-placeholder';
 
 // import {Helmet} from "react-helmet";
 
@@ -66,11 +66,11 @@ const PlayBackInfo = (props) => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const [showBuyCrypto, setShowBuyCrypto] = useState(false);
-  const buyCrypto = () => setShowBuyCrypto(!showBuyCrypto);
+  // const [showBuyCrypto, setShowBuyCrypto] = useState(false);
+  // const buyCrypto = () => setShowBuyCrypto(!showBuyCrypto);
 
-  const [showRecurring, setShowRecurring] = useState(false);
-  const toggleRecurring = () => setShowRecurring(!showRecurring);
+  // const [showRecurring, setShowRecurring] = useState(false);
+  // const toggleRecurring = () => setShowRecurring(!showRecurring);
 
   const [show, setShow] = useState(false);
 
@@ -440,37 +440,37 @@ const PlayBackInfo = (props) => {
 
   ////console.log(arrayData);
 
-  const testFlow = async (amount) => {
-    const walletAddress = await window.ethereum.request({
-      method: 'eth_requestAccounts',
-      params: [
-        {
-          eth_accounts: {},
-        },
-      ],
-    });
-    const sf = new SuperfluidSDK.Framework({
-      ethers: new Web3Provider(window.ethereum),
-    });
-    await sf.initialize();
+  // const testFlow = async (amount) => {
+  //   const walletAddress = await window.ethereum.request({
+  //     method: 'eth_requestAccounts',
+  //     params: [
+  //       {
+  //         eth_accounts: {},
+  //       },
+  //     ],
+  //   });
+  //   const sf = new SuperfluidSDK.Framework({
+  //     ethers: new Web3Provider(window.ethereum),
+  //   });
+  //   await sf.initialize();
 
-    const carol2 = sf.user({
-      address: walletAddress[0],
+  //   const carol2 = sf.user({
+  //     address: walletAddress[0],
 
-      // fDAIx token, which is a test Super Token on Goerli network  0xF2d68898557cCb2Cf4C10c3Ef2B034b2a69DAD00
-      //MATICx Tokens 0x96B82B65ACF7072eFEb00502F45757F254c2a0D4
-      token: '0x96B82B65ACF7072eFEb00502F45757F254c2a0D4',
-    });
-    let finalAmount = 385802469135 * amount;
-    await carol2.flow({
-      recipient: '0x7095b5921592D02C446C2C7bEF145D441Ab270ff',
-      // This flow rate is equivalent to 1 tokens per month, for a token with 18 decimals.
-      flowRate: finalAmount.toString(),
-    });
+  //     // fDAIx token, which is a test Super Token on Goerli network  0xF2d68898557cCb2Cf4C10c3Ef2B034b2a69DAD00
+  //     //MATICx Tokens 0x96B82B65ACF7072eFEb00502F45757F254c2a0D4
+  //     token: '0x96B82B65ACF7072eFEb00502F45757F254c2a0D4',
+  //   });
+  //   let finalAmount = 385802469135 * amount;
+  //   await carol2.flow({
+  //     recipient: '0x7095b5921592D02C446C2C7bEF145D441Ab270ff',
+  //     // This flow rate is equivalent to 1 tokens per month, for a token with 18 decimals.
+  //     flowRate: finalAmount.toString(),
+  //   });
 
-    //const details = await carol2.details();
-    //console.log(details.cfa.flows.outFlows[0]);
-  };
+  //   //const details = await carol2.details();
+  //   //console.log(details.cfa.flows.outFlows[0]);
+  // };
 
   return (
     <>
