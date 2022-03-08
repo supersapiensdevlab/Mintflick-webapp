@@ -1,6 +1,6 @@
 import { Web3Provider } from '@ethersproject/providers';
 import SuperfluidSDK from '@superfluid-finance/js-sdk';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Container } from 'react-bootstrap';
 import Modal from 'react-modal';
 import { useSelector } from 'react-redux';
@@ -19,7 +19,9 @@ const SuperfanModal = ({ show, handleClose, userDataDetails }) => {
   const darkMode = useSelector((darkmode) => darkmode.toggleDarkMode);
 
   const [showBuyCrypto, setShowBuyCrypto] = useState(false);
-  const buyCrypto = () => setShowBuyCrypto(!showBuyCrypto);
+  const buyCrypto = () => {
+    setShowBuyCrypto(!showBuyCrypto);
+  };
 
   const [showRecurring, setShowRecurring] = useState(false);
   const toggleRecurring = () => setShowRecurring(!showRecurring);
@@ -463,7 +465,7 @@ const SuperfanModal = ({ show, handleClose, userDataDetails }) => {
                   ></img>
                 </>
               ) : (
-                'Cancel'
+                'Back'
               )}
             </button>
             {showBuyCrypto ? (

@@ -9,6 +9,7 @@ import { makeStorageClient } from '../../../../component/uploadHelperFunction';
 import VideoPlayer from '../../../../component/VideoPlayer/VideoPlayer';
 import classes from '../Info.module.css';
 import LiveChat from '../LivePublicPage/LiveChat';
+import { io } from 'socket.io-client';
 
 const UserInfo = () => {
   const user = JSON.parse(window.localStorage.getItem('user'));
@@ -21,6 +22,7 @@ const UserInfo = () => {
   const [modalShow, setModalShow] = useState(false);
   const [showStreamModal, setShowStreamModal] = useState(false);
   const [showDestinationModal, setShowDestinationModal] = useState(false);
+  const [showPriceModal, setShowPriceModal] = useState(false);
 
   //MultiStreams
   const [userStreams, setUserStreams] = useState([]);
@@ -66,6 +68,10 @@ const UserInfo = () => {
     royality: '',
   });
 
+  //socket
+  const [currentSocket, setCurrentSocket] = useState(null);
+  const [livestreamViews, setLivestreamViews] = useState(0);
+
   useEffect(() => {
     if (user.multistream_platform) {
       ////console.log("hello",user.multistream_platform)
@@ -83,6 +89,30 @@ const UserInfo = () => {
     setUserStreams(user.livepeer_data);
     // eslint-disable-next-line
   }, []);
+
+  // useEffect(() => {
+  //   const socket = io('http://localhost:800', { transports: ['websocket'], upgrade: false });
+  //   socket.on('connection');
+  //   socket
+  //     .off('count', (data) => {
+  //       console.log(data);
+  //     })
+  //     .on('count', (data) => {
+  //       console.log(data.num);
+  //       setLivestreamViews(data.num);
+  //     });
+  //   // socket.on('getCount', (views) => {
+  //   //   console.log(views);
+  //   //   setLivestreamViews(views);
+  //   // });
+  //   // socket.emit('get-count', livestreamViews);
+  //   // socket.on('get-views', (count) => {
+  //   //   setLivestreamViews(count);
+  //   //   console.log(count);
+  //   // });
+  // }, []);
+
+  // console.log(livestreamViews);
 
   //set Stream Key
   const handleChange = (e) => {
@@ -564,10 +594,14 @@ const UserInfo = () => {
                     Start Recording
                   </button>
                   <button
-                    className={`text-center rounded-md w-full 
-                          ${!recording ? 'bg-red-300' : 'bg-red-600'} mx-2 py-2`}
-                    disabled={!recording}
-                    onClick={stopRecording}
+                    variant="primary"
+                    className="bg-dbeats-dark-secondary text-center content-center justify-center align-middle hover:nm-inset-dbeats-light flex text-white rounded-3xl font-bold px-4 py-3 tracking-widest w-max"
+                    type="button"
+                    onClick={
+                      multiStreamConnected.length < 3
+                        ? () => setShowDestinationModal(true)
+                        : () => setShowPriceModal(true)
+                    }
                   >
                     Stop Recording
                   </button>
@@ -1032,6 +1066,19 @@ const UserInfo = () => {
             </div>
           </div>
         )}
+      <Modal
+        isOpen={showPriceModal}
+        className="h-max lg:w-1/3 w-5/6 mx-auto 2xl:mt-24 lg:mt-16 mt-24 shadow-xl bg-white"
+      >
+        <h2 className="grid grid-cols-5 justify-items-center rounded-t-xl w-full dark:rounded-t-sm text-2xl py-4 dark:bg-dbeats-dark-alt bg-white dark:text-white">
+          <div className="col-span-4 pl-14 text-lg lg:text-2xl text-center">
+            To add more than 3 platforms you have to pay $10
+          </div>
+          <div className="mr-7 flex justify-end w-full" onClick={() => setShowPriceModal(false)}>
+            <i className="fas fa-times cursor-pointer mr-3"></i>
+          </div>
+        </h2>
+      </Modal>
     </Fragment>
   );
 };

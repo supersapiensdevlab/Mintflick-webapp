@@ -7,7 +7,10 @@ import useWeb3Modal from '../../hooks/useWeb3Modal';
 import ForgotPasswordForm from './component/ForgotPasswordForm';
 import LoginForm from './component/LoginForm';
 import SignupForm from './component/SignupForm';
+import { CHAIN_NAMESPACES, CustomChainConfig } from '@web3auth/base';
 
+import Web3 from 'web3';
+import { Web3Auth } from '@web3auth/web3auth';
 const Moralis = require('moralis');
 
 const Login = () => {
@@ -21,7 +24,20 @@ const Login = () => {
   const [loader, setLoader] = useState(true);
   const [resetPasswordEmail, setResetPasswordEmail] = useState('');
   const [forgotPassword, setForgotPassword] = useState(false);
-
+  const [account, setAccount] = useState('');
+  const web3auth = new Web3Auth({
+    chainConfig: {
+      chainNamespace: CHAIN_NAMESPACES.EIP155,
+      rpcTarget: 'https://rpc-mumbai.maticvigil.com',
+      blockExplorer: 'https://mumbai-explorer.matic.today',
+      chainId: '0x13881',
+      displayName: 'Polygon Mumbai Testnet',
+      ticker: 'matic',
+      tickerName: 'matic',
+    },
+    clientId:
+      'BFrU6JsPLNdCdC1jb72ye0Pwc1ViJVl4D9aSqT2qdgPxrUZ79CbwxnhTimVo5cRrXPbGsVWGEYhl0bgIiGhmZc0', // get your clientId from https://developer.web3auth.io
+  });
   // Metamask Auth
   function WalletButton({ provider, loadWeb3Modal, logoutOfWeb3Modal }) {
     return (
@@ -31,28 +47,34 @@ const Login = () => {
           ${!provider ? 'cursor-pointer' : 'cursor-default'} `}
           onClick={async () => {
             if (!provider) {
-              loadWeb3Modal();
+              let variable = await loadWeb3Modal();
+              const web3 = new Web3(variable);
+              const accounts = await web3.eth.getAccounts();
+              setAccount(accounts[0]);
+              console.log('pubKey', accounts);
+              if (provider) {
+                await axios
+                  .get(`${process.env.REACT_APP_SERVER_URL}/user/getuser_by_wallet/${accounts[0]}`)
+                  .then((value) => {
+                    window.localStorage.setItem('user', JSON.stringify(value.data.user));
+                    window.localStorage.setItem('authtoken', JSON.stringify(value.data.jwtToken));
+                    window.location.href = '/';
+                  });
+              }
             } else {
               logoutOfWeb3Modal();
             }
           }}
           disabled={provider ? true : false}
         >
-          <p className="mt-2">
+          <p className=" ">
             {' '}
             {!provider
-              ? 'Connect MetaMask '
-              : `Connected (${
-                  provider.provider.selectedAddress.slice(0, 4) +
-                  '...' +
-                  provider.provider.selectedAddress.slice(-4)
+              ? 'Connect your Wallet '
+              : `Connected  (${
+                  account ? account.slice(0, 8) : '' + '...' + account ? account.slice(-4) : ''
                 })`}
           </p>
-          <img
-            className="2xl:w-12 2xl:h-12 lg:w-9 lg:h-9 h-9 w-9 rounded-full self-center"
-            alt="metamask button"
-            src="https://raw.githubusercontent.com/MetaMask/brand-resources/master/SVG/metamask-fox.svg"
-          ></img>
         </button>
       </div>
     );
@@ -67,25 +89,28 @@ const Login = () => {
           type="button"
           onClick={async () => {
             let variable = await loadWeb3Modal();
+            const web3 = new Web3(variable);
+            const accounts = await web3.eth.getAccounts();
+            setAccount(accounts[0]);
+            console.log('pubKey', accounts);
             if (provider && variable) {
               await axios
-                .get(
-                  `${process.env.REACT_APP_SERVER_URL}/user/getuser_by_wallet/${provider.provider.selectedAddress}`,
-                )
+                .get(`${process.env.REACT_APP_SERVER_URL}/user/getuser_by_wallet/${account}`)
                 .then((value) => {
                   window.localStorage.setItem('user', JSON.stringify(value.data.user));
-                  window.localStorage.setItem('authtoken', value.data.jwtToken);
+                  window.localStorage.setItem('authtoken', JSON.stringify(value.data.jwtToken));
                   window.location.href = '/';
                 });
             }
           }}
         >
-          <p className="mt-2">{!provider ? 'Login using ' : `MetaMask Connected (Click Again)`}</p>
-          <img
-            className="2xl:w-12 2xl:h-12 lg:w-9 lg:h-9 h-9 w-9 rounded-full self-center"
-            alt="metamask login"
-            src="https://raw.githubusercontent.com/MetaMask/brand-resources/master/SVG/metamask-fox.svg"
-          ></img>
+          <p className=" ">
+            {!provider
+              ? 'Login using Wallet'
+              : `(${
+                  account ? account.slice(0, 8) : '' + '...' + account ? account.slice(-4) : ''
+                })  Connected (Click Again)`}
+          </p>
         </Button>
       </div>
     );
