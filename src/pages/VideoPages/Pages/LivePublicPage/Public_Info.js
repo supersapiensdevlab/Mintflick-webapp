@@ -43,7 +43,7 @@ const PublicInfo = (props) => {
 
   const [playbackUrl, setPlaybackUrl] = useState('');
 
-  const [livestreamViews, setLivestreamViews] = useState(0);
+  const [livestreamViews, setLivestreamViews] = useState(null);
 
   const [showSubscriptionModal, setshowSubscriptionModal] = useState(false);
   const handleCloseSubscriptionModal = () => setshowSubscriptionModal(false);
@@ -178,6 +178,16 @@ const PublicInfo = (props) => {
         setLivestreamViews(details.roomSize);
       }
     });
+    socket.on('livecount', (details) => {
+      setLivestreamViews(details.roomSize);
+      console.log('emitted');
+      console.log('inc', livestreamViews);
+    });
+    socket.on('removecount', (roomSize) => {
+      setLivestreamViews(roomSize);
+      console.log('removecount emitted');
+      console.log('dec', livestreamViews);
+    });
     // socket
     //   .off('count', (data) => {
     //     console.log(data);
@@ -187,8 +197,6 @@ const PublicInfo = (props) => {
     //     setLivestreamViews(data.num);
     //   });
   }, []);
-
-  console.log(livestreamViews);
 
   const testFlow = async (amount) => {
     const walletAddress = await window.ethereum.request({
