@@ -8,6 +8,7 @@ import Dropdown from '../../../../component/dropdown.component';
 import { makeStorageClient } from '../../../../component/uploadHelperFunction';
 import VideoPlayer from '../../../../component/VideoPlayer/VideoPlayer';
 import classes from '../Info.module.css';
+import { io } from 'socket.io-client';
 
 const UserInfo = () => {
   const user = JSON.parse(window.localStorage.getItem('user'));
@@ -20,6 +21,7 @@ const UserInfo = () => {
   const [modalShow, setModalShow] = useState(false);
   const [showStreamModal, setShowStreamModal] = useState(false);
   const [showDestinationModal, setShowDestinationModal] = useState(false);
+  const [showPriceModal, setShowPriceModal] = useState(false);
 
   //MultiStreams
   const [userStreams, setUserStreams] = useState([]);
@@ -65,6 +67,10 @@ const UserInfo = () => {
     royality: '',
   });
 
+  //socket
+  const [currentSocket, setCurrentSocket] = useState(null);
+  const [livestreamViews, setLivestreamViews] = useState(0);
+
   useEffect(() => {
     if (user.multistream_platform) {
       ////console.log("hello",user.multistream_platform)
@@ -82,6 +88,30 @@ const UserInfo = () => {
     setUserStreams(user.livepeer_data);
     // eslint-disable-next-line
   }, []);
+
+  // useEffect(() => {
+  //   const socket = io('http://localhost:800', { transports: ['websocket'], upgrade: false });
+  //   socket.on('connection');
+  //   socket
+  //     .off('count', (data) => {
+  //       console.log(data);
+  //     })
+  //     .on('count', (data) => {
+  //       console.log(data.num);
+  //       setLivestreamViews(data.num);
+  //     });
+  //   // socket.on('getCount', (views) => {
+  //   //   console.log(views);
+  //   //   setLivestreamViews(views);
+  //   // });
+  //   // socket.emit('get-count', livestreamViews);
+  //   // socket.on('get-views', (count) => {
+  //   //   setLivestreamViews(count);
+  //   //   console.log(count);
+  //   // });
+  // }, []);
+
+  // console.log(livestreamViews);
 
   //set Stream Key
   const handleChange = (e) => {
@@ -108,6 +138,10 @@ const UserInfo = () => {
       method: 'post',
       url: `${process.env.REACT_APP_SERVER_URL}/user/add_multistream_platform`,
       data: postData,
+      headers: {
+        'content-type': 'application/json',
+        'auth-token': localStorage.getItem('authtoken'),
+      },
     });
 
     setMultiStreamConnected([...multiStreamConnected, postData]);
@@ -273,6 +307,26 @@ const UserInfo = () => {
   };
 
   // Thumbnail
+  async function storeThumbnail(files) {
+    // show the root cid as soon as it's ready
+    const onRootCidReady = (cid) => {};
+    const file = [files[0]];
+    const totalSize = files[0].size;
+    let uploaded = 0;
+    const onStoredChunk = (size) => {
+      uploaded += size;
+      const pct = totalSize / uploaded;
+      // setUploading(10 - pct);
+      // console.log(`Uploading... ${pct}% complete`);
+    };
+
+    // makeStorageClient returns an authorized Web3.Storage client instance
+    const client = makeStorageClient();
+
+    // client.put will invoke our callbacks during the upload
+    // and return the root cid when the upload completes
+    return client.put(file, { onRootCidReady, onStoredChunk });
+  }
   const onFileChange = (event) => {
     // Update the state
     setSelectedFile({
@@ -284,7 +338,7 @@ const UserInfo = () => {
     e.preventDefault();
     if (selectedFile) {
       setUploadingFile(true);
-      storeWithProgress(selectedFile.file)
+      storeThumbnail(selectedFile.file)
         .then(async (cid) => {
           setUploadingFile(false);
           console.log('https://ipfs.io/ipfs/' + cid + '/' + selectedFile.file[0].name);
@@ -296,6 +350,10 @@ const UserInfo = () => {
             method: 'POST',
             url: `${process.env.REACT_APP_SERVER_URL}/user/uploadThumbnail`,
             data: data,
+            headers: {
+              'content-type': 'application/json',
+              'auth-token': localStorage.getItem('authtoken'),
+            },
           });
           if (res.data == 'success') {
             axios.get(`${process.env.REACT_APP_SERVER_URL}/user/${user.username}`).then((value) => {
@@ -338,7 +396,10 @@ const UserInfo = () => {
       <div className="grid sm:grid-cols-1 lg:grid-cols-3 grid-flow-row pt-3 pb-50 2xl:mt-10 lg:mt-4 lg:ml-12  bg-gradient-to-b from-blue-50 via-blue-50 to-white  dark:bg-gradient-to-b dark:from-dbeats-dark-secondary  dark:to-dbeats-dark-secondary">
         <div className="lg:col-span-2 2xl:ml-8 lg:ml-2 self-center   w-screen lg:w-full dark:bg-dbeats-dark-primary   rounded  ">
           {user ? (
-            <VideoPlayer playbackUrl={playbackUrl} creatorData={user} footer={false} />
+            <>
+              <VideoPlayer playbackUrl={playbackUrl} creatorData={user} footer={false} />
+              {/* <p className="text-white text-lg p-3">{livestreamViews} live viewers</p> */}
+            </>
           ) : null}
         </div>
         <div className="text-sm mx-auto col-span-1  2xl:mt-10 lg:mt-4 mb-6 max-w-md">
@@ -468,7 +529,11 @@ const UserInfo = () => {
                     variant="primary"
                     className="bg-dbeats-dark-secondary text-center content-center justify-center align-middle hover:nm-inset-dbeats-light flex text-white rounded-3xl font-bold px-4 py-3 tracking-widest w-max"
                     type="button"
-                    onClick={() => setShowDestinationModal(true)}
+                    onClick={
+                      multiStreamConnected.length < 3
+                        ? () => setShowDestinationModal(true)
+                        : () => setShowPriceModal(true)
+                    }
                   >
                     Add MultiStream Platforms
                     <i className="fas fa-solid fa-video mx-4 cursor-pointer pt-1"></i>
@@ -789,6 +854,19 @@ const UserInfo = () => {
             </div>
           </div>
         </main>
+      </Modal>
+      <Modal
+        isOpen={showPriceModal}
+        className="h-max lg:w-1/3 w-5/6 mx-auto 2xl:mt-24 lg:mt-16 mt-24 shadow-xl bg-white"
+      >
+        <h2 className="grid grid-cols-5 justify-items-center rounded-t-xl w-full dark:rounded-t-sm text-2xl py-4 dark:bg-dbeats-dark-alt bg-white dark:text-white">
+          <div className="col-span-4 pl-14 text-lg lg:text-2xl text-center">
+            To add more than 3 platforms you have to pay $10
+          </div>
+          <div className="mr-7 flex justify-end w-full" onClick={() => setShowPriceModal(false)}>
+            <i className="fas fa-times cursor-pointer mr-3"></i>
+          </div>
+        </h2>
       </Modal>
     </Fragment>
   );

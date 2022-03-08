@@ -29,6 +29,10 @@ const FeedbackForm = () => {
       method: 'POST',
       url: `${process.env.REACT_APP_SERVER_URL}/user/send_feedback`,
       data: feedbackData,
+      headers: {
+        'content-type': 'application/json',
+        'auth-token':localStorage.getItem('authtoken')
+      },
     })
       .then((response) => {
         console.log('success');

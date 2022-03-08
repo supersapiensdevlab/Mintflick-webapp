@@ -388,6 +388,7 @@ const UploadTrackModal = (props) => {
           .post(`${process.env.REACT_APP_SERVER_URL}/upload_music`, formData, {
             headers: {
               'content-type': 'multipart/form-data',
+              'auth-token':localStorage.getItem('authtoken')
             },
           })
           .then(function (response) {

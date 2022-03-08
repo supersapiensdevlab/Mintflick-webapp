@@ -139,6 +139,7 @@ export const UploadCoverImageModal = ({
           .post(`${process.env.REACT_APP_SERVER_URL}/user/coverimage`, formData, {
             headers: {
               'content-type': 'multipart/form-data',
+                'auth-token':localStorage.getItem('authtoken')
             },
           })
           .then((res) => {
@@ -327,6 +328,7 @@ export const UploadProfileImageModal = ({
           .post(`${process.env.REACT_APP_SERVER_URL}/user/profileimage`, formData, {
             headers: {
               'content-type': 'multipart/form-data',
+                'auth-token':localStorage.getItem('authtoken')
             },
           })
           .then((res) => {

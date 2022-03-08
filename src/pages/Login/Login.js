@@ -58,7 +58,6 @@ const Login = () => {
                   .then((value) => {
                     window.localStorage.setItem('user', JSON.stringify(value.data.user));
                     window.localStorage.setItem('authtoken', JSON.stringify(value.data.jwtToken));
-
                     window.location.href = '/';
                   });
               }
