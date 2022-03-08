@@ -8,6 +8,7 @@ import Dropdown from '../../../../component/dropdown.component';
 import { makeStorageClient } from '../../../../component/uploadHelperFunction';
 import VideoPlayer from '../../../../component/VideoPlayer/VideoPlayer';
 import classes from '../Info.module.css';
+import LiveChat from '../LivePublicPage/LiveChat';
 
 const UserInfo = () => {
   const user = JSON.parse(window.localStorage.getItem('user'));
@@ -363,179 +364,218 @@ const UserInfo = () => {
   // console.log(user);
   return (
     <Fragment className={`${darkMode && 'dark'}`}>
-      <div className="grid sm:grid-cols-1 lg:grid-cols-3 grid-flow-row pt-3 pb-50 2xl:mt-10 lg:mt-4 lg:ml-12  bg-gradient-to-b from-blue-50 via-blue-50 to-white  dark:bg-gradient-to-b dark:from-dbeats-dark-secondary  dark:to-dbeats-dark-secondary">
-        <div className="lg:col-span-2 2xl:ml-8 lg:ml-2 self-center   w-screen lg:w-full dark:bg-dbeats-dark-primary   rounded  ">
-          {user ? (
-            <VideoPlayer playbackUrl={playbackUrl} creatorData={user} footer={false} />
-          ) : null}
-        </div>
-        <div className="text-sm mx-auto col-span-1  2xl:mt-10 lg:mt-4 mb-6 max-w-md">
-          <div className="bg-white dark:bg-dbeats-dark-primary dark:text-dbeats-white w-80 border border-dbeats-light border-opacity-40  2xl:w-full  p-5 rounded text-sm sm:lg:text-xl shadow mt-6  lg:ml-0 ">
-            <div className="grid grid-cols-2">
-              <div className="pb-2">
-                <span className="font-semibold tracking-widest">Name</span>
-                <p className="opacity-50">{user.name}</p>
-              </div>
-              <div className="pb-2">
-                <span className="font-semibold tracking-widest">Username</span>
-                <p className="opacity-50">{user.username}</p>
-              </div>
-            </div>
-
-            <div className="pb-2">
-              <span className="font-semibold tracking-widest">RTMP URL</span>
-              <div className="flex">
-                <p className="opacity-50">rtmp://rtmp.livepeer.com/live</p>
-                <i
-                  onClick={() => {
-                    navigator.clipboard.writeText('rtmp://rtmp.livepeer.com/live');
-                    setCopied('rtmp://rtmp.livepeer.com/live');
-                  }}
-                  className="fas fa-solid fa-copy mx-4 hover:text-dbeats-light cursor-pointer pt-1"
-                ></i>
-                {copied == 'rtmp://rtmp.livepeer.com/live' ? (
-                  <span className="text-dbeats-light">copied</span>
-                ) : null}
-              </div>
-            </div>
-            <hr width="95%" className="mt-2 mb-2  border-dbeats-white" />
-
-            <div className="pb-2">
-              <span className="font-semibold tracking-widest ">Streamer Key</span>
-              <div className="flex">
-                <p className="opacity-50">{userStreams.streamKey}</p>
-                <i
-                  onClick={() => {
-                    navigator.clipboard.writeText(userStreams.streamKey);
-                    setCopied(userStreams.streamKey);
-                  }}
-                  className="fas fa-solid fa-copy mx-4 hover:text-dbeats-light cursor-pointer pt-1 "
-                ></i>
-                {copied == userStreams.streamKey ? (
-                  <span className="text-dbeats-light">copied</span>
-                ) : null}
-              </div>
-            </div>
-            <div className="pb-2  break-words hidden">
-              <span className="font-semibold tracking-widest ">Playback URL</span>
-              <p className="opacity-50">{playbackUrl}</p>
-            </div>
-            <div className="pb-2  break-words">
-              <span className="font-semibold tracking-widest">Live URL</span>
-              <p>
-                <a
-                  className="opacity-50"
-                  href={`https://dbeats.live/live/${user.username}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  https://dbeats.live/live/{user.username}
-                </a>
-                <i
-                  onClick={() => {
-                    navigator.clipboard.writeText('https://dbeats.live/live/' + user.username);
-                    setCopied('https://dbeats.live/live/' + user.username);
-                  }}
-                  className="fas fa-solid fa-copy mx-4 hover:text-dbeats-light cursor-pointer pt-1 "
-                ></i>
-                {copied == 'https://dbeats.live/live/' + user.username ? (
-                  <span className="text-dbeats-light">copied</span>
-                ) : null}
-              </p>
-            </div>
-            <hr width="95%" className="mt-2 mb-2  border-dbeats-white" />
-            <div className="mb-4">
-              <h1 className="text-bold">Thumbnail </h1>
-              {selectedFile ? (
-                <img src={selectedFile.localurl} className="my-2 rounded max-h-72"></img>
-              ) : user.thumbnail ? (
-                <img src={user.thumbnail} className="my-2 rounded max-h-110"></img>
-              ) : null}
-              <form className="flex items-center" onSubmit={uploadThumbnail}>
-                <input
-                  name="image"
-                  type="file"
-                  accept=".jpg,.png,.jpeg,.gif,.webp"
-                  required={true}
-                  onChange={onFileChange}
-                />
-                <div className="p-1 nm-flat-dbeats-dark-primary rounded-3xl hover:nm-inset-dbeats-dark-primary">
+      <div className="grid sm:grid-cols-1 lg:grid-cols-3 grid-flow-row  pb-50  lg:ml-12  bg-gradient-to-b from-blue-50 via-blue-50 to-white  dark:bg-gradient-to-b dark:from-dbeats-dark-secondary  dark:to-dbeats-dark-primary">
+        <div className=" lg:col-span-2 pt-3 mt-10">
+          <div className="self-center lg:px-8 w-screen lg:w-full lg:mt-3 mt-0.5  ">
+            {' '}
+            {user ? (
+              <VideoPlayer playbackUrl={playbackUrl} creatorData={user} footer={false} />
+            ) : null}
+            {user.livepeer_data.isActive && (
+              <div className="dark:text-dbeats-white mt-3 ml-2">
+                <p className="text-md">To create NFT start Recording</p>
+                <div className="flex justify-between items-center w-full pt-2 text-white">
                   <button
-                    disabled={uploadingFile}
-                    type="submit"
-                    className={`${
-                      uploadingFile
-                        ? 'dark:bg-dbeats-dark-primary'
-                        : 'bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:nm-inset-dbeats-light-xs'
-                    }  px-4 py-2  rounded-3xl group flex items-center justify-center  `}
+                    className={`text-center rounded-md w-full 
+                          ${recording ? 'bg-green-300' : 'bg-green-600'} mx-2 py-2`}
+                    disabled={recording}
+                    onClick={startRecording}
                   >
-                    <p className="hidden md:inline">Upload</p>
+                    Start Recording
+                  </button>
+                  <button
+                    className={`text-center rounded-md w-full 
+                          ${!recording ? 'bg-red-300' : 'bg-red-600'} mx-2 py-2`}
+                    disabled={!recording}
+                    onClick={stopRecording}
+                  >
+                    Stop Recording
                   </button>
                 </div>
-                <div
-                  className="animate-spin rounded-full h-7 w-7 ml-3 border-t-2 border-b-2 bg-gradient-to-r from-green-400 to-blue-500 "
-                  hidden={!uploadingFile}
-                ></div>
-              </form>
-            </div>
-            <div>
-              <div className="flex flex-col">
-                <p className="text-center mb-1">Currently Connected :</p>
-                <div className="flex flex-wrap justify-center">
-                  {multiStreamConnected.map((value, index) => {
-                    ////console.log(value);
-                    return (
-                      <div key={index} className="m-1">
-                        <img src={value.platform.logo} alt="logo" className="h-6 lg:h-10 w-auto" />
-                      </div>
-                    );
-                  })}
-                </div>
-                <div className="nm-flat-dbeats-dark-primary p-1 rounded-3xl hover:nm-inset-dbeats-dark w-max mx-auto">
-                  <button
-                    variant="primary"
-                    className="bg-dbeats-dark-secondary text-center content-center justify-center align-middle hover:nm-inset-dbeats-light flex text-white rounded-3xl font-bold px-4 py-3 tracking-widest w-max"
-                    type="button"
-                    onClick={() => setShowDestinationModal(true)}
-                  >
-                    Add MultiStream Platforms
-                    <i className="fas fa-solid fa-video mx-4 cursor-pointer pt-1"></i>
-                  </button>
-                </div>
-                <div className={classes.multistream_form_spinner}>
-                  <Spinner
-                    animation="border"
-                    variant="info"
-                    role="status"
-                    hidden={loader}
-                  ></Spinner>
-                </div>
               </div>
-            </div>
-            <>
-              <hr width="95%" className="mt-2 mb-4" />
-              <p className="text-md">To create NFT start Recording</p>
-              <div className="flex justify-between items-center w-full pt-2 text-white">
-                <button
-                  className={`text-center rounded-md w-full 
-                    ${recording ? 'bg-green-300' : 'bg-green-600'} mx-2 py-2`}
-                  disabled={recording}
-                  onClick={startRecording}
-                >
-                  Start Recording
-                </button>
-                <button
-                  className={`text-center rounded-md w-full 
-                    ${!recording ? 'bg-red-300' : 'bg-red-600'} mx-2 py-2`}
-                  disabled={!recording}
-                  onClick={stopRecording}
-                >
-                  Stop Recording
-                </button>
-              </div>
-            </>
+            )}
           </div>
+
         </div>
+        {user.livepeer_data.isActive ? (
+          user.username && (
+            <div className="  w-full col-span-1" style={{ height: '100vh' }}>
+              <LiveChat userp={user} privateUser={user}></LiveChat>
+            </div>
+          )
+        ) : (
+          <div className="text-sm mx-auto col-span-1  2xl:mt-10 lg:mt-4 mb-6 max-w-md">
+            <div className="bg-white dark:bg-dbeats-dark-primary dark:text-dbeats-white w-80 border border-dbeats-light border-opacity-40  2xl:w-full  p-5 rounded text-sm sm:lg:text-xl shadow mt-6  lg:ml-0 ">
+              <div className="grid grid-cols-2">
+                <div className="pb-2">
+                  <span className="font-semibold tracking-widest">Name</span>
+                  <p className="opacity-50">{user.name}</p>
+                </div>
+                <div className="pb-2">
+                  <span className="font-semibold tracking-widest">Username</span>
+                  <p className="opacity-50">{user.username}</p>
+                </div>
+              </div>
+
+              <div className="pb-2">
+                <span className="font-semibold tracking-widest">RTMP URL</span>
+                <div className="flex">
+                  <p className="opacity-50">rtmp://rtmp.livepeer.com/live</p>
+                  <i
+                    onClick={() => {
+                      navigator.clipboard.writeText('rtmp://rtmp.livepeer.com/live');
+                      setCopied('rtmp://rtmp.livepeer.com/live');
+                    }}
+                    className="fas fa-solid fa-copy mx-4 hover:text-dbeats-light cursor-pointer pt-1"
+                  ></i>
+                  {copied == 'rtmp://rtmp.livepeer.com/live' ? (
+                    <span className="text-dbeats-light">copied</span>
+                  ) : null}
+                </div>
+              </div>
+              <hr width="95%" className="mt-2 mb-2  border-dbeats-white" />
+
+              <div className="pb-2">
+                <span className="font-semibold tracking-widest ">Streamer Key</span>
+                <div className="flex">
+                  <p className="opacity-50">{userStreams.streamKey}</p>
+                  <i
+                    onClick={() => {
+                      navigator.clipboard.writeText(userStreams.streamKey);
+                      setCopied(userStreams.streamKey);
+                    }}
+                    className="fas fa-solid fa-copy mx-4 hover:text-dbeats-light cursor-pointer pt-1 "
+                  ></i>
+                  {copied == userStreams.streamKey ? (
+                    <span className="text-dbeats-light">copied</span>
+                  ) : null}
+                </div>
+              </div>
+              <div className="pb-2  break-words hidden">
+                <span className="font-semibold tracking-widest ">Playback URL</span>
+                <p className="opacity-50">{playbackUrl}</p>
+              </div>
+              <div className="pb-2  break-words">
+                <span className="font-semibold tracking-widest">Live URL</span>
+                <p>
+                  <a
+                    className="opacity-50"
+                    href={`https://dbeats.live/live/${user.username}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    https://dbeats.live/live/{user.username}
+                  </a>
+                  <i
+                    onClick={() => {
+                      navigator.clipboard.writeText('https://dbeats.live/live/' + user.username);
+                      setCopied('https://dbeats.live/live/' + user.username);
+                    }}
+                    className="fas fa-solid fa-copy mx-4 hover:text-dbeats-light cursor-pointer pt-1 "
+                  ></i>
+                  {copied == 'https://dbeats.live/live/' + user.username ? (
+                    <span className="text-dbeats-light">copied</span>
+                  ) : null}
+                </p>
+              </div>
+              <hr width="95%" className="mt-2 mb-2  border-dbeats-white" />
+              <div className="mb-4">
+                <h1 className="text-bold">Thumbnail </h1>
+                {selectedFile ? (
+                  <img src={selectedFile.localurl} className="my-2 rounded max-h-72"></img>
+                ) : user.thumbnail ? (
+                  <img src={user.thumbnail} className="my-2 rounded max-h-110"></img>
+                ) : null}
+                <form className="flex items-center" onSubmit={uploadThumbnail}>
+                  <input
+                    name="image"
+                    type="file"
+                    accept=".jpg,.png,.jpeg,.gif,.webp"
+                    required={true}
+                    onChange={onFileChange}
+                  />
+                  <div className="p-1 nm-flat-dbeats-dark-primary rounded-3xl hover:nm-inset-dbeats-dark-primary">
+                    <button
+                      disabled={uploadingFile}
+                      type="submit"
+                      className={`${
+                        uploadingFile
+                          ? 'dark:bg-dbeats-dark-primary'
+                          : 'bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:nm-inset-dbeats-light-xs'
+                      }  px-4 py-2  rounded-3xl group flex items-center justify-center  `}
+                    >
+                      <p className="hidden md:inline">Upload</p>
+                    </button>
+                  </div>
+                  <div
+                    className="animate-spin rounded-full h-7 w-7 ml-3 border-t-2 border-b-2 bg-gradient-to-r from-green-400 to-blue-500 "
+                    hidden={!uploadingFile}
+                  ></div>
+                </form>
+              </div>
+              <div>
+                <div className="flex flex-col">
+                  <p className="text-center mb-1">Currently Connected :</p>
+                  <div className="flex flex-wrap justify-center">
+                    {multiStreamConnected.map((value, index) => {
+                      ////console.log(value);
+                      return (
+                        <div key={index} className="m-1">
+                          <img
+                            src={value.platform.logo}
+                            alt="logo"
+                            className="h-6 lg:h-10 w-auto"
+                          />
+                        </div>
+                      );
+                    })}
+                  </div>
+                  <div className="nm-flat-dbeats-dark-primary p-1 rounded-3xl hover:nm-inset-dbeats-dark w-max mx-auto">
+                    <button
+                      variant="primary"
+                      className="bg-dbeats-dark-secondary text-center content-center justify-center align-middle hover:nm-inset-dbeats-light flex text-white rounded-3xl font-bold px-4 py-3 tracking-widest w-max"
+                      type="button"
+                      onClick={() => setShowDestinationModal(true)}
+                    >
+                      Add MultiStream Platforms
+                      <i className="fas fa-solid fa-video mx-4 cursor-pointer pt-1"></i>
+                    </button>
+                  </div>
+                  <div className={classes.multistream_form_spinner}>
+                    <Spinner
+                      animation="border"
+                      variant="info"
+                      role="status"
+                      hidden={loader}
+                    ></Spinner>
+                  </div>
+                </div>
+              </div>
+              <>
+                <hr width="95%" className="mt-2 mb-4" />
+                <p className="text-md">To create NFT start Recording</p>
+                <div className="flex justify-between items-center w-full pt-2 text-white">
+                  <button
+                    className={`text-center rounded-md w-full 
+                          ${recording ? 'bg-green-300' : 'bg-green-600'} mx-2 py-2`}
+                    disabled={recording}
+                    onClick={startRecording}
+                  >
+                    Start Recording
+                  </button>
+                  <button
+                    className={`text-center rounded-md w-full 
+                          ${!recording ? 'bg-red-300' : 'bg-red-600'} mx-2 py-2`}
+                    disabled={!recording}
+                    onClick={stopRecording}
+                  >
+                    Stop Recording
+                  </button>
+                </div>
+              </>
+            </div>
+          </div>
+        )}
       </div>
       {newRecord === 1 ? (
         <div className="flex justify-between m-6 py-6 px-10 bg-dbeats-dark-secondary">
@@ -818,6 +858,180 @@ const UserInfo = () => {
           </div>
         </main>
       </Modal>
+
+      {user.livepeer_data.isActive &&  (
+          <div className="text-sm md:ml-20 col-span-1  2xl:mt-10 lg:mt-4 mb-6 max-w-md">
+            <div className="bg-white dark:bg-dbeats-dark-primary dark:text-dbeats-white w-80 border border-dbeats-light border-opacity-40  2xl:w-full  p-5 rounded text-sm sm:lg:text-xl shadow mt-6  lg:ml-0 ">
+              <div className="grid grid-cols-2">
+                <div className="pb-2">
+                  <span className="font-semibold tracking-widest">Name</span>
+                  <p className="opacity-50">{user.name}</p>
+                </div>
+                <div className="pb-2">
+                  <span className="font-semibold tracking-widest">Username</span>
+                  <p className="opacity-50">{user.username}</p>
+                </div>
+              </div>
+
+              <div className="pb-2">
+                <span className="font-semibold tracking-widest">RTMP URL</span>
+                <div className="flex">
+                  <p className="opacity-50">rtmp://rtmp.livepeer.com/live</p>
+                  <i
+                    onClick={() => {
+                      navigator.clipboard.writeText('rtmp://rtmp.livepeer.com/live');
+                      setCopied('rtmp://rtmp.livepeer.com/live');
+                    }}
+                    className="fas fa-solid fa-copy mx-4 hover:text-dbeats-light cursor-pointer pt-1"
+                  ></i>
+                  {copied == 'rtmp://rtmp.livepeer.com/live' ? (
+                    <span className="text-dbeats-light">copied</span>
+                  ) : null}
+                </div>
+              </div>
+              <hr width="95%" className="mt-2 mb-2  border-dbeats-white" />
+
+              <div className="pb-2">
+                <span className="font-semibold tracking-widest ">Streamer Key</span>
+                <div className="flex">
+                  <p className="opacity-50">{userStreams.streamKey}</p>
+                  <i
+                    onClick={() => {
+                      navigator.clipboard.writeText(userStreams.streamKey);
+                      setCopied(userStreams.streamKey);
+                    }}
+                    className="fas fa-solid fa-copy mx-4 hover:text-dbeats-light cursor-pointer pt-1 "
+                  ></i>
+                  {copied == userStreams.streamKey ? (
+                    <span className="text-dbeats-light">copied</span>
+                  ) : null}
+                </div>
+              </div>
+              <div className="pb-2  break-words hidden">
+                <span className="font-semibold tracking-widest ">Playback URL</span>
+                <p className="opacity-50">{playbackUrl}</p>
+              </div>
+              <div className="pb-2  break-words">
+                <span className="font-semibold tracking-widest">Live URL</span>
+                <p>
+                  <a
+                    className="opacity-50"
+                    href={`https://dbeats.live/live/${user.username}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    https://dbeats.live/live/{user.username}
+                  </a>
+                  <i
+                    onClick={() => {
+                      navigator.clipboard.writeText('https://dbeats.live/live/' + user.username);
+                      setCopied('https://dbeats.live/live/' + user.username);
+                    }}
+                    className="fas fa-solid fa-copy mx-4 hover:text-dbeats-light cursor-pointer pt-1 "
+                  ></i>
+                  {copied == 'https://dbeats.live/live/' + user.username ? (
+                    <span className="text-dbeats-light">copied</span>
+                  ) : null}
+                </p>
+              </div>
+              <hr width="95%" className="mt-2 mb-2  border-dbeats-white" />
+              <div className="mb-4">
+                <h1 className="text-bold">Thumbnail </h1>
+                {selectedFile ? (
+                  <img src={selectedFile.localurl} className="my-2 rounded max-h-72"></img>
+                ) : user.thumbnail ? (
+                  <img src={user.thumbnail} className="my-2 rounded max-h-110"></img>
+                ) : null}
+                <form className="flex items-center" onSubmit={uploadThumbnail}>
+                  <input
+                    name="image"
+                    type="file"
+                    accept=".jpg,.png,.jpeg,.gif,.webp"
+                    required={true}
+                    onChange={onFileChange}
+                  />
+                  <div className="p-1 nm-flat-dbeats-dark-primary rounded-3xl hover:nm-inset-dbeats-dark-primary">
+                    <button
+                      disabled={uploadingFile}
+                      type="submit"
+                      className={`${
+                        uploadingFile
+                          ? 'dark:bg-dbeats-dark-primary'
+                          : 'bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:nm-inset-dbeats-light-xs'
+                      }  px-4 py-2  rounded-3xl group flex items-center justify-center  `}
+                    >
+                      <p className="hidden md:inline">Upload</p>
+                    </button>
+                  </div>
+                  <div
+                    className="animate-spin rounded-full h-7 w-7 ml-3 border-t-2 border-b-2 bg-gradient-to-r from-green-400 to-blue-500 "
+                    hidden={!uploadingFile}
+                  ></div>
+                </form>
+              </div>
+              <div>
+                <div className="flex flex-col">
+                  <p className="text-center mb-1">Currently Connected :</p>
+                  <div className="flex flex-wrap justify-center">
+                    {multiStreamConnected.map((value, index) => {
+                      ////console.log(value);
+                      return (
+                        <div key={index} className="m-1">
+                          <img
+                            src={value.platform.logo}
+                            alt="logo"
+                            className="h-6 lg:h-10 w-auto"
+                          />
+                        </div>
+                      );
+                    })}
+                  </div>
+                  <div className="nm-flat-dbeats-dark-primary p-1 rounded-3xl hover:nm-inset-dbeats-dark w-max mx-auto">
+                    <button
+                      variant="primary"
+                      className="bg-dbeats-dark-secondary text-center content-center justify-center align-middle hover:nm-inset-dbeats-light flex text-white rounded-3xl font-bold px-4 py-3 tracking-widest w-max"
+                      type="button"
+                      onClick={() => setShowDestinationModal(true)}
+                    >
+                      Add MultiStream Platforms
+                      <i className="fas fa-solid fa-video mx-4 cursor-pointer pt-1"></i>
+                    </button>
+                  </div>
+                  <div className={classes.multistream_form_spinner}>
+                    <Spinner
+                      animation="border"
+                      variant="info"
+                      role="status"
+                      hidden={loader}
+                    ></Spinner>
+                  </div>
+                </div>
+              </div>
+              <>
+                <hr width="95%" className="mt-2 mb-4" />
+                <p className="text-md">To create NFT start Recording</p>
+                <div className="flex justify-between items-center w-full pt-2 text-white">
+                  <button
+                    className={`text-center rounded-md w-full 
+                          ${recording ? 'bg-green-300' : 'bg-green-600'} mx-2 py-2`}
+                    disabled={recording}
+                    onClick={startRecording}
+                  >
+                    Start Recording
+                  </button>
+                  <button
+                    className={`text-center rounded-md w-full 
+                          ${!recording ? 'bg-red-300' : 'bg-red-600'} mx-2 py-2`}
+                    disabled={!recording}
+                    onClick={stopRecording}
+                  >
+                    Stop Recording
+                  </button>
+                </div>
+              </>
+            </div>
+          </div>
+        )}
     </Fragment>
   );
 };
