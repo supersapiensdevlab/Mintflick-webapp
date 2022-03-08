@@ -65,6 +65,7 @@ const useWeb3Modal = (config = {}) => {
 
   const logoutOfWeb3Modal = useCallback(
     async function () {
+      await web3auth.logout();
       await web3auth.clearCachedProvider();
       window.location.reload();
     },
