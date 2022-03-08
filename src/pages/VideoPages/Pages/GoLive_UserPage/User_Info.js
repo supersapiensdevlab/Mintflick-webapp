@@ -414,10 +414,14 @@ const UserInfo = () => {
                     Start Recording
                   </button>
                   <button
-                    className={`text-center rounded-md w-full 
-                          ${!recording ? 'bg-red-300' : 'bg-red-600'} mx-2 py-2`}
-                    disabled={!recording}
-                    onClick={stopRecording}
+                    variant="primary"
+                    className="bg-dbeats-dark-secondary text-center content-center justify-center align-middle hover:nm-inset-dbeats-light flex text-white rounded-3xl font-bold px-4 py-3 tracking-widest w-max"
+                    type="button"
+                    onClick={
+                      multiStreamConnected.length < 3
+                        ? () => setShowDestinationModal(true)
+                        : () => setShowPriceModal(true)
+                    }
                   >
                     Stop Recording
                   </button>
@@ -1054,10 +1058,14 @@ const UserInfo = () => {
                     Start Recording
                   </button>
                   <button
-                    className={`text-center rounded-md w-full 
-                          ${!recording ? 'bg-red-300' : 'bg-red-600'} mx-2 py-2`}
-                    disabled={!recording}
-                    onClick={stopRecording}
+                    variant="primary"
+                    className="bg-dbeats-dark-secondary text-center content-center justify-center align-middle hover:nm-inset-dbeats-light flex text-white rounded-3xl font-bold px-4 py-3 tracking-widest w-max"
+                    type="button"
+                    onClick={
+                      multiStreamConnected.length < 3
+                        ? () => setShowDestinationModal(true)
+                        : () => setShowPriceModal(true)
+                    }
                   >
                     Stop Recording
                   </button>
