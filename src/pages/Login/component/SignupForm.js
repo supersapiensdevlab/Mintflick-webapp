@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import axios from 'axios';
+import Web3 from 'web3';
 
 const SignupForm = ({
   loader,
@@ -21,6 +22,7 @@ const SignupForm = ({
   const [showPassword, setShowPassword] = useState(true);
   const seePass = useRef();
   const bcrypt = require('bcryptjs');
+  const [account, setAccount] = useState();
 
   const handleNameChange = (e) => {
     setName(e.target.value);
@@ -65,7 +67,12 @@ const SignupForm = ({
 
     let walletId = '';
     if (provider) {
-      walletId = provider.provider.selectedAddress;
+      let variable = await loadWeb3Modal();
+
+      const web3 = new Web3(variable);
+      const accounts = await web3.eth.getAccounts();
+      setAccount(accounts[0]);
+      walletId = account;
     }
 
     let password = await bcrypt.hash(form_password, 10);
@@ -196,7 +203,7 @@ const SignupForm = ({
         <div className="flex justify-center">
           <button
             className={`${
-              !(provider && provider.provider.selectedAddress) ||
+              (!provider && account) ||
               form_name === '' ||
               form_username === '' ||
               form_password === '' ||
@@ -206,7 +213,7 @@ const SignupForm = ({
             }`}
             onClick={createStream}
             disabled={
-              !(provider && provider.provider.selectedAddress) ||
+              (!provider && account) ||
               form_name === '' ||
               form_username === '' ||
               form_password === '' ||
