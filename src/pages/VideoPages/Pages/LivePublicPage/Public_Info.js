@@ -9,6 +9,7 @@ import React, { Fragment, useEffect, useState } from 'react';
 // import { Container, Row } from 'react-bootstrap';
 // import Lottie from 'react-lottie';
 import { useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import person from '../../../../assets/images/profile.svg';
 // import superfluid from '../../../../assets/images/superfluid-black.svg';
@@ -22,8 +23,14 @@ import VideoPlayer from '../../../../component/VideoPlayer/VideoPlayer';
 // import classes from '../Info.module.css';
 // import LiveCard from './LiveCard';
 import LiveChat from './LiveChat';
+import { io } from 'socket.io-client';
 
 const PublicInfo = (props) => {
+  // const socket = io('http://localhost:800');
+  const location = useLocation();
+  console.log(location);
+  console.log(props);
+
   let sharable_data = `${process.env.REACT_APP_CLIENT_URL}/live/${props.stream_id}`;
   const darkMode = useSelector((darkmode) => darkmode.toggleDarkMode);
 
@@ -35,6 +42,8 @@ const PublicInfo = (props) => {
   const [time, setTime] = useState(null);
 
   const [playbackUrl, setPlaybackUrl] = useState('');
+
+  const [livestreamViews, setLivestreamViews] = useState(0);
 
   const [showSubscriptionModal, setshowSubscriptionModal] = useState(false);
   const handleCloseSubscriptionModal = () => setshowSubscriptionModal(false);
@@ -64,10 +73,9 @@ const PublicInfo = (props) => {
         url: `${process.env.REACT_APP_SERVER_URL}/user/follow`,
         headers: {
           'content-type': 'application/json',
-          'auth-token':localStorage.getItem('authtoken')
+          'auth-token': localStorage.getItem('authtoken'),
         },
         data: followData,
-        
       })
         .then(function (response) {
           if (response) {
@@ -86,7 +94,7 @@ const PublicInfo = (props) => {
         url: `${process.env.REACT_APP_SERVER_URL}/user/unfollow`,
         headers: {
           'content-type': 'application/json',
-          'auth-token':localStorage.getItem('authtoken')
+          'auth-token': localStorage.getItem('authtoken'),
         },
         data: followData,
       })
@@ -158,6 +166,30 @@ const PublicInfo = (props) => {
     // eslint-disable-next-line
   }, []);
 
+  useEffect(() => {
+    const socket = io(process.env.REACT_APP_VIEWS_URL, {
+      transports: ['websocket'],
+      upgrade: false,
+    });
+    socket.on('connection');
+    socket.emit('joinlivestream', props.stream_id);
+    socket.on('count', (details) => {
+      if (details.room === props.stream_id) {
+        setLivestreamViews(details.roomSize);
+      }
+    });
+    // socket
+    //   .off('count', (data) => {
+    //     console.log(data);
+    //   })
+    //   .on('count', (data) => {
+    //     console.log(data.num);
+    //     setLivestreamViews(data.num);
+    //   });
+  }, []);
+
+  console.log(livestreamViews);
+
   const testFlow = async (amount) => {
     const walletAddress = await window.ethereum.request({
       method: 'eth_requestAccounts',
@@ -221,9 +253,9 @@ const PublicInfo = (props) => {
                       <>
                         {' '}
                         <div className="flex   text-black text-sm font-medium   px-4  py-3">
-                          <Link to={`/profile/${user.username}/`} className="mr-4">
+                          <Link to={`/profile/${userData.username}/`} className="mr-4">
                             <img
-                              src={user.profile_image ? user.profile_image : person}
+                              src={userData.profile_image ? userData.profile_image : person}
                               alt=""
                               className="  w-16 h-14    rounded-full    self-start"
                             />
@@ -232,12 +264,12 @@ const PublicInfo = (props) => {
                             <div>
                               <div className="w-full self-center  ">
                                 <Link
-                                  to={`/profile/${user.username}/`}
+                                  to={`/profile/${userData.username}/`}
                                   className="2xl:text-sm lg:text-xs text-sm text-gray-500  mb-2"
                                 >
                                   <div className="flex align-middle">
                                     <h3 className="text-white mr-1 text-lg tracking-wider">
-                                      {user.name}
+                                      {userData.name}
                                     </h3>
                                     &middot;
                                     <p className="text-white ml-1 text-opacity-40 text-xs self-center align-middle">
@@ -245,7 +277,7 @@ const PublicInfo = (props) => {
                                     </p>
                                   </div>
 
-                                  <p className="text-white text-opacity-40">{user.username}</p>
+                                  <p className="text-white text-opacity-40">{userData.username}</p>
                                 </Link>{' '}
                               </div>
                             </div>
@@ -320,6 +352,7 @@ const PublicInfo = (props) => {
                 ) : null}
               </div>
               <div className="2xl:text-2xl lg:text-md 2xl:py-4 lg:py-2 py-2 flex justify-around dark:text-dbeats-white">
+                <p className="text-white text-lg text-center pr-2">{livestreamViews} viewers</p>
                 <div className="  text-center lg:mx-3">
                   <button className="border-0 bg-transparent" onClick={handleShow}>
                     <i className="fas fa-share-alt opacity-50 mx-2"></i>
