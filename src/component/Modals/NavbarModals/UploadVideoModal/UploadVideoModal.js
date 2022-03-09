@@ -376,7 +376,7 @@ const UploadVideoModal = (props) => {
                           className="text-center relative cursor-pointer bg-white rounded-md font-medium text-dbeats-light hover:text-blue-500 focus-within:outline-none focus-within:ring-0 focus-within:ring-offset-2 focus-within:ring-blue-500"
                         >
                           <span id="video-thumbnail-label" className="truncate w-32">
-                            Choose Video Thumbnail
+                            Choose Video Thumbnail <span className='text-red-600'> *</span>
                           </span>
                           <input
                             id="file-upload3"
@@ -385,6 +385,7 @@ const UploadVideoModal = (props) => {
                             accept=".jpg,.png,.jpeg,.gif,.webp"
                             onChange={onVideoFileChange}
                             className="sr-only "
+                            required={true}
                           />
                         </label>
                         <p className="pl-1"> </p>
@@ -417,7 +418,7 @@ const UploadVideoModal = (props) => {
                           className="relative cursor-pointer bg-white rounded-md font-medium text-dbeats-light hover:text-blue-500 focus-within:outline-none focus-within:ring-0 focus-within:ring-offset-2 focus-within:ring-blue-500"
                         >
                           <p className="truncate w-32 " id="video-label">
-                            Choose Video file
+                            Choose Video file <span className='text-red-600'> *</span>
                           </p>
                           <input
                             id="file-upload4"
@@ -426,6 +427,7 @@ const UploadVideoModal = (props) => {
                             name="videoFile"
                             onChange={onVideoFileChange}
                             className="sr-only "
+                            required={true}
                           />
                         </label>
                         <p className="pl-1"></p>
@@ -507,7 +509,7 @@ const UploadVideoModal = (props) => {
                           htmlFor="videoName"
                           className="block 2xl:text-sm text-sm lg:text-xs font-medium dark:text-gray-100 text-gray-700 "
                         >
-                          Video Title
+                          Video Title <span className='text-red-600'> *</span>
                         </label>
                         <div className="mt-1 flex rounded-md shadow-sm nm-flat-dbeats-dark-secondary  p-0.5">
                           <input
@@ -518,6 +520,7 @@ const UploadVideoModal = (props) => {
                             onChange={handleVideoInputs}
                             className="focus:nm-inset-dbeats-dark-primary  border-0 bg-dbeats-dark-primary  ring-0   flex-1 block w-full rounded-md sm:text-sm  "
                             placeholder=""
+                            required={true}
                           />
                         </div>
                       </div>
