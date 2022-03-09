@@ -57,6 +57,9 @@ const PublicInfo = (props) => {
   const [buttonText, setButtonText] = useState(text);
   const [subscribeButtonText, setSubscribeButtonText] = useState('Subscribe');
 
+  const [viewColor, setViewColor] = useState('white');
+  const [viewAnimate, setViewAnimate] = useState('animate-none');
+
   // eslint-disable-next-line no-unused-vars
   const [arrayData, setArrayData] = useState([]);
 
@@ -182,11 +185,23 @@ const PublicInfo = (props) => {
       setLivestreamViews(details.roomSize);
       console.log('emitted');
       console.log('inc', livestreamViews);
+      setViewColor('green-500');
+      setViewAnimate('animate-pulse');
+      setTimeout(() => {
+        setViewColor('white');
+        setViewAnimate('animate-none');
+      }, 3000);
     });
     socket.on('removecount', (roomSize) => {
       setLivestreamViews(roomSize);
       console.log('removecount emitted');
       console.log('dec', livestreamViews);
+      setViewColor('red-500');
+      setViewAnimate('animate-pulse');
+      setTimeout(() => {
+        setViewColor('white');
+        setViewAnimate('animate-none');
+      }, 3000);
     });
     // socket
     //   .off('count', (data) => {
@@ -363,7 +378,12 @@ const PublicInfo = (props) => {
                 ) : null}
               </div>
               <div className="2xl:text-2xl lg:text-md 2xl:py-4 lg:py-2 py-2 flex justify-around dark:text-dbeats-white">
-                <p className="text-white text-lg text-center pr-2">{livestreamViews} viewers</p>
+                <p className={`text-white text-lg text-center pr-2 flex flex-col`}>
+                  <span className={`text-${viewColor}  ${viewAnimate} font-bold`}>
+                    {livestreamViews}
+                  </span>
+                  viewers
+                </p>
                 <div className="  text-center lg:mx-3">
                   <button className="border-0 bg-transparent" onClick={handleShow}>
                     <i className="fas fa-share-alt opacity-50 mx-2"></i>

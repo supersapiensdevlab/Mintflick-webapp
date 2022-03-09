@@ -53,7 +53,9 @@ function LiveChat({ userp }) {
       //   window.history.replaceState({}, 'Home', '/');
     }
     return () => {
-      currentSocket.disconnect();
+      if (currentSocket) {
+        currentSocket.disconnect();
+      }
     };
     // eslint-disable-next-line
   }, []);
