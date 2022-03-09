@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import logo from '../../assets/images/logo.svg';
 import CarouselCard from '../../pages/Profile/Cards/CarouselCard';
+import person from '../../assets/images/profile.svg';
 
 const SearchResult = () => {
   const darkMode = useSelector((state) => state.toggleDarkMode);
@@ -47,12 +48,14 @@ const SearchResult = () => {
                             <Link to={`/profile/${value.username}`}>
                               <img
                                 className="mx-auto  h-32 w-32 rounded-full self-center  cursor-pointer"
-                                src={value.profile_image ? value.profile_image : logo}
+                                src={value.profile_image ? value.profile_image : person}
                                 alt={`Profile ${i}`}
                               />
                             </Link>
-                            <p className="dark:text-white lg:text-xs 2xl:text-lg text-xs">
-                              {value.username.slice(0, 10) + '..'}
+                            <p className="dark:text-white lg:text-xs 2xl:text-lg text-xs mt-2">
+                              {value.username.length > 12
+                                ? value.username.slice(0, 14) + '..'
+                                : value.username}
                             </p>
                           </SplideSlide>
                         );
@@ -61,7 +64,7 @@ const SearchResult = () => {
                   </>
                 ) : (
                   <div className="w-full text-center">
-                    <p className="dark:text-white p-5">No Users Found</p>
+                    <p className="dark:text-white p-5">No Users Found with matching Terms</p>
                   </div>
                 )}
               </div>
@@ -84,7 +87,7 @@ const SearchResult = () => {
                   </div>
                 ) : (
                   <div className="w-full text-center">
-                    <p className="dark:text-white p-5">No Videos Found</p>
+                    <p className="dark:text-white p-5">No Videos Found with matching Terms</p>
                   </div>
                 )}
               </div>

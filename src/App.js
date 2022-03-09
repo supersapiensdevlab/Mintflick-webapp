@@ -47,12 +47,14 @@ import Tables from './views/admin/Tables.js';
 import { useState } from 'react';
 
 import Ticket from './Ticket.js';
+import useWeb3Modal from './hooks/useWeb3Modal';
 
 export default function App() {
   const user = JSON.parse(window.localStorage.getItem('user'));
   const darkMode = useSelector((state) => state.toggleDarkMode);
   let darkmode = JSON.parse(window.localStorage.getItem('darkmode'));
   const dispatch = useDispatch();
+  const [provider, loadWeb3Modal, logoutOfWeb3Modal] = useWeb3Modal();
 
   const userType = useSelector((state) => state.toggleUserType);
   //dispatch(toggleUserType(userType));
@@ -92,11 +94,12 @@ export default function App() {
       setLatestTrack(data);
       setLatestUploads(true);
     }
+    await loadWeb3Modal();
   };
 
-  useEffect(() => {
+  useEffect(async () => {
     if (user) {
-      console.log('THIS IS BEING PASSED', user);
+      //console.log('THIS IS BEING PASSED', user);
       axios.get(`${process.env.REACT_APP_SERVER_URL}/user/${user.username}`).then((value) => {
         window.localStorage.setItem('user', JSON.stringify(value.data));
       });

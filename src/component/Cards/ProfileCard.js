@@ -9,8 +9,6 @@ const ProfileCard = ({ user }) => {
   const userp = JSON.parse(window.localStorage.getItem('user'));
   const [following, setFollowing] = useState(false);
   useEffect(() => {
-    console.log(user);
-    console.log(userp);
     if (userp) {
       if (userp.followee_count.indexOf(user.username) > -1) {
         setFollowing(true);
@@ -19,35 +17,37 @@ const ProfileCard = ({ user }) => {
   }, []);
 
   const handleFollow = () => {
-    if(userp){
-    const followData = {
-      following: `${user.username}`,
-      follower: `${userp.username}`,
-    };
-    axios({
-      method: 'POST',
-      url: `${process.env.REACT_APP_SERVER_URL}/user/follow`,
-      headers: {
-        'content-type': 'application/json',
-        'auth-token': localStorage.getItem('authtoken'),
-      },
-      data: followData,
-    })
-      .then(function (response) {
-        if (response) {
-          setFollowing(true);
-          axios.get(`${process.env.REACT_APP_SERVER_URL}/user/${userp.username}`).then((value) => {
-            window.localStorage.setItem('user', JSON.stringify(value.data));
-          });
-        } else {
-          alert('Invalid Login');
-        }
+    if (userp) {
+      const followData = {
+        following: `${user.username}`,
+        follower: `${userp.username}`,
+      };
+      axios({
+        method: 'POST',
+        url: `${process.env.REACT_APP_SERVER_URL}/user/follow`,
+        headers: {
+          'content-type': 'application/json',
+          'auth-token': localStorage.getItem('authtoken'),
+        },
+        data: followData,
       })
-      .catch(function (error) {
-        console.log(error);
-      });
-    }else{
-      window.location.href = '/signup'
+        .then(function (response) {
+          if (response) {
+            setFollowing(true);
+            axios
+              .get(`${process.env.REACT_APP_SERVER_URL}/user/${userp.username}`)
+              .then((value) => {
+                window.localStorage.setItem('user', JSON.stringify(value.data));
+              });
+          } else {
+            alert('Invalid Login');
+          }
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    } else {
+      window.location.href = '/signup';
     }
   };
   return (
@@ -58,7 +58,7 @@ const ProfileCard = ({ user }) => {
             <div className="flex items-center h-max w-full justify-center">
               <div className=" ">
                 <div className="   sm:rounded-lg pb-3">
-                  <div className="relative align-middle   justify-items-center items-center nm-flat-dbeats-dark-primary">
+                  <div className="relative align-middle   justify-items-center items-center ">
                     <Link to={`/profile/${user.username}`}>
                       <div className="">
                         <img

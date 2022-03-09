@@ -43,7 +43,7 @@ const PublicInfo = (props) => {
 
   const [playbackUrl, setPlaybackUrl] = useState('');
 
-  const [livestreamViews, setLivestreamViews] = useState(null);
+  const [livestreamViews, setLivestreamViews] = useState(0);
 
   const [showSubscriptionModal, setshowSubscriptionModal] = useState(false);
   const handleCloseSubscriptionModal = () => setshowSubscriptionModal(false);
@@ -279,14 +279,17 @@ const PublicInfo = (props) => {
                                     <h3 className="text-white mr-1 text-lg tracking-wider">
                                       {userData.name}
                                     </h3>
-                                    &middot;
+
                                     <p className="text-white ml-1 text-opacity-40 text-xs self-center align-middle">
                                       {time}
                                     </p>
                                   </div>
 
-                                  <p className="text-white text-opacity-40">{userData.username}</p>
-                                </Link>{' '}
+                                  <p className="text-white text-opacity-40 self-center items-center content-center">
+                                    &middot;&nbsp;{userData.username}
+                                  </p>
+                                </Link>
+                                {''}
                               </div>
                             </div>
                             {/* Hiding Follow Button due to bugs 
