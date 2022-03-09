@@ -101,7 +101,7 @@ const Login = () => {
           >
             <p className=" ">
               {!account
-                ? 'Login using Wallet'
+                ? 'Sign in using Wallet'
                 : `(${
                     account ? account.slice(0, 8) : '' + '...' + account ? account.slice(-4) : ''
                   })  Connected (Click Again)`}

@@ -12,7 +12,6 @@ import { ethers } from 'ethers';
 import Market from '../../../../artifacts/contracts/Market.sol/NFTMarket.json';
 import { nftmarketaddress } from '../../../../functions/config';
 import { Transition } from '@headlessui/react';
-import { Biconomy } from '@biconomy/mexa';
 import Web3 from 'web3';
 import useWeb3Modal from '../../../../hooks/useWeb3Modal';
 import { Web3Auth } from '@web3auth/web3auth';
@@ -257,7 +256,7 @@ const UploadVideoModal = (props) => {
           .then(() => {
             let url = 'https://ipfs.infura.io/ipfs/' + cid + '/meta.json';
             console.log(url);
-            createSale(url);
+            //createSale(url); uncomment for minting NFT after video's meta.json is Uploaded to IPFS
             setVideo({
               videoName: '',
               videoImage: '',
@@ -288,49 +287,49 @@ const UploadVideoModal = (props) => {
     });
   };
 
-  async function createSale(url) {
-    const biconomy = new Biconomy(window.ethereum, {
-      apiKey: 'YhACwSssf.8d583b5e-8b95-47da-bc08-fa7aa8df7dad',
-      debug: true,
-    });
+  // async function createSale(url) {
+  //   const biconomy = new Biconomy(window.ethereum, {
+  //     apiKey: 'YhACwSssf.8d583b5e-8b95-47da-bc08-fa7aa8df7dad',
+  //     debug: true,
+  //   });
 
-    const web3 = new Web3(biconomy);
+  //   const web3 = new Web3(biconomy);
 
-    // const connection = await web3Modal.connect();
-    // const provider = new ethers.providers.Web3Provider(connection);
-    // const signer = provider.getSigner();
+  //   // const connection = await web3Modal.connect();
+  //   // const provider = new ethers.providers.Web3Provider(connection);
+  //   // const signer = provider.getSigner();
 
-    biconomy
-      .onEvent(biconomy.READY, async () => {
-        // Initialize your dapp here like getting user accounts etc
-        await window.ethereum.enable();
-        let contract = new web3.eth.Contract(Market.abi, nftmarketaddress);
-        let transaction = await contract.createToken(
-          url,
-          ethers.utils.parseUnits(NFTprice, 'ether'),
-        );
-        await transaction.wait();
-        console.log(transaction);
-      })
-      .onEvent(biconomy.ERROR, (error, message) => {
-        // Handle error while initializing mexa
-        console.log(error);
-      });
+  //   biconomy
+  //     .onEvent(biconomy.READY, async () => {
+  //       // Initialize your dapp here like getting user accounts etc
+  //       await window.ethereum.enable();
+  //       let contract = new web3.eth.Contract(Market.abi, nftmarketaddress);
+  //       let transaction = await contract.createToken(
+  //         url,
+  //         ethers.utils.parseUnits(NFTprice, 'ether'),
+  //       );
+  //       await transaction.wait();
+  //       console.log(transaction);
+  //     })
+  //     .onEvent(biconomy.ERROR, (error, message) => {
+  //       // Handle error while initializing mexa
+  //       console.log(error);
+  //     });
 
-    /* next, create the item */
-    //let contract = new web3.eth.Contract(Market.abi, nftmarketaddress);
-    console.log('NFT PRICE:', ethers.utils.parseUnits(NFTprice, 'ether'));
+  //   /* next, create the item */
+  //   //let contract = new web3.eth.Contract(Market.abi, nftmarketaddress);
+  //   console.log('NFT PRICE:', ethers.utils.parseUnits(NFTprice, 'ether'));
 
-    //let event = tx.events[0];
-    //let value = event.args[2];
-    //let tokenId = value.toNumber();
-    // {
-    //   value: listingPrice,
-    // }
-    //transaction = await contract.createMarketItem(tokenId, price);
-    //await transaction.wait();
-    props.handleCloseVideoUpload();
-  }
+  //   //let event = tx.events[0];
+  //   //let value = event.args[2];
+  //   //let tokenId = value.toNumber();
+  //   // {
+  //   //   value: listingPrice,
+  //   // }
+  //   //transaction = await contract.createMarketItem(tokenId, price);
+  //   //await transaction.wait();
+  //   props.handleCloseVideoUpload();
+  // }
   const customStyles = {
     content: {
       top: '100%',
@@ -403,7 +402,7 @@ const UploadVideoModal = (props) => {
                           className="text-center relative cursor-pointer bg-white rounded-md font-medium text-dbeats-light hover:text-blue-500 focus-within:outline-none focus-within:ring-0 focus-within:ring-offset-2 focus-within:ring-blue-500"
                         >
                           <span id="video-thumbnail-label" className="truncate w-32">
-                            Choose Video Thumbnail <span className='text-red-600'> *</span>
+                            Choose Video Thumbnail <span className="text-red-600"> *</span>
                           </span>
                           <input
                             id="file-upload3"
@@ -445,7 +444,7 @@ const UploadVideoModal = (props) => {
                           className="relative cursor-pointer bg-white rounded-md font-medium text-dbeats-light hover:text-blue-500 focus-within:outline-none focus-within:ring-0 focus-within:ring-offset-2 focus-within:ring-blue-500"
                         >
                           <p className="truncate w-32 " id="video-label">
-                            Choose Video file <span className='text-red-600'> *</span>
+                            Choose Video file <span className="text-red-600"> *</span>
                           </p>
                           <input
                             id="file-upload4"
@@ -536,7 +535,7 @@ const UploadVideoModal = (props) => {
                           htmlFor="videoName"
                           className="block 2xl:text-sm text-sm lg:text-xs font-medium dark:text-gray-100 text-gray-700 "
                         >
-                          Video Title <span className='text-red-600'> *</span>
+                          Video Title <span className="text-red-600"> *</span>
                         </label>
                         <div className="mt-1 flex rounded-md shadow-sm nm-flat-dbeats-dark-secondary  p-0.5">
                           <input
