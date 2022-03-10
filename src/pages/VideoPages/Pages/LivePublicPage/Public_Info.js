@@ -183,8 +183,8 @@ const PublicInfo = (props) => {
     });
     socket.on('livecount', (details) => {
       setLivestreamViews(details.roomSize);
-      console.log('emitted');
-      console.log('inc', livestreamViews);
+      // console.log('emitted');
+      // console.log('inc', livestreamViews);
       setViewColor('green-500');
       setViewAnimate('animate-pulse');
       setTimeout(() => {
@@ -194,8 +194,8 @@ const PublicInfo = (props) => {
     });
     socket.on('removecount', (roomSize) => {
       setLivestreamViews(roomSize);
-      console.log('removecount emitted');
-      console.log('dec', livestreamViews);
+      // console.log('removecount emitted');
+      // console.log('dec', livestreamViews);
       setViewColor('red-500');
       setViewAnimate('animate-pulse');
       setTimeout(() => {
@@ -380,7 +380,7 @@ const PublicInfo = (props) => {
               <div className="2xl:text-2xl lg:text-md 2xl:py-4 lg:py-2 py-2 flex justify-around dark:text-dbeats-white">
                 <p className={`text-white text-lg text-center pr-2 flex flex-col`}>
                   <span className={`text-${viewColor}  ${viewAnimate} font-bold`}>
-                    {livestreamViews}
+                    {livestreamViews - 1}
                   </span>
                   viewers
                 </p>
