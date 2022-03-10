@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import DeleteModal from '../../../component/Modals/DeleteModal/DeleteModal';
 import { ShareModal } from '../../../component/Modals/ShareModal/ShareModal';
 
 const TrackCard = (props) => {
@@ -16,6 +17,8 @@ const TrackCard = (props) => {
 
   const text = 'Copy Link To Clipboard';
   const [buttonText, setButtonText] = useState(text);
+
+  const [showDelete, setShowDelete] = useState(false);
 
   let sharable_data = `${process.env.REACT_APP_CLIENT_URL}/track/${props.username}/${props.index}`;
 
@@ -94,6 +97,12 @@ const TrackCard = (props) => {
               >
                 <p className=" 2xl:text-lg lg:text-sm ">{`${play ? 'Pause' : 'Play'}`}</p>
               </button>
+              <button
+                onClick={()=>{setShowDelete(true)}}
+                className=" cursor-pointer mr-2 uppercase font-bold  bg-red-500   text-white block 2xl:py-2 2xl:px-10 lg:px-7 lg:py-1 py-1 px-5   hover:scale-95 transform transition-all"
+              >
+                Delete
+              </button>
             </div>
           </div>
         </div>
@@ -105,6 +114,7 @@ const TrackCard = (props) => {
         copybuttonText={buttonText}
         setCopyButtonText={setButtonText}
       />
+      <DeleteModal type='track' data={props.track} show={showDelete} setShowDelete={setShowDelete}></DeleteModal>
     </div>
   );
 };
