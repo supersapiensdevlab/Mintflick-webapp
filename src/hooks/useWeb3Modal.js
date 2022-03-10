@@ -15,37 +15,12 @@ import { CHAIN_NAMESPACES, CustomChainConfig } from '@web3auth/base';
 const NETWORK_NAME = 'mainnet';
 
 const useWeb3Modal = (config = {}) => {
-  const [provider, setProvider] = useState();
   const [autoLoaded, setAutoLoaded] = useState(false);
   const { autoLoad = true, NETWORK = NETWORK_NAME } = config;
 
-  const web3auth = new Web3Auth({
-    chainConfig: {
-      chainNamespace: CHAIN_NAMESPACES.EIP155,
-      rpcTarget: 'https://rpc-mumbai.maticvigil.com',
-      blockExplorer: 'https://mumbai-explorer.matic.today',
-      chainId: '0x13881',
-      displayName: 'Polygon Mumbai Testnet',
-      ticker: 'matic',
-      tickerName: 'matic',
-    },
-    whiteLabel: {
-      theme: {
-        isDark: true,
-        colors: {
-          torusBrand1: '#282c34',
-        },
-      },
-      logoDark:
-        'https://bafybeifkq5r5b7wiaaap4jxptoiuxbjdacmig6yu3m76whhf2422doyr7e.ipfs.dweb.link/', // Dark logo for light background
-      logoLight:
-        'https://bafybeifkq5r5b7wiaaap4jxptoiuxbjdacmig6yu3m76whhf2422doyr7e.ipfs.dweb.link/', // Light logo for dark background
+  const torus = new Torus({});
+  const [provider, setProvider] = useState(null);
 
-      defaultLanguage: 'en',
-    },
-    clientId:
-      'BFrU6JsPLNdCdC1jb72ye0Pwc1ViJVl4D9aSqT2qdgPxrUZ79CbwxnhTimVo5cRrXPbGsVWGEYhl0bgIiGhmZc0', // get your clientId from https://developer.web3auth.io
-  });
   // Web3Modal also supports many other wallets.
   // You can see other options at https://github.com/Web3Modal/web3modal
   // const web3Modal = new Web3Modal({
@@ -56,29 +31,80 @@ const useWeb3Modal = (config = {}) => {
 
   // Open wallet selection modal.
   const loadWeb3Modal = useCallback(async () => {
-    await web3auth.initModal();
+    //console.log(torus);
 
-    const provider = await web3auth.connect();
-    setProvider(new Web3(provider));
+    if (!torus.isInitialized)
+      await torus.init({
+        loginConfig: {
+          // Customize login provider configurations.
+
+          // Customize brand logo, colors, and translation
+          whitelabel: {
+            theme: {
+              isDark: true,
+              colors: {
+                torusBrand: '#000',
+              },
+            },
+            logoDark: 'https://cryptologos.cc/logos/polygon-matic-logo.png?v=022', // Dark logo for light background
+            logoLight: 'https://cryptologos.cc/logos/polygon-matic-logo.png?v=022', // Light logo for dark background
+            topupHide: true,
+            featuredBillboardHide: false,
+            disclaimerHide: false,
+            defaultLanguage: 'en',
+          },
+        },
+      });
+
+    if (!torus.isLoggedIn) {
+      await torus.login();
+      const userInfo = await torus.getUserInfo();
+
+      console.log('Hi', userInfo.name, ' registered with', userInfo.email);
+      /*
+        email: string;
+        name: string;
+        profileImage: string;
+        verifier: string;
+        verifierId: string;
+      */
+    } else {
+      const userInfo = await torus.getUserInfo();
+
+      console.log('Hi', userInfo.name, 'you are registered with', userInfo.email);
+    }
+
+    const web3 = new Web3(torus.provider);
+    const address = (await web3.eth.getAccounts())[0];
+    const balance = await web3.eth.getBalance(address);
+    //console.log('provider', web3.currentProvider);
+    setProvider(web3.currentProvider);
+    //console.log(torus);
     return provider;
-  }, [web3auth]);
+  }, [provider]);
 
   const logoutOfWeb3Modal = useCallback(
     async function () {
-      await web3auth.logout();
-      await web3auth.clearCachedProvider();
-      window.location.reload();
+      console.log(torus);
+      if (torus.isLoggedIn) {
+        await torus.logout();
+      } else if (torus.isInitialized) {
+        torus.cleanUp();
+      }
+      setProvider(null);
+      console.log('logging out');
+      return provider;
     },
-    [web3auth],
+    [!torus.isLoggedIn],
   );
 
   // If autoLoad is enabled and the the wallet had been loaded before, load it automatically now.
   useEffect(() => {
-    if (autoLoad && !autoLoaded && web3auth.cachedProvider) {
+    if (autoLoad && !autoLoaded && torus.cachedProvider) {
       loadWeb3Modal();
       setAutoLoaded(true);
     }
-  }, [autoLoad, autoLoaded, loadWeb3Modal, setAutoLoaded, web3auth.cachedProvider]);
+  }, [autoLoad, autoLoaded, loadWeb3Modal, setAutoLoaded, torus.cachedProvider]);
 
   return [provider, loadWeb3Modal, logoutOfWeb3Modal];
 };

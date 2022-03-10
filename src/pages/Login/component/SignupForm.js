@@ -182,13 +182,11 @@ const SignupForm = ({
         </div>
 
         <div
-          className={`flex justify-center 2xl:mt-6 lg:mt-3 mt-3 mb-2  text-yellow-600 
-            border border-yellow-600 bg-white dark:bg-dbeats-dark-secondary rounded 
+          className={`flex justify-center 2xl:mt-6 lg:mt-3 mt-3 mb-2   
             ${
               !provider
-                ? `transform transition-all hover:scale-99
-                    dark:hover:bg-yellow-600 hover:bg-yellow-600 
-                    dark:hover:bg-opacity-5 hover:bg-opacity-5`
+                ? `transform transition-all 
+                      `
                 : ''
             }  
             mx-3 py-1 2xl:text-lg lg:text-sm`}

@@ -43,7 +43,7 @@ const PublicInfo = (props) => {
 
   const [playbackUrl, setPlaybackUrl] = useState('');
 
-  const [livestreamViews, setLivestreamViews] = useState(null);
+  const [livestreamViews, setLivestreamViews] = useState(0);
 
   const [showSubscriptionModal, setshowSubscriptionModal] = useState(false);
   const handleCloseSubscriptionModal = () => setshowSubscriptionModal(false);
@@ -56,6 +56,9 @@ const PublicInfo = (props) => {
   const text = 'Copy Link To Clipboard';
   const [buttonText, setButtonText] = useState(text);
   const [subscribeButtonText, setSubscribeButtonText] = useState('Subscribe');
+
+  const [viewColor, setViewColor] = useState('white');
+  const [viewAnimate, setViewAnimate] = useState('animate-none');
 
   // eslint-disable-next-line no-unused-vars
   const [arrayData, setArrayData] = useState([]);
@@ -180,13 +183,25 @@ const PublicInfo = (props) => {
     });
     socket.on('livecount', (details) => {
       setLivestreamViews(details.roomSize);
-      console.log('emitted');
-      console.log('inc', livestreamViews);
+      // console.log('emitted');
+      // console.log('inc', livestreamViews);
+      setViewColor('green-500');
+      setViewAnimate('animate-pulse');
+      setTimeout(() => {
+        setViewColor('white');
+        setViewAnimate('animate-none');
+      }, 3000);
     });
     socket.on('removecount', (roomSize) => {
       setLivestreamViews(roomSize);
-      console.log('removecount emitted');
-      console.log('dec', livestreamViews);
+      // console.log('removecount emitted');
+      // console.log('dec', livestreamViews);
+      setViewColor('red-500');
+      setViewAnimate('animate-pulse');
+      setTimeout(() => {
+        setViewColor('white');
+        setViewAnimate('animate-none');
+      }, 3000);
     });
     // socket
     //   .off('count', (data) => {
@@ -279,14 +294,17 @@ const PublicInfo = (props) => {
                                     <h3 className="text-white mr-1 text-lg tracking-wider">
                                       {userData.name}
                                     </h3>
-                                    &middot;
+
                                     <p className="text-white ml-1 text-opacity-40 text-xs self-center align-middle">
                                       {time}
                                     </p>
                                   </div>
 
-                                  <p className="text-white text-opacity-40">{userData.username}</p>
-                                </Link>{' '}
+                                  <p className="text-white text-opacity-40 self-center items-center content-center">
+                                    &middot;&nbsp;{userData.username}
+                                  </p>
+                                </Link>
+                                {''}
                               </div>
                             </div>
                             {/* Hiding Follow Button due to bugs 
@@ -360,7 +378,12 @@ const PublicInfo = (props) => {
                 ) : null}
               </div>
               <div className="2xl:text-2xl lg:text-md 2xl:py-4 lg:py-2 py-2 flex justify-around dark:text-dbeats-white">
-                <p className="text-white text-lg text-center pr-2">{livestreamViews} viewers</p>
+                <p className={`text-white text-lg text-center pr-2 flex flex-col`}>
+                  <span className={`text-${viewColor}  ${viewAnimate} font-bold`}>
+                    {livestreamViews - 1}
+                  </span>
+                  viewers
+                </p>
                 <div className="  text-center lg:mx-3">
                   <button className="border-0 bg-transparent" onClick={handleShow}>
                     <i className="fas fa-share-alt opacity-50 mx-2"></i>

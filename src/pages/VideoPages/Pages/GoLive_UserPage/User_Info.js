@@ -11,7 +11,7 @@ import classes from '../Info.module.css';
 import LiveChat from '../LivePublicPage/LiveChat';
 import { io } from 'socket.io-client';
 
-const UserInfo = () => {
+const UserInfo = (props) => {
   const user = JSON.parse(window.localStorage.getItem('user'));
   const darkMode = useSelector((darkmode) => darkmode.toggleDarkMode);
   const [playbackUrl, setPlaybackUrl] = useState('');
@@ -40,6 +40,9 @@ const UserInfo = () => {
   const [selectedFile, setSelectedFile] = useState(null);
 
   const [copied, setCopied] = useState(null);
+
+  const [viewColor, setViewColor] = useState('white');
+  const [viewAnimate, setViewAnimate] = useState('animate-none');
 
   //nft video
   const category = [
@@ -90,29 +93,41 @@ const UserInfo = () => {
     // eslint-disable-next-line
   }, []);
 
-  // useEffect(() => {
-  //   const socket = io('http://localhost:800', { transports: ['websocket'], upgrade: false });
-  //   socket.on('connection');
-  //   socket
-  //     .off('count', (data) => {
-  //       console.log(data);
-  //     })
-  //     .on('count', (data) => {
-  //       console.log(data.num);
-  //       setLivestreamViews(data.num);
-  //     });
-  //   // socket.on('getCount', (views) => {
-  //   //   console.log(views);
-  //   //   setLivestreamViews(views);
-  //   // });
-  //   // socket.emit('get-count', livestreamViews);
-  //   // socket.on('get-views', (count) => {
-  //   //   setLivestreamViews(count);
-  //   //   console.log(count);
-  //   // });
-  // }, []);
-
-  // console.log(livestreamViews);
+  useEffect(() => {
+    const socket = io(process.env.REACT_APP_VIEWS_URL, {
+      transports: ['websocket'],
+      upgrade: false,
+    });
+    socket.on('connection');
+    socket.emit('joinlivestream', props.stream_id);
+    socket.on('count', (details) => {
+      if (details.room === props.stream_id) {
+        setLivestreamViews(details.roomSize);
+      }
+    });
+    socket.on('livecount', (details) => {
+      setLivestreamViews(details.roomSize);
+      // console.log('emitted');
+      // console.log('inc', livestreamViews);
+      setViewColor('green-500');
+      setViewAnimate('animate-pulse');
+      setTimeout(() => {
+        setViewColor('white');
+        setViewAnimate('animate-none');
+      }, 3000);
+    });
+    socket.on('removecount', (roomSize) => {
+      setLivestreamViews(roomSize);
+      // console.log('removecount emitted');
+      // console.log('dec', livestreamViews);
+      setViewColor('red-500');
+      setViewAnimate('animate-pulse');
+      setTimeout(() => {
+        setViewColor('white');
+        setViewAnimate('animate-none');
+      }, 3000);
+    });
+  }, []);
 
   //set Stream Key
   const handleChange = (e) => {
@@ -424,6 +439,12 @@ const UserInfo = () => {
                 </div>
               </div>
             )}
+            <p className={`text-white text-lg text-right pr-2 flex flex-col`}>
+              <span className={` text-${viewColor}  ${viewAnimate} font-bold`}>
+                {livestreamViews - 1}
+              </span>
+              viewers
+            </p>
           </div>
         </div>
         {user.livepeer_data.isActive ? (

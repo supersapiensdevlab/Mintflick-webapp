@@ -62,11 +62,24 @@ const LoginForm = ({
 
   return (
     <div className="  w-full  ">
-      <div className="flex flex-col justify-center   2xl:text-lg lg:texr-md px-5 pt-2 lg:pt-0">
+      <div className="flex flex-col justify-center   2xl:text-lg lg:texr-md  pt-2 lg:pt-0 p-5  ">
         <h1 className="self-center  2xl:text-2xl lg:text-md text-xl font-bold text-gray-900 dark:text-white">
           SIGN IN
         </h1>
         <>
+          <div className="flex justify-center 2xl:mt-6 lg:mt-5  cursor-pointer  transform transition-all mb-3 lg:mb-0">
+            <div className="">
+              <LoginWalletButton
+                provider={provider}
+                loadWeb3Modal={loadWeb3Modal}
+                logoutOfWeb3Modal={logoutOfWeb3Modal}
+              />
+            </div>
+          </div>
+          <hr className="2xl:my-3 lg:my-2 w-2/3 self-center mb-4 lg:mb-0 hidden" />
+          <h3 className="self-center cursor-pointer 2xl:py-2 lg:py-0 mb-2 lg:mb-0 2xl:text-lg lg:text-xs text-gray-900 dark:text-white">
+            OR
+          </h3>
           <input
             className={`self-center mt-2 mb-1 rounded w-full mx-5 lg:h-8 2xl:h-10 lg:text-xs 2xl:text-lg
                         border-0  dark:bg-dbeats-dark-primary
@@ -134,22 +147,6 @@ const LoginForm = ({
           }}
         >
           Forgot your password ?
-        </div>
-        <hr className="2xl:my-3 lg:my-2 w-2/3 self-center mb-4 lg:mb-0" />
-
-        <div
-          className="flex justify-center 2xl:mt-6 lg:mt-5 py-2 cursor-pointer text-yellow-600 border border-yellow-600 
-                    bg-white dark:bg-dbeats-dark-secondary 
-                    rounded hover:bg-yellow-600 dark:hover:bg-yellow-600 dark:hover:bg-opacity-5 
-                    hover:bg-opacity-5 transform transition-all hover:scale-99 mb-3 lg:mb-0"
-        >
-          <div className="">
-            <LoginWalletButton
-              provider={provider}
-              loadWeb3Modal={loadWeb3Modal}
-              logoutOfWeb3Modal={logoutOfWeb3Modal}
-            />
-          </div>
         </div>
       </div>
     </div>

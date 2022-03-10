@@ -14,6 +14,7 @@ import useWeb3Modal from '../../hooks/useWeb3Modal';
 import moment from 'moment';
 import Toggle from '../toggle.component';
 import classes from './Navbar.module.css';
+import person from '../../assets/images/profile.svg';
 
 moment().format();
 
@@ -76,7 +77,7 @@ const NavBar = () => {
         data: data,
         headers: {
           'content-type': 'application/json',
-          'auth-token':localStorage.getItem('authtoken')
+          'auth-token': localStorage.getItem('authtoken'),
         },
       })
         .then()
@@ -610,7 +611,10 @@ const NavBar = () => {
                   to={`/profile/${user.username}`}
                   className="shadow-sm 2xl:h-10  2xl:w-10 self-center  h-8 w-8 p-0.5 nm-flat-dbeats-dark-primary hover:nm-inset-dbeats-dark-primary text-white rounded-full font-bold mx-2 flex"
                 >
-                  <img src={user.profile_image} className=" mx-auto self-center rounded-full"></img>
+                  <img
+                    src={user.profile_image ? user.profile_image : person}
+                    className=" mx-auto self-center rounded-full"
+                  ></img>
                 </Link>
               </div>
             ) : (

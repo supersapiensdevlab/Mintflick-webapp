@@ -1,6 +1,6 @@
 import axios from 'axios';
 //import Ticket from '../Profile/ProfileSections/Ticket/Ticket';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import useWeb3Modal from '../../hooks/useWeb3Modal';
@@ -8,6 +8,7 @@ import ForgotPasswordForm from './component/ForgotPasswordForm';
 import LoginForm from './component/LoginForm';
 import SignupForm from './component/SignupForm';
 import { CHAIN_NAMESPACES, CustomChainConfig } from '@web3auth/base';
+import Torus from '@toruslabs/torus-embed';
 
 import Web3 from 'web3';
 import { Web3Auth } from '@web3auth/web3auth';
@@ -24,53 +25,42 @@ const Login = () => {
   const [loader, setLoader] = useState(true);
   const [resetPasswordEmail, setResetPasswordEmail] = useState('');
   const [forgotPassword, setForgotPassword] = useState(false);
-  const [account, setAccount] = useState('');
-  const web3auth = new Web3Auth({
-    chainConfig: {
-      chainNamespace: CHAIN_NAMESPACES.EIP155,
-      rpcTarget: 'https://rpc-mumbai.maticvigil.com',
-      blockExplorer: 'https://mumbai-explorer.matic.today',
-      chainId: '0x13881',
-      displayName: 'Polygon Mumbai Testnet',
-      ticker: 'matic',
-      tickerName: 'matic',
-    },
-    clientId:
-      'BFrU6JsPLNdCdC1jb72ye0Pwc1ViJVl4D9aSqT2qdgPxrUZ79CbwxnhTimVo5cRrXPbGsVWGEYhl0bgIiGhmZc0', // get your clientId from https://developer.web3auth.io
-  });
+  const [account, setAccount] = useState(null);
+
+  useEffect(async () => {
+    if (provider && !account) {
+      const web3 = new Web3(provider);
+      const address = (await web3.eth.getAccounts())[0];
+      const balance = await web3.eth.getBalance(address);
+
+      setAccount(address);
+    }
+  }, [provider]);
+
+  useEffect(async () => {
+    setAccount(null);
+
+    console.log('logged out');
+  }, [logoutOfWeb3Modal]);
   // Metamask Auth
   function WalletButton({ provider, loadWeb3Modal, logoutOfWeb3Modal }) {
     return (
-      <div>
+      <div className="nm-flat-dbeats-dark-secondary p-1 rounded-3xl hover:nm-inset-dbeats-dark-secondary   transform-gpu  transition-all duration-300 ease-in-out ">
         <button
-          className={`font-bold flex self-center text-center
-          ${!provider ? 'cursor-pointer' : 'cursor-default'} `}
+          className={` relative px-5 py-2.5 whitespace-nowrap text-xs sm:text-sm text-white  bg-gradient-to-br from-yellow-500 to-yellow-600  hover:nm-inset-yellow-500 rounded-3xl  `}
           onClick={async () => {
             if (!provider) {
-              let variable = await loadWeb3Modal();
-              const web3 = new Web3(variable);
-              const accounts = await web3.eth.getAccounts();
-              setAccount(accounts[0]);
-              console.log('pubKey', accounts);
-              if (provider) {
-                await axios
-                  .get(`${process.env.REACT_APP_SERVER_URL}/user/getuser_by_wallet/${accounts[0]}`)
-                  .then((value) => {
-                    window.localStorage.setItem('user', JSON.stringify(value.data.user));
-                    window.localStorage.setItem('authtoken', JSON.stringify(value.data.jwtToken));
-                    window.location.href = '/';
-                  });
-              }
+              await loadWeb3Modal();
             } else {
-              logoutOfWeb3Modal();
+              await logoutOfWeb3Modal();
+              setAccount(null);
             }
           }}
-          disabled={provider ? true : false}
         >
           <p className=" ">
             {' '}
-            {!provider
-              ? 'Connect your Wallet '
+            {!account
+              ? 'Sign up using Wallet '
               : `Connected  (${
                   account ? account.slice(0, 8) : '' + '...' + account ? account.slice(-4) : ''
                 })`}
@@ -84,34 +74,40 @@ const Login = () => {
   function LoginWalletButton({ provider, loadWeb3Modal, logoutOfWeb3Modal }) {
     return (
       <div>
-        <Button
-          className="font-bold flex lg:text-sm 2xl:text-lg self-center text-center"
-          type="button"
-          onClick={async () => {
-            let variable = await loadWeb3Modal();
-            const web3 = new Web3(variable);
-            const accounts = await web3.eth.getAccounts();
-            setAccount(accounts[0]);
-            console.log('pubKey', accounts);
-            if (provider && variable) {
-              await axios
-                .get(`${process.env.REACT_APP_SERVER_URL}/user/getuser_by_wallet/${account}`)
-                .then((value) => {
-                  window.localStorage.setItem('user', JSON.stringify(value.data.user));
-                  window.localStorage.setItem('authtoken', JSON.stringify(value.data.jwtToken));
-                  window.location.href = '/';
-                });
-            }
-          }}
+        <div
+          className="    transform-gpu  transition-all duration-300 ease-in-out mt-3 cursor-pointer
+         relative inline-flex items-center justify-center p-1 mb-2 mr-2 overflow-hidden text-sm font-medium 
+         text-gray-900 rounded-3xl  bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-secondary   hover:nm-inset-dbeats-dark-secondary   hover:text-white dark:text-white  "
         >
-          <p className=" ">
-            {!provider
-              ? 'Login using Wallet'
-              : `(${
-                  account ? account.slice(0, 8) : '' + '...' + account ? account.slice(-4) : ''
-                })  Connected (Click Again)`}
-          </p>
-        </Button>
+          <Button
+            className="relative px-5 py-2.5 whitespace-nowrap text-xs sm:text-sm  bg-gradient-to-br from-yellow-500 to-yellow-600 hover:nm-inset-yellow-500 rounded-3xl"
+            type="button"
+            onClick={async () => {
+              if (!provider) {
+                await loadWeb3Modal();
+              }
+              if (provider && account !== '') {
+                console.log('ADDRESS', account);
+                await axios
+                  .get(`${process.env.REACT_APP_SERVER_URL}/user/getuser_by_wallet/${account}`)
+                  .then((value) => {
+                    console.log('VALUE', value.data);
+                    window.localStorage.setItem('user', JSON.stringify(value.data.user));
+                    window.localStorage.setItem('authtoken', JSON.stringify(value.data.jwtToken));
+                    window.location.href = '/';
+                  });
+              }
+            }}
+          >
+            <p className=" ">
+              {!account
+                ? 'Sign in using Wallet'
+                : `(${
+                    account ? account.slice(0, 8) : '' + '...' + account ? account.slice(-4) : ''
+                  })  Connected (Click Again)`}
+            </p>
+          </Button>
+        </div>
       </div>
     );
   }

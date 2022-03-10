@@ -9,6 +9,7 @@ import Billboard from '../../component/Billboard/Billboard-Card';
 import ProfileCard from '../../component/Cards/ProfileCard';
 import Dropdown from '../../component/dropdown.component';
 import FeedbackForm from '../../component/form/feedbackForm';
+import HowToUse from '../../component/form/howToUse';
 import MainToolbar from '../../component/Toolbar/main-toolbar';
 import animationData from '../../lotties/gamers.json';
 import ResponsiveCarousel from './Cards/HomeSlider';
@@ -256,13 +257,14 @@ const Home = () => {
 
             <div className="w-full col-span-4 md:col-span-3 lg:col-span-3 xl:col-span-2   h-full   md:block hidden      ">
               <div className="sticky top-20">
-                <Billboard user={user}></Billboard>
+                {/* <Billboard user={user}></Billboard> */}
+                <HowToUse className="z-500" />
               </div>
             </div>
             {/* {classes.other_videos} */}
 
             <div className="flex flex-col justify-between     h-full w-full  col-span-10 md:col-span-6 lg:col-span-5  xl:col-span-4 ">
-              <div className="2xl:px-4 lg:px-3  ">
+              <div className="2xl:px-4 lg:px-3  my-2 sm:my-4">
                 <div>
                   {user ? <MainToolbar></MainToolbar> : ''}
                   <div className=" ">
@@ -339,7 +341,7 @@ const Home = () => {
                       return (
                         <div key={i}>
                           <PlayBackCard darkMode={darkMode} playbackUserData={playbackUser} />
-                          {i % 3 == 0 ? <Billboard user={user}></Billboard> : null}
+                          {/* {i % 3 == 0 ? <Billboard user={user}></Billboard> : null} */}
                         </div>
                       );
                     })}
@@ -358,7 +360,7 @@ const Home = () => {
             </div>
 
             <div className="w-full   h-full    col-span-4 md:col-span-3 lg:col-span-2 xl:col-span-2  lg:block hidden  ">
-              <div className=" ">
+              <div className="my-4 ">
                 <FeedbackForm className="z-500" />
               </div>
 
