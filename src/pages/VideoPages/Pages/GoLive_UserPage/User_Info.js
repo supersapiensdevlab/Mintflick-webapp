@@ -407,7 +407,14 @@ const UserInfo = (props) => {
   // }
 
   // console.log(user);
+useEffect(()=>{
+if(!user){
+  window.location.href='/signup'
+}
+},[])
+
   return (
+    user?(
     <Fragment className={`${darkMode && 'dark'}`}>
       <div className="grid sm:grid-cols-1 lg:grid-cols-3 grid-flow-row  pb-50  lg:ml-12  bg-gradient-to-b from-blue-50 via-blue-50 to-white  dark:bg-gradient-to-b dark:from-dbeats-dark-secondary  dark:to-dbeats-dark-primary">
         <div className=" lg:col-span-2 pt-3 mt-10">
@@ -1106,6 +1113,7 @@ const UserInfo = (props) => {
         </h2>
       </Modal>
     </Fragment>
+    ):<></>
   );
 };
 
