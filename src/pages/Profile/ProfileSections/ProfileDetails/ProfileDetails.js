@@ -62,8 +62,8 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
   const [displayName, setDisplayName] = useState(user.name);
 
   const myData = JSON.parse(window.localStorage.getItem('user'));
-  console.log(myData.username);
-  console.log(user.username);
+  // console.log(myData.username);
+  // console.log(user.username);
 
   useEffect(() => {
     let value = JSON.parse(window.localStorage.getItem('user'));

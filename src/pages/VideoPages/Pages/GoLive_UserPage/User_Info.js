@@ -420,31 +420,37 @@ const UserInfo = (props) => {
               <div className="dark:text-dbeats-white mt-3 ml-2">
                 <p className="text-md">To create NFT start Recording</p>
                 <div className="flex justify-between items-center w-full pt-2 text-white">
-                  <button
-                    className={`text-center rounded-md w-full 
+                  <div className="w-2/3">
+                    <button
+                      className={`text-center rounded-md w-1/4 
                     ${recording ? 'bg-green-300' : 'bg-green-600'} mx-2 py-2`}
-                    disabled={recording}
-                    onClick={startRecording}
-                  >
-                    Start Recording
-                  </button>
-                  <button
-                    className={`text-center rounded-md w-full 
+                      disabled={recording}
+                      onClick={startRecording}
+                    >
+                      Start Recording
+                    </button>
+                    {recording ? (
+                      <button
+                        className={`text-center rounded-md w-1/4 
                     ${!recording ? 'bg-red-300' : 'bg-red-600'} mx-2 py-2`}
-                    disabled={!recording}
-                    onClick={stopRecording}
-                  >
-                    Stop Recording
-                  </button>
+                        disabled={!recording}
+                        onClick={stopRecording}
+                      >
+                        Stop Recording
+                      </button>
+                    ) : (
+                      <></>
+                    )}
+                  </div>
+                  <p className={`text-white text-lg text-center pr-2 flex `}>
+                    <span className={` text-${viewColor}  ${viewAnimate} font-bold mr-2`}>
+                      {livestreamViews}
+                    </span>
+                    viewers
+                  </p>
                 </div>
               </div>
             )}
-            <p className={`text-white text-lg text-right pr-2 flex flex-col`}>
-              <span className={` text-${viewColor}  ${viewAnimate} font-bold`}>
-                {livestreamViews - 1}
-              </span>
-              viewers
-            </p>
           </div>
         </div>
         {user.livepeer_data.isActive ? (
