@@ -49,7 +49,7 @@ const LoginForm = ({
           window.localStorage.setItem('user', JSON.stringify(response.data.user));
           window.localStorage.setItem('authtoken', JSON.stringify(response.data.jwtToken));
           //window.location.reload();
-          //window.location.href = '/';
+          window.location.href = '/';
         } else {
           setInvalidUsername(true);
         }

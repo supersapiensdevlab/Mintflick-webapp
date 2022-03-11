@@ -172,11 +172,18 @@ const AnnouncementCard = (props) => {
               </div>
             </div>
           </p>
-          <div className="absolute bottom-0">
-            <button onClick={()=>{setShowDelete(true)}} className="mb-5 px-2 py-1 rounded-md bg-dbeats-light text-dbeats-white hover:bg-red-500">
-              Delete
-            </button>
-          </div>
+          {props.privateUser && (
+            <div className="absolute bottom-0">
+              <button
+                onClick={() => {
+                  setShowDelete(true);
+                }}
+                className="mb-5 px-2 py-1 rounded-md bg-dbeats-light text-dbeats-white hover:bg-red-500"
+              >
+                Delete
+              </button>
+            </div>
+          )}
         </div>
       </div>
       <ShareModal
@@ -186,7 +193,12 @@ const AnnouncementCard = (props) => {
         copybuttonText={buttonText}
         setCopyButtonText={setButtonText}
       />
-      <DeleteModal type='post' data={props.post} show={showDelete} setShowDelete={setShowDelete}></DeleteModal>
+      <DeleteModal
+        type="post"
+        data={props.post}
+        show={showDelete}
+        setShowDelete={setShowDelete}
+      ></DeleteModal>
     </div>
   );
 };

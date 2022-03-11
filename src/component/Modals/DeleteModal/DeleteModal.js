@@ -23,6 +23,7 @@ function DeleteModal({ show, setShowDelete, data ,type}) {
       setShowDelete(false);
       axios.get(`${process.env.REACT_APP_SERVER_URL}/user/${user.username}`).then((value) => {
         window.localStorage.setItem('user', JSON.stringify(value.data));
+        location.reload();
       });
     }).catch((error)=>{
       console.log(error);
@@ -51,8 +52,8 @@ function DeleteModal({ show, setShowDelete, data ,type}) {
               <p>Are you sure you want to delete it from Dbeats?</p>
               {data.meta_url &&             
               <p>
-              Note: Your Content will only be deleted from Dbeats but will be available on IPFS to anyone
-              who has the {data.meta_url}.
+              Note: Your Content will only be deleted from Dbeats but will be <br /> available on IPFS to anyone
+              who has the <a href={data.meta_url} className='text-dbeats-secondary-light'>Link</a>
             </p>}
             <button onClick={handleConfirm} className="mt-3 px-2 py-1 rounded-md bg-red-600 hover:bg-red-400 text-right">
               Confirm

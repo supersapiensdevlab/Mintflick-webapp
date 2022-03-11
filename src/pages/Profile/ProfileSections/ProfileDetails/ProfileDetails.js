@@ -546,7 +546,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                         ////console.log(playbackUser)
                         return (
                           <div key={i}>
-                            <AnnouncementCard post={post} index={i} username={user.username} />
+                            <AnnouncementCard privateUser={privateUser} post={post} index={i} username={user.username} />
                           </div>
                         );
                       })}
@@ -569,6 +569,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                           return (
                             <div key={i}>
                               <CarouselCard
+                              privateUser={privateUser}
                                 videono={i}
                                 playbackUserData={playbackUser}
                                 index={user.videos.length - 1 - i}
@@ -597,6 +598,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                           return (
                             <div key={i} className="w-full">
                               <TrackCard
+                              privateUser={privateUser}
                                 trackno={i}
                                 track={track}
                                 index={i}

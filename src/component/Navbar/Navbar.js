@@ -585,7 +585,6 @@ const NavBar = () => {
                     >
                       {notification.length > 0 ? (
                         <>
-                          <p className="text-right px-4 py-2">clear all</p>
                           {notification.map((value, i) => {
                             return (
                               <div className="px-1   " key={i}>

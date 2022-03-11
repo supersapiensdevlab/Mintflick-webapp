@@ -47,7 +47,9 @@ function LiveChat({ userp }) {
       socket.on('live_message', (msg) => {
         console.log(msg);
         setMessages((prevArray) => [...prevArray, msg]);
-        chatRef.current.scrollIntoView({ behavior: 'smooth' });
+        if (chatRef.current) {
+          chatRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
       });
     } else {
       //   window.history.replaceState({}, 'Home', '/');
@@ -63,27 +65,31 @@ function LiveChat({ userp }) {
   // set a new message in gun, update the local state to reset the form field
   function saveMessage(e) {
     e.preventDefault();
-    let room = {
-      room_admin: userp._id,
-      chat: {
-        user_id: user._id,
-        username: user.username,
-        profile_image: user.profile_image,
-        type: 'text',
-        message: formState.message,
-        createdAt: Date.now(),
-      },
-    };
-    if (formState.replyto) {
-      room.chat.reply_to = formState.replyto;
+    if (user) {
+      let room = {
+        room_admin: userp._id,
+        chat: {
+          user_id: user._id,
+          username: user.username,
+          profile_image: user.profile_image,
+          type: 'text',
+          message: formState.message,
+          createdAt: Date.now(),
+        },
+      };
+      if (formState.replyto) {
+        room.chat.reply_to = formState.replyto;
+      }
+      console.log(room);
+      currentSocket.emit('live_chatMessage', room);
+      setForm({
+        message: '',
+        replyto: null,
+      });
+      setShowEmojis(false);
+    } else {
+      window.location.href = '/signup';
     }
-    console.log(room);
-    currentSocket.emit('live_chatMessage', room);
-    setForm({
-      message: '',
-      replyto: null,
-    });
-    setShowEmojis(false);
   }
   // update the form state as the user types
   function onChange(e) {

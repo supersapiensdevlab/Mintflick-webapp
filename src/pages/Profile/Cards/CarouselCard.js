@@ -2,6 +2,7 @@ import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import ReactPlayer from 'react-player';
 import { Link } from 'react-router-dom';
+import DeleteModal from '../../../component/Modals/DeleteModal/DeleteModal';
 import { ShareModal } from '../../../component/Modals/ShareModal/ShareModal';
 import classes from '../Profile.module.css';
 
@@ -19,6 +20,8 @@ const CarouselCard = (props) => {
 
   const text = 'Copy Link To Clipboard';
   const [buttonText, setButtonText] = useState(text);
+
+  const [showDelete, setShowDelete] = useState(false);
 
   let sharable_data = `${process.env.REACT_APP_CLIENT_URL}/playback/${props.username}/${props.playbackUserData.videoId}`;
 
@@ -86,6 +89,16 @@ const CarouselCard = (props) => {
                 <p className="2xl:text-sm lg:text-xs md:text-sm text-gray-500 lg:my-3 md:my-2 2xl:my-0">
                   {time}
                 </p>
+                {props.privateUser && (
+                  <button
+                    onClick={() => {
+                      setShowDelete(true);
+                    }}
+                    className="mb-5 mt-5 px-2 py-1 rounded-md bg-dbeats-light text-dbeats-white hover:bg-red-500"
+                  >
+                    Delete
+                  </button>
+                )}
               </div>
             </div>
             <div>
@@ -105,6 +118,12 @@ const CarouselCard = (props) => {
         copybuttonText={buttonText}
         setCopyButtonText={setButtonText}
       />
+      <DeleteModal
+        type="video"
+        data={props.playbackUserData}
+        show={showDelete}
+        setShowDelete={setShowDelete}
+      ></DeleteModal>
     </div>
   );
 };
