@@ -95,7 +95,7 @@ const SignupForm = ({
           setExistingValue(response.data);
         } else {
           window.localStorage.setItem('user', JSON.stringify(response.data.user));
-          window.localStorage.setItem('authtoken', response.data.jwtToken);
+          window.localStorage.setItem('authtoken', JSON.stringify(response.data.jwtToken));
           window.location.href = '/';
         }
       })
