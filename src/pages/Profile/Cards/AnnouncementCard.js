@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { detectURLs, linkify } from '../../../component/uploadHelperFunction';
 import { ShareModal } from '../../../component/Modals/ShareModal/ShareModal';
 import classes from '../Profile.module.css';
+import DeleteModal from '../../../component/Modals/DeleteModal/DeleteModal';
 
 moment().format();
 
@@ -27,6 +28,8 @@ const AnnouncementCard = (props) => {
   const [buttonText, setButtonText] = useState(text);
 
   let sharable_data = `${process.env.REACT_APP_CLIENT_URL}/profile/${props.username}/posts`;
+
+  const [showDelete, setShowDelete] = useState(false);
 
   const handleMouseMove = () => {
     setPlaying(true);
@@ -136,7 +139,7 @@ const AnnouncementCard = (props) => {
           </Link>
         </div>
 
-        <div className={`px-5 w-full py-2`}>
+        <div className={`px-5 w-full py-2 relative`}>
           <p className="flex w-full justify-between text-black text-sm font-medium dark:text-gray-100">
             <div className="w-full">
               <div className="text-gray-500  pb-1">{time}</div>
@@ -169,6 +172,18 @@ const AnnouncementCard = (props) => {
               </div>
             </div>
           </p>
+          {props.privateUser && (
+            <div className="absolute bottom-0">
+              <button
+                onClick={() => {
+                  setShowDelete(true);
+                }}
+                className="mb-5 px-2 py-1 rounded-md bg-dbeats-light text-dbeats-white hover:bg-red-500"
+              >
+                Delete
+              </button>
+            </div>
+          )}
         </div>
       </div>
       <ShareModal
@@ -178,6 +193,12 @@ const AnnouncementCard = (props) => {
         copybuttonText={buttonText}
         setCopyButtonText={setButtonText}
       />
+      <DeleteModal
+        type="post"
+        data={props.post}
+        show={showDelete}
+        setShowDelete={setShowDelete}
+      ></DeleteModal>
     </div>
   );
 };

@@ -272,7 +272,7 @@ const PublicInfo = (props) => {
                 </div>
                 {!privateUser ? (
                   <div>
-                    {userData ? (
+                    {user && userData ? (
                       <>
                         {' '}
                         <div className="flex   text-black text-sm font-medium   px-4  py-3">
@@ -373,7 +373,7 @@ const PublicInfo = (props) => {
                     ) : (
                       <Link
                         to="/signup"
-                        className="bg-dbeats-light flex  p-1 2xl:text-lg lg:text-sm text-md  rounded-sm 2xl:px-4 px-4 lg:px-2 mr-3 font-semibold text-white "
+                        className="bg-dbeats-light flex w-max  p-1 2xl:text-lg lg:text-sm text-md  rounded-sm 2xl:px-4 px-4 lg:px-2 mr-3 font-semibold text-white "
                       >
                         <span className="whitespace-nowrap flex">
                           Login to Subscribe & Become a SuperFan
@@ -386,7 +386,7 @@ const PublicInfo = (props) => {
               <div className="2xl:text-2xl lg:text-md 2xl:py-4 lg:py-2 py-2 flex justify-around dark:text-dbeats-white">
                 <p className={`text-white text-lg text-center pr-2 flex flex-col`}>
                   <span className={`text-${viewColor}  ${viewAnimate} font-bold`}>
-                    {livestreamViews - 1}
+                    {livestreamViews}
                   </span>
                   viewers
                 </p>

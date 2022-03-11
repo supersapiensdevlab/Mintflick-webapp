@@ -353,7 +353,7 @@ const NavBar = () => {
               </svg>
             </div>
             <div className="flex items-center">
-              <Link to="/" className="  self-center cursor-pointer sm:flex hidden">
+              <a href="/" className="  self-center cursor-pointer sm:flex hidden">
                 <img
                   src={logo}
                   alt="dbeats_logo"
@@ -365,8 +365,8 @@ const NavBar = () => {
                   className="h-10 lg:h-7 2xl:h-10 w-max hidden dark:block"
                 ></img>
                 <span className="mr-5 text-lg font-bold   sm:ml-2"> </span>
-              </Link>
-              <Link to="/" className="flex self-center cursor-pointer sm:hidden ">
+              </a>
+              <a href="/" className="flex self-center cursor-pointer sm:hidden ">
                 <img
                   src={CircleLogo}
                   alt="dbeats_logo"
@@ -378,7 +378,7 @@ const NavBar = () => {
                   className="h-10 lg:h-7 2xl:h-10 w-max hidden dark:block  "
                 ></img>
                 <span className="mr-5 text-lg font-bold   sm:ml-2"> </span>
-              </Link>
+              </a>
               <p
                 className="px-2 -ml-3.5 flex pb-0.5 mt-1 text-xs text-white dark:text-dbeats-light 
               bg-dbeats-light dark:bg-dbeats-alt border border-white dark:border-dbeats-light font-semibold rounded-lg"
@@ -585,7 +585,6 @@ const NavBar = () => {
                     >
                       {notification.length > 0 ? (
                         <>
-                          <p className="text-right px-4 py-2">clear all</p>
                           {notification.map((value, i) => {
                             return (
                               <div className="px-1   " key={i}>
