@@ -98,54 +98,56 @@ const PlayBackInfo = (props) => {
   console.log(props);
 
   const trackFollowers = () => {
-    setLoader(false);
-    const followData = {
-      following: `${userData.username}`,
-      follower: `${user.username}`,
-    };
-    if (subscribeButtonText === 'Subscribe') {
-      axios({
-        method: 'POST',
-        url: `${process.env.REACT_APP_SERVER_URL}/user/follow`,
-        headers: {
-          'content-type': 'application/json',
-          'auth-token':localStorage.getItem('authtoken')
-        },
-        data: followData,
-      })
-        .then(function (response) {
-          if (response) {
-            setSubscribeButtonText('Unsubscribe');
-            setLoader(true);
-          } else {
-            alert('Invalid Login');
-          }
+    if (user != null) {
+      setLoader(false);
+      const followData = {
+        following: `${userData.username}`,
+        follower: `${user.username}`,
+      };
+      if (subscribeButtonText === 'Subscribe') {
+        axios({
+          method: 'POST',
+          url: `${process.env.REACT_APP_SERVER_URL}/user/follow`,
+          headers: {
+            'content-type': 'application/json',
+            'auth-token': localStorage.getItem('authtoken'),
+          },
+          data: followData,
         })
-        .catch(function (error) {
-          console.log(error);
-        });
-    } else {
-      axios({
-        method: 'POST',
-        url: `${process.env.REACT_APP_SERVER_URL}/user/unfollow`,
-        headers: {
-          'content-type': 'application/json',
-          'auth-token':localStorage.getItem('authtoken')
-        },
-        data: followData,
-      })
-        .then(function (response) {
-          if (response) {
-            console.log(response);
-            setSubscribeButtonText('Subscribe');
-            setLoader(true);
-          } else {
-            alert('Invalid Login');
-          }
+          .then(function (response) {
+            if (response) {
+              setSubscribeButtonText('Unsubscribe');
+              setLoader(true);
+            } else {
+              alert('Invalid Login');
+            }
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+      } else {
+        axios({
+          method: 'POST',
+          url: `${process.env.REACT_APP_SERVER_URL}/user/unfollow`,
+          headers: {
+            'content-type': 'application/json',
+            'auth-token': localStorage.getItem('authtoken'),
+          },
+          data: followData,
         })
-        .catch(function (error) {
-          console.log(error);
-        });
+          .then(function (response) {
+            if (response) {
+              console.log(response);
+              setSubscribeButtonText('Subscribe');
+              setLoader(true);
+            } else {
+              alert('Invalid Login');
+            }
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+      }
     }
   };
 
@@ -304,7 +306,7 @@ const PlayBackInfo = (props) => {
         url: `${process.env.REACT_APP_SERVER_URL}/user/reactions`,
         headers: {
           'content-type': 'application/json',
-          'auth-token':localStorage.getItem('authtoken')
+          'auth-token': localStorage.getItem('authtoken'),
         },
         data: reactionData,
       })
@@ -371,7 +373,7 @@ const PlayBackInfo = (props) => {
         url: `${process.env.REACT_APP_SERVER_URL}/user/removeuserreaction`,
         headers: {
           'content-type': 'application/json',
-          'auth-token':localStorage.getItem('authtoken')
+          'auth-token': localStorage.getItem('authtoken'),
         },
         data: reactionData,
       })
@@ -429,7 +431,7 @@ const PlayBackInfo = (props) => {
           url: `${process.env.REACT_APP_SERVER_URL}/user/views`,
           headers: {
             'content-type': 'application/json',
-            'auth-token':localStorage.getItem('authtoken')
+            'auth-token': localStorage.getItem('authtoken'),
           },
           data: videoDetails,
         });
@@ -520,7 +522,9 @@ const PlayBackInfo = (props) => {
                           <div className="flex items-center   w-full">
                             <button
                               className="flex items-center dark:bg-dbeats-dark-primary border border-dbeats-light dark:hover:bg-dbeats-light p-1 2xl:text-lg lg:text-sm text-md rounded-sm 2xl:px-4 px-4 lg:px-2 mr-3 font-semibold text-white "
-                              onClick={trackFollowers}
+                              onClick={
+                                user != null ? trackFollowers : (window.location.href = '/signup')
+                              }
                             >
                               <span>{subscribeButtonText}</span>
                               <div
@@ -530,7 +534,11 @@ const PlayBackInfo = (props) => {
                             </button>
 
                             <button
-                              onClick={handleShowSubscriptionModal}
+                              onClick={
+                                user != null
+                                  ? handleShowSubscriptionModal
+                                  : (window.location.href = '/signup')
+                              }
                               className={
                                 footerData.superfan_data
                                   ? ' flex dark:bg-dbeats-dark-primary border border-dbeats-light dark:hover:bg-dbeats-light p-1 2xl:text-lg lg:text-sm text-md  rounded-sm 2xl:px-4 px-4 lg:px-2      mr-3 font-semibold text-white   '

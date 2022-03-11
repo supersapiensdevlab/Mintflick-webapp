@@ -256,7 +256,7 @@ const UploadVideoModal = (props) => {
           .then(() => {
             let url = 'https://ipfs.infura.io/ipfs/' + cid + '/meta.json';
             console.log(url);
-            //createSale(url); uncomment for minting NFT after video's meta.json is Uploaded to IPFS
+            //createSale(url); //uncomment for minting NFT after video's meta.json is Uploaded to IPFS
             setVideo({
               videoName: '',
               videoImage: '',
@@ -330,6 +330,35 @@ const UploadVideoModal = (props) => {
   //   //await transaction.wait();
   //   props.handleCloseVideoUpload();
   // }
+
+  async function createSale(url) {
+    // const web3Modal = new Web3Modal({
+    //   cacheProvider: true,
+    // });
+
+    const connection = await useWeb3Modal.loadWeb3Modal();
+
+    const provider = new ethers.providers.Web3Provider(connection);
+    const signer = provider.getSigner();
+
+    /* next, create the item */
+    let contract = new ethers.Contract(nftmarketaddress, Market.abi, signer);
+    const price = ethers.utils.parseUnits(NFTprice, 'ether');
+
+    let transaction = await contract.createToken(url, price);
+    await transaction.wait();
+    //let event = tx.events[0];
+    //let value = event.args[2];
+    //let tokenId = value.toNumber();
+    // {
+    //   value: listingPrice,
+    // }
+    //transaction = await contract.createMarketItem(tokenId, price);
+    //await transaction.wait();
+    props.handleCloseVideoUpload();
+
+    //history.push('/');
+  }
   const customStyles = {
     content: {
       top: '100%',

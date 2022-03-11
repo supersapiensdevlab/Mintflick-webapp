@@ -336,7 +336,9 @@ const PublicInfo = (props) => {
                             <button
                               id="subscribeButton"
                               className="flex items-center dark:bg-dbeats-dark-primary border border-dbeats-light dark:hover:bg-dbeats-light p-1 2xl:text-lg lg:text-sm text-md rounded-sm 2xl:px-4 px-4 lg:px-2 mr-3 font-semibold text-white "
-                              onClick={trackFollowers}
+                              onClick={
+                                user != null ? trackFollowers : (window.location.href = '/signup')
+                              }
                             >
                               <span>{subscribeButtonText}</span>
                               {/* <div
@@ -347,7 +349,11 @@ const PublicInfo = (props) => {
                           ) : null}
 
                           <button
-                            onClick={handleShowSubscriptionModal}
+                            onClick={
+                              user != null
+                                ? handleShowSubscriptionModal
+                                : (window.location.href = '/signup')
+                            }
                             className={
                               userData.superfan_data
                                 ? ' flex dark:bg-dbeats-dark-primary border border-dbeats-light dark:hover:bg-dbeats-light p-1 2xl:text-lg lg:text-sm text-md  rounded-sm 2xl:px-4 px-4 lg:px-2      mr-3 font-semibold text-white   '

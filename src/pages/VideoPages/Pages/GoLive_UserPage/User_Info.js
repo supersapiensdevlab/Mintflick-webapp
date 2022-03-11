@@ -416,29 +416,31 @@ const UserInfo = (props) => {
             {user ? (
               <VideoPlayer playbackUrl={playbackUrl} creatorData={user} footer={false} />
             ) : null}
-            {user.livepeer_data.isActive && (
-              <div className="dark:text-dbeats-white mt-3 ml-2">
-                <p className="text-md">To create NFT start Recording</p>
-                <div className="flex justify-between items-center w-full pt-2 text-white">
-                  <button
-                    className={`text-center rounded-md w-full 
+            {user.livepeer_data
+              ? user.livepeer_data.isActive && (
+                  <div className="dark:text-dbeats-white mt-3 ml-2">
+                    <p className="text-md">To create NFT start Recording</p>
+                    <div className="flex justify-between items-center w-full pt-2 text-white">
+                      <button
+                        className={`text-center rounded-md w-full 
                     ${recording ? 'bg-green-300' : 'bg-green-600'} mx-2 py-2`}
-                    disabled={recording}
-                    onClick={startRecording}
-                  >
-                    Start Recording
-                  </button>
-                  <button
-                    className={`text-center rounded-md w-full 
+                        disabled={recording}
+                        onClick={startRecording}
+                      >
+                        Start Recording
+                      </button>
+                      <button
+                        className={`text-center rounded-md w-full 
                     ${!recording ? 'bg-red-300' : 'bg-red-600'} mx-2 py-2`}
-                    disabled={!recording}
-                    onClick={stopRecording}
-                  >
-                    Stop Recording
-                  </button>
-                </div>
-              </div>
-            )}
+                        disabled={!recording}
+                        onClick={stopRecording}
+                      >
+                        Stop Recording
+                      </button>
+                    </div>
+                  </div>
+                )
+              : null}
             <p className={`text-white text-lg text-right pr-2 flex flex-col`}>
               <span className={` text-${viewColor}  ${viewAnimate} font-bold`}>
                 {livestreamViews - 1}
@@ -447,6 +449,7 @@ const UserInfo = (props) => {
             </p>
           </div>
         </div>
+        user.livepeer_data?
         {user.livepeer_data.isActive ? (
           user.username && (
             <div className="  w-full col-span-1" style={{ height: '100vh' }}>
