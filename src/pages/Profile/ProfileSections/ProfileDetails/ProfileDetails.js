@@ -21,6 +21,7 @@ import ReactionCard from '../../Cards/ReactionCard';
 import TrackCard from '../../Cards/TrackCard';
 import dbeatsLogoBnW from '../../../../assets/images/Logo/logo-blacknwhite.png';
 import { Image } from 'react-img-placeholder';
+import SuperfanModal from '../../../../component/Modals/SuperfanModal/superfan-modal';
 
 const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow, darkMode }) => {
   const [pinnedData, setPinnedData] = useState([]);
@@ -60,6 +61,13 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
 
   const [buttonText, setButtonText] = useState('Subscribe');
   const [displayName, setDisplayName] = useState(user.name);
+
+  const [superfan_data,setSuperfan_data] = useState(null);
+  const [showSubscriptionModal, setshowSubscriptionModal] = useState(false);
+
+  const handleShowSubscriptionModal = () => setshowSubscriptionModal(true);
+  const handleCloseSubscriptionModal = () => setshowSubscriptionModal(false);
+  const [pageUser , setPageUser] = useState(null);
 
   const myData = JSON.parse(window.localStorage.getItem('user'));
   if (myData)
@@ -158,6 +166,8 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
       setFollowing(value.data.followee_count.length);
       setIsMailVerified(value.data.is_mail_verified);
       setIsVerified(value.data.is_verified);
+      setSuperfan_data(value.data.superfan_data);
+      setPageUser(value.data)
 
       if (value.data.cover_image && value.data.cover_image !== '') {
         setCoverImage(value.data.cover_image);
@@ -395,7 +405,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
               <div className="w-full flex flex-col   z-1 mx-auto ">
                 <div className="  flex flex-col lg:flex-row justify-between   md:mt-20  mt-40  sm:-mt-24 text-gray-400   dark:bg-dbeats-dark-primary bg-white dark:backdrop-filter dark:backdrop-blur dark:bg-opacity-80  backdrop-filter  backdrop-blur  bg-opacity-90">
                   <div className="dark:text-white  text-dbeats-dark-alt 2xl:py-4 lg:py-2.5    md:py-3 lg:mx-0 px-10 lg:px-10 md:px-4 ">
-                    <div className="flex w-max lg:pt-0 items-center ">
+                    <div className="flex flex-wrap lg:pt-0 items-center ">
                       <span className="font-bold 2xl:text-xl lg:text-xl md:text-xl mr-3 font-GTWalsheimPro">
                         {user.name}
                       </span>
@@ -427,6 +437,24 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                       >
                         <i className="fas fa-share-alt self-center mr-2 "></i> SHARE
                       </button>
+                      {!privateUser && myData && superfan_data ? (
+                        <button
+                          onClick={handleShowSubscriptionModal}
+                          className={
+                            superfan_data
+                              ? ' flex dark:bg-dbeats-dark-primary border border-dbeats-light dark:hover:bg-dbeats-light p-1 2xl:text-lg lg:text-sm text-md  rounded-sm 2xl:px-4 px-4 lg:px-2      mr-3 font-semibold text-white   '
+                              : 'hidden'
+                          }
+                        >
+                          <span
+                            className={`${
+                              superfan_data ? '' : 'hidden'
+                            } whitespace-nowrap  flex`}
+                          >
+                            Become a Superfan
+                          </span>
+                        </button>
+                      ) : null}
                       {privateUser ? (
                         <button
                           onClick={handleShowUpdate}
@@ -792,6 +820,12 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
         darkMode={darkMode}
         setDisplayName={setDisplayName}
       />
+       <SuperfanModal
+            userDataDetails={pageUser}
+            show={showSubscriptionModal}
+            handleClose={handleCloseSubscriptionModal}
+            className={`${darkMode && 'dark'}   mx-auto    mt-32 shadow `}
+          />
     </div>
   );
 };

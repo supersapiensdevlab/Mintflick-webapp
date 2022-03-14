@@ -104,6 +104,21 @@ const PlayBackCard = (props) => {
   const handleCloseBidModal = () => setShowBidModal(false);
   const handleShowBidModal = () => setShowBidModal(true);
 
+  const handleLike = () =>{
+    if(user){
+      // Code For Like 
+    }else{
+      window.location.href='/signup'
+    }
+  }
+  const handleReport = () =>{
+    if(user){
+      // Code For Report 
+    }else{
+      window.location.href='/signup'
+    }
+  }
+
   return (
     <>
       {props.playbackUserData.user ? (
@@ -254,7 +269,7 @@ const PlayBackCard = (props) => {
             </div>
             <div className="grid grid-cols-3 border-t border-opacity-20 mx-2">
               <div className="flex text-white  items-center justify-center text-sm font-medium  text-center px-4  py-3">
-                <p className="w-full mt-2 text-center cursor-pointer opacity-50 hover:opacity-100">
+                <p onClick={handleLike} className="w-full mt-2 text-center cursor-pointer opacity-50 hover:opacity-100">
                   <i className="fas fa-heart mr-2"></i>
                   Like
                 </p>
@@ -265,7 +280,7 @@ const PlayBackCard = (props) => {
                 </p>
               </div>
               <div className="flex  text-white  items-center justify-center text-sm font-medium  text-center px-4  py-3">
-                <p className="w-full mt-2 text-center cursor-pointer opacity-50 hover:opacity-100 flex items-center justify-center">
+                <p onClick={handleReport} className="w-full mt-2 text-center cursor-pointer opacity-50 hover:opacity-100 flex items-center justify-center">
                   <i className="fas fa-flag mr-2"></i> Report
                 </p>
               </div>
