@@ -60,6 +60,7 @@ const UploadVideoModal = (props) => {
 
   const [videoUpload, setVideoUpload] = useState(false);
   const [videoImageUpload, setVideoImageUpload] = useState(false);
+  const [warning,setWarning] = useState(null);
 
   const [video, setVideo] = useState({
     videoName: '',
@@ -169,8 +170,20 @@ const UploadVideoModal = (props) => {
   }, [selectedCategory, selectedCommercialUse, selectedDerivativeWorks, selectedAttribution, tags]);
 
   const PostData = async (e) => {
-    props.setLoader(false);
     e.preventDefault();
+    if(!videoUpload){
+      setWarning('Please select a video');
+      return;
+    }else if(!videoImageUpload){
+      setWarning('Please select video thumbnail');
+      return;
+    }else if(video.videoName == ''){
+      setWarning('Please enter a video name');
+      return;
+    }else{
+      setWarning(null);
+    }
+    props.setLoader(false);
     const {
       videoName,
       videoImage,
@@ -402,7 +415,7 @@ const UploadVideoModal = (props) => {
                           className="text-center relative cursor-pointer bg-white rounded-md font-medium text-dbeats-light hover:text-blue-500 focus-within:outline-none focus-within:ring-0 focus-within:ring-offset-2 focus-within:ring-blue-500"
                         >
                           <span id="video-thumbnail-label" className="truncate w-32">
-                            Choose Video Thumbnail <span className="text-red-600"> *</span>
+                            Choose Video Thumbnail <span className="text-red-600 text-xs"><i className="fa-solid fa-star-of-life"></i></span>
                           </span>
                           <input
                             id="file-upload3"
@@ -444,7 +457,7 @@ const UploadVideoModal = (props) => {
                           className="relative cursor-pointer bg-white rounded-md font-medium text-dbeats-light hover:text-blue-500 focus-within:outline-none focus-within:ring-0 focus-within:ring-offset-2 focus-within:ring-blue-500"
                         >
                           <p className="truncate w-32 " id="video-label">
-                            Choose Video file <span className="text-red-600"> *</span>
+                            Choose Video file <span className="text-red-600 text-xs"><i className="fa-solid fa-star-of-life"></i></span>
                           </p>
                           <input
                             id="file-upload4"
@@ -535,7 +548,7 @@ const UploadVideoModal = (props) => {
                           htmlFor="videoName"
                           className="block 2xl:text-sm text-sm lg:text-xs font-medium dark:text-gray-100 text-gray-700 "
                         >
-                          Video Title <span className="text-red-600"> *</span>
+                          Video Title <span className="text-red-600 text-xs"><i className="fa-solid fa-star-of-life"></i></span>
                         </label>
                         <div className="mt-1 flex rounded-md shadow-sm nm-flat-dbeats-dark-secondary  p-0.5">
                           <input
@@ -669,6 +682,7 @@ const UploadVideoModal = (props) => {
           </div>
 
           <div className="lg:px-4 2xl:py-3 lg:py-1 lg:text-right text-center sm:px-6 flex justify-end items-center">
+            {warning && <span className='mr-16 text-red-500'><i className="fa-solid fa-triangle-exclamation"></i> {warning}</span>}
             <div className=" mx-5 flex items-center w-64">
               <input
                 type="range"
@@ -695,7 +709,6 @@ const UploadVideoModal = (props) => {
                 px-3 2xl:text-lg rounded  border-dbeats-light border
                 lg:text-md text-md my-auto font-semibold  bg-transparent
                 dark:text-white `}
-              disabled={!videoUpload || !videoImageUpload}
             ></input>
             <div
               className="animate-spin rounded-full h-7 w-7 ml-3 border-t-2 border-b-2 bg-gradient-to-r from-green-400 to-blue-500 "
