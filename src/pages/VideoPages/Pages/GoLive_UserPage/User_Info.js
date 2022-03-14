@@ -926,7 +926,7 @@ if(!user){
         </main>
       </Modal>
 
-      {user.livepeer_data.isActive && (
+      {/* {user.livepeer_data.isActive && (
         <div className="text-sm ml-20 col-span-1  2xl:mt-10 lg:mt-4 mb-6 max-w-md">
           <div className="bg-white dark:bg-dbeats-dark-primary dark:text-dbeats-white w-80 border border-dbeats-light border-opacity-40  2xl:w-full  p-5 rounded text-sm sm:lg:text-xl shadow mt-6  lg:ml-0 ">
             <div className="grid grid-cols-2">
@@ -1098,7 +1098,7 @@ if(!user){
             </>
           </div>
         </div>
-      )}
+      )} */}
       <Modal
         isOpen={showPriceModal}
         className="h-max lg:w-1/3 w-5/6 mx-auto 2xl:mt-24 lg:mt-16 mt-24 shadow-xl bg-white"
