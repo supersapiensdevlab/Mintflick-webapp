@@ -1,6 +1,4 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Web3Provider } from '@ethersproject/providers';
-import Web3Modal from 'web3modal';
 import Torus from '@toruslabs/torus-embed';
 import Web3 from 'web3';
 import { Web3Auth } from '@web3auth/web3auth';
@@ -12,13 +10,17 @@ import { CHAIN_NAMESPACES, CustomChainConfig } from '@web3auth/base';
 // You can get a key for free at https://infura.io/register
 //const INFURA_ID =  "https://polygon-mumbai.infura.io/v3/a186bf6fba224d889e3facc647134699";
 
-const NETWORK_NAME = 'mainnet';
+const NETWORK_NAME = 'mumbai';
 
 const useWeb3Modal = (config = {}) => {
   const [autoLoaded, setAutoLoaded] = useState(false);
   const { autoLoad = true, NETWORK = NETWORK_NAME } = config;
 
-  const torus = new Torus({});
+  const torus = new Torus({
+    buttonPosition: 'bottom-right', // customize position of torus icon in dapp
+  });
+  window.torus = torus;
+
   const [provider, setProvider] = useState(null);
 
   // Web3Modal also supports many other wallets.
@@ -29,30 +31,30 @@ const useWeb3Modal = (config = {}) => {
   //   providerOptions: {},
   // });
 
+  const polygonMumbaiConfig: CustomChainConfig = {
+    chainNamespace: CHAIN_NAMESPACES.EIP155,
+    rpcTarget: 'https://rpc-mumbai.maticvigil.com',
+    blockExplorer: 'https://mumbai-explorer.matic.today',
+    chainId: '0x13881',
+    displayName: 'Polygon Mumbai Testnet',
+    ticker: 'matic',
+    tickerName: 'matic',
+  };
+
   // Open wallet selection modal.
   const loadWeb3Modal = useCallback(async () => {
     //console.log(torus);
 
     if (!torus.isInitialized)
       await torus.init({
-        loginConfig: {
-          // Customize login provider configurations.
-
-          // Customize brand logo, colors, and translation
-          whitelabel: {
-            theme: {
-              isDark: true,
-              colors: {
-                torusBrand: '#000',
-              },
-            },
-            logoDark: 'https://cryptologos.cc/logos/polygon-matic-logo.png?v=022', // Dark logo for light background
-            logoLight: 'https://cryptologos.cc/logos/polygon-matic-logo.png?v=022', // Light logo for dark background
-            topupHide: true,
-            featuredBillboardHide: false,
-            disclaimerHide: false,
-            defaultLanguage: 'en',
-          },
+        enableLogging: true,
+        network: {
+          host: 'https://rpc-mumbai.maticvigil.com', // mandatory
+          networkName: 'Matic Mumbai', // optional
+          chainId: '0x13881',
+          blockExplorer: 'https://mumbai-explorer.matic.today',
+          ticker: 'MATIC',
+          tickerName: 'MATIC',
         },
       });
 
