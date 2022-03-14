@@ -404,7 +404,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
               <div className="w-full flex flex-col   z-1 mx-auto ">
                 <div className="  flex flex-col lg:flex-row justify-between   md:mt-20  mt-40  sm:-mt-24 text-gray-400   dark:bg-dbeats-dark-primary bg-white dark:backdrop-filter dark:backdrop-blur dark:bg-opacity-80  backdrop-filter  backdrop-blur  bg-opacity-90">
                   <div className="dark:text-white  text-dbeats-dark-alt 2xl:py-4 lg:py-2.5    md:py-3 lg:mx-0 px-10 lg:px-10 md:px-4 ">
-                    <div className="flex w-max lg:pt-0 items-center ">
+                    <div className="flex flex-wrap lg:pt-0 items-center ">
                       <span className="font-bold 2xl:text-xl lg:text-xl md:text-xl mr-3 font-GTWalsheimPro">
                         {user.name}
                       </span>
