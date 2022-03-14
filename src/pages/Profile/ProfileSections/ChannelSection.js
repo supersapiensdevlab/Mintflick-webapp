@@ -1,5 +1,5 @@
 import { RadioGroup } from '@headlessui/react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Modal from 'react-awesome-modal';
 import { Col, Container, Row } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
@@ -13,7 +13,7 @@ const ChannelSection = (props) => {
   const darkMode = useSelector((darkmode) => darkmode.toggleDarkMode);
 
   const server_channels = [
-    { name: 'Voice-Channel', type: 'voice' },
+    // { name: 'Voice-Channel', type: 'voice' },
     { name: 'Text-Channel', type: 'text' },
     { name: 'Store', type: 'store' },
     { name: 'Event', type: 'event' },
@@ -36,6 +36,16 @@ const ChannelSection = (props) => {
 
   const [selected, setSelected] = useState(channels[0]);
 
+  const [activeChannel,setActiveChannel] = useState(null)
+
+  const handleClick = (type) =>{
+    setActiveChannel(type);
+  }
+  useEffect(()=>{
+    const last_segment = window.location.pathname.split('/').pop();
+    setActiveChannel(last_segment)
+  },[])
+  
   return (
     <div
       className={`${
@@ -74,7 +84,7 @@ const ChannelSection = (props) => {
               <div key={i} className="  2xl:pb-2 2xl:pt-2 lg:my-1 lg:mt-3 2xl:mt-0">
                 <div>
                   <Link to={`/profile/${props.user.username}/${channel.type}`}>
-                    <div className="text-gray-600   cursor-pointer 2xl:text-base lg:text-xs dark:text-gray-200 hover:text-white w-full justify-between self-center hover:bg-dbeats-light dark:hover:bg-dbeats-dark-alt dark:hover:text-dbeats-light  rounded 2xl:p-2 lg:p-1.5 relative">
+                    <div onClick={() => handleClick(channel.type)} className={activeChannel == channel.type ? `bg-dbeats-dark-alt text-dbeats-light   cursor-pointer 2xl:text-base lg:text-xs  hover:text-white w-full justify-between self-center hover:bg-dbeats-light dark:hover:bg-dbeats-dark-alt dark:hover:text-dbeats-light  rounded 2xl:p-2 lg:p-1.5 relative`:`text-gray-600   cursor-pointer 2xl:text-base lg:text-xs dark:text-gray-200 hover:text-white w-full justify-between self-center hover:bg-dbeats-light dark:hover:bg-dbeats-dark-alt dark:hover:text-dbeats-light  rounded 2xl:p-2 lg:p-1.5 relative`}>
                       {' '}
                       {channel.type === 'text' ? <i className="fas fa-hashtag mr-2"></i> : ''}
                       {channel.type === 'voice' ? (
