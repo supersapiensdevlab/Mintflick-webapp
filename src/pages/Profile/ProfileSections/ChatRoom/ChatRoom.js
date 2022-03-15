@@ -73,7 +73,7 @@ function ChatRoom(props) {
     if (user) {
       loadingRef.current.continuousStart();
       // https://dbeats-chat.herokuapp.com
-      const socket = io('https://dbeats-chat.herokuapp.com');
+      const socket = io(process.env.REACT_APP_CHAT_URL);
       setCurrentSocket(socket);
       socket.emit('joinroom', { user_id: user._id, room_id: props.userp._id });
       socket.on('init', (msgs) => {
