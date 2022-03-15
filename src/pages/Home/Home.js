@@ -15,6 +15,7 @@ import animationData from '../../lotties/gamers.json';
 import ResponsiveCarousel from './Cards/HomeSlider';
 import LiveCard from './Cards/LiveCard';
 import PlayBackCard from './Cards/PlayBackCard';
+import * as Scroll from 'react-scroll';
 
 Modal.setAppElement('#root');
 
@@ -60,6 +61,45 @@ const Home = () => {
 
   const filter = ['All', 'Music', 'Gaming', 'Movies', 'Videos', 'NFT'];
   const [selectedFilter, setSelectedFilter] = useState(filter[0]);
+
+  const [showNewPost, setShowNewPost] = useState(false);
+
+  const [scrollPosition, setScrollPosition] = useState(0);
+  const handleScroll = () => {
+    const position = window.pageYOffset;
+    setScrollPosition(position);
+    if (position > 2000) {
+      setShowNewPost(true);
+    } else {
+      setShowNewPost(false);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+  const scrollTop = () => {
+    console.log('called');
+    var scroll = Scroll.animateScroll;
+    scroll.scrollToTop({
+      duration: 3000,
+    });
+  };
+
+  // useEffect(() => {
+  //   if (scrollPosition > 1500) {
+  //     const interval = setInterval(() => {
+  //       console.log('Logs every minute');
+  //     }, 1000);
+
+  //     return () => clearInterval(interval);
+  //   } // This represents the unmount function, in which you need to clear your interval to prevent memory leaks.
+  // }, []);
 
   useEffect(() => {
     let slidesValue = [];
@@ -337,6 +377,28 @@ const Home = () => {
                         </div>
                       );
                     })} */}
+                    {showNewPost ? (
+                      <button
+                        className="w-max cursor-pointer text-xs 2xl:text-base fixed 2xl:ml-100 ml-68 flex z-10 bg-white h-max  2xl:px-3 2xl:py-2 px-2 py-1 rounded-lg text-black dark:text-white  rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-secondary hover:nm-inset-dbeats-dark-secondary"
+                        onClick={scrollTop}
+                      >
+                        <p className="font-bold w-full self-center">New Post</p>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-6 w-6 2xl:ml-1 ml-0.5"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M5.293 9.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 7.414V15a1 1 0 11-2 0V7.414L6.707 9.707a1 1 0 01-1.414 0z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                      </button>
+                    ) : (
+                      <></>
+                    )}
                     {latestVideo.map((playbackUser, i) => {
                       return (
                         <div key={i}>
@@ -363,7 +425,6 @@ const Home = () => {
               <div className="my-4 ">
                 <FeedbackForm className="z-500" />
               </div>
-
               <div className="sticky top-20">
                 <h4 className="text-white  px-2 my-1 ">Recommended Creators</h4>
 

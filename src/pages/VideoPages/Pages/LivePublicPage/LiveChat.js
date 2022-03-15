@@ -33,7 +33,7 @@ function LiveChat({ userp }) {
     if (user) {
       loadingRef.current.continuousStart();
       // https://dbeats-chat.herokuapp.com
-      const socket = io('https://dbeats-chat.herokuapp.com');
+      const socket = io(process.env.REACT_APP_CHAT_URL);
       setCurrentSocket(socket);
       socket.emit('live_joinroom', { user_id: user._id, room_id: userp._id });
       socket.on('live_init', (msgs) => {
