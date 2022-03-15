@@ -82,6 +82,8 @@ module.exports = {
       },
       margin: {
         13: '3.2rem',
+        100: '35rem',
+        68: '16.7rem',
       },
       fontFamily: {
         'proxima-reg': ['Proxima', 'Arial', 'sans-serif'],

@@ -379,13 +379,13 @@ const Home = () => {
                     })} */}
                     {showNewPost ? (
                       <button
-                        className="w-full cursor-pointer fixed right-1/3 flex z-10 bg-white h-max w-max px-2 py-1 rounded-lg"
+                        className="w-max cursor-pointer text-xs 2xl:text-base fixed 2xl:ml-100 ml-68 flex z-10 bg-white h-max  2xl:px-3 2xl:py-2 px-2 py-1 rounded-lg text-black dark:text-white  rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-secondary hover:nm-inset-dbeats-dark-secondary"
                         onClick={scrollTop}
                       >
-                        <p className="font-bold">New Post</p>
+                        <p className="font-bold w-full self-center">New Post</p>
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
-                          className="h-5 w-5 ml-1"
+                          className="h-6 w-6 2xl:ml-1 ml-0.5"
                           viewBox="0 0 20 20"
                           fill="currentColor"
                         >
