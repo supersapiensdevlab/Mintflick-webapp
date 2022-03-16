@@ -11,6 +11,8 @@ import CircleLogoDark from '../../assets/images/dark-logo-svg.svg';
 import CircleLogo from '../../assets/images/dbeats-logo.png';
 import logo from '../../assets/images/white-logo.svg';
 import useWeb3Modal from '../../hooks/useWeb3Modal';
+import getTorus from '../../hooks/useWeb3Modal';
+
 import moment from 'moment';
 import Toggle from '../toggle.component';
 import classes from './Navbar.module.css';
@@ -29,7 +31,7 @@ const NavBar = () => {
 
   const [notification, setNotification] = useState([]);
 
-  const user = JSON.parse(window.localStorage.getItem('user'));
+  const user = useSelector((state) => state.User.user); //JSON.parse(window.localStorage.getItem('user'));
 
   const wrapperRef = useRef(null);
 
@@ -271,16 +273,27 @@ const NavBar = () => {
       //console.log('USER LOGGED IN', address, balance);
       if (address) {
         console.log('ADDRESS', address);
-        await axios
-          .get(`${process.env.REACT_APP_SERVER_URL}/user/getuser_by_wallet/${address}`)
-          .then((value) => {
-            window.localStorage.setItem('user', JSON.stringify(value.data.user));
-            dispatch(web3Login(value.data));
-            // window.localStorage.setItem('authtoken', JSON.stringify(value.data.jwtToken));
-            // //window.location.href = '/';
-            console.log(value.data);
-            history.push('/');
-          });
+        console.log('PROVIDER', provider);
+        const data = JSON.parse(window.localStorage.getItem('torus'));
+
+        if (data) {
+          const userData = {
+            walletId: address,
+            name: data.name,
+            email: data.email,
+            profileImage: data.profileImage,
+          };
+          await axios
+            .post(`${process.env.REACT_APP_SERVER_URL}/user/getuser_by_wallet`, userData, {})
+            .then((value) => {
+              window.localStorage.setItem('user', JSON.stringify(value.data.user));
+              dispatch(web3Login(value.data));
+              // window.localStorage.setItem('authtoken', JSON.stringify(value.data.jwtToken));
+              // //window.location.href = '/';
+              console.log(value.data);
+              history.push('/');
+            });
+        }
       }
     } else if (account) {
       await logoutOfWeb3Modal();
@@ -663,7 +676,7 @@ const NavBar = () => {
                 <div className=" px-5 py-1   bg-gradient-to-br from-dbeats-light to-dbeats-secondary-light hover:nm-inset-dbeats-secondary-light  rounded-3xl flex self-center align-middle">
                   <i className="fas fa-sign-in-alt text-xs lg:text-sm 2xl:text-lg self-center mr-2 hidden md:block align-middle justify-center"></i>{' '}
                   <p className=" text-xs lg:text-sm 2xl:text-lg self-center mr-2 hidden md:block align-middle justify-center">
-                    signup
+                    Connect Wallet
                   </p>
                 </div>
               </div>

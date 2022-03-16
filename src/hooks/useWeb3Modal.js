@@ -48,7 +48,14 @@ const useWeb3Modal = (config = {}) => {
     if (!torus.isLoggedIn) {
       await torus.login();
       const userInfo = await torus.getUserInfo();
-
+      window.localStorage.setItem(
+        'torus',
+        JSON.stringify({
+          name: userInfo.name,
+          email: userInfo.email,
+          profileImage: userInfo.profileImage,
+        }),
+      );
       console.log('Hi', userInfo.name, ' registered with', userInfo.email);
       /*
         email: string;
@@ -68,6 +75,7 @@ const useWeb3Modal = (config = {}) => {
     const balance = await web3.eth.getBalance(address);
 
     dispatch(createProvider(web3.currentProvider));
+
     return web3.currentProvider;
   }, []);
 
