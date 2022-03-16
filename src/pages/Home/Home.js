@@ -364,7 +364,32 @@ const Home = () => {
                         </span>
                       </button>
                     </div>
+                    {showNewPost ? (
+                      <div className="2xl:w-1/3 lg:w-1/3 w-screen 2xl:ml-5 cursor-pointer flex justify-center items-center text-xs 2xl:text-base fixed z-10 h-max ">
+                        <button
+                          className="w-max flex 2xl:px-3 2xl:py-2 px-2 py-1 rounded-lg text-black dark:text-white  rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-secondary hover:nm-inset-dbeats-dark-secondary"
+                          onClick={scrollTop}
+                        >
+                          <p className="font-bold w-full self-center">New Post</p>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-6 w-6 2xl:ml-1 ml-0.5"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M5.293 9.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 7.414V15a1 1 0 11-2 0V7.414L6.707 9.707a1 1 0 01-1.414 0z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                        </button>
+                      </div>
+                    ) : (
+                      <></>
+                    )}
                   </div>
+
                   <div className="my-2">
                     <div
                       className="mt-10 animate-spin rounded-full h-7 w-7 mx-auto border-t-2 border-b-2 bg-gradient-to-r from-green-400 to-blue-500 "
@@ -377,28 +402,6 @@ const Home = () => {
                         </div>
                       );
                     })} */}
-                    {showNewPost ? (
-                      <button
-                        className="w-max cursor-pointer text-xs 2xl:text-base fixed 2xl:ml-100 ml-68 flex z-10 bg-white h-max  2xl:px-3 2xl:py-2 px-2 py-1 rounded-lg text-black dark:text-white  rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-secondary hover:nm-inset-dbeats-dark-secondary"
-                        onClick={scrollTop}
-                      >
-                        <p className="font-bold w-full self-center">New Post</p>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="h-6 w-6 2xl:ml-1 ml-0.5"
-                          viewBox="0 0 20 20"
-                          fill="currentColor"
-                        >
-                          <path
-                            fillRule="evenodd"
-                            d="M5.293 9.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 7.414V15a1 1 0 11-2 0V7.414L6.707 9.707a1 1 0 01-1.414 0z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-                      </button>
-                    ) : (
-                      <></>
-                    )}
                     {latestVideo.map((playbackUser, i) => {
                       return (
                         <div key={i}>
