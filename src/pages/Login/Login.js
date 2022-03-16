@@ -9,16 +9,19 @@ import LoginForm from './component/LoginForm';
 import SignupForm from './component/SignupForm';
 import { CHAIN_NAMESPACES, CustomChainConfig } from '@web3auth/base';
 import Torus from '@toruslabs/torus-embed';
+import { useDispatch } from 'react-redux';
 
 import Web3 from 'web3';
 import { Web3Auth } from '@web3auth/web3auth';
+import { clearProvider } from '../../actions/web3Actions';
 const Moralis = require('moralis');
 
 const Login = () => {
   // Web3
-  const [provider, loadWeb3Modal, logoutOfWeb3Modal] = useWeb3Modal();
+  const [loadWeb3Modal, logoutOfWeb3Modal] = useWeb3Modal();
   Moralis.initialize('RrKpMiHThO0v1tXiKcxJuBacU35i7UidwNwQq0as');
   Moralis.serverURL = 'https://58zywcsvxppw.usemoralis.com:2053/server';
+  const provider = useSelector((state) => state.web3Reducer.provider);
 
   // Form varibles
   const [login, setLogin] = useState(true);
@@ -26,6 +29,7 @@ const Login = () => {
   const [resetPasswordEmail, setResetPasswordEmail] = useState('');
   const [forgotPassword, setForgotPassword] = useState(false);
   const [account, setAccount] = useState(null);
+  const dispatch = useDispatch();
 
   useEffect(async () => {
     if (provider && !account) {
@@ -49,10 +53,18 @@ const Login = () => {
         <button
           className={` relative px-5 py-2.5 whitespace-nowrap text-xs sm:text-sm text-white  bg-gradient-to-br from-yellow-500 to-yellow-600  hover:nm-inset-yellow-500 rounded-3xl  `}
           onClick={async () => {
-            if (!provider) {
+            if (!provider && !account) {
               await loadWeb3Modal();
+            } else if (provider && !account) {
+              const web3 = new Web3(provider);
+              const address = (await web3.eth.getAccounts())[0];
+              const balance = await web3.eth.getBalance(address);
+
+              setAccount(address);
             } else {
               await logoutOfWeb3Modal();
+              dispatch(clearProvider());
+              console.log('logged out WORKS!!!');
               setAccount(null);
             }
           }}

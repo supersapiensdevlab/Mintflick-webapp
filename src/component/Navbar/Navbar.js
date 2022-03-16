@@ -15,12 +15,17 @@ import moment from 'moment';
 import Toggle from '../toggle.component';
 import classes from './Navbar.module.css';
 import person from '../../assets/images/profile.svg';
+import Web3 from 'web3';
+import { clearProvider } from '../../actions/web3Actions';
+import { useHistory } from 'react-router-dom';
+import { web3Login } from '../../actions/userActions';
 
 moment().format();
 
 const NavBar = () => {
   // eslint-disable-next-line no-unused-vars
-  const [provider, loadWeb3Modal, logoutOfWeb3Modal] = useWeb3Modal();
+  const [loadWeb3Modal, logoutOfWeb3Modal] = useWeb3Modal();
+  const provider = useSelector((state) => state.web3Reducer.provider);
 
   const [notification, setNotification] = useState([]);
 
@@ -254,6 +259,37 @@ const NavBar = () => {
       </div>
     );
   };
+
+  const [account, setAccount] = useState(null);
+  const history = useHistory();
+  const login = async () => {
+    if (!provider) {
+      const web3 = new Web3(await loadWeb3Modal());
+      const address = (await web3.eth.getAccounts())[0];
+      const balance = await web3.eth.getBalance(address);
+      setAccount(address);
+      //console.log('USER LOGGED IN', address, balance);
+      if (address) {
+        console.log('ADDRESS', address);
+        await axios
+          .get(`${process.env.REACT_APP_SERVER_URL}/user/getuser_by_wallet/${address}`)
+          .then((value) => {
+            window.localStorage.setItem('user', JSON.stringify(value.data.user));
+            dispatch(web3Login(value.data));
+            // window.localStorage.setItem('authtoken', JSON.stringify(value.data.jwtToken));
+            // //window.location.href = '/';
+            console.log(value.data);
+            history.push('/');
+          });
+      }
+    } else if (account) {
+      await logoutOfWeb3Modal();
+      dispatch(clearProvider());
+      console.log('logged ou!!!');
+      setAccount(null);
+    }
+  };
+
   return (
     <>
       <div className={`${darkMode && 'dark'}`}>
@@ -617,8 +653,8 @@ const NavBar = () => {
                 </Link>
               </div>
             ) : (
-              <Link
-                to="/signup"
+              <div
+                onClick={login}
                 className="shadow-sm p-0.5 dark:bg-gradient-to-r 
                 dark:from-dbeats-secondary-light dark:to-dbeats-light  ml-2 md:mx-2 md:ml-0 transform-gpu  transition-all duration-300 ease-in-out my-1 
                 cursor-pointer relative inline-flex items-center justify-center   mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-3xl 
@@ -630,7 +666,7 @@ const NavBar = () => {
                     signup
                   </p>
                 </div>
-              </Link>
+              </div>
             )}
           </div>
         </div>
