@@ -31,16 +31,6 @@ const useWeb3Modal = (config = {}) => {
   //   providerOptions: {},
   // });
 
-  const polygonMumbaiConfig: CustomChainConfig = {
-    chainNamespace: CHAIN_NAMESPACES.EIP155,
-    rpcTarget: 'https://rpc-mumbai.maticvigil.com',
-    blockExplorer: 'https://mumbai-explorer.matic.today',
-    chainId: '0x13881',
-    displayName: 'Polygon Mumbai Testnet',
-    ticker: 'matic',
-    tickerName: 'matic',
-  };
-
   // Open wallet selection modal.
   const loadWeb3Modal = useCallback(async () => {
     //console.log(torus);
@@ -49,10 +39,10 @@ const useWeb3Modal = (config = {}) => {
       await torus.init({
         enableLogging: true,
         network: {
-          host: 'https://rpc-mumbai.maticvigil.com', // mandatory
-          networkName: 'Matic Mumbai', // optional
-          chainId: '0x13881',
-          blockExplorer: 'https://mumbai-explorer.matic.today',
+          host: 'matic', // mandatory https://rpc-mumbai.maticvigil.com
+          networkName: 'Matic Mainnet', // optional
+          chainId: '137',
+          blockExplorer: 'https://polygonscan.com/',
           ticker: 'MATIC',
           tickerName: 'MATIC',
         },

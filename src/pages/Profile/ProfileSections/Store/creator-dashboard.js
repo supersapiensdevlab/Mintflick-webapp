@@ -1,6 +1,6 @@
 import { ethers, Signer } from 'ethers';
 import { create as ipfsHttpClient } from 'ipfs-http-client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 //import { useRouter } from 'next/router';
@@ -8,6 +8,7 @@ import Market from '../../../../artifacts/contracts/Market.sol/NFTMarket.json';
 import { nftmarketaddress } from '../../../../functions/config';
 import Torus from '@toruslabs/torus-embed';
 import Web3 from 'web3';
+import useWeb3Modal from '../../../../hooks/useWeb3Modal';
 
 const client = ipfsHttpClient('https://ipfs.infura.io:5001/api/v0');
 const torus = new Torus({
@@ -15,6 +16,8 @@ const torus = new Torus({
 });
 window.torus = torus;
 export default function CreateItem() {
+  const [provider, loadWeb3Modal, logoutOfWeb3Modal] = useWeb3Modal();
+
   const [fileUrl, setFileUrl] = useState(null);
   const [formInput, updateFormInput] = useState({ price: '', name: '', description: '' });
   // const router = useRouter();
@@ -48,10 +51,47 @@ export default function CreateItem() {
       console.log('added', added);
       const url = `https://ipfs.infura.io/ipfs/${added.path}`;
       /* after file is uploaded to IPFS, pass the URL to save it on Polygon */
-      //createSale(url);
+      createSale(url);
     } catch (error) {
       console.log('Error uploading file: ', error);
     }
+  }
+
+  useEffect(() => {
+    if (!provider) loadWeb3Modal();
+    console.log(provider);
+  }, [provider]);
+
+  async function createSale(url) {
+    // const connection = await web3Modal.connect();
+    console.log('provider', provider);
+
+    const web3 = new Web3(provider);
+    const address = (await web3.eth.getAccounts())[0];
+    const balance = await web3.eth.getBalance(address);
+    console.log('address', address);
+    console.log('value', balance);
+
+    /* next, create the item */
+    let contract = new web3.eth.Contract(Market.abi, nftmarketaddress);
+    const price = ethers.utils.parseUnits(formInput.price, 'ether');
+
+    contract.methods
+      .createToken(url, price)
+      .send({ from: address })
+      .on('receipt', function (receipt) {
+        console.log('Transaction complete', receipt);
+      });
+
+    //let event = tx.events[0];
+    //let value = event.args[2];
+    //let tokenId = value.toNumber();
+    // {
+    //   value: listingPrice,
+    // }
+    //transaction = await contract.createMarketItem(tokenId, price);
+    //await transaction.wait();
+    history.push('/');
   }
 
   // async function createSale(url) {

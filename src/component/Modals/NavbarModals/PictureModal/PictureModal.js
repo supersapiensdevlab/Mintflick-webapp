@@ -24,10 +24,10 @@ export const PictureModal = (props) => {
       await torus.init({
         enableLogging: true,
         network: {
-          host: 'https://matic-mumbai.chainstacklabs.com', // mandatory
-          networkName: 'Polygon Mainnet', // optional
-          chainId: '0x13881',
-          blockExplorer: 'https://mumbai-explorer.matic.today',
+          host: 'matic', // mandatory https://rpc-mumbai.maticvigil.com
+          networkName: 'Matic Mainnet', // optional
+          chainId: '137',
+          blockExplorer: 'https://polygonscan.com/',
           ticker: 'MATIC',
           tickerName: 'MATIC',
         },
@@ -52,7 +52,7 @@ export const PictureModal = (props) => {
     const user = await window.torus.getUserInfo(); // user profile info (email address etc)
 
     const web3 = new Web3(window.torus.provider);
-    window.web3 = web3;
+
     const address = (await web3.eth.getAccounts())[0];
     const balance = await web3.eth.getBalance(address);
 

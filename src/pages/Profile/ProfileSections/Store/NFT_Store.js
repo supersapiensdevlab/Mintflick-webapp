@@ -6,26 +6,31 @@ import Market from '../../../../artifacts/contracts/Market.sol/NFTMarket.json';
 import { nftmarketaddress } from '../../../../functions/config';
 import NFTCard from './NFTCard';
 import UserOwnedAssets from './UserOwnedAssets';
+import useWeb3Modal from '../../../../hooks/useWeb3Modal';
+import Web3 from 'web3';
 
 export default function NFTStore() {
   const [nfts, setNfts] = useState([]);
   // const [seeMore, setSeeMore] = useState(false);
   // const [nameSeeMore, setNameSeeMore] = useState(false);
+  const [provider, loadWeb3Modal, logoutOfWeb3Modal] = useWeb3Modal();
 
   const [loadingState, setLoadingState] = useState('not-loaded');
   useEffect(() => {
-    loadNFTs();
-  }, []);
+    if (!provider) loadWeb3Modal();
+  }, [provider]);
+
+  useEffect(() => {
+    if (provider) loadNFTs();
+  }, [provider]);
   async function loadNFTs() {
+    console.log(provider);
+
     /* create a generic provider and query for unsold market items */
-    const web3Modal = new Web3Modal({
-      cacheProvider: true,
-    });
-    const connection = await web3Modal.connect();
-    const provider = new ethers.providers.Web3Provider(connection);
+    const web3 = new Web3(provider);
     //const tokenContract = new ethers.Contract(nftaddress, NFT.abi, provider);
-    const marketContract = new ethers.Contract(nftmarketaddress, Market.abi, provider);
-    const data = await marketContract.fetchMarketItems();
+    const marketContract = new web3.eth.Contract(Market.abi, nftmarketaddress);
+    const data = await marketContract.methods.fetchMarketItems().call();
 
     /*
      *  map over items returned from smart contract and format
@@ -93,7 +98,7 @@ export default function NFTStore() {
     return (
       <div className="h-max lg:col-span-5 col-span-6 w-full mt-20     ">
         <h1 className="   text-gray-300 w-full flex ">NFTs owned by you: </h1>
-        <UserOwnedAssets resellOwnedItem={resellOwnedItem}></UserOwnedAssets>
+        {/* <UserOwnedAssets resellOwnedItem={resellOwnedItem}></UserOwnedAssets> */}
         <h1 className=" text-gray-300 w-full flex mt-10">No items in marketplace</h1>
       </div>
     );
@@ -104,7 +109,7 @@ export default function NFTStore() {
         <h1 className="   dark:text-gray-300 w-full flex   text-dbeats-dark   px-3">
           NFTs owned by you :{' '}
         </h1>
-        <UserOwnedAssets resellOwnedItem={resellOwnedItem}></UserOwnedAssets>
+        {/* <UserOwnedAssets resellOwnedItem={resellOwnedItem}></UserOwnedAssets> */}
         <h1 className="   dark:text-gray-300 w-full flex   text-dbeats-dark   pt-5  px-3">
           Marketplace{' '}
         </h1>
