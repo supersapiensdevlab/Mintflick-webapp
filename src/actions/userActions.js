@@ -17,15 +17,14 @@ export const loadUser = () => (dispatch) => {
 
   axios
     .get('/user/getLoggedInUser', tokenConfig())
-    .then((res) =>{
+    .then((res) => {
       dispatch({
         type: USER_LOADED,
         payload: res.data,
-      })
-    }
-    )
+      });
+    })
     .catch((err) => {
-        console.log(err);
+      console.log(err);
     });
 };
 
@@ -45,7 +44,7 @@ export const register =
       .post('/user/add', body, config)
       .then((res) => {
         if (res.data === 'Email' || res.data === 'Username') {
-            dispatch({type: USER_EXISTS,payload:res.data});
+          dispatch({ type: USER_EXISTS, payload: res.data });
         } else {
           dispatch({
             type: REGISTER_SUCCESS,
@@ -88,4 +87,11 @@ export const logout = () => {
   return {
     type: LOGOUT_SUCCESS,
   };
+};
+
+export const web3Login = (userData) => (dispatch) => {
+  dispatch({
+    type: LOGIN_SUCCESS,
+    payload: userData,
+  });
 };

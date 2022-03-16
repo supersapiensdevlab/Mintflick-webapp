@@ -3,13 +3,15 @@ import OpenLogin from '@toruslabs/openlogin';
 import Web3 from 'web3';
 import Matic from '@maticnetwork/maticjs';
 import Network from '@maticnetwork/meta/network';
+import AccountInfo from '../../components/AccountInfo';
+import './style.scss';
 
 const maticClient = {
-  _matic: 'mainnet',
-  _network: 'v1',
+  _matic: null,
+  _network: null,
   connect: async (_network, _version) => {
     const network = new Network(_network, _version);
-    console.log('RPC:', network.Main.RPC, network.Matic.RPC);
+    console.log(network.Main.RPC, network.Matic.RPC);
     const matic = new Matic({
       network: _network,
       version: _version,
@@ -59,9 +61,8 @@ function Login() {
     setLoading(true);
     async function initializeOpenlogin() {
       const sdkInstance = new OpenLogin({
-        clientId:
-          'BFrU6JsPLNdCdC1jb72ye0Pwc1ViJVl4D9aSqT2qdgPxrUZ79CbwxnhTimVo5cRrXPbGsVWGEYhl0bgIiGhmZc0',
-        network: 'mainnet',
+        clientId: 'YOUR_PROJECT_ID',
+        network: 'testnet',
       });
       await sdkInstance.init();
       if (sdkInstance.privKey) {
@@ -114,7 +115,7 @@ function Login() {
       ) : (
         <div>
           {openlogin && openlogin.privKey ? (
-            <div
+            <AccountInfo
               handleLogout={handleLogout}
               loading={loading}
               privKey={openlogin?.privKey}

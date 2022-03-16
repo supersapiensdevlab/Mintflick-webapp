@@ -70,51 +70,52 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
   const [pageUser , setPageUser] = useState(null);
 
   const myData = JSON.parse(window.localStorage.getItem('user'));
-  // console.log(myData.username);
-  // console.log(user.username);
+  if (myData)
+    //console.log(myData.username);
+    //console.log(user.username);
 
-  useEffect(() => {
-    let value = JSON.parse(window.localStorage.getItem('user'));
-    if (value) {
-      if (value.username === urlUsername) {
-        setSharable_data(`${process.env.REACT_APP_CLIENT_URL}/profile/${value.username}`);
-        setPrivate(true);
-        setFollowers(value.follower_count.length);
-        setFollowing(value.followee_count.length);
-        setIsMailVerified(value.is_mail_verified);
-        setIsVerified(value.is_verified);
+    useEffect(() => {
+      let value = JSON.parse(window.localStorage.getItem('user'));
+      if (value) {
+        if (value.username === urlUsername) {
+          setSharable_data(`${process.env.REACT_APP_CLIENT_URL}/profile/${value.username}`);
+          setPrivate(true);
+          setFollowers(value.follower_count.length);
+          setFollowing(value.followee_count.length);
+          setIsMailVerified(value.is_mail_verified);
+          setIsVerified(value.is_verified);
 
-        if (value.pinned) {
-          setPinnedData(value.pinned);
-        }
+          if (value.pinned) {
+            setPinnedData(value.pinned);
+          }
 
-        if (value.cover_image && value.cover_image !== '') {
-          setCoverImage(value.cover_image);
+          if (value.cover_image && value.cover_image !== '') {
+            setCoverImage(value.cover_image);
+          } else {
+            setCoverImage(background);
+          }
+
+          if (value.profile_image && value.profile_image !== '') {
+            setProfileImage(value.profile_image);
+          } else {
+            //console.log('person', person);
+            setProfileImage(person);
+          }
+
+          if (value.posts) {
+            let data = value.posts;
+            setPostsData(data.reverse());
+          }
         } else {
-          setCoverImage(background);
-        }
-
-        if (value.profile_image && value.profile_image !== '') {
-          setProfileImage(value.profile_image);
-        } else {
-          console.log('person', person);
-          setProfileImage(person);
-        }
-
-        if (value.posts) {
-          let data = value.posts;
-          setPostsData(data.reverse());
+          get_User();
+          setPrivate(false);
         }
       } else {
         get_User();
         setPrivate(false);
       }
-    } else {
-      get_User();
-      setPrivate(false);
-    }
-    // eslint-disable-next-line
-  }, [urlUsername]);
+      // eslint-disable-next-line
+    }, [urlUsername]);
 
   useEffect(() => {
     let tabno = tabname;
@@ -145,7 +146,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
     // eslint-disable-next-line
   }, [tabname]);
 
-  console.log(navigate);
+  //console.log(navigate);
 
   const get_User = async () => {
     await axios.get(`${process.env.REACT_APP_SERVER_URL}/user/${urlUsername}`).then((value) => {
@@ -182,7 +183,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
       if (value.data.profile_image && value.data.profile_image !== '') {
         setProfileImage(value.data.profile_image);
       } else {
-        console.log('person', person);
+        //console.log('person', person);
         setProfileImage(person);
       }
     });
@@ -197,7 +198,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
     if (buttonText === 'Login to Subscribe') {
       window.location.href = '/signup';
     }
-    //console.log(followers);
+    ////console.log(followers);
     const followData = {
       following: `${user.username}`,
       follower: `${myData.username}`,
@@ -223,7 +224,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
           }
         })
         .catch(function (error) {
-          console.log(error);
+          //console.log(error);
         });
     } else {
       axios({
@@ -245,7 +246,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
           }
         })
         .catch(function (error) {
-          console.log(error);
+          //console.log(error);
         });
     }
   };
@@ -275,7 +276,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
         setPinnedData(value);
       })
       .catch(function (error) {
-        console.log(error);
+        //console.log(error);
       });
   };
 
@@ -298,7 +299,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
         setPinnedData((prevData) => [...prevData, pinnedUser]);
       })
       .catch(function (error) {
-        console.log(error);
+        //console.log(error);
       });
   };
 
@@ -317,7 +318,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
         setIsMailVerified(true);
       })
       .catch(function (error) {
-        console.log(error);
+        //console.log(error);
       });
   };
 
@@ -571,7 +572,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                   {postsData && postsData.length > 0 ? (
                     <div>
                       {postsData.map((post, i) => {
-                        ////console.log(playbackUser)
+                        //////console.log(playbackUser)
                         return (
                           <div key={i}>
                             <AnnouncementCard
@@ -598,7 +599,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                         .slice(0)
                         .reverse()
                         .map((playbackUser, i) => {
-                          ////console.log(playbackUser)
+                          //////console.log(playbackUser)
                           return (
                             <div key={i}>
                               <CarouselCard
@@ -627,7 +628,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                         .slice(0)
                         .reverse()
                         .map((track, i) => {
-                          ////console.log(playbackUser)
+                          //////console.log(playbackUser)
                           return (
                             <div key={i} className="w-full">
                               <TrackCard
@@ -655,7 +656,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                         .slice(0)
                         .reverse()
                         .map((playbackUser, i) => {
-                          ////console.log(playbackUser)
+                          //////console.log(playbackUser)
                           return (
                             <div key={i} className="">
                               <ReactionCard
@@ -723,7 +724,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                     {user.followee_count ? (
                       <div>
                         {user.followee_count.map((following, i) => {
-                          ////console.log(playbackUser)
+                          //////console.log(playbackUser)
                           return (
                             <div
                               key={i}
@@ -765,7 +766,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                     {user.follower_count ? (
                       <div>
                         {user.follower_count.map((follower, i) => {
-                          ////console.log(playbackUser)
+                          //////console.log(playbackUser)
                           return (
                             <div
                               key={i}

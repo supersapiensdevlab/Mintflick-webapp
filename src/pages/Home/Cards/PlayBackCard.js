@@ -1,7 +1,7 @@
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { Image } from 'react-img-placeholder';
-import ReactPlayer from 'react-player';
+import ReactPlayer from 'react-player/lazy';
 import { Link } from 'react-router-dom';
 import maticLogo from '../../../assets/graphics/polygon-matic-logo.svg';
 import dbeatsLogoBnW from '../../../assets/images/Logo/logo-blacknwhite.png';
@@ -59,7 +59,7 @@ const PlayBackCard = (props) => {
         url: `${process.env.REACT_APP_SERVER_URL}/user/follow`,
         headers: {
           'content-type': 'application/json',
-          'auth-token':localStorage.getItem("authtoken")
+          'auth-token': localStorage.getItem('authtoken'),
         },
         data: followData,
       })
@@ -81,7 +81,7 @@ const PlayBackCard = (props) => {
         url: `${process.env.REACT_APP_SERVER_URL}/user/unfollow`,
         headers: {
           'content-type': 'application/json',
-          'auth-token':localStorage.getItem('authtoken')
+          'auth-token': localStorage.getItem('authtoken'),
         },
         data: followData,
       })
@@ -209,10 +209,6 @@ const PlayBackCard = (props) => {
                 url={props.playbackUserData.link}
                 controls={true}
               />
-              <img
-                src={props.playbackUserData.artwork}
-                className="w-full h-full max-h-screen hidden"
-              ></img>
             </div>
             <div className="flex   text-black text-sm font-medium   px-4  py-3">
               <Link to={`/profile/${props.playbackUserData.user.username}/`} className="mr-4">
@@ -223,6 +219,7 @@ const PlayBackCard = (props) => {
                       : person
                   }
                   alt=""
+                  loading="lazy"
                   className="w-16 h-14 rounded-full self-start"
                 />
               </Link>

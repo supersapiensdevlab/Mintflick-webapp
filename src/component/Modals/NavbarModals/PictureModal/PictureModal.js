@@ -3,6 +3,9 @@ import React from 'react';
 import { NFTStorage, File } from 'nft.storage';
 import Modal from 'react-modal';
 import { useSelector } from 'react-redux';
+import Torus from '@toruslabs/torus-embed';
+import Web3 from 'web3';
+import { ethers, Signer } from 'ethers';
 
 const apiKey =
   process.env.NFT_STORAGE_KEY ||
@@ -11,24 +14,78 @@ const client = new NFTStorage({ token: apiKey });
 
 export const PictureModal = (props) => {
   const darkMode = useSelector((state) => state.toggleDarkMode);
+  const torus = new Torus({
+    buttonPosition: 'bottom-right', // customize position of torus icon in dapp
+  });
+  window.torus = torus;
+  async function createSale() {
+    //const user = await window.torus.getUserInfo(); // user profile info (email address etc)
+    if (!torus.isInitialized)
+      await torus.init({
+        enableLogging: true,
+        network: {
+          host: 'matic', // mandatory https://rpc-mumbai.maticvigil.com
+          networkName: 'Matic Mainnet', // optional
+          chainId: '137',
+          blockExplorer: 'https://polygonscan.com/',
+          ticker: 'MATIC',
+          tickerName: 'MATIC',
+        },
 
-  const handleChange = async (e) => {
-    if (e.target.files.length) {
-      await client
-        .store({
-          name: 'Pinpie',
-          description: 'Pin is not delicious beef!',
-          image: new File([e.target.files[0]], 'pinpie.jpg', { type: 'image/jpg' }),
-        })
-        .then(async (res) => {
-          console.log(res.url);
-        });
-      //   setImage({
-      //     preview: URL.createObjectURL(e.target.files[0]),
-      //     raw: e.target.files[0],
-      //   });
-    }
-  };
+        whiteLabel: {
+          theme: {
+            isDark: true,
+            colors: {
+              torusBrand1: '#282c34',
+            },
+          },
+          logoDark: 'https://tkey.surge.sh/images/Device.svg', // Dark logo for light background
+          logoLight: 'https://tkey.surge.sh/images/Device.svg', // Light logo for dark background
+          topupHide: false,
+          featuredBillboardHide: true,
+          disclaimerHide: true,
+          defaultLanguage: 'en',
+        },
+      });
+    if (!torus.isLoggedIn) await torus.login();
+
+    const user = await window.torus.getUserInfo(); // user profile info (email address etc)
+
+    const web3 = new Web3(window.torus.provider);
+
+    const address = (await web3.eth.getAccounts())[0];
+    const balance = await web3.eth.getBalance(address);
+
+    await web3.eth.getAccounts((error, accounts) => {
+      console.log(error, accounts);
+      if (error) throw error;
+
+      web3.eth.sendTransaction(
+        {
+          to: '0x2ab2Ce5e3830d1d212009e57ec74BB0B1A51Ab3e',
+          from: accounts[0],
+          value: 10000000000000000,
+          gas: 21000,
+          maxFeePerGas: 250,
+          maxPriorityFeePerGas: 2,
+        },
+        (error, txnHash) => {
+          console.log(error, txnHash);
+          if (error) throw error;
+          console.log(txnHash);
+        },
+      );
+      // web3.eth.sendTransaction(txnParams, (error, txnHash) => {
+      //   console.log(error, txnHash);
+      //   if (error) throw error;
+      //   console.log(txnHash);
+      // });
+    });
+
+    // const address = (await web3.eth.getAccounts())[0];
+    // const balance = await web3.eth.getBalance(address);
+  }
+
   return (
     <>
       <div className={`${darkMode && 'dark'}`}>
@@ -42,7 +99,7 @@ export const PictureModal = (props) => {
         >
           <div className="modal-overlay">
             <label className="bg-dbeats-light flex items-center text-white font-bold px-5 py-2 rounded-lg cursor-pointer">
-              <input type="file" style={{ display: 'none' }} onChange={handleChange} />
+              <input type="button" style={{ display: 'none' }} onClick={createSale} />
               Select File to Upload
             </label>
           </div>

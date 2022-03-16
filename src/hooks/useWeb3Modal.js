@@ -1,10 +1,11 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Web3Provider } from '@ethersproject/providers';
-import Web3Modal from 'web3modal';
 import Torus from '@toruslabs/torus-embed';
 import Web3 from 'web3';
 import { Web3Auth } from '@web3auth/web3auth';
 import { CHAIN_NAMESPACES, CustomChainConfig } from '@web3auth/base';
+import { clearProvider } from '../actions/web3Actions';
+import { useDispatch, useSelector } from 'react-redux';
+import { createProvider } from '../actions/web3Actions';
 
 //import WalletConnectProvider from "@walletconnect/web3-provider";
 
@@ -12,22 +13,20 @@ import { CHAIN_NAMESPACES, CustomChainConfig } from '@web3auth/base';
 // You can get a key for free at https://infura.io/register
 //const INFURA_ID =  "https://polygon-mumbai.infura.io/v3/a186bf6fba224d889e3facc647134699";
 
-const NETWORK_NAME = 'mainnet';
+const NETWORK_NAME = 'mumbai';
 
 const useWeb3Modal = (config = {}) => {
   const [autoLoaded, setAutoLoaded] = useState(false);
   const { autoLoad = true, NETWORK = NETWORK_NAME } = config;
 
-  const torus = new Torus({});
-  const [provider, setProvider] = useState(null);
+  const provider = useSelector((state) => state.web3Reducer.provider);
 
-  // Web3Modal also supports many other wallets.
-  // You can see other options at https://github.com/Web3Modal/web3modal
-  // const web3Modal = new Web3Modal({
-  //   network: NETWORK,
-  //   cacheProvider: true,
-  //   providerOptions: {},
-  // });
+  const torus = new Torus({
+    buttonPosition: 'bottom-right', // customize position of torus icon in dapp
+  });
+  window.torus = torus;
+
+  const dispatch = useDispatch();
 
   // Open wallet selection modal.
   const loadWeb3Modal = useCallback(async () => {
@@ -35,24 +34,14 @@ const useWeb3Modal = (config = {}) => {
 
     if (!torus.isInitialized)
       await torus.init({
-        loginConfig: {
-          // Customize login provider configurations.
-
-          // Customize brand logo, colors, and translation
-          whitelabel: {
-            theme: {
-              isDark: true,
-              colors: {
-                torusBrand: '#000',
-              },
-            },
-            logoDark: 'https://cryptologos.cc/logos/polygon-matic-logo.png?v=022', // Dark logo for light background
-            logoLight: 'https://cryptologos.cc/logos/polygon-matic-logo.png?v=022', // Light logo for dark background
-            topupHide: true,
-            featuredBillboardHide: false,
-            disclaimerHide: false,
-            defaultLanguage: 'en',
-          },
+        enableLogging: true,
+        network: {
+          host: 'matic', // mandatory https://rpc-mumbai.maticvigil.com
+          networkName: 'Matic Mainnet', // optional
+          chainId: '137',
+          blockExplorer: 'https://polygonscan.com/',
+          ticker: 'MATIC',
+          tickerName: 'MATIC',
         },
       });
 
@@ -77,21 +66,19 @@ const useWeb3Modal = (config = {}) => {
     const web3 = new Web3(torus.provider);
     const address = (await web3.eth.getAccounts())[0];
     const balance = await web3.eth.getBalance(address);
-    //console.log('provider', web3.currentProvider);
-    setProvider(web3.currentProvider);
-    //console.log(torus);
-    return provider;
-  }, [provider]);
+
+    dispatch(createProvider(web3.currentProvider));
+    return web3.currentProvider;
+  }, []);
 
   const logoutOfWeb3Modal = useCallback(
     async function () {
-      console.log(torus);
       if (torus.isLoggedIn) {
         await torus.logout();
       } else if (torus.isInitialized) {
         torus.cleanUp();
       }
-      setProvider(null);
+      console.log(torus);
       console.log('logging out');
       return provider;
     },
@@ -106,7 +93,7 @@ const useWeb3Modal = (config = {}) => {
     }
   }, [autoLoad, autoLoaded, loadWeb3Modal, setAutoLoaded, torus.cachedProvider]);
 
-  return [provider, loadWeb3Modal, logoutOfWeb3Modal];
+  return [loadWeb3Modal, logoutOfWeb3Modal];
 };
 
 export default useWeb3Modal;

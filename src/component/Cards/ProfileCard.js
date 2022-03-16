@@ -17,7 +17,7 @@ const ProfileCard = ({ user }) => {
   }, []);
 
   const handleFollow = () => {
-    if (userp) {
+    if (userp != null) {
       const followData = {
         following: `${user.username}`,
         follower: `${userp.username}`,

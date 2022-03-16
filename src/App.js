@@ -4,6 +4,8 @@ import React, { useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
 
 import { useDispatch, useSelector } from 'react-redux';
+import { clearProvider, createProvider } from './actions/web3Actions';
+
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import '../node_modules/noty/lib/noty.css';
 import '../node_modules/noty/lib/themes/metroui.css';
@@ -50,15 +52,16 @@ import Ticket from './Ticket.js';
 import useWeb3Modal from './hooks/useWeb3Modal';
 
 // Redux
-import {loadUser} from './actions/userActions'
+import { loadUser } from './actions/userActions';
 
 export default function App() {
   const user = JSON.parse(window.localStorage.getItem('user'));
   const darkMode = useSelector((state) => state.toggleDarkMode);
   let darkmode = JSON.parse(window.localStorage.getItem('darkmode'));
   const dispatch = useDispatch();
-  const [provider, loadWeb3Modal, logoutOfWeb3Modal] = useWeb3Modal();
+  const [loadWeb3Modal, logoutOfWeb3Modal] = useWeb3Modal();
 
+  const provider = useSelector((state) => state.web3Reducer.provider);
   const userType = useSelector((state) => state.toggleUserType);
   //dispatch(toggleUserType(userType));
 
@@ -97,8 +100,13 @@ export default function App() {
       setLatestTrack(data);
       setLatestUploads(true);
     }
-    await loadWeb3Modal();
   };
+
+  useEffect(async () => {
+    if (!provider) {
+      dispatch(createProvider(await loadWeb3Modal()));
+    }
+  }, []);
 
   useEffect(async () => {
     if (user) {
@@ -126,7 +134,7 @@ export default function App() {
     fetchData();
 
     // Redux loading already login user;
-    dispatch(loadUser())
+    dispatch(loadUser());
     // eslint-disable-next-line
   }, []);
 
