@@ -365,7 +365,7 @@ const Home = () => {
                       </button>
                     </div>
                     {showNewPost ? (
-                      <div className="2xl:w-1/3 lg:w-1/3 w-screen 2xl:ml-5 cursor-pointer flex justify-center items-center text-xs 2xl:text-base fixed z-10 h-max ">
+                      <div className="2xl:w-1/3 lg:w-1/3 w-screen 2xl:ml-5 cursor-pointer flex justify-center items-center text-xs 2xl:text-base fixed 2xl:top-16 lg:top-12 top-16 z-10 h-max ">
                         <button
                           className="w-max flex 2xl:px-3 2xl:py-2 px-2 py-1 rounded-lg text-black dark:text-white  rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-secondary hover:nm-inset-dbeats-dark-secondary"
                           onClick={scrollTop}

@@ -16,6 +16,7 @@ import animationDataNotFound from '../../../../lotties/error-animation.json';
 import RecommendedCard from './RecommendedCard';
 //import dbeatsLogoBnW from '../../../../assets/images/Logo/logo-blacknwhite.png';
 import SuperfanModal from '../../../../component/Modals/SuperfanModal/superfan-modal';
+import { RadioGroup } from '@headlessui/react';
 
 //import maticLogo from '../../../../assets/graphics/polygon-matic-logo.svg';
 //import Web3 from 'web3';
@@ -42,6 +43,21 @@ const PlayBackInfo = (props) => {
   const [showPlaylist, setShowPlaylist] = useState(false);
   const handleClosePlaylist = () => setShowPlaylist(false);
   const handleShowPlaylist = () => setShowPlaylist(true);
+
+  const [showReport, setShowReport] = useState(false);
+  const handleReportShow = () => setShowReport(true);
+  const handleReportClose = () => setShowReport(false);
+
+  const [showReportSubmitThankyou, setShowReportSubmitThankyou] = useState(false);
+  const handleReportThankyouShow = () => setShowReportSubmitThankyou(true);
+  const handleReportThankyouClose = () => setShowReportSubmitThankyou(false);
+
+  const [showOtherReport, setShowOtherReport] = useState(false);
+  const handleOtherReportShow = () => setShowOtherReport(true);
+  const handleOtherReportClose = () => setShowOtherReport(false);
+
+  const [reportValue, setReportValue] = useState('Nudity or pornography');
+  const [userReportValue, setUserReportValue] = useState('');
 
   const [showLogin, setShowLogin] = useState(false);
   const handleLoginClose = () => setShowLogin(false);
@@ -96,6 +112,32 @@ const PlayBackInfo = (props) => {
   // });
   console.log(user);
   console.log(props);
+
+  const handleReportSubmit = () => {
+    let reportData = {
+      reporter: user.username,
+      reported: userData.username,
+      report: reportValue,
+    };
+    axios({
+      method: 'POST',
+      url: `${process.env.REACT_APP_SERVER_URL}/user/videoreports`,
+      headers: {
+        'content-type': 'application/json',
+        'auth-token': localStorage.getItem('authtoken'),
+      },
+      data: reportData,
+    })
+      .then((response) => {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    setShowReport(false);
+    setShowOtherReport(false);
+    setShowReportSubmitThankyou(true);
+  };
 
   const trackFollowers = () => {
     setLoader(false);
@@ -438,6 +480,10 @@ const PlayBackInfo = (props) => {
     }
   }, [props.video_id]);
 
+  const handleInputChange = (e) => {
+    setReportValue(e.target.value);
+  };
+
   ////console.log(arrayData);
 
   // const testFlow = async (amount) => {
@@ -636,15 +682,26 @@ const PlayBackInfo = (props) => {
                             <Menu.Items className="  dark:bg-opacity-10 backdrop-filter  backdrop-blur-md absolute right-0 w-56  origin-top-right bg-white dark:bg-dbeats-dark-primary dark:text-gray-50 divide-y divide-gray-100   shadow   focus:outline-none">
                               <div className="px-1 py-1 ">
                                 {user ? (
-                                  <Menu.Item className="w-full text-gray-700 dark:text-gray-50 text-left text-lg pl-2 hover:text-white hover:bg-dbeats-light">
-                                    <button
-                                      onClick={() => {
-                                        handleShowPlaylist();
-                                      }}
-                                    >
-                                      Add to Playlist
-                                    </button>
-                                  </Menu.Item>
+                                  <>
+                                    <Menu.Item className="w-full text-gray-700 dark:text-gray-50 text-left text-lg pl-2 hover:text-white hover:bg-dbeats-light">
+                                      <button
+                                        onClick={() => {
+                                          handleShowPlaylist();
+                                        }}
+                                      >
+                                        Add to Playlist
+                                      </button>
+                                    </Menu.Item>
+                                    <Menu.Item className="w-full text-gray-700 dark:text-gray-50 text-left text-lg pl-2 hover:text-white hover:bg-dbeats-light">
+                                      <button
+                                        onClick={() => {
+                                          handleReportShow();
+                                        }}
+                                      >
+                                        Report
+                                      </button>
+                                    </Menu.Item>
+                                  </>
                                 ) : (
                                   <> </>
                                 )}
@@ -732,6 +789,369 @@ const PlayBackInfo = (props) => {
                   >
                     Login
                   </Link>
+                </Row>
+              </Container>
+            </div>
+          </Modal>
+
+          <Modal
+            isOpen={showReport}
+            className="h-max lg:w-1/3  w-5/6  mx-auto lg:mt-60 mt-32 rounded-lg"
+          >
+            <div className={`${darkMode && 'dark'}`}>
+              <Container className="2xl:px-5 px-5 lg:px-1 pb-4 dark:bg-dbeats-dark-primary rounded-lg">
+                <Row>
+                  <h2 className="grid grid-cols-5 justify-around w-full 2xl:text-2xl lg:text-md py-4 2xl:py-4 lg:py-2  pt-7  text-center relative  ">
+                    <div className="col-span-5 text-gray-900 dark:text-gray-100 font-bold">
+                      Report
+                    </div>
+                    <div
+                      className="ml-5 cursor-pointer text-gray-900 dark:text-gray-100 dark:bg-dbeats-dark-primary absolute right-10 top-7 2xl:top-4 lg:top-2"
+                      onClick={handleReportClose}
+                    >
+                      <i className="fas fa-times"></i>
+                    </div>
+                  </h2>
+                </Row>
+                <Row>
+                  <div className="w-full">
+                    <h1 className="text-white text-xl mb-2">Why are you reporting this post?</h1>
+                    <div className="w-full max-h-60 overflow-y-scroll text-white text-lg">
+                      <RadioGroup value={reportValue} onChange={setReportValue} className=" w-max">
+                        <RadioGroup.Option
+                          value="Nudity or pornography"
+                          className="p-1 cursor-pointer flex items-center"
+                        >
+                          {({ checked }) => (
+                            <>
+                              <span className={checked ? 'text-dbeats-light' : ''}>
+                                Nudity or pornography
+                              </span>
+                              {checked ? (
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  className="h-5 w-5 ml-2"
+                                  viewBox="0 0 20 20"
+                                  fill="#00d3ff"
+                                >
+                                  <path
+                                    fillRule="evenodd"
+                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                    clipRule="evenodd"
+                                  />
+                                </svg>
+                              ) : (
+                                <></>
+                              )}
+                            </>
+                          )}
+                        </RadioGroup.Option>
+                        <RadioGroup.Option
+                          className="p-1 cursor-pointer flex items-center"
+                          value="Sexual Exploitation"
+                        >
+                          {({ checked }) => (
+                            <>
+                              <span className={checked ? 'text-dbeats-light' : ''}>
+                                Sexual Exploitation
+                              </span>
+                              {checked ? (
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  className="h-5 w-5 ml-2"
+                                  viewBox="0 0 20 20"
+                                  fill="#00d3ff"
+                                >
+                                  <path
+                                    fillRule="evenodd"
+                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                    clipRule="evenodd"
+                                  />
+                                </svg>
+                              ) : (
+                                <></>
+                              )}
+                            </>
+                          )}
+                        </RadioGroup.Option>
+                        <RadioGroup.Option
+                          className="p-1 cursor-pointer flex items-center"
+                          value="Sharing private images"
+                        >
+                          {({ checked }) => (
+                            <>
+                              <span className={checked ? 'text-dbeats-light' : ''}>
+                                Sharing private images
+                              </span>
+                              {checked ? (
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  className="h-5 w-5 ml-2"
+                                  viewBox="0 0 20 20"
+                                  fill="#00d3ff"
+                                >
+                                  <path
+                                    fillRule="evenodd"
+                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                    clipRule="evenodd"
+                                  />
+                                </svg>
+                              ) : (
+                                <></>
+                              )}
+                            </>
+                          )}
+                        </RadioGroup.Option>
+                        <RadioGroup.Option
+                          className="p-1 cursor-pointer flex items-center"
+                          value="Violent threat"
+                        >
+                          {({ checked }) => (
+                            <>
+                              <span className={checked ? 'text-dbeats-light' : ''}>
+                                Violent threat
+                              </span>
+                              {checked ? (
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  className="h-5 w-5 ml-2"
+                                  viewBox="0 0 20 20"
+                                  fill="#00d3ff"
+                                >
+                                  <path
+                                    fillRule="evenodd"
+                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                    clipRule="evenodd"
+                                  />
+                                </svg>
+                              ) : (
+                                <></>
+                              )}
+                            </>
+                          )}
+                        </RadioGroup.Option>
+                        <RadioGroup.Option
+                          className="p-1 cursor-pointer flex items-center"
+                          value="Animal abuse"
+                        >
+                          {({ checked }) => (
+                            <span className={checked ? 'text-dbeats-light' : ''}>Animal abuse</span>
+                          )}
+                        </RadioGroup.Option>
+                        <RadioGroup.Option
+                          className="p-1 cursor-pointer flex items-center"
+                          value="Death, severe injury, dangerous"
+                        >
+                          {({ checked }) => (
+                            <>
+                              <span className={checked ? 'text-dbeats-light' : ''}>
+                                Death, severe injury, dangerous
+                              </span>
+                              {checked ? (
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  className="h-5 w-5 ml-2"
+                                  viewBox="0 0 20 20"
+                                  fill="#00d3ff"
+                                >
+                                  <path
+                                    fillRule="evenodd"
+                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                    clipRule="evenodd"
+                                  />
+                                </svg>
+                              ) : (
+                                <></>
+                              )}
+                            </>
+                          )}
+                        </RadioGroup.Option>
+                        <RadioGroup.Option
+                          className="p-1 cursor-pointer flex items-center"
+                          value="Firearms"
+                        >
+                          {({ checked }) => (
+                            <>
+                              <span className={checked ? 'text-dbeats-light' : ''}>Firearms</span>
+                              {checked ? (
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  className="h-5 w-5 ml-2"
+                                  viewBox="0 0 20 20"
+                                  fill="#00d3ff"
+                                >
+                                  <path
+                                    fillRule="evenodd"
+                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                    clipRule="evenodd"
+                                  />
+                                </svg>
+                              ) : (
+                                <></>
+                              )}
+                            </>
+                          )}
+                        </RadioGroup.Option>
+                        <RadioGroup.Option
+                          className="p-1 cursor-pointer flex items-center"
+                          value="Fake health documents"
+                        >
+                          {({ checked }) => (
+                            <>
+                              <span className={checked ? 'text-dbeats-light' : ''}>
+                                Fake health documents
+                              </span>
+                              {checked ? (
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  className="h-5 w-5 ml-2"
+                                  viewBox="0 0 20 20"
+                                  fill="#00d3ff"
+                                >
+                                  <path
+                                    fillRule="evenodd"
+                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                    clipRule="evenodd"
+                                  />
+                                </svg>
+                              ) : (
+                                <></>
+                              )}
+                            </>
+                          )}
+                        </RadioGroup.Option>
+                        <RadioGroup.Option
+                          className="p-1 cursor-pointer flex items-center"
+                          value="Report piracy"
+                        >
+                          {({ checked }) => (
+                            <>
+                              <span className={checked ? 'text-dbeats-light' : ''}>
+                                Report piracy
+                              </span>
+                              {checked ? (
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  className="h-5 w-5 ml-2"
+                                  viewBox="0 0 20 20"
+                                  fill="#00d3ff"
+                                >
+                                  <path
+                                    fillRule="evenodd"
+                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                    clipRule="evenodd"
+                                  />
+                                </svg>
+                              ) : (
+                                <></>
+                              )}
+                            </>
+                          )}
+                        </RadioGroup.Option>
+                      </RadioGroup>
+                      <button
+                        className="p-1"
+                        onClick={() => {
+                          handleOtherReportShow();
+                          handleReportClose();
+                        }}
+                      >
+                        Others
+                      </button>
+                    </div>
+                  </div>
+                </Row>
+                <Row>
+                  <div className="w-full flex justify-center items-center py-2">
+                    <button
+                      className="text-white px-2 py-1 text-lg border"
+                      onClick={handleReportSubmit}
+                    >
+                      Submit Report
+                    </button>
+                  </div>
+                </Row>
+              </Container>
+            </div>
+          </Modal>
+
+          <Modal
+            isOpen={showReportSubmitThankyou}
+            className="h-max lg:w-1/3  w-5/6 mx-auto lg:mt-60 mt-32 rounded-lg"
+          >
+            <div className={`${darkMode && 'dark'}`}>
+              <Container className="2xl:px-5 px-5 lg:px-1 pb-4 dark:bg-dbeats-dark-primary rounded-lg">
+                <Row>
+                  <h2 className="grid grid-cols-5 justify-around w-full 2xl:text-2xl lg:text-md py-4 2xl:py-4 lg:py-2  pt-7  text-center relative  ">
+                    <div className="col-span-5 text-gray-900 dark:text-gray-100 font-bold">
+                      Thanks for reporting!!
+                    </div>
+                    <div
+                      className="ml-5 cursor-pointer text-gray-900 dark:text-gray-100 dark:bg-dbeats-dark-primary absolute right-10 top-7 2xl:top-4 lg:top-2"
+                      onClick={handleReportThankyouClose}
+                    >
+                      <i className="fas fa-times"></i>
+                    </div>
+                  </h2>
+                </Row>
+                <Row>
+                  <div className="w-full flex justify-center items-center ">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-24 w-24"
+                      viewBox="0 0 20 20"
+                      fill="white"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </div>
+                </Row>
+              </Container>
+            </div>
+          </Modal>
+
+          <Modal
+            isOpen={showOtherReport}
+            className="h-max lg:w-1/3  w-5/6 mx-auto lg:mt-60 mt-32 rounded-lg"
+          >
+            <div className={`${darkMode && 'dark'}`}>
+              <Container className="2xl:px-5 px-5 lg:px-1 pb-4 dark:bg-dbeats-dark-primary rounded-lg">
+                <Row>
+                  <h2 className="grid grid-cols-5 justify-around w-full 2xl:text-2xl lg:text-md py-4 2xl:py-4 lg:py-2  pt-7  text-center relative  ">
+                    <div className="col-span-5 text-gray-900 dark:text-gray-100 font-bold">
+                      Help us understand the problem
+                    </div>
+                    <div
+                      className="ml-5 cursor-pointer text-gray-900 dark:text-gray-100 dark:bg-dbeats-dark-primary absolute right-10 top-7 2xl:top-4 lg:top-2"
+                      onClick={handleOtherReportClose}
+                    >
+                      <i className="fas fa-times"></i>
+                    </div>
+                  </h2>
+                </Row>
+                <Row>
+                  <div className="w-full h-max px-2">
+                    <textarea
+                      className="w-full text-white text-lg h-48 rounded-sm p-2  border dark:bg-dbeats-dark-primary"
+                      placeholder="Issue..."
+                      required
+                      onChange={handleInputChange}
+                    />
+                  </div>
+                </Row>
+                <Row>
+                  <div className="w-full flex justify-center items-center py-2">
+                    <button
+                      className="text-white px-2 py-1 text-lg border"
+                      onClick={handleReportSubmit}
+                    >
+                      Submit Report
+                    </button>
+                  </div>
                 </Row>
               </Container>
             </div>
