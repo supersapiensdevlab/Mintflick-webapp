@@ -11,7 +11,7 @@ import {
 } from '../actions/types';
 
 const initialState = {
-  authtoken: localStorage.getItem('authtoken'),
+  authtoken: JSON.parse(localStorage.getItem('authtoken')),
   isAuthenticated: null,
   isLoading: false,
   user: null,
@@ -34,7 +34,7 @@ export default function (state = initialState, action) {
       };
     case LOGIN_SUCCESS:
     case REGISTER_SUCCESS:
-      localStorage.setItem('authtoken', action.payload.jwtToken);
+      localStorage.setItem('authtoken', JSON.stringify(action.payload.jwtToken));
       return {
         ...state,
         user: action.payload.user,
