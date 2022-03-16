@@ -49,6 +49,9 @@ import { useState } from 'react';
 import Ticket from './Ticket.js';
 import useWeb3Modal from './hooks/useWeb3Modal';
 
+// Redux
+import {loadUser} from './actions/userActions'
+
 export default function App() {
   const user = JSON.parse(window.localStorage.getItem('user'));
   const darkMode = useSelector((state) => state.toggleDarkMode);
@@ -122,6 +125,8 @@ export default function App() {
 
     fetchData();
 
+    // Redux loading already login user;
+    dispatch(loadUser())
     // eslint-disable-next-line
   }, []);
 
