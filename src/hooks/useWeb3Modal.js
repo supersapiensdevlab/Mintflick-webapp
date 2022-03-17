@@ -6,6 +6,10 @@ import { CHAIN_NAMESPACES, CustomChainConfig } from '@web3auth/base';
 import { clearProvider } from '../actions/web3Actions';
 import { useDispatch, useSelector } from 'react-redux';
 import { createProvider } from '../actions/web3Actions';
+import { web3Login } from '../actions/userActions';
+import axios from 'axios';
+import { useHistory } from 'react-router-dom';
+
 
 //import WalletConnectProvider from "@walletconnect/web3-provider";
 
@@ -16,6 +20,8 @@ import { createProvider } from '../actions/web3Actions';
 const NETWORK_NAME = 'mumbai';
 
 const useWeb3Modal = (config = {}) => {
+  const history = useHistory();
+
   const [autoLoaded, setAutoLoaded] = useState(false);
   const { autoLoad = true, NETWORK = NETWORK_NAME } = config;
 
@@ -31,7 +37,7 @@ const useWeb3Modal = (config = {}) => {
   // Open wallet selection modal.
   const loadWeb3Modal = useCallback(async () => {
     //console.log(torus);
-
+    let  userInfo = null;
     if (!torus.isInitialized)
       await torus.init({
         enableLogging: true,
@@ -47,7 +53,7 @@ const useWeb3Modal = (config = {}) => {
 
     if (!torus.isLoggedIn) {
       await torus.login();
-      const userInfo = await torus.getUserInfo();
+       userInfo = await torus.getUserInfo();
       window.localStorage.setItem(
         'torus',
         JSON.stringify({
@@ -65,7 +71,7 @@ const useWeb3Modal = (config = {}) => {
         verifierId: string;
       */
     } else {
-      const userInfo = await torus.getUserInfo();
+       userInfo = await torus.getUserInfo();
 
       console.log('Hi', userInfo.name, 'you are registered with', userInfo.email);
     }
@@ -73,7 +79,23 @@ const useWeb3Modal = (config = {}) => {
     const web3 = new Web3(torus.provider);
     const address = (await web3.eth.getAccounts())[0];
     const balance = await web3.eth.getBalance(address);
-
+    if(userInfo){
+    const userData = {
+      walletId: address,
+      name: userInfo.name,
+      email: userInfo.email,
+      profileImage: userInfo.profileImage,
+    };
+    await axios
+      .post(`${process.env.REACT_APP_SERVER_URL}/user/getuser_by_wallet`, userData, {})
+      .then((value) => {
+        window.localStorage.setItem('user', JSON.stringify(value.data.user));
+        dispatch(web3Login(value.data));
+        // window.localStorage.setItem('authtoken', JSON.stringify(value.data.jwtToken));
+        // //window.location.href = '/';
+        console.log(value.data);
+      });
+    }
     dispatch(createProvider(web3.currentProvider));
 
     return web3.currentProvider;
@@ -100,6 +122,11 @@ const useWeb3Modal = (config = {}) => {
       setAutoLoaded(true);
     }
   }, [autoLoad, autoLoaded, loadWeb3Modal, setAutoLoaded, torus.cachedProvider]);
+
+  useEffect(() => {
+console.log(torus);
+  }, [torus]);
+
 
   return [loadWeb3Modal, logoutOfWeb3Modal];
 };

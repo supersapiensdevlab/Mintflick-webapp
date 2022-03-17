@@ -17,7 +17,7 @@ const PlayBackCard = (props) => {
   const user = JSON.parse(window.localStorage.getItem('user'));
 
   //let history = useHistory();
-  let sharable_data = `${process.env.REACT_APP_CLIENT_URL}/playback/${props.playbackUserData.user.username}/${props.playbackUserData.id}`;
+  let sharable_data = `${process.env.REACT_APP_CLIENT_URL}/playback/${props.playbackUserData.user ? props.playbackUserData.user.username:''}/${props.playbackUserData.id}`;
   // const setUserName = props.playbackUserData.user.name.toLower();
   // console.log(setUserName);
 
@@ -136,8 +136,6 @@ const PlayBackCard = (props) => {
       window.location.href = '/signup';
     }
   };
-
-  console.log(props.playbackUserData);
 
   return (
     <>

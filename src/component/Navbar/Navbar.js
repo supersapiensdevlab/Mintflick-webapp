@@ -274,26 +274,6 @@ const NavBar = () => {
       if (address) {
         console.log('ADDRESS', address);
         console.log('PROVIDER', provider);
-        const data = JSON.parse(window.localStorage.getItem('torus'));
-
-        if (data) {
-          const userData = {
-            walletId: address,
-            name: data.name,
-            email: data.email,
-            profileImage: data.profileImage,
-          };
-          await axios
-            .post(`${process.env.REACT_APP_SERVER_URL}/user/getuser_by_wallet`, userData, {})
-            .then((value) => {
-              window.localStorage.setItem('user', JSON.stringify(value.data.user));
-              dispatch(web3Login(value.data));
-              // window.localStorage.setItem('authtoken', JSON.stringify(value.data.jwtToken));
-              // //window.location.href = '/';
-              console.log(value.data);
-              history.push('/');
-            });
-        }
       }
     } else if (account) {
       await logoutOfWeb3Modal();
