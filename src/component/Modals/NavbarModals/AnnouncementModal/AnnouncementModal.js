@@ -4,15 +4,16 @@ import { NFTStorage } from 'nft.storage';
 import React, { useState } from 'react';
 import { Container } from 'react-bootstrap';
 import Modal from 'react-modal';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { detectURLs, makeStorageClient } from '../../../uploadHelperFunction';
 import LinkPreview from './LinkPreview';
 import classes from './LinkPreview.module.css';
-
+import {loadUser} from '../../../../actions/userActions';
 moment().format();
 
 const AnnouncementModal = (props) => {
-  const user = JSON.parse(window.localStorage.getItem('user'));
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.User.user); 
 
   const darkMode = useSelector((darkmode) => darkmode.toggleDarkMode);
 
@@ -195,7 +196,8 @@ const AnnouncementModal = (props) => {
         formData.append('announcement', announcement.announcementText);
         formData.append('postImage', announcement.postImage);
         formData.append('postVideo', announcement.postVideo);
-        formData.append('timestamp', moment().toDate().getTime());
+        const timestamp = moment().toDate().getTime()
+        formData.append('timestamp', timestamp);
 
         formData.append('eventlink', announcement.event_link);
         formData.append('announcementHash', announcement.cid);
@@ -212,6 +214,7 @@ const AnnouncementModal = (props) => {
               },
             })
             .then(() => {
+              dispatch(loadUser())
               setAnnouncement({
                 announcementText: '',
                 postImage: null,

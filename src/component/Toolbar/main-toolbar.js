@@ -11,6 +11,7 @@ import {
 } from '../Modals/NavbarModals';
 
 import useWeb3Modal from '../../hooks/useWeb3Modal';
+import { useSelector } from 'react-redux';
 
 const MainToolbar = () => {
   //Popup
@@ -37,7 +38,7 @@ const MainToolbar = () => {
 
   //Loader
   const [loader, setLoader] = useState(true);
-  const user = JSON.parse(window.localStorage.getItem('user'));
+  const user = useSelector((state) => state.User.user); 
   const [iceBreaker, setIceBreaker] = useState(['Hello World!']);
 
   const questions = [

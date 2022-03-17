@@ -23,3 +23,6 @@ export const USER_PUBLIC_ERROR = 'USER_PUBLIC_ERROR';
 // for trending 
 export const TRENDING_LOADING = 'TRENDING_LOADING';
 export const TRENDING_LOADED = 'TRENDING_LOADED';
+
+// for announcement 
+export const CREATE_POST = 'CREATE_POST';

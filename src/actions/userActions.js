@@ -9,6 +9,7 @@ import {
   USER_EXISTS,
   USER_LOADED,
   USER_LOADING,
+  CREATE_POST
 } from './types';
 import axios from '../https-common';
 
@@ -111,4 +112,5 @@ export const followUser = (data) => (dispatch) => {
       console.log(error);
     });
 };
+
 

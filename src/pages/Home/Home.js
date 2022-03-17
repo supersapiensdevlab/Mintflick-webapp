@@ -25,11 +25,6 @@ const Home = () => {
   const [slides, setSlides] = useState([]);
   const darkMode = useSelector((darkmode) => darkmode.toggleDarkMode);
 
-  const [arrayData, setArrayData] = useState([]);
-
-  const [latestVideo, setLatestVideo] = useState([]);
-  const [latestTrack, setLatestTrack] = useState([]);
-
   const user = useSelector((state) => state.User.user); 
   const Trending = useSelector((state) => state.Trending); 
 

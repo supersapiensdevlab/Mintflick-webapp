@@ -8,7 +8,8 @@ import {
   USER_EXISTS,
   USER_LOADED,
   USER_LOADING,
-  FOLLOW_USER
+  FOLLOW_USER,
+  CREATE_POST
 } from '../actions/types';
 
 const initialState = {
