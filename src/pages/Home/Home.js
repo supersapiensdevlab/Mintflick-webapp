@@ -4,7 +4,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import Lottie from 'react-lottie';
 import Modal from 'react-modal';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Billboard from '../../component/Billboard/Billboard-Card';
 import ProfileCard from '../../component/Cards/ProfileCard';
 import Dropdown from '../../component/dropdown.component';
@@ -16,10 +16,11 @@ import ResponsiveCarousel from './Cards/HomeSlider';
 import LiveCard from './Cards/LiveCard';
 import PlayBackCard from './Cards/PlayBackCard';
 import * as Scroll from 'react-scroll';
-
+import {loadTrending} from '../../actions/trendingActions'
 Modal.setAppElement('#root');
 
 const Home = () => {
+  const dispatch = useDispatch();
   const [activeStreams, setActiveStreams] = useState([]);
   const [slides, setSlides] = useState([]);
   const darkMode = useSelector((darkmode) => darkmode.toggleDarkMode);
@@ -29,7 +30,9 @@ const Home = () => {
   const [latestVideo, setLatestVideo] = useState([]);
   const [latestTrack, setLatestTrack] = useState([]);
 
-  const user = JSON.parse(window.localStorage.getItem('user'));
+  const user = useSelector((state) => state.User.user); 
+  const Trending = useSelector((state) => state.Trending); 
+
 
   const [verifiedUser, setverifiedUser] = useState(null);
 
@@ -41,7 +44,7 @@ const Home = () => {
       preserveAspectRatio: 'xMidYMid slice',
     },
   };
-  const [latestUploads, setLatestUploads] = useState(null);
+  // const [latestUploads, setLatestUploads] = useState(null);
 
   Splide.defaults = {
     type: 'loop',
@@ -117,7 +120,9 @@ const Home = () => {
       }
       setSlides(slidesValue);
     });
-    fetchData();
+    // fetchData();
+    dispatch(loadTrending())
+    
 
     axios.get(`${process.env.REACT_APP_SERVER_URL}/get_verifiedusers`).then(async (repos) => {
       let data = [];
@@ -130,43 +135,43 @@ const Home = () => {
     });
   }, []);
 
-  const fetchData = async () => {
-    const fileRes = await axios.get(`${process.env.REACT_APP_SERVER_URL}/user`);
-    for (let i = 0; i < fileRes.data.length; i++) {
-      if (fileRes.data[i].videos && fileRes.data[i].videos.length > 0) {
-        if (user ? fileRes.data[i].username !== user.username : true)
-          setArrayData((prevState) => [...prevState, fileRes.data[i]]);
-      }
-    }
+  // const fetchData = async () => {
+  //   // const fileRes = await axios.get(`${process.env.REACT_APP_SERVER_URL}/user`);
+  //   // for (let i = 0; i < fileRes.data.length; i++) {
+  //   //   if (fileRes.data[i].videos && fileRes.data[i].videos.length > 0) {
+  //   //     if (user ? fileRes.data[i].username !== user.username : true)
+  //   //       setArrayData((prevState) => [...prevState, fileRes.data[i]]);
+  //   //   }
+  //   // }
 
-    const fetchUploads = await axios.get(`${process.env.REACT_APP_SERVER_URL}/trending`);
-    // console.log(fetchUploads.data.trending);
-    if (fetchUploads.data.trending) {
-      let trending = [];
-      let fetchedData = fetchUploads.data.trending.reverse();
+  //   const fetchUploads = await axios.get(`${process.env.REACT_APP_SERVER_URL}/trending`);
+  //   // console.log(fetchUploads.data.trending);
+  //   if (fetchUploads.data.trending) {
+  //     let trending = [];
+  //     let fetchedData = fetchUploads.data.trending.reverse();
 
-      for (let i = 0; i < fetchedData.length; i++) {
-        trending.push(fetchedData[i]);
-      }
-      setLatestVideo(trending);
-      {
-        //console.log(trending);
-      }
-      setLatestUploads(true);
-    }
+  //     for (let i = 0; i < fetchedData.length; i++) {
+  //       trending.push(fetchedData[i]);
+  //     }
+  //     setLatestVideo(trending);
+  //     {
+  //       //console.log(trending);
+  //     }
+  //     // setLatestUploads(true);
+  //   }
 
-    if (fetchUploads.data.latest_tracks) {
-      let data = [];
-      let fetchedData = fetchUploads.data.latest_tracks.reverse();
-      for (let i = 0; i < fetchedData.length; i++) {
-        if (!data.some((el) => el.username === fetchedData[i].username)) {
-          data.push(fetchedData[i]);
-        }
-      }
-      setLatestTrack(data);
-      setLatestUploads(true);
-    }
-  };
+  //   // if (fetchUploads.data.latest_tracks) {
+  //   //   let data = [];
+  //   //   let fetchedData = fetchUploads.data.latest_tracks.reverse();
+  //   //   for (let i = 0; i < fetchedData.length; i++) {
+  //   //     if (!data.some((el) => el.username === fetchedData[i].username)) {
+  //   //       data.push(fetchedData[i]);
+  //   //     }
+  //   //   }
+  //   //   setLatestTrack(data);
+  //   //   setLatestUploads(true);
+  //   // }
+  // };
 
   return (
     <>
@@ -393,7 +398,7 @@ const Home = () => {
                   <div className="my-2">
                     <div
                       className="mt-10 animate-spin rounded-full h-7 w-7 mx-auto border-t-2 border-b-2 bg-gradient-to-r from-green-400 to-blue-500 "
-                      hidden={latestVideo.length > 0 ? true : false}
+                      hidden={!Trending.loading ? true : false}
                     ></div>{' '}
                     {/* {arrayData.map((playbackUser, i) => {
                       return (
@@ -402,7 +407,7 @@ const Home = () => {
                         </div>
                       );
                     })} */}
-                    {latestVideo.map((playbackUser, i) => {
+                    {Trending.trending && Trending.trending.map((playbackUser, i) => {
                       return (
                         <div key={i}>
                           <PlayBackCard darkMode={darkMode} playbackUserData={playbackUser} />

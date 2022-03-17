@@ -8,6 +8,7 @@ import {
   USER_EXISTS,
   USER_LOADED,
   USER_LOADING,
+  FOLLOW_USER
 } from '../actions/types';
 
 const initialState = {
@@ -59,6 +60,12 @@ export default function (state = initialState, action) {
         isAuthenticated: false,
         isLoading: false,
       };
+
+    case FOLLOW_USER:
+      return {
+        ...state,
+        user:{...state.user,followee_count:[...state.user.followee_count,action.payload]}
+      }
     default:
       return state;
   }

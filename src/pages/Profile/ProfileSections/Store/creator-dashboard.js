@@ -11,10 +11,7 @@ import Web3 from 'web3';
 import useWeb3Modal from '../../../../hooks/useWeb3Modal';
 
 const client = ipfsHttpClient('https://ipfs.infura.io:5001/api/v0');
-const torus = new Torus({
-  buttonPosition: 'bottom-right', // customize position of torus icon in dapp
-});
-window.torus = torus;
+
 export default function CreateItem() {
   const [provider, loadWeb3Modal, logoutOfWeb3Modal] = useWeb3Modal();
 

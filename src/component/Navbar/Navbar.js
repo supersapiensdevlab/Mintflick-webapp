@@ -26,7 +26,7 @@ moment().format();
 
 const NavBar = () => {
   // eslint-disable-next-line no-unused-vars
-  const [loadWeb3Modal, logoutOfWeb3Modal] = useWeb3Modal();
+  const [loadWeb3Modal, logoutOfWeb3Modal,logoutweb3] = useWeb3Modal();
   const provider = useSelector((state) => state.web3Reducer.provider);
 
   const [notification, setNotification] = useState([]);
@@ -53,12 +53,11 @@ const NavBar = () => {
 
   // Auth functions
   const handleLogout = () => {
-    window.location.href = '/';
+    logoutweb3();
     window.localStorage.clear();
-    const timer = setTimeout(() => {
-      logoutOfWeb3Modal();
-    }, 2000);
-    return () => clearTimeout(timer);
+    // window.location.href = '/';
+
+
   };
 
   const [toggled, setToggled] = useState(JSON.parse(window.localStorage.getItem('darkmode')));

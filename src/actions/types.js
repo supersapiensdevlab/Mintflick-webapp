@@ -9,6 +9,7 @@ export const REGISTER_FAIL = 'REGISTER_FAIL';
 export const GET_ERRORS = 'GET_ERRORS';
 export const CLEAR_ERRORS = 'CLEAR_ERRORS';
 export const USER_EXISTS = 'USER_EXISTS';
+export const FOLLOW_USER = 'FOLLOW_USER';
 
 //web3 Login
 export const CREATE_PROVIDER = 'CREATE_PROVIDER';
@@ -18,3 +19,7 @@ export const CLEAR_PROVIDER = 'CLEAR_PROVIDER';
 export const USER_PUBLIC_LOADING = 'USER_PUBLIC_LOADING';
 export const USER_PUBLIC_LOADED = 'USER_PUBLIC_LOADED';
 export const USER_PUBLIC_ERROR = 'USER_PUBLIC_ERROR';
+
+// for trending 
+export const TRENDING_LOADING = 'TRENDING_LOADING';
+export const TRENDING_LOADED = 'TRENDING_LOADED';

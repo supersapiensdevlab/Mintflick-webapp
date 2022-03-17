@@ -16,7 +16,6 @@ import transakSDK from '@transak/transak-sdk';
 
 const SuperfanModal = ({ show, handleClose, userDataDetails }) => {
   const provider = useSelector((state) => state.web3Reducer.provider);
-
   var Web3HttpProvider = require('web3-providers-http');
   let transak = new transakSDK({
     apiKey: '792b8161-1aeb-4341-a553-894611bfc51f', // Your API Key
@@ -117,7 +116,7 @@ const SuperfanModal = ({ show, handleClose, userDataDetails }) => {
         nonce: '0x00', // ignored by MetaMask
         // gasPrice: '0x09184e72a000', // customizable by user during MetaMask confirmation.
         // gas: '0x2710', // customizable by user during MetaMask confirmation.
-        to: '0x2ab2Ce5e3830d1d212009e57ec74BB0B1A51Ab3e', // Required except during contract publications.
+        to: userDataDetails.wallet_id, // Required except during contract publications.
         from: accounts[0], // must match user's active address.
         //value: Number(donationAmountInWei).toString(16), // Only required to send ether to the recipient from the initiating external account.
         value: donationAmountInWei,

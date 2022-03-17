@@ -1,6 +1,7 @@
 import { tokenConfig } from '../helper/tokenConfig';
 import {
   AUTH_ERROR,
+  FOLLOW_USER,
   LOGIN_FAIL,
   LOGIN_SUCCESS,
   LOGOUT_SUCCESS,
@@ -95,3 +96,19 @@ export const web3Login = (userData) => (dispatch) => {
     payload: userData,
   });
 };
+
+export const followUser = (data) => (dispatch) => {
+  axios.post('/user/follow', data, tokenConfig())
+    .then(function (response) {
+      if (response) {
+        dispatch({
+          type: FOLLOW_USER,
+          payload: data.following,
+        });
+      } 
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+};
+

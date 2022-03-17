@@ -14,10 +14,7 @@ const client = new NFTStorage({ token: apiKey });
 
 export const PictureModal = (props) => {
   const darkMode = useSelector((state) => state.toggleDarkMode);
-  const torus = new Torus({
-    buttonPosition: 'bottom-right', // customize position of torus icon in dapp
-  });
-  window.torus = torus;
+
   async function createSale() {
     //const user = await window.torus.getUserInfo(); // user profile info (email address etc)
     if (!torus.isInitialized)

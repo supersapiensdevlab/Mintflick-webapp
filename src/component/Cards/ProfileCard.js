@@ -3,10 +3,12 @@ import { Link } from 'react-router-dom';
 import { ReactComponent as Verified } from '../../assets/icons/verified-account.svg';
 import logo from '../..//assets/images/logo.svg';
 import axios from 'axios';
-
+import { useSelector , useDispatch } from 'react-redux';
+import { followUser } from '../../actions/userActions';
 // components
 const ProfileCard = ({ user }) => {
-  const userp = JSON.parse(window.localStorage.getItem('user'));
+  const dispatch = useDispatch();
+  const userp = useSelector((state) => state.User.user); 
   const [following, setFollowing] = useState(false);
   useEffect(() => {
     if (userp) {
@@ -14,7 +16,7 @@ const ProfileCard = ({ user }) => {
         setFollowing(true);
       }
     }
-  }, []);
+  }, [userp]);
 
   const handleFollow = () => {
     if (userp != null) {
@@ -22,32 +24,10 @@ const ProfileCard = ({ user }) => {
         following: `${user.username}`,
         follower: `${userp.username}`,
       };
-      axios({
-        method: 'POST',
-        url: `${process.env.REACT_APP_SERVER_URL}/user/follow`,
-        headers: {
-          'content-type': 'application/json',
-          'auth-token': localStorage.getItem('authtoken'),
-        },
-        data: followData,
-      })
-        .then(function (response) {
-          if (response) {
-            setFollowing(true);
-            axios
-              .get(`${process.env.REACT_APP_SERVER_URL}/user/${userp.username}`)
-              .then((value) => {
-                window.localStorage.setItem('user', JSON.stringify(value.data));
-              });
-          } else {
-            alert('Invalid Login');
-          }
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
+      dispatch(followUser(followData));
+
     } else {
-      window.location.href = '/signup';
+      // window.location.href = '/signup';
     }
   };
   return (
