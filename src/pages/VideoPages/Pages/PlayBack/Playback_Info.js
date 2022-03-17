@@ -118,6 +118,7 @@ const PlayBackInfo = (props) => {
       reporter: user.username,
       reported: userData.username,
       report: reportValue,
+      videoId: props.video_id,
     };
     axios({
       method: 'POST',
@@ -700,15 +701,19 @@ const PlayBackInfo = (props) => {
                                         Add to Playlist
                                       </button>
                                     </Menu.Item>
-                                    <Menu.Item className="w-full text-gray-700 dark:text-gray-50 text-left text-lg pl-2 hover:text-white hover:bg-dbeats-light">
-                                      <button
-                                        onClick={() => {
-                                          handleReportShow();
-                                        }}
-                                      >
-                                        Report
-                                      </button>
-                                    </Menu.Item>
+                                    {user.username != userData.username ? (
+                                      <Menu.Item className="w-full text-gray-700 dark:text-gray-50 text-left text-lg pl-2 hover:text-white hover:bg-dbeats-light">
+                                        <button
+                                          onClick={() => {
+                                            handleReportShow();
+                                          }}
+                                        >
+                                          Report
+                                        </button>
+                                      </Menu.Item>
+                                    ) : (
+                                      <></>
+                                    )}
                                   </>
                                 ) : (
                                   <> </>
@@ -806,23 +811,25 @@ const PlayBackInfo = (props) => {
             isOpen={showReport}
             className="h-max lg:w-1/3  w-5/6  mx-auto lg:mt-60 mt-32 rounded-lg"
           >
-            <div className={`${darkMode && 'dark'}`}>
-              <Container className="2xl:px-5 px-5 lg:px-1 pb-4 dark:bg-dbeats-dark-primary rounded-lg">
+            <div className={`${darkMode && 'dark'} border rounded-lg`}>
+              <Container className="2xl:px-5 px-5 lg:px-1 pb-4 dark:bg-dbeats-dark-alt rounded-lg">
                 <Row>
-                  <h2 className="grid grid-cols-5 justify-around w-full 2xl:text-2xl lg:text-md py-4 2xl:py-4 lg:py-2  pt-7  text-center relative  ">
-                    <div className="col-span-5 text-gray-900 dark:text-gray-100 font-bold">
+                  <h2 className="flex justify-between w-full 2xl:text-2xl lg:text-md py-4 2xl:py-4 lg:py-2  pt-7  text-center relative  ">
+                    <div className="col-span-5 ml-60 text-gray-900 dark:text-gray-100 font-bold">
                       Report
                     </div>
                     <div
-                      className="ml-5 cursor-pointer text-gray-900 dark:text-gray-100 dark:bg-dbeats-dark-primary absolute right-10 top-7 2xl:top-4 lg:top-2"
+                      className="rounded-3xl group w-max   p-2  mx-1 mr-8 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-secondary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
                       onClick={handleReportClose}
                     >
-                      <i className="fas fa-times"></i>
+                      <span className="text-black dark:text-white  flex px-2 py-1 rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:nm-inset-dbeats-dark-secondary">
+                        <i className="fas fa-times"></i>
+                      </span>
                     </div>
                   </h2>
                 </Row>
                 <Row>
-                  <div className="w-full">
+                  <div className="w-full px-3">
                     <h1 className="text-white text-xl mb-2">Why are you reporting this post?</h1>
                     <div className="w-full max-h-60 overflow-y-scroll text-white text-lg">
                       <RadioGroup value={reportValue} onChange={setReportValue} className=" w-max">
@@ -1070,9 +1077,13 @@ const PlayBackInfo = (props) => {
                   </div>
                 </Row>
                 <Row>
-                  <div className="w-full flex justify-center items-center py-2">
+                  <div
+                    className="w-full flex justify-center items-center py-2  
+                      cursor-pointer  "
+                  >
                     <button
-                      className="text-white px-2 py-1 text-lg border"
+                      className="text-white px-5 py-3 text-lg  bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-secondary-dark-primary 
+                      hover:nm-inset-dbeats-secondary-light  rounded-3xl transition-all duration-300"
                       onClick={handleReportSubmit}
                     >
                       Submit Report
@@ -1088,25 +1099,27 @@ const PlayBackInfo = (props) => {
             className="h-max lg:w-1/3  w-5/6 mx-auto lg:mt-60 mt-32 rounded-lg"
           >
             <div className={`${darkMode && 'dark'}`}>
-              <Container className="2xl:px-5 px-5 lg:px-1 pb-4 dark:bg-dbeats-dark-primary rounded-lg">
+              <Container className="2xl:px-5 px-5 lg:px-1 pb-4 dark:bg-dbeats-dark-alt rounded-lg border">
                 <Row>
-                  <h2 className="grid grid-cols-5 justify-around w-full 2xl:text-2xl lg:text-md py-4 2xl:py-4 lg:py-2  pt-7  text-center relative  ">
+                  <h2 className="flex justify-between  w-full 2xl:text-2xl lg:text-md py-4 2xl:py-4 lg:py-2  pt-7  text-center relative  ">
                     <div className="col-span-5 text-gray-900 dark:text-gray-100 font-bold">
                       Thanks for reporting!!
                     </div>
                     <div
-                      className="ml-5 cursor-pointer text-gray-900 dark:text-gray-100 dark:bg-dbeats-dark-primary absolute right-10 top-7 2xl:top-4 lg:top-2"
+                      className="rounded-3xl group w-max   p-2  mx-1  justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-secondary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
                       onClick={handleReportThankyouClose}
                     >
-                      <i className="fas fa-times"></i>
+                      <span className="text-black dark:text-white  flex px-2 py-1 rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:nm-inset-dbeats-dark-secondary">
+                        <i className="fas fa-times"></i>
+                      </span>
                     </div>
                   </h2>
                 </Row>
                 <Row>
-                  <div className="w-full flex justify-center items-center ">
+                  <div className="w-full flex justify-center items-center pt-5 pb-10">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      className="h-24 w-24"
+                      className="h-28 w-28"
                       viewBox="0 0 20 20"
                       fill="white"
                     >
@@ -1126,18 +1139,40 @@ const PlayBackInfo = (props) => {
             isOpen={showOtherReport}
             className="h-max lg:w-1/3  w-5/6 mx-auto lg:mt-60 mt-32 rounded-lg"
           >
-            <div className={`${darkMode && 'dark'}`}>
-              <Container className="2xl:px-5 px-5 lg:px-1 pb-4 dark:bg-dbeats-dark-primary rounded-lg">
+            <div className={`${darkMode && 'dark'} border rounded-lg`}>
+              <Container className="2xl:px-5 px-5 lg:px-1 pb-4 dark:bg-dbeats-dark-alt rounded-lg">
                 <Row>
-                  <h2 className="grid grid-cols-5 justify-around w-full 2xl:text-2xl lg:text-md py-4 2xl:py-4 lg:py-2  pt-7  text-center relative  ">
-                    <div className="col-span-5 text-gray-900 dark:text-gray-100 font-bold">
+                  <h2 className="flex justify-around w-full 2xl:text-2xl lg:text-md py-4 2xl:py-6 lg:py-2  pt-7  text-center relative  ">
+                    <div
+                      onClick={() => {
+                        handleOtherReportClose();
+                        handleReportShow();
+                      }}
+                      className="cursor-pointer text-gray-900 dark:text-gray-100 dark:bg-dbeats-dark-alt ml-5"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-7 w-7"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M7.707 14.707a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l2.293 2.293a1 1 0 010 1.414z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </div>
+                    <div className="col-span-4 text-gray-900 dark:text-gray-100 font-bold">
                       Help us understand the problem
                     </div>
                     <div
-                      className="ml-5 cursor-pointer text-gray-900 dark:text-gray-100 dark:bg-dbeats-dark-primary absolute right-10 top-7 2xl:top-4 lg:top-2"
+                      className="rounded-3xl group w-max   p-2  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-secondary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
                       onClick={handleOtherReportClose}
                     >
-                      <i className="fas fa-times"></i>
+                      <span className="text-black dark:text-white  flex px-2 py-1 rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:nm-inset-dbeats-dark-secondary">
+                        <i className="fas fa-times"></i>
+                      </span>
                     </div>
                   </h2>
                 </Row>
@@ -1152,9 +1187,13 @@ const PlayBackInfo = (props) => {
                   </div>
                 </Row>
                 <Row>
-                  <div className="w-full flex justify-center items-center py-2">
+                  <div
+                    className="w-full flex justify-center items-center py-2  
+                      cursor-pointer  "
+                  >
                     <button
-                      className="text-white px-2 py-1 text-lg border"
+                      className="text-white px-5 py-3 text-lg  bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-secondary-dark-primary 
+                      hover:nm-inset-dbeats-secondary-light  rounded-3xl transition-all duration-300"
                       onClick={handleReportSubmit}
                     >
                       Submit Report

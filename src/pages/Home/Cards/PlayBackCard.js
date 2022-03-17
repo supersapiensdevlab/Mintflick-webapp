@@ -8,6 +8,7 @@ import dbeatsLogoBnW from '../../../assets/images/Logo/logo-blacknwhite.png';
 import person from '../../../assets/images/profile.svg';
 import axios from 'axios';
 import BidModal from '../../../component/Modals/BidModal/BidModal';
+import { ShareModal } from '../../../component/Modals/ShareModal/ShareModal';
 
 moment().format();
 
@@ -16,6 +17,19 @@ const PlayBackCard = (props) => {
   const user = JSON.parse(window.localStorage.getItem('user'));
 
   //let history = useHistory();
+  let sharable_data = `${process.env.REACT_APP_CLIENT_URL}/playback/${props.playbackUserData.user.username}/${props.playbackUserData.id}`;
+  // const setUserName = props.playbackUserData.user.name.toLower();
+  // console.log(setUserName);
+
+  const shareText = 'Copy Link To Clipboard';
+  const [shareButtonText, setShareButtonText] = useState(shareText);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShareButtonText(shareText);
+    }, 2000);
+    return () => clearTimeout(timer);
+  }, [shareButtonText]);
 
   const handleMouseMove = () => {
     setPlaying(true);
@@ -26,6 +40,10 @@ const PlayBackCard = (props) => {
   };
 
   const [time, setTime] = useState(null);
+
+  const [showShare, setShowShare] = useState(false);
+  const handleShareClose = () => setShowShare(false);
+  const handleShareShow = () => setShowShare(true);
 
   useEffect(() => {
     if (props.playbackUserData) {
@@ -104,20 +122,22 @@ const PlayBackCard = (props) => {
   const handleCloseBidModal = () => setShowBidModal(false);
   const handleShowBidModal = () => setShowBidModal(true);
 
-  const handleLike = () =>{
-    if(user){
-      // Code For Like 
-    }else{
-      window.location.href='/signup'
+  const handleLike = () => {
+    if (user) {
+      // Code For Like
+    } else {
+      window.location.href = '/signup';
     }
-  }
-  const handleReport = () =>{
-    if(user){
-      // Code For Report 
-    }else{
-      window.location.href='/signup'
+  };
+  const handleReport = () => {
+    if (user) {
+      // Code For Report
+    } else {
+      window.location.href = '/signup';
     }
-  }
+  };
+
+  console.log(props.playbackUserData);
 
   return (
     <>
@@ -269,18 +289,27 @@ const PlayBackCard = (props) => {
             </div>
             <div className="grid grid-cols-3 border-t border-opacity-20 mx-2">
               <div className="flex text-white  items-center justify-center text-sm font-medium  text-center px-4  py-3">
-                <p onClick={handleLike} className="w-full mt-2 text-center cursor-pointer opacity-50 hover:opacity-100">
+                <p
+                  onClick={handleLike}
+                  className="w-full mt-2 text-center cursor-pointer opacity-50 hover:opacity-100"
+                >
                   <i className="fas fa-heart mr-2"></i>
                   Like
                 </p>
               </div>
-              <div className="flex text-white  items-center justify-center text-sm font-medium  text-center px-4  py-3">
+              <div
+                onClick={handleShareShow}
+                className="flex text-white  items-center justify-center text-sm font-medium  text-center px-4  py-3"
+              >
                 <p className="w-full mt-2 text-center cursor-pointer opacity-50 hover:opacity-100">
                   <i className="fas fa-share mr-2"></i>Share
                 </p>
               </div>
               <div className="flex  text-white  items-center justify-center text-sm font-medium  text-center px-4  py-3">
-                <p onClick={handleReport} className="w-full mt-2 text-center cursor-pointer opacity-50 hover:opacity-100 flex items-center justify-center">
+                <p
+                  onClick={handleReport}
+                  className="w-full mt-2 text-center cursor-pointer opacity-50 hover:opacity-100 flex items-center justify-center"
+                >
                   <i className="fas fa-flag mr-2"></i> Report
                 </p>
               </div>
@@ -289,6 +318,13 @@ const PlayBackCard = (props) => {
         </div>
       ) : null}
       <BidModal isBidOpen={showBidModal} handleCloseBid={handleCloseBidModal}></BidModal>
+      <ShareModal
+        show={showShare}
+        handleClose={handleShareClose}
+        sharable_data={sharable_data}
+        copybuttonText={shareButtonText}
+        setCopyButtonText={setShareButtonText}
+      />
     </>
   );
 };
