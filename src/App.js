@@ -104,7 +104,7 @@ export default function App() {
 
   useEffect(async () => {
     if (!provider) {
-      //dispatch(createProvider(await loadWeb3Modal()));
+      dispatch(createProvider(await loadWeb3Modal()));
     }
   }, []);
 

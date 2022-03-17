@@ -8,27 +8,27 @@ import NFT from '../../../../artifacts/contracts/NFT.sol/NFT.json';
 import maticLogo from '../../../../assets/graphics/polygon-matic-logo.svg';
 import dbeatsLogoBnW from '../../../../assets/images/Logo/logo-blacknwhite.png';
 import { nftaddress, nftmarketaddress } from '../../../../functions/config';
+import Web3 from 'web3';
+import { useSelector } from 'react-redux';
 
 const MyAssets = ({ resellOwnedItem }) => {
   const [nfts, setNfts] = useState([]);
   const [loadingState, setLoadingState] = useState('not-loaded');
   const [seeMore, setSeeMore] = useState(false);
   const [nameSeeMore, setNameSeeMore] = useState(false);
+  const provider = useSelector((state) => state.web3Reducer.provider);
 
   useEffect(() => {
     loadNFTs();
   }, []);
   async function loadNFTs() {
-    const web3Modal = new Web3Modal({
-      cacheProvider: true,
-    });
-    const connection = await web3Modal.connect();
-    const provider = new ethers.providers.Web3Provider(connection);
-    const signer = provider.getSigner();
+    const web3 = new Web3(provider);
+    var accounts = await web3.eth.getAccounts();
+    window.web3 = web3;
 
-    const marketContract = new ethers.Contract(nftmarketaddress, Market.abi, signer);
+    const marketContract = new web3.eth.Contract(Market.abi, nftmarketaddress, accounts[0]);
 
-    const data = await marketContract.fetchMyNFTs();
+    const data = await marketContract.methods.fetchMyNFTs().call();
 
     const items = await Promise.all(
       data.map(async (i) => {

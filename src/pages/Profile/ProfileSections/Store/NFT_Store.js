@@ -8,12 +8,14 @@ import NFTCard from './NFTCard';
 import UserOwnedAssets from './UserOwnedAssets';
 import useWeb3Modal from '../../../../hooks/useWeb3Modal';
 import Web3 from 'web3';
-
+import { useSelector } from 'react-redux';
+import NFTMarket from './NFTMarket';
 export default function NFTStore() {
   const [nfts, setNfts] = useState([]);
   // const [seeMore, setSeeMore] = useState(false);
   // const [nameSeeMore, setNameSeeMore] = useState(false);
-  const [provider, loadWeb3Modal, logoutOfWeb3Modal] = useWeb3Modal();
+  const [loadWeb3Modal, logoutOfWeb3Modal] = useWeb3Modal();
+  const provider = useSelector((state) => state.web3Reducer.provider);
 
   const [loadingState, setLoadingState] = useState('not-loaded');
   useEffect(() => {
@@ -21,17 +23,19 @@ export default function NFTStore() {
   }, [provider]);
 
   useEffect(() => {
-    if (provider) loadNFTs();
+    loadNFTs();
   }, [provider]);
   async function loadNFTs() {
     console.log(provider);
 
     /* create a generic provider and query for unsold market items */
     const web3 = new Web3(provider);
+    var accounts = await web3.eth.getAccounts();
+    window.web3 = web3;
     //const tokenContract = new ethers.Contract(nftaddress, NFT.abi, provider);
-    const marketContract = new web3.eth.Contract(Market.abi, nftmarketaddress);
+    const marketContract = new window.web3.eth.Contract(Market.abi, nftmarketaddress);
     const data = await marketContract.methods.fetchMarketItems().call();
-
+    console.log(data);
     /*
      *  map over items returned from smart contract and format
      *  them as well as fetch their token metadata
@@ -81,8 +85,10 @@ export default function NFTStore() {
   async function resellOwnedItem(nft, price) {
     const web3Modal = new Web3Modal();
     const connection = await web3Modal.connect();
+
     const provider = new ethers.providers.Web3Provider(connection);
     const signer = provider.getSigner();
+
     const marketContract = new ethers.Contract(nftmarketaddress, Market.abi, signer);
 
     const listingPrice = await marketContract.getListingPrice();
