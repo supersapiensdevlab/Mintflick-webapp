@@ -333,16 +333,17 @@ const PlayBackInfo = (props) => {
       if (videoprops === 'like') {
         setLike(like + 1);
         setUserreact('like');
-      } else if (videoprops === 'dislike') {
-        setDislike(dislike + 1);
-        setUserreact('dislike');
-      } else if (videoprops === 'happy') {
-        setHappy(happy + 1);
-        setUserreact('happy');
-      } else {
-        setAngry(angry + 1);
-        setUserreact('angry');
       }
+      // else if (videoprops === 'dislike') {
+      //   setDislike(dislike + 1);
+      //   setUserreact('dislike');
+      // } else if (videoprops === 'happy') {
+      //   setHappy(happy + 1);
+      //   setUserreact('happy');
+      // } else {
+      //   setAngry(angry + 1);
+      //   setUserreact('angry');
+      // }
 
       axios({
         method: 'POST',
@@ -377,38 +378,41 @@ const PlayBackInfo = (props) => {
       if (videoprops === userreact) {
         if (videoprops === 'like') {
           setLike(like - 1);
-        } else if (videoprops === 'dislike') {
-          setDislike(dislike - 1);
-        } else if (videoprops === 'happy') {
-          setHappy(happy - 1);
-        } else {
-          setAngry(angry - 1);
         }
+        // else if (videoprops === 'dislike') {
+        //   setDislike(dislike - 1);
+        // } else if (videoprops === 'happy') {
+        //   setHappy(happy - 1);
+        // } else {
+        //   setAngry(angry - 1);
+        // }
         setUserreact('');
       } else {
         if (videoprops === 'like') {
           setLike(like + 1);
           setUserreact('like');
-        } else if (videoprops === 'dislike') {
-          setDislike(dislike + 1);
-          setUserreact('dislike');
-        } else if (videoprops === 'happy') {
-          setHappy(happy + 1);
-          setUserreact('happy');
-        } else {
-          setAngry(angry + 1);
-          setUserreact('angry');
         }
+        // else if (videoprops === 'dislike') {
+        //   setDislike(dislike + 1);
+        //   setUserreact('dislike');
+        // } else if (videoprops === 'happy') {
+        //   setHappy(happy + 1);
+        //   setUserreact('happy');
+        // } else {
+        //   setAngry(angry + 1);
+        //   setUserreact('angry');
+        // }
 
         if (userreact === 'like') {
           setLike(like - 1);
-        } else if (userreact === 'dislike') {
-          setDislike(dislike - 1);
-        } else if (userreact === 'happy') {
-          setHappy(happy - 1);
-        } else {
-          setAngry(angry - 1);
         }
+        // else if (userreact === 'dislike') {
+        //   setDislike(dislike - 1);
+        // } else if (userreact === 'happy') {
+        //   setHappy(happy - 1);
+        // } else {
+        //   setAngry(angry - 1);
+        // }
       }
 
       axios({
@@ -486,6 +490,35 @@ const PlayBackInfo = (props) => {
   const handleInputChange = (e) => {
     setReportValue(e.target.value);
   };
+
+  // const handleLikes = () =>{
+  //   if(user){
+  //     let likeData = {
+  //       likedBy: user.username,
+  //       liked: userData.username,
+  //       videoId: props.video_id,
+  //     }
+
+  //     axios({
+  //       method: 'POST',
+  //       url: `${process.env.REACT_APP_SERVER_URL}/user/videolikes`,
+  //       headers: {
+  //         'content-type': 'application/json',
+  //         'auth-token': localStorage.getItem('authtoken'),
+  //       },
+  //       data: likeData,
+  //     })
+  //       .then(function (response) {
+  //         console.log(response);
+  //       })
+  //       .catch(function (error) {
+  //         console.log(error);
+  //       });
+
+  //   }else{
+  //     window.location.href = "/signup"
+  //   }
+  // }
 
   ////console.log(arrayData);
 
@@ -636,7 +669,7 @@ const PlayBackInfo = (props) => {
                           <br />
                           <p className="text-base">{like}</p>
                         </div>
-                        <div className="  text-center">
+                        {/* <div className="  text-center">
                           <i
                             className={
                               userreact === 'dislike'
@@ -671,7 +704,7 @@ const PlayBackInfo = (props) => {
                           ></i>{' '}
                           <br />
                           <p className="text-base"> {angry}</p>
-                        </div>
+                        </div> */}
 
                         <Menu as="div" className="relative inline-block text-left">
                           <div>
