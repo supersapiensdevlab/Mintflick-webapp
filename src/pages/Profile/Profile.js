@@ -23,7 +23,7 @@ const Profile = () => {
   const [privateUser, setPrivate] = useState(true);
   const [notFound, setNotFound] = useState(false);
 
-  const [NFTData, setNFTData] = useState(null);
+  //const [NFTData, setNFTData] = useState(null);
 
   const [sharable_data, setSharable_data] = useState('');
 
@@ -42,7 +42,7 @@ const Profile = () => {
         setUser(value);
         setSharable_data(`${process.env.REACT_APP_CLIENT_URL}/profile/${value.username}`);
         setPrivate(true);
-        get_NFT(value);
+        //get_NFT(value);
       } else {
         get_User();
         setPrivate(false);
@@ -62,51 +62,51 @@ const Profile = () => {
       } else {
         setUser(value.data);
         setSharable_data(`${process.env.REACT_APP_CLIENT_URL}/profile/${value.data.username}`);
-        get_NFT(value.data);
+        //get_NFT(value.data);
       }
     });
   };
 
-  const get_NFT = async (value) => {
-    let nftMedata = null;
-    //-------------------------------------------------------Fetches all the NFT's of the user on Dbeats-------------------------------------------------------
-    //address to use which has already minted the NFTs: 0x5d55407a341d96418ceda98e06c244a502fc9572 or else use ${value.wallet_id}
-    await axios({
-      method: 'GET',
-      // url:
-      //   'https://api.nftport.xyz/v0/accounts/' +
-      //   value.wallet_id +
-      //   '?chain=polygon&include=metadata',
-      url: `https://api.covalenthq.com/v1/137/address/${value.wallet_id}/balances_v2/?quote-currency=USD&format=JSON&nft=true&no-nft-fetch=false&key=ckey_b5245f3db18d4a2d999fef65fc0`,
-      headers: {
-        'Content-Type': 'application/json',
-        // Authorization: 'ad092d8e-feb0-4430-92f7-1fa501b83bec',
-      },
-    })
-      .then((response) => {
-        //console.log(response);
-        let nftData = null;
-        //when using covalent api tweak the response to get metadata
-        for (let i = 0; i < response.data.data.items.length; i++) {
-          const value = response.data.data.items[i];
+  // const get_NFT = async (value) => {
+  //   let nftMedata = null;
+  //   //-------------------------------------------------------Fetches all the NFT's of the user on Dbeats-------------------------------------------------------
+  //   //address to use which has already minted the NFTs: 0x5d55407a341d96418ceda98e06c244a502fc9572 or else use ${value.wallet_id}
+  //   await axios({
+  //     method: 'GET',
+  //     // url:
+  //     //   'https://api.nftport.xyz/v0/accounts/' +
+  //     //   value.wallet_id +
+  //     //   '?chain=polygon&include=metadata',
+  //     url: `https://api.covalenthq.com/v1/137/address/${value.wallet_id}/balances_v2/?quote-currency=USD&format=JSON&nft=true&no-nft-fetch=false&key=ckey_b5245f3db18d4a2d999fef65fc0`,
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //       // Authorization: 'ad092d8e-feb0-4430-92f7-1fa501b83bec',
+  //     },
+  //   })
+  //     .then((response) => {
+  //       //console.log(response);
+  //       let nftData = null;
+  //       //when using covalent api tweak the response to get metadata
+  //       for (let i = 0; i < response.data.data.items.length; i++) {
+  //         const value = response.data.data.items[i];
 
-          if (value.contract_address === '0x03160747b94be986261d9340d01128d4d5566383') {
-            console.log('thisruns');
-            console.log(value.contract_address);
-            console.log(value.nft_data, value.contract_name);
-            nftData = value.nft_data;
-          }
-        }
-        console.log('NFTDATA:', nftData);
-        //response.data.nfts for nftport;
-        nftMedata = nftData;
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-    //-------------------------------------------------------XXXXXXXXXXXXXXXXXENDXXXXXXXXXXXXXXXXXXXX---------------------------------------------------------
-    setNFTData(nftMedata);
-  };
+  //         if (value.contract_address === '0x03160747b94be986261d9340d01128d4d5566383') {
+  //           console.log('thisruns');
+  //           console.log(value.contract_address);
+  //           console.log(value.nft_data, value.contract_name);
+  //           nftData = value.nft_data;
+  //         }
+  //       }
+  //       console.log('NFTDATA:', nftData);
+  //       //response.data.nfts for nftport;
+  //       nftMedata = nftData;
+  //     })
+  //     .catch(function (error) {
+  //       console.log(error);
+  //     });
+  //   //-------------------------------------------------------XXXXXXXXXXXXXXXXXENDXXXXXXXXXXXXXXXXXXXX---------------------------------------------------------
+  //   setNFTData(nftMedata);
+  // };
 
   useEffect(() => {
     const timer = setTimeout(() => {

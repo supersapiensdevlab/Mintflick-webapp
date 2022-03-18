@@ -37,7 +37,7 @@ const useWeb3Modal = (config = {}) => {
   const loadWeb3Modal = useCallback(async () => {
     //console.log(torus);
     let userInfo = null;
-    if (!torus.isInitialized){
+    if (!torus.isInitialized) {
       const torusinit = await torus.init({
         enableLogging: true,
         network: {
@@ -50,12 +50,11 @@ const useWeb3Modal = (config = {}) => {
         },
       });
       console.log('init ');
-      console.log(torusinit)
+      console.log(torusinit);
     }
     if (!torus.isLoggedIn) {
-
       const toruslogin = await torus.login();
-      console.log(toruslogin)
+      console.log(toruslogin);
       userInfo = await torus.getUserInfo();
       window.localStorage.setItem(
         'torus',
@@ -120,8 +119,8 @@ const useWeb3Modal = (config = {}) => {
   const logoutweb3 = useCallback(async function () {
     if (torus) {
       await torus.cleanUp();
-      console.log(window.torus)
-      console.log('cleared')
+      console.log(window.torus);
+      console.log('cleared');
     }
   }, []);
 
@@ -134,10 +133,10 @@ const useWeb3Modal = (config = {}) => {
   }, [autoLoad, autoLoaded, loadWeb3Modal, setAutoLoaded, torus.cachedProvider]);
 
   useEffect(() => {
-    console.log(torus);
+    //console.log(torus);
   }, [torus]);
 
-  return [loadWeb3Modal, logoutOfWeb3Modal,logoutweb3];
+  return [loadWeb3Modal, logoutOfWeb3Modal, logoutweb3];
 };
 
 export default useWeb3Modal;

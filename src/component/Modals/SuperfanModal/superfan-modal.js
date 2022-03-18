@@ -1,6 +1,6 @@
 import { Web3Provider } from '@ethersproject/providers';
 import SuperfluidSDK from '@superfluid-finance/js-sdk';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Container } from 'react-bootstrap';
 import Modal from 'react-modal';
 import { useSelector } from 'react-redux';
@@ -13,6 +13,8 @@ import { Image } from 'react-img-placeholder';
 
 import validateTransaction from './validate';
 import transakSDK from '@transak/transak-sdk';
+import { superfan } from '../../../actions/userActions';
+import { useDispatch } from 'react-redux';
 
 const SuperfanModal = ({ show, handleClose, userDataDetails }) => {
   const provider = useSelector((state) => state.web3Reducer.provider);
@@ -56,7 +58,8 @@ const SuperfanModal = ({ show, handleClose, userDataDetails }) => {
   const [txInitiated, settxInitiated] = useState(false);
   const [txSuccess, settxSuccess] = useState(false);
   const [currentBlockNumber, setcurrentBlockNumber] = useState(null);
-  const [minimumBlockConfirmations] = useState(25);
+  const [minimumBlockConfirmations] = useState(5);
+  const [txHashCreated, settxHashCreated] = useState(null);
 
   const testFlow = async (amount) => {
     const walletAddress = await window.ethereum.request({
@@ -99,14 +102,31 @@ const SuperfanModal = ({ show, handleClose, userDataDetails }) => {
 
     return false;
   };
-
+  const userp = useSelector((state) => state.User.user);
+  const dispatch = useDispatch();
   var initialHash = [];
-  const handleDonation = async (amount) => {
+  var amount = null;
+  const handleSuperfan = () => {
+    if (userp != null) {
+      var superfanData = {
+        superfanof: `${userDataDetails.username}`,
+        superfanto: `${userp.username}`,
+        plan: amount,
+        txnHash: initialHash,
+      };
+      dispatch(superfan(superfanData));
+      console.log(superfanData);
+    } else {
+      // window.location.href = '/signup';
+    }
+  };
+
+  const handleDonation = async (_amount) => {
     settxInitiated(false);
     settxSuccess(false);
     setcurrentBlockNumber(null);
 
-    const donationAmountInWei = amount * 1e18;
+    const donationAmountInWei = _amount * 1e18;
 
     if (ethEnabled) {
       var web3 = new Web3(provider);
@@ -139,12 +159,14 @@ const SuperfanModal = ({ show, handleClose, userDataDetails }) => {
         if (error) throw error;
         console.log(txnHash);
         initialHash = txnHash;
+        settxHashCreated(txnHash);
+        amount = _amount;
       });
       ////////////////////////////////////////////////////////////////////////////////
 
       // Instantiate subscription object
       const subscription = window.web3.eth.subscribe('newBlockHeaders');
-      // Subscribe to pending transactions
+      // Follow to pending transactions
       subscription
         .subscribe((error, result) => {
           if (error) console.log(error, result);
@@ -156,7 +178,7 @@ const SuperfanModal = ({ show, handleClose, userDataDetails }) => {
             // Initiate transaction confirmation
             confirmEtherTransaction(data['hash']);
 
-            // Unsubscribe from pending transactions.
+            // Unfollow from pending transactions.
             subscription.unsubscribe();
           } catch (error) {
             console.log(error);
@@ -207,6 +229,7 @@ const SuperfanModal = ({ show, handleClose, userDataDetails }) => {
 
           console.log('Transaction with hash ' + txHash + ' has been successfully confirmed');
           settxSuccess(true);
+          handleSuperfan();
           return;
         }
         // Recursive call
@@ -328,64 +351,118 @@ bg-white dark:bg-dbeats-dark-primary    "
             </span>
           </button>
         </div> }*/
-                  <div className="grid grid-cols-3 gap-4    self-center mx-5">
-                    <div
-                      className="w-52 h-max dark:border-dbeats-light border dark:border-opacity-40 
+                  <>
+                    <p className="text-white text-center my-2 text-opacity-70">
+                      The transaction amount will be sent directly to the Creators Wallet{' '}
+                    </p>
+                    <div className="grid grid-cols-3 gap-4    self-center mx-5">
+                      <div
+                        className="w-52 h-max dark:border-dbeats-light border dark:border-opacity-40 
           dark:bg-dbeats-dark-secondary rounded-lg p-4 mt-5"
-                    >
-                      <p className="font-bold text-lg text-center text-dbeats-light">
-                        {userDataDetails.superfan_data && userDataDetails.superfan_data.plan
-                          ? userDataDetails.superfan_data.plan
-                          : 'Lite'}
-                      </p>
+                      >
+                        <p className="font-bold text-lg text-center text-dbeats-light">
+                          {userDataDetails.superfan_data && userDataDetails.superfan_data.plan
+                            ? userDataDetails.superfan_data.plan
+                            : 'Lite'}
+                        </p>
 
-                      <Image
-                        src={
-                          userDataDetails.superfan_data && userDataDetails.superfan_data.planImage
-                            ? userDataDetails.superfan_data.planImage
-                            : dbeatsLogoBnW
-                        }
-                        height={80}
-                        width={80}
-                        className="object-cover  h-24 w-24 mx-auto rounded-full  mt-1"
-                        alt=""
-                        placeholderSrc={dbeatsLogoBnW}
-                      />
-                      <div className=" flex text-2xl font-bold mx-auto justify-center  text-center mt-3 mb-2">
-                        <>
-                          <img className="h-6 w-6 self-center mr-1" src={maticLogo}></img>
-                          <p className=" text-3xl font-bold   text-center dark:text-dbeats-white">
-                            {userDataDetails.superfan_data && userDataDetails.superfan_data.price}
-                          </p>
-                        </>
-                      </div>
-                      <button
-                        onClick={() =>
-                          handleDonation(
-                            userDataDetails.superfan_data && userDataDetails.superfan_data.price,
-                          )
-                        }
-                        className="rounded-full block shadow text-center col-span-1  bg-white dark:bg-dbeats-dark-primary text-black dark:text-white  
+                        <Image
+                          src={
+                            userDataDetails.superfan_data && userDataDetails.superfan_data.planImage
+                              ? userDataDetails.superfan_data.planImage
+                              : dbeatsLogoBnW
+                          }
+                          height={80}
+                          width={80}
+                          className="object-cover  h-24 w-24 mx-auto rounded-full  mt-1"
+                          alt=""
+                          placeholderSrc={dbeatsLogoBnW}
+                        />
+                        <div className=" flex text-2xl font-bold mx-auto justify-center  text-center mt-3 mb-2">
+                          <>
+                            <img className="h-6 w-6 self-center mr-1" src={maticLogo}></img>
+                            <p className=" text-3xl font-bold   text-center dark:text-dbeats-white">
+                              {userDataDetails.superfan_data && userDataDetails.superfan_data.price}
+                            </p>
+                          </>
+                        </div>
+                        <button
+                          onClick={() =>
+                            handleDonation(
+                              userDataDetails.superfan_data && userDataDetails.superfan_data.price,
+                            )
+                          }
+                          className="rounded-full block shadow text-center col-span-1  bg-white dark:bg-dbeats-dark-primary text-black dark:text-white  
              2xl:w-max w-max px-5 mx-auto py-2      font-semibold   border border-dbeats-light dark:border-dbeats-light dark:hover:border-dbeats-light  hover:border-dbeats-light hover:shadow-none 
              transition-all transform hover:scale-99 hover:bg-dbeats-light dark:hover:bg-dbeats-light hover:text-white "
-                      >
-                        <span className="font-semibold text-md px-4 ">Join</span>
-                      </button>
-                      <p className="  text-gray-800 dark:text-gray-300 mt-4">
-                        {userDataDetails.superfan_data && userDataDetails.superfan_data.perks}
-                      </p>
-                    </div>
-                    <div className="bg-dbeats-light  rounded-lg">
-                      <p className="dark:text-white p-2 text-center mx-auto font-semibold">
-                        Most Popular
-                      </p>
+                        >
+                          <span className="font-semibold text-md px-4 ">Join</span>
+                        </button>
+                        <p className="  text-gray-800 dark:text-gray-300 mt-4">
+                          {userDataDetails.superfan_data && userDataDetails.superfan_data.perks}
+                        </p>
+                      </div>
+                      <div className="bg-dbeats-light  rounded-lg">
+                        <p className="dark:text-white p-2 text-center mx-auto font-semibold">
+                          Most Popular
+                        </p>
+                        <div
+                          className="w-52 h-max  dark:border-dbeats-light border dark:border-opacity-40 
+          dark:bg-dbeats-dark-secondary rounded-lg p-4"
+                        >
+                          <p className="font-bold text-lg text-center text-dbeats-light">
+                            {userDataDetails.superfan_data && userDataDetails.superfan_data.plan2
+                              ? userDataDetails.superfan_data.plan2
+                              : 'Lite'}
+                          </p>
+
+                          <Image
+                            src={
+                              userDataDetails.superfan_data &&
+                              userDataDetails.superfan_data.planImage
+                                ? userDataDetails.superfan_data.planImage
+                                : dbeatsLogoBnW
+                            }
+                            height={80}
+                            width={80}
+                            className="object-cover  h-24 w-24 mx-auto rounded-full  mt-1"
+                            alt=""
+                            placeholderSrc={dbeatsLogoBnW}
+                          />
+                          <div className=" flex text-2xl font-bold mx-auto justify-center  text-center mt-3 mb-2">
+                            <>
+                              <img className="h-6 w-6 self-center mr-1" src={maticLogo}></img>
+                              <p className=" text-3xl font-bold   text-center dark:text-dbeats-white">
+                                {userDataDetails.superfan_data &&
+                                  userDataDetails.superfan_data.price2}
+                              </p>
+                            </>
+                          </div>
+                          <button
+                            onClick={() =>
+                              handleDonation(
+                                userDataDetails.superfan_data &&
+                                  userDataDetails.superfan_data.price2,
+                              )
+                            }
+                            className="rounded-full block shadow text-center col-span-1  bg-white dark:bg-dbeats-dark-primary text-black dark:text-white  
+             2xl:w-max w-max px-5   mx-auto py-2      font-semibold   border border-dbeats-light dark:border-dbeats-light dark:hover:border-dbeats-light  hover:border-dbeats-light hover:shadow-none 
+             transition-all transform hover:scale-99 hover:bg-dbeats-light dark:hover:bg-dbeats-light hover:text-white "
+                          >
+                            <span className="font-semibold text-md px-4 ">Join</span>
+                          </button>
+                          <p className="  text-gray-800 dark:text-gray-300 mt-4">
+                            {userDataDetails.superfan_data && userDataDetails.superfan_data.perks2}
+                          </p>
+                        </div>
+                      </div>
                       <div
-                        className="w-52 h-max  dark:border-dbeats-light border dark:border-opacity-40 
+                        className="w-52 h-max self-center dark:border-dbeats-light border dark:border-opacity-40 
           dark:bg-dbeats-dark-secondary rounded-lg p-4"
                       >
                         <p className="font-bold text-lg text-center text-dbeats-light">
-                          {userDataDetails.superfan_data && userDataDetails.superfan_data.plan2
-                            ? userDataDetails.superfan_data.plan2
+                          {userDataDetails.superfan_data && userDataDetails.superfan_data.plan3
+                            ? userDataDetails.superfan_data.plan3
                             : 'Lite'}
                         </p>
 
@@ -406,14 +483,14 @@ bg-white dark:bg-dbeats-dark-primary    "
                             <img className="h-6 w-6 self-center mr-1" src={maticLogo}></img>
                             <p className=" text-3xl font-bold   text-center dark:text-dbeats-white">
                               {userDataDetails.superfan_data &&
-                                userDataDetails.superfan_data.price2}
+                                userDataDetails.superfan_data.price3}
                             </p>
                           </>
                         </div>
                         <button
                           onClick={() =>
                             handleDonation(
-                              userDataDetails.superfan_data && userDataDetails.superfan_data.price2,
+                              userDataDetails.superfan_data && userDataDetails.superfan_data.price3,
                             )
                           }
                           className="rounded-full block shadow text-center col-span-1  bg-white dark:bg-dbeats-dark-primary text-black dark:text-white  
@@ -423,57 +500,11 @@ bg-white dark:bg-dbeats-dark-primary    "
                           <span className="font-semibold text-md px-4 ">Join</span>
                         </button>
                         <p className="  text-gray-800 dark:text-gray-300 mt-4">
-                          {userDataDetails.superfan_data && userDataDetails.superfan_data.perks2}
+                          {userDataDetails.superfan_data && userDataDetails.superfan_data.perks3}
                         </p>
                       </div>
                     </div>
-                    <div
-                      className="w-52 h-max self-center dark:border-dbeats-light border dark:border-opacity-40 
-          dark:bg-dbeats-dark-secondary rounded-lg p-4"
-                    >
-                      <p className="font-bold text-lg text-center text-dbeats-light">
-                        {userDataDetails.superfan_data && userDataDetails.superfan_data.plan3
-                          ? userDataDetails.superfan_data.plan3
-                          : 'Lite'}
-                      </p>
-
-                      <Image
-                        src={
-                          userDataDetails.superfan_data && userDataDetails.superfan_data.planImage
-                            ? userDataDetails.superfan_data.planImage
-                            : dbeatsLogoBnW
-                        }
-                        height={80}
-                        width={80}
-                        className="object-cover  h-24 w-24 mx-auto rounded-full  mt-1"
-                        alt=""
-                        placeholderSrc={dbeatsLogoBnW}
-                      />
-                      <div className=" flex text-2xl font-bold mx-auto justify-center  text-center mt-3 mb-2">
-                        <>
-                          <img className="h-6 w-6 self-center mr-1" src={maticLogo}></img>
-                          <p className=" text-3xl font-bold   text-center dark:text-dbeats-white">
-                            {userDataDetails.superfan_data && userDataDetails.superfan_data.price3}
-                          </p>
-                        </>
-                      </div>
-                      <button
-                        onClick={() =>
-                          handleDonation(
-                            userDataDetails.superfan_data && userDataDetails.superfan_data.price3,
-                          )
-                        }
-                        className="rounded-full block shadow text-center col-span-1  bg-white dark:bg-dbeats-dark-primary text-black dark:text-white  
-             2xl:w-max w-max px-5   mx-auto py-2      font-semibold   border border-dbeats-light dark:border-dbeats-light dark:hover:border-dbeats-light  hover:border-dbeats-light hover:shadow-none 
-             transition-all transform hover:scale-99 hover:bg-dbeats-light dark:hover:bg-dbeats-light hover:text-white "
-                      >
-                        <span className="font-semibold text-md px-4 ">Join</span>
-                      </button>
-                      <p className="  text-gray-800 dark:text-gray-300 mt-4">
-                        {userDataDetails.superfan_data && userDataDetails.superfan_data.perks3}
-                      </p>
-                    </div>
-                  </div>
+                  </>
                 )
               ) : (
                 ''
@@ -496,14 +527,18 @@ bg-white dark:bg-dbeats-dark-primary    "
                   'Back'
                 )}
               </button>
-              {showBuyCrypto ? (
-                <iframe
-                  src="https://buy.moonpay.com/?apiKey=[your_api_key]"
-                  allow="accelerometer; autoplay; camera; gyroscope; payment"
-                  width="100%"
-                  height="400px"
-                  frameBorder="0"
-                ></iframe>
+              {txHashCreated ? (
+                <div className="text-center flex">
+                  <p className="no-underline">🚀</p>
+                  <a
+                    target={'_blank'}
+                    rel="noopener noreferrer "
+                    className="dark:text-dbeats-light cursor-pointer underline  "
+                    href={`https://polygonscan.com/tx/${txHashCreated}`}
+                  >
+                    Check on Polygonscan
+                  </a>
+                </div>
               ) : (
                 ''
               )}

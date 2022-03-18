@@ -16,6 +16,11 @@ export const PictureModal = (props) => {
   const darkMode = useSelector((state) => state.toggleDarkMode);
 
   async function createSale() {
+    const torus = new Torus({
+      buttonPosition: 'bottom-left', // customize position of torus icon in dapp
+    });
+    window.torus = torus;
+
     //const user = await window.torus.getUserInfo(); // user profile info (email address etc)
     if (!torus.isInitialized)
       await torus.init({

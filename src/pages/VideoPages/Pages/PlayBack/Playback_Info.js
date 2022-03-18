@@ -93,7 +93,7 @@ const PlayBackInfo = (props) => {
   const text = 'Copy Link To Clipboard';
   const [buttonText, setButtonText] = useState(text);
 
-  const [subscribeButtonText, setSubscribeButtonText] = useState('Subscribe');
+  const [subscribeButtonText, setSubscribeButtonText] = useState('Follow');
 
   const [arrayData, setArrayData] = useState([]);
 
@@ -147,7 +147,7 @@ const PlayBackInfo = (props) => {
         following: `${userData.username}`,
         follower: `${user.username}`,
       };
-      if (subscribeButtonText === 'Subscribe') {
+      if (subscribeButtonText === 'Follow') {
         axios({
           method: 'POST',
           url: `${process.env.REACT_APP_SERVER_URL}/user/follow`,
@@ -159,7 +159,7 @@ const PlayBackInfo = (props) => {
         })
           .then(function (response) {
             if (response) {
-              setSubscribeButtonText('Unsubscribe');
+              setSubscribeButtonText('Unfollow');
               setLoader(true);
             } else {
               alert('Invalid Login');
@@ -181,7 +181,7 @@ const PlayBackInfo = (props) => {
           .then(function (response) {
             if (response) {
               console.log(response);
-              setSubscribeButtonText('Subscribe');
+              setSubscribeButtonText('Follow');
               setLoader(true);
             } else {
               alert('Invalid Login');
@@ -229,7 +229,7 @@ const PlayBackInfo = (props) => {
         convertTimestampToTime(fetchedVideoData);
         for (let i = 0; i < value.data.follower_count.length; i++) {
           if (user ? value.data.follower_count[i] === user.username : false) {
-            setSubscribeButtonText('Unsubscribe');
+            setSubscribeButtonText('Unfollow');
             break;
           }
         }
@@ -630,7 +630,7 @@ const PlayBackInfo = (props) => {
                                   footerData.superfan_data ? '' : 'hidden'
                                 } whitespace-nowrap  flex`}
                               >
-                                Become a Superfan
+                                🥳 Become a Superfan
                               </span>
                             </button>
                           </div>
@@ -640,7 +640,7 @@ const PlayBackInfo = (props) => {
                             className="bg-dbeats-light flex whitespace-nowrap w-max p-1 2xl:text-lg lg:text-sm text-md  rounded-sm 2xl:px-4 px-4 lg:px-2 mr-3 font-semibold text-white "
                           >
                             <span className="flex whitespace-nowrap">
-                              Login to Subscribe & Become a SuperFan
+                              Login to Follow & Become a SuperFan
                             </span>
                           </Link>
                         )}

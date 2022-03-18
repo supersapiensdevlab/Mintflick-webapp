@@ -73,7 +73,7 @@ const PublicInfo = (props) => {
 
   const text = 'Copy Link To Clipboard';
   const [buttonText, setButtonText] = useState(text);
-  const [subscribeButtonText, setSubscribeButtonText] = useState('Subscribe');
+  const [subscribeButtonText, setSubscribeButtonText] = useState('Follow');
 
   const [viewColor, setViewColor] = useState('white');
   const [viewAnimate, setViewAnimate] = useState('animate-none');
@@ -118,8 +118,8 @@ const PublicInfo = (props) => {
       follower: `${user.username}`,
     };
 
-    if (subscribeButtonText === 'Subscribe') {
-      setSubscribeButtonText('Unsubscribe');
+    if (subscribeButtonText === 'Follow') {
+      setSubscribeButtonText('Unfollow');
       axios({
         method: 'POST',
         url: `${process.env.REACT_APP_SERVER_URL}/user/follow`,
@@ -140,7 +140,7 @@ const PublicInfo = (props) => {
           console.log(error);
         });
     } else {
-      setSubscribeButtonText('Subscribe');
+      setSubscribeButtonText('Follow');
       axios({
         method: 'POST',
         url: `${process.env.REACT_APP_SERVER_URL}/user/unfollow`,
@@ -168,7 +168,7 @@ const PublicInfo = (props) => {
       setUserData(value.data);
       for (let i = 0; i < value.data.follower_count.length; i++) {
         if (user ? value.data.follower_count[i] === user.username : false) {
-          setSubscribeButtonText('Unsubscribe');
+          setSubscribeButtonText('Unfollow');
           break;
         }
       }
@@ -381,7 +381,7 @@ const PublicInfo = (props) => {
                           </div>
                         </div>
                         <div className="flex items-center   w-full">
-                          {subscribeButtonText === 'Subscribe' ? (
+                          {subscribeButtonText === 'Follow' ? (
                             <button
                               id="subscribeButton"
                               className="flex items-center dark:bg-dbeats-dark-primary border border-dbeats-light dark:hover:bg-dbeats-light p-1 2xl:text-lg lg:text-sm text-md rounded-sm 2xl:px-4 px-4 lg:px-2 mr-3 font-semibold text-white "
@@ -414,7 +414,7 @@ const PublicInfo = (props) => {
                                 userData.superfan_data ? '' : 'hidden'
                               } whitespace-nowrap flex`}
                             >
-                              Become a Superfan
+                              🥳 Become a Superfan
                             </span>
                           </button>
                         </div>
@@ -425,7 +425,7 @@ const PublicInfo = (props) => {
                         className="bg-dbeats-light flex w-max  p-1 2xl:text-lg lg:text-sm text-md  rounded-sm 2xl:px-4 px-4 lg:px-2 mr-3 font-semibold text-white "
                       >
                         <span className="whitespace-nowrap flex">
-                          Login to Subscribe & Become a SuperFan
+                          Login to Follow & Become a SuperFan
                         </span>
                       </Link>
                     )}

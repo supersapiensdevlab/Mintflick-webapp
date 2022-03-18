@@ -28,6 +28,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
 
   const [followers, setFollowers] = useState(0);
   const [following, setFollowing] = useState(0);
+  const [superfan, setSuperfan] = useState(0);
 
   const [privateUser, setPrivate] = useState(true);
   const [loader, setLoader] = useState(true);
@@ -59,15 +60,15 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
   const [tabIndex, setTabIndex] = useState(0);
   const [postsData, setPostsData] = useState(null);
 
-  const [buttonText, setButtonText] = useState('Subscribe');
+  const [buttonText, setButtonText] = useState('Follow');
   const [displayName, setDisplayName] = useState(user.name);
 
-  const [superfan_data,setSuperfan_data] = useState(null);
+  const [superfan_data, setSuperfan_data] = useState(null);
   const [showSubscriptionModal, setshowSubscriptionModal] = useState(false);
 
   const handleShowSubscriptionModal = () => setshowSubscriptionModal(true);
   const handleCloseSubscriptionModal = () => setshowSubscriptionModal(false);
-  const [pageUser , setPageUser] = useState(null);
+  const [pageUser, setPageUser] = useState(null);
 
   const myData = JSON.parse(window.localStorage.getItem('user'));
   if (myData)
@@ -82,6 +83,8 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
           setPrivate(true);
           setFollowers(value.follower_count.length);
           setFollowing(value.followee_count.length);
+          setSuperfan(value.superfan_of.length);
+
           setIsMailVerified(value.is_mail_verified);
           setIsVerified(value.is_verified);
 
@@ -153,21 +156,23 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
       for (let i = 0; i < value.data.follower_count.length; i++) {
         if (myData) {
           if (value.data.follower_count[i] === myData.username) {
-            setButtonText('Unsubscribe');
+            setButtonText('Unfollow');
             break;
           }
         } else {
-          setButtonText('Login to Subscribe');
+          setButtonText('Login to Follow');
           break;
         }
       }
       setSharable_data(`${process.env.REACT_APP_CLIENT_URL}/profile/${value.data.username}`);
       setFollowers(value.data.follower_count.length);
       setFollowing(value.data.followee_count.length);
+      setSuperfan(value.data.superfan_of.length);
+
       setIsMailVerified(value.data.is_mail_verified);
       setIsVerified(value.data.is_verified);
       setSuperfan_data(value.data.superfan_data);
-      setPageUser(value.data)
+      setPageUser(value.data);
 
       if (value.data.cover_image && value.data.cover_image !== '') {
         setCoverImage(value.data.cover_image);
@@ -195,7 +200,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
 
   const trackFollowers = () => {
     setSubscribeLoader(false);
-    if (buttonText === 'Login to Subscribe') {
+    if (buttonText === 'Login to Follow') {
       window.location.href = '/signup';
     }
     ////console.log(followers);
@@ -204,7 +209,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
       follower: `${myData.username}`,
     };
 
-    if (buttonText === 'Subscribe') {
+    if (buttonText === 'Follow') {
       axios({
         method: 'POST',
         url: `${process.env.REACT_APP_SERVER_URL}/user/follow`,
@@ -216,7 +221,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
       })
         .then(function (response) {
           if (response) {
-            setButtonText('Unsubscribe');
+            setButtonText('Unfollow');
             setFollowers(followers + 1);
             setSubscribeLoader(true);
           } else {
@@ -238,7 +243,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
       })
         .then(function (response) {
           if (response) {
-            setButtonText('Subscribe');
+            setButtonText('Follow');
             setFollowers(followers - 1);
             setSubscribeLoader(true);
           } else {
@@ -409,6 +414,32 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                       <span className="font-bold 2xl:text-xl lg:text-xl md:text-xl mr-3 font-GTWalsheimPro">
                         {user.name}
                       </span>
+                      {!privateUser && myData && superfan_data ? (
+                        <button
+                          onClick={handleShowSubscriptionModal}
+                          className={
+                            superfan_data
+                              ? ' flex nm-flat-dbeats-dark-primary  border border-dbeats-light dark:hover:bg-dbeats-light p-1 2xl:text-lg lg:text-sm text-md  rounded  2xl:px-4 px-4 lg:px-2      mr-3   text-white   '
+                              : 'hidden'
+                          }
+                        >
+                          <span
+                            className={`${superfan_data ? '' : 'hidden'} whitespace-nowrap  flex`}
+                          >
+                            🥳 Become a Superfan
+                          </span>
+                        </button>
+                      ) : null}
+                      <button
+                        onClick={handleShow}
+                        className="no-underline border text-dbeats-dark-alt 
+                        cursor-pointer dark:border-transparent border-1 dark:border-opacity-20  dark:text-gray-200 
+                        hover:bg-dbeats-light hover:text-white 
+                        dark:hover:text-white rounded   mr-1 
+                        flex self-center   py-2.5 2xl:px-3 lg:px-1.5  text-xs 2xl:text-lg  px-2"
+                      >
+                        <i className="fas fa-share-alt self-center mx-1 "></i>
+                      </button>
                       {myData && !privateUser ? (
                         <button
                           href="#"
@@ -418,7 +449,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                           onClick={trackFollowers}
                         >
                           <span>
-                            {buttonText === 'Subscribe' ? <i className="fas fa-plus"></i> : null}
+                            {buttonText === 'Follow' ? <i className="fas fa-plus"></i> : null}
                             &nbsp;{buttonText}
                           </span>
                           <div
@@ -427,34 +458,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                           ></div>
                         </button>
                       ) : null}
-                      <button
-                        onClick={handleShow}
-                        className="no-underline border text-dbeats-dark-alt 
-                        cursor-pointer dark:border-white border-1 dark:border-opacity-20  dark:text-gray-200 
-                        hover:bg-dbeats-light hover:text-white 
-                        dark:hover:text-white rounded font-bold mr-1 
-                        flex self-center   py-1 2xl:px-3 lg:px-1.5  text-xs 2xl:text-lg  px-2"
-                      >
-                        <i className="fas fa-share-alt self-center mr-2 "></i> SHARE
-                      </button>
-                      {!privateUser && myData && superfan_data ? (
-                        <button
-                          onClick={handleShowSubscriptionModal}
-                          className={
-                            superfan_data
-                              ? ' flex dark:bg-dbeats-dark-primary border border-dbeats-light dark:hover:bg-dbeats-light p-1 2xl:text-lg lg:text-sm text-md  rounded-sm 2xl:px-4 px-4 lg:px-2      mr-3 font-semibold text-white   '
-                              : 'hidden'
-                          }
-                        >
-                          <span
-                            className={`${
-                              superfan_data ? '' : 'hidden'
-                            } whitespace-nowrap  flex`}
-                          >
-                            Become a Superfan
-                          </span>
-                        </button>
-                      ) : null}
+
                       {privateUser ? (
                         <button
                           onClick={handleShowUpdate}
@@ -481,9 +485,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                       ) : null}
                     </div>
                     <div className="flex items-center">
-                      <span className="font-semibold 2xl:text-lg lg:text-sm opacity-60">
-                        @{user.username}
-                      </span>
+                      <span className="  2xl:text-lg lg:text-sm opacity-60">@{user.username}</span>
                       {isVerified ? (
                         <Verified className="h-5 w-5  items-center self-center justify-center text-dbeats-light mx-1" />
                       ) : null}
@@ -552,6 +554,17 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                         </div>
                       </Link>
                     </div>
+                    <div className="mx-auto lg:px-4 px-2 flex flex-col lg:flex-row justify-center items-center">
+                      <div className=" w-full mr-2 flex justify-center ">
+                        {/*{user.subscribed ? <>{user.subscribed.length}</> : 0}{" "}*/}
+                        {superfan}{' '}
+                      </div>
+                      <Link to={`/profile/${urlUsername}/superfans`}>
+                        <div className="cursor-pointer 2xl:text-sm lg:text-xs hover:underline hover:text-gray-50">
+                          SUPERFANS
+                        </div>
+                      </Link>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -586,7 +599,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                       })}
                     </div>
                   ) : (
-                    <p className="2xl:text-lg lg:text-sm dark:text-white">No Posts till now</p>
+                    <p className="2xl:text-lg lg:text-sm dark:text-white mt-2">No Posts till now</p>
                   )}
                 </div>
               </Route>
@@ -615,7 +628,9 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                         })}
                     </div>
                   ) : (
-                    <p className="2xl:text-lg lg:text-sm dark:text-white">No Videos till now</p>
+                    <p className="2xl:text-lg lg:text-sm dark:text-white mt-2">
+                      No Videos till now
+                    </p>
                   )}
                 </div>
               </Route>
@@ -643,7 +658,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                         })}
                     </div>
                   ) : (
-                    <p className="2xl:text-lg lg:text-sm dark:text-white">No Music till now</p>
+                    <p className="2xl:text-lg lg:text-sm dark:text-white mt-2">No Music till now</p>
                   )}
                 </div>
               </Route>
@@ -671,7 +686,9 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                         })}
                     </div>
                   ) : (
-                    <p className="2xl:text-lg lg:text-sm dark:text-white">No Latest Activity</p>
+                    <p className="2xl:text-lg lg:text-sm dark:text-white mt-2">
+                      No Latest Activity
+                    </p>
                   )}
                 </div>
               </Route>
@@ -719,9 +736,11 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                     <h2 className="text-white opacity-40">
                       Pinned Channels will be shown on left sidebar.
                     </h2>
-                  ) : null}
+                  ) : (
+                    <h2 className="text-white opacity-40">Following</h2>
+                  )}
                   <div className=" grid grid-cols-2 sm:grid-cols-4 grid-flow-row ">
-                    {user.followee_count ? (
+                    {user.followee_count.length > 0 ? (
                       <div>
                         {user.followee_count.map((following, i) => {
                           //////console.log(playbackUser)
@@ -753,7 +772,9 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                         })}
                       </div>
                     ) : (
-                      <p className="2xl:text-lg lg:text-sm dark:text-white">0 Subscribed</p>
+                      <p className="2xl:text-lg lg:text-sm dark:text-white mt-2">
+                        🥺Not Following Anyone
+                      </p>
                     )}
                   </div>
                 </div>
@@ -761,7 +782,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
 
               <Route path={`/profile/:username/followers`}>
                 <div className="pt-4 pl-4">
-                  {privateUser ? <h2 className="text-white opacity-40">Users You Follow</h2> : null}
+                  {<h2 className="text-white opacity-40">Followers</h2>}
                   <div className=" grid grid-cols-2 sm:grid-cols-4 grid-flow-row ">
                     {user.follower_count ? (
                       <div>
@@ -780,7 +801,40 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                         })}
                       </div>
                     ) : (
-                      <p className="2xl:text-lg lg:text-sm dark:text-white">0 Subscribed</p>
+                      <p className="2xl:text-lg lg:text-sm dark:text-white">🥺No Followers</p>
+                    )}
+                  </div>
+                </div>
+              </Route>
+
+              <Route path={`/profile/:username/superfans`}>
+                <div className="pt-4 pl-4">
+                  {<h2 className="text-white opacity-40"> Superfans</h2>}
+                  <div className=" grid grid-cols-2 sm:grid-cols-4 grid-flow-row ">
+                    {user.superfan_of.length > 0 ? (
+                      <div>
+                        {user.superfan_of.reverse().map((superfan, i) => {
+                          //////console.log(playbackUser)
+                          return (
+                            <div
+                              key={i}
+                              className="justify-between flex 2xl:text-lg lg:text-sm text-md shadow  w-full  lg:w-full px-4  my-3 lg:my-2.5 py-2 rounded dark:hover:bg-dbeats-dark-alt dark:bg-dbeats-dark-secondary dark:text-gray-100 "
+                            >
+                              <Link to={`/profile/${superfan.username}/posts`}>
+                                <h2 className="hover:underline">{superfan.username}</h2>
+                              </Link>
+                              <a
+                                className="underline text-dbeats-white opacity-40 justify-end"
+                                href={`https://polygonscan.com/tx/${superfan.txnHash}`}
+                              >
+                                view transaction
+                              </a>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    ) : (
+                      <p className="2xl:text-lg lg:text-sm dark:text-white mt-2"> 🥺No Superfans</p>
                     )}
                   </div>
                 </div>
@@ -820,12 +874,12 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
         darkMode={darkMode}
         setDisplayName={setDisplayName}
       />
-       <SuperfanModal
-            userDataDetails={pageUser}
-            show={showSubscriptionModal}
-            handleClose={handleCloseSubscriptionModal}
-            className={`${darkMode && 'dark'}   mx-auto    mt-32 shadow `}
-          />
+      <SuperfanModal
+        userDataDetails={pageUser}
+        show={showSubscriptionModal}
+        handleClose={handleCloseSubscriptionModal}
+        className={`${darkMode && 'dark'}   mx-auto    mt-32 shadow `}
+      />
     </div>
   );
 };

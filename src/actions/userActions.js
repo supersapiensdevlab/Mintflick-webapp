@@ -9,7 +9,8 @@ import {
   USER_EXISTS,
   USER_LOADED,
   USER_LOADING,
-  CREATE_POST
+  CREATE_POST,
+  SUPERFAN,
 } from './types';
 import axios from '../https-common';
 
@@ -99,18 +100,33 @@ export const web3Login = (userData) => (dispatch) => {
 };
 
 export const followUser = (data) => (dispatch) => {
-  axios.post('/user/follow', data, tokenConfig())
+  axios
+    .post('/user/follow', data, tokenConfig())
     .then(function (response) {
       if (response) {
         dispatch({
           type: FOLLOW_USER,
           payload: data.following,
         });
-      } 
+      }
     })
     .catch(function (error) {
       console.log(error);
     });
 };
 
-
+export const superfan = (data) => (dispatch) => {
+  axios
+    .post('/user/superfan', data, tokenConfig())
+    .then(function (response) {
+      if (response) {
+        dispatch({
+          type: SUPERFAN,
+          payload: data,
+        });
+      }
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+};

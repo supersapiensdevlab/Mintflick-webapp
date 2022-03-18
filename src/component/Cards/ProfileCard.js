@@ -3,12 +3,12 @@ import { Link } from 'react-router-dom';
 import { ReactComponent as Verified } from '../../assets/icons/verified-account.svg';
 import logo from '../..//assets/images/logo.svg';
 import axios from 'axios';
-import { useSelector , useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { followUser } from '../../actions/userActions';
 // components
 const ProfileCard = ({ user }) => {
   const dispatch = useDispatch();
-  const userp = useSelector((state) => state.User.user); 
+  const userp = useSelector((state) => state.User.user);
   const [following, setFollowing] = useState(false);
   useEffect(() => {
     if (userp) {
@@ -25,7 +25,6 @@ const ProfileCard = ({ user }) => {
         follower: `${userp.username}`,
       };
       dispatch(followUser(followData));
-
     } else {
       // window.location.href = '/signup';
     }

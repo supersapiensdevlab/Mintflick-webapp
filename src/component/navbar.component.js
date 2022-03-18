@@ -64,18 +64,18 @@
 //     const web3 = new Web3(provider);
 //     const accounts = await web3.eth.getAccounts();
 
-//     // Subscribe to accounts change
+//     // Follow to accounts change
 //     provider.on('accountsChanged', (accounts) => {
 //       //console.log(accounts);
 //       setWalletConnected(accounts[0]);
 //     });
 
-//     // Subscribe to chainId change
+//     // Follow to chainId change
 //     provider.on('chainChanged', (chainId) => {
 //       //console.log(chainId);
 //     });
 
-//     // Subscribe to provider connection
+//     // Follow to provider connection
 //     provider.on('connect', (info) => {
 //       //console.log(info);
 //       setWalletConnected(accounts[0]);
@@ -83,7 +83,7 @@
 //       fs.writeFileSync('./profile-icon.svg', icon);
 //     });
 
-//     // Subscribe to provider disconnection
+//     // Follow to provider disconnection
 //     provider.on('disconnect', (error) => {
 //       console.log(error);
 //       setWalletConnected(false);

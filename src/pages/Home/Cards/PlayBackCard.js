@@ -86,7 +86,7 @@ const PlayBackCard = (props) => {
 
   const trackFollowers = () => {
     setSubscribeLoader(false);
-    if (buttonText === 'Login to Subscribe') {
+    if (buttonText === 'Login to Follow') {
       window.location.href = '/signup';
     }
     //console.log(followers);

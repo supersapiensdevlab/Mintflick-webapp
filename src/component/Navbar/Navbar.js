@@ -26,7 +26,7 @@ moment().format();
 
 const NavBar = () => {
   // eslint-disable-next-line no-unused-vars
-  const [loadWeb3Modal, logoutOfWeb3Modal,logoutweb3] = useWeb3Modal();
+  const [loadWeb3Modal, logoutOfWeb3Modal, logoutweb3] = useWeb3Modal();
   const provider = useSelector((state) => state.web3Reducer.provider);
 
   const [notification, setNotification] = useState([]);
@@ -56,8 +56,6 @@ const NavBar = () => {
     logoutweb3();
     window.localStorage.clear();
     // window.location.href = '/';
-
-
   };
 
   const [toggled, setToggled] = useState(JSON.parse(window.localStorage.getItem('darkmode')));
@@ -381,7 +379,7 @@ const NavBar = () => {
               </svg>
             </div>
             <div className="flex items-center">
-              <a href="/" className="  self-center cursor-pointer sm:flex hidden">
+              <Link to="/" className="  self-center cursor-pointer sm:flex hidden">
                 <img
                   src={logo}
                   alt="dbeats_logo"
@@ -393,8 +391,8 @@ const NavBar = () => {
                   className="h-10 lg:h-7 2xl:h-10 w-max hidden dark:block"
                 ></img>
                 <span className="mr-5 text-lg font-bold   sm:ml-2"> </span>
-              </a>
-              <a href="/" className="flex self-center cursor-pointer sm:hidden ">
+              </Link>
+              <Link to="/" className="flex self-center cursor-pointer sm:hidden ">
                 <img
                   src={CircleLogo}
                   alt="dbeats_logo"
@@ -406,7 +404,7 @@ const NavBar = () => {
                   className="h-10 lg:h-7 2xl:h-10 w-max hidden dark:block  "
                 ></img>
                 <span className="mr-5 text-lg font-bold   sm:ml-2"> </span>
-              </a>
+              </Link>
               <p
                 className="px-2 -ml-3.5 flex pb-0.5 mt-1 text-xs text-white dark:text-dbeats-light 
               bg-dbeats-light dark:bg-dbeats-alt border border-white dark:border-dbeats-light font-semibold rounded-lg"
