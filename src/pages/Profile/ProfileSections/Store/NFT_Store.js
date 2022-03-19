@@ -16,6 +16,7 @@ export default function NFTStore() {
   // const [nameSeeMore, setNameSeeMore] = useState(false);
   const [loadWeb3Modal, logoutOfWeb3Modal] = useWeb3Modal();
   const provider = useSelector((state) => state.web3Reducer.provider);
+  const user = useSelector((state) => state.User.user);
 
   const [loadingState, setLoadingState] = useState('not-loaded');
   useEffect(() => {
@@ -23,7 +24,7 @@ export default function NFTStore() {
   }, [provider]);
 
   useEffect(() => {
-    loadNFTs();
+    if (provider) loadNFTs();
   }, [provider]);
   async function loadNFTs() {
     console.log(provider);
@@ -33,7 +34,7 @@ export default function NFTStore() {
     var accounts = await web3.eth.getAccounts();
     window.web3 = web3;
     //const tokenContract = new ethers.Contract(nftaddress, NFT.abi, provider);
-    const marketContract = new window.web3.eth.Contract(Market.abi, nftmarketaddress);
+    const marketContract = new web3.eth.Contract(Market, nftmarketaddress);
     const data = await marketContract.methods.fetchMarketItems().call();
     console.log(data);
     /*
@@ -42,13 +43,13 @@ export default function NFTStore() {
      */
     const items = await Promise.all(
       data.map(async (i) => {
-        const tokenUri = await marketContract.tokenURI(i.tokenId);
+        const tokenUri = await marketContract.methods.tokenURI(i.tokenId).call();
         const meta = await axios.get(tokenUri);
         console.log('TOKEN URI:', tokenUri);
         let price = ethers.utils.formatUnits(i.price.toString(), 'ether');
         let item = {
           price,
-          tokenId: i.tokenId.toNumber(),
+          tokenId: i.tokenId,
           seller: i.seller,
           owner: i.owner,
           image: meta.data.image,
@@ -63,40 +64,41 @@ export default function NFTStore() {
   }
   async function buyNft(nft) {
     /* needs the user to sign the transaction, so will use Web3Provider and sign it */
-    const web3Modal = new Web3Modal();
-    const connection = await web3Modal.connect();
-    const provider = new ethers.providers.Web3Provider(connection);
-    const signer = provider.getSigner();
-    const contract = new ethers.Contract(nftmarketaddress, Market.abi, signer);
+
+    const web3 = new Web3(provider);
+    var accounts = await web3.eth.getAccounts();
+    window.web3 = web3;
+    const contract = new web3.eth.Contract(Market, nftmarketaddress);
 
     /* user will be prompted to pay the asking proces to complete the transaction */
     const price = ethers.utils.parseUnits(nft.price.toString(), 'ether');
     console.log(price);
 
-    let marketFees = await contract.getListingPrice();
+    let marketFees = await contract.methods.getListingPrice().call();
 
-    const transaction = await contract.createMarketSale(nft.tokenId, {
+    const transaction = await contract.methods.createMarketSale(nft.tokenId).send({
+      from: user.wallet_id,
+
       value: price.add(marketFees),
     });
-    await transaction.wait();
+    if (transaction) {
+      console.log(transaction);
+
+      await transaction.wait();
+    }
     loadNFTs();
   }
 
   async function resellOwnedItem(nft, price) {
-    const web3Modal = new Web3Modal();
-    const connection = await web3Modal.connect();
+    const web3 = new Web3(provider);
+    window.web3 = web3;
 
-    const provider = new ethers.providers.Web3Provider(connection);
-    const signer = provider.getSigner();
+    const marketContract = new web3.eth.Contract(Market, nftmarketaddress);
 
-    const marketContract = new ethers.Contract(nftmarketaddress, Market.abi, signer);
-
-    const listingPrice = await marketContract.getListingPrice();
-    const tx = await marketContract.resellToken(
-      nft.tokenId,
-      ethers.utils.parseUnits(price, 'ether'),
-      { value: listingPrice.toString() },
-    );
+    const listingPrice = await marketContract.methods.getListingPrice().call();
+    const tx = await marketContract.methods
+      .resellToken(nft.tokenId, ethers.utils.parseUnits(price, 'ether'))
+      .send({ from: user.wallet_id, value: listingPrice.toString() });
     await tx.wait();
   }
 
@@ -104,7 +106,7 @@ export default function NFTStore() {
     return (
       <div className="h-max lg:col-span-5 col-span-6 w-full mt-20     ">
         <h1 className="   text-gray-300 w-full flex ">NFTs owned by you: </h1>
-        {/* <UserOwnedAssets resellOwnedItem={resellOwnedItem}></UserOwnedAssets> */}
+        <UserOwnedAssets resellOwnedItem={resellOwnedItem}></UserOwnedAssets>
         <h1 className=" text-gray-300 w-full flex mt-10">No items in marketplace</h1>
       </div>
     );
@@ -115,7 +117,7 @@ export default function NFTStore() {
         <h1 className="   dark:text-gray-300 w-full flex   text-dbeats-dark   px-3">
           NFTs owned by you :{' '}
         </h1>
-        {/* <UserOwnedAssets resellOwnedItem={resellOwnedItem}></UserOwnedAssets> */}
+        <UserOwnedAssets resellOwnedItem={resellOwnedItem}></UserOwnedAssets>
         <h1 className="   dark:text-gray-300 w-full flex   text-dbeats-dark   pt-5  px-3">
           Marketplace{' '}
         </h1>

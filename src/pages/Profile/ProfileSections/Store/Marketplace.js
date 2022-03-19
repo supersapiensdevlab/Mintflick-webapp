@@ -56,7 +56,11 @@ export default function Home() {
     const transaction = await contract.createMarketSale(nftaddress, nft.tokenId, {
       value: price,
     });
-    await transaction.wait();
+    if (transaction) {
+      console.log(transaction);
+
+      await transaction.wait();
+    }
     loadNFTs();
   }
   if (loadingState === 'loaded' && !nfts.length)

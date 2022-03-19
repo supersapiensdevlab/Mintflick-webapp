@@ -5,23 +5,29 @@ import Web3Modal from 'web3modal';
 import Market from '../../../../artifacts/contracts/Market.sol/NFTMarket.json';
 import NFT from '../../../../artifacts/contracts/NFT.sol/NFT.json';
 import { nftaddress, nftmarketaddress } from '../../../../functions/config';
+import { useDispatch, useSelector } from 'react-redux';
+import Web3 from 'web3';
 
 export default function Home() {
   const [nfts, setNfts] = useState([]);
+
+  const dispatch = useDispatch();
+
+  const provider = useSelector((state) => state.web3Reducer.provider);
+
   const [loadingState, setLoadingState] = useState('not-loaded');
   useEffect(() => {
     loadNFTs();
   }, []);
   async function loadNFTs() {
     /* create a generic provider and query for unsold market items */
-    const web3Modal = new Web3Modal({
-      cacheProvider: true,
-    });
-    const connection = await web3Modal.connect();
-    const provider = new ethers.providers.Web3Provider(connection);
-    const tokenContract = new ethers.Contract(nftaddress, NFT.abi, provider);
-    const marketContract = new ethers.Contract(nftmarketaddress, Market.abi, provider);
-    const data = await marketContract.fetchMarketItems();
+    const web3 = new Web3(provider);
+    var accounts = await web3.eth.getAccounts();
+    window.web3 = web3;
+
+    const tokenContract = new web3.eth.Contract(Market, nftmarketaddress);
+    const marketContract = new web3.eth.Contract(Market, nftmarketaddress);
+    const data = await marketContract.methods.fetchMarketItems().call();
 
     /*
      *  map over items returned from smart contract and format
@@ -29,12 +35,12 @@ export default function Home() {
      */
     const items = await Promise.all(
       data.map(async (i) => {
-        const tokenUri = await tokenContract.tokenURI(i.tokenId);
+        const tokenUri = await tokenContract.methods.tokenURI(i.tokenId).call();
         const meta = await axios.get(tokenUri);
         let price = ethers.utils.formatUnits(i.price.toString(), 'ether');
         let item = {
           price,
-          tokenId: i.tokenId.toNumber(),
+          tokenId: i.tokenId,
           seller: i.seller,
           owner: i.owner,
           image: meta.data.image,
@@ -49,18 +55,21 @@ export default function Home() {
   }
   async function buyNft(nft) {
     /* needs the user to sign the transaction, so will use Web3Provider and sign it */
-    const web3Modal = new Web3Modal();
-    const connection = await web3Modal.connect();
-    const provider = new ethers.providers.Web3Provider(connection);
-    const signer = provider.getSigner();
-    const contract = new ethers.Contract(nftmarketaddress, Market.abi, signer);
+    const web3 = new Web3(provider);
+    var accounts = await web3.eth.getAccounts();
+    window.web3 = web3;
+    const contract = new web3.eth.Contract(Market, nftmarketaddress);
 
     /* user will be prompted to pay the asking proces to complete the transaction */
     const price = ethers.utils.parseUnits(nft.price.toString(), 'ether');
-    const transaction = await contract.createMarketSale(nftaddress, nft.tokenId, {
+    const transaction = await contract.methods.createMarketSale(nftaddress, nft.tokenId).send({
       value: price,
     });
-    await transaction.wait();
+    if (transaction) {
+      console.log(transaction);
+
+      await transaction.wait();
+    }
     loadNFTs();
   }
   if (loadingState === 'loaded' && !nfts.length)

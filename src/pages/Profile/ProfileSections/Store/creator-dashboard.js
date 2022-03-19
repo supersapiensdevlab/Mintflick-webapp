@@ -13,7 +13,8 @@ import useWeb3Modal from '../../../../hooks/useWeb3Modal';
 const client = ipfsHttpClient('https://ipfs.infura.io:5001/api/v0');
 
 export default function CreateItem() {
-  const [provider, loadWeb3Modal, logoutOfWeb3Modal] = useWeb3Modal();
+  const [loadWeb3Modal, logoutOfWeb3Modal] = useWeb3Modal();
+  const provider = useSelector((state) => state.web3Reducer.provider);
 
   const [fileUrl, setFileUrl] = useState(null);
   const [formInput, updateFormInput] = useState({ price: '', name: '', description: '' });

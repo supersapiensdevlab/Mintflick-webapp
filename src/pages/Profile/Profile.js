@@ -11,6 +11,8 @@ import ChatRoom from './ProfileSections/ChatRoom/ChatRoom';
 import ProfileDetails from './ProfileSections/ProfileDetails/ProfileDetails';
 import NFTStore from './ProfileSections/Store/NFT_Store';
 import Ticket from '../../Ticket';
+import { useDispatch } from 'react-redux';
+
 const Profile = () => {
   // For Routing
   let match = useRouteMatch();
@@ -35,8 +37,9 @@ const Profile = () => {
 
   const darkMode = useSelector((darkmode) => darkmode.toggleDarkMode);
 
+  const dispatch = useDispatch();
+  const value = useSelector((state) => state.User.user);
   useEffect(() => {
-    let value = JSON.parse(window.localStorage.getItem('user'));
     if (value) {
       if (value.username === urlUsername) {
         setUser(value);

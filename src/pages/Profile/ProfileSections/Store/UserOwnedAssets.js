@@ -19,25 +19,24 @@ const MyAssets = ({ resellOwnedItem }) => {
   const provider = useSelector((state) => state.web3Reducer.provider);
 
   useEffect(() => {
-    loadNFTs();
-  }, []);
+    if (provider) loadNFTs();
+  }, [provider]);
   async function loadNFTs() {
     const web3 = new Web3(provider);
     var accounts = await web3.eth.getAccounts();
     window.web3 = web3;
-
-    const marketContract = new web3.eth.Contract(Market.abi, nftmarketaddress, accounts[0]);
+    const marketContract = new web3.eth.Contract(Market, nftmarketaddress);
 
     const data = await marketContract.methods.fetchMyNFTs().call();
-
+    console.log(data, accounts[0]);
     const items = await Promise.all(
       data.map(async (i) => {
-        const tokenUri = await marketContract.tokenURI(i.tokenId);
+        const tokenUri = await marketContract.methods.tokenURI(i.tokenId).call();
         const meta = await axios.get(tokenUri);
         let price = ethers.utils.formatUnits(i.price.toString(), 'ether');
         let item = {
           price,
-          tokenId: i.tokenId.toNumber(),
+          tokenId: i.tokenId,
           seller: i.seller,
           owner: i.owner,
           image: meta.data.image,

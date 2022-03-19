@@ -9,10 +9,12 @@ import ReactAudioPlayer from 'react-audio-player';
 import LoadingBar from 'react-top-loading-bar';
 import ChatLinkPreview from './ChatLinkPreview';
 import InfiniteScroll from 'react-infinite-scroller';
+import { useDispatch, useSelector } from 'react-redux';
 
 function ChatRoom(props) {
   // to get loggedin user from   localstorage
-  const user = JSON.parse(window.localStorage.getItem('user'));
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.User.user);
 
   const chatRef = useRef(null);
   const loadingRef = useRef(null);
@@ -103,7 +105,7 @@ function ChatRoom(props) {
       window.history.replaceState({}, 'Home', '/');
     }
     return () => {
-      currentSocket.disconnect();
+      if (currentSocket) currentSocket.disconnect();
     };
     // eslint-disable-next-line
   }, []);

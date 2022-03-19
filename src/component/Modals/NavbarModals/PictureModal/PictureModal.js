@@ -23,33 +23,34 @@ export const PictureModal = (props) => {
 
     //const user = await window.torus.getUserInfo(); // user profile info (email address etc)
     if (!torus.isInitialized)
-      await torus.init({
-        enableLogging: true,
-        network: {
-          host: 'matic', // mandatory https://rpc-mumbai.maticvigil.com
-          networkName: 'Matic Mainnet', // optional
-          chainId: '137',
-          blockExplorer: 'https://polygonscan.com/',
-          ticker: 'MATIC',
-          tickerName: 'MATIC',
-        },
+      if (!torus.isLoggedIn)
+        // await torus.init({
+        //   enableLogging: true,
+        //   network: {
+        //     host: 'matic', // mandatory https://rpc-mumbai.maticvigil.com
+        //     networkName: 'Matic Mainnet', // optional
+        //     chainId: '137',
+        //     blockExplorer: 'https://polygonscan.com/',
+        //     ticker: 'MATIC',
+        //     tickerName: 'MATIC',
+        //   },
 
-        whiteLabel: {
-          theme: {
-            isDark: true,
-            colors: {
-              torusBrand1: '#282c34',
-            },
-          },
-          logoDark: 'https://tkey.surge.sh/images/Device.svg', // Dark logo for light background
-          logoLight: 'https://tkey.surge.sh/images/Device.svg', // Light logo for dark background
-          topupHide: false,
-          featuredBillboardHide: true,
-          disclaimerHide: true,
-          defaultLanguage: 'en',
-        },
-      });
-    if (!torus.isLoggedIn) await torus.login();
+        //   whiteLabel: {
+        //     theme: {
+        //       isDark: true,
+        //       colors: {
+        //         torusBrand1: '#282c34',
+        //       },
+        //     },
+        //     logoDark: 'https://tkey.surge.sh/images/Device.svg', // Dark logo for light background
+        //     logoLight: 'https://tkey.surge.sh/images/Device.svg', // Light logo for dark background
+        //     topupHide: false,
+        //     featuredBillboardHide: true,
+        //     disclaimerHide: true,
+        //     defaultLanguage: 'en',
+        //   },
+        // });
+        await torus.login();
 
     const user = await window.torus.getUserInfo(); // user profile info (email address etc)
 

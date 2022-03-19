@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@biconomy/mexa": "^2.0.28",
+    "@biconomy/mexa": "^2.0.30",
     "@craco/craco": "^5.9.0",
     "@date-io/date-fns": "^2.13.1",
     "@ethersproject/contracts": "^5.4.1",

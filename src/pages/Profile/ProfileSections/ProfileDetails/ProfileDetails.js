@@ -83,7 +83,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
           setPrivate(true);
           setFollowers(value.follower_count.length);
           setFollowing(value.followee_count.length);
-          setSuperfan(value.superfan_of.length);
+          setSuperfan(value.superfan_to.length);
 
           setIsMailVerified(value.is_mail_verified);
           setIsVerified(value.is_verified);
@@ -167,7 +167,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
       setSharable_data(`${process.env.REACT_APP_CLIENT_URL}/profile/${value.data.username}`);
       setFollowers(value.data.follower_count.length);
       setFollowing(value.data.followee_count.length);
-      setSuperfan(value.data.superfan_of.length);
+      setSuperfan(value.data.superfan_to.length);
 
       setIsMailVerified(value.data.is_mail_verified);
       setIsVerified(value.data.is_verified);
@@ -811,9 +811,9 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                 <div className="pt-4 pl-4">
                   {<h2 className="text-white opacity-40"> Superfans</h2>}
                   <div className=" grid grid-cols-2 sm:grid-cols-4 grid-flow-row ">
-                    {user.superfan_of.length > 0 ? (
+                    {user.superfan_to.length > 0 ? (
                       <div>
-                        {user.superfan_of.reverse().map((superfan, i) => {
+                        {user.superfan_to.reverse().map((superfan, i) => {
                           //////console.log(playbackUser)
                           return (
                             <div
@@ -824,6 +824,8 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                                 <h2 className="hover:underline">{superfan.username}</h2>
                               </Link>
                               <a
+                                target="_blank"
+                                rel="noopener noreferrer"
                                 className="underline text-dbeats-white opacity-40 justify-end"
                                 href={`https://polygonscan.com/tx/${superfan.txnHash}`}
                               >

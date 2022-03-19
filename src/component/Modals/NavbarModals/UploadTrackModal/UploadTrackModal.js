@@ -9,9 +9,13 @@ import { Link } from 'react-router-dom';
 import Dropdown from '../../../dropdown.component';
 import { makeStorageClient } from '../../../uploadHelperFunction';
 import { chipTheme, theme } from '../Theme';
+import { useDispatch } from 'react-redux';
+import { loadUser } from '../../../../actions/userActions';
 
 const UploadTrackModal = (props) => {
-  const user = JSON.parse(window.localStorage.getItem('user'));
+  const dispatch = useDispatch();
+
+  const user = useSelector((state) => state.User.user);
 
   const darkMode = useSelector((state) => state.toggleDarkMode);
 
@@ -388,10 +392,12 @@ const UploadTrackModal = (props) => {
           .post(`${process.env.REACT_APP_SERVER_URL}/upload_music`, formData, {
             headers: {
               'content-type': 'multipart/form-data',
-              'auth-token':localStorage.getItem('authtoken')
+              'auth-token': localStorage.getItem('authtoken'),
             },
           })
           .then(function (response) {
+            dispatch(loadUser());
+
             setTrack({
               trackName: '',
               trackImage: '',
