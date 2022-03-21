@@ -6,7 +6,7 @@ const middleWare = [thunk];
 const initialState = {};
 
 let store = null;
-if (process.env.NODE_ENV === 'developments') {
+if (process.env.NODE_ENV === 'development') {
   store = createStore(
     rootReducer,
     initialState,

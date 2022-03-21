@@ -27,3 +27,6 @@ export const TRENDING_LOADED = 'TRENDING_LOADED';
 
 // for announcement
 export const CREATE_POST = 'CREATE_POST';
+
+//for sharable Data
+export const SHARABLE = 'SHARABLE';

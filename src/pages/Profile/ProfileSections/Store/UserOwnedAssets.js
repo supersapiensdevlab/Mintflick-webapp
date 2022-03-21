@@ -28,7 +28,7 @@ const MyAssets = ({ resellOwnedItem }) => {
     const marketContract = new web3.eth.Contract(Market, nftmarketaddress);
 
     const data = await marketContract.methods.fetchMyNFTs().call();
-    console.log(data, accounts[0]);
+    console.log(data);
     const items = await Promise.all(
       data.map(async (i) => {
         const tokenUri = await marketContract.methods.tokenURI(i.tokenId).call();

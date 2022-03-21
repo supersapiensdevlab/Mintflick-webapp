@@ -22,6 +22,7 @@ export const ShareModal = ({
   sharable_data,
   copybuttonText,
   setCopyButtonText,
+  title,
 }) => {
   const darkMode = useSelector((darkmode) => darkmode.toggleDarkMode);
   return (
@@ -34,7 +35,13 @@ export const ShareModal = ({
       >
         <div className={``}>
           <h2 className="grid grid-cols-5 justify-items-center 2xl:text-2xl lg:text-lg py-4 2xl:py-4 lg:py-2 dark:bg-dbeats-dark-primary dark:text-white">
-            <div className="col-span-4 pl-14">Share link on</div>
+            {title !== null ? (
+              <div className="col-span-4 pl-14 text-base text-center justify-center align-middle mt-1.5">
+                {title}
+              </div>
+            ) : (
+              <div className="col-span-4 pl-14">Share link on</div>
+            )}
             <div
               className="ml-5 cursor-pointer hover:bg-dbeats-dark-alt px-2.5 py-0.5"
               onClick={handleClose}
@@ -97,10 +104,10 @@ export const ShareModal = ({
               <Row>
                 <CopyToClipboard
                   text={sharable_data}
-                  className="block mx-auto p-2 2xl:p-2 lg:p-1.5  my-3 mt-5 2xl:w-96 lg:w-80 lg:text-md  w-full  text-white font-semibold rounded-lg bg-dbeats-light"
+                  className="block mx-auto p-2 2xl:p-2 lg:p-1.5  my-3 mt-5 2xl:w-96 lg:w-80 lg:text-md  w-full  text-white font-semibold rounded-lg bg-dbeats-dark-primary hover:bg-dbeats-light"
                 >
                   <button type="submit" onClick={() => setCopyButtonText('Link Copied!')}>
-                    {copybuttonText}
+                    {copybuttonText} &nbsp;<i className="fa-solid fa-copy"></i>
                   </button>
                 </CopyToClipboard>
               </Row>

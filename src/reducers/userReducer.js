@@ -9,7 +9,8 @@ import {
   USER_LOADED,
   USER_LOADING,
   FOLLOW_USER,
-  CREATE_POST
+  CREATE_POST,
+  SHARABLE,
 } from '../actions/types';
 
 const initialState = {
@@ -18,6 +19,7 @@ const initialState = {
   isLoading: false,
   user: null,
   error: null,
+  sharableData: null,
 };
 
 export default function (state = initialState, action) {
@@ -65,8 +67,13 @@ export default function (state = initialState, action) {
     case FOLLOW_USER:
       return {
         ...state,
-        user:{...state.user,followee_count:[...state.user.followee_count,action.payload]}
-      }
+        user: { ...state.user, followee_count: [...state.user.followee_count, action.payload] },
+      };
+    // case SHARABLE:
+    //   return {
+    //     ...state,
+    //     sharableData: action.payload,
+    //   };
     default:
       return state;
   }

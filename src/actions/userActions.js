@@ -11,24 +11,23 @@ import {
   USER_LOADING,
   CREATE_POST,
   SUPERFAN,
+  SHARABLE,
 } from './types';
 import axios from '../https-common';
+import { useSelector } from 'react-redux';
 
-export const loadUser = () => (dispatch) => {
+export const loadUser = () => async (dispatch) => {
   // User loading
   dispatch({ type: USER_LOADING });
-
-  axios
-    .get('/user/getLoggedInUser', tokenConfig())
-    .then((res) => {
-      dispatch({
-        type: USER_LOADED,
-        payload: res.data,
-      });
-    })
-    .catch((err) => {
-      console.log(err);
+  try {
+    const res = await axios.get('/user/getLoggedInUser', tokenConfig());
+    dispatch({
+      type: USER_LOADED,
+      payload: res.data,
     });
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 export const register =
@@ -130,3 +129,15 @@ export const superfan = (data) => (dispatch) => {
       console.log(error);
     });
 };
+
+// export const setSharable = () => async (dispatch) => {
+//   await loadUser(); // wait for user to load
+//   const user = useSelector((state) => state.User.user);
+
+//   dispatch({
+//     type: SHARABLE,
+//     payload: `${process.env.REACT_APP_CLIENT_URL}/playback/${user.username}/${
+//       user.videos[user.videos.length - 1].videoId
+//     }`,
+//   });
+// };

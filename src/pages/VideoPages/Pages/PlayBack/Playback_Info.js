@@ -442,7 +442,6 @@ const PlayBackInfo = (props) => {
   useEffect(() => {
     setArrayData([]);
     get_User();
-
     fetchData();
     let value = JSON.parse(window.localStorage.getItem('user'));
     ////console.log(value);
@@ -464,7 +463,6 @@ const PlayBackInfo = (props) => {
 
   useEffect(() => {
     //View Counter
-
     if (user ? user.username !== props.video_username : false) {
       const timer = setTimeout(() => {
         const videoDetails = {
