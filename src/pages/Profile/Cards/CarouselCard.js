@@ -5,10 +5,15 @@ import { Link } from 'react-router-dom';
 import DeleteModal from '../../../component/Modals/DeleteModal/DeleteModal';
 import { ShareModal } from '../../../component/Modals/ShareModal/ShareModal';
 import classes from '../Profile.module.css';
-
+import { useSelector } from 'react-redux';
+import { useHistory } from "react-router-dom";
+import useWeb3Modal from '../../../hooks/useWeb3Modal';
 moment().format();
 
 const CarouselCard = (props) => {
+  const user = useSelector((state) => state.User.user); 
+  const history = useHistory();
+  const [loadWeb3Modal, logoutOfWeb3Modal] = useWeb3Modal();
   //console.log(props);
   const [playing, setPlaying] = useState(false);
 
@@ -44,7 +49,13 @@ const CarouselCard = (props) => {
   }, []);
 
   ////console.log(props.playbackUserData)
-
+const handlePlayerClick = async () =>{
+  if(user){
+    history.push(`/playback/${props.username}/${props.playbackUserData.videoId}`);
+  }else{
+    await loadWeb3Modal();
+  }
+}
   return (
     <div id="tracks-section" className="py-1 ">
       <div
@@ -56,7 +67,7 @@ const CarouselCard = (props) => {
         <div
           className={`cursor-pointer h-44 lg:h-32 2xl:h-48 md:h-40 lg:w-1/3 w-full  my-auto dark:bg-dbeats-dark-primary `}
         >
-          <Link to={`/playback/${props.username}/${props.playbackUserData.videoId}`}>
+          <a onClick={handlePlayerClick}>
             <ReactPlayer
               width="100%"
               height="100%"
@@ -69,7 +80,7 @@ const CarouselCard = (props) => {
               onMouseMove={handleMouseMove}
               onMouseLeave={hanldeMouseLeave}
             />
-          </Link>
+          </a>
         </div>
         <div className="col-start-1 row-start-3 py-2 px-5 w-full">
           <p className="flex justify-between mt-0 sm:pb-1 text-black text-sm font-medium dark:text-gray-100 ">

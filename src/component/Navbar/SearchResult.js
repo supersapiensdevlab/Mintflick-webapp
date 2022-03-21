@@ -6,17 +6,30 @@ import { Link } from 'react-router-dom';
 import logo from '../../assets/images/logo.svg';
 import CarouselCard from '../../pages/Profile/Cards/CarouselCard';
 import person from '../../assets/images/profile.svg';
+import { useHistory } from "react-router-dom";
+import useWeb3Modal from '../../hooks/useWeb3Modal';
 
 const SearchResult = () => {
   const darkMode = useSelector((state) => state.toggleDarkMode);
   const [data, setData] = useState(null);
-  //console.log(data);
+  const history = useHistory();
+  const [loadWeb3Modal, logoutOfWeb3Modal] = useWeb3Modal();
 
+  //console.log(data);
+  const user = useSelector((state) => state.User.user); 
   useEffect(() => {
     setData(JSON.parse(window.sessionStorage.getItem('searchResult')));
 
     // eslint-disable-next-line
   }, [JSON.parse(window.sessionStorage.getItem('searchResult'))]);
+  
+  const handleUserClick = async (username) =>{
+    if(user){
+      history.push(`/profile/${username}`);
+    }else{
+      await loadWeb3Modal();
+    }
+  }
 
   return (
     <div id="outer-container" className="h-full ">
@@ -45,13 +58,13 @@ const SearchResult = () => {
                       {data.usernameData.map((value, i) => {
                         return (
                           <SplideSlide className=" md:px-5 " key={i}>
-                            <Link to={`/profile/${value.username}`}>
+                            <a onClick={()=>handleUserClick(value.username)}>
                               <img
                                 className="mx-auto  h-32 w-32 rounded-full self-center  cursor-pointer"
                                 src={value.profile_image ? value.profile_image : person}
                                 alt={`Profile ${i}`}
                               />
-                            </Link>
+                            </a>
                             <p className="dark:text-white lg:text-xs 2xl:text-lg text-xs mt-2">
                               {value.username.length > 12
                                 ? value.username.slice(0, 14) + '..'

@@ -5,11 +5,15 @@ import logo from '../..//assets/images/logo.svg';
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import { followUser } from '../../actions/userActions';
+import useWeb3Modal from '../../hooks/useWeb3Modal';
+
 // components
 const ProfileCard = ({ user }) => {
   const dispatch = useDispatch();
   const userp = useSelector((state) => state.User.user);
   const [following, setFollowing] = useState(false);
+  const [loadWeb3Modal, logoutOfWeb3Modal] = useWeb3Modal();
+
   useEffect(() => {
     if (userp) {
       if (userp.followee_count.indexOf(user.username) > -1) {
@@ -18,7 +22,7 @@ const ProfileCard = ({ user }) => {
     }
   }, [userp]);
 
-  const handleFollow = () => {
+  const handleFollow = async () => {
     if (userp != null) {
       const followData = {
         following: `${user.username}`,
@@ -27,6 +31,7 @@ const ProfileCard = ({ user }) => {
       dispatch(followUser(followData));
     } else {
       // window.location.href = '/signup';
+      await loadWeb3Modal()
     }
   };
   return (
