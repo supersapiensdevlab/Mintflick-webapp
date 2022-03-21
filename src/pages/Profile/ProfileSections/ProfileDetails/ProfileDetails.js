@@ -22,6 +22,7 @@ import TrackCard from '../../Cards/TrackCard';
 import dbeatsLogoBnW from '../../../../assets/images/Logo/logo-blacknwhite.png';
 import { Image } from 'react-img-placeholder';
 import SuperfanModal from '../../../../component/Modals/SuperfanModal/superfan-modal';
+import Modal from 'react-modal';
 
 const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow, darkMode }) => {
   const [pinnedData, setPinnedData] = useState([]);
@@ -44,6 +45,18 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
   const [showSettings, setshowSettings] = useState(false);
   const handleshowSettings = () => setshowSettings(true);
   const handleCloseSettings = () => setshowSettings(false);
+
+  const [showFollowers, setshowFollowers] = useState(false);
+  const handleShowFollowers = () => setshowFollowers(true);
+  const handleCloseFollowers = () => setshowFollowers(false);
+
+  const [showFollowing, setshowFollowing] = useState(false);
+  const handleShowFollowing = () => setshowFollowing(true);
+  const handleCloseFollowing = () => setshowFollowing(false);
+
+  const [showSuperfan, setshowSuperfan] = useState(false);
+  const handleShowSuperfan = () => setshowSuperfan(true);
+  const handleCloseSuperfan = () => setshowSuperfan(false);
 
   const navigate = useHistory();
 
@@ -537,33 +550,42 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                         {followers}{' '}
                       </div>
 
-                      <Link to={`/profile/${urlUsername}/followers`}>
-                        <div className="cursor-pointer 2xl:text-sm lg:text-xs hover:underline hover:text-gray-50">
-                          FOLLOWERS
-                        </div>
-                      </Link>
+                      {/* <Link to={`/profile/${urlUsername}/followers`}> */}
+                      <div
+                        onClick={handleShowFollowers}
+                        className="cursor-pointer 2xl:text-sm lg:text-xs hover:underline hover:text-gray-50"
+                      >
+                        FOLLOWERS
+                      </div>
+                      {/* </Link> */}
                     </div>
                     <div className="mx-auto lg:px-4 px-2 flex flex-col lg:flex-row justify-center items-center">
                       <div className=" w-full mr-2 flex justify-center ">
                         {/*{user.subscribed ? <>{user.subscribed.length}</> : 0}{" "}*/}
                         {following}{' '}
                       </div>
-                      <Link to={`/profile/${urlUsername}/following`}>
-                        <div className="cursor-pointer 2xl:text-sm lg:text-xs hover:underline hover:text-gray-50">
-                          FOLLOWING
-                        </div>
-                      </Link>
+                      {/* <Link to={`/profile/${urlUsername}/following`}> */}
+                      <div
+                        onClick={handleShowFollowing}
+                        className="cursor-pointer 2xl:text-sm lg:text-xs hover:underline hover:text-gray-50"
+                      >
+                        FOLLOWING
+                      </div>
+                      {/* </Link> */}
                     </div>
                     <div className="mx-auto lg:px-4 px-2 flex flex-col lg:flex-row justify-center items-center">
                       <div className=" w-full mr-2 flex justify-center ">
                         {/*{user.subscribed ? <>{user.subscribed.length}</> : 0}{" "}*/}
                         {superfan}{' '}
                       </div>
-                      <Link to={`/profile/${urlUsername}/superfans`}>
-                        <div className="cursor-pointer 2xl:text-sm lg:text-xs hover:underline hover:text-gray-50">
-                          SUPERFANS
-                        </div>
-                      </Link>
+                      {/* <Link to={`/profile/${urlUsername}/superfans`}> */}
+                      <div
+                        onClick={handleShowSuperfan}
+                        className="cursor-pointer 2xl:text-sm lg:text-xs hover:underline hover:text-gray-50"
+                      >
+                        SUPERFANS
+                      </div>
+                      {/* </Link> */}
                     </div>
                   </div>
                 </div>
@@ -882,6 +904,150 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
         handleClose={handleCloseSubscriptionModal}
         className={`${darkMode && 'dark'}   mx-auto    mt-32 shadow `}
       />
+      <Modal
+        isOpen={showFollowers}
+        className={
+          darkMode
+            ? 'h-max lg:w-1/3 w-5/6 mx-auto 2xl:mt-32 lg:mt-16 mt-20 bg-dbeats-dark-alt rounded-xl'
+            : 'h-max lg:w-1/3 w-5/6 mx-auto 2xl:mt-32 lg:mt-16 mt-20 bg-gray-50 rounded-xl shadow-2xl'
+        }
+      >
+        <div className={`${darkMode && 'dark'} p-2 h-max`}>
+          <h2 className="grid grid-cols-5 justify-items-center 2xl:text-2xl text-lg 2xl:py-4 py-4 lg:py-3 dark:bg-dbeats-dark-alt bg-white dark:text-white">
+            <div className="col-span-4 pl-14 ">Followers</div>
+            <div
+              onClick={handleCloseFollowers}
+              className=" rounded-3xl group w-max   p-1  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-secondary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
+            >
+              <span className="  text-black dark:text-white  flex p-1 rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:nm-inset-dbeats-dark-secondary ">
+                <p className="self-center mx-2">
+                  {' '}
+                  <i className="fas fa-times"></i>{' '}
+                </p>
+              </span>
+            </div>
+          </h2>
+          <hr />
+          <div className=" bg-white text-gray-500  dark:bg-dbeats-dark-alt dark:text-gray-100   shadow-sm rounded-lg   2xl:py-5   lg:py-1  mb-5 lg:mb-2 2xl:mb-5 lg:max-h-full  max-h-96  overflow-y-auto overflow-hidden">
+            {user && user.follower_count ? (
+              <div className="w-full max-h-44 overflow-y-scroll px-3 ">
+                {user.follower_count.map((value, i) => {
+                  return (
+                    <div key={i} className="w-full flex justify-between ">
+                      <Link key={i} to={`/profile/${value}`} onClick={handleCloseFollowers}>
+                        <p className="mb-1.5 w-full px-3 py-1.5  hover:text-dbeats-light cursor-pointer">
+                          {value}
+                        </p>
+                      </Link>
+                      {!myData.followee_count.includes(value) ? (
+                        <button className="px-3 rounded-sm h-8  bg-dbeats-light text-white">
+                          {buttonText}
+                        </button>
+                      ) : (
+                        <></>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            ) : null}
+          </div>
+        </div>
+      </Modal>
+      <Modal
+        isOpen={showFollowing}
+        className={
+          darkMode
+            ? 'h-max lg:w-1/3 w-5/6 mx-auto 2xl:mt-32 lg:mt-16 mt-20 bg-dbeats-dark-alt rounded-xl'
+            : 'h-max lg:w-1/3 w-5/6 mx-auto 2xl:mt-32 lg:mt-16 mt-20 bg-gray-50 rounded-xl shadow-2xl'
+        }
+      >
+        <div className={`${darkMode && 'dark'} p-2 h-max`}>
+          <h2 className="grid grid-cols-5 justify-items-center 2xl:text-2xl text-lg 2xl:py-4 py-4 lg:py-3 dark:bg-dbeats-dark-alt bg-white dark:text-white">
+            <div className="col-span-4 pl-14 ">Following</div>
+            <div
+              onClick={handleCloseFollowing}
+              className=" rounded-3xl group w-max   p-1  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-secondary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
+            >
+              <span className="  text-black dark:text-white  flex p-1 rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:nm-inset-dbeats-dark-secondary ">
+                <p className="self-center mx-2">
+                  {' '}
+                  <i className="fas fa-times"></i>{' '}
+                </p>
+              </span>
+            </div>
+          </h2>
+          <hr />
+          <div className=" bg-white text-gray-500  dark:bg-dbeats-dark-alt dark:text-gray-100   shadow-sm rounded-lg   2xl:py-5  lg:py-1 py-1 mb-5 lg:mb-2 2xl:mb-5 lg:max-h-full  max-h-96  overflow-y-auto overflow-hidden">
+            {user && user.followee_count ? (
+              <div className="w-full max-h-44 overflow-y-scroll px-3">
+                {user.followee_count.map((value, i) => {
+                  return (
+                    <div key={i} className="flex justify-between px-2 mb-1.5">
+                      <Link key={i} to={`/profile/${value}`} onClick={handleCloseFollowing}>
+                        <p className=" w-full px-3 py-1.5 hover:text-dbeats-light cursor-pointer">
+                          {value}
+                        </p>
+                      </Link>
+                      {!myData.followee_count.includes(value) ? (
+                        <button
+                          onClick={trackFollowers}
+                          className="px-3 rounded-sm h-8  bg-dbeats-light text-white"
+                        >
+                          Follow
+                        </button>
+                      ) : (
+                        <></>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            ) : null}
+          </div>
+        </div>
+      </Modal>
+      <Modal
+        isOpen={showSuperfan}
+        className={
+          darkMode
+            ? 'h-max lg:w-1/3 w-5/6 mx-auto 2xl:mt-32 lg:mt-16 mt-20 bg-dbeats-dark-alt rounded-xl'
+            : 'h-max lg:w-1/3 w-5/6 mx-auto 2xl:mt-32 lg:mt-16 mt-20 bg-gray-50 rounded-xl shadow-2xl'
+        }
+      >
+        <div className={`${darkMode && 'dark'} p-2 h-max`}>
+          <h2 className="grid grid-cols-5 justify-items-center 2xl:text-2xl text-lg 2xl:py-4 py-4 lg:py-3 dark:bg-dbeats-dark-alt bg-white dark:text-white">
+            <div className="col-span-4 pl-14 ">Superfan</div>
+            <div
+              onClick={handleCloseSuperfan}
+              className=" rounded-3xl group w-max   p-1  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-secondary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
+            >
+              <span className="  text-black dark:text-white  flex p-1 rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:nm-inset-dbeats-dark-secondary ">
+                <p className="self-center mx-2">
+                  {' '}
+                  <i className="fas fa-times"></i>{' '}
+                </p>
+              </span>
+            </div>
+          </h2>
+          <hr />
+          <div className=" bg-white text-gray-500  dark:bg-dbeats-dark-alt dark:text-gray-100   shadow-sm rounded-lg  2xl:px-5 2xl:py-5  lg:px-2 lg:py-1 px-2 py-1 mb-5 lg:mb-2 2xl:mb-5 lg:max-h-full  max-h-96  overflow-y-auto overflow-hidden">
+            {user && user.superfan_to ? (
+              <div className="w-full max-h-44 overflow-y-scroll">
+                {user.superfan_to.map((value, i) => {
+                  return (
+                    <Link key={i} to={`/profile/${value.username}`} onClick={handleCloseSuperfan}>
+                      <p className="mb-1.5 w-full px-3 py-1.5 border hover:text-dbeats-light cursor-pointer">
+                        {value.username}
+                      </p>
+                    </Link>
+                  );
+                })}
+              </div>
+            ) : null}
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };
