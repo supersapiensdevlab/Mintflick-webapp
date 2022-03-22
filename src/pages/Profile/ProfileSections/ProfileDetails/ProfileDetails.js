@@ -83,6 +83,12 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
   const handleCloseSubscriptionModal = () => setshowSubscriptionModal(false);
   const [pageUser, setPageUser] = useState(null);
 
+  const [searchInput, setSearchInput] = useState('');
+  const [searchOutput, setSearchOutput] = useState([]);
+
+  const [followerSearchInput, setFollowerSearchInput] = useState('');
+  const [followerSearchOutput, setFollowerSearchOutput] = useState([]);
+
   const myData = JSON.parse(window.localStorage.getItem('user'));
   if (myData)
     //console.log(myData.username);
@@ -132,6 +138,28 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
       }
       // eslint-disable-next-line
     }, [urlUsername]);
+
+  useEffect(() => {
+    if (user && user.followee_count) {
+      setSearchOutput([]);
+      user.followee_count.filter((val) => {
+        if (val.toLowerCase().includes(searchInput.toLowerCase())) {
+          setSearchOutput((searchOutput) => [...searchOutput, val]);
+        }
+      });
+    }
+  }, [searchInput]);
+
+  useEffect(() => {
+    if (user && user.follower_count) {
+      setFollowerSearchOutput([]);
+      user.follower_count.filter((val) => {
+        if (val.toLowerCase().includes(followerSearchInput.toLowerCase())) {
+          setFollowerSearchOutput((followerSearchOutput) => [...followerSearchOutput, val]);
+        }
+      });
+    }
+  }, [followerSearchInput]);
 
   useEffect(() => {
     let tabno = tabname;
@@ -210,6 +238,64 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
   function classNames(...classes) {
     return classes.filter(Boolean).join(' ');
   }
+
+  const trackFollow = (value) => {
+    if (!myData) {
+      window.location.href = '/signup';
+    }
+    let followData = {
+      following: `${value}`,
+      follower: `${myData.username}`,
+    };
+    axios({
+      method: 'POST',
+      url: `${process.env.REACT_APP_SERVER_URL}/user/follow`,
+      headers: {
+        'content-type': 'application/json',
+        'auth-token': localStorage.getItem('authtoken'),
+      },
+      data: followData,
+    })
+      .then(function (response) {
+        if (response) {
+          console.log(response);
+        } else {
+          alert('Invalid Login');
+        }
+      })
+      .catch(function (error) {
+        //console.log(error);
+      });
+  };
+
+  const trackUnfollow = (value) => {
+    if (!myData) {
+      window.location.href = '/signup';
+    }
+    let followData = {
+      following: `${value}`,
+      follower: `${myData.username}`,
+    };
+    axios({
+      method: 'POST',
+      url: `${process.env.REACT_APP_SERVER_URL}/user/unfollow`,
+      headers: {
+        'content-type': 'application/json',
+        'auth-token': localStorage.getItem('authtoken'),
+      },
+      data: followData,
+    })
+      .then(function (response) {
+        if (response) {
+          console.log(response);
+        } else {
+          alert('Invalid Login');
+        }
+      })
+      .catch(function (error) {
+        //console.log(error);
+      });
+  };
 
   const trackFollowers = () => {
     setSubscribeLoader(false);
@@ -929,22 +1015,42 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
           </h2>
           <hr />
           <div className=" bg-white text-gray-500  dark:bg-dbeats-dark-alt dark:text-gray-100   shadow-sm rounded-lg   2xl:py-5   lg:py-1  mb-5 lg:mb-2 2xl:mb-5 lg:max-h-full  max-h-96  overflow-y-auto overflow-hidden">
+            <div className="px-7 py-4">
+              <input
+                type="text"
+                placeholder="Search"
+                onChange={(e) => setFollowerSearchInput(e.target.value)}
+                className="w-full h-10 rounded-full px-4 py-3 bg-dbeats-dark-alt text-white border border-white focus:border-dbeats-light"
+              />
+            </div>
             {user && user.follower_count ? (
               <div className="w-full max-h-44 overflow-y-scroll px-3 ">
-                {user.follower_count.map((value, i) => {
+                {followerSearchOutput.map((value, i) => {
                   return (
-                    <div key={i} className="w-full flex justify-between ">
-                      <Link key={i} to={`/profile/${value}`} onClick={handleCloseFollowers}>
+                    <div key={i} className="w-full flex justify-between px-3">
+                      <a key={i} href={`/profile/${value}`} onClick={handleCloseFollowers}>
                         <p className="mb-1.5 w-full px-3 py-1.5  hover:text-dbeats-light cursor-pointer">
                           {value}
                         </p>
-                      </Link>
+                      </a>
                       {!myData.followee_count.includes(value) ? (
-                        <button className="px-3 rounded-sm h-8  bg-dbeats-light text-white">
-                          {buttonText}
+                        <button
+                          onClick={() => {
+                            trackFollow(value);
+                          }}
+                          className="px-3 rounded-sm h-8  bg-dbeats-light text-white"
+                        >
+                          Follow
                         </button>
                       ) : (
-                        <></>
+                        <button
+                          onClick={() => {
+                            trackUnfollow(value);
+                          }}
+                          className="px-1.5 rounded-sm h-8  text-dbeats-light border-0 bg-none font-semibold"
+                        >
+                          Unfollow
+                        </button>
                       )}
                     </div>
                   );
@@ -979,25 +1085,42 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
           </h2>
           <hr />
           <div className=" bg-white text-gray-500  dark:bg-dbeats-dark-alt dark:text-gray-100   shadow-sm rounded-lg   2xl:py-5  lg:py-1 py-1 mb-5 lg:mb-2 2xl:mb-5 lg:max-h-full  max-h-96  overflow-y-auto overflow-hidden">
+            <div className="px-7 py-4">
+              <input
+                type="text"
+                placeholder="Search"
+                onChange={(e) => setSearchInput(e.target.value)}
+                className="w-full h-10 rounded-full px-4 py-3 bg-dbeats-dark-alt text-white border border-white focus:border-dbeats-light"
+              />
+            </div>
             {user && user.followee_count ? (
               <div className="w-full max-h-44 overflow-y-scroll px-3">
-                {user.followee_count.map((value, i) => {
+                {searchOutput.map((value, i) => {
                   return (
                     <div key={i} className="flex justify-between px-2 mb-1.5">
-                      <Link key={i} to={`/profile/${value}`} onClick={handleCloseFollowing}>
+                      <a key={i} href={`/profile/${value}`} onClick={handleCloseFollowing}>
                         <p className=" w-full px-3 py-1.5 hover:text-dbeats-light cursor-pointer">
                           {value}
                         </p>
-                      </Link>
+                      </a>
                       {!myData.followee_count.includes(value) ? (
                         <button
-                          onClick={trackFollowers}
+                          onClick={() => {
+                            trackFollow(value);
+                          }}
                           className="px-3 rounded-sm h-8  bg-dbeats-light text-white"
                         >
                           Follow
                         </button>
                       ) : (
-                        <></>
+                        <button
+                          onClick={() => {
+                            trackUnfollow(value);
+                          }}
+                          className="px-1.5 rounded-sm h-8  text-dbeats-light border-0 bg-none"
+                        >
+                          Unfollow
+                        </button>
                       )}
                     </div>
                   );
@@ -1036,11 +1159,11 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
               <div className="w-full max-h-44 overflow-y-scroll">
                 {user.superfan_to.map((value, i) => {
                   return (
-                    <Link key={i} to={`/profile/${value.username}`} onClick={handleCloseSuperfan}>
+                    <a key={i} href={`/profile/${value.username}`} onClick={handleCloseSuperfan}>
                       <p className="mb-1.5 w-full px-3 py-1.5 border hover:text-dbeats-light cursor-pointer">
                         {value.username}
                       </p>
-                    </Link>
+                    </a>
                   );
                 })}
               </div>
