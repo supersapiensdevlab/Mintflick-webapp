@@ -41,7 +41,7 @@ const NewPlaylist = (props) => {
       data: data,
       headers: {
         'content-type': 'application/json',
-        'auth-token':localStorage.getItem('authtoken')
+        'auth-token': localStorage.getItem('authtoken'),
       },
     });
 
@@ -55,23 +55,34 @@ const NewPlaylist = (props) => {
         isOpen={props.showNewPlaylist}
         className={
           darkMode
-            ? 'h-max w-80 mx-auto mt-28  bg-dbeats-dark-primary rounded-xl '
-            : 'h-max w-80 mx-auto mt-28  bg-gray-50 rounded-xl shadow-2xl'
+            ? 'h-max w-96 mx-auto mt-28  bg-black rounded-xl  '
+            : 'h-max w-96 mx-auto mt-28 bg-gray-50 rounded-xl shadow-2xl'
         }
       >
-        <div className={`${darkMode && 'dark'} dark:text-white p-5`}>
-          <div className=" flex justify-end w-full" onClick={props.handleCloseNewPlaylist}>
-            <i className="fas fa-times cursor-pointer text-lg text-white mr-5 mt-2"></i>
+        <div className={`${darkMode && 'dark'} dark:text-white p-2 bg-dbeats-dark-alt rounded-lg`}>
+          <div
+            onClick={props.handleCloseNewPlaylist}
+            className=" rounded-3xl group w-max p-1  mx-2 mt-2  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-secondary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
+          >
+            <span className="  text-black dark:text-white  flex p-1 rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:nm-inset-dbeats-dark-secondary ">
+              <p className="self-center mx-2">
+                {' '}
+                <i className="fas fa-times"></i>{' '}
+              </p>
+            </span>
           </div>
-          <div className="h-32 w-full flex flex-col justify-center items-center">
-            <input
-              type="text"
-              placeholder="Enter Playlist Name"
-              className="h-10 w-full px-4 py-2 mb-4"
-              onChange={(e) => handleNameChange(e)}
-            ></input>
+          <div className="h-32 w-full flex flex-col justify-center items-center px-5">
+            <div className="mt-1 flex rounded-md w-full shadow-sm nm-flat-dbeats-dark-secondary  p-0.5 mb-4">
+              <input
+                type="text"
+                placeholder="Enter Playlist Name"
+                className="h-10 w-full px-4  focus:nm-inset-dbeats-dark-primary  border-0 bg-dbeats-dark-primary  ring-0   flex-1 block w-full text-white rounded-md sm:text-sm "
+                onChange={(e) => handleNameChange(e)}
+              ></input>
+            </div>
             <button
-              className="h-10 w-2/3 rounded-md dark:text-white dark:bg-dbeats-light text-lg  "
+              className="h-10 w-2/3 rounded-md dark:text-white  text-lg bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-secondary-dark-primary 
+              hover:nm-inset-dbeats-secondary-light rounded-3xl transition-all duration-300 "
               onClick={() => {
                 handleSubmitPlaylist();
               }}
@@ -119,7 +130,7 @@ export const Playlist = (props) => {
       data: data,
       headers: {
         'content-type': 'application/json',
-        'auth-token':localStorage.getItem('authtoken')
+        'auth-token': localStorage.getItem('authtoken'),
       },
     });
 
@@ -133,23 +144,32 @@ export const Playlist = (props) => {
         className={
           darkMode
             ? 'h-max w-80 mx-auto mt-28  bg-dbeats-dark-primary rounded-xl z-100'
-            : 'h-max w-80 mx-auto mt-28  bg-gray-50 rounded-xl shadow-2xl z-100'
+            : 'h-max w-80 mx-auto mt-28  bg-dbeats-dark-alt rounded-xl shadow-2xl z-100'
         }
       >
-        <div className={`${darkMode && 'dark'} dark:text-white z-100`}>
-          <div className="mr-7 flex justify-end w-full" onClick={props.handleClosePlaylist}>
-            <i className="fas fa-times cursor-pointer text-lg text-white mr-5 mt-2"></i>
+        <div className={`${darkMode && 'dark'} dark:text-white z-100 bg-dbeats-dark-alt relative`}>
+          <div
+            onClick={props.handleClosePlaylist}
+            className=" rounded-3xl group w-max   p-1  mx-2 mt-2 absolute right-0  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-secondary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
+          >
+            <span className="  text-black dark:text-white  flex p-1 rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:nm-inset-dbeats-dark-secondary ">
+              <p className="self-center mx-2">
+                {' '}
+                <i className="fas fa-times"></i>{' '}
+              </p>
+            </span>
           </div>
           <div className="dark:text-white text-xl flex flex-col justify-center items-center w-full ">
-            <p>Add to Existing</p>
-            <div className="pt-3 w-full ">
+            <p className="mt-12">Add to Existing</p>
+            <div className="pt-3 w-full px-2">
               {user && user.my_playlists ? (
                 <>
                   {user.my_playlists.map((value, i) => {
                     return (
                       <div
                         key={i}
-                        className="hover:bg-dbeats-dark-alt w-full p-2 text-center cursor-pointer"
+                        className="hover:bg-dbeats-dark-alt w-full p-2 text-center cursor-pointer hover:bg-dbeats-dark-alt py-2 bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-secondary-dark-primary 
+                        hover:nm-inset-dbeats-secondary-light  rounded-3xl transition-all duration-300"
                         onClick={() => {
                           handleSubmitPlaylist(value.playlistname);
                         }}
@@ -163,8 +183,11 @@ export const Playlist = (props) => {
             </div>
           </div>
           <hr className="my-2 " />
-          <div className="h-14 my-2 w-full rounded-xl">
-            <div className="flex justify-center items-center cursor-pointer hover:bg-dbeats-dark-alt py-2">
+          <div className="h-14 my-2 w-full rounded-xl px-2">
+            <div
+              className="flex justify-center items-center cursor-pointer hover:bg-dbeats-dark-alt py-2 bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-secondary-dark-primary 
+                hover:nm-inset-dbeats-secondary-light mt-3 mb-4 rounded-3xl transition-all duration-300 "
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-8 w-8 dark:text-white mr-3"

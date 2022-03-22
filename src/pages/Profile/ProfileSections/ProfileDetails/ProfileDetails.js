@@ -89,6 +89,11 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
   const [followerSearchInput, setFollowerSearchInput] = useState('');
   const [followerSearchOutput, setFollowerSearchOutput] = useState([]);
 
+  const [SuperfanSearchInput, setSuperfanSearchInput] = useState('');
+  const [SuperfanSearchOutput, setSuperfanSearchOutput] = useState([]);
+
+  const [followText, setFollowText] = useState('Follow');
+
   const myData = JSON.parse(window.localStorage.getItem('user'));
   if (myData)
     //console.log(myData.username);
@@ -160,6 +165,22 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
       });
     }
   }, [followerSearchInput]);
+
+  // useEffect(() => {
+  //   if (user && user.superfan_to) {
+  //     setSuperfanSearchOutput([]);
+  //     user.superfan_to.filter((val) => {
+  //       if (val && val.username) {
+  //         if (val.username.toLowerCase().includes(SuperfanSearchInput.toLowerCase())) {
+  //           setSuperfanSearchOutput((SuperfanSearchOutput) => [
+  //             ...SuperfanSearchOutput,
+  //             val.username,
+  //           ]);
+  //         }
+  //       }
+  //     });
+  //   }
+  // }, [SuperfanSearchInput]);
 
   useEffect(() => {
     let tabno = tabname;
@@ -239,10 +260,11 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
     return classes.filter(Boolean).join(' ');
   }
 
-  const trackFollow = (value) => {
+  const trackFollow = (value, i) => {
     if (!myData) {
       window.location.href = '/signup';
     }
+    console.log(i);
     let followData = {
       following: `${value}`,
       follower: `${myData.username}`,
@@ -994,8 +1016,8 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
         isOpen={showFollowers}
         className={
           darkMode
-            ? 'h-max lg:w-1/3 w-5/6 mx-auto 2xl:mt-32 lg:mt-16 mt-20 bg-dbeats-dark-alt rounded-xl'
-            : 'h-max lg:w-1/3 w-5/6 mx-auto 2xl:mt-32 lg:mt-16 mt-20 bg-gray-50 rounded-xl shadow-2xl'
+            ? 'h-max lg:w-1/3 w-full mx-auto 2xl:mt-32 lg:mt-16 mt-20 bg-dbeats-dark-alt rounded-xl'
+            : 'h-max lg:w-1/3 w-full mx-auto 2xl:mt-32 lg:mt-16 mt-20 bg-gray-50 rounded-xl shadow-2xl'
         }
       >
         <div className={`${darkMode && 'dark'} p-2 h-max`}>
@@ -1024,7 +1046,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
               />
             </div>
             {user && user.follower_count ? (
-              <div className="w-full max-h-44 overflow-y-scroll px-3 ">
+              <div className="w-full max-h-60 overflow-y-scroll px-3 ">
                 {followerSearchOutput.map((value, i) => {
                   return (
                     <div key={i} className="w-full flex justify-between px-3">
@@ -1036,11 +1058,11 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                       {!myData.followee_count.includes(value) ? (
                         <button
                           onClick={() => {
-                            trackFollow(value);
+                            trackFollow(value, i);
                           }}
                           className="px-3 rounded-sm h-8  bg-dbeats-light text-white"
                         >
-                          Follow
+                          {followText}
                         </button>
                       ) : (
                         <button
@@ -1064,8 +1086,8 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
         isOpen={showFollowing}
         className={
           darkMode
-            ? 'h-max lg:w-1/3 w-5/6 mx-auto 2xl:mt-32 lg:mt-16 mt-20 bg-dbeats-dark-alt rounded-xl'
-            : 'h-max lg:w-1/3 w-5/6 mx-auto 2xl:mt-32 lg:mt-16 mt-20 bg-gray-50 rounded-xl shadow-2xl'
+            ? 'h-max lg:w-1/3 w-full mx-auto 2xl:mt-32 lg:mt-16 mt-20 bg-dbeats-dark-alt rounded-xl'
+            : 'h-max lg:w-1/3 w-full mx-auto 2xl:mt-32 lg:mt-16 mt-20 bg-gray-50 rounded-xl shadow-2xl'
         }
       >
         <div className={`${darkMode && 'dark'} p-2 h-max`}>
@@ -1094,11 +1116,11 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
               />
             </div>
             {user && user.followee_count ? (
-              <div className="w-full max-h-44 overflow-y-scroll px-3">
+              <div className="w-full max-h-60 overflow-y-scroll px-3">
                 {searchOutput.map((value, i) => {
                   return (
                     <div key={i} className="flex justify-between px-2 mb-1.5">
-                      <a key={i} href={`/profile/${value}`} onClick={handleCloseFollowing}>
+                      <a href={`/profile/${value}`} onClick={handleCloseFollowing}>
                         <p className=" w-full px-3 py-1.5 hover:text-dbeats-light cursor-pointer">
                           {value}
                         </p>
@@ -1106,7 +1128,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                       {!myData.followee_count.includes(value) ? (
                         <button
                           onClick={() => {
-                            trackFollow(value);
+                            trackFollow(value, i);
                           }}
                           className="px-3 rounded-sm h-8  bg-dbeats-light text-white"
                         >
@@ -1134,8 +1156,8 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
         isOpen={showSuperfan}
         className={
           darkMode
-            ? 'h-max lg:w-1/3 w-5/6 mx-auto 2xl:mt-32 lg:mt-16 mt-20 bg-dbeats-dark-alt rounded-xl'
-            : 'h-max lg:w-1/3 w-5/6 mx-auto 2xl:mt-32 lg:mt-16 mt-20 bg-gray-50 rounded-xl shadow-2xl'
+            ? 'h-max lg:w-1/3 w-full mx-auto 2xl:mt-32 lg:mt-16 mt-20 bg-dbeats-dark-alt rounded-xl'
+            : 'h-max lg:w-1/3 w-full mx-auto 2xl:mt-32 lg:mt-16 mt-20 bg-gray-50 rounded-xl shadow-2xl'
         }
       >
         <div className={`${darkMode && 'dark'} p-2 h-max`}>
@@ -1155,12 +1177,20 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
           </h2>
           <hr />
           <div className=" bg-white text-gray-500  dark:bg-dbeats-dark-alt dark:text-gray-100   shadow-sm rounded-lg  2xl:px-5 2xl:py-5  lg:px-2 lg:py-1 px-2 py-1 mb-5 lg:mb-2 2xl:mb-5 lg:max-h-full  max-h-96  overflow-y-auto overflow-hidden">
+            <div className=" py-4">
+              <input
+                type="text"
+                placeholder="Search"
+                // onChange={(e) => setSuperfanSearchInput(e.target.value)}
+                className="w-full h-10 rounded-full px-4 py-3 bg-dbeats-dark-alt text-white border border-white focus:border-dbeats-light"
+              />
+            </div>
             {user && user.superfan_to ? (
-              <div className="w-full max-h-44 overflow-y-scroll">
+              <div className="w-full max-h-60 overflow-y-scroll">
                 {user.superfan_to.map((value, i) => {
                   return (
                     <a key={i} href={`/profile/${value.username}`} onClick={handleCloseSuperfan}>
-                      <p className="mb-1.5 w-full px-3 py-1.5 border hover:text-dbeats-light cursor-pointer">
+                      <p className="mb-1.5 w-full px-3 py-1.5 hover:text-dbeats-light cursor-pointer">
                         {value.username}
                       </p>
                     </a>
