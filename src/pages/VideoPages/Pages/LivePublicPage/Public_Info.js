@@ -27,6 +27,7 @@ import VideoPlayer from '../../../../component/VideoPlayer/VideoPlayer';
 import LiveChat from './LiveChat';
 import { io } from 'socket.io-client';
 import { RadioGroup } from '@headlessui/react';
+import useWeb3Modal from '../../../../hooks/useWeb3Modal';
 
 const PublicInfo = (props) => {
   // const socket = io('http://localhost:800');
@@ -36,12 +37,13 @@ const PublicInfo = (props) => {
 
   let sharable_data = `${process.env.REACT_APP_CLIENT_URL}/live/${props.stream_id}`;
   const darkMode = useSelector((darkmode) => darkmode.toggleDarkMode);
+  const [loadWeb3Modal, logoutOfWeb3Modal, logoutweb3] = useWeb3Modal();
 
   const [userData, setUserData] = useState({});
 
   const [privateUser, setPrivate] = useState(true);
 
-  const user = JSON.parse(window.localStorage.getItem('user'));
+  const user = useSelector((state) => state.User.user); 
   const [time, setTime] = useState(null);
 
   const [playbackUrl, setPlaybackUrl] = useState('');
@@ -201,10 +203,8 @@ const PublicInfo = (props) => {
   useEffect(() => {
     get_User();
     fetchData();
-    let value = JSON.parse(window.localStorage.getItem('user'));
-    console.log(userData);
-    console.log(user);
-    if (user ? value.username === props.stream_id : false) {
+
+    if (user ? user.username === props.stream_id : false) {
       setPrivate(true);
     } else {
       setPrivate(false);
@@ -292,6 +292,9 @@ const PublicInfo = (props) => {
     //const details = await carol2.details();
     //console.log(details.cfa.flows.outFlows[0]);
   };
+  const handleLogin = ()=>{
+    loadWeb3Modal();
+  }
   return (
     <div className="">
       <div
@@ -420,14 +423,14 @@ const PublicInfo = (props) => {
                         </div>
                       </>
                     ) : (
-                      <Link
-                        to="/signup"
+                      <a
+                        onClick={handleLogin}
                         className="bg-dbeats-light flex w-max  p-1 2xl:text-lg lg:text-sm text-md  rounded-sm 2xl:px-4 px-4 lg:px-2 mr-3 font-semibold text-white "
                       >
                         <span className="whitespace-nowrap flex">
                           Login to Follow & Become a SuperFan
                         </span>
-                      </Link>
+                      </a>
                     )}
                   </div>
                 ) : null}
@@ -463,7 +466,7 @@ const PublicInfo = (props) => {
                     leaveTo="transform opacity-0 scale-95"
                   >
                     <Menu.Items className="   absolute right-0 w-56  origin-top-right bg-white dark:bg-dbeats-dark-primary dark:text-gray-50 divide-y divide-gray-100   shadow   focus:outline-none">
-                      {user.username != userData.username ? (
+                      {user && user.username != userData.username ? (
                         <div className="px-1 py-1 ">
                           <Menu.Item className="w-full text-gray-700 dark:text-gray-50 text-left text-lg pl-2 hover:text-white hover:bg-dbeats-light">
                             <button

@@ -5,11 +5,8 @@ import { useSelector } from 'react-redux';
 
 function DeleteModal({ show, setShowDelete, data ,type}) {
   const darkMode = useSelector((darkmode) => darkmode.toggleDarkMode);
-  const user = JSON.parse(window.localStorage.getItem('user'));
+  const user = useSelector((state) => state.User.user);
 
-  useEffect(()=>{
-    console.log(data);
-  },[])
   const handleConfirm = () =>{
     axios({
       method: 'delete',

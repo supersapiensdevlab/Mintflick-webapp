@@ -23,6 +23,7 @@ import dbeatsLogoBnW from '../../../../assets/images/Logo/logo-blacknwhite.png';
 import { Image } from 'react-img-placeholder';
 import SuperfanModal from '../../../../component/Modals/SuperfanModal/superfan-modal';
 import Modal from 'react-modal';
+import { useSelector } from 'react-redux';
 
 const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow, darkMode }) => {
   const [pinnedData, setPinnedData] = useState([]);
@@ -94,43 +95,41 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
 
   const [followText, setFollowText] = useState('Follow');
 
-  const myData = JSON.parse(window.localStorage.getItem('user'));
-  if (myData)
+  const myData =  useSelector((state) => state.User.user);
     //console.log(myData.username);
     //console.log(user.username);
 
     useEffect(() => {
-      let value = JSON.parse(window.localStorage.getItem('user'));
-      if (value) {
-        if (value.username === urlUsername) {
-          setSharable_data(`${process.env.REACT_APP_CLIENT_URL}/profile/${value.username}`);
+      if (myData) {
+        if (myData.username === urlUsername) {
+          setSharable_data(`${process.env.REACT_APP_CLIENT_URL}/profile/${myData.username}`);
           setPrivate(true);
-          setFollowers(value.follower_count.length);
-          setFollowing(value.followee_count.length);
-          setSuperfan(value.superfan_to.length);
+          setFollowers(myData.follower_count.length);
+          setFollowing(myData.followee_count.length);
+          setSuperfan(myData.superfan_to.length);
 
-          setIsMailVerified(value.is_mail_verified);
-          setIsVerified(value.is_verified);
+          setIsMailVerified(myData.is_mail_verified);
+          setIsVerified(myData.is_verified);
 
-          if (value.pinned) {
-            setPinnedData(value.pinned);
+          if (myData.pinned) {
+            setPinnedData(myData.pinned);
           }
 
-          if (value.cover_image && value.cover_image !== '') {
-            setCoverImage(value.cover_image);
+          if (myData.cover_image && myData.cover_image !== '') {
+            setCoverImage(myData.cover_image);
           } else {
             setCoverImage(background);
           }
 
-          if (value.profile_image && value.profile_image !== '') {
-            setProfileImage(value.profile_image);
+          if (myData.profile_image && myData.profile_image !== '') {
+            setProfileImage(myData.profile_image);
           } else {
             //console.log('person', person);
             setProfileImage(person);
           }
 
-          if (value.posts) {
-            let data = value.posts;
+          if (myData.posts) {
+            let data = myData.posts;
             setPostsData(data.reverse());
           }
         } else {
@@ -448,6 +447,9 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
       });
   };
 
+  useEffect(()=>{
+    console.log(privateUser)
+  },[privateUser])
   const NavTabs = ['Posts', 'Videos', 'Music', 'Playlists']; //, 'Subscribed Channels'
 
   const NavTabsTitle = ({ text }) => {
@@ -1045,7 +1047,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                 className="w-full h-10 rounded-full px-4 py-3 bg-dbeats-dark-alt text-white border border-white focus:border-dbeats-light"
               />
             </div>
-            {user && user.follower_count ? (
+            {user && user.follower_count && user.followee_count ? (
               <div className="w-full max-h-60 overflow-y-scroll px-3 ">
                 {followerSearchOutput.map((value, i) => {
                   return (
@@ -1055,7 +1057,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                           {value}
                         </p>
                       </a>
-                      {!myData.followee_count.includes(value) ? (
+                      {myData && !myData.followee_count.includes(value) ? (
                         <button
                           onClick={() => {
                             trackFollow(value, i);
@@ -1115,7 +1117,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                 className="w-full h-10 rounded-full px-4 py-3 bg-dbeats-dark-alt text-white border border-white focus:border-dbeats-light"
               />
             </div>
-            {user && user.followee_count ? (
+            {user && user.followee_count && user.followee_count ? (
               <div className="w-full max-h-60 overflow-y-scroll px-3">
                 {searchOutput.map((value, i) => {
                   return (
@@ -1125,7 +1127,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                           {value}
                         </p>
                       </a>
-                      {!myData.followee_count.includes(value) ? (
+                      {myData && !myData.followee_count.includes(value) ? (
                         <button
                           onClick={() => {
                             trackFollow(value, i);

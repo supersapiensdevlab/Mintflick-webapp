@@ -4,10 +4,13 @@ import io from 'socket.io-client';
 import Picker from 'emoji-picker-react';
 import person from '../../../../assets/images/profile.svg';
 import LoadingBar from 'react-top-loading-bar';
+import useWeb3Modal from '../../../../hooks/useWeb3Modal';
+import { useSelector } from 'react-redux';
 
 function LiveChat({ userp }) {
   // to get loggedin user from   localstorage
-  const user = JSON.parse(window.localStorage.getItem('user'));
+  const [loadWeb3Modal, logoutOfWeb3Modal, logoutweb3] = useWeb3Modal();
+  const user =  useSelector((state) => state.User.user); 
   const chatRef = useRef(null);
   const loadingRef = useRef(null);
   // the form state manages the form input for creating a new message
@@ -88,7 +91,7 @@ function LiveChat({ userp }) {
       });
       setShowEmojis(false);
     } else {
-      window.location.href = '/signup';
+      loadWeb3Modal();
     }
   }
   // update the form state as the user types

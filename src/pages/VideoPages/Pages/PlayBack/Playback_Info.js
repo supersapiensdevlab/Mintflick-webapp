@@ -17,6 +17,7 @@ import RecommendedCard from './RecommendedCard';
 //import dbeatsLogoBnW from '../../../../assets/images/Logo/logo-blacknwhite.png';
 import SuperfanModal from '../../../../component/Modals/SuperfanModal/superfan-modal';
 import { RadioGroup } from '@headlessui/react';
+import useWeb3Modal from '../../../../hooks/useWeb3Modal';
 
 //import maticLogo from '../../../../assets/graphics/polygon-matic-logo.svg';
 //import Web3 from 'web3';
@@ -63,7 +64,7 @@ const PlayBackInfo = (props) => {
   const handleLoginClose = () => setShowLogin(false);
   const handleLoginShow = () => setShowLogin(true);
 
-  const user = JSON.parse(window.localStorage.getItem('user'));
+  const user = useSelector((state) => state.User.user); 
 
   const [playbackUrl, setPlaybackUrl] = useState('');
 
@@ -81,6 +82,7 @@ const PlayBackInfo = (props) => {
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+  const [loadWeb3Modal, logoutOfWeb3Modal, logoutweb3] = useWeb3Modal();
 
   // const [showBuyCrypto, setShowBuyCrypto] = useState(false);
   // const buyCrypto = () => setShowBuyCrypto(!showBuyCrypto);
@@ -110,8 +112,7 @@ const PlayBackInfo = (props) => {
   // const sf = new SuperfluidSDK.Framework({
   //   ethers: new Web3Provider(window.ethereum),
   // });
-  console.log(user);
-  console.log(props);
+
 
   const handleReportSubmit = () => {
     let reportData = {
@@ -551,6 +552,9 @@ const PlayBackInfo = (props) => {
   //   //const details = await carol2.details();
   //   //console.log(details.cfa.flows.outFlows[0]);
   // };
+  const handleLogin = () =>{
+     loadWeb3Modal();
+  }
 
   return (
     <>
@@ -633,14 +637,14 @@ const PlayBackInfo = (props) => {
                             </button>
                           </div>
                         ) : (
-                          <Link
-                            to="/signup"
-                            className="bg-dbeats-light flex whitespace-nowrap w-max p-1 2xl:text-lg lg:text-sm text-md  rounded-sm 2xl:px-4 px-4 lg:px-2 mr-3 font-semibold text-white "
+                          <a
+                            onClick={handleLogin}
+                            className="bg-dbeats-light flex whitespace-nowrap w-max p-1 2xl:text-lg lg:text-sm text-md  rounded-sm 2xl:px-4 px-4 lg:px-2 mr-3 font-semibold text-white cursor-pointer "
                           >
-                            <span className="flex whitespace-nowrap">
+                            <span className="flex whitespace-nowrap ">
                               Login to Follow & Become a SuperFan
                             </span>
-                          </Link>
+                          </a>
                         )}
                       </div>
                     ) : null}

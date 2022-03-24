@@ -12,6 +12,7 @@ import ProfileDetails from './ProfileSections/ProfileDetails/ProfileDetails';
 import NFTStore from './ProfileSections/Store/NFT_Store';
 import Ticket from '../../Ticket';
 import { useDispatch } from 'react-redux';
+import useWeb3Modal from '../../hooks/useWeb3Modal';
 
 const Profile = () => {
   // For Routing
@@ -24,6 +25,7 @@ const Profile = () => {
   const [user, setUser] = useState(null);
   const [privateUser, setPrivate] = useState(true);
   const [notFound, setNotFound] = useState(false);
+  const [loadWeb3Modal, logoutOfWeb3Modal, logoutweb3] = useWeb3Modal();
 
   //const [NFTData, setNFTData] = useState(null);
 
@@ -39,7 +41,7 @@ const Profile = () => {
 
   const dispatch = useDispatch();
   const value = useSelector((state) => state.User.user);
-  useEffect(() => {
+  useEffect(async() => {
     if (value) {
       if (value.username === urlUsername) {
         setUser(value);
@@ -53,8 +55,8 @@ const Profile = () => {
     } else {
       get_User();
       setPrivate(false);
+      await loadWeb3Modal();
     }
-
     // eslint-disable-next-line
   }, [urlUsername]);
 
