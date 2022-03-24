@@ -99,53 +99,53 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
 
   const [followText, setFollowText] = useState('Follow');
 
-  const myData =  useSelector((state) => state.User.user);
-    //console.log(myData.username);
-    //console.log(user.username);
+  const myData = useSelector((state) => state.User.user);
+  //console.log(myData.username);
+  //console.log(user.username);
 
-    useEffect(() => {
-      if (myData) {
-        if (myData.username === urlUsername) {
-          setSharable_data(`${process.env.REACT_APP_CLIENT_URL}/profile/${myData.username}`);
-          setPrivate(true);
-          setFollowers(myData.follower_count.length);
-          setFollowing(myData.followee_count.length);
-          setSuperfan(myData.superfan_to.length);
+  useEffect(() => {
+    if (myData) {
+      if (myData.username === urlUsername) {
+        setSharable_data(`${process.env.REACT_APP_CLIENT_URL}/profile/${myData.username}`);
+        setPrivate(true);
+        setFollowers(myData.follower_count.length);
+        setFollowing(myData.followee_count.length);
+        setSuperfan(myData.superfan_to.length);
 
-          setIsMailVerified(myData.is_mail_verified);
-          setIsVerified(myData.is_verified);
+        setIsMailVerified(myData.is_mail_verified);
+        setIsVerified(myData.is_verified);
 
-          if (myData.pinned) {
-            setPinnedData(myData.pinned);
-          }
+        if (myData.pinned) {
+          setPinnedData(myData.pinned);
+        }
 
-          if (myData.cover_image && myData.cover_image !== '') {
-            setCoverImage(myData.cover_image);
-          } else {
-            setCoverImage(background);
-          }
-
-          if (myData.profile_image && myData.profile_image !== '') {
-            setProfileImage(myData.profile_image);
-          } else {
-            //console.log('person', person);
-            setProfileImage(person);
-          }
-
-          if (myData.posts) {
-            let data = myData.posts;
-            setPostsData(data.reverse());
-          }
+        if (myData.cover_image && myData.cover_image !== '') {
+          setCoverImage(myData.cover_image);
         } else {
-          get_User();
-          setPrivate(false);
+          setCoverImage(background);
+        }
+
+        if (myData.profile_image && myData.profile_image !== '') {
+          setProfileImage(myData.profile_image);
+        } else {
+          //console.log('person', person);
+          setProfileImage(person);
+        }
+
+        if (myData.posts) {
+          let data = myData.posts;
+          setPostsData(data.reverse());
         }
       } else {
         get_User();
         setPrivate(false);
       }
-      // eslint-disable-next-line
-    }, [urlUsername]);
+    } else {
+      get_User();
+      setPrivate(false);
+    }
+    // eslint-disable-next-line
+  }, [urlUsername]);
 
   useEffect(() => {
     if (user && user.followee_count) {
@@ -265,7 +265,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
 
   const trackFollow = (value, i) => {
     if (!myData) {
-       loadWeb3Modal();
+      loadWeb3Modal();
       return;
     }
     console.log(i);
@@ -284,7 +284,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
     })
       .then(function (response) {
         if (response) {
-          dispatch(loadUser())
+          dispatch(loadUser());
           console.log(response);
         } else {
           alert('Invalid Login');
@@ -297,8 +297,9 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
 
   const trackUnfollow = (value) => {
     if (!myData) {
-       loadWeb3Modal();
-      return;    }
+      loadWeb3Modal();
+      return;
+    }
     let followData = {
       following: `${value}`,
       follower: `${myData.username}`,
@@ -314,7 +315,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
     })
       .then(function (response) {
         if (response) {
-          dispatch(loadUser())
+          dispatch(loadUser());
         } else {
           alert('Invalid Login');
         }
@@ -327,8 +328,8 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
   const trackFollowers = () => {
     setSubscribeLoader(false);
     if (buttonText === 'Login to Follow') {
-       loadWeb3Modal();
-      return
+      loadWeb3Modal();
+      return;
     }
     ////console.log(followers);
     const followData = {
@@ -351,7 +352,6 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
             setButtonText('Unfollow');
             setFollowers(followers + 1);
             setSubscribeLoader(true);
-            
           } else {
             alert('Invalid Login');
           }
@@ -455,9 +455,9 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
       });
   };
 
-  useEffect(()=>{
-    console.log(privateUser)
-  },[privateUser])
+  useEffect(() => {
+    console.log(privateUser);
+  }, [privateUser]);
   const NavTabs = ['Posts', 'Videos', 'Music', 'Playlists']; //, 'Subscribed Channels'
 
   const NavTabsTitle = ({ text }) => {

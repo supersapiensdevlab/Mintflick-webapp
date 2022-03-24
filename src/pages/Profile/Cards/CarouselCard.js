@@ -6,12 +6,12 @@ import DeleteModal from '../../../component/Modals/DeleteModal/DeleteModal';
 import { ShareModal } from '../../../component/Modals/ShareModal/ShareModal';
 import classes from '../Profile.module.css';
 import { useSelector } from 'react-redux';
-import { useHistory } from "react-router-dom";
+import { useHistory } from 'react-router-dom';
 import useWeb3Modal from '../../../hooks/useWeb3Modal';
 moment().format();
 
 const CarouselCard = (props) => {
-  const user = useSelector((state) => state.User.user); 
+  const user = useSelector((state) => state.User.user);
   const history = useHistory();
   const [loadWeb3Modal, logoutOfWeb3Modal] = useWeb3Modal();
   //console.log(props);
@@ -49,13 +49,13 @@ const CarouselCard = (props) => {
   }, []);
 
   ////console.log(props.playbackUserData)
-const handlePlayerClick = async () =>{
-  if(user){
-    history.push(`/playback/${props.username}/${props.playbackUserData.videoId}`);
-  }else{
-    await loadWeb3Modal();
-  }
-}
+  const handlePlayerClick = async () => {
+    if (user) {
+      history.push(`/playback/${props.username}/${props.playbackUserData.videoId}`);
+    } else {
+      await loadWeb3Modal();
+    }
+  };
   return (
     <div id="tracks-section" className="py-1 ">
       <div
@@ -65,7 +65,7 @@ const handlePlayerClick = async () =>{
       lg:px-3 2xl:px-3 md:p-2`}
       >
         <div
-          className={`cursor-pointer h-44 lg:h-32 2xl:h-48 md:h-40 lg:w-1/3 w-full  my-auto dark:bg-dbeats-dark-primary `}
+          className={`cursor-pointer h-44 lg:h-32 2xl:h-48 md:h-40 lg:w-1/3 w-max  my-auto dark:bg-dbeats-dark-primary `}
         >
           <a onClick={handlePlayerClick}>
             <ReactPlayer
@@ -74,11 +74,10 @@ const handlePlayerClick = async () =>{
               playing={playing}
               muted={false}
               volume={0.5}
+              className={`${classes.cards_videos}`}
+              light={props.playbackUserData.videoImage}
               url={props.playbackUserData.link}
               controls={false}
-              className={`${classes.cards_videos}`}
-              onMouseMove={handleMouseMove}
-              onMouseLeave={hanldeMouseLeave}
             />
           </a>
         </div>

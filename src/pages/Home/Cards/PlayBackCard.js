@@ -22,6 +22,7 @@ const PlayBackCard = (props) => {
 
   const [like, setLike] = useState(0);
   const [userreact, setUserreact] = useState('');
+  const ref = React.createRef();
 
   //let history = useHistory();
   let sharable_data = `${process.env.REACT_APP_CLIENT_URL}/playback/${
@@ -141,6 +142,10 @@ const PlayBackCard = (props) => {
         });
     }
   };
+
+  const [showSubscriptionModal, setshowSubscriptionModal] = useState(false);
+  const handleCloseSubscriptionModal = () => setshowSubscriptionModal(false);
+  const handleShowSubscriptionModal = () => setshowSubscriptionModal(true);
 
   const [showBidModal, setShowBidModal] = useState(false);
   const handleCloseBidModal = () => setShowBidModal(false);
@@ -372,6 +377,27 @@ const PlayBackCard = (props) => {
                           {props.playbackUserData.user.username}
                         </p>
                       </Link>{' '}
+                      {console.log(props.playbackUserData.user)}
+                      <button
+                        onClick={
+                          user != null
+                            ? handleShowSubscriptionModal
+                            : (window.location.href = '/signup')
+                        }
+                        className={
+                          props.playbackUserData.user.superfan_data
+                            ? ' flex dark:bg-dbeats-dark-primary border border-dbeats-light dark:hover:bg-dbeats-light p-1 2xl:text-lg lg:text-sm text-md  rounded-sm 2xl:px-4 px-4 lg:px-2      mr-3 font-semibold text-white   '
+                            : 'hidden'
+                        }
+                      >
+                        <span
+                          className={`${
+                            props.playbackUserData.user.superfan_data ? '' : 'hidden'
+                          } whitespace-nowrap flex`}
+                        >
+                          🥳 Become a Superfan
+                        </span>
+                      </button>
                     </div>
                   </div>
                   {/* Hiding Follow Button due to bugs 
@@ -414,13 +440,14 @@ const PlayBackCard = (props) => {
               <ReactPlayer
                 className="w-full h-full max-h-screen "
                 width="100%"
-                height="480px"
+                height="400px"
                 playing={true}
                 muted={true}
                 volume={0.5}
                 light={props.playbackUserData.artwork}
                 url={props.playbackUserData.link}
                 controls={true}
+                ref={ref}
               />
             </div>
             <div className="flex   text-black text-sm font-medium   px-4  py-3">
