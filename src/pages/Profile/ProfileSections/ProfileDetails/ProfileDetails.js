@@ -24,10 +24,14 @@ import { Image } from 'react-img-placeholder';
 import SuperfanModal from '../../../../component/Modals/SuperfanModal/superfan-modal';
 import Modal from 'react-modal';
 import { useSelector } from 'react-redux';
+import useWeb3Modal from '../../../../hooks/useWeb3Modal';
+import { useDispatch } from 'react-redux';
+import { loadUser } from '../../../../actions/userActions';
 
 const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow, darkMode }) => {
   const [pinnedData, setPinnedData] = useState([]);
-
+  const [loadWeb3Modal, logoutOfWeb3Modal, logoutweb3] = useWeb3Modal();
+  const dispatch = useDispatch();
   const [followers, setFollowers] = useState(0);
   const [following, setFollowing] = useState(0);
   const [superfan, setSuperfan] = useState(0);
@@ -261,7 +265,8 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
 
   const trackFollow = (value, i) => {
     if (!myData) {
-      window.location.href = '/signup';
+       loadWeb3Modal();
+      return;
     }
     console.log(i);
     let followData = {
@@ -279,6 +284,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
     })
       .then(function (response) {
         if (response) {
+          dispatch(loadUser())
           console.log(response);
         } else {
           alert('Invalid Login');
@@ -291,8 +297,8 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
 
   const trackUnfollow = (value) => {
     if (!myData) {
-      window.location.href = '/signup';
-    }
+       loadWeb3Modal();
+      return;    }
     let followData = {
       following: `${value}`,
       follower: `${myData.username}`,
@@ -308,7 +314,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
     })
       .then(function (response) {
         if (response) {
-          console.log(response);
+          dispatch(loadUser())
         } else {
           alert('Invalid Login');
         }
@@ -321,7 +327,8 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
   const trackFollowers = () => {
     setSubscribeLoader(false);
     if (buttonText === 'Login to Follow') {
-      window.location.href = '/signup';
+       loadWeb3Modal();
+      return
     }
     ////console.log(followers);
     const followData = {
@@ -344,6 +351,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
             setButtonText('Unfollow');
             setFollowers(followers + 1);
             setSubscribeLoader(true);
+            
           } else {
             alert('Invalid Login');
           }
