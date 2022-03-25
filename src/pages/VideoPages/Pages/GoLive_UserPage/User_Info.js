@@ -409,7 +409,7 @@ const UserInfo = (props) => {
   // console.log(user);
   useEffect(() => {
     if (!user) {
-      window.location.href = '/signup';
+      // window.location.href = '/signup';
     }
   }, []);
 

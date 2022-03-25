@@ -88,7 +88,7 @@ const PlayBackCard = (props) => {
   const trackFollowers = () => {
     setSubscribeLoader(false);
     if (buttonText === 'Login to Follow') {
-      window.location.href = '/signup';
+      // window.location.href = '/signup';
     }
     //console.log(followers);
     const followData = {
@@ -193,7 +193,7 @@ const PlayBackCard = (props) => {
       setShowOtherReport(false);
       setShowReportSubmitThankyou(true);
     } else {
-      window.location.href = '/signup';
+      // window.location.href = '/signup';
     }
   };
 
@@ -211,7 +211,7 @@ const PlayBackCard = (props) => {
 
   const handlereaction = (videoprops) => {
     if (!user) {
-      window.location.href = '/signup';
+      // window.location.href = '/signup';
     }
     if (userreact === '') {
       const reactionData = {
@@ -381,8 +381,7 @@ const PlayBackCard = (props) => {
                       <button
                         onClick={
                           user != null
-                            ? handleShowSubscriptionModal
-                            : (window.location.href = '/signup')
+                            && handleShowSubscriptionModal
                         }
                         className={
                           props.playbackUserData.user.superfan_data

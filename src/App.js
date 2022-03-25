@@ -55,7 +55,7 @@ import useWeb3Modal from './hooks/useWeb3Modal';
 import { loadUser } from './actions/userActions';
 
 export default function App() {
-  const user = JSON.parse(window.localStorage.getItem('user'));
+  const user = useSelector((state) => state.User.user); 
   const darkMode = useSelector((state) => state.toggleDarkMode);
   let darkmode = JSON.parse(window.localStorage.getItem('darkmode'));
   const dispatch = useDispatch();
