@@ -13,7 +13,8 @@ import axios from 'axios';
 import BidModal from '../../../component/Modals/BidModal/BidModal';
 import { ShareModal } from '../../../component/Modals/ShareModal/ShareModal';
 import { RadioGroup } from '@headlessui/react';
-
+import { useHistory } from "react-router-dom";
+import useWeb3Modal  from '../../../hooks/useWeb3Modal';
 moment().format();
 
 const PlayBackCard = (props) => {
@@ -23,7 +24,8 @@ const PlayBackCard = (props) => {
   const [like, setLike] = useState(0);
   const [userreact, setUserreact] = useState('');
   const ref = React.createRef();
-
+  const history = useHistory();
+  const [loadWeb3Modal, logoutOfWeb3Modal] = useWeb3Modal();
   //let history = useHistory();
   let sharable_data = `${process.env.REACT_APP_CLIENT_URL}/playback/${
     props.playbackUserData.user ? props.playbackUserData.user.username : ''
@@ -152,7 +154,13 @@ const PlayBackCard = (props) => {
   const handleShowBidModal = () => setShowBidModal(true);
 
   const [showReport, setShowReport] = useState(false);
-  const handleReportShow = () => setShowReport(true);
+  const handleReportShow = () => {
+    if(user){
+    setShowReport(true);
+  }else{
+    loadWeb3Modal();
+  }
+  }
   const handleReportClose = () => setShowReport(false);
 
   const [showReportSubmitThankyou, setShowReportSubmitThankyou] = useState(false);
@@ -211,7 +219,8 @@ const PlayBackCard = (props) => {
 
   const handlereaction = (videoprops) => {
     if (!user) {
-      // window.location.href = '/signup';
+      loadWeb3Modal();
+return;
     }
     if (userreact === '') {
       const reactionData = {
@@ -336,6 +345,13 @@ const PlayBackCard = (props) => {
   //     window.location.href = '/signup';
   //   }
   // };
+  const handleClick = () =>{
+    if(user){
+      history.push(`/profile/${props.playbackUserData.user.username}/`);
+    }else{
+      loadWeb3Modal();
+    }
+  }
 
   return (
     <>
@@ -347,7 +363,7 @@ const PlayBackCard = (props) => {
           <div className="sm:rounded-xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary">
             <div className=" pb-4 ">
               <div className="flex   text-black text-sm font-medium   px-4  py-3">
-                <Link to={`/profile/${props.playbackUserData.user.username}/`} className="mr-4">
+                <a onClick={handleClick} className="mr-4 cursor-pointer">
                   <img
                     src={
                       props.playbackUserData.user.profile_image
@@ -357,13 +373,13 @@ const PlayBackCard = (props) => {
                     alt=""
                     className="  w-16 h-14    rounded-full    self-start"
                   />
-                </Link>
+                </a>
                 <div className="w-full flex  justify-between mt-2">
                   <div>
                     <div className="w-full self-center  ">
-                      <Link
-                        to={`/profile/${props.playbackUserData.user.username}/`}
-                        className="2xl:text-sm lg:text-xs text-sm text-gray-500  mb-2"
+                      <a
+                        onClick={handleClick}
+                        className="2xl:text-sm lg:text-xs text-sm text-gray-500  mb-2 cursor-pointer"
                       >
                         <div className="flex align-middle">
                           <p className="text-white mr-1">{props.playbackUserData.user.name}</p>
@@ -376,7 +392,7 @@ const PlayBackCard = (props) => {
                         <p className="text-white text-opacity-40">
                           {props.playbackUserData.user.username}
                         </p>
-                      </Link>{' '}
+                      </a>{' '}
                       <button
                         onClick={()=>{
                           user != null
@@ -507,10 +523,10 @@ const PlayBackCard = (props) => {
               </div>
             </div>
             <div className="flex justify-around border-t border-opacity-20 mx-2">
-              {user && user.username != props.playbackUserData.user.username ? (
+              {user==null || user.username != props.playbackUserData.user.username ? (
                 <div className="flex text-white  items-center justify-center text-sm font-medium  text-center px-4  py-3">
                   <p
-                    // onClick={handlereaction}
+                    onClick={handlereaction}
                     className="w-full mt-2 text-center cursor-pointer opacity-50 hover:opacity-100"
                   >
                     <i
@@ -534,7 +550,7 @@ const PlayBackCard = (props) => {
                   <i className="fas fa-share mr-2"></i>Share
                 </p>
               </div>
-              {user && user.username != props.playbackUserData.user.username ? (
+              {user==null ||  user.username != props.playbackUserData.user.username ? (
                 <div className="flex  text-white  items-center justify-center text-sm font-medium  text-center px-4  py-3">
                   <p
                     onClick={handleReportShow}
