@@ -13,8 +13,9 @@ import axios from 'axios';
 import BidModal from '../../../component/Modals/BidModal/BidModal';
 import { ShareModal } from '../../../component/Modals/ShareModal/ShareModal';
 import { RadioGroup } from '@headlessui/react';
-import { useHistory } from "react-router-dom";
-import useWeb3Modal  from '../../../hooks/useWeb3Modal';
+import { useHistory } from 'react-router-dom';
+import useWeb3Modal from '../../../hooks/useWeb3Modal';
+import SuperfanModal from '../../../component/Modals/SuperfanModal/superfan-modal';
 moment().format();
 
 const PlayBackCard = (props) => {
@@ -155,12 +156,12 @@ const PlayBackCard = (props) => {
 
   const [showReport, setShowReport] = useState(false);
   const handleReportShow = () => {
-    if(user){
-    setShowReport(true);
-  }else{
-    loadWeb3Modal();
-  }
-  }
+    if (user) {
+      setShowReport(true);
+    } else {
+      loadWeb3Modal();
+    }
+  };
   const handleReportClose = () => setShowReport(false);
 
   const [showReportSubmitThankyou, setShowReportSubmitThankyou] = useState(false);
@@ -201,7 +202,7 @@ const PlayBackCard = (props) => {
       setShowOtherReport(false);
       setShowReportSubmitThankyou(true);
     } else {
-      // window.location.href = '/signup';
+      loadWeb3Modal();
     }
   };
 
@@ -220,7 +221,7 @@ const PlayBackCard = (props) => {
   const handlereaction = (videoprops) => {
     if (!user) {
       loadWeb3Modal();
-return;
+      return;
     }
     if (userreact === '') {
       const reactionData = {
@@ -345,14 +346,13 @@ return;
   //     window.location.href = '/signup';
   //   }
   // };
-  const handleClick = () =>{
-    if(user){
+  const handleClick = () => {
+    if (user) {
       history.push(`/profile/${props.playbackUserData.user.username}/`);
-    }else{
+    } else {
       loadWeb3Modal();
     }
-  }
-
+  };
   return (
     <>
       {props.playbackUserData.user ? (
@@ -362,60 +362,41 @@ return;
         >
           <div className="sm:rounded-xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary">
             <div className=" pb-4 ">
-              <div className="flex   text-black text-sm font-medium   px-4  py-3">
-                <a onClick={handleClick} className="mr-4 cursor-pointer">
-                  <img
-                    src={
-                      props.playbackUserData.user.profile_image
-                        ? props.playbackUserData.user.profile_image
-                        : person
-                    }
-                    alt=""
-                    className="  w-16 h-14    rounded-full    self-start"
-                  />
-                </a>
-                <div className="w-full flex  justify-between mt-2">
-                  <div>
-                    <div className="w-full self-center  ">
-                      <a
-                        onClick={handleClick}
-                        className="2xl:text-sm lg:text-xs text-sm text-gray-500  mb-2 cursor-pointer"
-                      >
-                        <div className="flex align-middle">
-                          <p className="text-white mr-1">{props.playbackUserData.user.name}</p>
-                          &middot;
-                          <p className="text-white ml-1 text-opacity-40 text-xs self-center align-middle">
-                            {time}
-                          </p>
-                        </div>
-
-                        <p className="text-white text-opacity-40">
-                          {props.playbackUserData.user.username}
-                        </p>
-                      </a>{' '}
-                      <button
-                        onClick={()=>{
-                          user != null
-                            && handleShowSubscriptionModal();
-                          }
-                        }
-                        className={
-                          props.playbackUserData.user.superfan_data
-                            ? ' flex dark:bg-dbeats-dark-primary border border-dbeats-light dark:hover:bg-dbeats-light p-1 2xl:text-lg lg:text-sm text-md  rounded-sm 2xl:px-4 px-4 lg:px-2      mr-3 font-semibold text-white   '
-                            : 'hidden'
-                        }
-                      >
-                        <span
-                          className={`${
-                            props.playbackUserData.user.superfan_data ? '' : 'hidden'
-                          } whitespace-nowrap flex`}
+              <div className="flex justify-between items-center  text-black text-sm font-medium   px-4  py-3">
+                <div className = 'flex'>
+                  <a onClick={handleClick} className="mr-4  w-16 h-14  cursor-pointer">
+                    <img
+                      src={
+                        props.playbackUserData.user.profile_image
+                          ? props.playbackUserData.user.profile_image
+                          : person
+                      }
+                      alt=""
+                      className="  w-14 h-14    rounded-full    self-start"
+                    />
+                  </a>
+                  <div className="flex  justify-between mt-2">
+                    <div>
+                      <div className="w-full self-center  ">
+                        <a
+                          onClick={handleClick}
+                          className="2xl:text-sm lg:text-xs text-sm text-gray-500  mb-2 cursor-pointer"
                         >
-                          🥳 Become a Superfan
-                        </span>
-                      </button>
+                          <div className="flex align-middle">
+                            <p className="text-white mr-1">{props.playbackUserData.user.name}</p>
+                            &middot;
+                            <p className="text-white ml-1 text-opacity-40 text-xs self-center align-middle">
+                              {time}
+                            </p>
+                          </div>
+
+                          <p className="text-white text-opacity-40">
+                            {props.playbackUserData.user.username}
+                          </p>
+                        </a>{' '}
+                      </div>
                     </div>
-                  </div>
-                  {/* Hiding Follow Button due to bugs 
+                    {/* Hiding Follow Button due to bugs 
                 <div>
                   <div
                     onClick={trackFollowers}
@@ -437,7 +418,27 @@ return;
                     </div>
                   </div>
                 </div> */}
+                  </div>
                 </div>
+                <button
+                  onClick={() => {
+                    if (user) handleShowSubscriptionModal();
+                    else loadWeb3Modal();
+                  }}
+                  className={
+                    props.playbackUserData.user.superfan_data
+                      ? ' flex dark:bg-dbeats-dark-primary border border-dbeats-light dark:hover:bg-dbeats-light p-1 2xl:text-lg lg:text-sm text-md  rounded-sm 2xl:px-4 px-4 lg:px-2      mr-3 font-semibold text-white   '
+                      : 'hidden'
+                  }
+                >
+                  <span
+                    className={`${
+                      props.playbackUserData.user.superfan_data ? '' : 'hidden'
+                    } whitespace-nowrap flex`}
+                  >
+                    🥳 Become a Superfan
+                  </span>
+                </button>
               </div>
 
               <div className=" text-base  dark:text-gray-200   text-gray-900 px-4  ">
@@ -466,7 +467,7 @@ return;
               />
             </div>
             <div className="flex   text-black text-sm font-medium   px-4  py-3">
-              <Link to={`/profile/${props.playbackUserData.user.username}/`} className="mr-4">
+              <a onClick={handleClick} className="mr-4">
                 <img
                   src={
                     props.playbackUserData.user.profile_image
@@ -477,7 +478,7 @@ return;
                   loading="lazy"
                   className="w-16 h-14 rounded-full self-start"
                 />
-              </Link>
+              </a>
               <div className="w-full flex justify-between mt-2">
                 <div>
                   <div className="w-full self-center  ">
@@ -523,7 +524,7 @@ return;
               </div>
             </div>
             <div className="flex justify-around border-t border-opacity-20 mx-2">
-              {user==null || user.username != props.playbackUserData.user.username ? (
+              {user == null || user.username != props.playbackUserData.user.username ? (
                 <div className="flex text-white  items-center justify-center text-sm font-medium  text-center px-4  py-3">
                   <p
                     onClick={handlereaction}
@@ -550,7 +551,7 @@ return;
                   <i className="fas fa-share mr-2"></i>Share
                 </p>
               </div>
-              {user==null ||  user.username != props.playbackUserData.user.username ? (
+              {user == null || user.username != props.playbackUserData.user.username ? (
                 <div className="flex  text-white  items-center justify-center text-sm font-medium  text-center px-4  py-3">
                   <p
                     onClick={handleReportShow}
@@ -966,6 +967,12 @@ return;
           </Container>
         </div>
       </Modal>
+      <SuperfanModal
+            userDataDetails={props.playbackUserData.user}
+            show={showSubscriptionModal}
+            handleClose={handleCloseSubscriptionModal}
+            className={`${darkMode && 'dark'}   mx-auto    mt-32 shadow `}
+          />
     </>
   );
 };
