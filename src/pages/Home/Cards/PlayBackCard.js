@@ -16,6 +16,7 @@ import { RadioGroup } from '@headlessui/react';
 import { useHistory } from 'react-router-dom';
 import useWeb3Modal from '../../../hooks/useWeb3Modal';
 import SuperfanModal from '../../../component/Modals/SuperfanModal/superfan-modal';
+
 moment().format();
 
 const PlayBackCard = (props) => {
@@ -363,7 +364,7 @@ const PlayBackCard = (props) => {
           <div className="sm:rounded-xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary">
             <div className=" pb-4 ">
               <div className="flex justify-between items-center  text-black text-sm font-medium   px-4  py-3">
-                <div className = 'flex'>
+                <div className="flex">
                   <a onClick={handleClick} className="mr-4  w-16 h-14  cursor-pointer">
                     <img
                       src={
@@ -427,16 +428,23 @@ const PlayBackCard = (props) => {
                   }}
                   className={
                     props.playbackUserData.user.superfan_data
-                      ? ' flex dark:bg-dbeats-dark-primary border border-dbeats-light dark:hover:bg-dbeats-light p-1 2xl:text-lg lg:text-sm text-md  rounded-sm 2xl:px-4 px-4 lg:px-2      mr-3 font-semibold text-white   '
+                      ? ' flex dark:bg-dbeats-dark-primary border border-dbeats-light dark:hover:bg-dbeats-light p-1   text-sm    rounded  2xl:px-4 px-4 lg:px-2      mr-1   text-white   '
                       : 'hidden'
                   }
                 >
                   <span
                     className={`${
                       props.playbackUserData.user.superfan_data ? '' : 'hidden'
-                    } whitespace-nowrap flex`}
+                    } whitespace-nowrap sm:flex hidden`}
                   >
                     🥳 Become a Superfan
+                  </span>
+                  <span
+                    className={`${
+                      props.playbackUserData.user.superfan_data ? '' : 'hidden'
+                    } whitespace-nowrap sm:hidden flex`}
+                  >
+                    Become a Superfan
                   </span>
                 </button>
               </div>
@@ -968,11 +976,11 @@ const PlayBackCard = (props) => {
         </div>
       </Modal>
       <SuperfanModal
-            userDataDetails={props.playbackUserData.user}
-            show={showSubscriptionModal}
-            handleClose={handleCloseSubscriptionModal}
-            className={`${darkMode && 'dark'}   mx-auto    mt-32 shadow `}
-          />
+        userDataDetails={props.playbackUserData.user}
+        show={showSubscriptionModal}
+        handleClose={handleCloseSubscriptionModal}
+        className={`${darkMode && 'dark'}   mx-auto    mt-32 shadow `}
+      />
     </>
   );
 };

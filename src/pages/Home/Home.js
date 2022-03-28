@@ -14,9 +14,11 @@ import MainToolbar from '../../component/Toolbar/main-toolbar';
 import animationData from '../../lotties/gamers.json';
 import ResponsiveCarousel from './Cards/HomeSlider';
 import LiveCard from './Cards/LiveCard';
-import PlayBackCard from './Cards/PlayBackCard';
+import NFTCard from '../Profile/ProfileSections/Store/NFT_Store';
+
 import * as Scroll from 'react-scroll';
-import {loadTrending} from '../../actions/trendingActions'
+import { loadTrending } from '../../actions/trendingActions';
+import NFTStore from '../Profile/ProfileSections/Store/NFT_Store';
 Modal.setAppElement('#root');
 
 const Home = () => {
@@ -24,13 +26,9 @@ const Home = () => {
   const [activeStreams, setActiveStreams] = useState([]);
   const [slides, setSlides] = useState([]);
   const darkMode = useSelector((darkmode) => darkmode.toggleDarkMode);
-
-  const user = useSelector((state) => state.User.user); 
-  const Trending = useSelector((state) => state.Trending); 
-
-
+  const user = useSelector((state) => state.User.user);
+  const Trending = useSelector((state) => state.Trending);
   const [verifiedUser, setverifiedUser] = useState(null);
-
   const defaultOptions = {
     loop: true,
     autoplay: true,
@@ -94,7 +92,6 @@ const Home = () => {
   //     const interval = setInterval(() => {
   //       console.log('Logs every minute');
   //     }, 1000);
-
   //     return () => clearInterval(interval);
   //   } // This represents the unmount function, in which you need to clear your interval to prevent memory leaks.
   // }, []);
@@ -116,8 +113,7 @@ const Home = () => {
       setSlides(slidesValue);
     });
     // fetchData();
-    dispatch(loadTrending())
-    
+    dispatch(loadTrending());
 
     axios.get(`${process.env.REACT_APP_SERVER_URL}/get_verifiedusers`).then(async (repos) => {
       let data = [];
@@ -402,14 +398,17 @@ const Home = () => {
                         </div>
                       );
                     })} */}
-                    {Trending.trending && Trending.trending.map((playbackUser, i) => {
-                      return (
-                        <div key={i}>
-                          <PlayBackCard darkMode={darkMode} playbackUserData={playbackUser} />
-                          {/* {i % 3 == 0 ? <Billboard user={user}></Billboard> : null} */}
-                        </div>
-                      );
-                    })}
+                    <NFTStore></NFTStore>
+                    {Trending.trending &&
+                      Trending.trending.map((playbackUser, i) => {
+                        return (
+                          <div key={i}>
+                            {/* <PlayBackCard darkMode={darkMode} playbackUserData={playbackUser} /> */}
+
+                            {/* {i % 3 == 0 ? <Billboard user={user}></Billboard> : null} */}
+                          </div>
+                        );
+                      })}
                   </div>
                 </div>
               </div>

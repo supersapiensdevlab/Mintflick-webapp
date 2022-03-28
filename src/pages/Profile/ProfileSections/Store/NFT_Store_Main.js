@@ -4,14 +4,13 @@ import React, { useEffect, useState } from 'react';
 import Web3Modal from 'web3modal';
 import Market from '../../../../artifacts/contracts/Market.sol/NFTMarket.json';
 import { nftmarketaddress } from '../../../../functions/config';
-import NFTCard from './NFTCard';
+import NFTCardMain from './NFTCard_Main';
 import UserOwnedAssets from './UserOwnedAssets';
 import useWeb3Modal from '../../../../hooks/useWeb3Modal';
 import Web3 from 'web3';
 import { useSelector } from 'react-redux';
 import NFTMarket from './NFTMarket';
-
-export default function NFTStore(props) {
+export default function NFTStore() {
   const [nfts, setNfts] = useState([]);
   // const [seeMore, setSeeMore] = useState(false);
   // const [nameSeeMore, setNameSeeMore] = useState(false);
@@ -60,8 +59,7 @@ export default function NFTStore(props) {
         return item;
       }),
     );
-    setNfts(items.reverse());
-
+    setNfts(items);
     setLoadingState('loaded');
   }
   async function buyNft(nft) {
@@ -115,7 +113,7 @@ export default function NFTStore(props) {
   }
   return (
     <>
-      <div className="h-full lg:col-span-1 col-span-6 w-full pt-20    ">
+      <div className="h-full lg:col-span-5 col-span-6 w-full pt-20    ">
         <h1 className="   dark:text-gray-300 w-full flex   text-dbeats-dark   px-3">
           NFTs owned by you :{' '}
         </h1>
@@ -124,7 +122,7 @@ export default function NFTStore(props) {
           Marketplace{' '}
         </h1>
 
-        <div className="w-full   mx-auto col-span-1  grid grid-flow-row  grid-cols-1   gap-2 gap-x-0   sm:px-3 sm:py-5">
+        <div className="w-full   mx-auto col-span-6 lg:col-span-5 md:col-span-6 xs:col-span-6 grid grid-flow-row   xl:grid-cols-4 lg:grid-cols-3  md:grid-cols-3 grid-cols-1  gap-2 gap-x-0   sm:px-3 sm:py-5">
           {nfts ? (
             <>
               {nfts.map((nft, i) => {
@@ -136,7 +134,7 @@ export default function NFTStore(props) {
                       key={i}
                       className=" self-center  col-span-1   rounded-lg sm:mx-2  transition-all duration-300 "
                     >
-                      <NFTCard nft={nft} buyNft={buyNft} />
+                      <NFTCardMain nft={nft} buyNft={buyNft} />
                       {/* <NFTMarket nft={nft}></NFTMarket> */}
                     </div>
                   );

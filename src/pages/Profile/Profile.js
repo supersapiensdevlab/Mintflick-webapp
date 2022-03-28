@@ -9,7 +9,7 @@ import animationData from '../../lotties/error-animation.json';
 import ChannelSection from './ProfileSections/ChannelSection';
 import ChatRoom from './ProfileSections/ChatRoom/ChatRoom';
 import ProfileDetails from './ProfileSections/ProfileDetails/ProfileDetails';
-import NFTStore from './ProfileSections/Store/NFT_Store';
+import NFTStore from './ProfileSections/Store/NFT_Store_Main';
 import Ticket from '../../Ticket';
 import { useDispatch } from 'react-redux';
 import useWeb3Modal from '../../hooks/useWeb3Modal';
@@ -41,7 +41,7 @@ const Profile = () => {
 
   const dispatch = useDispatch();
   const value = useSelector((state) => state.User.user);
-  useEffect(async() => {
+  useEffect(async () => {
     if (value) {
       if (value.username === urlUsername) {
         setUser(value);
