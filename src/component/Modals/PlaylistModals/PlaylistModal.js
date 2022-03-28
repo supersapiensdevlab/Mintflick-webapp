@@ -1,11 +1,11 @@
 import axios from 'axios';
 import React, { useState } from 'react';
 import Modal from 'react-modal';
-import { useSelector } from 'react-redux';
-
-const user = JSON.parse(window.localStorage.getItem('user'));
+import { useDispatch, useSelector } from 'react-redux';
 
 const NewPlaylist = (props) => {
+  const user = useSelector((state) => state.User.user);
+  const dispatch = useDispatch();
   const darkMode = useSelector((state) => state.toggleDarkMode);
 
   const [playlist, setPlaylist] = useState('');
@@ -97,8 +97,9 @@ const NewPlaylist = (props) => {
 };
 
 export const Playlist = (props) => {
+  const user = useSelector((state) => state.User.user);
+  const dispatch = useDispatch();
   const darkMode = useSelector((state) => state.toggleDarkMode);
-
   const [showNewPlaylist, setShowNewPlaylist] = useState(false);
   const handleCloseNewPlaylist = () => setShowNewPlaylist(false);
   const handleShowNewPlaylist = () => setShowNewPlaylist(true);

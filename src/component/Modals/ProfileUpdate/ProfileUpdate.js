@@ -1,12 +1,13 @@
 import axios from 'axios';
 import React, { useState } from 'react';
 import Modal from 'react-modal';
-
+import { useDispatch } from 'react-redux';
+import {loadUser} from '../../../actions/userActions';
 const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayName }) => {
   const [buttonText, setButtonText] = useState('Click Here');
   const [loader, setLoader] = useState(false);
   const [existingValue, setExistingValue] = useState(null);
-
+  const dispatch = useDispatch();
   const [newData, setNewData] = useState({
     name: userData.name,
     email: userData.email,
@@ -51,13 +52,14 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
       data: data,
       headers: {
         'content-type': 'application/json',
-        'auth-token':localStorage.getItem('authtoken')
+        'auth-token': localStorage.getItem('authtoken'),
       },
     })
       .then((res) => {
         if (res.data === 'Invalid') {
           setExistingValue(res.data);
         } else {
+          dispatch(loadUser());
           if (userData.name !== newData.name) {
             setDisplayName(newData.name);
           }

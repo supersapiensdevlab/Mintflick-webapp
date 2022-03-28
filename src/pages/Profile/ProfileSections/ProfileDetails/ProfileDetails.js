@@ -145,7 +145,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
       setPrivate(false);
     }
     // eslint-disable-next-line
-  }, [urlUsername]);
+  }, [urlUsername,myData]);
 
   useEffect(() => {
     if (user && user.followee_count) {

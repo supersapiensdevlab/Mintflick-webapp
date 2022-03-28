@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { Container, Row } from 'react-bootstrap';
 import Modal from 'react-modal';
 import maticLogo from '../../../assets/graphics/polygon-matic-logo.svg';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import dbeatsLogoBnW from '../../../assets/images/Logo/logo-blacknwhite.png';
 import person from '../../../assets/images/profile.svg';
 import axios from 'axios';
@@ -18,8 +18,8 @@ moment().format();
 
 const PlayBackCard = (props) => {
   const [playing, setPlaying] = useState(false);
-  const user = JSON.parse(window.localStorage.getItem('user'));
-
+  const user = useSelector((state) => state.User.user);
+  const dispatch = useDispatch();
   const [like, setLike] = useState(0);
   const [userreact, setUserreact] = useState('');
   const ref = React.createRef();
@@ -377,11 +377,11 @@ const PlayBackCard = (props) => {
                           {props.playbackUserData.user.username}
                         </p>
                       </Link>{' '}
-                      {console.log(props.playbackUserData.user)}
                       <button
-                        onClick={
+                        onClick={()=>{
                           user != null
-                            && handleShowSubscriptionModal
+                            && handleShowSubscriptionModal();
+                          }
                         }
                         className={
                           props.playbackUserData.user.superfan_data

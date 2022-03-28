@@ -23,8 +23,7 @@ export default function Track() {
   const dispatch = useDispatch();
   const darkMode = useSelector((state) => state.toggleDarkMode);
   const audius = useSelector((state) => state.toggleAudius);
-  const user = JSON.parse(window.localStorage.getItem('user'));
-
+  const user = useSelector((state) => state.User.user);
   const [firstPlayed, setFirstPlay] = useState(false);
   const [songDetails, setDetails] = useState({
     id: '',

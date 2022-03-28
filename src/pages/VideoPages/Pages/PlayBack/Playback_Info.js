@@ -444,10 +444,7 @@ const PlayBackInfo = (props) => {
     setArrayData([]);
     get_User();
     fetchData();
-    let value = JSON.parse(window.localStorage.getItem('user'));
-    ////console.log(value);
-
-    if (user ? value.username === props.video_username : false) {
+    if (user ? user.username === props.video_username : false) {
       setPrivate(true);
     } else {
       setPrivate(false);

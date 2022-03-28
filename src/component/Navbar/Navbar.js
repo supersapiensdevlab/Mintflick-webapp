@@ -31,7 +31,7 @@ const NavBar = () => {
 
   const [notification, setNotification] = useState([]);
 
-  const user = useSelector((state) => state.User.user); //JSON.parse(window.localStorage.getItem('user'));
+  const user = useSelector((state) => state.User.user); 
 
   const wrapperRef = useRef(null);
 

@@ -1,12 +1,12 @@
 import axios from 'axios';
 import React, { useEffect } from 'react';
 import Modal from 'react-modal';
-import { useSelector } from 'react-redux';
-
+import { useSelector ,useDispatch} from 'react-redux';
+import {loadUser} from '../../../actions/userActions'
 function DeleteModal({ show, setShowDelete, data ,type}) {
   const darkMode = useSelector((darkmode) => darkmode.toggleDarkMode);
   const user = useSelector((state) => state.User.user);
-
+  const dispatch = useDispatch();
   const handleConfirm = () =>{
     axios({
       method: 'delete',
@@ -17,6 +17,7 @@ function DeleteModal({ show, setShowDelete, data ,type}) {
         'auth-token': localStorage.getItem('authtoken'),
       },
     }).then((res)=>{
+      dispatch(loadUser());
       setShowDelete(false);
       axios.get(`${process.env.REACT_APP_SERVER_URL}/user/${user.username}`).then((value) => {
         window.localStorage.setItem('user', JSON.stringify(value.data));

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 import { Playlist } from '../../../../component/Modals/PlaylistModals/PlaylistModal';
 import AudioPlayer from './Track_Components/AudioPlayer';
@@ -11,8 +11,9 @@ const TrackInfo = () => {
   const username = params.username;
   const track_id = params.track_id;
 
-  const user = JSON.parse(window.localStorage.getItem('user'));
-  const darkMode = useSelector((darkmode) => darkmode.toggleDarkMode);
+  const user = useSelector((state) => state.User.user);
+  const dispatch = useDispatch();
+    const darkMode = useSelector((darkmode) => darkmode.toggleDarkMode);
   const [userData, setUserData] = useState(null);
 
   const [arrayData, setArrayData] = useState([]);

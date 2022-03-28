@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { Fragment, useEffect, useState } from 'react';
 import { Spinner } from 'react-bootstrap';
 import Modal from 'react-modal';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { MultiStreamData } from '../../../../assets/Data';
 import Dropdown from '../../../../component/dropdown.component';
 import { makeStorageClient } from '../../../../component/uploadHelperFunction';
@@ -12,7 +12,8 @@ import LiveChat from '../LivePublicPage/LiveChat';
 import { io } from 'socket.io-client';
 
 const UserInfo = (props) => {
-  const user = JSON.parse(window.localStorage.getItem('user'));
+  const user = useSelector((state) => state.User.user);
+  const dispatch = useDispatch();  
   const darkMode = useSelector((darkmode) => darkmode.toggleDarkMode);
   const [playbackUrl, setPlaybackUrl] = useState('');
   const [StreamKey, setKey] = useState('');
@@ -76,7 +77,7 @@ const UserInfo = (props) => {
   const [livestreamViews, setLivestreamViews] = useState(0);
 
   useEffect(() => {
-    if (user.multistream_platform) {
+    if (user && user.multistream_platform) {
       ////console.log("hello",user.multistream_platform)
       let new_array = [];
       for (let i = 0; i < user.multistream_platform.length; i++) {
@@ -371,11 +372,6 @@ const UserInfo = (props) => {
               'auth-token': localStorage.getItem('authtoken'),
             },
           });
-          if (res.data == 'success') {
-            axios.get(`${process.env.REACT_APP_SERVER_URL}/user/${user.username}`).then((value) => {
-              window.localStorage.setItem('user', JSON.stringify(value.data));
-            });
-          }
         })
         .catch((err) => {
           setUploadingFile(false);
@@ -409,7 +405,7 @@ const UserInfo = (props) => {
   // console.log(user);
   useEffect(() => {
     if (!user) {
-      // window.location.href = '/signup';
+      window.location.href = '/';
     }
   }, []);
 
