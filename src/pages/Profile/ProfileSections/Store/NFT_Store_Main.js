@@ -19,9 +19,6 @@ export default function NFTStore() {
   const user = useSelector((state) => state.User.user);
 
   const [loadingState, setLoadingState] = useState('not-loaded');
-  useEffect(() => {
-    if (!provider) loadWeb3Modal();
-  }, [provider]);
 
   useEffect(() => {
     if (provider) loadNFTs();

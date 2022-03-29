@@ -21,7 +21,7 @@ export default function NFTStore(props) {
 
   const [loadingState, setLoadingState] = useState('not-loaded');
   useEffect(() => {
-    if (!provider) loadWeb3Modal();
+    //if (!provider) loadWeb3Modal();
   }, [provider]);
 
   useEffect(() => {
@@ -46,7 +46,7 @@ export default function NFTStore(props) {
       data.map(async (i) => {
         const tokenUri = await marketContract.methods.tokenURI(i.tokenId).call();
         const meta = await axios.get(tokenUri);
-        console.log('TOKEN URI:', tokenUri);
+        //console.log('TOKEN URI:', tokenUri);
         let price = ethers.utils.formatUnits(i.price.toString(), 'ether');
         let item = {
           price,
@@ -104,27 +104,27 @@ export default function NFTStore(props) {
     await tx.wait();
   }
 
-  if (loadingState === 'loaded' && !nfts.length) {
-    return (
-      <div className="h-max lg:col-span-5 col-span-6 w-full mt-20     ">
-        <h1 className="   text-gray-300 w-full flex ">NFTs owned by you: </h1>
-        <UserOwnedAssets resellOwnedItem={resellOwnedItem}></UserOwnedAssets>
-        <h1 className=" text-gray-300 w-full flex mt-10">No items in marketplace</h1>
-      </div>
-    );
-  }
+  // if (loadingState === 'loaded' && !nfts.length) {
+  //   return (
+  //     <div className="h-max lg:col-span-5 col-span-6 w-full mt-20     ">
+  //       <h1 className="   text-gray-300 w-full flex ">NFTs owned by you: </h1>
+  //       <UserOwnedAssets resellOwnedItem={resellOwnedItem}></UserOwnedAssets>
+  //       <h1 className=" text-gray-300 w-full flex mt-10">No items in marketplace</h1>
+  //     </div>
+  //   );
+  // }
   return (
     <>
-      <div className="h-full lg:col-span-1 col-span-6 w-full pt-20    ">
-        <h1 className="   dark:text-gray-300 w-full flex   text-dbeats-dark   px-3">
+      <div className="h-full lg:col-span-1 col-span-6 w-full     ">
+        {/* <h1 className="   dark:text-gray-300 w-full flex   text-dbeats-dark   px-3">
           NFTs owned by you :{' '}
         </h1>
         <UserOwnedAssets resellOwnedItem={resellOwnedItem}></UserOwnedAssets>
         <h1 className="   dark:text-gray-300 w-full flex   text-dbeats-dark   pt-5  px-3">
           Marketplace{' '}
-        </h1>
+        </h1> */}
 
-        <div className="w-full   mx-auto col-span-1  grid grid-flow-row  grid-cols-1   gap-2 gap-x-0   sm:px-3 sm:py-5">
+        <div className="w-full   mx-auto col-span-1  grid grid-flow-row  grid-cols-1   gap-2 gap-x-0   sm:px-3 sm:py-0 py-5">
           {nfts ? (
             <>
               {nfts.map((nft, i) => {

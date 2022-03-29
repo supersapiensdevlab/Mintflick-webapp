@@ -9,6 +9,7 @@ import { createProvider } from '../actions/web3Actions';
 import { web3Login } from '../actions/userActions';
 import axios from 'axios';
 import { useHistory } from 'react-router-dom';
+import { logout } from '../actions/userActions';
 
 //import WalletConnectProvider from "@walletconnect/web3-provider";
 
@@ -17,7 +18,9 @@ import { useHistory } from 'react-router-dom';
 //const INFURA_ID =  "https://polygon-mumbai.infura.io/v3/a186bf6fba224d889e3facc647134699";
 
 const NETWORK_NAME = 'mumbai';
-
+const torus = new Torus({
+  buttonPosition: 'bottom-left', // customize position of torus icon in dapp
+});
 const useWeb3Modal = (config = {}) => {
   const history = useHistory();
 
@@ -26,11 +29,6 @@ const useWeb3Modal = (config = {}) => {
 
   const provider = useSelector((state) => state.web3Reducer.provider);
 
-  const torus = new Torus({
-    buttonPosition: 'bottom-left', // customize position of torus icon in dapp
-  });
-  window.torus = torus;
-
   const dispatch = useDispatch();
 
   // Open wallet selection modal.
@@ -38,7 +36,7 @@ const useWeb3Modal = (config = {}) => {
     //console.log(torus);
     let userInfo = null;
     if (!torus.isInitialized) {
-      const torusinit = await torus.init({
+      await torus.init({
         enableLogging: true,
         network: {
           host: 'matic', // mandatory https://rpc-mumbai.maticvigil.com
@@ -49,12 +47,10 @@ const useWeb3Modal = (config = {}) => {
           tickerName: 'MATIC',
         },
       });
-      console.log('init ');
-      console.log(torusinit);
+      console.log('init '); //, torusinit);
     }
     if (!torus.isLoggedIn) {
-      const toruslogin = await torus.login();
-      console.log(toruslogin);
+      await torus.login();
       userInfo = await torus.getUserInfo();
       window.localStorage.setItem(
         'torus',
@@ -64,6 +60,7 @@ const useWeb3Modal = (config = {}) => {
           profileImage: userInfo.profileImage,
         }),
       );
+      console.log(torus);
       console.log('Hi', userInfo.name, ' registered with', userInfo.email);
       /*
         email: string;
@@ -103,38 +100,28 @@ const useWeb3Modal = (config = {}) => {
     return web3.currentProvider;
   }, []);
 
-  const logoutOfWeb3Modal = useCallback(
-    async function () {
-      if (torus.isLoggedIn) {
-        await torus.logout();
-      } else if (torus.isInitialized) {
-        torus.cleanUp();
-      }
-      console.log(torus);
-      console.log('logging out');
-      return provider;
-    },
-    [!torus.isLoggedIn],
-  );
+  const logoutOfWeb3Modal = useCallback(async function () {
+    torus.logout();
+    torus.cleanUp();
+
+    dispatch(clearProvider());
+    console.log(torus);
+    console.log('logging out');
+
+    window.localStorage.removeItem('torus');
+  }, []);
+
   const logoutweb3 = useCallback(async function () {
-    if (torus) {
-      await torus.cleanUp();
-      console.log(window.torus);
-      console.log('cleared');
-    }
+    await torus.logout();
+    await torus.cleanUp();
+    dispatch(logout());
+
+    dispatch(clearProvider());
+    console.log(torus);
+    console.log('logging out');
   }, []);
 
   // If autoLoad is enabled and the the wallet had been loaded before, load it automatically now.
-  useEffect(() => {
-    if (autoLoad && !autoLoaded && torus.cachedProvider) {
-      loadWeb3Modal();
-      setAutoLoaded(true);
-    }
-  }, [autoLoad, autoLoaded, loadWeb3Modal, setAutoLoaded, torus.cachedProvider]);
-
-  useEffect(() => {
-    //console.log(torus);
-  }, [torus]);
 
   return [loadWeb3Modal, logoutOfWeb3Modal, logoutweb3];
 };

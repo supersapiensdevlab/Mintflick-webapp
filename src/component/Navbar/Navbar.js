@@ -31,7 +31,7 @@ const NavBar = () => {
 
   const [notification, setNotification] = useState([]);
 
-  const user = useSelector((state) => state.User.user); 
+  const user = useSelector((state) => state.User.user);
 
   const wrapperRef = useRef(null);
 
@@ -54,7 +54,7 @@ const NavBar = () => {
   // Auth functions
   const handleLogout = () => {
     logoutweb3();
-    window.localStorage.clear();
+
     // window.location.href = '/';
   };
 

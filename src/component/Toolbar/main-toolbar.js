@@ -7,7 +7,6 @@ import {
   UploadNFTModal,
   UploadTrackModal,
   UploadVideoModal,
-  PictureModal,
 } from '../Modals/NavbarModals';
 
 import useWeb3Modal from '../../hooks/useWeb3Modal';
@@ -38,7 +37,7 @@ const MainToolbar = () => {
 
   //Loader
   const [loader, setLoader] = useState(true);
-  const user = useSelector((state) => state.User.user); 
+  const user = useSelector((state) => state.User.user);
   const [iceBreaker, setIceBreaker] = useState(['Hello World!']);
 
   const questions = [
@@ -146,7 +145,7 @@ const MainToolbar = () => {
               </div>
             </div>
 
-            <div
+            {/* <div
               onClick={() => {
                 handleShowPictureModal();
                 handleCloseVideoUpload();
@@ -162,7 +161,7 @@ const MainToolbar = () => {
                   Photo
                 </p>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
@@ -195,14 +194,6 @@ const MainToolbar = () => {
         setShowNFTUpload={setShowNFTUpload}
         handleCloseNFTUpload={handleCloseNFTUpload}
         handleShowNFTUpload={handleShowNFTUpload}
-        loader={loader}
-        setLoader={setLoader}
-      />{' '}
-      <PictureModal
-        showPictureModal={showPictureModal}
-        setShowPictureModal={setShowPictureModal}
-        handleClosePictureModal={handleClosePictureModal}
-        handleShowPictureModal={handleShowPictureModal}
         loader={loader}
         setLoader={setLoader}
       />{' '}

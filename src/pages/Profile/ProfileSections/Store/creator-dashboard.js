@@ -55,11 +55,6 @@ export default function CreateItem() {
     }
   }
 
-  useEffect(() => {
-    if (!provider) loadWeb3Modal();
-    console.log(provider);
-  }, [provider]);
-
   async function createSale(url) {
     // const connection = await web3Modal.connect();
     console.log('provider', provider);

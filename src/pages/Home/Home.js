@@ -399,16 +399,15 @@ const Home = () => {
                       );
                     })} */}
                     <NFTStore></NFTStore>
-                    {Trending.trending &&
+                    {/* {Trending.trending &&
                       Trending.trending.map((playbackUser, i) => {
                         return (
                           <div key={i}>
                             {/* <PlayBackCard darkMode={darkMode} playbackUserData={playbackUser} /> */}
-
-                            {/* {i % 3 == 0 ? <Billboard user={user}></Billboard> : null} */}
-                          </div>
+                    {/* {i % 3 == 0 ? <Billboard user={user}></Billboard> : null} */}
+                    {/* </div>
                         );
-                      })}
+                      })} */}
                   </div>
                 </div>
               </div>
