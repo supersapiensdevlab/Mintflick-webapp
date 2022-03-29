@@ -41,6 +41,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
   const [isMailVerified, setIsMailVerified] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
   const [subscribeLoader, setSubscribeLoader] = useState(true);
+  const [unfollowLoader, setUnfollowLoader] = useState(true);
 
   const handleShow = () => setShow(true);
   const [showUpdate, setShowUpdate] = useState(false);
@@ -263,12 +264,12 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
     return classes.filter(Boolean).join(' ');
   }
 
-  const trackFollow = (value, i) => {
+  const trackFollow = (value) => {
+    setSubscribeLoader(false)
     if (!myData) {
       loadWeb3Modal();
       return;
     }
-    console.log(i);
     let followData = {
       following: `${value}`,
       follower: `${myData.username}`,
@@ -284,6 +285,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
     })
       .then(function (response) {
         if (response) {
+          setSubscribeLoader(true)
           dispatch(loadUser());
           console.log(response);
         } else {
@@ -296,6 +298,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
   };
 
   const trackUnfollow = (value) => {
+    setUnfollowLoader(false)
     if (!myData) {
       loadWeb3Modal();
       return;
@@ -315,6 +318,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
     })
       .then(function (response) {
         if (response) {
+          setUnfollowLoader(true)
           dispatch(loadUser());
         } else {
           alert('Invalid Login');
@@ -1026,8 +1030,8 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
         isOpen={showFollowers}
         className={
           darkMode
-            ? 'h-max lg:w-1/3 w-full mx-auto 2xl:mt-32 lg:mt-16 mt-20 bg-dbeats-dark-alt rounded-xl'
-            : 'h-max lg:w-1/3 w-full mx-auto 2xl:mt-32 lg:mt-16 mt-20 bg-gray-50 rounded-xl shadow-2xl'
+            ? 'h-max lg:w-1/3 w-full mx-auto 2xl:mt-60 lg:mt-16 mt-20 bg-dbeats-dark-alt rounded-xl'
+            : 'h-max lg:w-1/3 w-full mx-auto 2xl:mt-60 lg:mt-16 mt-20 bg-gray-50 rounded-xl shadow-2xl'
         }
       >
         <div className={`${darkMode && 'dark'} p-2 h-max`}>
@@ -1060,29 +1064,41 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                 {followerSearchOutput.map((value, i) => {
                   return (
                     <div key={i} className="w-full flex justify-between px-3">
-                      <a key={i} href={`/profile/${value}`} onClick={handleCloseFollowers}>
+                      <Link key={i} to={`/profile/${value}`} onClick={handleCloseFollowers}>
                         <p className="mb-1.5 w-full px-3 py-1.5  hover:text-dbeats-light cursor-pointer">
                           {value}
                         </p>
-                      </a>
+                      </Link>
                       {myData && !myData.followee_count.includes(value) ? (
+                        <div className='flex'>
                         <button
                           onClick={() => {
-                            trackFollow(value, i);
+                            trackFollow(value);
                           }}
                           className="px-3 rounded-sm h-8  bg-dbeats-light text-white"
                         >
-                          {followText}
+                          Follow
                         </button>
+                        <div
+                            hidden={subscribeLoader}
+                            className="w-3 h-3 ml-2 border-t-4 border-b-4 border-white rounded-full animate-spin"
+                          ></div>
+                        </div>
                       ) : (
+                        <div className='flex'>
                         <button
                           onClick={() => {
                             trackUnfollow(value);
                           }}
-                          className="px-1.5 rounded-sm h-8  text-dbeats-light border-0 bg-none font-semibold"
+                          className="px-1.5 rounded-sm h-8  text-dbeats-light border-0 bg-none"
                         >
                           Unfollow
                         </button>
+                        <div
+                            hidden={unfollowLoader}
+                            className="w-3 h-3 ml-2 border-t-4 border-b-4 border-white rounded-full animate-spin"
+                          ></div>
+                        </div>
                       )}
                     </div>
                   );
@@ -1096,8 +1112,8 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
         isOpen={showFollowing}
         className={
           darkMode
-            ? 'h-max lg:w-1/3 w-full mx-auto 2xl:mt-32 lg:mt-16 mt-20 bg-dbeats-dark-alt rounded-xl'
-            : 'h-max lg:w-1/3 w-full mx-auto 2xl:mt-32 lg:mt-16 mt-20 bg-gray-50 rounded-xl shadow-2xl'
+            ? 'h-max lg:w-1/3 w-full mx-auto 2xl:mt-60 lg:mt-8 mt-20 bg-dbeats-dark-alt rounded-xl'
+            : 'h-max lg:w-1/3 w-full mx-auto 2xl:mt-60 lg:mt-8 mt-20 bg-gray-50 rounded-xl shadow-2xl'
         }
       >
         <div className={`${darkMode && 'dark'} p-2 h-max`}>
@@ -1130,21 +1146,28 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                 {searchOutput.map((value, i) => {
                   return (
                     <div key={i} className="flex justify-between px-2 mb-1.5">
-                      <a href={`/profile/${value}`} onClick={handleCloseFollowing}>
+                      <Link to={`/profile/${value}`} onClick={handleCloseFollowing}>
                         <p className=" w-full px-3 py-1.5 hover:text-dbeats-light cursor-pointer">
                           {value}
                         </p>
-                      </a>
+                      </Link>
                       {myData && !myData.followee_count.includes(value) ? (
+                        <div className='flex'>
                         <button
                           onClick={() => {
-                            trackFollow(value, i);
+                            trackFollow(value);
                           }}
                           className="px-3 rounded-sm h-8  bg-dbeats-light text-white"
                         >
                           Follow
                         </button>
+                        <div
+                            hidden={subscribeLoader}
+                            className="w-3 h-3 ml-2 border-t-4 border-b-4 border-white rounded-full animate-spin"
+                          ></div>
+                        </div>
                       ) : (
+                        <div className='flex'>
                         <button
                           onClick={() => {
                             trackUnfollow(value);
@@ -1153,6 +1176,11 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                         >
                           Unfollow
                         </button>
+                        <div
+                            hidden={unfollowLoader}
+                            className="w-3 h-3 ml-2 border-t-4 border-b-4 border-white rounded-full animate-spin"
+                          ></div>
+                        </div>
                       )}
                     </div>
                   );
@@ -1166,8 +1194,8 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
         isOpen={showSuperfan}
         className={
           darkMode
-            ? 'h-max lg:w-1/3 w-full mx-auto 2xl:mt-32 lg:mt-16 mt-20 bg-dbeats-dark-alt rounded-xl'
-            : 'h-max lg:w-1/3 w-full mx-auto 2xl:mt-32 lg:mt-16 mt-20 bg-gray-50 rounded-xl shadow-2xl'
+            ? 'h-max lg:w-1/3 w-full mx-auto 2xl:mt-60 lg:mt-16 mt-20 bg-dbeats-dark-alt rounded-xl'
+            : 'h-max lg:w-1/3 w-full mx-auto 2xl:mt-60 lg:mt-16 mt-20 bg-gray-50 rounded-xl shadow-2xl'
         }
       >
         <div className={`${darkMode && 'dark'} p-2 h-max`}>
@@ -1199,11 +1227,11 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
               <div className="w-full max-h-60 overflow-y-scroll">
                 {user.superfan_to.map((value, i) => {
                   return (
-                    <a key={i} href={`/profile/${value.username}`} onClick={handleCloseSuperfan}>
+                    <Link key={i} to={`/profile/${value.username}`} onClick={handleCloseSuperfan}>
                       <p className="mb-1.5 w-full px-3 py-1.5 hover:text-dbeats-light cursor-pointer">
                         {value.username}
                       </p>
-                    </a>
+                    </Link>
                   );
                 })}
               </div>
