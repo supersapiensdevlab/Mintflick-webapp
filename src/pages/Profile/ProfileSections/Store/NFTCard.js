@@ -18,6 +18,7 @@ import { useHistory } from 'react-router-dom';
 import useWeb3Modal from '../../../../hooks/useWeb3Modal';
 import SuperfanModal from '../../../../component/Modals/SuperfanModal/superfan-modal';
 import dbeatsDAOLogo from '../../../../assets/images/dbeats-logo.png';
+// import Addcomment from './comments/Addcomment';
 
 const NFTCard = ({ nft, buyNft }) => {
   //console.log(nft);
@@ -759,21 +760,37 @@ const NFTCard = ({ nft, buyNft }) => {
                           : `fas fa-heart mr-2`
                       }
                     ></i>
-                    Like
+                    <span className='text-dbeats-light font-extrabold	'>Like</span>
                   </p>
                 </div>
               ) : (
                 <></>
               )}
+                {user == null || user.username != cardDetails.user.username ? (
+                <div className="flex text-white  items-center justify-center text-sm font-medium  text-center px-4  py-3">
+                  <p
+                    onClick={handlereaction}
+                    className="w-full mt-2 text-center cursor-pointer opacity-50 hover:opacity-100"
+                  >
+                    <i className="fa-solid fa-comment text-white"></i>
+                    <span className='text-dbeats-light font-extrabold	'> Comment</span>
+                  </p>
+                </div>
+              ) : (
+                <></>
+              )}
+    
+
               <div
                 onClick={handleShareShow}
                 className="flex text-white  items-center justify-center text-sm font-medium  text-center px-4  py-3"
               >
                 <p className="w-full mt-2 text-center cursor-pointer opacity-50 hover:opacity-100">
-                  <i className="fas fa-share mr-2"></i>Share
+                <i className="fa-solid fa-share-nodes"></i>Share
                 </p>
               </div>
-              {user == null || user.username != cardDetails.user.username ? (
+
+              {/* {user == null || user.username != cardDetails.user.username ? (
                 <div className="flex  text-white  items-center justify-center text-sm font-medium  text-center px-4  py-3">
                   <p
                     onClick={handleReportShow}
@@ -784,8 +801,9 @@ const NFTCard = ({ nft, buyNft }) => {
                 </div>
               ) : (
                 <></>
-              )}
+              )} */}
             </div>
+            {/* <Addcomment></Addcomment> */}
           </div>
         </div>
       ) : null}
