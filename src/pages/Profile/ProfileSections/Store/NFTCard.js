@@ -17,6 +17,7 @@ import { RadioGroup } from '@headlessui/react';
 import { useHistory } from 'react-router-dom';
 import useWeb3Modal from '../../../../hooks/useWeb3Modal';
 import SuperfanModal from '../../../../component/Modals/SuperfanModal/superfan-modal';
+import dbeatsDAOLogo from '../../../../assets/images/dbeats-logo.png';
 
 const NFTCard = ({ nft, buyNft }) => {
   //console.log(nft);
@@ -25,12 +26,16 @@ const NFTCard = ({ nft, buyNft }) => {
   const [nameSeeMore, setNameSeeMore] = useState(false);
 
   const [cardDetails, setCardDetails] = useState();
+  const [ownerDetails, setOwnerDetails] = useState();
+
   let sharable_data = `${process.env.REACT_APP_CLIENT_URL}/profile/${nft.username}`;
   useEffect(async () => {
     // console.log(nft);
     const userData = {
-      walletId: nft.seller,
+      walletId: nft.creator,
     };
+
+    //Fetch Seller Details
     await axios
       .post(`${process.env.REACT_APP_SERVER_URL}/user/getuser_by_wallet`, userData, {})
       .then((value) => {
@@ -38,6 +43,25 @@ const NFTCard = ({ nft, buyNft }) => {
         // //window.location.href = '/';
 
         setCardDetails(value.data);
+        console.log(userData);
+
+        //Fetch Owner details
+        const OwnerData = {
+          walletId: nft.owner,
+        };
+        if (ownerDetails === '0x43AD46287bfA992b3777F1ec4264b649AD2eBca9') {
+          setOwnerDetails('DAO');
+        } else {
+          axios
+            .post(`${process.env.REACT_APP_SERVER_URL}/user/getuser_by_wallet`, OwnerData, {})
+            .then((value) => {
+              // window.localStorage.setItem('authtoken', JSON.stringify(value.data.jwtToken));
+              // //window.location.href = '/';
+
+              setOwnerDetails(value.data);
+              console.log('OWNER DATA : ', OwnerData);
+            });
+        }
       });
 
     if (cardDetails && user && user.your_reactions.length != 0 && cardDetails.user) {
@@ -62,6 +86,7 @@ const NFTCard = ({ nft, buyNft }) => {
   const history = useHistory();
   const [loadWeb3Modal, logoutOfWeb3Modal] = useWeb3Modal();
   //let history = useHistory();
+  const [showMore, setShowMore] = useState(false);
 
   // const setUserName = cardDetails.user.name.toLower();
   // console.log(setUserName);
@@ -541,7 +566,7 @@ const NFTCard = ({ nft, buyNft }) => {
                             </p>
                           </div>
 
-                          <p className="text-white text-opacity-40">{cardDetails.user.username}</p>
+                          <p className="text-white text-opacity-40">@{cardDetails.user.username}</p>
                         </a>{' '}
                       </div>
                     </div>
@@ -597,10 +622,22 @@ const NFTCard = ({ nft, buyNft }) => {
                 </button>
               </div>
 
-              <div className=" text-base  dark:text-gray-200   text-gray-900 px-4  ">
-                {cardDetails.user.name.slice(0, 45)}
-                {cardDetails.user.name.length > 45 ? '...' : ''}
+              <div className=" text-lg   text-white px-4  ">{nft.name}</div>
+
+              <div className=" text-base     text-opacity-50 text-white px-4  ">
+                {showMore ? nft.description : `${nft.description.substring(0, 120)}`}
+                {nft.description.length > 120 && !showMore ? '...' : null}
+                {/* {nft.description.slice(0, 120)} */}
               </div>
+
+              {nft.description.length > 120 ? (
+                <button
+                  className="btn justify-end text-right text-base  cursor-pointer   text-opacity-40 text-dbeats-light px-4"
+                  onClick={() => setShowMore(!showMore)}
+                >
+                  {showMore ? '...see less' : '...see more'}
+                </button>
+              ) : null}
             </div>
             <div
               className={`cursor-pointer w-full 2xl:h-max lg:h-max md:h-max xs:h-max min-h-full   dark:bg-black bg-black `}
@@ -627,7 +664,11 @@ const NFTCard = ({ nft, buyNft }) => {
             <div className="flex   text-black text-sm font-medium   px-4  py-3">
               <a onClick={handleClick} className="mr-4">
                 <img
-                  src={cardDetails.user.profile_image ? cardDetails.user.profile_image : person}
+                  src={
+                    nft.owner === '0x43AD46287bfA992b3777F1ec4264b649AD2eBca9'
+                      ? dbeatsDAOLogo
+                      : ownerDetails.user.profile_image
+                  }
                   alt=""
                   loading="lazy"
                   className="w-16 h-14 rounded-full self-start"
@@ -635,17 +676,41 @@ const NFTCard = ({ nft, buyNft }) => {
               </a>
               <div className="w-full flex justify-between mt-2">
                 <div>
-                  <div className="w-full self-center  ">
-                    <Link
-                      to={`/profile/${cardDetails.user.username}/`}
-                      className="2xl:text-sm lg:text-xs text-sm text-gray-500  mb-2"
-                    >
-                      <h4>{cardDetails.user.name} </h4>
-                    </Link>{' '}
-                    <div className="2xl:text-sm lg:text-xs text-sm text-gray-500 pr-2 flex  ">
-                      owner
+                  {nft.owner === '0x43AD46287bfA992b3777F1ec4264b649AD2eBca9' ? (
+                    <div className="w-full self-center  ">
+                      <Link
+                        to={`/profile/dbeatsDAO/`}
+                        className="2xl:text-sm lg:text-xs text-sm text-gray-500  mb-2"
+                      >
+                        <h4>DBeats DAO</h4>
+                      </Link>{' '}
+                      <div className="2xl:text-sm lg:text-xs text-sm text-gray-500 pr-2 flex  ">
+                        owner
+                      </div>
+                      {console.log('NFT OWNER', nft.owner)}
                     </div>
-                  </div>
+                  ) : (
+                    <div className="w-full self-center  ">
+                      {console.log('NFT OWNER', nft.owner)}
+                      <Link
+                        to={`/profile/${
+                          ownerDetails !== undefined &&
+                          ownerDetails !== 'Try Again' &&
+                          ownerDetails.user.username
+                        }/`}
+                        className="2xl:text-sm lg:text-xs text-sm text-gray-500  mb-2"
+                      >
+                        <h4>
+                          {ownerDetails !== undefined &&
+                            ownerDetails !== 'Try Again' &&
+                            ownerDetails.user.name}{' '}
+                        </h4>
+                      </Link>{' '}
+                      <div className="2xl:text-sm lg:text-xs text-sm text-gray-500 pr-2 flex  ">
+                        owner
+                      </div>
+                    </div>
+                  )}
                 </div>
                 <div className="flex ">
                   {listingPrice ? (

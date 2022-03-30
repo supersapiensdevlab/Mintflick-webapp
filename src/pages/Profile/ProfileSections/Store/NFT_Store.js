@@ -51,11 +51,13 @@ export default function NFTStore(props) {
         let item = {
           price,
           tokenId: i.tokenId,
+          creator: i.creator,
           seller: i.seller,
           owner: i.owner,
           image: meta.data.image,
           name: meta.data.name,
           description: meta.data.description,
+          external_url: meta.data.external_url,
         };
         return item;
       }),
@@ -64,6 +66,7 @@ export default function NFTStore(props) {
 
     setLoadingState('loaded');
   }
+
   async function buyNft(nft) {
     /* needs the user to sign the transaction, so will use Web3Provider and sign it */
 

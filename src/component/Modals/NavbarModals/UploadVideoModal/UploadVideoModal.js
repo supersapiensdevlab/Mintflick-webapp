@@ -279,46 +279,8 @@ const UploadVideoModal = (props) => {
         video.videoImage.length !== 0 &&
         video.videoName.length !== 0
       ) {
-        axios
-          .post(`${process.env.REACT_APP_SERVER_URL}/upload_video`, formData, {
-            headers: {
-              'content-type': 'multipart/form-data',
-              'auth-token': localStorage.getItem('authtoken'),
-            },
-          })
-          .then(async () => {
-            let url = 'https://ipfs.infura.io/ipfs/' + cid + '/meta.json';
-            console.log(url);
-            if (isNFT) createSale(url); //uncomment for minting NFT after video's meta.json is Uploaded to IPFS
-            await dispatch(loadUser());
-            const res = await axios.get(
-              `${process.env.REACT_APP_SERVER_URL}/user/getLoggedInUser`,
-              tokenConfig(),
-            );
-
-            let latestVideoId = res.data.videos[res.data.videos.length - 1].videoId;
-            setsharable_data(
-              `${process.env.REACT_APP_CLIENT_URL}/playback/${res.data.username}/${latestVideoId}`,
-            );
-            if (!isNFT) setShow(true);
-            setVideo({
-              videoName: '',
-              videoImage: '',
-              videoFile: '',
-              category: '',
-              ratings: '',
-              tags: [],
-              description: '',
-              allowAttribution: '',
-              commercialUse: '',
-              derivativeWorks: '',
-            });
-            setUploading(0);
-            props.setLoader(true);
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+        let url = 'https://ipfs.infura.io/ipfs/' + cid + '/meta.json';
+        createToken(url, formData);
       } else {
         Noty.closeAll();
         new Noty({
@@ -338,7 +300,8 @@ const UploadVideoModal = (props) => {
     return () => clearTimeout(timer);
   }, [buttonText]);
 
-  async function createSale(url) {
+  async function createToken(url, formData) {
+    var tokenId = null;
     var biconomy = new Biconomy(provider, {
       apiKey: 'Ooz6qQnPL.10a08ea0-3611-432d-a7de-34cf9c44b49b',
     });
@@ -355,13 +318,59 @@ const UploadVideoModal = (props) => {
       .onEvent(biconomy.READY, async () => {
         console.log('Biconomy is ready', user.wallet_id);
         let contract = new web3.eth.Contract(Market, nftmarketaddress);
-        let transaction = await contract.methods
+        await contract.methods
           .createToken(url, ethers.utils.parseUnits(NFTprice, 'ether'))
-          .send({ from: user.wallet_id });
-        console.log(transaction);
-        setShow(true);
-        setMinting(transaction.transactionHash);
+          .send({ from: user.wallet_id })
+          .then(async (res) => {
+            tokenId = res.events.MarketItemCreated.returnValues.tokenId;
 
+            setShow(true);
+            setMinting(res.transactionHash);
+
+            console.log('#token created : ', tokenId);
+
+            formData.append('tokenId', tokenId);
+
+            axios
+              .post(`${process.env.REACT_APP_SERVER_URL}/upload_video`, formData, {
+                headers: {
+                  'content-type': 'multipart/form-data',
+                  'auth-token': localStorage.getItem('authtoken'),
+                },
+              })
+              .then(async () => {
+                if (isNFT)
+                  //uncomment for minting NFT after video's meta.json is Uploaded to IPFS
+                  await dispatch(loadUser());
+                const res = await axios.get(
+                  `${process.env.REACT_APP_SERVER_URL}/user/getLoggedInUser`,
+                  tokenConfig(),
+                );
+
+                let latestVideoId = res.data.videos[res.data.videos.length - 1].videoId;
+                setsharable_data(
+                  `${process.env.REACT_APP_CLIENT_URL}/playback/${res.data.username}/${latestVideoId}`,
+                );
+                if (!isNFT) setShow(true);
+                setVideo({
+                  videoName: '',
+                  videoImage: '',
+                  videoFile: '',
+                  category: '',
+                  ratings: '',
+                  tags: [],
+                  description: '',
+                  allowAttribution: '',
+                  commercialUse: '',
+                  derivativeWorks: '',
+                });
+                setUploading(0);
+                props.setLoader(true);
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+          });
         // transaction
         //   .on('transactionHash', function (hash) {
         //     console.log(`Transaction hash is ${hash}`);
@@ -470,10 +479,12 @@ const UploadVideoModal = (props) => {
 
         {minting !== null ? (
           minting === true && minting !== null ? (
-            <div className="mx-3 text-dbeats-secondary-light">Confirm NFT Mint</div>
+            <div className="mx-3 text-dbeats-secondary-light mt-5">
+              ✅ Confirm NFT Mint on the Popup
+            </div>
           ) : (
             minting !== null && (
-              <div className="text-center flex mx-3">
+              <div className="text-center flex mx-3 mt-5">
                 <p className="no-underline  text-dbeats-light">🚀 NFT Minted &nbsp;</p>
                 <a
                   target={'_blank'}
@@ -802,10 +813,12 @@ const UploadVideoModal = (props) => {
                 </p>
               </div>
               {minting === true && minting !== null ? (
-                <div className="mx-3 text-dbeats-secondary-light">Confirm NFT Mint</div>
+                <div className="mx-3 text-dbeats-secondary-light mt-5">
+                  ✅ Confirm NFT Mint on the Popup
+                </div>
               ) : (
                 minting !== null && (
-                  <div className="text-center flex mx-3">
+                  <div className="text-center flex mx-3 mt-5">
                     <p className="no-underline  text-dbeats-light">🚀 NFT Minted &nbsp;</p>
                     <a
                       target={'_blank'}
