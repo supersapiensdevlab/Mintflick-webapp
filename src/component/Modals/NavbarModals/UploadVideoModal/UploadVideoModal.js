@@ -319,56 +319,60 @@ const UploadVideoModal = (props) => {
         console.log('Biconomy is ready', user.wallet_id);
         let contract = new web3.eth.Contract(Market, nftmarketaddress);
         await contract.methods
-          .createToken(url, ethers.utils.parseUnits(NFTprice, 'ether'))
+          .createToken(url)
           .send({ from: user.wallet_id })
           .then(async (res) => {
-            tokenId = res.events.MarketItemCreated.returnValues.tokenId;
+            console.log('#transaction : ', res);
+            tokenId = res.events.Transfer.returnValues.tokenId;
 
-            setShow(true);
             setMinting(res.transactionHash);
 
             console.log('#token created : ', tokenId);
+            await contract.methods
+              .createMarketItem(tokenId, ethers.utils.parseUnits(NFTprice, 'ether'))
+              .send({ from: user.wallet_id })
+              .then(async (res) => {
+                formData.append('tokenId', tokenId);
+                setShow(true);
+                axios
+                  .post(`${process.env.REACT_APP_SERVER_URL}/upload_video`, formData, {
+                    headers: {
+                      'content-type': 'multipart/form-data',
+                      'auth-token': localStorage.getItem('authtoken'),
+                    },
+                  })
+                  .then(async () => {
+                    if (isNFT)
+                      //uncomment for minting NFT after video's meta.json is Uploaded to IPFS
+                      await dispatch(loadUser());
+                    const res = await axios.get(
+                      `${process.env.REACT_APP_SERVER_URL}/user/getLoggedInUser`,
+                      tokenConfig(),
+                    );
 
-            formData.append('tokenId', tokenId);
-
-            axios
-              .post(`${process.env.REACT_APP_SERVER_URL}/upload_video`, formData, {
-                headers: {
-                  'content-type': 'multipart/form-data',
-                  'auth-token': localStorage.getItem('authtoken'),
-                },
-              })
-              .then(async () => {
-                if (isNFT)
-                  //uncomment for minting NFT after video's meta.json is Uploaded to IPFS
-                  await dispatch(loadUser());
-                const res = await axios.get(
-                  `${process.env.REACT_APP_SERVER_URL}/user/getLoggedInUser`,
-                  tokenConfig(),
-                );
-
-                let latestVideoId = res.data.videos[res.data.videos.length - 1].videoId;
-                setsharable_data(
-                  `${process.env.REACT_APP_CLIENT_URL}/playback/${res.data.username}/${latestVideoId}`,
-                );
-                if (!isNFT) setShow(true);
-                setVideo({
-                  videoName: '',
-                  videoImage: '',
-                  videoFile: '',
-                  category: '',
-                  ratings: '',
-                  tags: [],
-                  description: '',
-                  allowAttribution: '',
-                  commercialUse: '',
-                  derivativeWorks: '',
-                });
-                setUploading(0);
-                props.setLoader(true);
-              })
-              .catch((error) => {
-                console.log(error);
+                    let latestVideoId = res.data.videos[res.data.videos.length - 1].videoId;
+                    setsharable_data(
+                      `${process.env.REACT_APP_CLIENT_URL}/playback/${res.data.username}/${latestVideoId}`,
+                    );
+                    if (!isNFT) setShow(true);
+                    setVideo({
+                      videoName: '',
+                      videoImage: '',
+                      videoFile: '',
+                      category: '',
+                      ratings: '',
+                      tags: [],
+                      description: '',
+                      allowAttribution: '',
+                      commercialUse: '',
+                      derivativeWorks: '',
+                    });
+                    setUploading(0);
+                    props.setLoader(true);
+                  })
+                  .catch((error) => {
+                    console.log(error);
+                  });
               });
           });
         // transaction

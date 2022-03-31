@@ -36,8 +36,8 @@ export default function NFTStore(props) {
     window.web3 = web3;
     //const tokenContract = new ethers.Contract(nftaddress, NFT.abi, provider);
     const marketContract = new web3.eth.Contract(Market, nftmarketaddress);
-    const data = await marketContract.methods.fetchMarketItems().call();
-    console.log(data);
+    const data = await marketContract.methods.fetchTotalMintedTokens().call();
+    console.log('TOTAL MINTED NFTs:', data);
     /*
      *  map over items returned from smart contract and format
      *  them as well as fetch their token metadata

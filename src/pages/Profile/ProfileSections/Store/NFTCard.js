@@ -20,6 +20,7 @@ import SuperfanModal from '../../../../component/Modals/SuperfanModal/superfan-m
 import dbeatsDAOLogo from '../../../../assets/images/dbeats-logo.png';
 import Addcomment from './comments/Addcomment';
 import Allcomments from './comments/Allcomments';
+import { nftmarketaddress } from '../../../../functions/config';
 
 const NFTCard = ({ nft, buyNft }) => {
   //console.log(nft);
@@ -36,6 +37,7 @@ const NFTCard = ({ nft, buyNft }) => {
     const userData = {
       walletId: nft.creator,
     };
+    console.log(nft);
 
     //Fetch Seller Details
     await axios
@@ -43,23 +45,24 @@ const NFTCard = ({ nft, buyNft }) => {
       .then((value) => {
         // window.localStorage.setItem('authtoken', JSON.stringify(value.data.jwtToken));
         // //window.location.href = '/';
-
+        console.log(value);
+        console.log('ownerdetails', ownerDetails);
         setCardDetails(value.data);
-        console.log(userData);
 
         //Fetch Owner details
         const OwnerData = {
           walletId: nft.owner,
         };
-        if (ownerDetails === '0x43AD46287bfA992b3777F1ec4264b649AD2eBca9') {
+        console.log('NFT DATA:', nft);
+        if (ownerDetails === nftmarketaddress) {
           setOwnerDetails('DAO');
         } else {
+          console.log('OWNER :', OwnerData, ownerDetails);
           axios
             .post(`${process.env.REACT_APP_SERVER_URL}/user/getuser_by_wallet`, OwnerData, {})
             .then((value) => {
               // window.localStorage.setItem('authtoken', JSON.stringify(value.data.jwtToken));
               // //window.location.href = '/';
-
               setOwnerDetails(value.data);
               console.log('OWNER DATA : ', OwnerData);
             });
@@ -129,7 +132,7 @@ const NFTCard = ({ nft, buyNft }) => {
       setTime(moment(timestamp).fromNow());
     }
     // eslint-disable-next-line
-  }, []);
+  }, [cardDetails]);
 
   const [subscribeLoader, setSubscribeLoader] = useState(true);
 
@@ -221,8 +224,8 @@ const NFTCard = ({ nft, buyNft }) => {
   const handleOtherReportShow = () => setShowOtherReport(true);
   const handleOtherReportClose = () => setShowOtherReport(false);
 
-  const [showComment,setShowComment] = useState(false);
-  const [showAllComments,setShowAllComments] = useState(false);
+  const [showComment, setShowComment] = useState(false);
+  const [showAllComments, setShowAllComments] = useState(false);
 
   const [reportValue, setReportValue] = useState('Nudity or pornography');
   const [userReportValue, setUserReportValue] = useState('');
@@ -670,9 +673,11 @@ const NFTCard = ({ nft, buyNft }) => {
               <a onClick={handleClick} className="mr-4">
                 <img
                   src={
-                    nft.owner === '0x43AD46287bfA992b3777F1ec4264b649AD2eBca9'
+                    nft.owner === nftmarketaddress
                       ? dbeatsDAOLogo
-                      : ownerDetails.user.profile_image
+                      : ownerDetails
+                      ? ownerDetails.user.profile_image
+                      : person
                   }
                   alt=""
                   loading="lazy"
@@ -681,7 +686,7 @@ const NFTCard = ({ nft, buyNft }) => {
               </a>
               <div className="w-full flex justify-between mt-2">
                 <div>
-                  {nft.owner === '0x43AD46287bfA992b3777F1ec4264b649AD2eBca9' ? (
+                  {nft.owner === nftmarketaddress ? (
                     <div className="w-full self-center  ">
                       <Link
                         to={`/profile/dbeatsDAO/`}
@@ -692,7 +697,10 @@ const NFTCard = ({ nft, buyNft }) => {
                       <div className="2xl:text-sm lg:text-xs text-sm text-gray-500 pr-2 flex  ">
                         owner
                       </div>
-                      <div onClick={()=>setShowAllComments(true)} className="text-xs cursor-pointer text-dbeats-light pr-2 flex  ">
+                      <div
+                        onClick={() => setShowAllComments(true)}
+                        className="text-xs cursor-pointer text-dbeats-light pr-2 flex  "
+                      >
                         comments
                       </div>
                     </div>
@@ -716,7 +724,10 @@ const NFTCard = ({ nft, buyNft }) => {
                       <div className="2xl:text-sm lg:text-xs text-sm text-gray-500 pr-2 flex  ">
                         owner
                       </div>
-                      <div onClick={()=>setShowAllComments(true)} className="text-xs cursor-pointer text-dbeats-light pr-2 flex  ">
+                      <div
+                        onClick={() => setShowAllComments(true)}
+                        className="text-xs cursor-pointer text-dbeats-light pr-2 flex  "
+                      >
                         comments
                       </div>
                     </div>
@@ -734,7 +745,9 @@ const NFTCard = ({ nft, buyNft }) => {
                           src={maticLogo}
                           alt="logo"
                         ></img>
-                        <p className="self-center mr-2 ml-1">{nft.price}</p>
+                        <p className="self-center mr-2 ml-1">
+                          {parseFloat(nft.price) > 0 ? nft.price : `Make an offer`}
+                        </p>
                       </span>
                     </div>
                   ) : (
@@ -769,33 +782,33 @@ const NFTCard = ({ nft, buyNft }) => {
                           : `fas fa-heart mr-2`
                       }
                     ></i>
-                    <span className='text-dbeats-light font-extrabold	'>Like</span>
+                    <span className="text-dbeats-light font-extrabold	">Like</span>
                   </p>
                 </div>
               ) : (
                 <></>
               )}
-                {user == null || user.username != cardDetails.user.username ? (
+              {user == null || user.username != cardDetails.user.username ? (
                 <div className="flex text-white  items-center justify-center text-sm font-medium  text-center px-4  py-3">
                   <p
-                    onClick={()=>setShowComment(true)}
+                    onClick={() => setShowComment(true)}
                     className="w-full mt-2 text-center cursor-pointer opacity-50 hover:opacity-100"
                   >
                     <i className="fa-solid fa-comment text-white"></i>
-                    <span className='text-dbeats-light font-extrabold	'> Comment</span>
+                    <span className="text-dbeats-light font-extrabold	"> Comment</span>
                   </p>
                 </div>
               ) : (
                 <></>
               )}
-    
 
               <div
                 onClick={handleShareShow}
                 className="flex text-white  items-center justify-center text-sm font-medium  text-center px-4  py-3"
               >
                 <p className="w-full mt-2 text-center cursor-pointer opacity-50 hover:opacity-100">
-                <i className="fa-solid fa-share-nodes"></i>  <span className='text-dbeats-light font-extrabold	'> Share</span>
+                  <i className="fa-solid fa-share-nodes"></i>{' '}
+                  <span className="text-dbeats-light font-extrabold	"> Share</span>
                 </p>
               </div>
 
@@ -812,7 +825,7 @@ const NFTCard = ({ nft, buyNft }) => {
                 <></>
               )} */}
             </div>
-            {showComment &&<Addcomment></Addcomment>}
+            {showComment && <Addcomment></Addcomment>}
             {showAllComments && <Allcomments setShowAllComments={setShowAllComments}></Allcomments>}
           </div>
         </div>
