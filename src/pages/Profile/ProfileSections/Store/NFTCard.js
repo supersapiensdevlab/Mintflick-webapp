@@ -18,7 +18,8 @@ import { useHistory } from 'react-router-dom';
 import useWeb3Modal from '../../../../hooks/useWeb3Modal';
 import SuperfanModal from '../../../../component/Modals/SuperfanModal/superfan-modal';
 import dbeatsDAOLogo from '../../../../assets/images/dbeats-logo.png';
-// import Addcomment from './comments/Addcomment';
+import Addcomment from './comments/Addcomment';
+import Allcomments from './comments/Allcomments';
 
 const NFTCard = ({ nft, buyNft }) => {
   //console.log(nft);
@@ -219,6 +220,9 @@ const NFTCard = ({ nft, buyNft }) => {
   const [showOtherReport, setShowOtherReport] = useState(false);
   const handleOtherReportShow = () => setShowOtherReport(true);
   const handleOtherReportClose = () => setShowOtherReport(false);
+
+  const [showComment,setShowComment] = useState(false);
+  const [showAllComments,setShowAllComments] = useState(false);
 
   const [reportValue, setReportValue] = useState('Nudity or pornography');
   const [userReportValue, setUserReportValue] = useState('');
@@ -688,7 +692,9 @@ const NFTCard = ({ nft, buyNft }) => {
                       <div className="2xl:text-sm lg:text-xs text-sm text-gray-500 pr-2 flex  ">
                         owner
                       </div>
-                      {console.log('NFT OWNER', nft.owner)}
+                      <div onClick={()=>setShowAllComments(true)} className="text-xs cursor-pointer text-dbeats-light pr-2 flex  ">
+                        comments
+                      </div>
                     </div>
                   ) : (
                     <div className="w-full self-center  ">
@@ -709,6 +715,9 @@ const NFTCard = ({ nft, buyNft }) => {
                       </Link>{' '}
                       <div className="2xl:text-sm lg:text-xs text-sm text-gray-500 pr-2 flex  ">
                         owner
+                      </div>
+                      <div onClick={()=>setShowAllComments(true)} className="text-xs cursor-pointer text-dbeats-light pr-2 flex  ">
+                        comments
                       </div>
                     </div>
                   )}
@@ -769,7 +778,7 @@ const NFTCard = ({ nft, buyNft }) => {
                 {user == null || user.username != cardDetails.user.username ? (
                 <div className="flex text-white  items-center justify-center text-sm font-medium  text-center px-4  py-3">
                   <p
-                    onClick={handlereaction}
+                    onClick={()=>setShowComment(true)}
                     className="w-full mt-2 text-center cursor-pointer opacity-50 hover:opacity-100"
                   >
                     <i className="fa-solid fa-comment text-white"></i>
@@ -786,7 +795,7 @@ const NFTCard = ({ nft, buyNft }) => {
                 className="flex text-white  items-center justify-center text-sm font-medium  text-center px-4  py-3"
               >
                 <p className="w-full mt-2 text-center cursor-pointer opacity-50 hover:opacity-100">
-                <i className="fa-solid fa-share-nodes"></i>Share
+                <i className="fa-solid fa-share-nodes"></i>  <span className='text-dbeats-light font-extrabold	'> Share</span>
                 </p>
               </div>
 
@@ -803,7 +812,8 @@ const NFTCard = ({ nft, buyNft }) => {
                 <></>
               )} */}
             </div>
-            {/* <Addcomment></Addcomment> */}
+            {showComment &&<Addcomment></Addcomment>}
+            {showAllComments && <Allcomments setShowAllComments={setShowAllComments}></Allcomments>}
           </div>
         </div>
       ) : null}
