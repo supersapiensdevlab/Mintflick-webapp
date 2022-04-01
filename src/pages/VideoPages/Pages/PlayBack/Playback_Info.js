@@ -566,7 +566,7 @@ const PlayBackInfo = (props) => {
           <div
             className={`${darkMode && 'dark'}  grid sm:grid-cols-1 lg:grid-cols-3 grid-flow-row 
               lg:pb-50  
-               sm:ml-20 
+                md:mx-4 lg:mx-0 lg:ml-20
                mt-16
              bg-gradient-to-b from-blue-50 via-blue-50 to-white  
              dark:bg-gradient-to-b dark:from-dbeats-dark-secondary  
@@ -580,7 +580,7 @@ const PlayBackInfo = (props) => {
               </div>
               <div className="2xl:mx-7 sm:p-2 p-3   dark:bg-dbeats-dark-alt">
                 <div className=" flex  ">
-                  <div className="2xl:py-4 lg:py-2 w-full">
+                  <div className="2xl:py-4 lg:py-2 md:w-full w-1/2">
                     <div className=" w-full text-left mt-0" style={{ padding: '0px' }}>
                       {userData ? (
                         <p className="font-semibold 2xl:text-xl lg:text-md ">
