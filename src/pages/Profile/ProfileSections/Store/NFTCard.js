@@ -30,6 +30,7 @@ const NFTCard = ({ nft, buyNft }) => {
 
   const [cardDetails, setCardDetails] = useState();
   const [ownerDetails, setOwnerDetails] = useState();
+  const [contentData, setConentData] = useState();
 
   let sharable_data = `${process.env.REACT_APP_CLIENT_URL}/profile/${nft.username}`;
   useEffect(async () => {
@@ -80,7 +81,20 @@ const NFTCard = ({ nft, buyNft }) => {
 
     setListingPrice(nft.price);
   }, [nft]);
-
+  useEffect(() => {
+    if (cardDetails) {
+      console.log('creators details');
+      console.log(cardDetails);
+      const extension = nft.external_url.split(/[#?]/)[0].split('.').pop().trim();
+      if(extension == 'mp4' || extension == 'mkv' || extension == 'mov' || extension == 'avi'){
+      cardDetails.user.videos.map((video)=>{
+        if(video.tokenId == nft.tokenId){
+          setConentData(video);
+        }
+      })
+      }
+    }
+  }, [cardDetails]);
   ///////////////////
   const [playing, setPlaying] = useState(false);
   const user = useSelector((state) => state.User.user);
@@ -543,7 +557,7 @@ const NFTCard = ({ nft, buyNft }) => {
     // </div>
 
     <>
-      {cardDetails && cardDetails.user ? (
+      {cardDetails && cardDetails.user && contentData ? (
         <div
           className="dark my-4  dark:text-gray-50 
            shadow-sm dark:shadow-md  p-0.5  sm:rounded-xl bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-primary-lg      text-dbeats-dark-primary    relative   "
@@ -663,7 +677,7 @@ const NFTCard = ({ nft, buyNft }) => {
                 volume={0.5}
                 light={nft.image}
                 url={
-                  'https://ipfs.io/ipfs/bafybeicb5xcmy3rflzswrzaaxsxs63ssemefmz4hgsbmelxclw43rk5f5q/VID-20220310-WA0020.mp4'
+                  contentData.link
                 }
                 controls={true}
                 ref={ref}
@@ -825,7 +839,7 @@ const NFTCard = ({ nft, buyNft }) => {
                 <></>
               )} */}
             </div>
-            {showComment && <Addcomment></Addcomment>}
+            {showComment && <Addcomment user_id={cardDetails.user._id} contentData={contentData}></Addcomment>}
             {showAllComments && <Allcomments setShowAllComments={setShowAllComments}></Allcomments>}
           </div>
         </div>
