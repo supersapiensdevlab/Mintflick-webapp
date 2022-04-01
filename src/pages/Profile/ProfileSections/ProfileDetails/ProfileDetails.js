@@ -544,7 +544,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
             <div className="w-full flex flex-col lg:flex-row 2xl:-mt-28 lg:-mt-20 -mt-20   ">
               <div className="w-full flex flex-col   z-1 mx-auto ">
                 <div className="  flex flex-col lg:flex-row justify-between   md:mt-20  mt-40  sm:-mt-24 text-gray-400   dark:bg-dbeats-dark-primary bg-white dark:backdrop-filter dark:backdrop-blur dark:bg-opacity-80  backdrop-filter  backdrop-blur  bg-opacity-90">
-                  <div className="dark:text-white  text-dbeats-dark-alt 2xl:py-4 lg:py-2.5    md:py-3 lg:mx-0 px-10 lg:px-10 md:px-4 ">
+                  <div className="dark:text-white  text-dbeats-dark-alt 2xl:py-4 lg:py-2.5    md:py-3 lg:mx-0 px-5 lg:px-10 md:px-4 ">
                     <div className="flex flex-wrap lg:pt-0 items-center ">
                       <span className="font-bold 2xl:text-xl lg:text-xl md:text-xl mr-3 font-GTWalsheimPro">
                         {user.name}
@@ -675,7 +675,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                       {/* <Link to={`/profile/${urlUsername}/followers`}> */}
                       <div
                         onClick={handleShowFollowers}
-                        className="cursor-pointer 2xl:text-sm lg:text-xs hover:underline hover:text-gray-50"
+                        className="cursor-pointer 2xl:text-sm lg:text-xs text-sm hover:underline hover:text-gray-50"
                       >
                         FOLLOWERS
                       </div>
@@ -689,7 +689,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                       {/* <Link to={`/profile/${urlUsername}/following`}> */}
                       <div
                         onClick={handleShowFollowing}
-                        className="cursor-pointer 2xl:text-sm lg:text-xs hover:underline hover:text-gray-50"
+                        className="cursor-pointer 2xl:text-sm lg:text-xs text-sm hover:underline hover:text-gray-50"
                       >
                         FOLLOWING
                       </div>
@@ -703,7 +703,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                       {/* <Link to={`/profile/${urlUsername}/superfans`}> */}
                       <div
                         onClick={handleShowSuperfan}
-                        className="cursor-pointer 2xl:text-sm lg:text-xs hover:underline hover:text-gray-50"
+                        className="cursor-pointer 2xl:text-sm lg:text-xs text-sm hover:underline hover:text-gray-50"
                       >
                         SUPERFANS
                       </div>
@@ -1030,12 +1030,12 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
         isOpen={showFollowers}
         className={
           darkMode
-            ? 'h-max lg:w-1/3 w-full mx-auto 2xl:mt-60 lg:mt-16 mt-20 bg-dbeats-dark-alt rounded-xl'
-            : 'h-max lg:w-1/3 w-full mx-auto 2xl:mt-60 lg:mt-16 mt-20 bg-gray-50 rounded-xl shadow-2xl'
+            ? 'h-max lg:w-1/3 md:w-2/3 w-full mx-auto 2xl:mt-60 lg:mt-16  md:mt-96 mt-48 bg-dbeats-dark-alt rounded-xl'
+            : 'h-max lg:w-1/3 md"w-2/3 w-full mx-auto 2xl:mt-60 lg:mt-16  md:mt-96 mt-48 bg-gray-50 rounded-xl shadow-2xl'
         }
       >
         <div className={`${darkMode && 'dark'} p-2 h-max`}>
-          <h2 className="grid grid-cols-5 justify-items-center 2xl:text-2xl text-lg 2xl:py-4 py-4 lg:py-3 dark:bg-dbeats-dark-alt bg-white dark:text-white">
+          <h2 className="grid grid-cols-5 justify-items-center 2xl:text-2xl text-lg md:text-2xl 2xl:py-4 py-4 lg:py-3 dark:bg-dbeats-dark-alt bg-white dark:text-white">
             <div className="col-span-4 pl-14 ">Followers</div>
             <div
               onClick={handleCloseFollowers}
@@ -1051,31 +1051,31 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
           </h2>
           <hr />
           <div className=" bg-white text-gray-500  dark:bg-dbeats-dark-alt dark:text-gray-100   shadow-sm rounded-lg   2xl:py-5   lg:py-1  mb-5 lg:mb-2 2xl:mb-5 lg:max-h-full  max-h-96  overflow-y-auto overflow-hidden">
-            <div className="px-7 py-4">
+            <div className="lg:px-7 lg:py-4 px-4 py-4">
               <input
                 type="text"
                 placeholder="Search"
                 onChange={(e) => setFollowerSearchInput(e.target.value)}
-                className="w-full h-10 rounded-full px-4 py-3 bg-dbeats-dark-alt text-white border border-white focus:border-dbeats-light"
+                className="w-full h-10 rounded-full lg:px-4 lg:py-3 px-3 py-2 md:px-5 md:py-6 bg-dbeats-dark-alt text-white border border-white focus:border-dbeats-light"
               />
             </div>
             {user && user.follower_count && user.followee_count ? (
-              <div className="w-full max-h-60 overflow-y-scroll px-3 ">
+              <div className="w-full max-h-60 overflow-y-scroll lg:px-3 px-0 ">
                 {followerSearchOutput.map((value, i) => {
                   return (
                     <div key={i} className="w-full flex justify-between px-3">
-                      <Link key={i} to={`/profile/${value}`} onClick={handleCloseFollowers}>
-                        <p className="mb-1.5 w-full px-3 py-1.5  hover:text-dbeats-light cursor-pointer">
+                      <a key={i} href={`/profile/${value}`} onClick={handleCloseFollowers}>
+                        <p className="mb-1.5 w-full px-3 lg:py-1.5 py-1 text-sm md:text-lg lg:text-base  hover:text-dbeats-light cursor-pointer">
                           {value}
                         </p>
-                      </Link>
+                      </a>
                       {myData && !myData.followee_count.includes(value) ? (
                         <div className='flex'>
                         <button
                           onClick={() => {
                             trackFollow(value);
                           }}
-                          className="px-3 rounded-sm h-8  bg-dbeats-light text-white"
+                          className="md:px-3 rounded-sm md:h-8 h-7 px-3 bg-dbeats-light text-white"
                         >
                           Follow
                         </button>
@@ -1112,12 +1112,12 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
         isOpen={showFollowing}
         className={
           darkMode
-            ? 'h-max lg:w-1/3 w-full mx-auto 2xl:mt-60 lg:mt-8 mt-20 bg-dbeats-dark-alt rounded-xl'
-            : 'h-max lg:w-1/3 w-full mx-auto 2xl:mt-60 lg:mt-8 mt-20 bg-gray-50 rounded-xl shadow-2xl'
+            ? 'h-max lg:w-1/3 md:w-2/3 w-full mx-auto 2xl:mt-60 lg:mt-8 mt-48 md:mt-96 bg-dbeats-dark-alt rounded-xl'
+            : 'h-max lg:w-1/3 md:w-2/3 w-full mx-auto 2xl:mt-60 lg:mt-8 mt-48 md:mt-96 bg-gray-50 rounded-xl shadow-2xl'
         }
       >
         <div className={`${darkMode && 'dark'} p-2 h-max`}>
-          <h2 className="grid grid-cols-5 justify-items-center 2xl:text-2xl text-lg 2xl:py-4 py-4 lg:py-3 dark:bg-dbeats-dark-alt bg-white dark:text-white">
+          <h2 className="grid grid-cols-5 justify-items-center 2xl:text-2xl text-lg md:text-2x 2xl:py-4 py-4 lg:py-3 dark:bg-dbeats-dark-alt bg-white dark:text-white">
             <div className="col-span-4 pl-14 ">Following</div>
             <div
               onClick={handleCloseFollowing}
@@ -1133,12 +1133,12 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
           </h2>
           <hr />
           <div className=" bg-white text-gray-500  dark:bg-dbeats-dark-alt dark:text-gray-100   shadow-sm rounded-lg   2xl:py-5  lg:py-1 py-1 mb-5 lg:mb-2 2xl:mb-5 lg:max-h-full  max-h-96  overflow-y-auto overflow-hidden">
-            <div className="px-7 py-4">
+            <div className="lg:px-7 lg:py-4 px-4 py-4">
               <input
                 type="text"
                 placeholder="Search"
                 onChange={(e) => setSearchInput(e.target.value)}
-                className="w-full h-10 rounded-full px-4 py-3 bg-dbeats-dark-alt text-white border border-white focus:border-dbeats-light"
+                className="w-full h-10 rounded-full lg:px-4 lg:py-3 px-3 py-2 md:px-5 md:py-6 bg-dbeats-dark-alt text-white border border-white focus:border-dbeats-light"
               />
             </div>
             {user && user.followee_count && user.followee_count ? (
@@ -1146,18 +1146,18 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                 {searchOutput.map((value, i) => {
                   return (
                     <div key={i} className="flex justify-between px-2 mb-1.5">
-                      <Link to={`/profile/${value}`} onClick={handleCloseFollowing}>
-                        <p className=" w-full px-3 py-1.5 hover:text-dbeats-light cursor-pointer">
+                      <a href={`/profile/${value}`} onClick={handleCloseFollowing}>
+                        <p className=" w-full px-3 lg:py-1.5 py-1 text-sm md:text-lg lg:text-base  hover:text-dbeats-light cursor-pointer">
                           {value}
                         </p>
-                      </Link>
+                      </a>
                       {myData && !myData.followee_count.includes(value) ? (
                         <div className='flex'>
                         <button
                           onClick={() => {
                             trackFollow(value);
                           }}
-                          className="px-3 rounded-sm h-8  bg-dbeats-light text-white"
+                          className="md:px-3 rounded-sm md:h-8 h-7 px-3  bg-dbeats-light text-white"
                         >
                           Follow
                         </button>
@@ -1194,12 +1194,12 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
         isOpen={showSuperfan}
         className={
           darkMode
-            ? 'h-max lg:w-1/3 w-full mx-auto 2xl:mt-60 lg:mt-16 mt-20 bg-dbeats-dark-alt rounded-xl'
-            : 'h-max lg:w-1/3 w-full mx-auto 2xl:mt-60 lg:mt-16 mt-20 bg-gray-50 rounded-xl shadow-2xl'
+            ? 'h-max md:w-2/3 lg:w-1/3 w-full mx-auto 2xl:mt-60 lg:mt-16 mt-48 md:mt-96 bg-dbeats-dark-alt rounded-xl'
+            : 'h-max md:w-2/3 lg:w-1/3 w-full mx-auto 2xl:mt-60 lg:mt-16 mt-48 md:mt-96 bg-gray-50 rounded-xl shadow-2xl'
         }
       >
         <div className={`${darkMode && 'dark'} p-2 h-max`}>
-          <h2 className="grid grid-cols-5 justify-items-center 2xl:text-2xl text-lg 2xl:py-4 py-4 lg:py-3 dark:bg-dbeats-dark-alt bg-white dark:text-white">
+          <h2 className="grid grid-cols-5 justify-items-center 2xl:text-2xl md:text-2x text-lg 2xl:py-4 py-4 lg:py-3 dark:bg-dbeats-dark-alt bg-white dark:text-white">
             <div className="col-span-4 pl-14 ">Superfan</div>
             <div
               onClick={handleCloseSuperfan}
@@ -1215,23 +1215,23 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
           </h2>
           <hr />
           <div className=" bg-white text-gray-500  dark:bg-dbeats-dark-alt dark:text-gray-100   shadow-sm rounded-lg  2xl:px-5 2xl:py-5  lg:px-2 lg:py-1 px-2 py-1 mb-5 lg:mb-2 2xl:mb-5 lg:max-h-full  max-h-96  overflow-y-auto overflow-hidden">
-            <div className=" py-4">
+            <div className="lg:px-7 lg:py-4 px-4 py-4">
               <input
                 type="text"
                 placeholder="Search"
                 // onChange={(e) => setSuperfanSearchInput(e.target.value)}
-                className="w-full h-10 rounded-full px-4 py-3 bg-dbeats-dark-alt text-white border border-white focus:border-dbeats-light"
+                className="w-full h-10 rounded-full lg:px-4 lg:py-3 px-3 py-2 md:px-5 md:py-6 bg-dbeats-dark-alt text-white border border-white focus:border-dbeats-light"
               />
             </div>
             {user && user.superfan_to ? (
               <div className="w-full max-h-60 overflow-y-scroll">
                 {user.superfan_to.map((value, i) => {
                   return (
-                    <Link key={i} to={`/profile/${value.username}`} onClick={handleCloseSuperfan}>
-                      <p className="mb-1.5 w-full px-3 py-1.5 hover:text-dbeats-light cursor-pointer">
+                    <a key={i} href={`/profile/${value.username}`} onClick={handleCloseSuperfan}>
+                      <p className="mb-1.5 w-full px-3 lg:py-1.5 py-1 md:text-lg text-sm lg:text-base  hover:text-dbeats-light cursor-pointer">
                         {value.username}
                       </p>
-                    </Link>
+                    </a>
                   );
                 })}
               </div>

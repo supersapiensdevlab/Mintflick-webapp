@@ -327,23 +327,23 @@ const PublicInfo = (props) => {
                     {user && userData ? (
                       <>
                         {' '}
-                        <div className="flex   text-black text-sm font-medium   px-4  py-3">
+                        <div className="flex   text-black text-sm font-medium   md:px-4  md:py-3 px-1 py-2">
                           <Link to={`/profile/${userData.username}/`} className="mr-4">
                             <img
                               src={userData.profile_image ? userData.profile_image : person}
                               alt=""
-                              className="  w-16 h-14    rounded-full    self-start"
+                              className="  md:w-16 md:h-14 h-8 w-10    rounded-full    self-start"
                             />
                           </Link>
-                          <div className="w-full flex  justify-between mt-2">
+                          <div className="w-full  flex  justify-between   md:mt-2 ">
                             <div>
                               <div className="w-full self-center  ">
                                 <Link
                                   to={`/profile/${userData.username}/`}
-                                  className="2xl:text-sm lg:text-xs text-sm text-gray-500  mb-2"
+                                  className="2xl:text-sm lg:text-xs text-xs text-gray-500  mb-2"
                                 >
                                   <div className="flex align-middle">
-                                    <h3 className="text-white mr-1 text-lg tracking-wider">
+                                    <h3 className="text-white mr-1 md:text-lg text-sm tracking-wider">
                                       {userData.name}
                                     </h3>
 
@@ -435,19 +435,19 @@ const PublicInfo = (props) => {
                   </div>
                 ) : null}
               </div>
-              <div className="2xl:text-2xl lg:text-md 2xl:py-4 lg:py-2 py-2 flex justify-around dark:text-dbeats-white">
-                <p className={`text-white text-lg text-center pr-2 flex flex-col`}>
+              <div className="2xl:text-2xl lg:text-md text-xs 2xl:py-4 lg:py-2 py-2 flex justify-around dark:text-dbeats-white -ml-24 md:-ml-0">
+                <p className={`text-white md:text-lg text-xs text-center pr-2 flex flex-col`}>
                   <span className={`text-${viewColor}  ${viewAnimate} font-bold`}>
                     {livestreamViews}
                   </span>
                   viewers
                 </p>
-                <div className="  text-center lg:mx-3">
+                <div className="  text-center lg:mx-3 mx-1">
                   <button className="border-0 bg-transparent" onClick={handleShow}>
                     <i className="fas fa-share-alt opacity-50 mx-2"></i>
                   </button>
                   <br />
-                  <p className="2xl:text-base  text-base lg:text-sm"> SHARE</p>
+                  <p className="2xl:text-base  text-xs lg:text-sm"> SHARE</p>
                 </div>
 
                 <Menu as="div" className="relative inline-block text-left">
