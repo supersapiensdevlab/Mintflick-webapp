@@ -29,8 +29,9 @@ const NFTCard = ({ nft, buyNft }) => {
   const [nameSeeMore, setNameSeeMore] = useState(false);
 
   const [cardDetails, setCardDetails] = useState();
-  const [ownerDetails, setOwnerDetails] = useState();
+  const [ownerDetails, setOwnerDetails] = useState(null);
   const [contentData, setConentData] = useState();
+
 
   let sharable_data = `${process.env.REACT_APP_CLIENT_URL}/profile/${nft.username}`;
   useEffect(async () => {
@@ -86,12 +87,18 @@ const NFTCard = ({ nft, buyNft }) => {
       console.log('creators details');
       console.log(cardDetails);
       const extension = nft.external_url.split(/[#?]/)[0].split('.').pop().trim();
-      if(extension == 'mp4' || extension == 'mkv' || extension == 'mov' || extension == 'avi'){
-      cardDetails.user.videos.map((video)=>{
-        if(video.tokenId == nft.tokenId){
-          setConentData(video);
-        }
-      })
+      if (extension == 'mp4' || extension == 'mkv' || extension == 'mov' || extension == 'avi') {
+        cardDetails.user.videos.map((video) => {
+          if (video.tokenId == nft.tokenId) {
+            let temp = video;
+            // for reversing the comments of videos
+            if (temp.comments) {
+              let temprevcomments = video.comments.reverse();
+              temp.comments = temprevcomments;
+            }
+            setConentData(temp);
+          }
+        });
       }
     }
   }, [cardDetails]);
@@ -557,7 +564,7 @@ const NFTCard = ({ nft, buyNft }) => {
     // </div>
 
     <>
-      {cardDetails && cardDetails.user && contentData ? (
+      {cardDetails && cardDetails.user && contentData && ownerDetails && ownerDetails.user ? (
         <div
           className="dark my-4  dark:text-gray-50 
            shadow-sm dark:shadow-md  p-0.5  sm:rounded-xl bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-primary-lg      text-dbeats-dark-primary    relative   "
@@ -676,9 +683,7 @@ const NFTCard = ({ nft, buyNft }) => {
                 muted={true}
                 volume={0.5}
                 light={nft.image}
-                url={
-                  contentData.link
-                }
+                url={contentData.link}
                 controls={true}
                 ref={ref}
               />
@@ -738,11 +743,16 @@ const NFTCard = ({ nft, buyNft }) => {
                       <div className="2xl:text-sm lg:text-xs text-sm text-gray-500 pr-2 flex  ">
                         owner
                       </div>
-                      <div
-                        onClick={() => setShowAllComments(true)}
-                        className="text-xs cursor-pointer text-dbeats-light pr-2 flex  "
-                      >
-                        comments
+                      <div className="flex">
+                        <div className="text-xs text-dbeats-light  flex pr-2 ">
+                          {`${contentData.views ? contentData.views.length : 0} views`}
+                        </div>
+                        <div
+                          onClick={() => setShowAllComments(true)}
+                          className="text-xs cursor-pointer text-dbeats-light pr-2 flex  "
+                        >
+                          {` ${contentData.comments ? contentData.comments.length : 0} comments`}
+                        </div>
                       </div>
                     </div>
                   )}
@@ -783,38 +793,31 @@ const NFTCard = ({ nft, buyNft }) => {
               </div>
             </div>
             <div className="flex justify-around border-t border-opacity-20 mx-2">
-              {user == null || user.username != cardDetails.user.username ? (
-                <div className="flex text-white  items-center justify-center text-sm font-medium  text-center px-4  py-3">
-                  <p
-                    onClick={handlereaction}
-                    className="w-full mt-2 text-center cursor-pointer opacity-50 hover:opacity-100"
-                  >
-                    <i
-                      className={
-                        userreact === 'like'
-                          ? `fas fa-heart mr-2 text-red-700 animate-pulse`
-                          : `fas fa-heart mr-2`
-                      }
-                    ></i>
-                    <span className="text-dbeats-light font-extrabold	">Like</span>
-                  </p>
-                </div>
-              ) : (
-                <></>
-              )}
-              {user == null || user.username != cardDetails.user.username ? (
-                <div className="flex text-white  items-center justify-center text-sm font-medium  text-center px-4  py-3">
-                  <p
-                    onClick={() => setShowComment(true)}
-                    className="w-full mt-2 text-center cursor-pointer opacity-50 hover:opacity-100"
-                  >
-                    <i className="fa-solid fa-comment text-white"></i>
-                    <span className="text-dbeats-light font-extrabold	"> Comment</span>
-                  </p>
-                </div>
-              ) : (
-                <></>
-              )}
+              <div className="flex text-white  items-center justify-center text-sm font-medium  text-center px-4  py-3">
+                <p
+                  onClick={handlereaction}
+                  className="w-full mt-2 text-center cursor-pointer opacity-50 hover:opacity-100"
+                >
+                  <i
+                    className={
+                      userreact === 'like'
+                        ? `fas fa-heart mr-2 text-red-700 animate-pulse`
+                        : `fas fa-heart mr-2`
+                    }
+                  ></i>
+                  <span className="text-dbeats-light font-extrabold	">Like</span>
+                </p>
+              </div>
+
+              <div className="flex text-white  items-center justify-center text-sm font-medium  text-center px-4  py-3">
+                <p
+                  onClick={() => setShowComment(true)}
+                  className="w-full mt-2 text-center cursor-pointer opacity-50 hover:opacity-100"
+                >
+                  <i className="fa-solid fa-comment text-white"></i>
+                  <span className="text-dbeats-light font-extrabold	"> Comment</span>
+                </p>
+              </div>
 
               <div
                 onClick={handleShareShow}
@@ -839,8 +842,15 @@ const NFTCard = ({ nft, buyNft }) => {
                 <></>
               )} */}
             </div>
-            {showComment && <Addcomment user_id={cardDetails.user._id} contentData={contentData}></Addcomment>}
-            {showAllComments && <Allcomments setShowAllComments={setShowAllComments}></Allcomments>}
+            {showComment && (
+              <Addcomment user_id={cardDetails.user._id} contentData={contentData}></Addcomment>
+            )}
+            {showAllComments && (
+              <Allcomments
+                contentData={contentData}
+                setShowAllComments={setShowAllComments}
+              ></Allcomments>
+            )}
           </div>
         </div>
       ) : null}
