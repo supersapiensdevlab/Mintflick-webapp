@@ -1214,7 +1214,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
             </div>
           </h2>
           <hr />
-          <div className=" bg-white text-gray-500  dark:bg-dbeats-dark-alt dark:text-gray-100   shadow-sm rounded-lg  2xl:px-5 2xl:py-5  lg:px-2 lg:py-1 px-2 py-1 mb-5 lg:mb-2 2xl:mb-5 lg:max-h-full  max-h-96  overflow-y-auto overflow-hidden">
+          <div className=" bg-white text-gray-500  dark:bg-dbeats-dark-alt dark:text-gray-100   shadow-sm rounded-lg   2xl:py-5  lg:py-1 py-1 mb-5 lg:mb-2 2xl:mb-5 lg:max-h-full  max-h-96  overflow-y-auto overflow-hidden">
             <div className="lg:px-7 lg:py-4 px-4 py-4">
               <input
                 type="text"
@@ -1224,7 +1224,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
               />
             </div>
             {user && user.superfan_to ? (
-              <div className="w-full max-h-60 overflow-y-scroll">
+              <div className="w-full max-h-60 overflow-y-scroll px-6">
                 {user.superfan_to.map((value, i) => {
                   return (
                     <a key={i} href={`/profile/${value.username}`} onClick={handleCloseSuperfan}>
