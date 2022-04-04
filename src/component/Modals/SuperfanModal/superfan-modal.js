@@ -245,17 +245,22 @@ const SuperfanModal = ({ show, handleClose, userDataDetails }) => {
       ariaHideApp={false}
     >
       {userDataDetails && (
-        <div className={`   mx-auto  bg-white dark:bg-dbeats-dark-primary w-full md:w-max lg:px-12 px-2`}>
+        <div className={`   mx-auto  bg-white dark:bg-dbeats-dark-alt w-full md:w-max lg:px-12 px-2`}>
           <h2
-            className="grid grid-cols-5 justify-items-center 2xl:text-2xl lg:text-md py-4 2xl:py-4 lg:py-2   text-center relative 
-bg-white dark:bg-dbeats-dark-primary    "
+            className="flex justify-between items-center 2xl:text-2xl lg:text-md py-4 2xl:py-6 lg:py-2   text-center relative 
+bg-white dark:bg-dbeats-dark-alt    "
           >
-            <div className="col-span-5    text-gray-900 dark:text-gray-100 font-bold">SUPERFAN</div>
+            <div className="col-span-5    text-gray-900 dark:text-gray-100 font-bold md:pl-80 pl-32">SUPERFAN</div>
             <div
-              className="ml-5 cursor-pointer text-gray-900 dark:text-gray-100 dark:bg-dbeats-dark-primary absolute right-10 top-5"
               onClick={handleClose}
+              className=" rounded-3xl group w-max   p-1  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-secondary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
             >
-              <i className="fas fa-times"></i>
+              <span className="  text-black dark:text-white  flex p-1 rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:nm-inset-dbeats-dark-secondary ">
+                <p className="self-center mx-2">
+                  {' '}
+                  <i className="fas fa-times"></i>{' '}
+                </p>
+              </span>
             </div>
           </h2>
 
