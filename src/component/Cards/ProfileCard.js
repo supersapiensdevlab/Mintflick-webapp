@@ -6,9 +6,10 @@ import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import { followUser } from '../../actions/userActions';
 import useWeb3Modal from '../../hooks/useWeb3Modal';
-
+import { useHistory } from 'react-router-dom'
 // components
 const ProfileCard = ({ user }) => {
+  const history = useHistory ();
   const dispatch = useDispatch();
   const userp = useSelector((state) => state.User.user);
   const [following, setFollowing] = useState(false);
@@ -31,9 +32,18 @@ const ProfileCard = ({ user }) => {
       dispatch(followUser(followData));
     } else {
       // window.location.href = '/signup';
-      await loadWeb3Modal()
+      await loadWeb3Modal();
     }
   };
+  const handleClick = async() => {
+    if (userp) {
+      history.push(`/profile/${user.username}`);
+    } else {
+      console.log('here in loading web3modal')
+      await loadWeb3Modal();
+    }
+  };
+
   return (
     <>
       {user ? (
@@ -43,7 +53,7 @@ const ProfileCard = ({ user }) => {
               <div className=" ">
                 <div className="   sm:rounded-lg pb-3">
                   <div className="relative align-middle   justify-items-center items-center ">
-                    <Link to={`/profile/${user.username}`}>
+                    <a onClick={handleClick}>
                       <div className="">
                         <img
                           className="w-full h-28 rounded-t-lg"
@@ -63,7 +73,7 @@ const ProfileCard = ({ user }) => {
                           alt={user.username}
                         />
                       </div>
-                    </Link>
+                    </a>
                     {following ? (
                       <></>
                     ) : (
