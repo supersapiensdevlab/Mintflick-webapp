@@ -5,6 +5,7 @@ import { Image } from 'react-img-placeholder';
 import dbeatsLogoBnW from '../../../assets/images/Logo/logo-blacknwhite.png';
 import maticLogo from '../../../assets/graphics/polygon-matic-logo.svg';
 import { useEffect } from 'react';
+import { Container, Row } from 'react-bootstrap';
 
 const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayName }) => {
   // const [buttonText, setButtonText] = useState('Click Here');
@@ -24,6 +25,13 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
 
   //console.log('userData', userData.superfan_data);
   const [currentPlan, setPlan] = useState('silver');
+  const [hideGold, setHideGold] = useState(true);
+  const [hidePlatinum, setHidePlatinum] = useState(true);
+  const [hidePlus, setHidePlus] = useState(false);
+
+  const [showSavedChanges, setShowSavedChanges] = useState(false);
+  const handleShowSavedChanged = () => setShowSavedChanges(true);
+  const handleCloseSavedChanges = () => setShowSavedChanges(false);
 
   const handleNewPlan = (e) => {
     let name = e.target.name;
@@ -66,6 +74,7 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
       .then((res) => {
         setLoader(false);
         handleClose();
+        handleShowSavedChanged();
         console.log(res);
       })
       .catch(function (error) {
@@ -88,8 +97,20 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
       });
     }
   }, [userData.superfan_data]);
+  
+  const showPlans = () =>{
+    if(hideGold){
+      setHideGold(false);
+      setPlan("gold");
+    }else{
+      setHidePlatinum(false);
+      setPlan("platinum");
+      setHidePlus(true);
+    }
+  }
 
   return (
+    <>
     <Modal
       isOpen={show}
       className={
@@ -101,9 +122,17 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
       <div className={`${darkMode && 'dark'} p-2 h-max`}>
         <h2 className="grid grid-cols-5 justify-items-center 2xl:text-2xl text-lg 2xl:pt-4   dark:bg-dbeats-dark-alt bg-white dark:text-white">
           <div className="col-span-4 pl-14 uppercase font-semibold text-dbeats-light">Settings</div>
-          <div className="mr-7 flex justify-end w-full" onClick={handleClose}>
-            <i className="fas fa-times cursor-pointer"></i>
-          </div>
+          <div
+              onClick={handleClose}
+              className=" rounded-3xl group w-max   p-1  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-secondary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
+            >
+              <span className="  text-black dark:text-white  flex p-1 rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:nm-inset-dbeats-dark-secondary ">
+                <p className="self-center mx-2">
+                  {' '}
+                  <i className="fas fa-times"></i>{' '}
+                </p>
+              </span>
+            </div>
         </h2>
 
         <div className=" bg-white text-gray-500 dark:text-dbeats-white  dark:bg-dbeats-dark-alt      rounded   p-5       max-h-96  sm:h-max sm:max-h-full  overflow-y-auto overflow-hidden">
@@ -148,13 +177,7 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
                           placeholder="Plan Name"
                           onChange={handleUserInputs}
                           value={
-                            currentPlan === 'silver'
-                              ? newData.plan
-                              : currentPlan === 'gold'
-                              ? newData.plan2
-                              : currentPlan === 'platinum'
-                              ? newData.plan3
-                              : ''
+                            currentPlan
                           }
                         />
                       </div>
@@ -245,7 +268,7 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
                           ? 'dark:border-dbeats-light  shadow-md '
                           : 'dark:border-dbeats-dark-primary border-dashed'
                       }   border   border-gray-500 self-center dark:bg-dbeats-dark-secondary bg-white 
-                     h-max rounded-md align-middle text-center cursor-pointer `}
+                     h-56 w-52 rounded-md align-middle text-center cursor-pointer `}
                     >
                       {' '}
                       <input
@@ -265,7 +288,7 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
                             : ''
                         }  align-middle font-bold  dark:text-dbeats-light text-lg mt-5 mx-2 rounded`}
                       >
-                        {newData.plan}&nbsp;
+                        Silver&nbsp;
                       </p>
                       <Image
                         src={dbeatsLogoBnW}
@@ -283,7 +306,7 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
                               !newData.price
                                 ? 'animate-pulse mt-5 dark:bg-dbeats-dark-primary bg-gray-200'
                                 : ''
-                            }  align-middle   text-lg  mx-2 rounded`}
+                            }  align-middle   text-2xl  mx-2 rounded`}
                           >
                             {' '}
                             {newData.price}&nbsp;
@@ -313,12 +336,13 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
                       name="second"
                       id="second"
                       onClick={handleNewPlan}
+                      hidden={hideGold}
                       className={` ${
                         currentPlan === 'gold'
                           ? 'dark:border-dbeats-light  shadow-md '
                           : 'dark:border-dbeats-dark-primary border-dashed'
                       }   border   border-gray-500 self-center dark:bg-dbeats-dark-secondary bg-white 
-                     h-max rounded-md align-middle text-center cursor-pointer `}
+                     h-56 w-52 rounded-md align-middle text-center cursor-pointer `}
                     >
                       <input
                         className="form-check-input appearance-none rounded-full h-4 w-4 border
@@ -338,7 +362,7 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
                             : ''
                         }  align-middle font-bold  dark:text-dbeats-light text-lg mt-5 mx-2 rounded`}
                       >
-                        {newData.plan2}&nbsp;
+                        Gold&nbsp;
                       </p>
                       <Image
                         src={dbeatsLogoBnW}
@@ -356,7 +380,7 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
                               !newData.price2
                                 ? 'animate-pulse mt-5 dark:bg-dbeats-dark-primary bg-gray-200'
                                 : ''
-                            }  align-middle   text-lg  mx-2 rounded`}
+                            }  align-middle   text-2xl  mx-2 rounded`}
                           >
                             {' '}
                             {newData.price2}&nbsp;
@@ -385,13 +409,14 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
                     <form
                       name="platinum"
                       id="platinum"
+                      hidden={hidePlatinum}
                       onClick={handleNewPlan}
                       className={` ${
                         currentPlan === 'platinum'
                           ? 'dark:border-dbeats-light  shadow-md '
                           : 'dark:border-dbeats-dark-primary border-dashed'
                       }   border   border-gray-500 self-center dark:bg-dbeats-dark-secondary bg-white 
-                     h-max rounded-md align-middle text-center cursor-pointer `}
+                     h-56 w-52 rounded-md align-middle text-center cursor-pointer `}
                     >
                       {' '}
                       <input
@@ -411,7 +436,7 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
                             : ''
                         }  align-middle font-bold  dark:text-dbeats-light text-lg mt-5 mx-2 rounded`}
                       >
-                        {newData.plan3}&nbsp;
+                        Platinum&nbsp;
                       </p>
                       <Image
                         src={dbeatsLogoBnW}
@@ -429,7 +454,7 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
                               !newData.price3
                                 ? 'animate-pulse mt-5 dark:bg-dbeats-dark-primary bg-gray-200'
                                 : ''
-                            }  align-middle   text-lg  mx-2 rounded`}
+                            }  align-middle   text-2xl  mx-2 rounded`}
                           >
                             {' '}
                             {newData.price3}&nbsp;
@@ -454,6 +479,28 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
                         {newData.perks3}&nbsp;
                       </p>
                     </form>
+                    <div hidden={hidePlus}>
+                    <form
+                    
+                      className='h-56 w-52 border-2 border-dbeats-light flex justify-center items-center rounded-md '
+                    >
+                      <div onClick={showPlans} className="h-14 w-14 cursor-pointer">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-14 w-14" viewBox="0 0 20 20" fill="gray">
+  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clipRule="evenodd" />
+</svg>
+</div>
+                    </form>
+                    </div>
+                    {/* <div
+                    hidden={hideSecPlus}
+                      className='h-56 w-52 border-2 border-dbeats-light flex justify-center items-center rounded-md '
+                    >
+                      <div onClick={()=>{setHidePlatinum(false); setHideSecPlus(true)}} className="h-14 w-14 cursor-pointer">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-14 w-14" viewBox="0 0 20 20" fill="gray">
+  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clipRule="evenodd" />
+</svg>
+</div>
+                    </div> */}
                   </div>
                 </dl>
 
@@ -466,7 +513,8 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
                flex justify-center 2xl:py-2 py-1 lg:px-5 
                 px-3 text-dbeats-light  rounded border-dbeats-light border
                 lg:text-md text-md my-auto font-semibold  bg-transparent
-                dark:text-white
+                dark:text-white bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-secondary-dark-primary 
+                hover:nm-inset-dbeats-secondary-light  transition-all duration-300
                 ${
                   newData.name === userData.name && newData.email === userData.email
                     ? ''
@@ -486,6 +534,47 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
         </div>
       </div>
     </Modal>
+    <Modal
+            isOpen={showSavedChanges}
+            className="h-max lg:w-1/3  w-5/6 mx-auto lg:mt-60 mt-32 rounded-lg"
+          >
+            <div className={`${darkMode && 'dark'}`}>
+              <Container className="2xl:px-5 px-5 lg:px-1 pb-4 dark:bg-dbeats-dark-alt rounded-lg border">
+                <Row>
+                  <h2 className="flex justify-between items-center  w-full 2xl:text-2xl lg:text-md py-4 2xl:py-4 lg:py-2  pt-7  text-center relative  ">
+                    <div className="col-span-5 text-gray-900 dark:text-gray-100 font-bold pl-48 ">
+                      Changes Saved SuccessFully
+                    </div>
+                    <div
+                      className="rounded-3xl group w-max   p-2  mx-1  justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-secondary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
+                      onClick={handleCloseSavedChanges}
+                    >
+                      <span className="text-black dark:text-white  flex px-2 py-1 rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:nm-inset-dbeats-dark-secondary">
+                        <i className="fas fa-times"></i>
+                      </span>
+                    </div>
+                  </h2>
+                </Row>
+                <Row>
+                  <div className="w-full flex justify-center items-center pt-5 pb-10">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-28 w-28"
+                      viewBox="0 0 20 20"
+                      fill="white"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </div>
+                </Row>
+              </Container>
+            </div>
+          </Modal>
+    </>
   );
 };
 
