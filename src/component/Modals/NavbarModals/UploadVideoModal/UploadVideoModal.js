@@ -328,7 +328,7 @@ const UploadVideoModal = (props) => {
             setMinting(res.transactionHash);
 
             console.log('#token created : ', tokenId);
-            await contract.methods
+            contract.methods
               .createMarketItem(tokenId, ethers.utils.parseUnits(NFTprice, 'ether'))
               .send({ from: user.wallet_id })
               .then(async (res) => {
@@ -396,7 +396,7 @@ const UploadVideoModal = (props) => {
 
     /* next, create the item */
     //let contract = new web3.eth.Contract(Market.abi, nftmarketaddress);
-    console.log('NFT PRICE:', ethers.utils.parseUnits(NFTprice, 'ether'));
+    //console.log('NFT PRICE:', ethers.utils.parseUnits(NFTprice, 'ether'));
 
     //let event = tx.events[0];
     //let value = event.args[2];

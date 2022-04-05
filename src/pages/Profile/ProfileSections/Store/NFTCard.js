@@ -21,6 +21,10 @@ import dbeatsDAOLogo from '../../../../assets/images/dbeats-logo.png';
 import Addcomment from './comments/Addcomment';
 import Allcomments from './comments/Allcomments';
 import { nftmarketaddress } from '../../../../functions/config';
+import { Biconomy } from '@biconomy/mexa';
+import Web3 from 'web3';
+import { ethers } from 'ethers';
+import Market from '../../../../artifacts/contracts/Market.sol/NFTMarket.json';
 
 const NFTCard = ({ nft, buyNft }) => {
   //console.log(nft);
@@ -31,6 +35,13 @@ const NFTCard = ({ nft, buyNft }) => {
   const [cardDetails, setCardDetails] = useState();
   const [ownerDetails, setOwnerDetails] = useState();
   const [contentData, setConentData] = useState();
+
+  const [subscribeLoader, setSubscribeLoader] = useState(true);
+
+  const [buttonText, setButtonText] = useState('follow');
+  const [followers, setFollowers] = useState(0);
+  const [listingPrice, setListingPrice] = useState(null);
+  const provider = useSelector((state) => state.web3Reducer.provider);
 
   let sharable_data = `${process.env.REACT_APP_CLIENT_URL}/profile/${nft.username}`;
   useEffect(async () => {
@@ -80,18 +91,18 @@ const NFTCard = ({ nft, buyNft }) => {
     }
 
     setListingPrice(nft.price);
-  }, [nft]);
+  }, []);
   useEffect(() => {
     if (cardDetails) {
       console.log('creators details');
       console.log(cardDetails);
       const extension = nft.external_url.split(/[#?]/)[0].split('.').pop().trim();
-      if(extension == 'mp4' || extension == 'mkv' || extension == 'mov' || extension == 'avi'){
-      cardDetails.user.videos.map((video)=>{
-        if(video.tokenId == nft.tokenId){
-          setConentData(video);
-        }
-      })
+      if (extension == 'mp4' || extension == 'mkv' || extension == 'mov' || extension == 'avi') {
+        cardDetails.user.videos.map((video) => {
+          if (video.tokenId == nft.tokenId) {
+            setConentData(video);
+          }
+        });
       }
     }
   }, [cardDetails]);
@@ -147,12 +158,6 @@ const NFTCard = ({ nft, buyNft }) => {
     }
     // eslint-disable-next-line
   }, [cardDetails]);
-
-  const [subscribeLoader, setSubscribeLoader] = useState(true);
-
-  const [buttonText, setButtonText] = useState('follow');
-  const [followers, setFollowers] = useState(0);
-  const [listingPrice, setListingPrice] = useState(null);
 
   const trackFollowers = () => {
     setSubscribeLoader(false);
@@ -211,6 +216,66 @@ const NFTCard = ({ nft, buyNft }) => {
         });
     }
   };
+
+  function createMarketSale(tokenId) {
+    var biconomy = new Biconomy(provider, {
+      apiKey: 'Ooz6qQnPL.10a08ea0-3611-432d-a7de-34cf9c44b49b',
+    });
+    console.log(provider);
+    console.log(biconomy);
+
+    const web3 = new Web3(biconomy);
+    window.web3 = web3;
+    // const connection = await web3Modal.connect();
+    // const provider = new ethers.providers.Web3Provider(connection);
+    // const signer = provider.getSigner();
+
+    biconomy
+      .onEvent(biconomy.READY, async () => {
+        console.log('Biconomy is ready', user.wallet_id);
+        let contract = new web3.eth.Contract(Market, nftmarketaddress);
+        var NFTPrice = ethers.utils.parseUnits(nft.price, 'ether');
+        console.log(NFTPrice, nft.price);
+        await contract.methods
+          .createMarketSale(tokenId)
+          .send({ from: user.wallet_id, value: NFTPrice.toString() })
+          .then(async (res) => {
+            console.log('Transferring Token with #:', tokenId);
+
+            console.log('#transaction : ', res);
+          });
+        // transaction
+        //   .on('transactionHash', function (hash) {
+        //     console.log(`Transaction hash is ${hash}`);
+        //     console.log(`Transaction sent. Waiting for confirmation ..`);
+        //   })
+        //   .once('confirmation', function (confirmationNumber, receipt) {
+        //     console.log(receipt);
+        //     console.log(receipt.transactionHash);
+        //     setShow(true);
+        //     setMinting(false);
+        //     //do something with transaction hash
+        //   });
+      })
+      .onEvent(biconomy.ERROR, (error, message) => {
+        // Handle error while initializing mexa
+        console.log(error);
+        console.log(message);
+      });
+
+    /* next, create the item */
+    //let contract = new web3.eth.Contract(Market.abi, nftmarketaddress);
+
+    //let event = tx.events[0];
+    //let value = event.args[2];
+    //let tokenId = value.toNumber();
+    // {
+    //   value: listingPrice,
+    // }
+    //transaction = await contract.createMarketItem(tokenId, price);
+    //await transaction.wait();
+    // props.handleCloseVideoUpload();
+  }
 
   const [showSubscriptionModal, setshowSubscriptionModal] = useState(false);
   const handleCloseSubscriptionModal = () => setshowSubscriptionModal(false);
@@ -676,9 +741,7 @@ const NFTCard = ({ nft, buyNft }) => {
                 muted={true}
                 volume={0.5}
                 light={nft.image}
-                url={
-                  contentData.link
-                }
+                url={contentData.link}
                 controls={true}
                 ref={ref}
               />
@@ -689,7 +752,7 @@ const NFTCard = ({ nft, buyNft }) => {
                   src={
                     nft.owner === nftmarketaddress
                       ? dbeatsDAOLogo
-                      : ownerDetails
+                      : ownerDetails && ownerDetails.user
                       ? ownerDetails.user.profile_image
                       : person
                   }
@@ -720,11 +783,11 @@ const NFTCard = ({ nft, buyNft }) => {
                     </div>
                   ) : (
                     <div className="w-full self-center  ">
-                      {console.log('NFT OWNER', nft.owner)}
                       <Link
                         to={`/profile/${
                           ownerDetails !== undefined &&
                           ownerDetails !== 'Try Again' &&
+                          ownerDetails.user &&
                           ownerDetails.user.username
                         }/`}
                         className="2xl:text-sm lg:text-xs text-sm text-gray-500  mb-2"
@@ -732,6 +795,7 @@ const NFTCard = ({ nft, buyNft }) => {
                         <h4>
                           {ownerDetails !== undefined &&
                             ownerDetails !== 'Try Again' &&
+                            ownerDetails.user &&
                             ownerDetails.user.name}{' '}
                         </h4>
                       </Link>{' '}
@@ -750,7 +814,7 @@ const NFTCard = ({ nft, buyNft }) => {
                 <div className="flex ">
                   {listingPrice ? (
                     <div
-                      onClick={handleShowBidModal}
+                      onClick={() => buyNft(nft)}
                       className=" rounded-3xl group w-max ml-2 p-1  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-primary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
                     >
                       <span className="  text-black dark:text-white  flex p-1 rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-secondary hover:nm-inset-dbeats-dark-secondary ">
@@ -839,7 +903,9 @@ const NFTCard = ({ nft, buyNft }) => {
                 <></>
               )} */}
             </div>
-            {showComment && <Addcomment user_id={cardDetails.user._id} contentData={contentData}></Addcomment>}
+            {showComment && (
+              <Addcomment user_id={cardDetails.user._id} contentData={contentData}></Addcomment>
+            )}
             {showAllComments && <Allcomments setShowAllComments={setShowAllComments}></Allcomments>}
           </div>
         </div>

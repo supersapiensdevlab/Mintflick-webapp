@@ -10,6 +10,7 @@ import useWeb3Modal from '../../../../hooks/useWeb3Modal';
 import Web3 from 'web3';
 import { useSelector } from 'react-redux';
 import NFTMarket from './NFTMarket';
+import { Biconomy } from '@biconomy/mexa';
 
 export default function NFTStore(props) {
   const [nfts, setNfts] = useState([]);
@@ -69,28 +70,47 @@ export default function NFTStore(props) {
 
   async function buyNft(nft) {
     /* needs the user to sign the transaction, so will use Web3Provider and sign it */
-
-    const web3 = new Web3(provider);
-    var accounts = await web3.eth.getAccounts();
-    window.web3 = web3;
-    const contract = new web3.eth.Contract(Market, nftmarketaddress);
-
-    /* user will be prompted to pay the asking proces to complete the transaction */
-    const price = ethers.utils.parseUnits(nft.price.toString(), 'ether');
-    console.log(price);
-
-    let marketFees = await contract.methods.getListingPrice().call();
-
-    const transaction = await contract.methods.createMarketSale(nft.tokenId).send({
-      from: user.wallet_id,
-
-      value: price.add(marketFees),
+    var biconomy = new Biconomy(provider, {
+      apiKey: 'Ooz6qQnPL.10a08ea0-3611-432d-a7de-34cf9c44b49b',
     });
-    if (transaction) {
-      console.log(transaction);
+    console.log(provider);
+    console.log(biconomy);
 
-      await transaction.wait();
-    }
+    const web3 = new Web3(biconomy);
+    window.web3 = web3;
+    // const connection = await web3Modal.connect();
+    // const provider = new ethers.providers.Web3Provider(connection);
+    // const signer = provider.getSigner();
+
+    biconomy
+      .onEvent(biconomy.READY, async () => {
+        console.log('Biconomy is ready', user.wallet_id);
+
+        window.web3 = web3;
+        const contract = new web3.eth.Contract(Market, nftmarketaddress);
+
+        /* user will be prompted to pay the asking proces to complete the transaction */
+        const price = ethers.utils.parseUnits(nft.price.toString(), 'ether');
+        console.log(price);
+
+        let marketFees = await contract.methods.getListingPrice().call();
+
+        const transaction = await contract.methods.createMarketSale(nft.tokenId).send({
+          from: user.wallet_id,
+
+          value: '250000000000000000',
+        });
+        if (transaction) {
+          console.log(transaction);
+
+          await transaction.wait();
+        }
+      })
+      .onEvent(biconomy.ERROR, (error, message) => {
+        // Handle error while initializing mexa
+        console.log(error);
+        console.log(message);
+      });
     loadNFTs();
   }
 
