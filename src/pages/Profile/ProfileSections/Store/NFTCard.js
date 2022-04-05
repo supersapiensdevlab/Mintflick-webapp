@@ -147,13 +147,14 @@ const NFTCard = ({ nft, buyNft }) => {
   const handleShareShow = () => setShowShare(true);
 
   useEffect(() => {
-    if (cardDetails) {
-      let videotime = cardDetails.time;
+    if ( contentData) {
+      console.log(contentData);
+      let videotime = contentData.time;
       const timestamp = new Date(videotime * 1000); // This would be the timestamp you want to format
       setTime(moment(timestamp).fromNow());
     }
     // eslint-disable-next-line
-  }, [cardDetails]);
+  }, [contentData]);
 
   const [subscribeLoader, setSubscribeLoader] = useState(true);
 
@@ -805,7 +806,7 @@ const NFTCard = ({ nft, buyNft }) => {
                         : `fas fa-heart mr-2`
                     }
                   ></i>
-                  <span className="text-dbeats-light font-extrabold	">Like</span>
+                  <span className="text-dbeats-light font-extrabold	">{contentData.reaction.like.length} Like</span>
                 </p>
               </div>
 
