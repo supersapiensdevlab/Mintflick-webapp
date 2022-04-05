@@ -29,8 +29,6 @@ export default function NFTStore(props) {
     if (provider) loadNFTs();
   }, [provider]);
   async function loadNFTs() {
-    console.log(provider);
-
     /* create a generic provider and query for unsold market items */
     const web3 = new Web3(provider);
     var accounts = await web3.eth.getAccounts();
@@ -38,7 +36,7 @@ export default function NFTStore(props) {
     //const tokenContract = new ethers.Contract(nftaddress, NFT.abi, provider);
     const marketContract = new web3.eth.Contract(Market, nftmarketaddress);
     const data = await marketContract.methods.fetchTotalMintedTokens().call();
-    console.log('TOTAL MINTED NFTs:', data);
+    // console.log('TOTAL MINTED NFTs:', data);
     /*
      *  map over items returned from smart contract and format
      *  them as well as fetch their token metadata
@@ -73,8 +71,8 @@ export default function NFTStore(props) {
     var biconomy = new Biconomy(provider, {
       apiKey: 'Ooz6qQnPL.10a08ea0-3611-432d-a7de-34cf9c44b49b',
     });
-    console.log(provider);
-    console.log(biconomy);
+
+    console.log('NFT buy Clicked', nft.tokenId);
 
     const web3 = new Web3(biconomy);
     window.web3 = web3;
@@ -84,32 +82,33 @@ export default function NFTStore(props) {
 
     biconomy
       .onEvent(biconomy.READY, async () => {
-        console.log('Biconomy is ready', user.wallet_id);
-
         window.web3 = web3;
         const contract = new web3.eth.Contract(Market, nftmarketaddress);
 
         /* user will be prompted to pay the asking proces to complete the transaction */
-        const price = ethers.utils.parseUnits(nft.price.toString(), 'ether');
-        console.log(price);
+        const price = ethers.utils.parseEther(nft.price.toString());
 
         let marketFees = await contract.methods.getListingPrice().call();
+        console.log('Market Fees', marketFees);
+        console.log('Price', price.toString(10));
 
-        const transaction = await contract.methods.createMarketSale(nft.tokenId).send({
-          from: user.wallet_id,
+        const transaction = await contract.methods
+          .createMarketSale(nft.tokenId)
+          .send({
+            from: user.wallet_id,
 
-          value: '250000000000000000',
-        });
-        if (transaction) {
-          console.log(transaction);
-
-          await transaction.wait();
-        }
+            value: price.toString(10),
+          })
+          .on('receipt', function () {
+            if (transaction) {
+              console.log('Transaction Receipt:', transaction);
+            }
+          });
       })
       .onEvent(biconomy.ERROR, (error, message) => {
         // Handle error while initializing mexa
-        console.log(error);
-        console.log(message);
+        console.log('Biconomy txn error:', error);
+        console.log('Biconomy txn msg:', message);
       });
     loadNFTs();
   }
