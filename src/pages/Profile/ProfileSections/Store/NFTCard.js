@@ -501,7 +501,6 @@ const NFTCard = ({ nft, buyNft }) => {
 
   return (
     <>
-      {console.log('card details', contentData)}
       {contentData ? (
         <div
           className="dark my-4  dark:text-gray-50 
@@ -632,11 +631,16 @@ const NFTCard = ({ nft, buyNft }) => {
                       <div className="2xl:text-sm lg:text-xs text-sm text-gray-500 pr-2 flex  ">
                         owner
                       </div>
-                      <div
-                        onClick={() => setShowAllComments(true)}
-                        className="text-xs cursor-pointer text-dbeats-light pr-2 flex  "
-                      >
-                        comments
+                      <div className="flex">
+                        <div className="text-xs text-dbeats-light  flex pr-2 ">
+                          {`${contentData.views ? contentData.views.length : 0} views`}
+                        </div>
+                        <div
+                          onClick={() => setShowAllComments(true)}
+                          className="text-xs cursor-pointer text-dbeats-light pr-2 flex  "
+                        >
+                          {contentData.comments ? contentData.comments.length : 0} comments
+                        </div>
                       </div>
                     </div>
                   ) : (
@@ -670,7 +674,7 @@ const NFTCard = ({ nft, buyNft }) => {
                           onClick={() => setShowAllComments(true)}
                           className="text-xs cursor-pointer text-dbeats-light pr-2 flex  "
                         >
-                          {` ${contentData.comments ? contentData.comments.length : 0} comments`}
+                          {contentData.comments ? contentData.comments.length : 0} comments
                         </div>
                       </div>
                     </div>
@@ -755,6 +759,7 @@ const NFTCard = ({ nft, buyNft }) => {
             )}
             {showAllComments && (
               <Allcomments
+              user_id={cardDetails.user._id} 
                 contentData={contentData}
                 setShowAllComments={setShowAllComments}
               ></Allcomments>

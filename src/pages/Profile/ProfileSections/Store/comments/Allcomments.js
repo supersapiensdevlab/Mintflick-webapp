@@ -2,18 +2,19 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
-function Allcomments({ setShowAllComments, contentData }) {
+function Allcomments({ setShowAllComments, contentData, user_id }) {
   const user = useSelector((state) => state.User.user);
   const [comments, setComments] = useState([]);
   const [totalComments, setTotalComments] = useState(0);
-  const [counter,setCounter] = useState(0);
+  const [counter, setCounter] = useState(0);
+
   useEffect(async () => {
     if (contentData.comments) {
       setTotalComments(contentData.comments.length);
       for (var i = 0; i < 2; i++) {
         if (contentData.comments[i]) {
           let x = counter + 1;
-          setCounter((counter) => counter+1);
+          setCounter((counter) => counter + 1);
           const res = await axios.get(
             `${process.env.REACT_APP_SERVER_URL}/user/shortData/${contentData.comments[i].user_id}`,
           );
@@ -30,14 +31,14 @@ function Allcomments({ setShowAllComments, contentData }) {
       setComments(null);
     }
   }, [contentData]);
-  const handleLoadComments = async() =>{
+  const handleLoadComments = async () => {
     console.log(counter);
     console.log(totalComments);
-    if(counter < totalComments){
+    if (counter < totalComments) {
       for (var i = counter; i < counter + 5; i++) {
         if (contentData.comments[i]) {
           let x = counter + 1;
-          setCounter((counter) => counter+1);
+          setCounter((counter) => counter + 1);
           const res = await axios.get(
             `${process.env.REACT_APP_SERVER_URL}/user/shortData/${contentData.comments[i].user_id}`,
           );
@@ -51,7 +52,23 @@ function Allcomments({ setShowAllComments, contentData }) {
         }
       }
     }
-  }
+  };
+  const handleCommentLike = async (comment) => {
+    let data = {
+      user_data_id: user_id,
+      content: contentData,
+      comment: comment,
+    };
+    const res = await axios({
+      method: 'post',
+      url: `${process.env.REACT_APP_SERVER_URL}/user/likecomment`,
+      data: data,
+      headers: {
+        'content-type': 'application/json',
+        'auth-token': localStorage.getItem('authtoken'),
+      },
+    });
+  };
   return (
     <div className="mx-4 my-1">
       <div
@@ -69,13 +86,21 @@ function Allcomments({ setShowAllComments, contentData }) {
               <p>{comment.comment}</p>
             </div>
             <div className="text-xs my-1 ml-2 cursor-pointer group">
-              <i className="fa-solid fa-heart group-hover:text-red-600"></i> Like
+              <i
+                onClick={() => {
+                  handleCommentLike(comment);
+                }}
+                className="fa-solid fa-heart group-hover:text-red-600"
+              ></i>{' '}
+              {comment.likes ? comment.likes.length : 0} Likes
             </div>
           </div>
         </div>
       ))}
 
-      <div className="text-sm ml-2 my-3 cursor-pointer" onClick={handleLoadComments}>Load more comments...</div>
+      <div className="text-sm ml-2 my-3 cursor-pointer" onClick={handleLoadComments}>
+        Load more comments...
+      </div>
     </div>
   );
 }
