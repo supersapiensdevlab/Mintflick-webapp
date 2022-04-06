@@ -1026,12 +1026,13 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
         handleClose={handleCloseSubscriptionModal}
         className={`${darkMode && 'dark'}   mx-auto    mt-32 shadow `}
       />
+      <div className='relative'>
       <Modal
         isOpen={showFollowers}
         className={
           darkMode
-            ? 'h-max lg:w-1/3 md:w-2/3 w-full mx-auto 2xl:mt-60 lg:mt-16  md:mt-96 mt-48 bg-dbeats-dark-alt rounded-xl'
-            : 'h-max lg:w-1/3 md"w-2/3 w-full mx-auto 2xl:mt-60 lg:mt-16  md:mt-96 mt-48 bg-gray-50 rounded-xl shadow-2xl'
+            ? 'h-max lg:w-1/3 md:w-2/3 w-full mx-auto absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-dbeats-dark-alt rounded-xl'
+            : 'h-max lg:w-1/3 md"w-2/3 w-full mx-auto absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-50 rounded-xl shadow-2xl'
         }
       >
         <div className={`${darkMode && 'dark'} p-2 h-max`}>
@@ -1108,12 +1109,14 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
           </div>
         </div>
       </Modal>
+      </div>
+      <div className='relative'>
       <Modal
         isOpen={showFollowing}
         className={
           darkMode
-            ? 'h-max lg:w-1/3 md:w-2/3 w-full mx-auto 2xl:mt-60 lg:mt-8 mt-48 md:mt-96 bg-dbeats-dark-alt rounded-xl'
-            : 'h-max lg:w-1/3 md:w-2/3 w-full mx-auto 2xl:mt-60 lg:mt-8 mt-48 md:mt-96 bg-gray-50 rounded-xl shadow-2xl'
+            ? 'h-max lg:w-1/3 md:w-2/3 w-full mx-auto absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-dbeats-dark-alt rounded-xl'
+            : 'h-max lg:w-1/3 md:w-2/3 w-full mx-auto absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-50 rounded-xl shadow-2xl'
         }
       >
         <div className={`${darkMode && 'dark'} p-2 h-max`}>
@@ -1190,12 +1193,14 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
           </div>
         </div>
       </Modal>
+      </div>
+      <div className='relative'>
       <Modal
         isOpen={showSuperfan}
         className={
           darkMode
-            ? 'h-max md:w-2/3 lg:w-1/3 w-full mx-auto 2xl:mt-60 lg:mt-16 mt-48 md:mt-96 bg-dbeats-dark-alt rounded-xl'
-            : 'h-max md:w-2/3 lg:w-1/3 w-full mx-auto 2xl:mt-60 lg:mt-16 mt-48 md:mt-96 bg-gray-50 rounded-xl shadow-2xl'
+            ? 'h-max md:w-2/3 lg:w-1/3 w-full mx-auto absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-dbeats-dark-alt rounded-xl '
+            : 'h-max md:w-2/3 lg:w-1/3 w-full mx-auto absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-50 rounded-xl shadow-2xl'
         }
       >
         <div className={`${darkMode && 'dark'} p-2 h-max`}>
@@ -1239,6 +1244,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
           </div>
         </div>
       </Modal>
+      </div>
     </div>
   );
 };

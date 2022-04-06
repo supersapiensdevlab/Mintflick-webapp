@@ -168,11 +168,11 @@ export const UploadCoverImageModal = ({
   };
 
   return (
-    <div>
+    <div className='relative'>
       <Modal
         isOpen={show}
         className={`${darkMode && 'dark'} h-max min-h-1/4 lg:w-2/5 w-5/6 bg-white  mx-auto 
-        2xl:mt-48 lg:mt-36 mt-32 shadow ring-0 outline-none rounded-md z-20`}
+        absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 shadow ring-0 outline-none rounded-md z-20`}
       >
         <div ref={wrapperRef} className="p-5 w-full">
           <div className="p-4 flex justify-center">
@@ -363,11 +363,11 @@ export const UploadProfileImageModal = ({
   };
 
   return (
-    <div>
+    <div className='relative'>
       <Modal
         isOpen={show}
         className={`${darkMode && 'dark'} h-max min-h-1/4 lg:w-2/5 w-5/6 bg-white  mx-auto 
-        2xl:mt-48 lg:mt-36 mt-32 shadow ring-0 outline-none rounded-md z-20`}
+        absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 shadow ring-0 outline-none rounded-md z-20`}
       >
         <div ref={wrapperRef} className="p-5 w-full">
           <div className="p-4 flex justify-center">

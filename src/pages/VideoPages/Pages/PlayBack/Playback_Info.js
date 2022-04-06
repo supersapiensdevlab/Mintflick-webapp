@@ -839,9 +839,10 @@ const PlayBackInfo = (props) => {
             </div>
           </Modal>
 
+          <div className='relative'>
           <Modal
             isOpen={showReport}
-            className="h-max lg:w-1/3  w-5/6  mx-auto lg:mt-60 mt-32 rounded-lg"
+            className="h-max lg:w-1/3  w-5/6  mx-auto absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-lg"
           >
             <div className={`${darkMode && 'dark'} border rounded-lg`}>
               <Container className="2xl:px-5 px-5 lg:px-1 pb-4 dark:bg-dbeats-dark-alt rounded-lg">
@@ -1125,10 +1126,12 @@ const PlayBackInfo = (props) => {
               </Container>
             </div>
           </Modal>
+          </div>
 
+          <div className='relative'>
           <Modal
             isOpen={showReportSubmitThankyou}
-            className="h-max lg:w-1/3  w-5/6 mx-auto lg:mt-60 mt-32 rounded-lg"
+            className="h-max lg:w-1/3  w-5/6 mx-auto absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-lg"
           >
             <div className={`${darkMode && 'dark'}`}>
               <Container className="2xl:px-5 px-5 lg:px-1 pb-4 dark:bg-dbeats-dark-alt rounded-lg border">
@@ -1166,10 +1169,12 @@ const PlayBackInfo = (props) => {
               </Container>
             </div>
           </Modal>
+          </div>
 
+          <div className='relative'>
           <Modal
             isOpen={showOtherReport}
-            className="h-max lg:w-1/3  w-5/6 mx-auto lg:mt-60 mt-32 rounded-lg"
+            className="h-max lg:w-1/3  w-5/6 mx-auto absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-lg"
           >
             <div className={`${darkMode && 'dark'} border rounded-lg`}>
               <Container className="2xl:px-5 px-5 lg:px-1 pb-4 dark:bg-dbeats-dark-alt rounded-lg">
@@ -1235,6 +1240,7 @@ const PlayBackInfo = (props) => {
               </Container>
             </div>
           </Modal>
+          </div>
 
           {userData && userData.videos ? (
             <Playlist

@@ -239,9 +239,10 @@ const SuperfanModal = ({ show, handleClose, userDataDetails }) => {
   };
 
   return (
+    <div className='relative'>
     <Modal
       isOpen={show}
-      className={`${darkMode && 'dark'}   mx-auto    lg:mt-72 mt-36 md:mt-80 w-screen shadow md:w-max`}
+      className={`${darkMode && 'dark'}  absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2    w-screen shadow md:w-max`}
       ariaHideApp={false}
     >
       {userDataDetails && (
@@ -564,6 +565,7 @@ bg-white dark:bg-dbeats-dark-alt    "
         </div>
       )}
     </Modal>
+    </div>
   );
 };
 

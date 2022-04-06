@@ -26,12 +26,12 @@ export const ShareModal = ({
 }) => {
   const darkMode = useSelector((darkmode) => darkmode.toggleDarkMode);
   return (
-    <>
+    <div className='relative'>
       <Modal
         isOpen={show}
         className={`${
           darkMode && 'dark'
-        } h-max lg:w-max w-5/6 bg-dbeats-dark-alt mx-auto 2xl:mt-60 lg:mt-36 mt-32 shadow `}
+        } h-max md:w-max w-full bg-dbeats-dark-alt mx-auto absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 shadow `}
       >
         <div className={``}>
           <h2 className="grid grid-cols-5 justify-between items-center ml-24 2xl:text-2xl lg:text-lg py-4 2xl:py-4 lg:py-2 dark:bg-dbeats-dark-alt dark:text-white">
@@ -40,11 +40,11 @@ export const ShareModal = ({
                 {title}
               </div>
             ) : (
-              <div className="col-span-4 pl-14">Share link on</div>
+              <div className="col-span-4  md:pl-10 lg:pl-14 pl-10">Share link on</div>
             )}
             <div
               onClick={handleClose}
-              className=" rounded-3xl group w-max   p-1  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-secondary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
+              className=" rounded-3xl group w-max   p-1  mx-1 md:mr-3 lg:mr-0 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-secondary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
             >
               <span className="  text-black dark:text-white  flex p-1 rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:nm-inset-dbeats-dark-secondary ">
                 <p className="self-center mx-2">
@@ -54,9 +54,9 @@ export const ShareModal = ({
               </span>
             </div>
           </h2>
-          <hr className="py-4 dark:bg-dbeats-dark-alt" />
+          <hr className="pt-4 dark:bg-dbeats-dark-alt" />
           <div>
-            <Container className="px-12 pb-4 dark:bg-dbeats-dark-alt">
+            <Container className="lg:px-12 p-6 pb-4 dark:bg-dbeats-dark-alt">
               <Row>
                 <Col className="flex lg:justify-around justify-center align-center flex-wrap">
                   <div className="px-1 py-1">
@@ -121,6 +121,6 @@ export const ShareModal = ({
           </div>
         </div>
       </Modal>
-    </>
+    </div>
   );
 };

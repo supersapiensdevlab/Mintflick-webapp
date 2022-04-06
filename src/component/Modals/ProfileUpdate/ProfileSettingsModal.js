@@ -110,13 +110,13 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
   }
 
   return (
-    <>
+    <div className='relative'>
     <Modal
       isOpen={show}
       className={
         darkMode
-          ? 'h-max max-h-screen lg:w-1/3 w-5/6 mx-auto mt-20   bg-dbeats-dark-primary rounded-xl '
-          : 'h-max max-h-screen lg:w-1/3 w-5/6 mx-auto mt-20    bg-gray-50 rounded-xl shadow-2xl'
+          ? 'h-max max-h-screen lg:w-1/3 w-5/6 mx-auto absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2   bg-dbeats-dark-primary rounded-xl '
+          : 'h-max max-h-screen lg:w-1/3 w-5/6 mx-auto absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2    bg-gray-50 rounded-xl shadow-2xl'
       }
     >
       <div className={`${darkMode && 'dark'} p-2 h-max`}>
@@ -173,6 +173,7 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
                           type="text"
                           name="plan"
                           id="plan"
+                          readOnly="true"
                           className="focus:border-opacity-60 border dark:border-dbeats-dark-primary dark:focus:ring-dbeats-light border-opacity-20 border-gray-300 dark:bg-dbeats-dark-primary     flex-1 block w-full rounded-md sm:text-sm  "
                           placeholder="Plan Name"
                           onChange={handleUserInputs}
@@ -258,7 +259,7 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
                     Choose a card to edit
                   </p>
 
-                  <div className="grid sm:grid-cols-3 grid-cols-1 gap-6 bg-gray-50 dark:bg-dbeats-dark-alt  align-middle justify-center row-auto p-3">
+                  <div className="grid sm:grid-cols-3 grid-cols-1 gap-6 bg-gray-50 dark:bg-dbeats-dark-alt  align-middle justify-center row-auto">
                     <form
                       name="silver"
                       id="silver"
@@ -268,7 +269,7 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
                           ? 'dark:border-dbeats-light  shadow-md '
                           : 'dark:border-dbeats-dark-primary border-dashed'
                       }   border   border-gray-500 self-center dark:bg-dbeats-dark-secondary bg-white 
-                     h-56 w-52 rounded-md align-middle text-center cursor-pointer `}
+                     h-56  rounded-md align-middle text-center cursor-pointer `}
                     >
                       {' '}
                       <input
@@ -342,7 +343,7 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
                           ? 'dark:border-dbeats-light  shadow-md '
                           : 'dark:border-dbeats-dark-primary border-dashed'
                       }   border   border-gray-500 self-center dark:bg-dbeats-dark-secondary bg-white 
-                     h-56 w-52 rounded-md align-middle text-center cursor-pointer `}
+                     h-56  rounded-md align-middle text-center cursor-pointer `}
                     >
                       <input
                         className="form-check-input appearance-none rounded-full h-4 w-4 border
@@ -416,7 +417,7 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
                           ? 'dark:border-dbeats-light  shadow-md '
                           : 'dark:border-dbeats-dark-primary border-dashed'
                       }   border   border-gray-500 self-center dark:bg-dbeats-dark-secondary bg-white 
-                     h-56 w-52 rounded-md align-middle text-center cursor-pointer `}
+                     h-56  rounded-md align-middle text-center cursor-pointer `}
                     >
                       {' '}
                       <input
@@ -482,7 +483,7 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
                     <div hidden={hidePlus}>
                     <form
                     
-                      className='h-56 w-52 border-2 border-dbeats-light flex justify-center items-center rounded-md '
+                      className='h-56 md:w-48 lg:w-52 border-2 border-dbeats-light flex justify-center items-center rounded-md '
                     >
                       <div onClick={showPlans} className="h-14 w-14 cursor-pointer">
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-14 w-14" viewBox="0 0 20 20" fill="gray">
@@ -504,7 +505,7 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
                   </div>
                 </dl>
 
-                <div className="lg:px-4 2xl:py-3 lg:py-1 lg:text-right text-center sm:px-6 flex justify-end items-center dark:bg-dbeats-dark-alt">
+                <div className=" 2xl:pt-5 lg:py-3 md:pt-5 md:px-1 lg:text-right text-center sm:px-6 flex justify-end items-center dark:bg-dbeats-dark-alt">
                   <input
                     type="button"
                     value={'Save changes'}
@@ -536,7 +537,7 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
     </Modal>
     <Modal
             isOpen={showSavedChanges}
-            className="h-max lg:w-1/3  w-5/6 mx-auto lg:mt-60 mt-32 rounded-lg"
+            className="h-max lg:w-1/3  w-5/6 mx-auto absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-lg"
           >
             <div className={`${darkMode && 'dark'}`}>
               <Container className="2xl:px-5 px-5 lg:px-1 pb-4 dark:bg-dbeats-dark-alt rounded-lg border">
@@ -574,7 +575,7 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
               </Container>
             </div>
           </Modal>
-    </>
+    </div>
   );
 };
 
