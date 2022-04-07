@@ -43,6 +43,9 @@ const NFTCard = ({ nft, buyNft }) => {
   const [listingPrice, setListingPrice] = useState(null);
   const provider = useSelector((state) => state.web3Reducer.provider);
 
+  const [myComments,setMyComments] = useState([]);
+
+
   let sharable_data = `${process.env.REACT_APP_CLIENT_URL}/profile/${nft.username}`;
   useEffect(async () => {
     // console.log(nft);
@@ -755,10 +758,11 @@ const NFTCard = ({ nft, buyNft }) => {
               </div>
             </div>
             {showComment && (
-              <Addcomment user_id={cardDetails.user._id} contentData={contentData}></Addcomment>
+              <Addcomment user_id={cardDetails.user._id} contentData={contentData} setMyComments={setMyComments} myComments={myComments}></Addcomment>
             )}
             {showAllComments && (
               <Allcomments
+              myComments={myComments}
               user_id={cardDetails.user._id} 
                 contentData={contentData}
                 setShowAllComments={setShowAllComments}

@@ -1,8 +1,9 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import ShowComment from './ShowComment';
 
-function Allcomments({ setShowAllComments, contentData, user_id }) {
+function Allcomments({ setShowAllComments, contentData, user_id, myComments }) {
   const user = useSelector((state) => state.User.user);
   const [comments, setComments] = useState([]);
   const [totalComments, setTotalComments] = useState(0);
@@ -77,25 +78,28 @@ function Allcomments({ setShowAllComments, contentData, user_id }) {
       >
         Latest comments <i className="fa-solid fa-sort-down self-center  "></i>
       </div>
-      {comments.map((comment, index) => (
+      {myComments.map((comment, index) => (
         <div className="flex" key={index}>
-          <img src={comment.profile_image} className="h-8 w-8 mr-2 rounded-full"></img>
+          <img src={user.profile_image} className="h-8 w-8 mr-2 rounded-full"></img>
           <div>
             <div className="text-gray-300 border border-dbeats-dark-secondary  rounded-lg px-3  py-2 nm-inset-dbeats-dark-primary">
-              <div className="font-semibold">{comment.name}</div>
-              <p>{comment.comment}</p>
+              <div className="font-semibold">{user.name}</div>
+              <p>{comment}</p>
             </div>
             <div className="text-xs my-1 ml-2 cursor-pointer group">
               <i
-                onClick={() => {
-                  handleCommentLike(comment);
-                }}
-                className="fa-solid fa-heart group-hover:text-red-600"
+                className={`fa-solid fa-heart
+                
+                    text-white group-hover:text-red-600
+                  } `}
               ></i>{' '}
-              {comment.likes ? comment.likes.length : 0} Likes
+              0 Likes
             </div>
           </div>
         </div>
+      ))}
+      {comments.map((comment, index) => (
+        <ShowComment key={index} comment={comment} user_id={user_id} contentData={contentData} />
       ))}
 
       <div className="text-sm ml-2 my-3 cursor-pointer" onClick={handleLoadComments}>

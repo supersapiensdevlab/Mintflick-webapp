@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import Picker from 'emoji-picker-react';
 import axios from 'axios';
 
-function Addcomment({user_id, contentData}) {
+function Addcomment({user_id, contentData,myComments, setMyComments}) {
   const user = useSelector((state) => state.User.user);
   const [comment, setComment] = useState('');
   const [showEmoji,setShowEmoji] = useState(false);
@@ -28,6 +28,7 @@ function Addcomment({user_id, contentData}) {
           'auth-token': localStorage.getItem('authtoken'),
         },
       });
+      setMyComments((myComments) => [...myComments, comment]);
       setComment('');
     }
   }
