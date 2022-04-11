@@ -88,6 +88,7 @@
     "react-scroll": "^1.8.6",
     "react-share": "^4.4.0",
     "react-stacked-center-carousel": "^1.0.3",
+    "react-switch": "^6.0.0",
     "react-top-loading-bar": "^2.1.0",
     "reactjs-popup": "^2.0.5",
     "redux-thunk": "^2.4.1",

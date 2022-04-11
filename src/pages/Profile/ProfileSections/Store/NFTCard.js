@@ -25,6 +25,8 @@ import { Biconomy } from '@biconomy/mexa';
 import Web3 from 'web3';
 import { ethers } from 'ethers';
 import Market from '../../../../artifacts/contracts/Market.sol/NFTMarket.json';
+import PostOptionModal from '../../../../component/Modals/ReportModals/PostOptionModal';
+import ReportModal from '../../../../component/Modals/ReportModals/ReportModal';
 
 const NFTCard = ({ nft, buyNft }) => {
   //console.log(nft);
@@ -43,8 +45,7 @@ const NFTCard = ({ nft, buyNft }) => {
   const [listingPrice, setListingPrice] = useState(null);
   const provider = useSelector((state) => state.web3Reducer.provider);
 
-  const [myComments,setMyComments] = useState([]);
-
+  const [myComments, setMyComments] = useState([]);
 
   let sharable_data = `${process.env.REACT_APP_CLIENT_URL}/profile/${nft.username}`;
   useEffect(async () => {
@@ -158,6 +159,8 @@ const NFTCard = ({ nft, buyNft }) => {
   const [showShare, setShowShare] = useState(false);
   const handleShareClose = () => setShowShare(false);
   const handleShareShow = () => setShowShare(true);
+  const [showPostOption, setShowPostOption] = useState(false);
+  const [showReport, setShowReport] = useState(false);
 
   useEffect(() => {
     if (contentData) {
@@ -299,7 +302,6 @@ const NFTCard = ({ nft, buyNft }) => {
   const handleCloseBidModal = () => setShowBidModal(false);
   const handleShowBidModal = () => setShowBidModal(true);
 
-  const [showReport, setShowReport] = useState(false);
   const handleReportShow = () => {
     if (user) {
       setShowReport(true);
@@ -541,32 +543,40 @@ const NFTCard = ({ nft, buyNft }) => {
                     </div>
                   </div>
                 </div>
-                <button
-                  onClick={() => {
-                    if (user) handleShowSubscriptionModal();
-                    else loadWeb3Modal();
-                  }}
-                  className={
-                    cardDetails.user.superfan_data
-                      ? ' flex dark:bg-dbeats-dark-primary border border-dbeats-light dark:hover:bg-dbeats-light p-1   text-sm    rounded  2xl:px-4 px-4 lg:px-2      mr-1   text-white   '
-                      : 'hidden'
-                  }
-                >
-                  <span
-                    className={`${
-                      cardDetails.user.superfan_data ? '' : 'hidden'
-                    } whitespace-nowrap sm:flex hidden`}
+                <div>
+                  <div className="text-right">
+                    <i
+                      onClick={() => setShowPostOption(true)}
+                      className="fa-solid fa-ellipsis text-3xl pr-2 text-white cursor-pointer"
+                    ></i>
+                  </div>
+                  <button
+                    onClick={() => {
+                      if (user) handleShowSubscriptionModal();
+                      else loadWeb3Modal();
+                    }}
+                    className={
+                      cardDetails.user.superfan_data
+                        ? ' flex dark:bg-dbeats-dark-primary border border-dbeats-light dark:hover:bg-dbeats-light p-1   text-sm    rounded  2xl:px-4 px-4 lg:px-2      mr-1   text-white   '
+                        : 'hidden'
+                    }
                   >
-                    🥳 Become a Superfan
-                  </span>
-                  <span
-                    className={`${
-                      cardDetails.user.superfan_data ? '' : 'hidden'
-                    } whitespace-nowrap sm:hidden flex`}
-                  >
-                    Become a Superfan
-                  </span>
-                </button>
+                    <span
+                      className={`${
+                        cardDetails.user.superfan_data ? '' : 'hidden'
+                      } whitespace-nowrap sm:flex hidden`}
+                    >
+                      🥳 Become a Superfan
+                    </span>
+                    <span
+                      className={`${
+                        cardDetails.user.superfan_data ? '' : 'hidden'
+                      } whitespace-nowrap sm:hidden flex`}
+                    >
+                      Become a Superfan
+                    </span>
+                  </button>
+                </div>
               </div>
 
               <div className=" text-lg   text-white px-4  ">{nft.name}</div>
@@ -758,12 +768,17 @@ const NFTCard = ({ nft, buyNft }) => {
               </div>
             </div>
             {showComment && (
-              <Addcomment user_id={cardDetails.user._id} contentData={contentData} setMyComments={setMyComments} myComments={myComments}></Addcomment>
+              <Addcomment
+                user_id={cardDetails.user._id}
+                contentData={contentData}
+                setMyComments={setMyComments}
+                myComments={myComments}
+              ></Addcomment>
             )}
             {showAllComments && (
               <Allcomments
-              myComments={myComments}
-              user_id={cardDetails.user._id} 
+                myComments={myComments}
+                user_id={cardDetails.user._id}
                 contentData={contentData}
                 setShowAllComments={setShowAllComments}
               ></Allcomments>
@@ -779,8 +794,14 @@ const NFTCard = ({ nft, buyNft }) => {
         copybuttonText={shareButtonText}
         setCopyButtonText={setShareButtonText}
       />
+      <PostOptionModal
+        show={showPostOption}
+        handleShowReport={setShowReport}
+        handleClose={setShowPostOption}
+      ></PostOptionModal>
+      <ReportModal show={showReport} handleClose={setShowReport}></ReportModal>
       <Modal
-        isOpen={showReport}
+        isOpen={false}
         className="h-max lg:w-1/3  w-5/6  mx-auto lg:mt-60 mt-32 rounded-lg"
       >
         <div className={`${darkMode && 'dark'} border rounded-lg`}>
