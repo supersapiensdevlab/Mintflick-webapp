@@ -78,33 +78,45 @@ function Allcomments({ setShowAllComments, contentData, user_id, myComments }) {
       >
         Latest comments <i className="fa-solid fa-sort-down self-center  "></i>
       </div>
-      {myComments.map((comment, index) => (
-        <div className="flex" key={index}>
-          <img src={user.profile_image} className="h-8 w-8 mr-2 rounded-full"></img>
-          <div>
-            <div className="text-gray-300 border border-dbeats-dark-secondary  rounded-lg px-3  py-2 nm-inset-dbeats-dark-primary">
-              <div className="font-semibold">{user.name}</div>
-              <p>{comment}</p>
-            </div>
-            <div className="text-xs my-1 ml-2 cursor-pointer group">
-              <i
-                className={`fa-solid fa-heart
+      {myComments && myComments.length > 0 ? (
+        myComments.map((comment, index) => (
+          <div className="flex" key={index}>
+            <img src={user.profile_image} className="h-8 w-8 mr-2 rounded-full"></img>
+            <div>
+              <div className="text-gray-300 border border-dbeats-dark-secondary  rounded-lg px-3  py-2 nm-inset-dbeats-dark-primary">
+                <div className="font-semibold">{user.name}</div>
+                <p>{comment}</p>
+              </div>
+              <div className="text-xs my-1 ml-2 cursor-pointer group">
+                <i
+                  className={`fa-solid fa-heart
                 
                     text-white group-hover:text-red-600
                   } `}
-              ></i>{' '}
-              0 Likes
+                ></i>{' '}
+                0 Likes
+              </div>
             </div>
           </div>
-        </div>
-      ))}
-      {comments.map((comment, index) => (
-        <ShowComment key={index} comment={comment} user_id={user_id} contentData={contentData} />
-      ))}
+        ))
+      ) : (
+        <></>
+      )}
+      {comments && comments.length > 0 ? (
+        comments.map((comment, index) => (
+          <ShowComment key={index} comment={comment} user_id={user_id} contentData={contentData} />
+        ))
+      ) : (
+        <div className="text-white">No comments</div>
+      )}
 
-      <div className="text-sm ml-2 my-3 cursor-pointer" onClick={handleLoadComments}>
-        Load more comments...
-      </div>
+      {comments && comments.length > 0 ? (
+        <div className="text-sm ml-2 my-3 cursor-pointer" onClick={handleLoadComments}>
+          Load more comments...
+        </div>
+      ) : (
+        <></>
+      )}
     </div>
   );
 }

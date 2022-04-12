@@ -1,7 +1,42 @@
 import React from 'react';
 import Modal from 'react-modal';
 
-function ReportModal({ show, handleClose }) {
+function ReportModal({ show, handleClose, handleShowReport2,setReportSection ,setShowOtherReport}) {
+
+  const handleSection = (section)=>{
+    switch(section){
+      case 1:
+        setReportSection(['Nudity or pornography','Sexual exploitation','Sharing private images']);
+        handleShowReport2(true);
+        handleClose(false);
+        break;
+      case 2:
+        setReportSection(['Violent Threat','Animal abuse','Death, severe injury, dangerous']);
+        handleShowReport2(true);
+        handleClose(false);
+        break;
+      case 3:
+        setReportSection(['Animals','Firearms','Fake health documents']);
+        handleShowReport2(true);
+        handleClose(false);
+        break;
+      case 4:
+        setReportSection(['Report Privacy']);
+        handleShowReport2(true);
+        handleClose(false);
+        break;
+      case 5:
+        setReportSection(['Spam']);
+        handleShowReport2(true);
+        handleClose(false);
+        break;
+      case 6:
+        setShowOtherReport(true);
+        handleClose(false);
+        break;
+      
+    }
+  }
   return (
     <Modal
       isOpen={show}
@@ -18,27 +53,27 @@ function ReportModal({ show, handleClose }) {
       </div>
       <div>Please select a problem</div>
       <div className=' mb-2'>
-        <div className="px-2 py-1  flex items-center mt-3 w-80 justify-between cursor-pointer hover:bg-dbeats-dark">
+        <div onClick={()=> handleSection(1)} className="px-2 py-1  flex items-center mt-3 w-80 justify-between cursor-pointer hover:bg-dbeats-dark">
             <div>Nudity</div>
             <div><i className="fa-solid fa-circle-chevron-right text-lg text-dbeats-light"></i></div>
         </div>
-        <div className="px-2 py-1  flex items-center mt-3 w-80 justify-between cursor-pointer hover:bg-dbeats-dark">
+        <div onClick={()=> handleSection(2)} className="px-2 py-1  flex items-center mt-3 w-80 justify-between cursor-pointer hover:bg-dbeats-dark">
             <div>Voilence</div>
             <div><i className="fa-solid fa-circle-chevron-right text-lg text-dbeats-light"></i></div>
         </div>
-        <div className="px-2 py-1  flex items-center mt-3 w-80 justify-between cursor-pointer hover:bg-dbeats-dark">
+        <div onClick={()=> handleSection(3)} className="px-2 py-1  flex items-center mt-3 w-80 justify-between cursor-pointer hover:bg-dbeats-dark">
             <div>Unauthorised sales</div>
             <div><i className="fa-solid fa-circle-chevron-right text-lg text-dbeats-light"></i></div>
         </div>
-        <div className="flex px-2  py-1 items-center mt-3 w-80 justify-between cursor-pointer hover:bg-dbeats-dark">
+        <div onClick={()=> handleSection(4)} className="flex px-2  py-1 items-center mt-3 w-80 justify-between cursor-pointer hover:bg-dbeats-dark">
             <div>Pirated</div>
             <div><i className="fa-solid fa-circle-chevron-right text-lg text-dbeats-light"></i></div>
         </div>
-        <div className="flex px-2  py-1  items-center mt-3 w-80 justify-between cursor-pointer hover:bg-dbeats-dark">
+        <div onClick={()=> handleSection(5)} className="flex px-2  py-1  items-center mt-3 w-80 justify-between cursor-pointer hover:bg-dbeats-dark">
             <div>Spam</div>
             <div><i className="fa-solid fa-circle-chevron-right text-lg text-dbeats-light"></i></div>
         </div>
-        <div className="flex px-2   py-1 items-center mt-3 w-80 justify-between cursor-pointer hover:bg-dbeats-dark">
+        <div onClick={()=> handleSection(6)} className="flex px-2   py-1 items-center mt-3 w-80 justify-between cursor-pointer hover:bg-dbeats-dark">
             <div>Something Else</div>
             <div><i className="fa-solid fa-circle-chevron-right text-lg text-dbeats-light"></i></div>
         </div>

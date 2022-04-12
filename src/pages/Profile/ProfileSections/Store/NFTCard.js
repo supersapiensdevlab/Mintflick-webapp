@@ -27,6 +27,7 @@ import { ethers } from 'ethers';
 import Market from '../../../../artifacts/contracts/Market.sol/NFTMarket.json';
 import PostOptionModal from '../../../../component/Modals/ReportModals/PostOptionModal';
 import ReportModal from '../../../../component/Modals/ReportModals/ReportModal';
+import ReportModal2 from '../../../../component/Modals/ReportModals/ReportModal2';
 
 const NFTCard = ({ nft, buyNft }) => {
   //console.log(nft);
@@ -161,6 +162,7 @@ const NFTCard = ({ nft, buyNft }) => {
   const handleShareShow = () => setShowShare(true);
   const [showPostOption, setShowPostOption] = useState(false);
   const [showReport, setShowReport] = useState(false);
+  const [showReport2, setShowReport2] = useState(false);
 
   useEffect(() => {
     if (contentData) {
@@ -322,16 +324,16 @@ const NFTCard = ({ nft, buyNft }) => {
   const [showComment, setShowComment] = useState(false);
   const [showAllComments, setShowAllComments] = useState(false);
 
-  const [reportValue, setReportValue] = useState('Nudity or pornography');
+  const [reportValue, setReportValue] = useState(null);
   const [userReportValue, setUserReportValue] = useState('');
-
+  const [reportSection, setReportSection] = useState([]);
   const handleReportSubmit = () => {
     if (user) {
       let reportData = {
         reporter: user.username,
         reported: cardDetails.user.username,
         report: reportValue,
-        videoId: cardDetails.id,
+        videoId: contentData.videoId,
       };
       axios({
         method: 'POST',
@@ -348,8 +350,10 @@ const NFTCard = ({ nft, buyNft }) => {
         .catch(function (error) {
           console.log(error);
         });
+      setShowPostOption(false);
       setShowReport(false);
       setShowOtherReport(false);
+      setShowReport2(false);
       setShowReportSubmitThankyou(true);
     } else {
       loadWeb3Modal();
@@ -799,11 +803,23 @@ const NFTCard = ({ nft, buyNft }) => {
         handleShowReport={setShowReport}
         handleClose={setShowPostOption}
       ></PostOptionModal>
-      <ReportModal show={showReport} handleClose={setShowReport}></ReportModal>
-      <Modal
-        isOpen={false}
-        className="h-max lg:w-1/3  w-5/6  mx-auto lg:mt-60 mt-32 rounded-lg"
-      >
+      <ReportModal
+        show={showReport}
+        handleClose={setShowReport}
+        setReportSection={setReportSection}
+        handleShowReport2={setShowReport2}
+        setShowOtherReport={setShowOtherReport}
+      ></ReportModal>
+      <ReportModal2
+        handleReportSubmit={handleReportSubmit}
+        reportValue={reportValue}
+        setReportValue={setReportValue}
+        reportSection={reportSection}
+        handleReport={setShowReport}
+        show={showReport2}
+        handleClose={setShowReport2}
+      ></ReportModal2>
+      <Modal isOpen={false} className="h-max lg:w-1/3  w-5/6  mx-auto lg:mt-60 mt-32 rounded-lg">
         <div className={`${darkMode && 'dark'} border rounded-lg`}>
           <Container className="2xl:px-5 px-5 lg:px-1 pb-4 dark:bg-dbeats-dark-alt rounded-lg">
             <Row>
@@ -1091,9 +1107,7 @@ const NFTCard = ({ nft, buyNft }) => {
           <Container className="2xl:px-5 px-5 lg:px-1 pb-4 dark:bg-dbeats-dark-alt rounded-lg border">
             <Row>
               <h2 className="flex justify-between  w-full 2xl:text-2xl lg:text-md py-4 2xl:py-4 lg:py-2  pt-7  text-center relative  ">
-                <div className="col-span-5 text-gray-900 dark:text-gray-100 font-bold">
-                  Thanks for reporting!!
-                </div>
+                <div className="col-span-5 text-gray-900 dark:text-gray-100 font-bold"></div>
                 <div
                   className="rounded-3xl group w-max   p-2  mx-1  justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-secondary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
                   onClick={handleReportThankyouClose}
@@ -1105,19 +1119,13 @@ const NFTCard = ({ nft, buyNft }) => {
               </h2>
             </Row>
             <Row>
-              <div className="w-full flex justify-center items-center pt-5 pb-10">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-28 w-28"
-                  viewBox="0 0 20 20"
-                  fill="white"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                    clipRule="evenodd"
-                  />
-                </svg>
+              <div className="w-full pt-5 pb-10">
+                <div className='text-center'>
+                <i className="fa-regular fa-circle-check text-white text-5xl text-center"></i>
+                </div>
+                <div className='text-center'>
+                  <p className="text-white text-center mt-2 mb-2">Thanks for reporting!</p>
+                </div>
               </div>
             </Row>
           </Container>
@@ -1134,6 +1142,7 @@ const NFTCard = ({ nft, buyNft }) => {
               <h2 className="flex justify-around w-full 2xl:text-2xl lg:text-md py-4 2xl:py-6 lg:py-2  pt-7  text-center relative  ">
                 <div
                   onClick={() => {
+                    setReportValue(null);
                     handleOtherReportClose();
                     handleReportShow();
                   }}
