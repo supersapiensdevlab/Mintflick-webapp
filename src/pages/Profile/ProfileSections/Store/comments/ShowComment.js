@@ -36,6 +36,8 @@ function ShowComment({ comment, user_id, contentData }) {
         'auth-token': localStorage.getItem('authtoken'),
       },
     });
+    console.log(data);
+    console.log(res);
     if (res.status == 201) {
       if (isLiked) {
         setLikeCount(likeCount - 1);

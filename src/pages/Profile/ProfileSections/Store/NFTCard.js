@@ -31,6 +31,7 @@ import ReportModal2 from '../../../../component/Modals/ReportModals/ReportModal2
 
 const NFTCard = ({ nft, buyNft }) => {
   //console.log(nft);
+  const user = useSelector((state) => state.User.user);
 
   const [seeMore, setSeeMore] = useState(false);
   const [nameSeeMore, setNameSeeMore] = useState(false);
@@ -47,7 +48,9 @@ const NFTCard = ({ nft, buyNft }) => {
   const provider = useSelector((state) => state.web3Reducer.provider);
 
   const [myComments, setMyComments] = useState([]);
-
+  const [myPost, setMyPost] = useState(false);
+  const [myReport, setMyReport] = useState(null);
+  const [commentDisabled, setCommentDisabled] = useState(false);
   let sharable_data = `${process.env.REACT_APP_CLIENT_URL}/profile/${nft.username}`;
   useEffect(async () => {
     // console.log(nft);
@@ -112,14 +115,36 @@ const NFTCard = ({ nft, buyNft }) => {
               temp.comments = temprevcomments;
             }
             setConentData(temp);
+            if (cardDetails.user._id == user._id) {
+              setMyPost(true);
+            }
           }
         });
       }
     }
   }, [cardDetails]);
+
+  useEffect(() => {
+    if (contentData && cardDetails && !myPost) {
+      if (contentData.disableComments) {
+        setCommentDisabled(true);
+      }
+      if (cardDetails.user.reports) {
+        cardDetails.user.reports.map((rep) => {
+          if (rep.reporter == user.username) {
+            setMyReport(rep.report);
+          }
+        });
+      }
+    }
+    if(contentData){
+      if (contentData.disableComments) {
+        setCommentDisabled(true);
+      }
+    }
+  }, [contentData]);
   ///////////////////
   const [playing, setPlaying] = useState(false);
-  const user = useSelector((state) => state.User.user);
   const dispatch = useDispatch();
   const [like, setLike] = useState(0);
   const [userreact, setUserreact] = useState('');
@@ -355,6 +380,7 @@ const NFTCard = ({ nft, buyNft }) => {
       setShowOtherReport(false);
       setShowReport2(false);
       setShowReportSubmitThankyou(true);
+      setMyReport(reportValue);
     } else {
       loadWeb3Modal();
     }
@@ -652,12 +678,14 @@ const NFTCard = ({ nft, buyNft }) => {
                         <div className="text-xs text-dbeats-light  flex pr-2 ">
                           {`${contentData.views ? contentData.views.length : 0} views`}
                         </div>
-                        <div
-                          onClick={() => setShowAllComments(true)}
-                          className="text-xs cursor-pointer text-dbeats-light pr-2 flex  "
-                        >
-                          {contentData.comments ? contentData.comments.length : 0} comments
-                        </div>
+                        {!commentDisabled ? (
+                          <div
+                            onClick={() => setShowAllComments(true)}
+                            className="text-xs cursor-pointer text-dbeats-light pr-2 flex  "
+                          >
+                            {contentData.comments ? contentData.comments.length : 0} comments
+                          </div>
+                        ):<></>}
                       </div>
                     </div>
                   ) : (
@@ -687,12 +715,14 @@ const NFTCard = ({ nft, buyNft }) => {
                         <div className="text-xs text-dbeats-light  flex pr-2 ">
                           {`${contentData.views ? contentData.views.length : 0} views`}
                         </div>
-                        <div
-                          onClick={() => setShowAllComments(true)}
-                          className="text-xs cursor-pointer text-dbeats-light pr-2 flex  "
-                        >
-                          {contentData.comments ? contentData.comments.length : 0} comments
-                        </div>
+                        {!commentDisabled ? (
+                          <div
+                            onClick={() => setShowAllComments(true)}
+                            className="text-xs cursor-pointer text-dbeats-light pr-2 flex  "
+                          >
+                            {contentData.comments ? contentData.comments.length : 0} comments
+                          </div>
+                        ):<></>}
                       </div>
                     </div>
                   )}
@@ -750,16 +780,24 @@ const NFTCard = ({ nft, buyNft }) => {
                   </span>
                 </p>
               </div>
-
-              <div className="flex text-white  items-center justify-center text-sm font-medium  text-center px-4  py-3">
-                <p
-                  onClick={() => setShowComment(true)}
-                  className="w-full mt-2 text-center cursor-pointer opacity-50 hover:opacity-100"
-                >
-                  <i className="fa-solid fa-comment text-white"></i>
-                  <span className="text-dbeats-light font-extrabold	"> Comment</span>
-                </p>
-              </div>
+              {commentDisabled ? (
+                <div className="flex text-gray-500  items-center justify-center text-sm font-medium  text-center px-4  py-3">
+                  <p className="w-full mt-2 text-center cursor-pointer opacity-50 ">
+                    <i className="fa-solid fa-comment text-white"></i>
+                    <span className="text-dbeats-light font-extrabold	"> Comment</span>
+                  </p>
+                </div>
+              ) : (
+                <div className="flex text-white  items-center justify-center text-sm font-medium  text-center px-4  py-3">
+                  <p
+                    onClick={() => setShowComment(true)}
+                    className="w-full mt-2 text-center cursor-pointer opacity-50 hover:opacity-100"
+                  >
+                    <i className="fa-solid fa-comment text-white"></i>
+                    <span className="text-dbeats-light font-extrabold	"> Comment</span>
+                  </p>
+                </div>
+              )}
 
               <div
                 onClick={handleShareShow}
@@ -771,7 +809,7 @@ const NFTCard = ({ nft, buyNft }) => {
                 </p>
               </div>
             </div>
-            {showComment && (
+            {showComment && !commentDisabled && (
               <Addcomment
                 user_id={cardDetails.user._id}
                 contentData={contentData}
@@ -779,7 +817,7 @@ const NFTCard = ({ nft, buyNft }) => {
                 myComments={myComments}
               ></Addcomment>
             )}
-            {showAllComments && (
+            {showAllComments && !commentDisabled && (
               <Allcomments
                 myComments={myComments}
                 user_id={cardDetails.user._id}
@@ -799,6 +837,13 @@ const NFTCard = ({ nft, buyNft }) => {
         setCopyButtonText={setShareButtonText}
       />
       <PostOptionModal
+        cardDetails={cardDetails}
+        contentData={contentData}
+        commentDisabled={commentDisabled}
+        setCommentDisabled={setCommentDisabled}
+        myReport={myReport}
+        setMyReport={setMyReport}
+        myPost={myPost}
         show={showPostOption}
         handleShowReport={setShowReport}
         handleClose={setShowPostOption}
@@ -1120,10 +1165,10 @@ const NFTCard = ({ nft, buyNft }) => {
             </Row>
             <Row>
               <div className="w-full pt-5 pb-10">
-                <div className='text-center'>
-                <i className="fa-regular fa-circle-check text-white text-5xl text-center"></i>
+                <div className="text-center">
+                  <i className="fa-regular fa-circle-check text-white text-5xl text-center"></i>
                 </div>
-                <div className='text-center'>
+                <div className="text-center">
                   <p className="text-white text-center mt-2 mb-2">Thanks for reporting!</p>
                 </div>
               </div>
