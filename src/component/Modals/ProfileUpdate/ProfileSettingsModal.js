@@ -173,10 +173,10 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
                           type="text"
                           name="plan"
                           id="plan"
-                          readOnly="true"
-                          className="focus:border-opacity-60 border dark:border-dbeats-dark-primary dark:focus:ring-dbeats-light border-opacity-20 border-gray-300 dark:bg-dbeats-dark-primary     flex-1 block w-full rounded-md sm:text-sm  "
+                          readOnly={true}
+                          className=" border dark:text-gray-400 dark:border-dbeats-dark-primary dark:focus:ring-dbeats-dark-secondary border-opacity-20 border-gray-300 dark:bg-dbeats-dark-primary     flex-1 block w-full rounded-md sm:text-sm  "
                           placeholder="Plan Name"
-                          onChange={handleUserInputs}
+                          // onChange={handleUserInputs}
                           value={
                             currentPlan
                           }
@@ -255,18 +255,18 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
                       <div className="tooltip-arrow" data-popper-arrow></div>
                     </div>
                   </div>
-                  <p className="text-center bg-dbeats-dark-alt self-center dark:text-gray-500">
+                  <p className="text-center bg-dbeats-dark-alt self-center dark:text-gray-500 pb-6">
                     Choose a card to edit
                   </p>
 
-                  <div className="grid sm:grid-cols-3 grid-cols-1 gap-6 bg-gray-50 dark:bg-dbeats-dark-alt  align-middle justify-center row-auto">
+                  <div className="grid sm:grid-cols-3 grid-cols-1 gap-6 bg-gray-50 dark:bg-dbeats-dark-alt   align-center justify-center row-auto">
                     <form
                       name="silver"
                       id="silver"
                       onClick={handleNewPlan}
                       className={` ${
                         currentPlan === 'silver'
-                          ? 'dark:border-dbeats-light  shadow-md '
+                          ? 'dark:border-dbeats-light  shadow-md transform scale-y-110 transition duration-200 ease-in'
                           : 'dark:border-dbeats-dark-primary border-dashed'
                       }   border   border-gray-500 self-center dark:bg-dbeats-dark-secondary bg-white 
                      h-56  rounded-md align-middle text-center cursor-pointer `}
@@ -340,7 +340,7 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
                       hidden={hideGold}
                       className={` ${
                         currentPlan === 'gold'
-                          ? 'dark:border-dbeats-light  shadow-md '
+                          ? 'dark:border-dbeats-light  shadow-md transform scale-y-110 transition duration-100 ease-in'
                           : 'dark:border-dbeats-dark-primary border-dashed'
                       }   border   border-gray-500 self-center dark:bg-dbeats-dark-secondary bg-white 
                      h-56  rounded-md align-middle text-center cursor-pointer `}
@@ -414,7 +414,7 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
                       onClick={handleNewPlan}
                       className={` ${
                         currentPlan === 'platinum'
-                          ? 'dark:border-dbeats-light  shadow-md '
+                          ? 'dark:border-dbeats-light  shadow-md  transform scale-y-110 transition duration-100 ease-in'
                           : 'dark:border-dbeats-dark-primary border-dashed'
                       }   border   border-gray-500 self-center dark:bg-dbeats-dark-secondary bg-white 
                      h-56  rounded-md align-middle text-center cursor-pointer `}
@@ -483,7 +483,7 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
                     <div hidden={hidePlus}>
                     <form
                     
-                      className='h-56 md:w-48 lg:w-52 border-2 border-dbeats-light flex justify-center items-center rounded-md '
+                      className='h-56 md:w-48 lg:w-52 mt-4 border-2 border-dbeats-light flex justify-center items-center rounded-md '
                     >
                       <div onClick={showPlans} className="h-14 w-14 cursor-pointer">
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-14 w-14" viewBox="0 0 20 20" fill="gray">

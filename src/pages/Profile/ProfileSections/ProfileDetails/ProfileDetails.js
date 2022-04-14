@@ -27,6 +27,7 @@ import { useSelector } from 'react-redux';
 import useWeb3Modal from '../../../../hooks/useWeb3Modal';
 import { useDispatch } from 'react-redux';
 import { loadUser } from '../../../../actions/userActions';
+import CommonCard from '../../Cards/CommonCard';
 
 const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow, darkMode }) => {
   const [pinnedData, setPinnedData] = useState([]);
@@ -544,17 +545,45 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
             <div className="w-full flex flex-col lg:flex-row 2xl:-mt-28 lg:-mt-20 -mt-20   ">
               <div className="w-full flex flex-col   z-1 mx-auto ">
                 <div className="  flex flex-col lg:flex-row justify-between   md:mt-20  mt-40  sm:-mt-24 text-gray-400   dark:bg-dbeats-dark-primary bg-white dark:backdrop-filter dark:backdrop-blur dark:bg-opacity-80  backdrop-filter  backdrop-blur  bg-opacity-90">
-                  <div className="dark:text-white  text-dbeats-dark-alt 2xl:py-4 lg:py-2.5    md:py-3 lg:mx-0 px-5 lg:px-10 md:px-4 ">
+                  <div className="dark:text-white  text-dbeats-dark-alt 2xl:py-4 lg:py-2.5    md:py-3 lg:mx-0 px-5 lg:px-10 md:px-3 ">
                     <div className="flex flex-wrap lg:pt-0 items-center ">
-                      <span className="font-bold 2xl:text-xl lg:text-xl md:text-xl mr-3 font-GTWalsheimPro">
+                      <span className="font-bold 2xl:text-xl lg:text-xl md:text-lg 2xl:mr-3 md:mr-1 font-GTWalsheimPro">
                         {user.name}
                       </span>
+                      <button
+                        onClick={handleShow}
+                        className="no-underline border text-dbeats-dark-alt 
+                        cursor-pointer dark:border-transparent border-1 dark:border-opacity-20  dark:text-gray-200 
+                        hover:bg-dbeats-light hover:text-white 
+                        dark:hover:text-white rounded   mr-1 
+                        flex self-center   py-2.5 2xl:px-3 lg:px-1.5  text-xs 2xl:text-lg  px-2 md:px-1.5"
+                      >
+                        <i className="fas fa-share-alt self-center mx-1 "></i>
+                      </button>
+                      {myData && !privateUser ? (
+                        <button
+                          href="#"
+                          className="flex items-center no-underline cursor-pointer border-dbeats-light border-1  
+                          text-dbeats-light hover:bg-dbeats-light 
+                          hover:text-white rounded font-bold mr-1   self-center py-1 2xl:px-3 lg:px-1.5 md:px-1.5 lg:text-sm 2xl:text-lg"
+                          onClick={trackFollowers}
+                        >
+                          <span>
+                            {buttonText === 'Follow' ? <i className="fas fa-plus"></i> : null}
+                            &nbsp;{buttonText}
+                          </span>
+                          <div
+                            hidden={subscribeLoader}
+                            className="w-3 h-3 ml-2 border-t-4 border-b-4 border-white rounded-full animate-spin"
+                          ></div>
+                        </button>
+                      ) : null}
                       {!privateUser && myData && superfan_data ? (
                         <button
                           onClick={handleShowSubscriptionModal}
                           className={
                             superfan_data
-                              ? ' flex nm-flat-dbeats-dark-primary  border border-dbeats-light dark:hover:bg-dbeats-light p-1 2xl:text-lg lg:text-sm text-md  rounded  2xl:px-4 px-4 lg:px-2      mr-3   text-white   '
+                              ? ' flex nm-flat-dbeats-dark-primary md:ml-72 lg:ml-0 border border-dbeats-light dark:hover:bg-dbeats-light p-1 2xl:text-lg lg:text-sm text-md  rounded  2xl:px-4 px-2 md:px-2 lg:px-2      mr-3   text-white   '
                               : 'hidden'
                           }
                         >
@@ -565,7 +594,8 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                           </span>
                         </button>
                       ) : null}
-                      <button
+                      
+                      {/* <button
                         onClick={handleShow}
                         className="no-underline border text-dbeats-dark-alt 
                         cursor-pointer dark:border-transparent border-1 dark:border-opacity-20  dark:text-gray-200 
@@ -574,8 +604,8 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                         flex self-center   py-2.5 2xl:px-3 lg:px-1.5  text-xs 2xl:text-lg  px-2"
                       >
                         <i className="fas fa-share-alt self-center mx-1 "></i>
-                      </button>
-                      {myData && !privateUser ? (
+                      </button> */}
+                      {/* {myData && !privateUser ? (
                         <button
                           href="#"
                           className="flex items-center no-underline cursor-pointer border-dbeats-light border-1  
@@ -592,7 +622,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                             className="w-3 h-3 ml-2 border-t-4 border-b-4 border-white rounded-full animate-spin"
                           ></div>
                         </button>
-                      ) : null}
+                      ) : null} */}
 
                       {privateUser ? (
                         <button
@@ -987,6 +1017,35 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
               </Route>
             </Switch>
           </Tab.Group>
+          {/* <div>
+            <p className='text-white'>Videos</p>
+          {user.videos && user.videos.length > 0 ? (
+                    <div className='flex w-max overflow-x-scroll'>
+                      {user.videos
+                        .slice(0)
+                        .reverse()
+                        .map((playbackUser, i) => {
+                          //////console.log(playbackUser)
+                          return (
+                            <div key={i} >
+                              <CommonCard
+                                privateUser={privateUser}
+                                videono={i}
+                                playbackUserData={playbackUser}
+                                index={user.videos.length - 1 - i}
+                                username={user.username}
+                                type="video"
+                              />
+                            </div>
+                          );
+                        })}
+                    </div>
+                  ) : (
+                    <p className="2xl:text-lg lg:text-sm dark:text-white mt-2">
+                      No Videos till now
+                    </p>
+                  )}
+                  </div> */}
         </div>
       </div>
       <UploadCoverImageModal
