@@ -1,6 +1,6 @@
 import { Tab } from '@headlessui/react';
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import Carousel from 'react-grid-carousel';
 import { Route, Switch, useHistory } from 'react-router';
 import { Link } from 'react-router-dom';
@@ -28,6 +28,8 @@ import useWeb3Modal from '../../../../hooks/useWeb3Modal';
 import { useDispatch } from 'react-redux';
 import { loadUser } from '../../../../actions/userActions';
 import CommonCard from '../../Cards/CommonCard';
+import TrackCardPC from '../../Cards/TrackCardPC';
+import AnnouncementCardPC from '../../Cards/AnnouncementCardPC';
 
 const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow, darkMode }) => {
   const [pinnedData, setPinnedData] = useState([]);
@@ -101,6 +103,10 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
 
   const [followText, setFollowText] = useState('Follow');
 
+  const scrollRef = useRef(null);
+  const musicScrollRef = useRef(null);
+  const postScrollRef = useRef(null);
+
   const myData = useSelector((state) => state.User.user);
   //console.log(myData.username);
   //console.log(user.username);
@@ -147,7 +153,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
       setPrivate(false);
     }
     // eslint-disable-next-line
-  }, [urlUsername,myData]);
+  }, [urlUsername, myData]);
 
   useEffect(() => {
     if (user && user.followee_count) {
@@ -170,6 +176,18 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
       });
     }
   }, [followerSearchInput]);
+
+  const scroll = (scrollOffset) => {
+    scrollRef.current.scrollLeft += scrollOffset;
+  };
+
+  const musicScroll = (scrollOffset) => {
+    postScrollRef.current.scrollLeft += scrollOffset;
+  };
+
+  const postScroll = (scrollOffset) => {
+    postScrollRef.current.scrollLeft += scrollOffset;
+  };
 
   // useEffect(() => {
   //   if (user && user.superfan_to) {
@@ -266,7 +284,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
   }
 
   const trackFollow = (value) => {
-    setSubscribeLoader(false)
+    setSubscribeLoader(false);
     if (!myData) {
       loadWeb3Modal();
       return;
@@ -286,7 +304,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
     })
       .then(function (response) {
         if (response) {
-          setSubscribeLoader(true)
+          setSubscribeLoader(true);
           dispatch(loadUser());
           console.log(response);
         } else {
@@ -299,7 +317,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
   };
 
   const trackUnfollow = (value) => {
-    setUnfollowLoader(false)
+    setUnfollowLoader(false);
     if (!myData) {
       loadWeb3Modal();
       return;
@@ -319,7 +337,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
     })
       .then(function (response) {
         if (response) {
-          setUnfollowLoader(true)
+          setUnfollowLoader(true);
           dispatch(loadUser());
         } else {
           alert('Invalid Login');
@@ -594,7 +612,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                           </span>
                         </button>
                       ) : null}
-                      
+
                       {/* <button
                         onClick={handleShow}
                         className="no-underline border text-dbeats-dark-alt 
@@ -746,306 +764,476 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
           </div>
         </div>
         <div className="w-full  relative mb-20 ">
-          <Tab.Group defaultIndex={tabIndex}>
-            <Tab.List className="flex  px-1  space-x-1 bg-white text-white  dark:bg-gradient-to-b  dark:from-dbeats-dark-primary  dark:to-dbeats-dark-primary bg-gradient-to-b    from-white  to-blue-50">
-              {NavTabs.map((tab, idx) => {
-                return <NavTabsTitle text={tab} key={idx} />;
-              })}
-            </Tab.List>
+          <div className="w-full block md:hidden">
+            <Tab.Group defaultIndex={tabIndex}>
+              <Tab.List className="flex  px-1  space-x-1 bg-white text-white  dark:bg-gradient-to-b  dark:from-dbeats-dark-primary  dark:to-dbeats-dark-primary bg-gradient-to-b    from-white  to-blue-50">
+                {NavTabs.map((tab, idx) => {
+                  return <NavTabsTitle text={tab} key={idx} />;
+                })}
+              </Tab.List>
 
-            <Switch>
-              <Route path={`/profile/:username/posts`}>
-                <div className=" sm:px-5  pb-5">
-                  {postsData && postsData.length > 0 ? (
-                    <div>
-                      {postsData.map((post, i) => {
-                        //////console.log(playbackUser)
-                        return (
-                          <div key={i}>
-                            <AnnouncementCard
-                              privateUser={privateUser}
-                              post={post}
-                              index={i}
-                              username={user.username}
-                            />
-                          </div>
-                        );
-                      })}
-                    </div>
-                  ) : (
-                    <p className="2xl:text-lg lg:text-sm dark:text-white mt-2">No Posts till now</p>
-                  )}
-                </div>
-              </Route>
-
-              <Route path={`/profile/:username/videos`}>
-                <div className=" sm:px-5  pb-5">
-                  {user.videos && user.videos.length > 0 ? (
-                    <div>
-                      {user.videos
-                        .slice(0)
-                        .reverse()
-                        .map((playbackUser, i) => {
+              <Switch>
+                <Route path={`/profile/:username/posts`}>
+                  <div className=" sm:px-5  pb-5">
+                    {postsData && postsData.length > 0 ? (
+                      <div>
+                        {postsData.map((post, i) => {
                           //////console.log(playbackUser)
                           return (
                             <div key={i}>
-                              <CarouselCard
+                              <AnnouncementCard
                                 privateUser={privateUser}
-                                videono={i}
-                                playbackUserData={playbackUser}
-                                index={user.videos.length - 1 - i}
-                                username={user.username}
-                                type="video"
-                              />
-                            </div>
-                          );
-                        })}
-                    </div>
-                  ) : (
-                    <p className="2xl:text-lg lg:text-sm dark:text-white mt-2">
-                      No Videos till now
-                    </p>
-                  )}
-                </div>
-              </Route>
-
-              <Route path={`/profile/:username/music`}>
-                <div className="sm:px-5  pb-5">
-                  {user.tracks && user.tracks.length > 0 ? (
-                    <div className="w-full">
-                      {user.tracks
-                        .slice(0)
-                        .reverse()
-                        .map((track, i) => {
-                          //////console.log(playbackUser)
-                          return (
-                            <div key={i} className="w-full">
-                              <TrackCard
-                                privateUser={privateUser}
-                                trackno={i}
-                                track={track}
+                                post={post}
                                 index={i}
                                 username={user.username}
                               />
-                            </div>
-                          );
-                        })}
-                    </div>
-                  ) : (
-                    <p className="2xl:text-lg lg:text-sm dark:text-white mt-2">No Music till now</p>
-                  )}
-                </div>
-              </Route>
-
-              <Route path={`/profile/:username/activity`}>
-                <div className=" sm:px-5  pb-5">
-                  {user.your_reactions.length > 0 ? (
-                    <div>
-                      {user.your_reactions
-                        .slice(0)
-                        .reverse()
-                        .map((playbackUser, i) => {
-                          //////console.log(playbackUser)
-                          return (
-                            <div key={i} className="">
-                              <ReactionCard
-                                reactno={i}
-                                playbackUserData={playbackUser}
-                                index={i}
-                                username={user.username}
-                                type="video"
-                              />
-                            </div>
-                          );
-                        })}
-                    </div>
-                  ) : (
-                    <p className="2xl:text-lg lg:text-sm dark:text-white mt-2">
-                      No Latest Activity
-                    </p>
-                  )}
-                </div>
-              </Route>
-
-              <Route path={`/profile/:username/playlists`}>
-                <div className="px-2 2xl:pt-5 lg:pt-2 pb-5">
-                  {user.my_playlists && user.my_playlists.length > 0 ? (
-                    <div>
-                      {user.my_playlists
-                        .slice(0)
-                        .reverse()
-                        .map((playlist, i) => {
-                          return (
-                            <>
-                              <div key={i} className="">
-                                <h2 className="dark:text-white font-bold 2xl:text-2xl lg:text-lg text-md ml-2 my-2">
-                                  {playlist.playlistname}
-                                </h2>
-                                <div>
-                                  <Carousel cols={4}>
-                                    {playlist.playlistdata.map((data, i) => {
-                                      return (
-                                        <Carousel.Item key={i}>
-                                          <PlaylistCard playlistData={data} />
-                                        </Carousel.Item>
-                                      );
-                                    })}
-                                  </Carousel>
-                                </div>
-                              </div>
-                              <hr className="2xl:my-7 lg:my-3 opacity-30" />
-                            </>
-                          );
-                        })}
-                    </div>
-                  ) : (
-                    <p className="2xl:text-lg lg:text-sm dark:text-white">No Existing PlayLists</p>
-                  )}
-                </div>
-              </Route>
-
-              <Route path={`/profile/:username/following`}>
-                <div className="pt-4 pl-4">
-                  {privateUser ? (
-                    <h2 className="text-white opacity-40">
-                      Pinned Channels will be shown on left sidebar.
-                    </h2>
-                  ) : (
-                    <h2 className="text-white opacity-40">Following</h2>
-                  )}
-                  <div className=" grid grid-cols-2 sm:grid-cols-4 grid-flow-row ">
-                    {user.followee_count.length > 0 ? (
-                      <div>
-                        {user.followee_count.map((following, i) => {
-                          //////console.log(playbackUser)
-                          return (
-                            <div
-                              key={i}
-                              className="flex 2xl:text-lg lg:text-sm text-md shadow pl-4 w-full  lg:w-full   my-3 lg:my-2.5 py-2 rounded dark:hover:bg-dbeats-dark-alt dark:bg-dbeats-dark-secondary dark:text-gray-100 "
-                            >
-                              {privateUser ? (
-                                <>
-                                  {pinnedData.indexOf(following) > -1 ? (
-                                    <i
-                                      className="fas fa-thumbtack mx-3 my-auto 2xl:text-xl lg:text-md cursor-pointer "
-                                      onClick={() => UnPinningUser(following)}
-                                    ></i>
-                                  ) : (
-                                    <i
-                                      className="fas fa-thumbtack mx-3 my-auto 2xl:text-xl lg:text-md  opacity-20 hover:opacity-100 cursor-pointer -rotate-45 transform"
-                                      onClick={() => PinningUser(following)}
-                                    ></i>
-                                  )}
-                                </>
-                              ) : null}
-                              <Link to={`/profile/${following}/posts`}>
-                                <h2 className="hover:underline">{following}</h2>
-                              </Link>
                             </div>
                           );
                         })}
                       </div>
                     ) : (
                       <p className="2xl:text-lg lg:text-sm dark:text-white mt-2">
-                        🥺Not Following Anyone
+                        No Posts till now
                       </p>
                     )}
                   </div>
-                </div>
-              </Route>
+                </Route>
 
-              <Route path={`/profile/:username/followers`}>
-                <div className="pt-4 pl-4">
-                  {<h2 className="text-white opacity-40">Followers</h2>}
-                  <div className=" grid grid-cols-2 sm:grid-cols-4 grid-flow-row ">
-                    {user.follower_count ? (
+                <Route path={`/profile/:username/videos`}>
+                  <div className=" sm:px-5  pb-5">
+                    {user.videos && user.videos.length > 0 ? (
                       <div>
-                        {user.follower_count.map((follower, i) => {
-                          //////console.log(playbackUser)
-                          return (
-                            <div
-                              key={i}
-                              className="flex 2xl:text-lg lg:text-sm text-md shadow  w-full  lg:w-full pl-4  my-3 lg:my-2.5 py-2 rounded dark:hover:bg-dbeats-dark-alt dark:bg-dbeats-dark-secondary dark:text-gray-100 "
-                            >
-                              <Link to={`/profile/${follower}/posts`}>
-                                <h2 className="hover:underline">{follower}</h2>
-                              </Link>
-                            </div>
-                          );
-                        })}
+                        {user.videos
+                          .slice(0)
+                          .reverse()
+                          .map((playbackUser, i) => {
+                            //////console.log(playbackUser)
+                            return (
+                              <div key={i}>
+                                <CarouselCard
+                                  privateUser={privateUser}
+                                  videono={i}
+                                  playbackUserData={playbackUser}
+                                  index={user.videos.length - 1 - i}
+                                  username={user.username}
+                                  type="video"
+                                />
+                              </div>
+                            );
+                          })}
                       </div>
                     ) : (
-                      <p className="2xl:text-lg lg:text-sm dark:text-white">🥺No Followers</p>
+                      <p className="2xl:text-lg lg:text-sm dark:text-white mt-2">
+                        No Videos till now
+                      </p>
                     )}
                   </div>
-                </div>
-              </Route>
+                </Route>
 
-              <Route path={`/profile/:username/superfans`}>
-                <div className="pt-4 pl-4">
-                  {<h2 className="text-white opacity-40"> Superfans</h2>}
-                  <div className=" grid grid-cols-2 sm:grid-cols-4 grid-flow-row ">
-                    {user.superfan_to.length > 0 ? (
+                <Route path={`/profile/:username/music`}>
+                  <div className="sm:px-5  pb-5">
+                    {user.tracks && user.tracks.length > 0 ? (
+                      <div className="w-full">
+                        {user.tracks
+                          .slice(0)
+                          .reverse()
+                          .map((track, i) => {
+                            //////console.log(playbackUser)
+                            return (
+                              <div key={i} className="w-full">
+                                <TrackCard
+                                  privateUser={privateUser}
+                                  trackno={i}
+                                  track={track}
+                                  index={i}
+                                  username={user.username}
+                                />
+                              </div>
+                            );
+                          })}
+                      </div>
+                    ) : (
+                      <p className="2xl:text-lg lg:text-sm dark:text-white mt-2">
+                        No Music till now
+                      </p>
+                    )}
+                  </div>
+                </Route>
+
+                <Route path={`/profile/:username/activity`}>
+                  <div className=" sm:px-5  pb-5">
+                    {user.your_reactions.length > 0 ? (
                       <div>
-                        {user.superfan_to.reverse().map((superfan, i) => {
-                          //////console.log(playbackUser)
-                          return (
-                            <div
-                              key={i}
-                              className="justify-between flex 2xl:text-lg lg:text-sm text-md shadow  w-full  lg:w-full px-4  my-3 lg:my-2.5 py-2 rounded dark:hover:bg-dbeats-dark-alt dark:bg-dbeats-dark-secondary dark:text-gray-100 "
-                            >
-                              <Link to={`/profile/${superfan.username}/posts`}>
-                                <h2 className="hover:underline">{superfan.username}</h2>
-                              </Link>
-                              <a
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="underline text-dbeats-white opacity-40 justify-end"
-                                href={`https://polygonscan.com/tx/${superfan.txnHash}`}
+                        {user.your_reactions
+                          .slice(0)
+                          .reverse()
+                          .map((playbackUser, i) => {
+                            //////console.log(playbackUser)
+                            return (
+                              <div key={i} className="">
+                                <ReactionCard
+                                  reactno={i}
+                                  playbackUserData={playbackUser}
+                                  index={i}
+                                  username={user.username}
+                                  type="video"
+                                />
+                              </div>
+                            );
+                          })}
+                      </div>
+                    ) : (
+                      <p className="2xl:text-lg lg:text-sm dark:text-white mt-2">
+                        No Latest Activity
+                      </p>
+                    )}
+                  </div>
+                </Route>
+
+                <Route path={`/profile/:username/playlists`}>
+                  <div className="px-2 2xl:pt-5 lg:pt-2 pb-5">
+                    {user.my_playlists && user.my_playlists.length > 0 ? (
+                      <div>
+                        {user.my_playlists
+                          .slice(0)
+                          .reverse()
+                          .map((playlist, i) => {
+                            return (
+                              <>
+                                <div key={i} className="">
+                                  <h2 className="dark:text-white font-bold 2xl:text-2xl lg:text-lg text-md ml-2 my-2">
+                                    {playlist.playlistname}
+                                  </h2>
+                                  <div>
+                                    <Carousel cols={4}>
+                                      {playlist.playlistdata.map((data, i) => {
+                                        return (
+                                          <Carousel.Item key={i}>
+                                            <PlaylistCard playlistData={data} />
+                                          </Carousel.Item>
+                                        );
+                                      })}
+                                    </Carousel>
+                                  </div>
+                                </div>
+                                <hr className="2xl:my-7 lg:my-3 opacity-30" />
+                              </>
+                            );
+                          })}
+                      </div>
+                    ) : (
+                      <p className="2xl:text-lg lg:text-sm dark:text-white">
+                        No Existing PlayLists
+                      </p>
+                    )}
+                  </div>
+                </Route>
+
+                <Route path={`/profile/:username/following`}>
+                  <div className="pt-4 pl-4">
+                    {privateUser ? (
+                      <h2 className="text-white opacity-40">
+                        Pinned Channels will be shown on left sidebar.
+                      </h2>
+                    ) : (
+                      <h2 className="text-white opacity-40">Following</h2>
+                    )}
+                    <div className=" grid grid-cols-2 sm:grid-cols-4 grid-flow-row ">
+                      {user.followee_count.length > 0 ? (
+                        <div>
+                          {user.followee_count.map((following, i) => {
+                            //////console.log(playbackUser)
+                            return (
+                              <div
+                                key={i}
+                                className="flex 2xl:text-lg lg:text-sm text-md shadow pl-4 w-full  lg:w-full   my-3 lg:my-2.5 py-2 rounded dark:hover:bg-dbeats-dark-alt dark:bg-dbeats-dark-secondary dark:text-gray-100 "
                               >
-                                view transaction
-                              </a>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    ) : (
-                      <p className="2xl:text-lg lg:text-sm dark:text-white mt-2"> 🥺No Superfans</p>
-                    )}
-                  </div>
-                </div>
-              </Route>
-            </Switch>
-          </Tab.Group>
-          {/* <div>
-            <p className='text-white'>Videos</p>
-          {user.videos && user.videos.length > 0 ? (
-                    <div className='flex w-max overflow-x-scroll'>
-                      {user.videos
-                        .slice(0)
-                        .reverse()
-                        .map((playbackUser, i) => {
-                          //////console.log(playbackUser)
-                          return (
-                            <div key={i} >
-                              <CommonCard
-                                privateUser={privateUser}
-                                videono={i}
-                                playbackUserData={playbackUser}
-                                index={user.videos.length - 1 - i}
-                                username={user.username}
-                                type="video"
-                              />
-                            </div>
-                          );
-                        })}
+                                {privateUser ? (
+                                  <>
+                                    {pinnedData.indexOf(following) > -1 ? (
+                                      <i
+                                        className="fas fa-thumbtack mx-3 my-auto 2xl:text-xl lg:text-md cursor-pointer "
+                                        onClick={() => UnPinningUser(following)}
+                                      ></i>
+                                    ) : (
+                                      <i
+                                        className="fas fa-thumbtack mx-3 my-auto 2xl:text-xl lg:text-md  opacity-20 hover:opacity-100 cursor-pointer -rotate-45 transform"
+                                        onClick={() => PinningUser(following)}
+                                      ></i>
+                                    )}
+                                  </>
+                                ) : null}
+                                <Link to={`/profile/${following}/posts`}>
+                                  <h2 className="hover:underline">{following}</h2>
+                                </Link>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      ) : (
+                        <p className="2xl:text-lg lg:text-sm dark:text-white mt-2">
+                          🥺Not Following Anyone
+                        </p>
+                      )}
                     </div>
-                  ) : (
-                    <p className="2xl:text-lg lg:text-sm dark:text-white mt-2">
-                      No Videos till now
-                    </p>
-                  )}
-                  </div> */}
+                  </div>
+                </Route>
+
+                <Route path={`/profile/:username/followers`}>
+                  <div className="pt-4 pl-4">
+                    {<h2 className="text-white opacity-40">Followers</h2>}
+                    <div className=" grid grid-cols-2 sm:grid-cols-4 grid-flow-row ">
+                      {user.follower_count ? (
+                        <div>
+                          {user.follower_count.map((follower, i) => {
+                            //////console.log(playbackUser)
+                            return (
+                              <div
+                                key={i}
+                                className="flex 2xl:text-lg lg:text-sm text-md shadow  w-full  lg:w-full pl-4  my-3 lg:my-2.5 py-2 rounded dark:hover:bg-dbeats-dark-alt dark:bg-dbeats-dark-secondary dark:text-gray-100 "
+                              >
+                                <Link to={`/profile/${follower}/posts`}>
+                                  <h2 className="hover:underline">{follower}</h2>
+                                </Link>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      ) : (
+                        <p className="2xl:text-lg lg:text-sm dark:text-white">🥺No Followers</p>
+                      )}
+                    </div>
+                  </div>
+                </Route>
+
+                <Route path={`/profile/:username/superfans`}>
+                  <div className="pt-4 pl-4">
+                    {<h2 className="text-white opacity-40"> Superfans</h2>}
+                    <div className=" grid grid-cols-2 sm:grid-cols-4 grid-flow-row ">
+                      {user.superfan_to.length > 0 ? (
+                        <div>
+                          {user.superfan_to.reverse().map((superfan, i) => {
+                            //////console.log(playbackUser)
+                            return (
+                              <div
+                                key={i}
+                                className="justify-between flex 2xl:text-lg lg:text-sm text-md shadow  w-full  lg:w-full px-4  my-3 lg:my-2.5 py-2 rounded dark:hover:bg-dbeats-dark-alt dark:bg-dbeats-dark-secondary dark:text-gray-100 "
+                              >
+                                <Link to={`/profile/${superfan.username}/posts`}>
+                                  <h2 className="hover:underline">{superfan.username}</h2>
+                                </Link>
+                                <a
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="underline text-dbeats-white opacity-40 justify-end"
+                                  href={`https://polygonscan.com/tx/${superfan.txnHash}`}
+                                >
+                                  view transaction
+                                </a>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      ) : (
+                        <p className="2xl:text-lg lg:text-sm dark:text-white mt-2">
+                          {' '}
+                          🥺No Superfans
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                </Route>
+              </Switch>
+            </Tab.Group>
+          </div>
+          <div className="w-full hidden md:block px-5 mt-2">
+            <div className="flex w-full justify-between">
+              <p className="text-white p-3 text-2xl">Posts</p>
+              <div className="flex">
+                <button className="mr-2 text-white" onClick={() => postScroll(-1700)}>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-8 w-8"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm.707-10.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L9.414 11H13a1 1 0 100-2H9.414l1.293-1.293z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </button>
+                <button className="text-white" onClick={() => postScroll(1700)}>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-8 w-8"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 1.414L10.586 9H7a1 1 0 100 2h3.586l-1.293 1.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
+            {postsData && postsData.length > 0 ? (
+              <div className="flex w-max overflow-x-scroll scroll-smooth max-w-full">
+                {postsData.map((post, i) => {
+                  //////console.log(playbackUser)
+                  return (
+                    <div key={i}>
+                      <AnnouncementCardPC
+                        privateUser={privateUser}
+                        post={post}
+                        index={i}
+                        username={user.username}
+                        user={user}
+                        myDataUser={myData.username}
+                        darkMode={darkMode}
+                      />
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <p className="2xl:text-lg lg:text-sm dark:text-white mt-2">No Posts till now</p>
+            )}
+          </div>
+          {/* <hr className="w-full mt-3" /> */}
+          <div className="w-full hidden md:block px-5 mt-5">
+            <div className="flex w-full justify-between">
+              <p className="text-white p-3 text-2xl">Videos</p>
+              <div className="flex">
+                <button className="mr-2 text-white" onClick={() => scroll(-1700)}>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-8 w-8"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm.707-10.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L9.414 11H13a1 1 0 100-2H9.414l1.293-1.293z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </button>
+                <button className="text-white" onClick={() => scroll(1700)}>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-8 w-8"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 1.414L10.586 9H7a1 1 0 100 2h3.586l-1.293 1.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
+            {user.videos && user.videos.length > 0 && myData ? (
+              <div
+                className="flex w-max overflow-x-scroll scroll-smooth max-w-full"
+                ref={scrollRef}
+              >
+                {user.videos
+                  .slice(0)
+                  .reverse()
+                  .map((playbackUser, i) => {
+                    //////console.log(playbackUser)
+                    return (
+                      <div key={i}>
+                        <CommonCard
+                          privateUser={privateUser}
+                          videono={i}
+                          playbackUserData={playbackUser}
+                          index={user.videos.length - 1 - i}
+                          username={user.username}
+                          user={user}
+                          myDataUser={myData.username}
+                          darkMode={darkMode}
+                          type="video"
+                        />
+                      </div>
+                    );
+                  })}
+              </div>
+            ) : (
+              <p className="2xl:text-lg lg:text-sm dark:text-white mt-2 pl-3">No Videos till now</p>
+            )}
+          </div>
+          {/* <hr className="w-full mt-3" /> */}
+          <div className="w-full hidden md:block px-5 mt-5">
+            <div className="flex w-full justify-between">
+              <p className="text-white p-3 text-2xl">Music</p>
+              <div className="flex">
+                <button className="mr-2 text-white" onClick={() => musicScroll(-1700)}>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-8 w-8"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm.707-10.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L9.414 11H13a1 1 0 100-2H9.414l1.293-1.293z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </button>
+                <button className="text-white" onClick={() => musicScroll(1700)}>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-8 w-8"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 1.414L10.586 9H7a1 1 0 100 2h3.586l-1.293 1.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
+            {user.tracks && user.tracks.length > 0 && myData ? (
+              <div
+                className="flex w-max overflow-x-scroll scroll-smooth max-w-full"
+                ref={musicScrollRef}
+              >
+                {user.tracks
+                  .slice(0)
+                  .reverse()
+                  .map((track, i) => {
+                    //////console.log(playbackUser)
+                    return (
+                      <div key={i} className="w-full">
+                        <TrackCardPC
+                          privateUser={privateUser}
+                          trackno={i}
+                          track={track}
+                          index={i}
+                          username={user.username}
+                          user={user}
+                          myDataUser={myData.username}
+                          darkMode={darkMode}
+                        />
+                      </div>
+                    );
+                  })}
+              </div>
+            ) : (
+              <p className="2xl:text-lg lg:text-sm dark:text-white mt-2 pl-3">No Music till now</p>
+            )}
+          </div>
         </div>
       </div>
       <UploadCoverImageModal
@@ -1085,224 +1273,224 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
         handleClose={handleCloseSubscriptionModal}
         className={`${darkMode && 'dark'}   mx-auto    mt-32 shadow `}
       />
-      <div className='relative'>
-      <Modal
-        isOpen={showFollowers}
-        className={
-          darkMode
-            ? 'h-max lg:w-1/3 md:w-2/3 w-full mx-auto absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-dbeats-dark-alt rounded-xl'
-            : 'h-max lg:w-1/3 md"w-2/3 w-full mx-auto absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-50 rounded-xl shadow-2xl'
-        }
-      >
-        <div className={`${darkMode && 'dark'} p-2 h-max`}>
-          <h2 className="grid grid-cols-5 justify-items-center 2xl:text-2xl text-lg md:text-2xl 2xl:py-4 py-4 lg:py-3 dark:bg-dbeats-dark-alt bg-white dark:text-white">
-            <div className="col-span-4 pl-14 ">Followers</div>
-            <div
-              onClick={handleCloseFollowers}
-              className=" rounded-3xl group w-max   p-1  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-secondary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
-            >
-              <span className="  text-black dark:text-white  flex p-1 rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:nm-inset-dbeats-dark-secondary ">
-                <p className="self-center mx-2">
-                  {' '}
-                  <i className="fas fa-times"></i>{' '}
-                </p>
-              </span>
+      <div className="relative">
+        <Modal
+          isOpen={showFollowers}
+          className={
+            darkMode
+              ? 'h-max lg:w-1/3 md:w-2/3 w-full mx-auto absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-dbeats-dark-alt rounded-xl'
+              : 'h-max lg:w-1/3 md"w-2/3 w-full mx-auto absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-50 rounded-xl shadow-2xl'
+          }
+        >
+          <div className={`${darkMode && 'dark'} p-2 h-max`}>
+            <h2 className="grid grid-cols-5 justify-items-center 2xl:text-2xl text-lg md:text-2xl 2xl:py-4 py-4 lg:py-3 dark:bg-dbeats-dark-alt bg-white dark:text-white">
+              <div className="col-span-4 pl-14 ">Followers</div>
+              <div
+                onClick={handleCloseFollowers}
+                className=" rounded-3xl group w-max   p-1  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-secondary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
+              >
+                <span className="  text-black dark:text-white  flex p-1 rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:nm-inset-dbeats-dark-secondary ">
+                  <p className="self-center mx-2">
+                    {' '}
+                    <i className="fas fa-times"></i>{' '}
+                  </p>
+                </span>
+              </div>
+            </h2>
+            <hr />
+            <div className=" bg-white text-gray-500  dark:bg-dbeats-dark-alt dark:text-gray-100   shadow-sm rounded-lg   2xl:py-5   lg:py-1  mb-5 lg:mb-2 2xl:mb-5 lg:max-h-full  max-h-96  overflow-y-auto overflow-hidden">
+              <div className="lg:px-7 lg:py-4 px-4 py-4">
+                <input
+                  type="text"
+                  placeholder="Search"
+                  onChange={(e) => setFollowerSearchInput(e.target.value)}
+                  className="w-full h-10 rounded-full lg:px-4 lg:py-3 px-3 py-2 md:px-5 md:py-6 bg-dbeats-dark-alt text-white border border-white focus:border-dbeats-light"
+                />
+              </div>
+              {user && user.follower_count && user.followee_count ? (
+                <div className="w-full max-h-60 overflow-y-scroll lg:px-3 px-0 ">
+                  {followerSearchOutput.map((value, i) => {
+                    return (
+                      <div key={i} className="w-full flex justify-between px-3">
+                        <a key={i} href={`/profile/${value}`} onClick={handleCloseFollowers}>
+                          <p className="mb-1.5 w-full px-3 lg:py-1.5 py-1 text-sm md:text-lg lg:text-base  hover:text-dbeats-light cursor-pointer">
+                            {value}
+                          </p>
+                        </a>
+                        {myData && !myData.followee_count.includes(value) ? (
+                          <div className="flex">
+                            <button
+                              onClick={() => {
+                                trackFollow(value);
+                              }}
+                              className="md:px-3 rounded-sm md:h-8 h-7 px-3 bg-dbeats-light text-white"
+                            >
+                              Follow
+                            </button>
+                            <div
+                              hidden={subscribeLoader}
+                              className="w-3 h-3 ml-2 border-t-4 border-b-4 border-white rounded-full animate-spin"
+                            ></div>
+                          </div>
+                        ) : (
+                          <div className="flex">
+                            <button
+                              onClick={() => {
+                                trackUnfollow(value);
+                              }}
+                              className="px-1.5 rounded-sm h-8  text-dbeats-light border-0 bg-none"
+                            >
+                              Unfollow
+                            </button>
+                            <div
+                              hidden={unfollowLoader}
+                              className="w-3 h-3 ml-2 border-t-4 border-b-4 border-white rounded-full animate-spin"
+                            ></div>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : null}
             </div>
-          </h2>
-          <hr />
-          <div className=" bg-white text-gray-500  dark:bg-dbeats-dark-alt dark:text-gray-100   shadow-sm rounded-lg   2xl:py-5   lg:py-1  mb-5 lg:mb-2 2xl:mb-5 lg:max-h-full  max-h-96  overflow-y-auto overflow-hidden">
-            <div className="lg:px-7 lg:py-4 px-4 py-4">
-              <input
-                type="text"
-                placeholder="Search"
-                onChange={(e) => setFollowerSearchInput(e.target.value)}
-                className="w-full h-10 rounded-full lg:px-4 lg:py-3 px-3 py-2 md:px-5 md:py-6 bg-dbeats-dark-alt text-white border border-white focus:border-dbeats-light"
-              />
+          </div>
+        </Modal>
+      </div>
+      <div className="relative">
+        <Modal
+          isOpen={showFollowing}
+          className={
+            darkMode
+              ? 'h-max lg:w-1/3 md:w-2/3 w-full mx-auto absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-dbeats-dark-alt rounded-xl'
+              : 'h-max lg:w-1/3 md:w-2/3 w-full mx-auto absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-50 rounded-xl shadow-2xl'
+          }
+        >
+          <div className={`${darkMode && 'dark'} p-2 h-max`}>
+            <h2 className="grid grid-cols-5 justify-items-center 2xl:text-2xl text-lg md:text-2x 2xl:py-4 py-4 lg:py-3 dark:bg-dbeats-dark-alt bg-white dark:text-white">
+              <div className="col-span-4 pl-14 ">Following</div>
+              <div
+                onClick={handleCloseFollowing}
+                className=" rounded-3xl group w-max   p-1  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-secondary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
+              >
+                <span className="  text-black dark:text-white  flex p-1 rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:nm-inset-dbeats-dark-secondary ">
+                  <p className="self-center mx-2">
+                    {' '}
+                    <i className="fas fa-times"></i>{' '}
+                  </p>
+                </span>
+              </div>
+            </h2>
+            <hr />
+            <div className=" bg-white text-gray-500  dark:bg-dbeats-dark-alt dark:text-gray-100   shadow-sm rounded-lg   2xl:py-5  lg:py-1 py-1 mb-5 lg:mb-2 2xl:mb-5 lg:max-h-full  max-h-96  overflow-y-auto overflow-hidden">
+              <div className="lg:px-7 lg:py-4 px-4 py-4">
+                <input
+                  type="text"
+                  placeholder="Search"
+                  onChange={(e) => setSearchInput(e.target.value)}
+                  className="w-full h-10 rounded-full lg:px-4 lg:py-3 px-3 py-2 md:px-5 md:py-6 bg-dbeats-dark-alt text-white border border-white focus:border-dbeats-light"
+                />
+              </div>
+              {user && user.followee_count && user.followee_count ? (
+                <div className="w-full max-h-60 overflow-y-scroll px-3">
+                  {searchOutput.map((value, i) => {
+                    return (
+                      <div key={i} className="flex justify-between px-2 mb-1.5">
+                        <a href={`/profile/${value}`} onClick={handleCloseFollowing}>
+                          <p className=" w-full px-3 lg:py-1.5 py-1 text-sm md:text-lg lg:text-base  hover:text-dbeats-light cursor-pointer">
+                            {value}
+                          </p>
+                        </a>
+                        {myData && !myData.followee_count.includes(value) ? (
+                          <div className="flex">
+                            <button
+                              onClick={() => {
+                                trackFollow(value);
+                              }}
+                              className="md:px-3 rounded-sm md:h-8 h-7 px-3  bg-dbeats-light text-white"
+                            >
+                              Follow
+                            </button>
+                            <div
+                              hidden={subscribeLoader}
+                              className="w-3 h-3 ml-2 border-t-4 border-b-4 border-white rounded-full animate-spin"
+                            ></div>
+                          </div>
+                        ) : (
+                          <div className="flex">
+                            <button
+                              onClick={() => {
+                                trackUnfollow(value);
+                              }}
+                              className="px-1.5 rounded-sm h-8  text-dbeats-light border-0 bg-none"
+                            >
+                              Unfollow
+                            </button>
+                            <div
+                              hidden={unfollowLoader}
+                              className="w-3 h-3 ml-2 border-t-4 border-b-4 border-white rounded-full animate-spin"
+                            ></div>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : null}
             </div>
-            {user && user.follower_count && user.followee_count ? (
-              <div className="w-full max-h-60 overflow-y-scroll lg:px-3 px-0 ">
-                {followerSearchOutput.map((value, i) => {
-                  return (
-                    <div key={i} className="w-full flex justify-between px-3">
-                      <a key={i} href={`/profile/${value}`} onClick={handleCloseFollowers}>
-                        <p className="mb-1.5 w-full px-3 lg:py-1.5 py-1 text-sm md:text-lg lg:text-base  hover:text-dbeats-light cursor-pointer">
-                          {value}
+          </div>
+        </Modal>
+      </div>
+      <div className="relative">
+        <Modal
+          isOpen={showSuperfan}
+          className={
+            darkMode
+              ? 'h-max md:w-2/3 lg:w-1/3 w-full mx-auto absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-dbeats-dark-alt rounded-xl '
+              : 'h-max md:w-2/3 lg:w-1/3 w-full mx-auto absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-50 rounded-xl shadow-2xl'
+          }
+        >
+          <div className={`${darkMode && 'dark'} p-2 h-max`}>
+            <h2 className="grid grid-cols-5 justify-items-center 2xl:text-2xl md:text-2x text-lg 2xl:py-4 py-4 lg:py-3 dark:bg-dbeats-dark-alt bg-white dark:text-white">
+              <div className="col-span-4 pl-14 ">Superfan</div>
+              <div
+                onClick={handleCloseSuperfan}
+                className=" rounded-3xl group w-max   p-1  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-secondary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
+              >
+                <span className="  text-black dark:text-white  flex p-1 rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:nm-inset-dbeats-dark-secondary ">
+                  <p className="self-center mx-2">
+                    {' '}
+                    <i className="fas fa-times"></i>{' '}
+                  </p>
+                </span>
+              </div>
+            </h2>
+            <hr />
+            <div className=" bg-white text-gray-500  dark:bg-dbeats-dark-alt dark:text-gray-100   shadow-sm rounded-lg   2xl:py-5  lg:py-1 py-1 mb-5 lg:mb-2 2xl:mb-5 lg:max-h-full  max-h-96  overflow-y-auto overflow-hidden">
+              <div className="lg:px-7 lg:py-4 px-4 py-4">
+                <input
+                  type="text"
+                  placeholder="Search"
+                  // onChange={(e) => setSuperfanSearchInput(e.target.value)}
+                  className="w-full h-10 rounded-full lg:px-4 lg:py-3 px-3 py-2 md:px-5 md:py-6 bg-dbeats-dark-alt text-white border border-white focus:border-dbeats-light"
+                />
+              </div>
+              {user && user.superfan_to ? (
+                <div className="w-full max-h-60 overflow-y-scroll px-6">
+                  {user.superfan_to.map((value, i) => {
+                    return (
+                      <a key={i} href={`/profile/${value.username}`} onClick={handleCloseSuperfan}>
+                        <p className="mb-1.5 w-full px-3 lg:py-1.5 py-1 md:text-lg text-sm lg:text-base  hover:text-dbeats-light cursor-pointer">
+                          {value.username}
                         </p>
                       </a>
-                      {myData && !myData.followee_count.includes(value) ? (
-                        <div className='flex'>
-                        <button
-                          onClick={() => {
-                            trackFollow(value);
-                          }}
-                          className="md:px-3 rounded-sm md:h-8 h-7 px-3 bg-dbeats-light text-white"
-                        >
-                          Follow
-                        </button>
-                        <div
-                            hidden={subscribeLoader}
-                            className="w-3 h-3 ml-2 border-t-4 border-b-4 border-white rounded-full animate-spin"
-                          ></div>
-                        </div>
-                      ) : (
-                        <div className='flex'>
-                        <button
-                          onClick={() => {
-                            trackUnfollow(value);
-                          }}
-                          className="px-1.5 rounded-sm h-8  text-dbeats-light border-0 bg-none"
-                        >
-                          Unfollow
-                        </button>
-                        <div
-                            hidden={unfollowLoader}
-                            className="w-3 h-3 ml-2 border-t-4 border-b-4 border-white rounded-full animate-spin"
-                          ></div>
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-            ) : null}
+                    );
+                  })}
+                </div>
+              ) : null}
+            </div>
           </div>
-        </div>
-      </Modal>
-      </div>
-      <div className='relative'>
-      <Modal
-        isOpen={showFollowing}
-        className={
-          darkMode
-            ? 'h-max lg:w-1/3 md:w-2/3 w-full mx-auto absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-dbeats-dark-alt rounded-xl'
-            : 'h-max lg:w-1/3 md:w-2/3 w-full mx-auto absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-50 rounded-xl shadow-2xl'
-        }
-      >
-        <div className={`${darkMode && 'dark'} p-2 h-max`}>
-          <h2 className="grid grid-cols-5 justify-items-center 2xl:text-2xl text-lg md:text-2x 2xl:py-4 py-4 lg:py-3 dark:bg-dbeats-dark-alt bg-white dark:text-white">
-            <div className="col-span-4 pl-14 ">Following</div>
-            <div
-              onClick={handleCloseFollowing}
-              className=" rounded-3xl group w-max   p-1  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-secondary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
-            >
-              <span className="  text-black dark:text-white  flex p-1 rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:nm-inset-dbeats-dark-secondary ">
-                <p className="self-center mx-2">
-                  {' '}
-                  <i className="fas fa-times"></i>{' '}
-                </p>
-              </span>
-            </div>
-          </h2>
-          <hr />
-          <div className=" bg-white text-gray-500  dark:bg-dbeats-dark-alt dark:text-gray-100   shadow-sm rounded-lg   2xl:py-5  lg:py-1 py-1 mb-5 lg:mb-2 2xl:mb-5 lg:max-h-full  max-h-96  overflow-y-auto overflow-hidden">
-            <div className="lg:px-7 lg:py-4 px-4 py-4">
-              <input
-                type="text"
-                placeholder="Search"
-                onChange={(e) => setSearchInput(e.target.value)}
-                className="w-full h-10 rounded-full lg:px-4 lg:py-3 px-3 py-2 md:px-5 md:py-6 bg-dbeats-dark-alt text-white border border-white focus:border-dbeats-light"
-              />
-            </div>
-            {user && user.followee_count && user.followee_count ? (
-              <div className="w-full max-h-60 overflow-y-scroll px-3">
-                {searchOutput.map((value, i) => {
-                  return (
-                    <div key={i} className="flex justify-between px-2 mb-1.5">
-                      <a href={`/profile/${value}`} onClick={handleCloseFollowing}>
-                        <p className=" w-full px-3 lg:py-1.5 py-1 text-sm md:text-lg lg:text-base  hover:text-dbeats-light cursor-pointer">
-                          {value}
-                        </p>
-                      </a>
-                      {myData && !myData.followee_count.includes(value) ? (
-                        <div className='flex'>
-                        <button
-                          onClick={() => {
-                            trackFollow(value);
-                          }}
-                          className="md:px-3 rounded-sm md:h-8 h-7 px-3  bg-dbeats-light text-white"
-                        >
-                          Follow
-                        </button>
-                        <div
-                            hidden={subscribeLoader}
-                            className="w-3 h-3 ml-2 border-t-4 border-b-4 border-white rounded-full animate-spin"
-                          ></div>
-                        </div>
-                      ) : (
-                        <div className='flex'>
-                        <button
-                          onClick={() => {
-                            trackUnfollow(value);
-                          }}
-                          className="px-1.5 rounded-sm h-8  text-dbeats-light border-0 bg-none"
-                        >
-                          Unfollow
-                        </button>
-                        <div
-                            hidden={unfollowLoader}
-                            className="w-3 h-3 ml-2 border-t-4 border-b-4 border-white rounded-full animate-spin"
-                          ></div>
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-            ) : null}
-          </div>
-        </div>
-      </Modal>
-      </div>
-      <div className='relative'>
-      <Modal
-        isOpen={showSuperfan}
-        className={
-          darkMode
-            ? 'h-max md:w-2/3 lg:w-1/3 w-full mx-auto absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-dbeats-dark-alt rounded-xl '
-            : 'h-max md:w-2/3 lg:w-1/3 w-full mx-auto absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-50 rounded-xl shadow-2xl'
-        }
-      >
-        <div className={`${darkMode && 'dark'} p-2 h-max`}>
-          <h2 className="grid grid-cols-5 justify-items-center 2xl:text-2xl md:text-2x text-lg 2xl:py-4 py-4 lg:py-3 dark:bg-dbeats-dark-alt bg-white dark:text-white">
-            <div className="col-span-4 pl-14 ">Superfan</div>
-            <div
-              onClick={handleCloseSuperfan}
-              className=" rounded-3xl group w-max   p-1  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-secondary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
-            >
-              <span className="  text-black dark:text-white  flex p-1 rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:nm-inset-dbeats-dark-secondary ">
-                <p className="self-center mx-2">
-                  {' '}
-                  <i className="fas fa-times"></i>{' '}
-                </p>
-              </span>
-            </div>
-          </h2>
-          <hr />
-          <div className=" bg-white text-gray-500  dark:bg-dbeats-dark-alt dark:text-gray-100   shadow-sm rounded-lg   2xl:py-5  lg:py-1 py-1 mb-5 lg:mb-2 2xl:mb-5 lg:max-h-full  max-h-96  overflow-y-auto overflow-hidden">
-            <div className="lg:px-7 lg:py-4 px-4 py-4">
-              <input
-                type="text"
-                placeholder="Search"
-                // onChange={(e) => setSuperfanSearchInput(e.target.value)}
-                className="w-full h-10 rounded-full lg:px-4 lg:py-3 px-3 py-2 md:px-5 md:py-6 bg-dbeats-dark-alt text-white border border-white focus:border-dbeats-light"
-              />
-            </div>
-            {user && user.superfan_to ? (
-              <div className="w-full max-h-60 overflow-y-scroll px-6">
-                {user.superfan_to.map((value, i) => {
-                  return (
-                    <a key={i} href={`/profile/${value.username}`} onClick={handleCloseSuperfan}>
-                      <p className="mb-1.5 w-full px-3 lg:py-1.5 py-1 md:text-lg text-sm lg:text-base  hover:text-dbeats-light cursor-pointer">
-                        {value.username}
-                      </p>
-                    </a>
-                  );
-                })}
-              </div>
-            ) : null}
-          </div>
-        </div>
-      </Modal>
+        </Modal>
       </div>
     </div>
   );

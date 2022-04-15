@@ -4,16 +4,16 @@ import Modal from 'react-modal';
 import ReactPlayer from 'react-player';
 import { useSelector } from 'react-redux';
 import classes from '../Profile.module.css';
-import image from '../../../assets/images/Logo/Icon 1.png';
 import moment from 'moment';
 import { useHistory } from 'react-router-dom';
 import useWeb3Modal from '../../../hooks/useWeb3Modal';
 import { ShareModal } from '../../../component/Modals/ShareModal/ShareModal';
 import { RadioGroup } from '@headlessui/react';
 import { Container, Row } from 'react-bootstrap';
+import image from '../../../assets/images/wallpaper.jpg';
 moment().format();
 
-const CommonCard = (props) => {
+const AnnouncementCardPC = (props) => {
   const user = useSelector((state) => state.User.user);
   const history = useHistory();
 
@@ -44,14 +44,14 @@ const CommonCard = (props) => {
   const text = 'Copy Link To Clipboard';
   const [buttonText, setButtonText] = useState(text);
 
-  let sharable_data = `${process.env.REACT_APP_CLIENT_URL}/playback/${props.username}/${props.playbackUserData.videoId}`;
+  let sharable_data = `${process.env.REACT_APP_CLIENT_URL}/profile/${props.username}`;
 
   const handleReportSubmit = () => {
     let reportData = {
       reporter: props.myDataUser,
       reported: props.username,
       report: reportValue,
-      videoId: props.playbackUserData.videoId,
+      videoId: props.post.announcement,
     };
     axios({
       method: 'POST',
@@ -78,24 +78,24 @@ const CommonCard = (props) => {
   };
 
   const convertTimestampToTime = () => {
-    const timestamp = new Date(props.playbackUserData.time * 1000); // This would be the timestamp you want to format
+    const timestamp = new Date(props.post.timestamp * 1); // This would be the timestamp you want to format
     setTime(moment(timestamp).fromNow());
   };
-
-  console.log(props.playbackUserData.time);
 
   useEffect(() => {
     convertTimestampToTime();
     // eslint-disable-next-line
   }, []);
 
-  const handlePlayerClick = async () => {
-    if (user) {
-      history.push(`/playback/${props.username}/${props.playbackUserData.videoId}`);
-    } else {
-      await loadWeb3Modal();
-    }
-  };
+  //   const handlePlayerClick = async () => {
+  //     if (user) {
+  //       history.push(`/track/${props.username}/${props.track.trackId}`);
+  //     } else {
+  //       await loadWeb3Modal();
+  //     }
+  //   };
+
+  console.log(props.post);
 
   return (
     <div className="w-96 bg-dbeats-black px-2 mr-10 py-1">
@@ -106,29 +106,35 @@ const CommonCard = (props) => {
           className="h-14 w-14 rounded-full"
         />
         <div className="ml-4">
-          <p className="text-white text-md">{props.playbackUserData.videoName.slice(0, 35)} ...</p>
-          <p className="text-white text-sm">{props.playbackUserData.category}</p>
+          <p className="text-white text-md">
+            {props.post.announcement ? props.post.announcement.slice(0, 35) : `Title`} ...
+          </p>
+          <p className="text-white text-sm">{props.username}</p>
           <p className="text-white text-xs">{time}</p>
         </div>
       </div>
       <div className=" my-2">
-        <p className="text-white py-2"> {props.playbackUserData.description.slice(0, 42)} ...</p>
+        <p className="text-white py-2">description</p>
       </div>
       <div
         className={`cursor-pointer h-44 lg:h-32 2xl:h-48 md:h-40 w-full  my-auto dark:bg-dbeats-dark-primary `}
       >
-        <a onClick={handlePlayerClick}>
-          <ReactPlayer
-            width="100%"
-            height="100%"
-            playing={playing}
-            muted={false}
-            volume={0.5}
-            className={`${classes.cards_videos}`}
-            light={props.playbackUserData.videoImage}
-            url={props.playbackUserData.link}
-            controls={false}
-          />
+        <a>
+          {props.post && props.post.post_image ? (
+            <img
+              id="album-artwork"
+              src={props.post.post_image}
+              className="cursor-pointer   w-full h-full  my-auto "
+              alt=""
+            ></img>
+          ) : (
+            <img
+              id="album-artwork"
+              src={image}
+              className="cursor-pointer   w-full h-full  my-auto "
+              alt=""
+            ></img>
+          )}
         </a>
       </div>
       <div className="flex w-full justify-between mt-3">
@@ -455,11 +461,11 @@ const CommonCard = (props) => {
               </Row>
               <Row>
                 <div
-                  className="w-full flex justify-center items-center py-2  
+                  className="w-full flex justify-center items-center py-2
                       cursor-pointer  "
                 >
                   <button
-                    className="text-white px-5 py-3 text-lg  bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-secondary-dark-primary 
+                    className="text-white px-5 py-3 text-lg  bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-secondary-dark-primary
                       hover:nm-inset-dbeats-secondary-light  rounded-3xl transition-all duration-300"
                     onClick={handleReportSubmit}
                   >
@@ -569,11 +575,11 @@ const CommonCard = (props) => {
               </Row>
               <Row>
                 <div
-                  className="w-full flex justify-center items-center py-2  
+                  className="w-full flex justify-center items-center py-2
                       cursor-pointer  "
                 >
                   <button
-                    className="text-white px-5 py-3 text-lg  bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-secondary-dark-primary 
+                    className="text-white px-5 py-3 text-lg  bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-secondary-dark-primary
                       hover:nm-inset-dbeats-secondary-light  rounded-3xl transition-all duration-300"
                     onClick={handleReportSubmit}
                   >
@@ -589,4 +595,4 @@ const CommonCard = (props) => {
   );
 };
 
-export default CommonCard;
+export default AnnouncementCardPC;

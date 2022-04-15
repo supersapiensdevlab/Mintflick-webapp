@@ -13,7 +13,7 @@ import { RadioGroup } from '@headlessui/react';
 import { Container, Row } from 'react-bootstrap';
 moment().format();
 
-const CommonCard = (props) => {
+const TrackCardPC = (props) => {
   const user = useSelector((state) => state.User.user);
   const history = useHistory();
 
@@ -44,14 +44,15 @@ const CommonCard = (props) => {
   const text = 'Copy Link To Clipboard';
   const [buttonText, setButtonText] = useState(text);
 
-  let sharable_data = `${process.env.REACT_APP_CLIENT_URL}/playback/${props.username}/${props.playbackUserData.videoId}`;
+  let sharable_data = `${process.env.REACT_APP_CLIENT_URL}/track/${props.username}/${props.track.trackId}`;
 
+  console.log(props.track);
   const handleReportSubmit = () => {
     let reportData = {
       reporter: props.myDataUser,
       reported: props.username,
       report: reportValue,
-      videoId: props.playbackUserData.videoId,
+      videoId: props.track.trackId,
     };
     axios({
       method: 'POST',
@@ -77,21 +78,21 @@ const CommonCard = (props) => {
     setReportValue(e.target.value);
   };
 
-  const convertTimestampToTime = () => {
-    const timestamp = new Date(props.playbackUserData.time * 1000); // This would be the timestamp you want to format
-    setTime(moment(timestamp).fromNow());
-  };
+  //   const convertTimestampToTime = () => {
+  //     const timestamp = new Date(props.playbackUserData.time * 1000); // This would be the timestamp you want to format
+  //     setTime(moment(timestamp).fromNow());
+  //   };
 
-  console.log(props.playbackUserData.time);
+  //   useEffect(() => {
+  //     convertTimestampToTime();
+  //     // eslint-disable-next-line
+  //   }, []);
 
-  useEffect(() => {
-    convertTimestampToTime();
-    // eslint-disable-next-line
-  }, []);
+  console.log(props.user);
 
   const handlePlayerClick = async () => {
     if (user) {
-      history.push(`/playback/${props.username}/${props.playbackUserData.videoId}`);
+      history.push(`/track/${props.username}/${props.track.trackId}`);
     } else {
       await loadWeb3Modal();
     }
@@ -106,29 +107,24 @@ const CommonCard = (props) => {
           className="h-14 w-14 rounded-full"
         />
         <div className="ml-4">
-          <p className="text-white text-md">{props.playbackUserData.videoName.slice(0, 35)} ...</p>
-          <p className="text-white text-sm">{props.playbackUserData.category}</p>
-          <p className="text-white text-xs">{time}</p>
+          <p className="text-white text-md">{props.track.trackName.slice(0, 35)} ...</p>
+          <p className="text-white text-sm">{props.track.genre}</p>
+          <p className="text-white text-xs">{props.username}</p>
         </div>
       </div>
       <div className=" my-2">
-        <p className="text-white py-2"> {props.playbackUserData.description.slice(0, 42)} ...</p>
+        <p className="text-white py-2"> {props.track.description.slice(0, 42)} ...</p>
       </div>
       <div
         className={`cursor-pointer h-44 lg:h-32 2xl:h-48 md:h-40 w-full  my-auto dark:bg-dbeats-dark-primary `}
       >
         <a onClick={handlePlayerClick}>
-          <ReactPlayer
-            width="100%"
-            height="100%"
-            playing={playing}
-            muted={false}
-            volume={0.5}
-            className={`${classes.cards_videos}`}
-            light={props.playbackUserData.videoImage}
-            url={props.playbackUserData.link}
-            controls={false}
-          />
+          <img
+            id="album-artwork"
+            src={props.track.trackImage}
+            className="cursor-pointer   w-full h-full  my-auto "
+            alt=""
+          ></img>
         </a>
       </div>
       <div className="flex w-full justify-between mt-3">
@@ -589,4 +585,4 @@ const CommonCard = (props) => {
   );
 };
 
-export default CommonCard;
+export default TrackCardPC;
