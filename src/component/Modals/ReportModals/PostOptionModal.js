@@ -24,7 +24,7 @@ function PostOptionModal({
         'content-type': 'application/json',
         'auth-token': localStorage.getItem('authtoken'),
       },
-      data: { videoId: contentData.videoId, value: checked ,user_data_id:cardDetails.user._id},
+      data: { videoId: contentData.videoId, value: checked, user_data_id: cardDetails.user._id },
     });
   };
   return (
@@ -32,23 +32,26 @@ function PostOptionModal({
       isOpen={show}
       className={`${'dark'} h-max md:w-max w-full bg-dbeats-dark-alt mx-auto absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 shadow `}
     >
-      <div className="text-right">
-        <i
-          className="fa-solid fa-xmark text-lg text-white p-3 cursor-pointer"
-          onClick={() => {
-            handleClose(false);
-          }}
-        ></i>
+      <div className="flex items-center justify-between">
+        <div className='text-white px-3'>{(!myPost && myReport) ? 'Already Reported' : <></>}</div>
+        <div>
+          <i
+            className="fa-solid fa-xmark text-lg text-white p-3 cursor-pointer"
+            onClick={() => {
+              handleClose(false);
+            }}
+          ></i>
+        </div>
       </div>
       <div className="mt-1 mx-2">
         {!myPost ? (
           myReport ? (
             <p className="mb-1 text-gray-500 text-lg cursor-pointer">
-              Already Reported <span className="text-sm">{myReport}</span>
+            {myReport}
             </p>
           ) : (
             <p
-              className="mb-1 text-white text-lg cursor-pointer"
+              className="mb-1 text-white text-lg cursor-pointer w-20"
               onClick={() => {
                 handleShowReport(true);
                 handleClose(false);

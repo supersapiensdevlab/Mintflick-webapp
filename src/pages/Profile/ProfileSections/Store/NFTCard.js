@@ -1146,7 +1146,7 @@ const NFTCard = ({ nft, buyNft }) => {
 
       <Modal
         isOpen={showReportSubmitThankyou}
-        className="h-max lg:w-1/3  w-5/6 mx-auto lg:mt-60 mt-32 rounded-lg"
+        className={`${'dark'} h-max md:w-max w-full bg-dbeats-dark-alt mx-auto absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 shadow `}
       >
         <div className={`${darkMode && 'dark'}`}>
           <Container className="2xl:px-5 px-5 lg:px-1 pb-4 dark:bg-dbeats-dark-alt rounded-lg border">
