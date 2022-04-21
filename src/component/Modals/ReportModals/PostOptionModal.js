@@ -30,7 +30,7 @@ function PostOptionModal({
   return (
     <Modal
       isOpen={show}
-      className={`${'dark'} h-max md:w-max w-full bg-dbeats-dark-alt mx-auto absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 shadow `}
+      className={`${'dark'} border border-dbeats-white h-max md:w-max w-full bg-dbeats-dark-alt mx-auto absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 shadow `}
     >
       <div className="flex items-center justify-between">
         <div className='text-white px-3'>{(!myPost && myReport) ? 'Already Reported' : <></>}</div>
