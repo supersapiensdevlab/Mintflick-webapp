@@ -25,9 +25,13 @@ import { Biconomy } from '@biconomy/mexa';
 import Web3 from 'web3';
 import { ethers } from 'ethers';
 import Market from '../../../../artifacts/contracts/Market.sol/NFTMarket.json';
+import PostOptionModal from '../../../../component/Modals/ReportModals/PostOptionModal';
+import ReportModal from '../../../../component/Modals/ReportModals/ReportModal';
+import ReportModal2 from '../../../../component/Modals/ReportModals/ReportModal2';
 
 const NFTCard = ({ nft, buyNft }) => {
   //console.log(nft);
+  const user = useSelector((state) => state.User.user);
 
   const [seeMore, setSeeMore] = useState(false);
   const [nameSeeMore, setNameSeeMore] = useState(false);
@@ -43,6 +47,10 @@ const NFTCard = ({ nft, buyNft }) => {
   const [listingPrice, setListingPrice] = useState(null);
   const provider = useSelector((state) => state.web3Reducer.provider);
 
+  const [myComments, setMyComments] = useState([]);
+  const [myPost, setMyPost] = useState(false);
+  const [myReport, setMyReport] = useState(null);
+  const [commentDisabled, setCommentDisabled] = useState(false);
   let sharable_data = `${process.env.REACT_APP_CLIENT_URL}/profile/${nft.username}`;
   useEffect(async () => {
     // console.log(nft);
@@ -107,14 +115,36 @@ const NFTCard = ({ nft, buyNft }) => {
               temp.comments = temprevcomments;
             }
             setConentData(temp);
+            if (cardDetails.user._id == user._id) {
+              setMyPost(true);
+            }
           }
         });
       }
     }
   }, [cardDetails]);
+
+  useEffect(() => {
+    if (contentData && cardDetails && !myPost) {
+      if (contentData.disableComments) {
+        setCommentDisabled(true);
+      }
+      if (cardDetails.user.reports) {
+        cardDetails.user.reports.map((rep) => {
+          if (rep.reporter == user.username) {
+            setMyReport(rep.report);
+          }
+        });
+      }
+    }
+    if(contentData){
+      if (contentData.disableComments) {
+        setCommentDisabled(true);
+      }
+    }
+  }, [contentData]);
   ///////////////////
   const [playing, setPlaying] = useState(false);
-  const user = useSelector((state) => state.User.user);
   const dispatch = useDispatch();
   const [like, setLike] = useState(0);
   const [userreact, setUserreact] = useState('');
@@ -155,6 +185,9 @@ const NFTCard = ({ nft, buyNft }) => {
   const [showShare, setShowShare] = useState(false);
   const handleShareClose = () => setShowShare(false);
   const handleShareShow = () => setShowShare(true);
+  const [showPostOption, setShowPostOption] = useState(false);
+  const [showReport, setShowReport] = useState(false);
+  const [showReport2, setShowReport2] = useState(false);
 
   useEffect(() => {
     if (contentData) {
@@ -296,7 +329,6 @@ const NFTCard = ({ nft, buyNft }) => {
   const handleCloseBidModal = () => setShowBidModal(false);
   const handleShowBidModal = () => setShowBidModal(true);
 
-  const [showReport, setShowReport] = useState(false);
   const handleReportShow = () => {
     if (user) {
       setShowReport(true);
@@ -317,16 +349,16 @@ const NFTCard = ({ nft, buyNft }) => {
   const [showComment, setShowComment] = useState(false);
   const [showAllComments, setShowAllComments] = useState(false);
 
-  const [reportValue, setReportValue] = useState('Nudity or pornography');
+  const [reportValue, setReportValue] = useState(null);
   const [userReportValue, setUserReportValue] = useState('');
-
+  const [reportSection, setReportSection] = useState([]);
   const handleReportSubmit = () => {
     if (user) {
       let reportData = {
         reporter: user.username,
         reported: cardDetails.user.username,
         report: reportValue,
-        videoId: cardDetails.id,
+        videoId: contentData.videoId,
       };
       axios({
         method: 'POST',
@@ -343,9 +375,12 @@ const NFTCard = ({ nft, buyNft }) => {
         .catch(function (error) {
           console.log(error);
         });
+      setShowPostOption(false);
       setShowReport(false);
       setShowOtherReport(false);
+      setShowReport2(false);
       setShowReportSubmitThankyou(true);
+      setMyReport(reportValue);
     } else {
       loadWeb3Modal();
     }
@@ -538,32 +573,40 @@ const NFTCard = ({ nft, buyNft }) => {
                     </div>
                   </div>
                 </div>
-                <button
-                  onClick={() => {
-                    if (user) handleShowSubscriptionModal();
-                    else loadWeb3Modal();
-                  }}
-                  className={
-                    cardDetails.user.superfan_data
-                      ? ' flex dark:bg-dbeats-dark-primary border border-dbeats-light dark:hover:bg-dbeats-light p-1   text-sm    rounded  2xl:px-4 px-4 lg:px-2      mr-1   text-white   '
-                      : 'hidden'
-                  }
-                >
-                  <span
-                    className={`${
-                      cardDetails.user.superfan_data ? '' : 'hidden'
-                    } whitespace-nowrap sm:flex hidden`}
+                <div>
+                  <div className="text-right">
+                    <i
+                      onClick={() => setShowPostOption(true)}
+                      className="fa-solid fa-ellipsis text-3xl pr-2 text-white cursor-pointer"
+                    ></i>
+                  </div>
+                  <button
+                    onClick={() => {
+                      if (user) handleShowSubscriptionModal();
+                      else loadWeb3Modal();
+                    }}
+                    className={
+                      cardDetails.user.superfan_data
+                        ? ' flex dark:bg-dbeats-dark-primary border border-dbeats-light dark:hover:bg-dbeats-light p-1   text-sm    rounded  2xl:px-4 px-4 lg:px-2      mr-1   text-white   '
+                        : 'hidden'
+                    }
                   >
-                    🥳 Become a Superfan
-                  </span>
-                  <span
-                    className={`${
-                      cardDetails.user.superfan_data ? '' : 'hidden'
-                    } whitespace-nowrap sm:hidden flex`}
-                  >
-                    Become a Superfan
-                  </span>
-                </button>
+                    <span
+                      className={`${
+                        cardDetails.user.superfan_data ? '' : 'hidden'
+                      } whitespace-nowrap sm:flex hidden`}
+                    >
+                      🥳 Become a Superfan
+                    </span>
+                    <span
+                      className={`${
+                        cardDetails.user.superfan_data ? '' : 'hidden'
+                      } whitespace-nowrap sm:hidden flex`}
+                    >
+                      Become a Superfan
+                    </span>
+                  </button>
+                </div>
               </div>
 
               <div className=" text-lg   text-white px-4  ">{nft.name}</div>
@@ -635,12 +678,14 @@ const NFTCard = ({ nft, buyNft }) => {
                         <div className="text-xs text-dbeats-light  flex pr-2 ">
                           {`${contentData.views ? contentData.views.length : 0} views`}
                         </div>
-                        <div
-                          onClick={() => setShowAllComments(true)}
-                          className="text-xs cursor-pointer text-dbeats-light pr-2 flex  "
-                        >
-                          {contentData.comments ? contentData.comments.length : 0} comments
-                        </div>
+                        {!commentDisabled ? (
+                          <div
+                            onClick={() => setShowAllComments(true)}
+                            className="text-xs cursor-pointer text-dbeats-light pr-2 flex  "
+                          >
+                            {contentData.comments ? contentData.comments.length : 0} comments
+                          </div>
+                        ):<></>}
                       </div>
                     </div>
                   ) : (
@@ -670,12 +715,14 @@ const NFTCard = ({ nft, buyNft }) => {
                         <div className="text-xs text-dbeats-light  flex pr-2 ">
                           {`${contentData.views ? contentData.views.length : 0} views`}
                         </div>
-                        <div
-                          onClick={() => setShowAllComments(true)}
-                          className="text-xs cursor-pointer text-dbeats-light pr-2 flex  "
-                        >
-                          {contentData.comments ? contentData.comments.length : 0} comments
-                        </div>
+                        {!commentDisabled ? (
+                          <div
+                            onClick={() => setShowAllComments(true)}
+                            className="text-xs cursor-pointer text-dbeats-light pr-2 flex  "
+                          >
+                            {contentData.comments ? contentData.comments.length : 0} comments
+                          </div>
+                        ):<></>}
                       </div>
                     </div>
                   )}
@@ -735,16 +782,24 @@ const NFTCard = ({ nft, buyNft }) => {
                   </span>
                 </p>
               </div>
-
-              <div className="flex text-white  items-center justify-center text-sm font-medium  text-center px-4  py-3">
-                <p
-                  onClick={() => setShowComment(true)}
-                  className="w-full mt-2 text-center cursor-pointer opacity-50 hover:opacity-100"
-                >
-                  <i className="fa-solid fa-comment text-white"></i>
-                  <span className="text-dbeats-light font-extrabold	"> Comment</span>
-                </p>
-              </div>
+              {commentDisabled ? (
+                <div className="flex text-gray-500  items-center justify-center text-sm font-medium  text-center px-4  py-3">
+                  <p className="w-full mt-2 text-center cursor-pointer opacity-50 ">
+                    <i className="fa-solid fa-comment text-white"></i>
+                    <span className="text-dbeats-light font-extrabold	"> Comment</span>
+                  </p>
+                </div>
+              ) : (
+                <div className="flex text-white  items-center justify-center text-sm font-medium  text-center px-4  py-3">
+                  <p
+                    onClick={() => setShowComment(true)}
+                    className="w-full mt-2 text-center cursor-pointer opacity-50 hover:opacity-100"
+                  >
+                    <i className="fa-solid fa-comment text-white"></i>
+                    <span className="text-dbeats-light font-extrabold	"> Comment</span>
+                  </p>
+                </div>
+              )}
 
               <div
                 onClick={handleShareShow}
@@ -756,11 +811,20 @@ const NFTCard = ({ nft, buyNft }) => {
                 </p>
               </div>
             </div>
-            {showComment && (
-              <Addcomment user_id={cardDetails.user._id} contentData={contentData}></Addcomment>
+            {showComment && !commentDisabled && (
+              <Addcomment
+                user_id={cardDetails.user._id}
+                contentData={contentData}
+                setMyComments={setMyComments}
+                myComments={myComments}
+              ></Addcomment>
             )}
-            {showAllComments && (
+            {showAllComments && !commentDisabled && (
               <Allcomments
+<<<<<<< HEAD
+=======
+                myComments={myComments}
+>>>>>>> 0bce6b7ea4c1744943416b1f7d289f5c5651ede0
                 user_id={cardDetails.user._id}
                 contentData={contentData}
                 setShowAllComments={setShowAllComments}
@@ -777,10 +841,35 @@ const NFTCard = ({ nft, buyNft }) => {
         copybuttonText={shareButtonText}
         setCopyButtonText={setShareButtonText}
       />
-      <Modal
-        isOpen={showReport}
-        className="h-max lg:w-1/3  w-5/6  mx-auto lg:mt-60 mt-32 rounded-lg"
-      >
+      <PostOptionModal
+        cardDetails={cardDetails}
+        contentData={contentData}
+        commentDisabled={commentDisabled}
+        setCommentDisabled={setCommentDisabled}
+        myReport={myReport}
+        setMyReport={setMyReport}
+        myPost={myPost}
+        show={showPostOption}
+        handleShowReport={setShowReport}
+        handleClose={setShowPostOption}
+      ></PostOptionModal>
+      <ReportModal
+        show={showReport}
+        handleClose={setShowReport}
+        setReportSection={setReportSection}
+        handleShowReport2={setShowReport2}
+        setShowOtherReport={setShowOtherReport}
+      ></ReportModal>
+      <ReportModal2
+        handleReportSubmit={handleReportSubmit}
+        reportValue={reportValue}
+        setReportValue={setReportValue}
+        reportSection={reportSection}
+        handleReport={setShowReport}
+        show={showReport2}
+        handleClose={setShowReport2}
+      ></ReportModal2>
+      <Modal isOpen={false} className="h-max lg:w-1/3  w-5/6  mx-auto lg:mt-60 mt-32 rounded-lg">
         <div className={`${darkMode && 'dark'} border rounded-lg`}>
           <Container className="2xl:px-5 px-5 lg:px-1 pb-4 dark:bg-dbeats-dark-alt rounded-lg">
             <Row>
@@ -1062,15 +1151,13 @@ const NFTCard = ({ nft, buyNft }) => {
 
       <Modal
         isOpen={showReportSubmitThankyou}
-        className="h-max lg:w-1/3  w-5/6 mx-auto lg:mt-60 mt-32 rounded-lg"
+        className={`${'dark'} h-max md:w-max w-full bg-dbeats-dark-alt mx-auto absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 shadow `}
       >
         <div className={`${darkMode && 'dark'}`}>
           <Container className="2xl:px-5 px-5 lg:px-1 pb-4 dark:bg-dbeats-dark-alt rounded-lg border">
             <Row>
               <h2 className="flex justify-between  w-full 2xl:text-2xl lg:text-md py-4 2xl:py-4 lg:py-2  pt-7  text-center relative  ">
-                <div className="col-span-5 text-gray-900 dark:text-gray-100 font-bold">
-                  Thanks for reporting!!
-                </div>
+                <div className="col-span-5 text-gray-900 dark:text-gray-100 font-bold"></div>
                 <div
                   className="rounded-3xl group w-max   p-2  mx-1  justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-secondary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
                   onClick={handleReportThankyouClose}
@@ -1082,19 +1169,13 @@ const NFTCard = ({ nft, buyNft }) => {
               </h2>
             </Row>
             <Row>
-              <div className="w-full flex justify-center items-center pt-5 pb-10">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-28 w-28"
-                  viewBox="0 0 20 20"
-                  fill="white"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                    clipRule="evenodd"
-                  />
-                </svg>
+              <div className="w-full pt-5 pb-10">
+                <div className="text-center">
+                  <i className="fa-regular fa-circle-check text-white text-5xl text-center"></i>
+                </div>
+                <div className="text-center">
+                  <p className="text-white text-center mt-2 mb-2">Thanks for reporting!</p>
+                </div>
               </div>
             </Row>
           </Container>
@@ -1111,6 +1192,7 @@ const NFTCard = ({ nft, buyNft }) => {
               <h2 className="flex justify-around w-full 2xl:text-2xl lg:text-md py-4 2xl:py-6 lg:py-2  pt-7  text-center relative  ">
                 <div
                   onClick={() => {
+                    setReportValue(null);
                     handleOtherReportClose();
                     handleReportShow();
                   }}

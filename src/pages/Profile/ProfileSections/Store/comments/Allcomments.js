@@ -1,8 +1,9 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import ShowComment from './ShowComment';
 
-function Allcomments({ setShowAllComments, contentData, user_id }) {
+function Allcomments({ setShowAllComments, contentData, user_id, myComments }) {
   const user = useSelector((state) => state.User.user);
   const [comments, setComments] = useState([]);
   const [totalComments, setTotalComments] = useState(0);
@@ -77,30 +78,28 @@ function Allcomments({ setShowAllComments, contentData, user_id }) {
       >
         Latest comments <i className="fa-solid fa-sort-down self-center  "></i>
       </div>
-      {comments.map((comment, index) => (
-        <div className="flex" key={index}>
-          <img src={comment.profile_image} className="h-8 w-8 mr-2 rounded-full"></img>
-          <div>
-            <div className="text-gray-300 border border-dbeats-dark-secondary  rounded-lg px-3  py-2 nm-inset-dbeats-dark-primary">
-              <div className="font-semibold">{comment.name}</div>
-              <p>{comment.comment}</p>
-            </div>
-            <div className="text-xs my-1 ml-2 cursor-pointer group">
-              <i
-                onClick={() => {
-                  handleCommentLike(comment);
-                }}
-                className="fa-solid fa-heart group-hover:text-red-600"
-              ></i>{' '}
-              {comment.likes ? comment.likes.length : 0} Likes
-            </div>
-          </div>
-        </div>
-      ))}
+      {myComments && myComments.length > 0 ? (
+        myComments.map((comment, index) => (
+          <ShowComment key={index} comment={comment} user_id={user_id} contentData={contentData} />
+        ))
+      ) : (
+        <></>
+      )}
+      {comments && comments.length > 0 ? (
+        comments.map((comment, index) => (
+          <ShowComment key={index} comment={comment} user_id={user_id} contentData={contentData} />
+        ))
+      ) : (
+        <div className="text-white">No comments</div>
+      )}
 
-      <div className="text-sm ml-2 my-3 cursor-pointer" onClick={handleLoadComments}>
-        Load more comments...
-      </div>
+      {comments && comments.length > 0 ? (
+        <div className="text-sm ml-2 my-3 cursor-pointer" onClick={handleLoadComments}>
+          Load more comments...
+        </div>
+      ) : (
+        <></>
+      )}
     </div>
   );
 }
