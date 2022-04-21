@@ -137,7 +137,7 @@ const NFTCard = ({ nft, buyNft }) => {
         });
       }
     }
-    if(contentData){
+    if (contentData) {
       if (contentData.disableComments) {
         setCommentDisabled(true);
       }
@@ -685,7 +685,9 @@ const NFTCard = ({ nft, buyNft }) => {
                           >
                             {contentData.comments ? contentData.comments.length : 0} comments
                           </div>
-                        ):<></>}
+                        ) : (
+                          <></>
+                        )}
                       </div>
                     </div>
                   ) : (
@@ -722,7 +724,9 @@ const NFTCard = ({ nft, buyNft }) => {
                           >
                             {contentData.comments ? contentData.comments.length : 0} comments
                           </div>
-                        ):<></>}
+                        ) : (
+                          <></>
+                        )}
                       </div>
                     </div>
                   )}
@@ -821,10 +825,6 @@ const NFTCard = ({ nft, buyNft }) => {
             )}
             {showAllComments && !commentDisabled && (
               <Allcomments
-<<<<<<< HEAD
-=======
-                myComments={myComments}
->>>>>>> 0bce6b7ea4c1744943416b1f7d289f5c5651ede0
                 user_id={cardDetails.user._id}
                 contentData={contentData}
                 setShowAllComments={setShowAllComments}

@@ -31,24 +31,6 @@ const AnnouncementCard = (props) => {
 
   const [showDelete, setShowDelete] = useState(false);
 
-  const handleMouseMove = () => {
-    setPlaying(true);
-    if (props.post.post_video !== null) {
-      if ((!props.post.post_image && linkData) || props.post.post_image) {
-        setShowImage(false);
-      }
-    }
-  };
-
-  const hanldeMouseLeave = () => {
-    setPlaying(false);
-    if (props.post.post_video !== null) {
-      if ((!props.post.post_image && linkData) || props.post.post_image) {
-        setShowImage(true);
-      }
-    }
-  };
-
   useEffect(() => {
     if (props.post.timestamp) {
       setTime(moment(Math.floor(props.post.timestamp)).fromNow());
@@ -87,11 +69,7 @@ const AnnouncementCard = (props) => {
         rounded  dark:bg-dbeats-dark-secondary dark:text-gray-100 
         lg:px-3 2xl:px-3 md:p-2`}
       >
-        <div
-          className={`cursor-pointer mx-auto items-center lg:w-80 2xl:w-80 2xl:h-48 lg:h-32 md:w-96 h-52 dark:bg-dbeats-dark-primary bg-gray-100`}
-          onMouseMove={handleMouseMove}
-          onMouseLeave={hanldeMouseLeave}
-        >
+        <div className={` mx-auto items-center lg:w-80 2xl:w-80 2xl:h-48 lg:h-32 md:w-96 h-52   `}>
           <Link
             to={{
               pathname: props.post.link,
@@ -108,7 +86,7 @@ const AnnouncementCard = (props) => {
                     <img
                       src={props.post.post_image}
                       alt="announcement_info"
-                      className="mx-auto h-full w-auto"
+                      className="mx-auto h-full w-auto bg-dbeats-dark-primary"
                     />
                   </>
                 ) : null}
@@ -119,7 +97,7 @@ const AnnouncementCard = (props) => {
                         linkData && linkData.image && linkData.image.url ? linkData.image.url : null
                       }
                       alt="announcement_info"
-                      className="mx-auto h-full w-auto"
+                      className="mx-auto h-full w-auto bg-dbeats-dark-primary"
                     />
                   </>
                 ) : null}
@@ -159,29 +137,29 @@ const AnnouncementCard = (props) => {
                     className="cursor-pointer text-base hover:underline text-gray-600 mt-2"
                     onClick={() => setSeeMore(!seeMore)}
                   >
-                    {seeMore ? 'see less' : 'see more'}
+                    {seeMore ? 'see less' : 'read more'}
                   </span>
                 ) : null}
               </div>
             </div>
-            <div>
-              <div className="2xl:text-2xl lg:text-lg text-gray-500 ">
-                <button className="px-1" onClick={handleShow}>
-                  <i className="fas fa-share-alt hover:text-dbeats-light"></i>
-                </button>
-              </div>
-            </div>
-          </p>
-          {props.privateUser && (
-            <div className="absolute bottom-0">
+            <div className=" right-0">
               <button
                 onClick={() => {
                   setShowDelete(true);
                 }}
-                className="mb-5 px-2 py-1 rounded-md bg-dbeats-light text-dbeats-white hover:bg-red-500"
+                className=" flex px-2 py-1  text-dbeats-white hover:bg-red-500"
               >
-                Delete
+                <i className="fa-solid fa-trash-can mr-2 text-sm"></i>Delete
               </button>
+            </div>
+          </p>
+          {props.privateUser && (
+            <div>
+              <div className="2xl:text-2xl lg:text-lg text-gray-500 ">
+                <button className="px-1" onClick={handleShow}>
+                  <i className="fas fa-share-alt hover:text-dbeats-white"></i>
+                </button>
+              </div>
             </div>
           )}
         </div>

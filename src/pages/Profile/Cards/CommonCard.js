@@ -98,24 +98,21 @@ const CommonCard = (props) => {
   };
 
   return (
-    <div className="w-96 bg-dbeats-black px-2 mr-10 py-1">
+    <div className="w-96 bg-dbeats-dark-primary p-3 mr-10 rounded mb-4">
       <div className="flex w-full items-center">
         <img
           src={props.user.profile_image}
           alt="profile_image"
-          className="h-14 w-14 rounded-full"
+          className="h-14 w-14 rounded-full hidden"
         />
-        <div className="ml-4">
-          <p className="text-white text-md">{props.playbackUserData.videoName.slice(0, 35)} ...</p>
-          <p className="text-white text-sm">{props.playbackUserData.category}</p>
-          <p className="text-white text-xs">{time}</p>
+        <div className=" ">
+          <p className="text-white text-sm text-opacity-40">{props.playbackUserData.category}</p>
+          <p className="text-white text-xs text-opacity-40">{time}</p>
+          <p className="text-white text-md">{props.playbackUserData.videoName} </p>
         </div>
       </div>
-      <div className=" my-2">
-        <p className="text-white py-2"> {props.playbackUserData.description.slice(0, 42)} ...</p>
-      </div>
       <div
-        className={`cursor-pointer h-44 lg:h-32 2xl:h-48 md:h-40 w-full  my-auto dark:bg-dbeats-dark-primary `}
+        className={`cursor-pointer h-44 lg:h-32 2xl:h-48 md:h-40 w-full  my-auto dark:bg-dbeats-dark-secondary mt-2 `}
       >
         <a onClick={handlePlayerClick}>
           <ReactPlayer
@@ -131,6 +128,10 @@ const CommonCard = (props) => {
           />
         </a>
       </div>
+      <div className=" my-2">
+        <p className="text-white py-2 hidden"> {props.playbackUserData.description} </p>
+      </div>
+
       <div className="flex w-full justify-between mt-3">
         <div className="flex justify-between w-2/3">
           <p className="w-full mt-2 text-center cursor-pointer opacity-50 hover:opacity-100 text-white">

@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import DeleteModal from '../../../component/Modals/DeleteModal/DeleteModal';
 import { ShareModal } from '../../../component/Modals/ShareModal/ShareModal';
+import moment from 'moment';
 
 const TrackCard = (props) => {
   //console.log(props);
+  moment().format();
 
   const [play, setPlay] = useState(false);
 
@@ -19,8 +21,19 @@ const TrackCard = (props) => {
   const [buttonText, setButtonText] = useState(text);
 
   const [showDelete, setShowDelete] = useState(false);
+  const [time, setTime] = useState(null);
 
   let sharable_data = `${process.env.REACT_APP_CLIENT_URL}/track/${props.username}/${props.index}`;
+
+  const convertTimestampToTime = () => {
+    const timestamp = new Date(props.track.time * 1000); // This would be the timestamp you want to format
+    setTime(moment(timestamp).fromNow());
+  };
+
+  useEffect(() => {
+    convertTimestampToTime();
+    // eslint-disable-next-line
+  }, []);
 
   useEffect(() => {
     if (!play) {
@@ -66,15 +79,20 @@ const TrackCard = (props) => {
         <div className={`px-5 w-full py-2 md:ml-4 lg:ml-0`}>
           <p className="flex justify-between pb-1 text-black text-sm font-medium dark:text-gray-100">
             <div>
-              <h4 className="playlist  mt-0  uppercase text-gray-500 tracking-widest 2xl:text-md lg:text-xs pb-1">
-                {props.track.genre}
-              </h4>
+              <div className="flex">
+                <h4 className="playlist mr-1 mt-0  uppercase text-gray-500 tracking-widest 2xl:text-md lg:text-xs pb-1">
+                  {props.track.genre}
+                </h4>{' '}
+                &middot;
+                <p className="2xl:text-sm lg:text-xs md:text-sm text-gray-500 ml-1">{time}</p>
+              </div>
               <div className="">
-                <p className="2xl:text-2xl lg:text-md md:text-lg font-semibold">
-                  {props.track.trackName}
+                <p className="2xl:text-2xl lg:text-md md:text-lg  ">{props.track.trackName}</p>
+                <p className="2xl:text-base lg:text-xs md:text-sm text-gray-500 mr-2 mt-1">
+                  {props.track.description}
                 </p>
                 <div className="flex">
-                  <p className="2xl:text-lg lg:text-xs text-gray-500 mr-2 mt-1">
+                  <p className="2xl:text-lg lg:text-xs text-gray-500 mr-2 mt-1 hidden">
                     {props.username}&nbsp;
                   </p>
                 </div>
@@ -82,31 +100,34 @@ const TrackCard = (props) => {
               </div>
             </div>
             <div>
-              <div className="2xl:text-2xl lg:text-lg text-gray-500 ">
-                <button className="px-1" onClick={handleShow}>
-                  <i className="fas fa-share-alt hover:text-dbeats-light"></i>
-                </button>
-              </div>
-            </div>
-          </p>
-          <div className=" flex 2xl:mt-4 lg:mt-2 md:mt-2 rounded bottom-0">
-            <div className=" sm:flex 2xl:text-lg lg:text-md ">
-              <button
-                onClick={handlePlay}
-                className=" cursor-pointer mr-2 uppercase font-bold  bg-gradient-to-r from-green-400 to-blue-500   text-white block 2xl:py-2 2xl:px-10 lg:px-7 lg:py-1 py-1 px-5   hover:scale-95 transform transition-all"
-              >
-                <p className=" 2xl:text-lg lg:text-sm ">{`${play ? 'Pause' : 'Play'}`}</p>
-              </button>
               {props.privateUser && (
                 <button
                   onClick={() => {
                     setShowDelete(true);
                   }}
-                  className=" cursor-pointer mr-2 uppercase font-bold  bg-red-500   text-white block 2xl:py-2 2xl:px-10 lg:px-7 lg:py-1 py-1 px-5   hover:scale-95 transform transition-all"
+                  className=" cursor-pointer      hover:bg-red-500   text-white block  py-2 px-3  hover:scale-99 transform transition-all"
                 >
-                  Delete
+                  <i className="fa-solid fa-trash-can mr-2 text-sm"></i>Delete
                 </button>
               )}
+            </div>
+          </p>
+          <div className=" flex 2xl:mt-4 lg:mt-2 md:mt-2 rounded bottom-0">
+            <div className="  flex  ">
+              <button
+                onClick={handlePlay}
+                className=" cursor-pointer mr-2      bg-gradient-to-r  from-green-400  to-blue-500   text-white block 2xl:py-2 px-4  hover:scale-95 transform transition-all"
+              >
+                <p className="   lg:text-sm ">
+                  <i className="fa-solid fa-play mr-1"></i>
+                  {`${play ? 'Pause' : 'Play'}`}
+                </p>
+              </button>
+              <div className="2xl:text-xl lg:text-lg text-gray-500  ">
+                <button className=" p-2" onClick={handleShow}>
+                  <i className="fas fa-share-alt hover:text-dbeats-white"></i>
+                </button>
+              </div>
             </div>
           </div>
         </div>

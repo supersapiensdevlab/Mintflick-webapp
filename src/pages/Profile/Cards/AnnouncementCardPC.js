@@ -98,26 +98,24 @@ const AnnouncementCardPC = (props) => {
   console.log(props.post);
 
   return (
-    <div className="w-96 bg-dbeats-black px-2 mr-10 py-1">
+    <div className="w-96 bg-dbeats-dark-primary p-3 mr-10  rounded mb-4 ">
       <div className="flex w-full items-center">
         <img
           src={props.user.profile_image}
           alt="profile_image"
-          className="h-14 w-14 rounded-full"
+          className="h-14 w-14 rounded-full hidden"
         />
-        <div className="ml-4">
+        <div className=" ">
+          <p className="text-white text-sm hidden">{props.username}</p>
+          <p className="text-white text-xs text-opacity-40">{time}</p>
           <p className="text-white text-md">
-            {props.post.announcement ? props.post.announcement.slice(0, 35) : `Title`} ...
+            {props.post.announcement ? props.post.announcement : `Title`}
           </p>
-          <p className="text-white text-sm">{props.username}</p>
-          <p className="text-white text-xs">{time}</p>
         </div>
       </div>
-      <div className=" my-2">
-        <p className="text-white py-2">description</p>
-      </div>
+
       <div
-        className={`cursor-pointer h-44 lg:h-32 2xl:h-48 md:h-40 w-full  my-auto dark:bg-dbeats-dark-primary `}
+        className={`cursor-pointer h-64 lg:h-32 2xl:h-48 md:h-40 lg:w-1/3 w-full  my-auto dark:bg-dbeats-dark-primary `}
       >
         <a>
           {props.post && props.post.post_image ? (

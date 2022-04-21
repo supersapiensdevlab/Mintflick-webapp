@@ -158,77 +158,10 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
                         <div className="mt-1 flex rounded-md shadow-sm"></div>
                         <input
                           type="text"
-<<<<<<< HEAD
                           className="dark:text-gray-400  border dark:border-dbeats-dark-primary dark:focus:ring-dbeats-dark-secondary dark:border-opacity-0 border-gray-300 dark:bg-dbeats-dark-secondary     flex-1 block w-full rounded-md sm:text-sm  "
                           placeholder="Plan Name"
                           value={userData.wallet_id}
                           readOnly={true}
-=======
-                          name="plan"
-                          id="plan"
-                          readOnly={true}
-                          className=" border dark:text-gray-400 dark:border-dbeats-dark-primary dark:focus:ring-dbeats-dark-secondary border-opacity-20 border-gray-300 dark:bg-dbeats-dark-primary     flex-1 block w-full rounded-md sm:text-sm  "
-                          placeholder="Plan Name"
-                          // onChange={handleUserInputs}
-                          value={
-                            currentPlan
-                          }
-                        />
-                      </div>
-                    </dd>
-                  </div>
-                  <div className="bg-gray-50 dark:bg-dbeats-dark-alt px-4  pb-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                    <dt className="text-sm font-medium text-gray-500 dark:text-dbeats-white align-middle self-center">
-                      Perks
-                    </dt>
-                    <dd className="  text-sm text-gray-900 dark:text-gray-100 sm:mt-0 sm:col-span-2">
-                      <div className="  flex rounded-md shadow-sm">
-                        <textarea
-                          type="text"
-                          name="perks"
-                          id="perks"
-                          placeholder="Perks"
-                          value={
-                            currentPlan === 'silver'
-                              ? newData.perks
-                              : currentPlan === 'gold'
-                              ? newData.perks2
-                              : currentPlan === 'platinum'
-                              ? newData.perks3
-                              : ''
-                          }
-                          onChange={handleUserInputs}
-                          className="focus:border-opacity-60 border dark:border-dbeats-dark-primary dark:focus:ring-dbeats-light border-opacity-20 border-gray-300 dark:bg-dbeats-dark-primary     flex-1 block w-full rounded-md sm:text-sm  "
-                        />
-                      </div>
-                    </dd>
-                  </div>
-                  <div className="bg-gray-50 dark:bg-dbeats-dark-alt px-4 pb-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                    <dt className="text-sm font-medium text-gray-500 dark:text-dbeats-white   self-center align-middle ">
-                      Pricing<br></br>
-                      <span className="font-mono"> (MATIC)</span>
-                    </dt>
-                    <dd className="  text-sm text-gray-900 dark:text-gray-100 sm:mt-0 sm:col-span-2">
-                      <div className="  flex rounded-md shadow-sm">
-                        <input
-                          type="number"
-                          name="price"
-                          id="price"
-                          min="0"
-                          max="1000"
-                          onChange={handleUserInputs}
-                          value={
-                            currentPlan === 'silver'
-                              ? newData.price
-                              : currentPlan === 'gold'
-                              ? newData.price2
-                              : currentPlan === 'platinum'
-                              ? newData.price3
-                              : ''
-                          }
-                          className="focus:border-opacity-60 border dark:border-dbeats-dark-primary dark:focus:ring-dbeats-light border-opacity-20 border-gray-300 dark:bg-dbeats-dark-primary     flex-1 block w-full rounded-md sm:text-sm  "
-                          placeholder="0.00 DBEATx"
->>>>>>> 0bce6b7ea4c1744943416b1f7d289f5c5651ede0
                         />
                       </dd>
                     </div>
@@ -322,39 +255,12 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
                         <div className="tooltip-arrow" data-popper-arrow></div>
                       </div>
                     </div>
-<<<<<<< HEAD
                     <p className="text-center bg-dbeats-dark-alt self-center dark:text-gray-500">
                       Choose a card to edit
                     </p>
 
                     <div className="grid sm:grid-cols-3 grid-cols-1 gap-6 bg-gray-50 dark:bg-dbeats-dark-alt  align-middle justify-center row-auto">
                       <form
-=======
-                  </div>
-                  <p className="text-center bg-dbeats-dark-alt self-center dark:text-gray-500 pb-6">
-                    Choose a card to edit
-                  </p>
-
-                  <div className="grid sm:grid-cols-3 grid-cols-1 gap-6 bg-gray-50 dark:bg-dbeats-dark-alt   align-center justify-center row-auto">
-                    <form
-                      name="silver"
-                      id="silver"
-                      onClick={handleNewPlan}
-                      className={` ${
-                        currentPlan === 'silver'
-                          ? 'dark:border-dbeats-light  shadow-md transform scale-y-110 transition duration-200 ease-in'
-                          : 'dark:border-dbeats-dark-primary border-dashed'
-                      }   border   border-gray-500 self-center dark:bg-dbeats-dark-secondary bg-white 
-                     h-56  rounded-md align-middle text-center cursor-pointer `}
-                    >
-                      {' '}
-                      <input
-                        className="form-check-input appearance-none rounded-full h-4 w-4 border
-                         border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 
-                         focus:outline-none  transition m-2 duration-200   align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
-                        type="radio"
-                        checked={currentPlan === 'silver'}
->>>>>>> 0bce6b7ea4c1744943416b1f7d289f5c5651ede0
                         name="silver"
                         id="silver"
                         onClick={handleNewPlan}
@@ -427,7 +333,6 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
                         </p>
                       </form>
 
-<<<<<<< HEAD
                       <form
                         name="second"
                         id="second"
@@ -438,18 +343,6 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
                             ? 'dark:border-dbeats-light  shadow-md '
                             : 'dark:border-dbeats-dark-primary border-dashed'
                         }   border   border-gray-500 self-center dark:bg-dbeats-dark-secondary bg-white 
-=======
-                    <form
-                      name="second"
-                      id="second"
-                      onClick={handleNewPlan}
-                      hidden={hideGold}
-                      className={` ${
-                        currentPlan === 'gold'
-                          ? 'dark:border-dbeats-light  shadow-md transform scale-y-110 transition duration-100 ease-in'
-                          : 'dark:border-dbeats-dark-primary border-dashed'
-                      }   border   border-gray-500 self-center dark:bg-dbeats-dark-secondary bg-white 
->>>>>>> 0bce6b7ea4c1744943416b1f7d289f5c5651ede0
                      h-56  rounded-md align-middle text-center cursor-pointer `}
                       >
                         <input
@@ -514,28 +407,7 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
                         </p>
                       </form>
 
-<<<<<<< HEAD
                       <form
-=======
-                    <form
-                      name="platinum"
-                      id="platinum"
-                      hidden={hidePlatinum}
-                      onClick={handleNewPlan}
-                      className={` ${
-                        currentPlan === 'platinum'
-                          ? 'dark:border-dbeats-light  shadow-md  transform scale-y-110 transition duration-100 ease-in'
-                          : 'dark:border-dbeats-dark-primary border-dashed'
-                      }   border   border-gray-500 self-center dark:bg-dbeats-dark-secondary bg-white 
-                     h-56  rounded-md align-middle text-center cursor-pointer `}
-                    >
-                      {' '}
-                      <input
-                        className="form-check-input appearance-none rounded-full h-4 w-4 border
-                         border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 
-                         focus:outline-none transition m-2 duration-200   align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
-                        type="radio"
->>>>>>> 0bce6b7ea4c1744943416b1f7d289f5c5651ede0
                         name="platinum"
                         id="platinum"
                         hidden={hidePlatinum}
@@ -594,7 +466,6 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
                           className="rounded-full block shadow text-center col-span-1  bg-white dark:bg-dbeats-dark-primary text-black dark:text-white  
                            2xl:w-max w-max px-5 lg:w-60  mx-auto py-2      font-semibold   border border-dbeats-light dark:border-dbeats-light dark:hover:border-dbeats-light  hover:border-dbeats-light hover:shadow-none 
                            transition-all transform hover:scale-99 hover:bg-dbeats-light dark:hover:bg-dbeats-light hover:text-white "
-<<<<<<< HEAD
                         >
                           <span className="font-semibold text-md px-4 ">Join</span>
                         </button>
@@ -628,35 +499,6 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
                         </form>
                       </div>
                       {/* <div
-=======
-                      >
-                        <span className="font-semibold text-md px-4 ">Join</span>
-                      </button>
-                      <p
-                        className={`${
-                          !newData.perks3
-                            ? 'animate-pulse mt-5 dark:bg-dbeats-dark-primary bg-gray-200'
-                            : ''
-                        }      text-lg  m-2 rounded  text-gray-800 dark:text-gray-300 mt-4`}
-                      >
-                        {' '}
-                        {newData.perks3}&nbsp;
-                      </p>
-                    </form>
-                    <div hidden={hidePlus}>
-                    <form
-                    
-                      className='h-56 md:w-48 lg:w-52 mt-4 border-2 border-dbeats-light flex justify-center items-center rounded-md '
-                    >
-                      <div onClick={showPlans} className="h-14 w-14 cursor-pointer">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-14 w-14" viewBox="0 0 20 20" fill="gray">
-  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clipRule="evenodd" />
-</svg>
-</div>
-                    </form>
-                    </div>
-                    {/* <div
->>>>>>> 0bce6b7ea4c1744943416b1f7d289f5c5651ede0
                     hidden={hideSecPlus}
                       className='h-56 w-52 border-2 border-dbeats-light flex justify-center items-center rounded-md '
                     >

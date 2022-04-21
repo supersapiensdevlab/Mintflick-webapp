@@ -764,7 +764,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
           </div>
         </div>
         <div className="w-full  relative mb-20 ">
-          <div className="w-full block md:hidden">
+          <div className="w-full block  ">
             <Tab.Group defaultIndex={tabIndex}>
               <Tab.List className="flex  px-1  space-x-1 bg-white text-white  dark:bg-gradient-to-b  dark:from-dbeats-dark-primary  dark:to-dbeats-dark-primary bg-gradient-to-b    from-white  to-blue-50">
                 {NavTabs.map((tab, idx) => {
@@ -1046,7 +1046,8 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
               </Switch>
             </Tab.Group>
           </div>
-          <div className="w-full hidden md:block px-5 mt-2">
+
+          <div className="w-full hidden  px-5 mt-2">
             <div className="flex w-full justify-between">
               <p className="text-white p-3 text-2xl">Posts</p>
               <div className="flex">
@@ -1104,7 +1105,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
             )}
           </div>
           {/* <hr className="w-full mt-3" /> */}
-          <div className="w-full hidden md:block px-5 mt-5">
+          <div className="w-full hidden  px-5 mt-5">
             <div className="flex w-full justify-between">
               <p className="text-white p-3 text-2xl">Videos</p>
               <div className="flex">
@@ -1170,7 +1171,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
             )}
           </div>
           {/* <hr className="w-full mt-3" /> */}
-          <div className="w-full hidden md:block px-5 mt-5">
+          <div className="w-full hidden  px-5 mt-5">
             <div className="flex w-full justify-between">
               <p className="text-white p-3 text-2xl">Music</p>
               <div className="flex">
