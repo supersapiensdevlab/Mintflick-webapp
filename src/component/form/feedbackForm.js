@@ -73,14 +73,9 @@ const FeedbackForm = () => {
           {!showFeedback ? (
             <div>
               <div className="justify-between flex">
-                <p className=" text-dbeats-light text-lg font-bold">Welcome ✨</p>
+                <p className=" text-dbeats-light text-lg font-bold">✨ We are listening to you.</p>
               </div>
-              <p className="">
-                This is our open Beta!
-                <br></br>Many things are still in the making. Please be patient if it isn’t 100% how
-                you would like, we are working on it. <br></br> So, enjoy, the house is yours and
-                please let us know how we can do better, fix any bugs and improve the app over time.
-              </p>
+              <p className="hidden">Please let us know</p>
               <div
                 onClick={() => {
                   handleShowFeedback();

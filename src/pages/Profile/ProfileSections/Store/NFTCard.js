@@ -682,20 +682,22 @@ const NFTCard = ({ nft, buyNft }) => {
                 </div>
                 <div className="flex ">
                   {listingPrice ? (
-                    <div
-                      onClick={() => createMarketSale(nft)}
-                      className=" rounded-3xl group w-max ml-2 p-1  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-primary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
-                    >
-                      <span className="  text-black dark:text-white  flex p-1 rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-secondary hover:nm-inset-dbeats-dark-secondary ">
-                        <img
-                          className="h-7 w-7 p-1  mr-1   text-white self-center align-middle items-center     "
-                          src={maticLogo}
-                          alt="logo"
-                        ></img>
-                        <p className="self-center mr-2 ml-1">
-                          {parseFloat(nft.price) > 0 ? nft.price : `Make an offer`}
-                        </p>
-                      </span>
+                    <div>
+                      <div
+                        onClick={() => createMarketSale(nft)}
+                        className=" rounded-3xl group w-max ml-2 p-1  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-primary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
+                      >
+                        <span className="  text-black dark:text-white  flex p-1 rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-secondary hover:nm-inset-dbeats-dark-secondary ">
+                          <img
+                            className="h-7 w-7 p-1  mr-1   text-white self-center align-middle items-center     "
+                            src={maticLogo}
+                            alt="logo"
+                          ></img>
+                          <p className="self-center mr-2 ml-1">
+                            {parseFloat(nft.price) > 0 ? nft.price : `Make an offer`}
+                          </p>
+                        </span>
+                      </div>
                     </div>
                   ) : (
                     <div
@@ -759,7 +761,7 @@ const NFTCard = ({ nft, buyNft }) => {
             )}
             {showAllComments && (
               <Allcomments
-              user_id={cardDetails.user._id} 
+                user_id={cardDetails.user._id}
                 contentData={contentData}
                 setShowAllComments={setShowAllComments}
               ></Allcomments>
