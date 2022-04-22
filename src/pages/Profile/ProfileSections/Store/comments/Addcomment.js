@@ -56,7 +56,7 @@ function Addcomment({ user_id, contentData, myComments, setMyComments }) {
             }}
             placeholder="Add a comment"
             type="text"
-            className="w-full focus:border-opacity-0 placeholder-dbeats-light text-dbeats-light text-sm h-8 border-none bg-transparent"
+            className="border-transparent focus:border-transparent focus:ring-0 w-full placeholder-opacity-40  border-opacity-0 placeholder-dbeats-light text-dbeats-light text-sm h-8 border-none bg-transparent"
           ></input>
           <i onClick={() => setShowEmoji(true)} className="far fa-laugh mx-1"></i>
           {showEmoji && (

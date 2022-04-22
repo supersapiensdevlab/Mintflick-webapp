@@ -11,10 +11,10 @@ function ShowComment({ comment, user_id, contentData }) {
     if (comment.likes) {
       setLikeCount(comment.likes.length);
       comment.likes.map((like) => {
-          console.log(like.user_id);
-          console.log(user._id);
+        console.log(like.user_id);
+        console.log(user._id);
         if (like == user._id) {
-            console.log('setting trueeeeee')
+          console.log('setting trueeeeee');
           setIsLiked(true);
         }
       });
@@ -38,7 +38,7 @@ function ShowComment({ comment, user_id, contentData }) {
     });
     console.log(data);
     console.log(res);
-    if (res.status == 201) {
+    if (res.status == 200) {
       if (isLiked) {
         setLikeCount(likeCount - 1);
         setIsLiked(false);
@@ -67,7 +67,7 @@ function ShowComment({ comment, user_id, contentData }) {
                 : 'text-white group-hover:text-red-600'
             } `}
           ></i>{' '}
-          {likeCount} Likes
+          {likeCount > 0 ? likeCount : 'like'}
         </div>
       </div>
     </div>

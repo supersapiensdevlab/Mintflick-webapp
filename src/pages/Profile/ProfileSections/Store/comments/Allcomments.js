@@ -93,7 +93,7 @@ function Allcomments({ setShowAllComments, contentData, user_id, myComments }) {
         <div className="text-white">No comments</div>
       )}
 
-      {comments && comments.length > 0 ? (
+      {comments && comments.length > 0 && comments.length < contentData.comments.length ? (
         <div className="text-sm ml-2 my-3 cursor-pointer" onClick={handleLoadComments}>
           Load more comments...
         </div>
