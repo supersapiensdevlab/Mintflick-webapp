@@ -825,6 +825,7 @@ const NFTCard = ({ nft, buyNft }) => {
             )}
             {showAllComments && !commentDisabled && (
               <Allcomments
+              myComments={myComments}
                 user_id={cardDetails.user._id}
                 contentData={contentData}
                 setShowAllComments={setShowAllComments}
