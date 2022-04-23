@@ -29,7 +29,7 @@ function Addcomment({ user_id, contentData, myComments, setMyComments }) {
       });
       console.log(res.data)
       setMyComments((myComments) => [
-        ...myComments,
+       
         {
           comment: comment,
           _id: res.data.id,
@@ -38,7 +38,8 @@ function Addcomment({ user_id, contentData, myComments, setMyComments }) {
           profile_image: user.profile_image,
           username: user.username,
           name: user.name,
-        },
+        }, 
+        ...myComments,
       ]);
       setComment('');
     }

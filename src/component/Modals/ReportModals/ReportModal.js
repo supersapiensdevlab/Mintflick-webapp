@@ -51,7 +51,7 @@ function ReportModal({ show, handleClose, handleShowReport2,setReportSection ,se
           ></i>
         </div>
       </div>
-      <div>Please select a problem</div>
+      <div className='pt-2 pl-1'>Please select a problem</div>
       <div className=' mb-2'>
         <div onClick={()=> handleSection(1)} className="px-2 py-1  flex items-center mt-3 w-80 justify-between cursor-pointer hover:bg-dbeats-dark">
             <div>Nudity</div>

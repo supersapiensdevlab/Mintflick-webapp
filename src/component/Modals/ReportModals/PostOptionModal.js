@@ -51,7 +51,7 @@ function PostOptionModal({
             </p>
           ) : (
             <p
-              className="mb-1 text-white text-lg cursor-pointer w-20"
+              className=" mb-1 text-white text-lg cursor-pointer w-60"
               onClick={() => {
                 handleShowReport(true);
                 handleClose(false);
