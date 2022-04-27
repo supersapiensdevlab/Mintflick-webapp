@@ -115,12 +115,12 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
         isOpen={show}
         className={
           darkMode
-            ? 'h-max max-h-screen lg:w-1/3 w-5/6 mx-auto absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2   bg-dbeats-dark-primary rounded-xl '
-            : 'h-max max-h-screen lg:w-1/3 w-5/6 mx-auto absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2    bg-gray-50 rounded-xl shadow-2xl'
+            ? 'h-max max-h-screen 2xl:w-1/3 xl:w-7/12 lg:w-7/12 md:w-5/6 w-11/12 mx-auto absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2   bg-dbeats-dark-primary rounded-xl '
+            : 'h-max max-h-screen 2xl:w-1/3  xl:w-7/12 lg:w-7/12 md:w-5/6 w-11/12 mx-auto absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2    bg-gray-50 rounded-xl shadow-2xl'
         }
       >
         <div className={`${darkMode && 'dark'} p-2 h-max`}>
-          <h2 className="grid grid-cols-5 justify-items-center 2xl:text-2xl text-lg 2xl:pt-4   dark:bg-dbeats-dark-alt bg-white dark:text-white">
+          <h2 className="grid grid-cols-5 justify-items-center 2xl:text-2xl text-lg 2xl:pt-4  pb-5 2xl:pb-0 pt-3 2xl:pt-0 lg:pb-1.5 dark:bg-dbeats-dark-alt bg-white dark:text-white">
             <div className="col-span-4 pl-14 uppercase font-semibold text-dbeats-light">
               Settings
             </div>
@@ -128,7 +128,7 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
               onClick={handleClose}
               className=" rounded-3xl group w-max   p-1  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-secondary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
             >
-              <span className="  text-black dark:text-white  flex p-1 rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:nm-inset-dbeats-dark-secondary ">
+              <span className="  text-black dark:text-white  flex rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:nm-inset-dbeats-dark-secondary ">
                 <p className="self-center mx-2">
                   {' '}
                   <i className="fas fa-times"></i>{' '}
@@ -137,7 +137,7 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
             </div>
           </h2>
 
-          <div className=" bg-white text-gray-500 dark:text-dbeats-white  dark:bg-dbeats-dark-alt      rounded   p-5       max-h-96  sm:h-max sm:max-h-full  overflow-y-auto overflow-hidden">
+          <div className=" bg-white text-gray-500 dark:text-dbeats-white  dark:bg-dbeats-dark-alt      rounded   2xl:p-5 md:p-5 p-3  lg:px-5 lg:py-3    max-h-96  sm:h-max sm:max-h-full  overflow-y-auto overflow-hidden">
             <div className="md:grid md:grid-cols-2 md:gap-6  ">
               <div className="bg-white dark:bg-dbeats-dark-secondary dark:text-dbeats-white  overflow-hidden sm:rounded  col-span-2">
                 <div className="px-4 py-5 sm:px-6 bg-gray-50 dark:bg-dbeats-dark-secondary">
@@ -150,7 +150,7 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
                 </div>
                 <div className="border-t border-dbeats-dark-primary">
                   <dl>
-                    <div className="bg-gray-50 dark:bg-dbeats-dark-alt px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <div className="bg-gray-50 dark:bg-dbeats-dark-alt 2xl:px-4 md:px-4  2xl:py-5 md:py-4 lg:py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                       <dt className="text-sm font-medium text-gray-500 dark:text-dbeats-white   self-center align-middle ">
                         Your Wallet Address
                       </dt>
@@ -165,7 +165,7 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
                         />
                       </dd>
                     </div>
-                    <div className="bg-gray-50 dark:bg-dbeats-dark-alt px-4 pb-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <div className="bg-gray-50 dark:bg-dbeats-dark-alt 2xl:px-4 md:px-4 2xl:pb-5 md:pb-5 lg:pb-2.5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                       <dt className="text-sm font-medium text-gray-500 dark:text-dbeats-white  self-center align-middle ">
                         Name
                       </dt>
@@ -184,7 +184,7 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
                         </div>
                       </dd>
                     </div>
-                    <div className="bg-gray-50 dark:bg-dbeats-dark-alt px-4  pb-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <div className="bg-gray-50 dark:bg-dbeats-dark-alt 2xl:px-4 md:px-4  2xl:pb-5 md:pb-5 lg:pb-2.5  sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                       <dt className="text-sm font-medium text-gray-500 dark:text-dbeats-white align-middle self-center">
                         Perks
                       </dt>
@@ -210,7 +210,7 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
                         </div>
                       </dd>
                     </div>
-                    <div className="bg-gray-50 dark:bg-dbeats-dark-alt px-4 pb-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <div className="bg-gray-50 dark:bg-dbeats-dark-alt 2xl:px-4 md:px-4 2xl:pb-5 md:pb-5 lg:pb-2.5  sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                       <dt className="text-sm font-medium text-gray-500 dark:text-dbeats-white   self-center align-middle ">
                         Pricing<br></br>
                         <span className="font-mono"> (MATIC)</span>
@@ -259,7 +259,11 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
                       Choose a card to edit
                     </p>
 
-                    <div className="grid sm:grid-cols-3 grid-cols-1 gap-6 bg-gray-50 dark:bg-dbeats-dark-alt  align-middle justify-center row-auto">
+                    <div
+                      className={`${
+                        hidePlus ? '  items-center justify-between' : 'items-center justify-start'
+                      } flex md:flex-row flex-col bg-gray-50 dark:bg-dbeats-dark-alt`}
+                    >
                       <form
                         name="silver"
                         id="silver"
@@ -269,7 +273,7 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
                             ? 'dark:border-dbeats-light  shadow-md '
                             : 'dark:border-dbeats-dark-primary border-dashed'
                         }   border   border-gray-500 self-center dark:bg-dbeats-dark-secondary bg-white 
-                     h-56  rounded-md align-middle text-center cursor-pointer `}
+                     2xl:h-56 2xl:w-48 2xl:mx-2 md:h-56 md:w-48 md:mx-2 w-2/3 mt-3 md:mt-0  rounded-md align-middle text-center cursor-pointer `}
                       >
                         {' '}
                         <input
@@ -316,7 +320,7 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
                         </div>
                         <button
                           className="rounded-full block shadow text-center col-span-1  bg-white dark:bg-dbeats-dark-primary text-black dark:text-white  
-                           2xl:w-max w-max px-5 lg:w-60  mx-auto py-2      font-semibold   border border-dbeats-light dark:border-dbeats-light dark:hover:border-dbeats-light  hover:border-dbeats-light hover:shadow-none 
+                           2xl:w-max w-max px-5 lg:w-max  mx-auto py-2      font-semibold   border border-dbeats-light dark:border-dbeats-light dark:hover:border-dbeats-light  hover:border-dbeats-light hover:shadow-none 
                            transition-all transform hover:scale-99 hover:bg-dbeats-light dark:hover:bg-dbeats-light hover:text-white "
                         >
                           <span className="font-semibold text-md px-4 ">Join</span>
@@ -343,7 +347,7 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
                             ? 'dark:border-dbeats-light  shadow-md '
                             : 'dark:border-dbeats-dark-primary border-dashed'
                         }   border   border-gray-500 self-center dark:bg-dbeats-dark-secondary bg-white 
-                     h-56  rounded-md align-middle text-center cursor-pointer `}
+                     2xl:h-56 2xl:w-48 2xl:mx-2 md:h-56 md:w-48 md:mx-2 w-2/3 mt-3 md:mt-0  rounded-md align-middle text-center cursor-pointer `}
                       >
                         <input
                           className="form-check-input appearance-none rounded-full h-4 w-4 border
@@ -390,7 +394,7 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
                         </div>
                         <button
                           className="rounded-full block shadow text-center col-span-1  bg-white dark:bg-dbeats-dark-primary text-black dark:text-white  
-                           2xl:w-max w-max px-5 lg:w-60  mx-auto py-2      font-semibold   border border-dbeats-light dark:border-dbeats-light dark:hover:border-dbeats-light  hover:border-dbeats-light hover:shadow-none 
+                           2xl:w-max w-max px-5 lg:w-max  mx-auto py-2      font-semibold   border border-dbeats-light dark:border-dbeats-light dark:hover:border-dbeats-light  hover:border-dbeats-light hover:shadow-none 
                            transition-all transform hover:scale-99 hover:bg-dbeats-light dark:hover:bg-dbeats-light hover:text-white "
                         >
                           <span className="font-semibold text-md px-4 ">Join</span>
@@ -417,7 +421,7 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
                             ? 'dark:border-dbeats-light  shadow-md '
                             : 'dark:border-dbeats-dark-primary border-dashed'
                         }   border   border-gray-500 self-center dark:bg-dbeats-dark-secondary bg-white 
-                     h-56  rounded-md align-middle text-center cursor-pointer `}
+                     2xl:h-56 2xl:w-48 2xl:mx-2 md:h-56 md:w-48 md:mx-2 w-2/3 mt-3 md:mt-0  rounded-md align-middle text-center cursor-pointer `}
                       >
                         {' '}
                         <input
@@ -464,7 +468,7 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
                         </div>
                         <button
                           className="rounded-full block shadow text-center col-span-1  bg-white dark:bg-dbeats-dark-primary text-black dark:text-white  
-                           2xl:w-max w-max px-5 lg:w-60  mx-auto py-2      font-semibold   border border-dbeats-light dark:border-dbeats-light dark:hover:border-dbeats-light  hover:border-dbeats-light hover:shadow-none 
+                           2xl:w-max w-max px-5 lg:w-max  mx-auto py-2      font-semibold   border border-dbeats-light dark:border-dbeats-light dark:hover:border-dbeats-light  hover:border-dbeats-light hover:shadow-none 
                            transition-all transform hover:scale-99 hover:bg-dbeats-light dark:hover:bg-dbeats-light hover:text-white "
                         >
                           <span className="font-semibold text-md px-4 ">Join</span>
@@ -480,8 +484,11 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
                           {newData.perks3}&nbsp;
                         </p>
                       </form>
-                      <div hidden={hidePlus}>
-                        <form className="h-56 md:w-48 lg:w-52 border-2 border-dbeats-light flex justify-center items-center rounded-md ">
+                      <div
+                        hidden={hidePlus}
+                        className="2xl:h-56 md:h-56 2xl:w-48 md:w-48 w-2/3 h-48 mt-3 md:mt-0"
+                      >
+                        <form className=" h-full w-full md:mx-2 border border-dbeats-light flex justify-center items-center rounded-md ">
                           <div onClick={showPlans} className="h-14 w-14 cursor-pointer">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -511,7 +518,7 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
                     </div>
                   </dl>
 
-                  <div className=" 2xl:pt-5 lg:py-3 md:pt-5 md:px-1 lg:text-right text-center sm:px-6 flex justify-end items-center dark:bg-dbeats-dark-alt">
+                  <div className=" 2xl:pt-5 lg:pt-3 lg:pb-0 md:pt-5 pt-5 md:px-1 lg:text-right text-center px-12 flex justify-end items-center dark:bg-dbeats-dark-alt">
                     <input
                       type="button"
                       value={'Save changes'}
