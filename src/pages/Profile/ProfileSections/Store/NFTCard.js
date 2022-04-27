@@ -1170,7 +1170,7 @@ const NFTCard = ({ nft, buyNft }) => {
               </h2>
             </Row>
             <Row>
-              <div className="w-full pt-5 pb-10">
+              <div className="w-full pt-5 pb-10 px-20">
                 <div className="text-center">
                   <i className="fa-regular fa-circle-check text-white text-5xl text-center"></i>
                 </div>
