@@ -143,25 +143,26 @@ const AnnouncementCard = (props) => {
               </div>
             </div>
             <div className=" right-0">
-              <button
-                onClick={() => {
-                  setShowDelete(true);
-                }}
-                className=" flex px-2 py-1  text-dbeats-white hover:bg-red-500"
-              >
-                <i className="fa-solid fa-trash-can mr-2 text-sm"></i>Delete
-              </button>
+              {props.privateUser && (
+                <button
+                  onClick={() => {
+                    setShowDelete(true);
+                  }}
+                  className=" flex px-2 py-1  text-dbeats-white hover:bg-red-500"
+                >
+                  <i className="fa-solid fa-trash-can mr-2 text-sm"></i>Delete
+                </button>
+              )}
             </div>
           </p>
-          {props.privateUser && (
-            <div>
-              <div className="2xl:text-2xl lg:text-lg text-gray-500 ">
-                <button className="px-1" onClick={handleShow}>
-                  <i className="fas fa-share-alt hover:text-dbeats-white"></i>
-                </button>
-              </div>
+
+          <div>
+            <div className="2xl:text-2xl lg:text-lg text-gray-500 ">
+              <button className="px-1" onClick={handleShow}>
+                <i className="fas fa-share-alt hover:text-dbeats-white"></i>
+              </button>
             </div>
-          )}
+          </div>
         </div>
       </div>
       <ShareModal
