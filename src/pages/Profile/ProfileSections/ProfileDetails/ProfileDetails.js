@@ -495,7 +495,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
           classNames(
             'w-full  text-sm leading-5 font-semibold text-gray-400 2xl:text-lg lg:text-xs ',
             selected
-              ? 'text-dbeats-light font-bold border-b-2 border-dbeats-light'
+              ? 'text-dbeats-light font-bold border-b-2  border-dbeats-light'
               : 'hover:bg-black/[0.12]  dark:hover:text-gray-100 hover:text-gray-700',
           )
         }
