@@ -246,17 +246,6 @@ function VideoPlayer(props) {
     screenful.toggle(playerContainerRef.current);
   };
 
-  const handleMouseMove = () => {
-    console.log('mousemove');
-    controlsRef.current.style.visibility = 'visible';
-    count = 0;
-  };
-
-  const hanldeMouseLeave = () => {
-    controlsRef.current.style.visibility = 'hidden';
-    count = 0;
-  };
-
   const handleDisplayFormat = () => {
     setTimeDisplayFormat(timeDisplayFormat == 'normal' ? 'remaining' : 'normal');
   };
@@ -300,8 +289,6 @@ function VideoPlayer(props) {
     <>
       <Container style={{ width: '100%', height: '100%' }}>
         <div
-          onMouseMove={handleMouseMove}
-          onMouseLeave={hanldeMouseLeave}
           ref={playerContainerRef}
           className="relative w-full 2xl:h-125 lg:h-110 md:h-120 xs:h-100 min-h-full"
         >

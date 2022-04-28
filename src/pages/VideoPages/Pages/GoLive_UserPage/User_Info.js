@@ -8,12 +8,12 @@ import Dropdown from '../../../../component/dropdown.component';
 import { makeStorageClient } from '../../../../component/uploadHelperFunction';
 import VideoPlayer from '../../../../component/VideoPlayer/VideoPlayer';
 import classes from '../Info.module.css';
-import LiveChat from '../LivePublicPage/LiveChat';
-import { io } from 'socket.io-client';
+// import LiveChat from '../LivePublicPage/LiveChat';
+// import { io } from 'socket.io-client';
 
 const UserInfo = (props) => {
   const user = useSelector((state) => state.User.user);
-  const dispatch = useDispatch();  
+  const dispatch = useDispatch();
   const darkMode = useSelector((darkmode) => darkmode.toggleDarkMode);
   const [playbackUrl, setPlaybackUrl] = useState('');
   const [StreamKey, setKey] = useState('');
@@ -45,6 +45,7 @@ const UserInfo = (props) => {
   const [viewColor, setViewColor] = useState('white');
   const [viewAnimate, setViewAnimate] = useState('animate-none');
 
+  const [uploading, setUploading] = useState(0);
   //nft video
   const category = [
     'Autos & Vehicles',
@@ -94,41 +95,41 @@ const UserInfo = (props) => {
     // eslint-disable-next-line
   }, []);
 
-  useEffect(() => {
-    const socket = io(process.env.REACT_APP_VIEWS_URL, {
-      transports: ['websocket'],
-      upgrade: false,
-    });
-    socket.on('connection');
-    socket.emit('joinlivestream', props.stream_id);
-    socket.on('count', (details) => {
-      if (details.room === props.stream_id) {
-        setLivestreamViews(details.roomSize);
-      }
-    });
-    socket.on('livecount', (details) => {
-      setLivestreamViews(details.roomSize);
-      // console.log('emitted');
-      // console.log('inc', livestreamViews);
-      setViewColor('green-500');
-      setViewAnimate('animate-pulse');
-      setTimeout(() => {
-        setViewColor('white');
-        setViewAnimate('animate-none');
-      }, 3000);
-    });
-    socket.on('removecount', (roomSize) => {
-      setLivestreamViews(roomSize);
-      // console.log('removecount emitted');
-      // console.log('dec', livestreamViews);
-      setViewColor('red-500');
-      setViewAnimate('animate-pulse');
-      setTimeout(() => {
-        setViewColor('white');
-        setViewAnimate('animate-none');
-      }, 3000);
-    });
-  }, []);
+  // useEffect(() => {
+  //   const socket = io(process.env.REACT_APP_VIEWS_URL, {
+  //     transports: ['websocket'],
+  //     upgrade: false,
+  //   });
+  //   socket.on('connection');
+  //   socket.emit('joinlivestream', props.stream_id);
+  //   socket.on('count', (details) => {
+  //     if (details.room === props.stream_id) {
+  //       setLivestreamViews(details.roomSize);
+  //     }
+  //   });
+  //   socket.on('livecount', (details) => {
+  //     setLivestreamViews(details.roomSize);
+  //     // console.log('emitted');
+  //     // console.log('inc', livestreamViews);
+  //     setViewColor('green-500');
+  //     setViewAnimate('animate-pulse');
+  //     setTimeout(() => {
+  //       setViewColor('white');
+  //       setViewAnimate('animate-none');
+  //     }, 3000);
+  //   });
+  //   socket.on('removecount', (roomSize) => {
+  //     setLivestreamViews(roomSize);
+  //     // console.log('removecount emitted');
+  //     // console.log('dec', livestreamViews);
+  //     setViewColor('red-500');
+  //     setViewAnimate('animate-pulse');
+  //     setTimeout(() => {
+  //       setViewColor('white');
+  //       setViewAnimate('animate-none');
+  //     }, 3000);
+  //   });
+  // }, []);
 
   //set Stream Key
   const handleChange = (e) => {
@@ -235,21 +236,29 @@ const UserInfo = (props) => {
   async function storeWithProgress() {
     const onRootCidReady = (cid) => {
       recordvideo.cid = cid;
+
+      console.log(cid);
     };
 
     const blob = new Blob([JSON.stringify(recordvideo)], { type: 'application/json' });
 
-    const files = [recordvideo.videoFile, new File([blob], 'meta.json')];
+    const files = [recordvideo.videoFile];
     const totalSize = recordvideo.videoFile.size;
+    console.log(totalSize);
     let uploaded = 0;
     const onStoredChunk = (size) => {
       uploaded += size;
       const pct = totalSize / uploaded;
-      //setUploading(10 - pct);
-      console.log(`Uploading... ${pct}% complete`);
+
+      setUploading(10 - pct);
+      console.log(`Uploading... ${Math.min(pct * 100, 100).toFixed(2)}% complete`);
     };
 
+    // makeStorageClient returns an authorized Web3.Storage client instance
     const client = makeStorageClient();
+
+    // client.put will invoke our callbacks during the upload
+    // and return the root cid when the upload completes
     return client.put(files, { onRootCidReady, onStoredChunk });
   }
 
@@ -280,8 +289,10 @@ const UserInfo = (props) => {
     recorderdata.ondataavailable = (e) => chunks.push(e.data);
     recorderdata.onstop = () => {
       const completeBlob = new Blob(chunks, { type: chunks[0].type });
+      const videoFile = new File(chunks, `video.webm`, { type: 'video/webm' });
 
       setRecordUrl(URL.createObjectURL(completeBlob));
+      setRecordVideo({ ...recordvideo, videoFile: videoFile });
       setRecording(false);
       setNewRecord(1);
     };
@@ -312,15 +323,49 @@ const UserInfo = (props) => {
   }, [selectedCategory]);
 
   useEffect(() => {
-    if (recordvideo.videoFile !== null) {
-      storeWithProgress();
-    }
     // eslint-disable-next-line
   }, [recordvideo.videoFile]);
 
   const mintNFT = () => {
-    const videoFile = new File(chunks, `${recordvideo.videoName}.webm`, { type: 'video/webm' });
-    setRecordVideo({ ...recordvideo, videoFile: videoFile });
+    // const videoFile = new File(chunks, `${recordvideo.videoName}.webm`, { type: 'video/webm' });
+    // console.log(videoFile.size);
+    //setRecordVideo({ ...recordvideo, videoFile: videoFile });
+    if (recordvideo.videoFile !== null) {
+      storeWithProgress().then(async () => {
+        var ts = Math.round(new Date().getTime() / 1000);
+
+        //Standard Metadata supported by OpenSea
+        let metadata = {
+          image: 'https://ipfs.io/ipfs/' + recordvideo.cid + '/video.webm',
+
+          external_url: 'https://ipfs.io/ipfs/' + recordvideo.cid + '/video.webm',
+
+          description: recordvideo.description,
+
+          name: recordvideo.videoName,
+
+          attributes: [
+            {
+              display_type: 'date',
+              trait_type: 'birthday',
+              value: ts,
+            },
+            {
+              trait_type: 'Category',
+              value: recordvideo.category,
+            },
+          ],
+          animation_url: 'https://ipfs.io/ipfs/' + recordvideo.cid + '/video.webm',
+        };
+
+        const blob = new Blob([JSON.stringify(metadata)], { type: 'application/json' });
+
+        const files = [new File([blob], 'meta.json')];
+        const client = makeStorageClient();
+        const cid = await client.put(files);
+        console.log('stored files with cid:', cid);
+      });
+    }
   };
 
   // Thumbnail
@@ -410,7 +455,7 @@ const UserInfo = (props) => {
   }, []);
 
   return user ? (
-    <Fragment className={`${darkMode && 'dark'}`}>
+    <div className={`${darkMode && 'dark'}`}>
       <div className="grid sm:grid-cols-1 lg:grid-cols-3 grid-flow-row  pb-50  lg:ml-12  bg-gradient-to-b from-blue-50 via-blue-50 to-white  dark:bg-gradient-to-b dark:from-dbeats-dark-secondary  dark:to-dbeats-dark-primary">
         <div className=" lg:col-span-2 pt-3 mt-10">
           <div className="self-center lg:px-8 w-screen lg:w-full lg:mt-3 mt-0.5  ">
@@ -460,7 +505,7 @@ const UserInfo = (props) => {
         {user.livepeer_data.isActive ? (
           user.username && (
             <div className="  w-full col-span-1" style={{ height: '100vh' }}>
-              <LiveChat userp={user} privateUser={user}></LiveChat>
+              {/* <LiveChat userp={user} privateUser={user}></LiveChat> */}
             </div>
           )
         ) : (
@@ -754,7 +799,20 @@ const UserInfo = (props) => {
                   />
                 </div>
               </div>
+
               <div className="float-right pt-20 flex items-center">
+                {recordvideo.cid != null ? (
+                  <>
+                    <a
+                      className=" text-white cursor-pointer mr-2 underline"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      href={`https://ipfs.io/ipfs/${recordvideo.cid}/video.webm`}
+                    >
+                      Click here to Download
+                    </a>
+                  </>
+                ) : null}
                 <div
                   onClick={mintNFT}
                   className="w-max font-bold cursor-pointer px-12 nowrap py-2 rounded-md text-md text-white bg-dbeats-light"
@@ -1109,7 +1167,7 @@ const UserInfo = (props) => {
           </div>
         </h2>
       </Modal>
-    </Fragment>
+    </div>
   ) : (
     <></>
   );
