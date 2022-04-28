@@ -1,22 +1,77 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Modal from 'react-modal';
+import { RadioGroup } from '@headlessui/react';
 
-function ReportModal({ show, handleClose, handleShowReport2,setReportSection ,setShowOtherReport}) {
+function ReportModal({
+  show,
+  handleClose,
+  handleShowReport2,
+  setReportSection,
+  setShowOtherReport,
+}) {
+  const [reportSectionValue, setReportSectionValue] = React.useState(0);
 
-  const handleSection = (section)=>{
-    switch(section){
+  useEffect(() => {
+    switch (reportSectionValue) {
+      case '1':
+        setReportSection([
+          'Nudity or pornography',
+          'Sexual exploitation',
+          'Sharing private images',
+        ]);
+        handleShowReport2(true);
+        handleClose(false);
+        setReportSectionValue(0)
+        break;
+      case '2':
+        setReportSection(['Violent Threat', 'Animal abuse', 'Death, severe injury, dangerous']);
+        handleShowReport2(true);
+        handleClose(false);
+        setReportSectionValue(0)
+        break;
+      case '3':
+        setReportSection(['Animals', 'Firearms', 'Fake health documents']);
+        handleShowReport2(true);
+        handleClose(false);
+        setReportSectionValue(0)
+        break;
+      case '4':
+        setReportSection(['Report Privacy']);
+        handleShowReport2(true);
+        handleClose(false);
+        setReportSectionValue(0)
+        break;
+      case '5':
+        setReportSection(['Spam']);
+        handleShowReport2(true);
+        handleClose(false);
+        setReportSectionValue(0)
+        break;
+      case '6':
+        setShowOtherReport(true);
+        handleClose(false);
+        setReportSectionValue(0)
+        break;
+    }
+  }, [reportSectionValue]);
+  const handleSection = (section) => {
+    switch (section) {
       case 1:
-        setReportSection(['Nudity or pornography','Sexual exploitation','Sharing private images']);
+        setReportSection([
+          'Nudity or pornography',
+          'Sexual exploitation',
+          'Sharing private images',
+        ]);
         handleShowReport2(true);
         handleClose(false);
         break;
       case 2:
-        setReportSection(['Violent Threat','Animal abuse','Death, severe injury, dangerous']);
+        setReportSection(['Violent Threat', 'Animal abuse', 'Death, severe injury, dangerous']);
         handleShowReport2(true);
         handleClose(false);
         break;
       case 3:
-        setReportSection(['Animals','Firearms','Fake health documents']);
+        setReportSection(['Animals', 'Firearms', 'Fake health documents']);
         handleShowReport2(true);
         handleClose(false);
         break;
@@ -34,50 +89,167 @@ function ReportModal({ show, handleClose, handleShowReport2,setReportSection ,se
         setShowOtherReport(true);
         handleClose(false);
         break;
-      
     }
-  }
+  };
   return (
     <Modal
       isOpen={show}
-      className={`${'dark'} text-white h-max md:w-max w-full bg-dbeats-dark-alt mx-auto absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 shadow `}
+      className={`${'dark'} border lg:w-1/3  w-5/6  text-white h-max md:w-max rounded-lg bg-dbeats-dark-alt mx-auto absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 shadow `}
     >
-      <div className="flex text-white items-center border-b-2 border-white">
-        <div className="text-center w-60 flex-1">Report</div>
-        <div>
-          <i
-            className="fa-solid fa-xmark text-lg text-white p-3 cursor-pointer"
-            onClick={() => handleClose(false)}
-          ></i>
+      <div className=" py-2 flex text-white items-center border-b-2 border-white">
+        <div className="text-center w-60 flex-1 font-bold">Report</div>
+
+        <div
+          className="rounded-3xl group w-max   p-2  mx-1 mr-8 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-secondary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
+          onClick={() => handleClose(false)}
+        >
+          <span className="text-black dark:text-white  flex px-2 py-1 rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:nm-inset-dbeats-dark-secondary">
+            <i className="fas fa-times"></i>
+          </span>
         </div>
       </div>
-      <div className='pt-2 pl-1'>Please select a problem</div>
-      <div className=' mb-2'>
-        <div onClick={()=> handleSection(1)} className="px-2 py-1  flex items-center mt-3 w-80 justify-between cursor-pointer hover:bg-dbeats-dark">
-            <div>Nudity</div>
-            <div><i className="fa-solid fa-circle-chevron-right text-lg text-dbeats-light"></i></div>
-        </div>
-        <div onClick={()=> handleSection(2)} className="px-2 py-1  flex items-center mt-3 w-80 justify-between cursor-pointer hover:bg-dbeats-dark">
-            <div>Voilence</div>
-            <div><i className="fa-solid fa-circle-chevron-right text-lg text-dbeats-light"></i></div>
-        </div>
-        <div onClick={()=> handleSection(3)} className="px-2 py-1  flex items-center mt-3 w-80 justify-between cursor-pointer hover:bg-dbeats-dark">
-            <div>Unauthorised sales</div>
-            <div><i className="fa-solid fa-circle-chevron-right text-lg text-dbeats-light"></i></div>
-        </div>
-        <div onClick={()=> handleSection(4)} className="flex px-2  py-1 items-center mt-3 w-80 justify-between cursor-pointer hover:bg-dbeats-dark">
-            <div>Pirated</div>
-            <div><i className="fa-solid fa-circle-chevron-right text-lg text-dbeats-light"></i></div>
-        </div>
-        <div onClick={()=> handleSection(5)} className="flex px-2  py-1  items-center mt-3 w-80 justify-between cursor-pointer hover:bg-dbeats-dark">
-            <div>Spam</div>
-            <div><i className="fa-solid fa-circle-chevron-right text-lg text-dbeats-light"></i></div>
-        </div>
-        <div onClick={()=> handleSection(6)} className="flex px-2   py-1 items-center mt-3 w-80 justify-between cursor-pointer hover:bg-dbeats-dark">
-            <div>Something Else</div>
-            <div><i className="fa-solid fa-circle-chevron-right text-lg text-dbeats-light"></i></div>
-        </div>
-        
+      <h1 className="pt-2 pl-2 text-white text-xl mb-2">Please select a problem</h1>
+      <div className=" pl-3 mb-2 text-white text-lg">
+        <RadioGroup value={reportSectionValue} onChange={setReportSectionValue} className=" w-max">
+          <RadioGroup.Option value="1" className="p-1 cursor-pointer flex items-center">
+            {({ checked }) => (
+              <>
+                <span className={checked ? 'text-dbeats-light' : ''}>Nudity</span>
+                {checked ? (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5 ml-2"
+                    viewBox="0 0 20 20"
+                    fill="#00d3ff"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                ) : (
+                  <></>
+                )}
+              </>
+            )}
+          </RadioGroup.Option>
+          <RadioGroup.Option value="2" className="p-1 cursor-pointer flex items-center">
+            {({ checked }) => (
+              <>
+                <span className={checked ? 'text-dbeats-light' : ''}>Voilence</span>
+                {checked ? (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5 ml-2"
+                    viewBox="0 0 20 20"
+                    fill="#00d3ff"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                ) : (
+                  <></>
+                )}
+              </>
+            )}
+          </RadioGroup.Option>
+          <RadioGroup.Option value="3" className="p-1 cursor-pointer flex items-center">
+            {({ checked }) => (
+              <>
+                <span className={checked ? 'text-dbeats-light' : ''}>Unauthorised sales</span>
+                {checked ? (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5 ml-2"
+                    viewBox="0 0 20 20"
+                    fill="#00d3ff"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                ) : (
+                  <></>
+                )}
+              </>
+            )}
+          </RadioGroup.Option>
+          <RadioGroup.Option value="4" className="p-1 cursor-pointer flex items-center">
+            {({ checked }) => (
+              <>
+                <span className={checked ? 'text-dbeats-light' : ''}>Pirated</span>
+                {checked ? (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5 ml-2"
+                    viewBox="0 0 20 20"
+                    fill="#00d3ff"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                ) : (
+                  <></>
+                )}
+              </>
+            )}
+          </RadioGroup.Option>
+          <RadioGroup.Option value="5" className="p-1 cursor-pointer flex items-center">
+            {({ checked }) => (
+              <>
+                <span className={checked ? 'text-dbeats-light' : ''}>Spam</span>
+                {checked ? (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5 ml-2"
+                    viewBox="0 0 20 20"
+                    fill="#00d3ff"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                ) : (
+                  <></>
+                )}
+              </>
+            )}
+          </RadioGroup.Option>
+          <RadioGroup.Option value="6" className="p-1 cursor-pointer flex items-center">
+            {({ checked }) => (
+              <>
+                <span className={checked ? 'text-dbeats-light' : ''}>Something Else</span>
+                {checked ? (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5 ml-2"
+                    viewBox="0 0 20 20"
+                    fill="#00d3ff"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                ) : (
+                  <></>
+                )}
+              </>
+            )}
+          </RadioGroup.Option>
+        </RadioGroup>
       </div>
     </Modal>
   );
