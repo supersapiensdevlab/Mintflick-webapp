@@ -51,7 +51,7 @@ const TrackCard = (props) => {
     <div id="tracks-section" className="py-1 ">
       <div
         className={`w-full  flex  md:flex-row flex-col  py-3 
-      bg-gray-50 shadow-lg  rounded  dark:bg-dbeats-dark-secondary 
+      bg-gray-50 shadow-lg  sm:rounded border border-white border-opacity-5 dark:bg-dbeats-dark-secondary 
         dark:text-gray-100 
       lg:px-3 2xl:px-3 md:p-2`}
       >
@@ -77,7 +77,7 @@ const TrackCard = (props) => {
         </div>
 
         <div className={`px-5 w-full py-2 md:ml-4 lg:ml-0`}>
-          <p className="flex justify-between pb-1 text-black text-sm font-medium dark:text-gray-100">
+          <p className="flex justify-between pb-1 text-black text-sm font-medium  dark:text-gray-100">
             <div>
               <div className="flex">
                 <h4 className="playlist mr-1 mt-0  uppercase text-gray-500 tracking-widest 2xl:text-md lg:text-xs pb-1">

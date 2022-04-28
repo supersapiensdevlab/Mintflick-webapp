@@ -169,7 +169,7 @@ function ChatRoom(props) {
     if (formState.replyto) {
       room.chat.reply_to = formState.replyto;
     }
-    currentSocket.emit('chatMessage', room);
+    currentSocket ? currentSocket.emit('chatMessage', room) : null;
     setForm({
       message: '',
       replyto: null,

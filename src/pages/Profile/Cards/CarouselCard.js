@@ -60,7 +60,7 @@ const CarouselCard = (props) => {
     <div id="tracks-section" className="py-1 ">
       <div
         className={`w-full  flex  md:flex-row flex-col  lg:py-3 
-      bg-gray-50 shadow-lg  rounded  dark:bg-dbeats-dark-secondary 
+      bg-gray-50 shadow-lg  sm:rounded border border-white border-opacity-5 dark:bg-dbeats-dark-secondary 
         dark:text-gray-100 
       lg:px-3 2xl:px-3 md:p-2`}
       >

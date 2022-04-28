@@ -65,11 +65,11 @@ const AnnouncementCard = (props) => {
   return (
     <div id="tracks-section" className="py-1 ">
       <div
-        className={`w-full  flex  md:flex-row flex-col  py-3 bg-gray-50 shadow-lg  
-        rounded  dark:bg-dbeats-dark-secondary dark:text-gray-100 
-        lg:px-3 2xl:px-3 md:p-2`}
+        className={`w-full  flex-col  md:flex-row    py-3 border border-white border-opacity-5 shadow-lg  
+        sm:rounded  dark:bg-dbeats-dark-secondary dark:text-gray-100 
+         md:px-5 px-3 `}
       >
-        <div className={` mx-auto items-center lg:w-80 2xl:w-80 2xl:h-48 lg:h-32 md:w-96 h-52   `}>
+        <div className={`   lg:w-80 2xl:w-80   md:w-96     `}>
           <Link
             to={{
               pathname: props.post.link,
@@ -116,8 +116,7 @@ const AnnouncementCard = (props) => {
             ) : null}
           </Link>
         </div>
-
-        <div className={`px-5 w-full py-2 relative`}>
+        <div className={`  w-full py-2 relative`}>
           <p className="flex w-full justify-between text-black text-sm font-medium dark:text-gray-100">
             <div className="w-full">
               <div className="text-gray-500  pb-1">{time}</div>
