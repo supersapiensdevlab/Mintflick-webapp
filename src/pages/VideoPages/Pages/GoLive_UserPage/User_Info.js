@@ -96,6 +96,7 @@ const UserInfo = (props) => {
   const [sharable_data, setsharable_data] = useState();
 
   const text = 'Copy Link To Clipboard';
+
   useEffect(() => {
     if (user && user.multistream_platform) {
       ////console.log("hello",user.multistream_platform)
@@ -305,7 +306,7 @@ const UserInfo = (props) => {
     let recorderdata = new MediaRecorder(data);
     setRecorder(recorderdata);
     recorderdata.ondataavailable = (e) => chunks.push(e.data);
-    recorderdata.onstop = () => {
+    recorderdata.onstop = async () => {
       const completeBlob = new Blob(chunks, { type: chunks[0].type });
       const videoFile = new File(chunks, `video.webm`, { type: 'video/webm' });
 
@@ -353,9 +354,9 @@ const UserInfo = (props) => {
 
         //Standard Metadata supported by OpenSea
         let metadata = {
-          image: 'https://ipfs.io/ipfs/' + recordvideo.cid + '/video.webm',
+          image: '' + user.thumbnail,
 
-          external_url: 'https://ipfs.io/ipfs/' + recordvideo.cid + '/video.webm',
+          external_url: 'https://ipfs.infura.io/ipfs/' + recordvideo.cid + '/video.mp4',
 
           description: recordvideo.description,
 
@@ -364,7 +365,7 @@ const UserInfo = (props) => {
           attributes: [
             {
               display_type: 'date',
-              trait_type: 'birthday',
+              trait_type: 'Created On',
               value: ts,
             },
             {
@@ -372,7 +373,7 @@ const UserInfo = (props) => {
               value: recordvideo.category,
             },
           ],
-          animation_url: 'https://ipfs.io/ipfs/' + recordvideo.cid + '/video.webm',
+          animation_url: 'https://ipfs.infura.io/ipfs/' + recordvideo.cid + '/video.mp4',
         };
 
         const blob = new Blob([JSON.stringify(metadata)], { type: 'application/json' });
@@ -418,7 +419,7 @@ const UserInfo = (props) => {
               .createMarketItem(tokenId, ethers.utils.parseUnits(recordvideo.price, 'ether'))
               .send({ from: user.wallet_id })
               .then(async (res) => {
-                formData.append('tokenId', tokenId);
+                //formData.append('tokenId', tokenId);
                 setShow(true);
               });
           });
@@ -464,9 +465,9 @@ const UserInfo = (props) => {
       storeThumbnail(selectedFile.file)
         .then(async (cid) => {
           setUploadingFile(false);
-          console.log('https://ipfs.io/ipfs/' + cid + '/' + selectedFile.file[0].name);
+          console.log('https://ipfs.infura.io/ipfs/' + cid + '/' + selectedFile.file[0].name);
           const data = {
-            url: 'https://ipfs.io/ipfs/' + cid + '/' + selectedFile.file[0].name,
+            url: 'https://ipfs.infura.io/ipfs/' + cid + '/' + selectedFile.file[0].name,
             username: user.username,
           };
           const res = await axios({
@@ -759,9 +760,7 @@ const UserInfo = (props) => {
               muted={false}
             />
           </div>
-          <div>
-            <input type={'number'} />{' '}
-          </div>
+
           <div className="w-full">
             <div className="space-y-6 text-gray-500 dark:text-gray-100">
               <div className="grid grid-cols-1 gap-6 sm:grid-cols-1">
@@ -871,7 +870,7 @@ const UserInfo = (props) => {
                       className=" text-white cursor-pointer mr-2 underline"
                       target="_blank"
                       rel="noopener noreferrer"
-                      href={`https://ipfs.io/ipfs/${recordvideo.cid}/video.webm`}
+                      href={`https://ipfs.infura.io/ipfs/${recordvideo.cid}/video.webm`}
                     >
                       Click here to Download
                     </a>

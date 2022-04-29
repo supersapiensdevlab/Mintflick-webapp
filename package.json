@@ -7,6 +7,8 @@
     "@craco/craco": "^5.9.0",
     "@date-io/date-fns": "^2.13.1",
     "@ethersproject/contracts": "^5.4.1",
+    "@ffmpeg/core": "^0.10.0",
+    "@ffmpeg/ffmpeg": "^0.10.1",
     "@fortawesome/react-fontawesome": "^0.1.15",
     "@headlessui/react": "^1.4.0",
     "@heroicons/react": "^1.0.3",
@@ -45,7 +47,7 @@
     "emoji-picker-react": "^3.5.0",
     "ethers": "^5.5.2",
     "express": "^4.17.1",
-     "gun": "^0.2020.1235",
+    "gun": "^0.2020.1235",
     "hardhat": "^2.7.1",
     "i": "^0.3.7",
     "ipfs-http-client": "^50.1.2",
@@ -103,6 +105,7 @@
     "web3": "^1.7.1",
     "web3.storage": "^3.3.2",
     "web3modal": "^1.9.4",
+    "webm-to-mp4": "^1.0.0",
     "webpack": "^4.42.0"
   },
   "scripts": {

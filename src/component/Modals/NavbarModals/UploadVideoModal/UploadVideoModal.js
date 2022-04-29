@@ -221,9 +221,9 @@ const UploadVideoModal = (props) => {
 
       //Standard Metadata supported by OpenSea
       let metadata = {
-        image: 'https://ipfs.io/ipfs/' + video.cid + '/' + video.videoImage.name,
+        image: 'https://ipfs.infura.io/ipfs/' + video.cid + '/' + video.videoImage.name,
 
-        external_url: 'https://ipfs.io/ipfs/' + video.cid + '/' + video.videoFile.name,
+        external_url: 'https://ipfs.infura.io/ipfs/' + video.cid + '/' + video.videoFile.name,
 
         description: video.description,
 
@@ -232,7 +232,7 @@ const UploadVideoModal = (props) => {
         attributes: [
           {
             display_type: 'date',
-            trait_type: 'birthday',
+            trait_type: 'Created On',
             value: ts,
           },
           {
@@ -241,7 +241,7 @@ const UploadVideoModal = (props) => {
           },
         ],
 
-        animation_url: 'https://ipfs.io/ipfs/' + video.cid + '/' + video.videoFile.name,
+        animation_url: 'https://ipfs.infura.io/ipfs/' + video.cid + '/' + video.videoFile.name,
       };
 
       const blob = new Blob([JSON.stringify(metadata)], { type: 'application/json' });
