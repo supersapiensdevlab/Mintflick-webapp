@@ -8,6 +8,14 @@ import Dropdown from '../../../../component/dropdown.component';
 import { makeStorageClient } from '../../../../component/uploadHelperFunction';
 import VideoPlayer from '../../../../component/VideoPlayer/VideoPlayer';
 import classes from '../Info.module.css';
+import { Biconomy } from '@biconomy/mexa';
+import Web3 from 'web3';
+import { ethers } from 'ethers';
+import { tokenConfig } from '../../../../helper/tokenConfig';
+import Market from '../../../../artifacts/contracts/Market.sol/NFTMarket.json';
+import { nftmarketaddress } from '../../../../functions/config';
+import { loadUser } from '../../../../actions/userActions';
+
 // import LiveChat from '../LivePublicPage/LiveChat';
 // import { io } from 'socket.io-client';
 
@@ -18,6 +26,7 @@ const UserInfo = (props) => {
   const [playbackUrl, setPlaybackUrl] = useState('');
   const [StreamKey, setKey] = useState('');
   const [loader, setLoader] = useState(true);
+  const provider = useSelector((state) => state.web3Reducer.provider);
 
   //Modal
   const [modalShow, setModalShow] = useState(false);
@@ -77,6 +86,16 @@ const UserInfo = (props) => {
   const [currentSocket, setCurrentSocket] = useState(null);
   const [livestreamViews, setLivestreamViews] = useState(0);
 
+  const [minting, setMinting] = useState(null);
+  const [isNFT, setIsNFT] = useState(true);
+  const [NFTprice, setPrice] = useState(0);
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+  const [sharable_data, setsharable_data] = useState();
+
+  const text = 'Copy Link To Clipboard';
   useEffect(() => {
     if (user && user.multistream_platform) {
       ////console.log("hello",user.multistream_platform)
@@ -285,7 +304,6 @@ const UserInfo = (props) => {
 
     let recorderdata = new MediaRecorder(data);
     setRecorder(recorderdata);
-
     recorderdata.ondataavailable = (e) => chunks.push(e.data);
     recorderdata.onstop = () => {
       const completeBlob = new Blob(chunks, { type: chunks[0].type });
@@ -296,7 +314,6 @@ const UserInfo = (props) => {
       setRecording(false);
       setNewRecord(1);
     };
-
     recorderdata.start();
   };
 
@@ -364,10 +381,54 @@ const UserInfo = (props) => {
         const client = makeStorageClient();
         const cid = await client.put(files);
         console.log('stored files with cid:', cid);
+
+        let url = 'https://ipfs.infura.io/ipfs/' + cid + '/meta.json';
+        createToken(url, metadata);
       });
     }
   };
 
+  async function createToken(url, formData) {
+    var tokenId = null;
+    var biconomy = new Biconomy(provider, {
+      apiKey: 'Ooz6qQnPL.10a08ea0-3611-432d-a7de-34cf9c44b49b',
+    });
+    console.log(provider);
+    console.log(biconomy);
+
+    const web3 = new Web3(biconomy);
+    window.web3 = web3;
+
+    setMinting(true);
+    biconomy
+      .onEvent(biconomy.READY, async () => {
+        console.log('Biconomy is ready', user.wallet_id);
+        let contract = new web3.eth.Contract(Market, nftmarketaddress);
+        await contract.methods
+          .createToken(url)
+          .send({ from: user.wallet_id })
+          .then(async (res) => {
+            console.log('#transaction : ', res);
+            tokenId = res.events.Transfer.returnValues.tokenId;
+
+            setMinting(res.transactionHash);
+
+            console.log('#token created : ', tokenId);
+            contract.methods
+              .createMarketItem(tokenId, ethers.utils.parseUnits(recordvideo.price, 'ether'))
+              .send({ from: user.wallet_id })
+              .then(async (res) => {
+                formData.append('tokenId', tokenId);
+                setShow(true);
+              });
+          });
+      })
+      .onEvent(biconomy.ERROR, (error, message) => {
+        // Handle error while initializing mexa
+        console.log(error);
+        console.log(message);
+      });
+  }
   // Thumbnail
   async function storeThumbnail(files) {
     // show the root cid as soon as it's ready
@@ -697,6 +758,9 @@ const UserInfo = (props) => {
               autoPlay={true}
               muted={false}
             />
+          </div>
+          <div>
+            <input type={'number'} />{' '}
           </div>
           <div className="w-full">
             <div className="space-y-6 text-gray-500 dark:text-gray-100">
