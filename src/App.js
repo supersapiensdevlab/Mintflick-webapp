@@ -53,9 +53,10 @@ import useWeb3Modal from './hooks/useWeb3Modal';
 
 // Redux
 import { loadUser } from './actions/userActions';
+import SpinGame from './pages/SpinGame/SpinGame';
 
 export default function App() {
-  const user = useSelector((state) => state.User.user); 
+  const user = useSelector((state) => state.User.user);
   const darkMode = useSelector((state) => state.toggleDarkMode);
   let darkmode = JSON.parse(window.localStorage.getItem('darkmode'));
   const dispatch = useDispatch();
@@ -240,6 +241,12 @@ export default function App() {
                   <NavBar />
                   <PinnedPanel />
                   <UserRoomPage />
+                </Route>
+                <Route exact path="/spingame">
+                  <TopLoader page="spingame" />
+                  <NavBar />
+                  <PinnedPanel />
+                  <SpinGame />
                 </Route>
 
                 {/* ADMIN ROUTES */}
