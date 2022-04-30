@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Transition } from '@headlessui/react';
 import axios from 'axios';
 import Noty from 'noty';
+import { Link } from 'react-router-dom';
 
 const HowToUse = () => {
   const [showFeedback, setShowFeedback] = useState(false);
@@ -72,14 +73,21 @@ const HowToUse = () => {
         <div className="mb-4 border border-gray-100 dark:text-gray-50 dark:border-dbeats-light dark:border-opacity-10 bg-white nm-flat-dbeats-dark-primary  rounded-xl shadow-sm dark:shadow-md    text-dbeats-dark-primary p-4    dialog ">
           <div>
             <div className="justify-between flex">
-              <p className=" text-dbeats-light text-lg font-bold">Get Started 🚀</p>
+              <p className=" text-dbeats-light text-lg font-bold">Game of Luck 🔮</p>
             </div>
             <p className="">
-              This is our open Beta!
-              <br></br>Many things are still in the making. Please be patient if it isn’t 100% how
-              you would like, we are working on it. <br></br> So, enjoy, the house is yours and
-              please let us know how we can do better, fix any bugs and improve the app over time.
+              Welcome to the Spin Game, here you can play the game of chance and win big. You can
+              play the game by clicking on the button below.
             </p>
+            <Link
+              to="/spingame"
+              href="/spingame"
+              className="  transform-gpu  transition-all duration-300 ease-in-out mt-3 cursor-pointer relative inline-flex items-center justify-center p-1 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-3xl  bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-primary   hover:nm-inset-dbeats-dark-primary   hover:text-white dark:text-white  "
+            >
+              <span className="relative px-5 py-2.5 whitespace-nowrap text-xs sm:text-sm bg-gradient-to-br from-dbeats-light to-dbeats-secondary-light hover:nm-inset-dbeats-secondary-light  rounded-3xl">
+                Let&apos;s Go!
+              </span>
+            </Link>
           </div>
         </div>
       </Transition>

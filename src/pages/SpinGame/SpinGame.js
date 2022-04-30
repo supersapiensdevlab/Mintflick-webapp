@@ -1,21 +1,23 @@
+import { random } from 'lodash';
 import React, { useEffect, useRef, useState } from 'react';
 import './SpinGame.css';
 function SpinGame() {
   const [isSpinning, setIsSpinning] = useState(false);
   const [win, setWin] = useState(null);
-  const [fruit1, setFruit1] = useState('🍒');
-  const [fruit2, setFruit2] = useState('🍒');
-  const [fruit3, setFruit3] = useState('🍒');
+  const fruits = ['🍒', '🍉', '🍊', '🍓', '🍇', '🥝', '🍭'];
+  console.log('win', fruits[Math.floor(Math.random() * fruits.length + 1)]);
+  const [fruit1, setFruit1] = useState('🍉');
+  const [fruit2, setFruit2] = useState('🍓');
+  const [fruit3, setFruit3] = useState('🍇');
   const [rolling, setRolling] = useState(false);
   let slotRef = [useRef(null), useRef(null), useRef(null)];
-  const fruits = ['🍒', '🍉', '🍊', '🍓', '🍇', '🥝'];
 
   useEffect(() => {
     if (isSpinning) {
-      console.log('spinning')
+      console.log('spinning');
       if (fruit1 === fruit2 && fruit2 === fruit3) {
         setWin(true);
-        console.log('holaaa')
+        console.log('holaaa');
       }
     }
   }, [fruit1, fruit2, fruit3]);
@@ -26,7 +28,7 @@ function SpinGame() {
 
     setTimeout(() => {
       setRolling(false);
-    }, 700);
+    }, 400);
 
     // looping through all 3 slots to start rolling
     slotRef.forEach((slot, i) => {
@@ -52,11 +54,11 @@ function SpinGame() {
 
   return (
     <div className="dark text-center mt-32 relative">
-      <h1 className='text-center text-4xl text-white py-6'>Make a spin</h1>
+      <h1 className="text-center text-4xl text-white py-6">Make a spin 🎪</h1>
       <div className="SlotMachine">
-        <div className="slot">
+        <div className="slot mx-1">
           <section>
-            <div className="container" ref={slotRef[0]}>
+            <div className=" container bg-dbeats-dark-alt " ref={slotRef[0]}>
               {fruits.map((fruit, i) => (
                 <div key={i}>
                   <span>{fruit}</span>
@@ -65,9 +67,9 @@ function SpinGame() {
             </div>
           </section>
         </div>
-        <div className="slot">
+        <div className="slot mx-1">
           <section>
-            <div className="container" ref={slotRef[1]}>
+            <div className="container bg-dbeats-dark-alt" ref={slotRef[1]}>
               {fruits.map((fruit) => (
                 <div key={Math.random()}>
                   <span>{fruit}</span>
@@ -76,9 +78,9 @@ function SpinGame() {
             </div>
           </section>
         </div>
-        <div className="slot">
+        <div className="slot mx-1">
           <section>
-            <div className="container" ref={slotRef[2]}>
+            <div className="container bg-dbeats-dark-alt shadow-md" ref={slotRef[2]}>
               {fruits.map((fruit) => (
                 <div key={Math.random()}>
                   <span>{fruit}</span>
@@ -87,13 +89,34 @@ function SpinGame() {
             </div>
           </section>
         </div>
+
         <div
-          className={!rolling ? 'roll rolling m-auto' : 'roll m-auto'}
           onClick={!rolling && roll}
           disabled={rolling}
+          className="  transform-gpu  w-max  mx-auto   transition-all duration-300 ease-in-out mt-3 cursor-pointer
+             items-center justify-center p-1   overflow-hidden 
+           text-sm font-medium text-gray-900 rounded-full   bg-gradient-to-br 
+           from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-primary  
+            hover:nm-inset-dbeats-dark-primary   hover:text-white dark:text-white  "
         >
-          {rolling ? 'Rolling...' : 'ROLL'}
+          <span className="relative px-12 py-2.5 whitespace-nowrap font-bold text-xs sm:text-sm bg-gradient-to-br from-dbeats-light to-dbeats-secondary-light hover:nm-inset-dbeats-secondary-light  rounded-full">
+            {rolling ? 'Rolling...' : 'ROLL'}
+          </span>
         </div>
+        {/* <div
+          className="p-1 nm-concave-dbeats-alt-sm w-max  mx-auto rounded-full 
+        hover:scale-99 hover:nm-inset-dbeats-dark transform"
+        >
+          <div
+            className={
+              'hover:bg-dbeats-secondary-light px-28  w-full text-center cursor-pointer rolling   rounded-full p-2 bg-dbeats-light m-auto font-semibold'
+            }
+            onClick={!rolling && roll}
+            disabled={rolling}
+          >
+            {rolling ? 'Rolling...' : 'ROLL'}
+          </div>
+        </div> */}
         {win && <div className="mt-5 text-center text-2xl text-white">You Won</div>}
       </div>
     </div>

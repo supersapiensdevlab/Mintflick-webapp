@@ -9,11 +9,10 @@
   section {
     position: absolute;
     border-radius: 15px !important;
-    border: 3px solid black !important;
+    border: 3px solid rgba(0, 0, 0, 0.158) !important;
     width: 150px;
     height: 150px;
-    overflow: hidden;
-    background-color: grey;
+    overflow: hidden; 
     border-radius: 2px;
     border: 1px solid lightgrey;
     color: white;
