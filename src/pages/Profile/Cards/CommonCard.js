@@ -98,7 +98,7 @@ const CommonCard = (props) => {
   };
 
   return (
-    <div className="w-96 bg-dbeats-dark-primary p-3 mr-10 rounded mb-4">
+    <div className="w-full bg-dbeats-dark-primary p-3 sm:m-2 mb-2 mt-0  m-0  rounded   border border-white border-opacity-5 shadow-lg">
       <div className="flex w-full items-center">
         <img
           src={props.user.profile_image}

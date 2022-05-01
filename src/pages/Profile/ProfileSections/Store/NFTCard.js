@@ -29,7 +29,7 @@ import PostOptionModal from '../../../../component/Modals/ReportModals/PostOptio
 import ReportModal from '../../../../component/Modals/ReportModals/ReportModal';
 import ReportModal2 from '../../../../component/Modals/ReportModals/ReportModal2';
 
-const NFTCard = ({ nft, buyNft }) => {
+const NFTCard = ({ nft, buyNft, address }) => {
   //console.log(nft);
   const user = useSelector((state) => state.User.user);
 
@@ -102,8 +102,7 @@ const NFTCard = ({ nft, buyNft }) => {
   }, []);
   useEffect(() => {
     if (cardDetails) {
-      console.log('creators details');
-      console.log(cardDetails);
+      console.log('creators details', cardDetails);
       const extension = nft.external_url.split(/[#?]/)[0].split('.').pop().trim();
       if (extension == 'mp4' || extension == 'mkv' || extension == 'mov' || extension == 'avi') {
         cardDetails.user.videos.map((video) => {
@@ -536,10 +535,10 @@ const NFTCard = ({ nft, buyNft }) => {
 
   return (
     <>
-      {contentData ? (
+      {contentData && address === cardDetails.user.wallet_id ? (
         <div
-          className="dark my-4  dark:text-gray-50 
-           shadow-sm dark:shadow-md  p-0.5  sm:rounded-xl bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-primary-lg      text-dbeats-dark-primary    relative   "
+          className="dark mt-2   dark:text-gray-50 
+             p-0.5  sm:rounded-xl bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-primary-lg      text-dbeats-dark-primary    relative   "
         >
           <div className="sm:rounded-xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary">
             <div className=" pb-4 ">
@@ -825,7 +824,304 @@ const NFTCard = ({ nft, buyNft }) => {
             )}
             {showAllComments && !commentDisabled && (
               <Allcomments
-              myComments={myComments}
+                myComments={myComments}
+                user_id={cardDetails.user._id}
+                contentData={contentData}
+                setShowAllComments={setShowAllComments}
+              ></Allcomments>
+            )}
+          </div>
+        </div>
+      ) : contentData && !address ? (
+        <div
+          className="dark mt-2   dark:text-gray-50 
+             p-0.5  sm:rounded-xl bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-primary-lg      text-dbeats-dark-primary    relative   "
+        >
+          <div className="sm:rounded-xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary">
+            <div className=" pb-4 ">
+              <div className="flex justify-between items-center  text-black text-sm font-medium   px-4  py-3">
+                <div className="flex">
+                  <a onClick={handleClick} className="mr-4  w-16 h-14  cursor-pointer">
+                    <img
+                      src={cardDetails.user.profile_image ? cardDetails.user.profile_image : person}
+                      alt=""
+                      className="  w-14 h-14    rounded-full    self-start"
+                    />
+                  </a>
+                  <div className="flex  justify-between mt-2">
+                    <div>
+                      <div className="w-full self-center  ">
+                        <a
+                          onClick={handleClick}
+                          className="2xl:text-sm lg:text-xs text-sm text-gray-500  mb-2 cursor-pointer"
+                        >
+                          <div className="flex align-middle">
+                            <p className="text-white mr-1">{cardDetails.user.name}</p>
+                            &middot;
+                            <p className="text-white ml-1 text-opacity-40 text-xs self-center align-middle">
+                              {time}
+                            </p>
+                          </div>
+
+                          <p className="text-white text-opacity-40">@{cardDetails.user.username}</p>
+                        </a>{' '}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <div className="text-right">
+                    <i
+                      onClick={() => setShowPostOption(true)}
+                      className="fa-solid fa-ellipsis text-3xl pr-2 text-white cursor-pointer"
+                    ></i>
+                  </div>
+                  <button
+                    onClick={() => {
+                      if (user) handleShowSubscriptionModal();
+                      else loadWeb3Modal();
+                    }}
+                    className={
+                      cardDetails.user.superfan_data
+                        ? ' flex dark:bg-dbeats-dark-primary border border-dbeats-light dark:hover:bg-dbeats-light p-1   text-sm    rounded  2xl:px-4 px-4 lg:px-2      mr-1   text-white   '
+                        : 'hidden'
+                    }
+                  >
+                    <span
+                      className={`${
+                        cardDetails.user.superfan_data ? '' : 'hidden'
+                      } whitespace-nowrap sm:flex hidden`}
+                    >
+                      🥳 Become a Superfan
+                    </span>
+                    <span
+                      className={`${
+                        cardDetails.user.superfan_data ? '' : 'hidden'
+                      } whitespace-nowrap sm:hidden flex`}
+                    >
+                      Become a Superfan
+                    </span>
+                  </button>
+                </div>
+              </div>
+
+              <div className=" text-lg   text-white px-4  ">{nft.name}</div>
+
+              <div className=" text-base     text-opacity-50 text-white px-4  ">
+                {showMore ? nft.description : `${nft.description.substring(0, 120)}`}
+                {nft.description.length > 120 && !showMore ? '...' : null}
+                {/* {nft.description.slice(0, 120)} */}
+              </div>
+
+              {nft.description.length > 120 ? (
+                <button
+                  className="btn justify-end text-right text-base  cursor-pointer   text-opacity-40 text-dbeats-light px-4"
+                  onClick={() => setShowMore(!showMore)}
+                >
+                  {showMore ? '...see less' : '...see more'}
+                </button>
+              ) : null}
+            </div>
+            <div
+              className={`cursor-pointer w-full 2xl:h-max lg:h-max md:h-max xs:h-max min-h-full   dark:bg-black bg-black `}
+            >
+              <Link
+                to={`/playback/${cardDetails.user.username}/${cardDetails.id}`}
+                className="h-full "
+              ></Link>
+              <ReactPlayer
+                className="w-full h-full max-h-screen "
+                width="100%"
+                height="400px"
+                playing={true}
+                muted={true}
+                volume={0.5}
+                light={nft.image}
+                url={contentData.link}
+                controls={true}
+                ref={ref}
+              />
+            </div>
+            <div className="flex   text-black text-sm font-medium   px-4  py-3">
+              <a onClick={handleClick} className="mr-4">
+                <img
+                  src={
+                    nft.owner === nftmarketaddress
+                      ? dbeatsDAOLogo
+                      : ownerDetails && ownerDetails.user
+                      ? ownerDetails.user.profile_image
+                      : person
+                  }
+                  alt=""
+                  loading="lazy"
+                  className="w-16 h-14 rounded-full self-start"
+                />
+              </a>
+              <div className="w-full flex justify-between mt-2">
+                <div>
+                  {nft.owner === nftmarketaddress ? (
+                    <div className="w-full self-center  ">
+                      <Link
+                        to={`/profile/dbeatsDAO/`}
+                        className="2xl:text-sm lg:text-xs text-sm text-gray-500  mb-2"
+                      >
+                        <h4>DBeats DAO</h4>
+                      </Link>{' '}
+                      <div className="2xl:text-sm lg:text-xs text-sm text-gray-500 pr-2 flex  ">
+                        owner
+                      </div>
+                      <div className="flex">
+                        <div className="text-xs text-dbeats-light  flex pr-2 ">
+                          {`${contentData.views ? contentData.views.length : 0} views`}
+                        </div>
+                        {!commentDisabled ? (
+                          <div
+                            onClick={() => setShowAllComments(true)}
+                            className="text-xs cursor-pointer text-dbeats-light pr-2 flex  "
+                          >
+                            {contentData.comments ? contentData.comments.length : 0} comments
+                          </div>
+                        ) : (
+                          <></>
+                        )}
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="w-full self-center  ">
+                      <Link
+                        to={`/profile/${
+                          ownerDetails !== undefined &&
+                          ownerDetails !== 'Try Again' &&
+                          ownerDetails &&
+                          ownerDetails.user &&
+                          ownerDetails.user.username
+                        }/`}
+                        className="2xl:text-sm lg:text-xs text-sm text-gray-500  mb-2"
+                      >
+                        <h4>
+                          {ownerDetails !== undefined &&
+                            ownerDetails !== 'Try Again' &&
+                            ownerDetails &&
+                            ownerDetails.user &&
+                            ownerDetails.user.name}{' '}
+                        </h4>
+                      </Link>{' '}
+                      <div className="2xl:text-sm lg:text-xs text-sm text-gray-500 pr-2 flex  ">
+                        owner
+                      </div>
+                      <div className="flex">
+                        <div className="text-xs text-dbeats-light  flex pr-2 ">
+                          {`${contentData.views ? contentData.views.length : 0} views`}
+                        </div>
+                        {!commentDisabled ? (
+                          <div
+                            onClick={() => setShowAllComments(true)}
+                            className="text-xs cursor-pointer text-dbeats-light pr-2 flex  "
+                          >
+                            {contentData.comments ? contentData.comments.length : 0} comments
+                          </div>
+                        ) : (
+                          <></>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
+                <div className="flex ">
+                  {listingPrice ? (
+                    <div>
+                      <div
+                        onClick={() => createMarketSale(nft)}
+                        className=" rounded-3xl group w-max ml-2 p-1  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-primary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
+                      >
+                        <span className="  text-black dark:text-white  flex p-1 rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-secondary hover:nm-inset-dbeats-dark-secondary ">
+                          <img
+                            className="h-7 w-7 p-1  mr-1   text-white self-center align-middle items-center     "
+                            src={maticLogo}
+                            alt="logo"
+                          ></img>
+                          <p className="self-center mr-2 ml-1">
+                            {parseFloat(nft.price) > 0 ? nft.price : `Make an offer`}
+                          </p>
+                        </span>
+                      </div>
+                    </div>
+                  ) : (
+                    <div
+                      onClick={handleShowBidModal}
+                      className=" rounded-3xl group w-max ml-2 p-1  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-primary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
+                    >
+                      <span className="  text-black dark:text-white  flex p-1 rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-secondary hover:nm-inset-dbeats-dark-secondary ">
+                        <img
+                          className="h-7 w-7 p-1  mr-1   text-white self-center align-middle items-center     "
+                          src={maticLogo}
+                          alt="logo"
+                        ></img>
+                        <p className="self-center mx-2">Make an offer</p>
+                      </span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+            <div className="flex justify-around border-t border-opacity-20 mx-2">
+              <div className="flex text-white  items-center justify-center text-sm font-medium  text-center px-4  py-3">
+                <p
+                  onClick={handlereaction}
+                  className="w-full mt-2 text-center cursor-pointer opacity-50 hover:opacity-100"
+                >
+                  <i
+                    className={
+                      userreact === 'like'
+                        ? `fas fa-heart mr-2 text-red-700 animate-pulse`
+                        : `fas fa-heart mr-2`
+                    }
+                  ></i>
+                  <span className="text-dbeats-light font-extrabold	">
+                    {contentData.reaction.like.length} Like
+                  </span>
+                </p>
+              </div>
+              {commentDisabled ? (
+                <div className="flex text-gray-500  items-center justify-center text-sm font-medium  text-center px-4  py-3">
+                  <p className="w-full mt-2 text-center cursor-pointer opacity-50 ">
+                    <i className="fa-solid fa-comment text-white"></i>
+                    <span className="text-dbeats-light font-extrabold	"> Comment</span>
+                  </p>
+                </div>
+              ) : (
+                <div className="flex text-white  items-center justify-center text-sm font-medium  text-center px-4  py-3">
+                  <p
+                    onClick={() => setShowComment(true)}
+                    className="w-full mt-2 text-center cursor-pointer opacity-50 hover:opacity-100"
+                  >
+                    <i className="fa-solid fa-comment text-white"></i>
+                    <span className="text-dbeats-light font-extrabold	"> Comment</span>
+                  </p>
+                </div>
+              )}
+
+              <div
+                onClick={handleShareShow}
+                className="flex text-white  items-center justify-center text-sm font-medium  text-center px-4  py-3"
+              >
+                <p className="w-full mt-2 text-center cursor-pointer opacity-50 hover:opacity-100">
+                  <i className="fa-solid fa-share-nodes"></i>{' '}
+                  <span className="text-dbeats-light font-extrabold	"> Share</span>
+                </p>
+              </div>
+            </div>
+            {showComment && !commentDisabled && (
+              <Addcomment
+                user_id={cardDetails.user._id}
+                contentData={contentData}
+                setMyComments={setMyComments}
+                myComments={myComments}
+              ></Addcomment>
+            )}
+            {showAllComments && !commentDisabled && (
+              <Allcomments
+                myComments={myComments}
                 user_id={cardDetails.user._id}
                 contentData={contentData}
                 setShowAllComments={setShowAllComments}

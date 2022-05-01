@@ -66,7 +66,7 @@ const AnnouncementCard = (props) => {
     <div id="tracks-section" className="py-1 ">
       <div
         className={`w-full  flex-col  md:flex-row    py-3 border border-white border-opacity-5 shadow-lg  
-        sm:rounded  dark:bg-dbeats-dark-secondary dark:text-gray-100 
+        sm:rounded  dark:bg-dbeats-dark-primary dark:text-gray-100 
          md:px-5 px-3 `}
       >
         <div className={`   lg:w-80 2xl:w-80   md:w-96     `}>

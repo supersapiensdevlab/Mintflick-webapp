@@ -30,6 +30,7 @@ import { loadUser } from '../../../../actions/userActions';
 import CommonCard from '../../Cards/CommonCard';
 import TrackCardPC from '../../Cards/TrackCardPC';
 import AnnouncementCardPC from '../../Cards/AnnouncementCardPC';
+import NFTStore from '../Store/NFT_Store';
 
 const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow, darkMode }) => {
   const [pinnedData, setPinnedData] = useState([]);
@@ -102,6 +103,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
   const [SuperfanSearchOutput, setSuperfanSearchOutput] = useState([]);
 
   const [followText, setFollowText] = useState('Follow');
+  const [walletId, setWalletId] = useState(null);
 
   const scrollRef = useRef(null);
   const musicScrollRef = useRef(null);
@@ -119,7 +121,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
         setFollowers(myData.follower_count.length);
         setFollowing(myData.followee_count.length);
         setSuperfan(myData.superfan_to.length);
-
+        setWalletId(myData.wallet_id);
         setIsMailVerified(myData.is_mail_verified);
         setIsVerified(myData.is_verified);
 
@@ -253,7 +255,8 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
       setFollowers(value.data.follower_count.length);
       setFollowing(value.data.followee_count.length);
       setSuperfan(value.data.superfan_to.length);
-
+      setWalletId(value.data.wallet_id);
+      console.log('VALEt', walletId, value.data.wallet_id);
       setIsMailVerified(value.data.is_mail_verified);
       setIsVerified(value.data.is_verified);
       setSuperfan_data(value.data.superfan_data);
@@ -800,9 +803,39 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                 </Route>
 
                 <Route path={`/profile/:username/videos`}>
-                  <div className=" sm:px-5  pb-5">
-                    {user.videos && user.videos.length > 0 ? (
-                      <div>
+                  <div className="w-full hidden  mt-1">
+                    <div className="flex  hidden">
+                      <button className="mr-2 text-white" onClick={() => scroll(-1700)}>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-8 w-8"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm.707-10.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L9.414 11H13a1 1 0 100-2H9.414l1.293-1.293z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                      </button>
+                      <button className="text-white" onClick={() => scroll(1700)}>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-8 w-8"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 1.414L10.586 9H7a1 1 0 100 2h3.586l-1.293 1.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+                    {user.videos && user.videos.length > 0 && myData ? (
+                      <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4  grid-cols-1 ">
                         {user.videos
                           .slice(0)
                           .reverse()
@@ -810,12 +843,16 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                             //////console.log(playbackUser)
                             return (
                               <div key={i}>
-                                <CarouselCard
+                                <CommonCard
+                                  className="mx-2 px-2"
                                   privateUser={privateUser}
                                   videono={i}
                                   playbackUserData={playbackUser}
                                   index={user.videos.length - 1 - i}
                                   username={user.username}
+                                  user={user}
+                                  myDataUser={myData.username}
+                                  darkMode={darkMode}
                                   type="video"
                                 />
                               </div>
@@ -823,11 +860,13 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                           })}
                       </div>
                     ) : (
-                      <p className="2xl:text-lg lg:text-sm dark:text-white mt-2">
+                      <p className="2xl:text-lg lg:text-sm dark:text-white mt-2 pl-3">
                         No Videos till now
                       </p>
                     )}
                   </div>
+
+                  <NFTStore address={walletId}></NFTStore>
                 </Route>
 
                 <Route path={`/profile/:username/music`}>
@@ -1047,69 +1086,12 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
             </Tab.Group>
           </div>
 
-          <div className="w-full hidden  px-5 mt-2">
-            <div className="flex w-full justify-between">
-              <p className="text-white p-3 text-2xl">Posts</p>
-              <div className="flex">
-                <button className="mr-2 text-white" onClick={() => postScroll(-1700)}>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-8 w-8"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm.707-10.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L9.414 11H13a1 1 0 100-2H9.414l1.293-1.293z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </button>
-                <button className="text-white" onClick={() => postScroll(1700)}>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-8 w-8"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 1.414L10.586 9H7a1 1 0 100 2h3.586l-1.293 1.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </button>
-              </div>
-            </div>
-            {postsData && postsData.length > 0 ? (
-              <div className="flex w-max overflow-x-scroll scroll-smooth max-w-full">
-                {postsData.map((post, i) => {
-                  //////console.log(playbackUser)
-                  return (
-                    <div key={i}>
-                      <AnnouncementCardPC
-                        privateUser={privateUser}
-                        post={post}
-                        index={i}
-                        username={user.username}
-                        user={user}
-                        myDataUser={myData.username}
-                        darkMode={darkMode}
-                      />
-                    </div>
-                  );
-                })}
-              </div>
-            ) : (
-              <p className="2xl:text-lg lg:text-sm dark:text-white mt-2">No Posts till now</p>
-            )}
-          </div>
           {/* <hr className="w-full mt-3" /> */}
-          <div className="w-full hidden  px-5 mt-5">
+          <div className="w-full  hidden  px-5 mt-5">
             <div className="flex w-full justify-between">
-              <p className="text-white p-3 text-2xl">Videos</p>
+              <p className="text-white p-3 text-2xl hidden">Videos</p>
               <div className="flex">
-                <button className="mr-2 text-white" onClick={() => scroll(-1700)}>
+                <button className="mr-2 text-white hidden" onClick={() => scroll(-1700)}>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     className="h-8 w-8"
@@ -1123,7 +1105,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                     />
                   </svg>
                 </button>
-                <button className="text-white" onClick={() => scroll(1700)}>
+                <button className="text-white hidden" onClick={() => scroll(1700)}>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     className="h-8 w-8"
@@ -1171,7 +1153,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
             )}
           </div>
           {/* <hr className="w-full mt-3" /> */}
-          <div className="w-full hidden  px-5 mt-5">
+          <div className="w-full  hidden  px-5 mt-5">
             <div className="flex w-full justify-between">
               <p className="text-white p-3 text-2xl">Music</p>
               <div className="flex">

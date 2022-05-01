@@ -30,10 +30,10 @@ function PostOptionModal({
   return (
     <Modal
       isOpen={show}
-      className={`${'dark'} border border-dbeats-white h-max md:w-max w-full bg-dbeats-dark-alt mx-auto absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 shadow `}
+      className={`${'dark'} border border-dbeats-white border-opacity-20  h-max rounded-lg  w-250 bg-dbeats-dark-alt mx-auto absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 shadow `}
     >
       <div className="flex items-center justify-between">
-        <div className='text-white px-3'>{(!myPost && myReport) ? 'Already Reported' : <></>}</div>
+        <div className="text-white px-3">{!myPost && myReport ? 'Already Reported' : <></>}</div>
         <div>
           <i
             className="fa-solid fa-xmark text-lg text-white p-3 cursor-pointer"
@@ -46,18 +46,17 @@ function PostOptionModal({
       <div className="mt-1 mx-2">
         {!myPost ? (
           myReport ? (
-            <p className="mb-1 text-gray-500 text-lg cursor-pointer">
-            {myReport}
-            </p>
+            <p className="mb-1 text-gray-500 cursor-pointer">{myReport}</p>
           ) : (
             <p
-              className=" mb-1 text-white text-lg cursor-pointer w-60"
+              className=" mb-12 text-white text-lg cursor-pointer w-max px-8 mx-auto text-center 
+               border border-white rounded border-opacity-10 hover:bg-dbeats-light hover bg-dbeats-dark-primary"
               onClick={() => {
                 handleShowReport(true);
                 handleClose(false);
               }}
             >
-              Report
+              <i className="fa-solid fa-flag mr-2 text-sm"></i>Report
             </p>
           )
         ) : (

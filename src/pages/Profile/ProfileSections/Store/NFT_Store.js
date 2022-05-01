@@ -146,7 +146,7 @@ export default function NFTStore(props) {
           Marketplace{' '}
         </h1> */}
 
-        <div className="w-full   mx-auto col-span-1  grid grid-flow-row  grid-cols-1   gap-2 gap-x-0   sm:px-3 sm:py-0 py-5">
+        <div className="w-full   mx-auto col-span-1  grid grid-flow-row  grid-cols-1    sm:px-3    ">
           {nfts ? (
             <>
               {nfts.map((nft, i) => {
@@ -156,9 +156,10 @@ export default function NFTStore(props) {
                   return (
                     <div
                       key={i}
-                      className=" self-center  col-span-1   rounded-lg sm:mx-2  transition-all duration-300 "
+                      className="  self-center  col-span-1   rounded-lg sm:mx-2  transition-all duration-300 "
                     >
-                      <NFTCard nft={nft} buyNft={buyNft} />
+                      <NFTCard nft={nft} buyNft={buyNft} address={props.address} />
+                      {console.log('WALLET ID:', props.address)}
                       {/* <NFTMarket nft={nft}></NFTMarket> */}
                     </div>
                   );
