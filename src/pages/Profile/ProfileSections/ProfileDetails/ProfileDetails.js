@@ -132,6 +132,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
         if (myData.cover_image && myData.cover_image !== '') {
           setCoverImage(myData.cover_image);
         } else {
+          // if cover image is not set
           setCoverImage(background);
         }
 
