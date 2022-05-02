@@ -148,7 +148,9 @@ export default function NFTStore(props) {
 
         <div
           className={`${
-            props.address ? 'grid grid-cols-3  ' : ' grid grid-flow-row  grid-cols-1 '
+            props.address
+              ? 'grid sm:grid-cols-1  md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 grid-cols-1'
+              : ' grid grid-flow-row  grid-cols-1 '
           }  w-full   sm:px-3  `}
         >
           {nfts ? (
