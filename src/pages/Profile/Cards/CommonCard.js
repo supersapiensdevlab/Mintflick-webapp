@@ -63,7 +63,7 @@ const CommonCard = (props) => {
       data: reportData,
     })
       .then((response) => {
-        console.log(response);
+        //console.log(response);
       })
       .catch(function (error) {
         console.log(error);
@@ -82,7 +82,7 @@ const CommonCard = (props) => {
     setTime(moment(timestamp).fromNow());
   };
 
-  console.log(props.playbackUserData.time);
+  //console.log(props.playbackUserData.time);
 
   useEffect(() => {
     convertTimestampToTime();

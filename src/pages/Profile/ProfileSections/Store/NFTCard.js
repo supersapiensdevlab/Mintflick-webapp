@@ -57,7 +57,7 @@ const NFTCard = ({ nft, buyNft, address }) => {
     const userData = {
       walletId: nft.creator,
     };
-    console.log(nft);
+    //console.log(nft);
 
     //Fetch Seller Details
     await axios
@@ -65,26 +65,26 @@ const NFTCard = ({ nft, buyNft, address }) => {
       .then((value) => {
         // window.localStorage.setItem('authtoken', JSON.stringify(value.data.jwtToken));
         // //window.location.href = '/';
-        console.log(value);
-        console.log('ownerdetails', ownerDetails);
+        //console.log(value);
+        //console.log('ownerdetails', ownerDetails);
         setCardDetails(value.data);
 
         //Fetch Owner details
         const OwnerData = {
           walletId: nft.owner,
         };
-        console.log('NFT DATA:', nft);
+        //console.log('NFT DATA:', nft);
         if (ownerDetails === nftmarketaddress) {
           setOwnerDetails('DAO');
         } else {
-          console.log('OWNER :', OwnerData, ownerDetails);
+          //console.log('OWNER :', OwnerData, ownerDetails);
           axios
             .post(`${process.env.REACT_APP_SERVER_URL}/user/getuser_by_wallet`, OwnerData, {})
             .then((value) => {
               // window.localStorage.setItem('authtoken', JSON.stringify(value.data.jwtToken));
               // //window.location.href = '/';
               setOwnerDetails(value.data);
-              console.log('OWNER DATA : ', OwnerData);
+              //console.log('OWNER DATA : ', OwnerData);
             });
         }
       });
@@ -102,7 +102,7 @@ const NFTCard = ({ nft, buyNft, address }) => {
   }, []);
   useEffect(() => {
     if (cardDetails) {
-      console.log('creators details', cardDetails);
+      //console.log('creators details', cardDetails);
       const extension = nft.external_url.split(/[#?]/)[0].split('.').pop().trim();
       if (extension == 'mp4' || extension == 'mkv' || extension == 'mov' || extension == 'avi') {
         cardDetails.user.videos.map((video) => {
@@ -190,7 +190,7 @@ const NFTCard = ({ nft, buyNft, address }) => {
 
   useEffect(() => {
     if (contentData) {
-      console.log(contentData);
+      //console.log(contentData);
       let videotime = contentData.time;
       const timestamp = new Date(videotime * 1000); // This would be the timestamp you want to format
       setTime(moment(timestamp).fromNow());
@@ -537,8 +537,8 @@ const NFTCard = ({ nft, buyNft, address }) => {
     <>
       {contentData && address === cardDetails.user.wallet_id ? (
         <div
-          className="dark mt-2   dark:text-gray-50 
-             p-0.5  sm:rounded-xl bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-primary-lg      text-dbeats-dark-primary    relative   "
+          className="dark mt-2   w-full dark:text-gray-50 
+             p-0.5  sm:rounded-xl bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-primary-lg      text-dbeats-dark-primary   "
         >
           <div className="sm:rounded-xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary">
             <div className=" pb-4 ">

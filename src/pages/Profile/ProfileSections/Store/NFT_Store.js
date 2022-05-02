@@ -146,17 +146,31 @@ export default function NFTStore(props) {
           Marketplace{' '}
         </h1> */}
 
-        <div className="w-full   mx-auto col-span-1  grid grid-flow-row  grid-cols-1    sm:px-3    ">
+        <div
+          className={`${
+            props.address ? 'grid grid-cols-3  ' : ' grid grid-flow-row  grid-cols-1 '
+          }  w-full   sm:px-3  `}
+        >
           {nfts ? (
             <>
               {nfts.map((nft, i) => {
                 // for covalent we have to set the contract address
 
-                if (nft && nft.name) {
+                if (nft && nft.name && !props.address) {
                   return (
                     <div
                       key={i}
-                      className="  self-center  col-span-1   rounded-lg sm:mx-2  transition-all duration-300 "
+                      className={`  self-center  col-span-1   rounded-lg sm:mx-2  transition-all duration-300 `}
+                    >
+                      <NFTCard nft={nft} buyNft={buyNft} />
+                      {/* <NFTMarket nft={nft}></NFTMarket> */}
+                    </div>
+                  );
+                } else if (props.address) {
+                  return (
+                    <div
+                      key={i}
+                      className={`  self-center  col-span-1   rounded-lg sm:mx-2  transition-all duration-300 `}
                     >
                       <NFTCard nft={nft} buyNft={buyNft} address={props.address} />
                       {console.log('WALLET ID:', props.address)}

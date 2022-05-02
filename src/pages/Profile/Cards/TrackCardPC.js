@@ -46,7 +46,7 @@ const TrackCardPC = (props) => {
 
   let sharable_data = `${process.env.REACT_APP_CLIENT_URL}/track/${props.username}/${props.track.trackId}`;
 
-  console.log(props.track);
+  //console.log(props.track);
   const handleReportSubmit = () => {
     let reportData = {
       reporter: props.myDataUser,
@@ -64,7 +64,7 @@ const TrackCardPC = (props) => {
       data: reportData,
     })
       .then((response) => {
-        console.log(response);
+        //console.log(response);
       })
       .catch(function (error) {
         console.log(error);
@@ -88,7 +88,7 @@ const TrackCardPC = (props) => {
   //     // eslint-disable-next-line
   //   }, []);
 
-  console.log(props.user);
+  //console.log(props.user);
 
   const handlePlayerClick = async () => {
     if (user) {
