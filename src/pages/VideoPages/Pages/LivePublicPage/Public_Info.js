@@ -43,7 +43,7 @@ const PublicInfo = (props) => {
 
   const [privateUser, setPrivate] = useState(true);
 
-  const user = useSelector((state) => state.User.user); 
+  const user = useSelector((state) => state.User.user);
   const [time, setTime] = useState(null);
 
   const [playbackUrl, setPlaybackUrl] = useState('');
@@ -220,7 +220,7 @@ const PublicInfo = (props) => {
 
   useEffect(() => {
     const socket = io(process.env.REACT_APP_VIEWS_URL, {
-      transports: ['websocket'],
+      transports: ['websocket'], // you need to explicitly tell it to use websockets
       upgrade: false,
     });
     socket.on('connection');
@@ -292,9 +292,9 @@ const PublicInfo = (props) => {
     //const details = await carol2.details();
     //console.log(details.cfa.flows.outFlows[0]);
   };
-  const handleLogin = ()=>{
+  const handleLogin = () => {
     loadWeb3Modal();
-  }
+  };
   return (
     <div className="">
       <div
@@ -388,9 +388,7 @@ const PublicInfo = (props) => {
                             <button
                               id="subscribeButton"
                               className="flex items-center dark:bg-dbeats-dark-primary border border-dbeats-light dark:hover:bg-dbeats-light p-1 2xl:text-lg lg:text-sm text-md rounded-sm 2xl:px-4 px-4 lg:px-2 mr-3 font-semibold text-white "
-                              onClick={
-                                user != null && trackFollowers 
-                              }
+                              onClick={user != null && trackFollowers}
                             >
                               <span>{subscribeButtonText}</span>
                               {/* <div
@@ -401,11 +399,7 @@ const PublicInfo = (props) => {
                           ) : null}
 
                           <button
-                            onClick={
-                              user != null
-                                && handleShowSubscriptionModal
-                                
-                            }
+                            onClick={user != null && handleShowSubscriptionModal}
                             className={
                               userData.superfan_data
                                 ? ' flex dark:bg-dbeats-dark-primary border border-dbeats-light dark:hover:bg-dbeats-light p-1 2xl:text-lg lg:text-sm text-md  rounded-sm 2xl:px-4 px-4 lg:px-2      mr-3 font-semibold text-white   '
