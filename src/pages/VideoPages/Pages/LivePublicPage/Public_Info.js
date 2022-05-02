@@ -1,6 +1,6 @@
 import { Web3Provider } from '@ethersproject/providers';
 import { Menu, Transition } from '@headlessui/react';
-import SuperfluidSDK from '@superfluid-finance/js-sdk';
+import { Framework } from '@superfluid-finance/sdk-core';
 //import playimg from "../../../assets/images/telegram.png";
 import axios from 'axios';
 import moment from 'moment';
@@ -271,7 +271,7 @@ const PublicInfo = (props) => {
         },
       ],
     });
-    const sf = new SuperfluidSDK.Framework({
+    const sf = await Framework.create({
       ethers: new Web3Provider(window.ethereum),
     });
     await sf.initialize();

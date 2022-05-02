@@ -1,4 +1,4 @@
-import SuperfluidSDK from '@superfluid-finance/js-sdk';
+import { Framework } from '@superfluid-finance/sdk-core';
 import { Web3Provider } from '@ethersproject/providers';
 
 const testFlow = async (props) => {
@@ -12,7 +12,7 @@ const testFlow = async (props) => {
       },
     ],
   });
-  const sf = new SuperfluidSDK.Framework({
+  const sf = await Framework.create({
     ethers: new Web3Provider(window.ethereum),
   });
   await sf.initialize();

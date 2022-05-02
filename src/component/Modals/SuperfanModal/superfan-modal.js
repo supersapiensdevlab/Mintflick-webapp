@@ -1,5 +1,5 @@
 import { Web3Provider } from '@ethersproject/providers';
-import SuperfluidSDK from '@superfluid-finance/js-sdk';
+import { Framework } from '@superfluid-finance/sdk-core';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Container } from 'react-bootstrap';
 import Modal from 'react-modal';
@@ -70,7 +70,7 @@ const SuperfanModal = ({ show, handleClose, userDataDetails }) => {
         },
       ],
     });
-    const sf = new SuperfluidSDK.Framework({
+    const sf = await Framework.create({
       ethers: new Web3Provider(window.ethereum),
     });
     await sf.initialize();
@@ -239,73 +239,79 @@ const SuperfanModal = ({ show, handleClose, userDataDetails }) => {
   };
 
   return (
-    <div className='relative'>
-    <Modal
-      isOpen={show}
-      className={`${darkMode && 'dark'}  absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2    w-screen shadow md:w-max`}
-      ariaHideApp={false}
-    >
-      {userDataDetails && (
-        <div className={`   mx-auto  bg-white dark:bg-dbeats-dark-alt w-full md:w-max lg:px-12 px-2`}>
-          <h2
-            className="flex justify-between items-center 2xl:text-2xl lg:text-md py-4 2xl:py-6 lg:py-2   text-center relative 
-bg-white dark:bg-dbeats-dark-alt    "
+    <div className="relative">
+      <Modal
+        isOpen={show}
+        className={`${
+          darkMode && 'dark'
+        }  absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2    w-screen shadow md:w-max`}
+        ariaHideApp={false}
+      >
+        {userDataDetails && (
+          <div
+            className={`   mx-auto  bg-white dark:bg-dbeats-dark-alt w-full md:w-max lg:px-12 px-2`}
           >
-            <div className="col-span-5    text-gray-900 dark:text-gray-100 font-bold md:pl-80 pl-32">SUPERFAN</div>
-            <div
-              onClick={handleClose}
-              className=" rounded-3xl group w-max   p-1  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-secondary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
+            <h2
+              className="flex justify-between items-center 2xl:text-2xl lg:text-md py-4 2xl:py-6 lg:py-2   text-center relative 
+bg-white dark:bg-dbeats-dark-alt    "
             >
-              <span className="  text-black dark:text-white  flex p-1 rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:nm-inset-dbeats-dark-secondary ">
-                <p className="self-center mx-2">
-                  {' '}
-                  <i className="fas fa-times"></i>{' '}
-                </p>
-              </span>
-            </div>
-          </h2>
+              <div className="col-span-5    text-gray-900 dark:text-gray-100 font-bold md:pl-80 pl-32">
+                SUPERFAN
+              </div>
+              <div
+                onClick={handleClose}
+                className=" rounded-3xl group w-max   p-1  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-secondary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
+              >
+                <span className="  text-black dark:text-white  flex p-1 rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:nm-inset-dbeats-dark-secondary ">
+                  <p className="self-center mx-2">
+                    {' '}
+                    <i className="fas fa-times"></i>{' '}
+                  </p>
+                </span>
+              </div>
+            </h2>
 
-          <div>
-            <Container className="  lg:px-4 lg:pb-4 px-2 pb-2    dark:bg-gradient-to-b dark:from-dbeats-dark-primary  dark:to-dbeats-dark-primary">
-              <div className="flex items-center justify-center w-full lg:mb-4 mb-2">
-                <label className="flex items-center cursor-pointer">
-                  <div className="mr-3 text-gray-700 dark:text-dbeats-white  font-medium ">
-                    One Time
-                  </div>
+            <div>
+              <Container className="  lg:px-4 lg:pb-4 px-2 pb-2    dark:bg-gradient-to-b dark:from-dbeats-dark-primary  dark:to-dbeats-dark-primary">
+                <div className="flex items-center justify-center w-full lg:mb-4 mb-2">
+                  <label className="flex items-center cursor-pointer">
+                    <div className="mr-3 text-gray-700 dark:text-dbeats-white  font-medium ">
+                      One Time
+                    </div>
 
-                  <div className="relative">
-                    <input
-                      type="checkbox"
-                      id="toggleB"
-                      className="sr-only"
-                      onClick={toggleRecurring}
-                    />
+                    <div className="relative">
+                      <input
+                        type="checkbox"
+                        id="toggleB"
+                        className="sr-only"
+                        onClick={toggleRecurring}
+                      />
 
-                    <div className="block bg-gray-600 lg:w-14 lg:h-8 h-5 w-9 rounded-full"></div>
+                      <div className="block bg-gray-600 lg:w-14 lg:h-8 h-5 w-9 rounded-full"></div>
 
-                    <div className="dot absolute left-1 top-1 bg-white lg:w-6 h-3 w-3 lg:h-6 rounded-full transition"></div>
-                  </div>
+                      <div className="dot absolute left-1 top-1 bg-white lg:w-6 h-3 w-3 lg:h-6 rounded-full transition"></div>
+                    </div>
 
-                  <div className="ml-3 text-gray-700 dark:text-dbeats-white  font-medium">
-                    Recurring
-                  </div>
-                </label>
-              </div>{' '}
-              {/* 
+                    <div className="ml-3 text-gray-700 dark:text-dbeats-white  font-medium">
+                      Recurring
+                    </div>
+                  </label>
+                </div>{' '}
+                {/* 
     <button
       onClick={handleCloseSubscriptionModal}
       className=" block text-center col-span-1 px-5 w-full  mx-auto p-2 mt-4 mb-2  text-dbeats-light font-semibold rounded-lg border  border-dbeats-light hover:border-white hover:text-white hover:bg-dbeats-dark-secondary transition-all transform hover:scale-95"
     >
       Cancel
     </button> */}
-              {!showBuyCrypto ? (
-                userDataDetails.superfan_data && showRecurring ? (
-                  <p className="font-bold text-dbeats-light text-lg text-center self-center">
-                    COMING SOON!
-                  </p>
-                ) : (
-                  //Enable this when you want to stream payment using Superfluid
-                  /*   {<div className="grid grid-cols-3 2xl:gap-4 lg:gap-2 w-full   self-center">
+                {!showBuyCrypto ? (
+                  userDataDetails.superfan_data && showRecurring ? (
+                    <p className="font-bold text-dbeats-light text-lg text-center self-center">
+                      COMING SOON!
+                    </p>
+                  ) : (
+                    //Enable this when you want to stream payment using Superfluid
+                    /*   {<div className="grid grid-cols-3 2xl:gap-4 lg:gap-2 w-full   self-center">
           <button
             onClick={() => testFlow(footerData.superfan_data.price)}
             className="block shadow text-center col-span-1  bg-white   dark:bg-dbeats-dark-alt text-black dark:text-white  
@@ -357,68 +363,18 @@ bg-white dark:bg-dbeats-dark-alt    "
             </span>
           </button>
         </div> }*/
-                  <>
-                    <p className="text-white text-center my-2 text-opacity-70 text-sm lg:text-base">
-                      The transaction amount will be sent directly to the Creators Wallet{' '}
-                    </p>
-                    <div className="flex flex-col  md:flex-row max-h-72 md:max-h-96 overflow-y-scroll   self-center mx-5">
-                      <div
-                        className=" w-52 h-max self-center  dark:border-dbeats-light border dark:border-opacity-40 
-          dark:bg-dbeats-dark-secondary rounded-lg lg:p-4 p-2 mt-4 lg:mx-4 md:mx-3 mb-3 lg:mb-0"
-                      >
-                        <p className="font-bold lg:text-lg text-lg text-center text-dbeats-light">
-                          {userDataDetails.superfan_data && userDataDetails.superfan_data.plan
-                            ? userDataDetails.superfan_data.plan
-                            : 'Lite'}
-                        </p>
-
-                        <Image
-                          src={
-                            userDataDetails.superfan_data && userDataDetails.superfan_data.planImage
-                              ? userDataDetails.superfan_data.planImage
-                              : dbeatsLogoBnW
-                          }
-                          height={80}
-                          width={80}
-                          className="object-cover  lg:h-24 lg:w-24 h-16 w-16 mx-auto rounded-full  mt-1"
-                          alt=""
-                          placeholderSrc={dbeatsLogoBnW}
-                        />
-                        <div className=" flex text-2xl font-bold mx-auto justify-center  text-center mt-3 mb-2">
-                          <>
-                            <img className="lg:h-6 lg:w-6 h-4 w-4 self-center lg:mr-1 mr-2" src={maticLogo}></img>
-                            <p className=" lg:text-3xl text-lg font-bold   text-center dark:text-dbeats-white">
-                              {userDataDetails.superfan_data && userDataDetails.superfan_data.price}
-                            </p>
-                          </>
-                        </div>
-                        <button
-                          onClick={() =>
-                            handleDonation(
-                              userDataDetails.superfan_data && userDataDetails.superfan_data.price,
-                            )
-                          }
-                          className="rounded-full block shadow text-center col-span-1  bg-white dark:bg-dbeats-dark-primary text-black dark:text-white  
-             2xl:w-max w-max lg:px-5 px-2 mx-auto lg:py-2 py-1      font-semibold   border border-dbeats-light dark:border-dbeats-light dark:hover:border-dbeats-light  hover:border-dbeats-light hover:shadow-none 
-             transition-all transform hover:scale-99 hover:bg-dbeats-light dark:hover:bg-dbeats-light hover:text-white "
-                        >
-                          <span className="font-semibold text-md px-4">Join</span>
-                        </button>
-                        <p className="  text-gray-800 dark:text-gray-300 text-sm lg:text-base text-center mt-4">
-                          {userDataDetails.superfan_data && userDataDetails.superfan_data.perks}
-                        </p>
-                      </div>
-                      <div className="bg-dbeats-light self-center  w-52 rounded-lg">
-                        <p className="dark:text-white p-2 text-center mx-auto font-semibold">
-                          Most Popular
-                        </p>
+                    <>
+                      <p className="text-white text-center my-2 text-opacity-70 text-sm lg:text-base">
+                        The transaction amount will be sent directly to the Creators Wallet{' '}
+                      </p>
+                      <div className="flex flex-col  md:flex-row max-h-72 md:max-h-96 overflow-y-scroll   self-center mx-5">
                         <div
-                          className="w-52 h-max self-center  dark:border-dbeats-light border dark:border-opacity-40 
-          dark:bg-dbeats-dark-secondary rounded-lg p-4"
+                          className=" w-52 h-max self-center  dark:border-dbeats-light border dark:border-opacity-40 
+          dark:bg-dbeats-dark-secondary rounded-lg lg:p-4 p-2 mt-4 lg:mx-4 md:mx-3 mb-3 lg:mb-0"
                         >
-                          <p className="font-bold lg:text-lg text-lg  text-center text-dbeats-light">
-                            {userDataDetails.superfan_data && userDataDetails.superfan_data.plan2
-                              ? userDataDetails.superfan_data.plan2
+                          <p className="font-bold lg:text-lg text-lg text-center text-dbeats-light">
+                            {userDataDetails.superfan_data && userDataDetails.superfan_data.plan
+                              ? userDataDetails.superfan_data.plan
                               : 'Lite'}
                           </p>
 
@@ -437,10 +393,13 @@ bg-white dark:bg-dbeats-dark-alt    "
                           />
                           <div className=" flex text-2xl font-bold mx-auto justify-center  text-center mt-3 mb-2">
                             <>
-                              <img className="lg:h-6 lg:w-6 h-4 w-4 self-center lg:mr-1 mr-2" src={maticLogo}></img>
-                              <p className=" lg:text-3xl text-lg  font-bold   text-center dark:text-dbeats-white">
+                              <img
+                                className="lg:h-6 lg:w-6 h-4 w-4 self-center lg:mr-1 mr-2"
+                                src={maticLogo}
+                              ></img>
+                              <p className=" lg:text-3xl text-lg font-bold   text-center dark:text-dbeats-white">
                                 {userDataDetails.superfan_data &&
-                                  userDataDetails.superfan_data.price2}
+                                  userDataDetails.superfan_data.price}
                               </p>
                             </>
                           </div>
@@ -448,123 +407,185 @@ bg-white dark:bg-dbeats-dark-alt    "
                             onClick={() =>
                               handleDonation(
                                 userDataDetails.superfan_data &&
-                                  userDataDetails.superfan_data.price2,
+                                  userDataDetails.superfan_data.price,
                               )
                             }
                             className="rounded-full block shadow text-center col-span-1  bg-white dark:bg-dbeats-dark-primary text-black dark:text-white  
+             2xl:w-max w-max lg:px-5 px-2 mx-auto lg:py-2 py-1      font-semibold   border border-dbeats-light dark:border-dbeats-light dark:hover:border-dbeats-light  hover:border-dbeats-light hover:shadow-none 
+             transition-all transform hover:scale-99 hover:bg-dbeats-light dark:hover:bg-dbeats-light hover:text-white "
+                          >
+                            <span className="font-semibold text-md px-4">Join</span>
+                          </button>
+                          <p className="  text-gray-800 dark:text-gray-300 text-sm lg:text-base text-center mt-4">
+                            {userDataDetails.superfan_data && userDataDetails.superfan_data.perks}
+                          </p>
+                        </div>
+                        <div className="bg-dbeats-light self-center  w-52 rounded-lg">
+                          <p className="dark:text-white p-2 text-center mx-auto font-semibold">
+                            Most Popular
+                          </p>
+                          <div
+                            className="w-52 h-max self-center  dark:border-dbeats-light border dark:border-opacity-40 
+          dark:bg-dbeats-dark-secondary rounded-lg p-4"
+                          >
+                            <p className="font-bold lg:text-lg text-lg  text-center text-dbeats-light">
+                              {userDataDetails.superfan_data && userDataDetails.superfan_data.plan2
+                                ? userDataDetails.superfan_data.plan2
+                                : 'Lite'}
+                            </p>
+
+                            <Image
+                              src={
+                                userDataDetails.superfan_data &&
+                                userDataDetails.superfan_data.planImage
+                                  ? userDataDetails.superfan_data.planImage
+                                  : dbeatsLogoBnW
+                              }
+                              height={80}
+                              width={80}
+                              className="object-cover  lg:h-24 lg:w-24 h-16 w-16 mx-auto rounded-full  mt-1"
+                              alt=""
+                              placeholderSrc={dbeatsLogoBnW}
+                            />
+                            <div className=" flex text-2xl font-bold mx-auto justify-center  text-center mt-3 mb-2">
+                              <>
+                                <img
+                                  className="lg:h-6 lg:w-6 h-4 w-4 self-center lg:mr-1 mr-2"
+                                  src={maticLogo}
+                                ></img>
+                                <p className=" lg:text-3xl text-lg  font-bold   text-center dark:text-dbeats-white">
+                                  {userDataDetails.superfan_data &&
+                                    userDataDetails.superfan_data.price2}
+                                </p>
+                              </>
+                            </div>
+                            <button
+                              onClick={() =>
+                                handleDonation(
+                                  userDataDetails.superfan_data &&
+                                    userDataDetails.superfan_data.price2,
+                                )
+                              }
+                              className="rounded-full block shadow text-center col-span-1  bg-white dark:bg-dbeats-dark-primary text-black dark:text-white  
              2xl:w-max w-max lg:px-5 px-2 lg:py-2 py-1   mx-auto       font-semibold   border border-dbeats-light dark:border-dbeats-light dark:hover:border-dbeats-light  hover:border-dbeats-light hover:shadow-none 
+             transition-all transform hover:scale-99 hover:bg-dbeats-light dark:hover:bg-dbeats-light hover:text-white "
+                            >
+                              <span className="font-semibold text-md px-4 ">Join</span>
+                            </button>
+                            <p className=" text-sm lg:text-base text-center text-gray-800 dark:text-gray-300 mt-4">
+                              {userDataDetails.superfan_data &&
+                                userDataDetails.superfan_data.perks2}
+                            </p>
+                          </div>
+                        </div>
+                        <div
+                          className="w-52 h-max self-center dark:border-dbeats-light border dark:border-opacity-40 
+          dark:bg-dbeats-dark-secondary rounded-lg p-4 mt-3 lg:mt-0 lg:mx-4 md:mx-3 mx-0"
+                        >
+                          <p className="font-bold lg:text-lg text-lg  text-center text-dbeats-light">
+                            {userDataDetails.superfan_data && userDataDetails.superfan_data.plan3
+                              ? userDataDetails.superfan_data.plan3
+                              : 'Lite'}
+                          </p>
+
+                          <Image
+                            src={
+                              userDataDetails.superfan_data &&
+                              userDataDetails.superfan_data.planImage
+                                ? userDataDetails.superfan_data.planImage
+                                : dbeatsLogoBnW
+                            }
+                            height={80}
+                            width={80}
+                            className="object-cover  lg:h-24 lg:w-24 h-16 w-16 mx-auto rounded-full  mt-1"
+                            alt=""
+                            placeholderSrc={dbeatsLogoBnW}
+                          />
+                          <div className=" flex text-2xl font-bold mx-auto justify-center  text-center mt-3 mb-2">
+                            <>
+                              <img
+                                className="lg:h-6 lg:w-6 h-4 w-4 self-center lg:mr-1 mr-2"
+                                src={maticLogo}
+                              ></img>
+                              <p className=" lg:text-3xl text-lg font-bold   text-center dark:text-dbeats-white">
+                                {userDataDetails.superfan_data &&
+                                  userDataDetails.superfan_data.price3}
+                              </p>
+                            </>
+                          </div>
+                          <button
+                            onClick={() =>
+                              handleDonation(
+                                userDataDetails.superfan_data &&
+                                  userDataDetails.superfan_data.price3,
+                              )
+                            }
+                            className="rounded-full block shadow text-center col-span-1  bg-white dark:bg-dbeats-dark-primary text-black dark:text-white  
+             2xl:w-max w-max    mx-auto lg:px-5 px-2 lg:py-2 py-1      font-semibold   border border-dbeats-light dark:border-dbeats-light dark:hover:border-dbeats-light  hover:border-dbeats-light hover:shadow-none 
              transition-all transform hover:scale-99 hover:bg-dbeats-light dark:hover:bg-dbeats-light hover:text-white "
                           >
                             <span className="font-semibold text-md px-4 ">Join</span>
                           </button>
-                          <p className=" text-sm lg:text-base text-center text-gray-800 dark:text-gray-300 mt-4">
-                            {userDataDetails.superfan_data && userDataDetails.superfan_data.perks2}
+                          <p className="  text-gray-800 dark:text-gray-300 mt-4 text-sm lg:text-base text-center ">
+                            {userDataDetails.superfan_data && userDataDetails.superfan_data.perks3}
                           </p>
                         </div>
                       </div>
-                      <div
-                        className="w-52 h-max self-center dark:border-dbeats-light border dark:border-opacity-40 
-          dark:bg-dbeats-dark-secondary rounded-lg p-4 mt-3 lg:mt-0 lg:mx-4 md:mx-3 mx-0"
-                      >
-                        <p className="font-bold lg:text-lg text-lg  text-center text-dbeats-light">
-                          {userDataDetails.superfan_data && userDataDetails.superfan_data.plan3
-                            ? userDataDetails.superfan_data.plan3
-                            : 'Lite'}
-                        </p>
-
-                        <Image
-                          src={
-                            userDataDetails.superfan_data && userDataDetails.superfan_data.planImage
-                              ? userDataDetails.superfan_data.planImage
-                              : dbeatsLogoBnW
-                          }
-                          height={80}
-                          width={80}
-                          className="object-cover  lg:h-24 lg:w-24 h-16 w-16 mx-auto rounded-full  mt-1"
-                          alt=""
-                          placeholderSrc={dbeatsLogoBnW}
-                        />
-                        <div className=" flex text-2xl font-bold mx-auto justify-center  text-center mt-3 mb-2">
-                          <>
-                            <img className="lg:h-6 lg:w-6 h-4 w-4 self-center lg:mr-1 mr-2" src={maticLogo}></img>
-                            <p className=" lg:text-3xl text-lg font-bold   text-center dark:text-dbeats-white">
-                              {userDataDetails.superfan_data &&
-                                userDataDetails.superfan_data.price3}
-                            </p>
-                          </>
-                        </div>
-                        <button
-                          onClick={() =>
-                            handleDonation(
-                              userDataDetails.superfan_data && userDataDetails.superfan_data.price3,
-                            )
-                          }
-                          className="rounded-full block shadow text-center col-span-1  bg-white dark:bg-dbeats-dark-primary text-black dark:text-white  
-             2xl:w-max w-max    mx-auto lg:px-5 px-2 lg:py-2 py-1      font-semibold   border border-dbeats-light dark:border-dbeats-light dark:hover:border-dbeats-light  hover:border-dbeats-light hover:shadow-none 
-             transition-all transform hover:scale-99 hover:bg-dbeats-light dark:hover:bg-dbeats-light hover:text-white "
-                        >
-                          <span className="font-semibold text-md px-4 ">Join</span>
-                        </button>
-                        <p className="  text-gray-800 dark:text-gray-300 mt-4 text-sm lg:text-base text-center ">
-                          {userDataDetails.superfan_data && userDataDetails.superfan_data.perks3}
-                        </p>
-                      </div>
-                    </div>
-                  </>
-                )
-              ) : (
-                ''
-              )}
-              <button
-                className="group text-center flex shadow hover:shadow-none   hover:border-purple-700 hover:border border border-transparent hover:scale-99  
-      transition-all duration-200 transform  bg-white lg:px-4 lg:py-2 mb-2 px-2 py-1 text-md lg:text-base self-center align-middle text-purple-700  rounded font-semibold mt-4 mx-auto"
-                onClick={buyCrypto}
-              >
-                {!showBuyCrypto ? (
-                  <>
-                    Buy MATIC
-                    <img
-                      className="h-5 w-5 ml-1 mr-1 self-center align-middle items-center group-hover:bg-white  group-hover:text-white"
-                      src={maticLogo}
-                      alt="logo"
-                    ></img>
-                  </>
+                    </>
+                  )
                 ) : (
-                  'Back'
+                  ''
                 )}
-              </button>
-              {txHashCreated ? (
-                <div className="text-center flex">
-                  <p className="no-underline">🚀</p>
-                  <a
-                    target={'_blank'}
-                    rel="noopener noreferrer "
-                    className="dark:text-dbeats-light cursor-pointer underline  "
-                    href={`https://polygonscan.com/tx/${txHashCreated}`}
-                  >
-                    Check on Polygonscan
-                  </a>
-                </div>
-              ) : (
-                ''
-              )}
-              {txInitiated && !txSuccess && currentBlockNumber === null ? (
-                <p className="dark:text-dbeats-light text-center">Transaction Initiated...</p>
-              ) : txInitiated && currentBlockNumber < minimumBlockConfirmations && !txSuccess ? (
-                <p className="dark:text-dbeats-light text-center">
-                  Waiting for {minimumBlockConfirmations - currentBlockNumber} of{' '}
-                  {minimumBlockConfirmations} Block confirmations
-                </p>
-              ) : txSuccess ? (
-                <p className="dark:text-dbeats-light text-center">Transaction Successfull</p>
-              ) : (
-                ''
-              )}
-            </Container>
+                <button
+                  className="group text-center flex shadow hover:shadow-none   hover:border-purple-700 hover:border border border-transparent hover:scale-99  
+      transition-all duration-200 transform  bg-white lg:px-4 lg:py-2 mb-2 px-2 py-1 text-md lg:text-base self-center align-middle text-purple-700  rounded font-semibold mt-4 mx-auto"
+                  onClick={buyCrypto}
+                >
+                  {!showBuyCrypto ? (
+                    <>
+                      Buy MATIC
+                      <img
+                        className="h-5 w-5 ml-1 mr-1 self-center align-middle items-center group-hover:bg-white  group-hover:text-white"
+                        src={maticLogo}
+                        alt="logo"
+                      ></img>
+                    </>
+                  ) : (
+                    'Back'
+                  )}
+                </button>
+                {txHashCreated ? (
+                  <div className="text-center flex">
+                    <p className="no-underline">🚀</p>
+                    <a
+                      target={'_blank'}
+                      rel="noopener noreferrer "
+                      className="dark:text-dbeats-light cursor-pointer underline  "
+                      href={`https://polygonscan.com/tx/${txHashCreated}`}
+                    >
+                      Check on Polygonscan
+                    </a>
+                  </div>
+                ) : (
+                  ''
+                )}
+                {txInitiated && !txSuccess && currentBlockNumber === null ? (
+                  <p className="dark:text-dbeats-light text-center">Transaction Initiated...</p>
+                ) : txInitiated && currentBlockNumber < minimumBlockConfirmations && !txSuccess ? (
+                  <p className="dark:text-dbeats-light text-center">
+                    Waiting for {minimumBlockConfirmations - currentBlockNumber} of{' '}
+                    {minimumBlockConfirmations} Block confirmations
+                  </p>
+                ) : txSuccess ? (
+                  <p className="dark:text-dbeats-light text-center">Transaction Successfull</p>
+                ) : (
+                  ''
+                )}
+              </Container>
+            </div>
           </div>
-        </div>
-      )}
-    </Modal>
+        )}
+      </Modal>
     </div>
   );
 };
