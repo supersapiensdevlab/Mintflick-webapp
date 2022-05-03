@@ -1,12 +1,12 @@
 
-  .slot {
+  .spin__slot {
     position: relative;
     display: inline-block;
     height: 150px;
     width: 150px;
   }
   
-  section {
+  .spin__section {
     position: absolute;
     border-radius: 15px !important;
     border: 3px solid rgba(0, 0, 0, 0.158) !important;
@@ -23,7 +23,7 @@
     cursor: default;
   }
   
-  .container {
+  .spin__container {
     position: absolute;
     top: 2px;
     width: 100%;
@@ -31,7 +31,7 @@
     text-align: center;
   }
   
-  .roll {
+  .spin__roll {
     width: 215px;
     cursor: pointer;
     background-color: yellow;
@@ -42,7 +42,7 @@
     border: 3px solid black;
   }
   
-  .rolling {
+  .spin__rolling {
     animation: blinkingText 1.2s infinite;
   }
   

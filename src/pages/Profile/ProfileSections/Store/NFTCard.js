@@ -786,12 +786,13 @@ const NFTCard = ({ nft, buyNft, address }) => {
                 </p>
               </div>
               {commentDisabled ? (
-                <div className="flex text-gray-500  items-center justify-center text-sm font-medium  text-center px-4  py-3">
-                  <p className="w-full mt-2 text-center cursor-pointer opacity-50 ">
-                    <i className="fa-solid fa-comment text-white"></i>
-                    <span className="text-dbeats-light font-extrabold	"> Comment</span>
-                  </p>
-                </div>
+                // <div className="flex text-gray-500  items-center justify-center text-sm font-medium  text-center px-4  py-3">
+                //   <p className="w-full mt-2 text-center cursor-pointer opacity-50 ">
+                //     <i className="fa-solid fa-comment text-white"></i>
+                //     <span className="text-dbeats-light font-extrabold	"> Comment</span>
+                //   </p>
+                // </div>
+                <></>
               ) : (
                 <div className="flex text-white  items-center justify-center text-sm font-medium  text-center px-4  py-3">
                   <p
