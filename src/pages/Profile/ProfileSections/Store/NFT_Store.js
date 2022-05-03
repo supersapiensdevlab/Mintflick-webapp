@@ -11,6 +11,7 @@ import Web3 from 'web3';
 import { useSelector } from 'react-redux';
 import NFTMarket from './NFTMarket';
 import { Biconomy } from '@biconomy/mexa';
+import { random } from 'lodash';
 
 export default function NFTStore(props) {
   const [nfts, setNfts] = useState([]);
@@ -21,9 +22,6 @@ export default function NFTStore(props) {
   const user = useSelector((state) => state.User.user);
 
   const [loadingState, setLoadingState] = useState('not-loaded');
-  useEffect(() => {
-    //if (!provider) loadWeb3Modal();
-  }, [provider]);
 
   useEffect(() => {
     if (provider) loadNFTs();
@@ -47,6 +45,7 @@ export default function NFTStore(props) {
         const meta = await axios.get(tokenUri);
         //console.log('TOKEN URI:', tokenUri);
         let price = ethers.utils.formatUnits(i.price.toString(), 'ether');
+
         let item = {
           price,
           tokenId: i.tokenId,
@@ -58,6 +57,7 @@ export default function NFTStore(props) {
           description: meta.data.description,
           external_url: meta.data.external_url,
         };
+
         return item;
       }),
     );
@@ -158,7 +158,7 @@ export default function NFTStore(props) {
               {nfts.map((nft, i) => {
                 // for covalent we have to set the contract address
 
-                if (nft && nft.name && !props.address) {
+                if (nft && nft.name && nft.creator != props.address) {
                   return (
                     <div
                       key={i}
@@ -168,14 +168,14 @@ export default function NFTStore(props) {
                       {/* <NFTMarket nft={nft}></NFTMarket> */}
                     </div>
                   );
-                } else if (props.address) {
+                } else if (props.address == nft.creator) {
                   return (
                     <div
-                      key={i}
+                      key={random()}
                       className={`  self-center  col-span-1   rounded-lg sm:mx-2  transition-all duration-300 `}
                     >
                       <NFTCard nft={nft} buyNft={buyNft} address={props.address} />
-                      {console.log('WALLET ID:', props.address)}
+                      {console.log('MY NFT LENGTH:')}
                       {/* <NFTMarket nft={nft}></NFTMarket> */}
                     </div>
                   );

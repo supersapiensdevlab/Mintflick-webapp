@@ -51,7 +51,7 @@ const NFTCard = ({ nft, buyNft, address }) => {
   const [myPost, setMyPost] = useState(false);
   const [myReport, setMyReport] = useState(null);
   const [commentDisabled, setCommentDisabled] = useState(false);
-  let sharable_data = `${process.env.REACT_APP_CLIENT_URL}/profile/${nft.username}`;
+  //let sharable_data = `${process.env.REACT_APP_CLIENT_URL}/profile/${nft.username}`;
   useEffect(async () => {
     // console.log(nft);
     const userData = {
@@ -141,6 +141,13 @@ const NFTCard = ({ nft, buyNft, address }) => {
         setCommentDisabled(true);
       }
     }
+    if (contentData) {
+      //console.log(contentData);
+      let videotime = contentData.time;
+      const timestamp = new Date(videotime * 1000); // This would be the timestamp you want to format
+      setTime(moment(timestamp).fromNow());
+    }
+    // eslint-disable-next-line
   }, [contentData]);
   ///////////////////
   const [playing, setPlaying] = useState(false);
@@ -187,16 +194,6 @@ const NFTCard = ({ nft, buyNft, address }) => {
   const [showPostOption, setShowPostOption] = useState(false);
   const [showReport, setShowReport] = useState(false);
   const [showReport2, setShowReport2] = useState(false);
-
-  useEffect(() => {
-    if (contentData) {
-      //console.log(contentData);
-      let videotime = contentData.time;
-      const timestamp = new Date(videotime * 1000); // This would be the timestamp you want to format
-      setTime(moment(timestamp).fromNow());
-    }
-    // eslint-disable-next-line
-  }, [contentData]);
 
   const trackFollowers = () => {
     setSubscribeLoader(false);
@@ -1131,13 +1128,13 @@ const NFTCard = ({ nft, buyNft, address }) => {
         </div>
       ) : null}
       <BidModal isBidOpen={showBidModal} handleCloseBid={handleCloseBidModal}></BidModal>
-      <ShareModal
+      {/* <ShareModal
         show={showShare}
         handleClose={handleShareClose}
         sharable_data={sharable_data}
         copybuttonText={shareButtonText}
         setCopyButtonText={setShareButtonText}
-      />
+      /> */}
       <PostOptionModal
         cardDetails={cardDetails}
         contentData={contentData}
