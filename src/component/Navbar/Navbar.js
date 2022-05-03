@@ -26,6 +26,7 @@ moment().format();
 
 const NavBar = () => {
   // eslint-disable-next-line no-unused-vars
+  const [onlyOnce,setOnlyOnce] = useState(false);
   const [loadWeb3Modal, logoutOfWeb3Modal, logoutweb3] = useWeb3Modal();
   const provider = useSelector((state) => state.web3Reducer.provider);
 
@@ -84,7 +85,9 @@ const NavBar = () => {
           'auth-token': localStorage.getItem('authtoken'),
         },
       })
-        .then()
+        .then((data)=>{
+          console.log(data)
+        })
         .catch(function (error) {
           console.log(error);
         });
@@ -161,7 +164,12 @@ const NavBar = () => {
         console.log(error);
       });
 
-    if (user && user.notification) {
+   
+    // eslint-disable-next-line
+  }, []);
+  useEffect(()=>{
+    if (user && user.notification && !onlyOnce) {
+      setOnlyOnce(true);
       if (user.notification.length > 0) {
         setNewNotification(user.notification.length);
         let data = [];
@@ -180,8 +188,7 @@ const NavBar = () => {
         setNotification(data.reverse());
       }
     }
-    // eslint-disable-next-line
-  }, []);
+  },[user])
 
   //console.log(notification);
 
