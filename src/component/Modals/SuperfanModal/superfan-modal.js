@@ -1,7 +1,6 @@
 import { Web3Provider } from '@ethersproject/providers';
 import { Framework } from '@superfluid-finance/sdk-core';
 import React, { useCallback, useEffect, useState } from 'react';
-import { Container } from 'react-bootstrap';
 import Modal from 'react-modal';
 import { useSelector } from 'react-redux';
 
@@ -272,7 +271,7 @@ bg-white dark:bg-dbeats-dark-alt    "
             </h2>
 
             <div>
-              <Container className="  lg:px-4 lg:pb-4 px-2 pb-2    dark:bg-gradient-to-b dark:from-dbeats-dark-primary  dark:to-dbeats-dark-primary">
+              <div className="  lg:px-4 lg:pb-4 px-2 pb-2    dark:bg-gradient-to-b dark:from-dbeats-dark-primary  dark:to-dbeats-dark-primary">
                 <div className="flex items-center justify-center w-full lg:mb-4 mb-2">
                   <label className="flex items-center cursor-pointer">
                     <div className="mr-3 text-gray-700 dark:text-dbeats-white  font-medium ">
@@ -581,7 +580,7 @@ bg-white dark:bg-dbeats-dark-alt    "
                 ) : (
                   ''
                 )}
-              </Container>
+              </div>
             </div>
           </div>
         )}

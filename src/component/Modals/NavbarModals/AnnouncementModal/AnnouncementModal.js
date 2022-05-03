@@ -2,18 +2,17 @@ import axios from 'axios';
 import moment from 'moment';
 import { NFTStorage } from 'nft.storage';
 import React, { useState } from 'react';
-import { Container } from 'react-bootstrap';
 import Modal from 'react-modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { detectURLs, makeStorageClient } from '../../../uploadHelperFunction';
 import LinkPreview from './LinkPreview';
 import classes from './LinkPreview.module.css';
-import {loadUser} from '../../../../actions/userActions';
+import { loadUser } from '../../../../actions/userActions';
 moment().format();
 
 const AnnouncementModal = (props) => {
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.User.user); 
+  const user = useSelector((state) => state.User.user);
 
   const darkMode = useSelector((darkmode) => darkmode.toggleDarkMode);
 
@@ -196,7 +195,7 @@ const AnnouncementModal = (props) => {
         formData.append('announcement', announcement.announcementText);
         formData.append('postImage', announcement.postImage);
         formData.append('postVideo', announcement.postVideo);
-        const timestamp = moment().toDate().getTime()
+        const timestamp = moment().toDate().getTime();
         formData.append('timestamp', timestamp);
 
         formData.append('eventlink', announcement.event_link);
@@ -210,11 +209,11 @@ const AnnouncementModal = (props) => {
             .post(`${process.env.REACT_APP_SERVER_URL}/user/announcement`, formData, {
               headers: {
                 'content-type': 'multipart/form-data',
-                'auth-token':localStorage.getItem('authtoken')
+                'auth-token': localStorage.getItem('authtoken'),
               },
             })
             .then(() => {
-              dispatch(loadUser())
+              dispatch(loadUser());
               setAnnouncement({
                 announcementText: '',
                 postImage: null,
@@ -244,7 +243,7 @@ const AnnouncementModal = (props) => {
         .post(`${process.env.REACT_APP_SERVER_URL}/user/announcement`, formData, {
           headers: {
             'content-type': 'multipart/form-data',
-            'auth-token':localStorage.getItem('authtoken')
+            'auth-token': localStorage.getItem('authtoken'),
           },
         })
         .then(() => {
@@ -309,7 +308,7 @@ const AnnouncementModal = (props) => {
           </div>
         </div>
         <div className="h-full w-full  align-center ">
-          <Container className=" 2xl:pb-4 rounded-b-xl dark:rounded-b-sm  lg:px-7 lg:pb-2 h-full px-4 w-full dark:bg-dbeats-dark-alt overflow-y-auto lg:overflow-hidden bg-white   dark:text-gray-100 ">
+          <div className=" 2xl:pb-4 rounded-b-xl dark:rounded-b-sm  lg:px-7 lg:pb-2 h-full px-4 w-full dark:bg-dbeats-dark-alt overflow-y-auto lg:overflow-hidden bg-white   dark:text-gray-100 ">
             <div className="align-center bg-gray-100 h-full dark:bg-dbeats-dark-alt">
               <div className={`${classes.view_container} lg:h-72 2xl:h-96 h-80 overflow-y-auto`}>
                 <div className="p-1 nm-flat-dbeats-dark-secondary h-5/6 w-full">
@@ -457,7 +456,7 @@ const AnnouncementModal = (props) => {
                   hidden={props.loader}
                 ></div>
               </Row> */}
-          </Container>
+          </div>
         </div>
       </div>
     </Modal>
