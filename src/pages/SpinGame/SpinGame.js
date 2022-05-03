@@ -58,9 +58,9 @@ function SpinGame() {
       <h1 className="text-center text-4xl text-white py-6">Make a spin 🎰</h1>
       <Confetti spray={win} />
       <div className="SlotMachine">
-        <div className="slot mx-1">
-          <section>
-            <div className=" container bg-dbeats-dark-alt " ref={slotRef[0]}>
+        <div className="spin__slot mx-1">
+          <section className='spin__section'>
+            <div className=" spin__container bg-dbeats-dark-alt " ref={slotRef[0]}>
               {fruits.map((fruit, i) => (
                 <div key={i}>
                   <span>{fruit}</span>
@@ -69,9 +69,9 @@ function SpinGame() {
             </div>
           </section>
         </div>
-        <div className="slot mx-1">
-          <section>
-            <div className="container bg-dbeats-dark-alt" ref={slotRef[1]}>
+        <div className="spin__slot mx-1">
+          <section className='spin__section'>
+            <div className="spin__container bg-dbeats-dark-alt" ref={slotRef[1]}>
               {fruits.map((fruit) => (
                 <div key={Math.random()}>
                   <span>{fruit}</span>
@@ -80,9 +80,9 @@ function SpinGame() {
             </div>
           </section>
         </div>
-        <div className="slot mx-1">
-          <section>
-            <div className="container bg-dbeats-dark-alt shadow-md" ref={slotRef[2]}>
+        <div className="spin__slot mx-1">
+          <section className='spin__section'>
+            <div className="spin__container bg-dbeats-dark-alt shadow-md" ref={slotRef[2]}>
               {fruits.map((fruit) => (
                 <div key={Math.random()}>
                   <span>{fruit}</span>
