@@ -26,7 +26,7 @@ export const ShareModal = ({
 }) => {
   const darkMode = useSelector((darkmode) => darkmode.toggleDarkMode);
   return (
-    <div className='relative'>
+    <div className="relative">
       <Modal
         isOpen={show}
         className={`${
@@ -56,9 +56,9 @@ export const ShareModal = ({
           </h2>
           <hr className="pt-4 dark:bg-dbeats-dark-alt" />
           <div>
-            <Container className="lg:px-12 p-6 pb-4 dark:bg-dbeats-dark-alt">
-              <Row>
-                <Col className="flex lg:justify-around justify-center align-center flex-wrap">
+            <div className="lg:px-12 p-6 pb-4 dark:bg-dbeats-dark-alt">
+              <div>
+                <div className="flex lg:justify-around justify-center align-center flex-wrap">
                   <div className="px-1 py-1">
                     <WhatsappShareButton url={sharable_data}>
                       <WhatsappIcon
@@ -104,9 +104,9 @@ export const ShareModal = ({
                       />
                     </TelegramShareButton>
                   </div>
-                </Col>
-              </Row>
-              <Row>
+                </div>
+              </div>
+              <div>
                 <CopyToClipboard
                   text={sharable_data}
                   className="block mx-auto w-full text-white px-5 py-2 text-lg  bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-secondary-dark-primary 
@@ -116,8 +116,8 @@ export const ShareModal = ({
                     {copybuttonText} &nbsp;<i className="fa-solid fa-copy"></i>
                   </button>
                 </CopyToClipboard>
-              </Row>
-            </Container>
+              </div>
+            </div>
           </div>
         </div>
       </Modal>
