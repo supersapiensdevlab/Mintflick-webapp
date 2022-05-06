@@ -5,7 +5,7 @@ import dbeatsLogoBnW from '../../../../assets/images/Logo/logo-blacknwhite.png';
 import axios from 'axios';
 
 import moment from 'moment';
-import ReactPlayer from 'react-player/lazy';
+import ReactPlayer from 'react-player';
 import { Link } from 'react-router-dom';
 import { Container, Row } from 'react-bootstrap';
 import Modal from 'react-modal';
@@ -529,7 +529,31 @@ const NFTCard = ({ nft, buyNft, address }) => {
       loadWeb3Modal();
     }
   };
+  const videoStarted = () =>{
 
+    if (user ? user.username !== cardDetails.user.username : false) {
+      const timer = setTimeout(() => {
+        const videoDetails = {
+          videousername: `${cardDetails.user.username}`,
+          videoindex: `${contentData.videoId}`,
+          viewed_user: `${user.username}`,
+        };
+
+        axios({
+          method: 'POST',
+          url: `${process.env.REACT_APP_SERVER_URL}/user/views`,
+          headers: {
+            'content-type': 'application/json',
+            'auth-token': localStorage.getItem('authtoken'),
+          },
+          data: videoDetails,
+        }).then(function (response) {
+          console.log(response);
+        });
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }
   return (
     <>
       {contentData && address === cardDetails.user.wallet_id ? (
@@ -640,6 +664,7 @@ const NFTCard = ({ nft, buyNft, address }) => {
                 url={contentData.link}
                 controls={true}
                 ref={ref}
+                onStart = {()=>{videoStarted()}}
               />
             </div>
             <div className="flex   text-black text-sm font-medium   px-4  py-3">
@@ -938,6 +963,7 @@ const NFTCard = ({ nft, buyNft, address }) => {
                 url={contentData.link}
                 controls={true}
                 ref={ref}
+                onStart = {()=>{videoStarted()}}
               />
             </div>
             <div className="flex   text-black text-sm font-medium   px-4  py-3">
