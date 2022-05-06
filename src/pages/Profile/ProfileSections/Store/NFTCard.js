@@ -548,7 +548,7 @@ const NFTCard = ({ nft, buyNft, address }) => {
           },
           data: videoDetails,
         }).then(function (response) {
-          console.log(response);
+          
         });
       }, 5000);
       return () => clearTimeout(timer);
