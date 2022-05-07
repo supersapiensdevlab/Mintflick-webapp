@@ -8,6 +8,7 @@ import Market from '../../../../artifacts/contracts/Market.sol/NFTMarket.json';
 import { nftmarketaddress } from '../../../../functions/config';
 import Torus from '@toruslabs/torus-embed';
 import Web3 from 'web3';
+import axios from 'axios';
 import useWeb3Modal from '../../../../hooks/useWeb3Modal';
 
 const client = ipfsHttpClient('https://ipfs.infura.io:5001/api/v0');
@@ -20,7 +21,35 @@ export default function CreateItem() {
   const [formInput, updateFormInput] = useState({ price: '', name: '', description: '' });
   // const router = useRouter();
   const darkMode = useSelector((state) => state.toggleDarkMode);
+  const myData = useSelector((state) => state.User.user);
   let history = useHistory();
+
+  const handleNFTnotification = () => {
+    if (myData) {
+      const data = {
+        username: myData.username,
+        nft_image: myData.profile_image,
+      };
+      axios({
+        method: 'POST',
+        url: `${process.env.REACT_APP_SERVER_URL}/user/nft-notification`,
+        data: data,
+        headers: {
+          'content-type': 'application/json',
+          'auth-token': localStorage.getItem('authtoken'),
+        },
+      })
+        .then((data) => {
+          console.log(data);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    } else {
+      loadWeb3Modal();
+      return;
+    }
+  };
 
   async function onChange(e) {
     const file = e.target.files[0];
@@ -84,6 +113,7 @@ export default function CreateItem() {
     // }
     //transaction = await contract.createMarketItem(tokenId, price);
     //await transaction.wait();
+    handleNFTnotification();
     history.push('/');
   }
 
