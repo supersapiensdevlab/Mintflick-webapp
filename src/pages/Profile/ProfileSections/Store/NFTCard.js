@@ -58,7 +58,7 @@ const NFTCard = ({ nft, buyNft, address }) => {
       walletId: nft.creator,
     };
     //console.log(nft);
-
+    console.log('TOKEN ID', nft.tokenId);
     //Fetch Seller Details
     await axios
       .post(`${process.env.REACT_APP_SERVER_URL}/user/getuser_by_wallet`, userData, {})
@@ -104,7 +104,13 @@ const NFTCard = ({ nft, buyNft, address }) => {
     if (cardDetails) {
       //console.log('creators details', cardDetails);
       const extension = nft.external_url.split(/[#?]/)[0].split('.').pop().trim();
-      if (extension == 'mp4' || extension == 'mkv' || extension == 'mov' || extension == 'avi') {
+      if (
+        extension == 'mp4' ||
+        extension == 'mkv' ||
+        extension == 'mov' ||
+        extension == 'avi' ||
+        extension == 'webm'
+      ) {
         cardDetails.user.videos.map((video) => {
           if (video.tokenId == nft.tokenId) {
             let temp = video;
@@ -529,8 +535,7 @@ const NFTCard = ({ nft, buyNft, address }) => {
       loadWeb3Modal();
     }
   };
-  const videoStarted = () =>{
-
+  const videoStarted = () => {
     if (user ? user.username !== cardDetails.user.username : false) {
       const timer = setTimeout(() => {
         const videoDetails = {
@@ -547,16 +552,14 @@ const NFTCard = ({ nft, buyNft, address }) => {
             'auth-token': localStorage.getItem('authtoken'),
           },
           data: videoDetails,
-        }).then(function (response) {
-          
-        });
+        }).then(function (response) {});
       }, 5000);
       return () => clearTimeout(timer);
     }
-  }
+  };
   return (
     <>
-      {contentData && address === cardDetails.user.wallet_id ? (
+      {contentData && address == cardDetails.user.wallet_id ? (
         <div
           className="dark mt-2   w-full dark:text-gray-50 
              p-0.5  sm:rounded-xl bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-primary-lg      text-dbeats-dark-primary   "
@@ -646,27 +649,32 @@ const NFTCard = ({ nft, buyNft, address }) => {
                 </button>
               ) : null}
             </div>
-            <div
-              className={`cursor-pointer w-full 2xl:h-max lg:h-max md:h-max xs:h-max min-h-full   dark:bg-black bg-black `}
-            >
-              <Link
-                to={`/playback/${cardDetails.user.username}/${cardDetails.id}`}
-                className="h-full "
-              ></Link>
-              <ReactPlayer
-                className="w-full h-full max-h-screen "
-                width="100%"
-                height="400px"
-                playing={true}
-                muted={true}
-                volume={0.5}
-                light={nft.image}
-                url={contentData.link}
-                controls={true}
-                ref={ref}
-                onStart = {()=>{videoStarted()}}
-              />
-            </div>
+            {contentData.link ? (
+              <div
+                className={`cursor-pointer w-full 2xl:h-max lg:h-max md:h-max xs:h-max min-h-full   dark:bg-black bg-black `}
+              >
+                <Link
+                  to={`/playback/${cardDetails.user.username}/${cardDetails.id}`}
+                  className="h-full "
+                ></Link>
+                <ReactPlayer
+                  className="w-full h-full max-h-screen "
+                  width="100%"
+                  height="400px"
+                  playing={true}
+                  muted={true}
+                  volume={0.5}
+                  light={nft.image}
+                  url={contentData.link}
+                  controls={true}
+                  ref={ref}
+                  onStart={() => {
+                    videoStarted();
+                  }}
+                />
+              </div>
+            ) : null}
+
             <div className="flex   text-black text-sm font-medium   px-4  py-3">
               <a onClick={handleClick} className="mr-4">
                 <img
@@ -963,7 +971,9 @@ const NFTCard = ({ nft, buyNft, address }) => {
                 url={contentData.link}
                 controls={true}
                 ref={ref}
-                onStart = {()=>{videoStarted()}}
+                onStart={() => {
+                  videoStarted();
+                }}
               />
             </div>
             <div className="flex   text-black text-sm font-medium   px-4  py-3">

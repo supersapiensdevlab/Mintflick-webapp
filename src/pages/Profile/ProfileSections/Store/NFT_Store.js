@@ -34,11 +34,12 @@ export default function NFTStore(props) {
     //const tokenContract = new ethers.Contract(nftaddress, NFT.abi, provider);
     const marketContract = new web3.eth.Contract(Market, nftmarketaddress);
     const data = await marketContract.methods.fetchTotalMintedTokens().call();
-    // console.log('TOTAL MINTED NFTs:', data);
+    console.log('TOTAL MINTED NFTs:', data);
     /*
      *  map over items returned from smart contract and format
      *  them as well as fetch their token metadata
      */
+    let myNFTLength = 0;
     const items = await Promise.all(
       data.map(async (i) => {
         const tokenUri = await marketContract.methods.tokenURI(i.tokenId).call();
@@ -57,7 +58,10 @@ export default function NFTStore(props) {
           description: meta.data.description,
           external_url: meta.data.external_url,
         };
-
+        if (i.creator == props.address) {
+          myNFTLength++;
+          console.log('MY NFT LENGTH:', myNFTLength);
+        }
         return item;
       }),
     );
@@ -137,8 +141,9 @@ export default function NFTStore(props) {
   // }
   return (
     <>
-      <div className="h-full lg:col-span-1 col-span-6 w-full     ">
-        {/* <h1 className="   dark:text-gray-300 w-full flex   text-dbeats-dark   px-3">
+      {nfts ? (
+        <div className="h-full lg:col-span-1 col-span-6 w-full     ">
+          {/* <h1 className="   dark:text-gray-300 w-full flex   text-dbeats-dark   px-3">
           NFTs owned by you :{' '}
         </h1>
         <UserOwnedAssets resellOwnedItem={resellOwnedItem}></UserOwnedAssets>
@@ -146,22 +151,21 @@ export default function NFTStore(props) {
           Marketplace{' '}
         </h1> */}
 
-        <div
-          className={`${
-            props.address
-              ? 'grid sm:grid-cols-1  md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 grid-cols-1'
-              : ' grid grid-flow-row  grid-cols-1 '
-          }  w-full   sm:px-3  `}
-        >
-          {nfts ? (
+          <div
+            className={`${
+              props.address
+                ? 'grid sm:grid-cols-1  md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 grid-cols-1'
+                : ' grid grid-flow-row  grid-cols-1 '
+            }  w-full   sm:px-3  `}
+          >
             <>
               {nfts.map((nft, i) => {
                 // for covalent we have to set the contract address
 
-                if (nft && nft.name && nft.creator != props.address) {
+                if (!props.address && nft && nft.name) {
                   return (
                     <div
-                      key={i}
+                      key={nft.tokenId}
                       className={`  self-center  col-span-1   rounded-lg sm:mx-2  transition-all duration-300 `}
                     >
                       <NFTCard nft={nft} buyNft={buyNft} />
@@ -171,7 +175,7 @@ export default function NFTStore(props) {
                 } else if (props.address == nft.creator) {
                   return (
                     <div
-                      key={random()}
+                      key={nft.tokenId}
                       className={`  self-center  col-span-1   rounded-lg sm:mx-2  transition-all duration-300 `}
                     >
                       <NFTCard nft={nft} buyNft={buyNft} address={props.address} />
@@ -180,12 +184,11 @@ export default function NFTStore(props) {
                     </div>
                   );
                 }
-                return 0;
               })}
             </>
-          ) : null}
+          </div>
         </div>
-      </div>
+      ) : null}
     </>
   );
 }

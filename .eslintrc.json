@@ -7,7 +7,9 @@
     },
     "extends": [
         "eslint:recommended",
-        "plugin:react/recommended"
+        "plugin:react/recommended",
+        "plugin:react-hooks/recommended"
+
     ],
     "parserOptions": {
         "ecmaFeatures": {
@@ -17,9 +19,12 @@
         "sourceType": "module"
     },
     "plugins": [
-        "react"
+        "react",
+        "react-hooks"
     ],
     "rules": {
+        "react-hooks/rules-of-hooks": "error",
+        "react-hooks/exhaustive-deps": "warn",
         "react/prop-types": "off",
         "react/react-in-jsx-scope": "off",
         "no-unused-vars": "off",
