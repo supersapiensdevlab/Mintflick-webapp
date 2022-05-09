@@ -11,7 +11,7 @@ import { loadUser } from '../actions/userActions';
 import { useDispatch } from 'react-redux';
 import { tokenConfig } from '../helper/tokenConfig';
 
-export let storeWithProgress = async (files) => {
+export let storeWithProgress = (files) => {
   // show the root cid as soon as it's ready
   const onRootCidReady = (cid) => {
     console.log('uploading files with cid:', cid);
@@ -26,6 +26,8 @@ export let storeWithProgress = async (files) => {
     const pct = totalSize / uploaded;
     //console.log(`Uploading... ${pct.toFixed(2)}% complete`);
     console.log(`Uploading... ${Math.min(pct * 100, 100).toFixed(2)}% complete`);
+    let progress = Math.min(pct * 100, 100).toFixed(2);
+    //setUploading(progress);
   };
 
   // makeStorageClient returns an authorized Web3.Storage client instance
@@ -36,14 +38,14 @@ export let storeWithProgress = async (files) => {
   return client.put(files, { onRootCidReady, onStoredChunk });
 };
 
-export let createToken = async (
+export let createToken = (
   url,
   NFTPrice,
   formData,
   provider,
   setMinting,
   setMintingProgress,
-  setShow,
+
   setTokenId,
 ) => {
   var tokenId = null;
@@ -80,7 +82,6 @@ export let createToken = async (
               formData.append('tokenId', tokenId);
               setMinting(res.transactionHash);
               setMintingProgress(100);
-              setShow(true);
             });
         });
       // transaction
@@ -101,6 +102,8 @@ export let createToken = async (
       console.log(error);
       console.log(message);
     });
+
+  return tokenId;
 
   /* next, create the item */
   //let contract = new web3.eth.Contract(Market.abi, nftmarketaddress);

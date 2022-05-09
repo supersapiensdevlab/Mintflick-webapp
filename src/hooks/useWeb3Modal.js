@@ -98,28 +98,34 @@ const useWeb3Modal = (config = {}) => {
     dispatch(createProvider(web3.currentProvider));
 
     return web3.currentProvider;
-  }, []);
+  }, [dispatch]);
 
-  const logoutOfWeb3Modal = useCallback(async function () {
-    torus.logout();
-    torus.cleanUp();
+  const logoutOfWeb3Modal = useCallback(
+    async function () {
+      torus.logout();
+      torus.cleanUp();
 
-    dispatch(clearProvider());
-    console.log(torus);
-    console.log('logging out');
+      dispatch(clearProvider());
+      console.log(torus);
+      console.log('logging out');
 
-    window.localStorage.removeItem('torus');
-  }, []);
+      window.localStorage.removeItem('torus');
+    },
+    [dispatch],
+  );
 
-  const logoutweb3 = useCallback(async function () {
-    await torus.logout();
-    await torus.cleanUp();
-    dispatch(logout());
+  const logoutweb3 = useCallback(
+    async function () {
+      await torus.logout();
+      await torus.cleanUp();
+      dispatch(logout());
 
-    dispatch(clearProvider());
-    console.log(torus);
-    console.log('logging out');
-  }, []);
+      dispatch(clearProvider());
+      console.log(torus);
+      console.log('logging out');
+    },
+    [dispatch],
+  );
 
   // If autoLoad is enabled and the the wallet had been loaded before, load it automatically now.
 

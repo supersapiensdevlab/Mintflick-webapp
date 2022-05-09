@@ -52,43 +52,46 @@ const NFTCard = ({ nft, buyNft, address }) => {
   const [myReport, setMyReport] = useState(null);
   const [commentDisabled, setCommentDisabled] = useState(false);
   //let sharable_data = `${process.env.REACT_APP_CLIENT_URL}/profile/${nft.username}`;
-  useEffect(async () => {
-    // console.log(nft);
-    const userData = {
-      walletId: nft.creator,
-    };
-    //console.log(nft);
-    console.log('TOKEN ID', nft.tokenId);
-    //Fetch Seller Details
-    await axios
-      .post(`${process.env.REACT_APP_SERVER_URL}/user/getuser_by_wallet`, userData, {})
-      .then((value) => {
-        // window.localStorage.setItem('authtoken', JSON.stringify(value.data.jwtToken));
-        // //window.location.href = '/';
-        //console.log(value);
-        //console.log('ownerdetails', ownerDetails);
-        setCardDetails(value.data);
+  useEffect(() => {
+    async function getuser_by_wallet() {
+      // console.log(nft);
+      const userData = {
+        walletId: nft.creator,
+      };
+      //console.log(nft);
+      //console.log('TOKEN ID', nft.tokenId);
+      //Fetch Seller Details
+      await axios
+        .post(`${process.env.REACT_APP_SERVER_URL}/user/getuser_by_wallet`, userData, {})
+        .then((value) => {
+          // window.localStorage.setItem('authtoken', JSON.stringify(value.data.jwtToken));
+          // //window.location.href = '/';
+          //console.log(value);
+          //console.log('ownerdetails', ownerDetails);
+          setCardDetails(value.data);
 
-        //Fetch Owner details
-        const OwnerData = {
-          walletId: nft.owner,
-        };
-        //console.log('NFT DATA:', nft);
-        if (ownerDetails === nftmarketaddress) {
-          setOwnerDetails('DAO');
-        } else {
-          //console.log('OWNER :', OwnerData, ownerDetails);
-          axios
-            .post(`${process.env.REACT_APP_SERVER_URL}/user/getuser_by_wallet`, OwnerData, {})
-            .then((value) => {
-              // window.localStorage.setItem('authtoken', JSON.stringify(value.data.jwtToken));
-              // //window.location.href = '/';
-              setOwnerDetails(value.data);
-              //console.log('OWNER DATA : ', OwnerData);
-            });
-        }
-      });
+          //Fetch Owner details
+          const OwnerData = {
+            walletId: nft.owner,
+          };
+          //console.log('NFT DATA:', nft);
+          if (ownerDetails === nftmarketaddress) {
+            setOwnerDetails('DAO');
+          } else {
+            //console.log('OWNER :', OwnerData, ownerDetails);
+            axios
+              .post(`${process.env.REACT_APP_SERVER_URL}/user/getuser_by_wallet`, OwnerData, {})
+              .then((value) => {
+                // window.localStorage.setItem('authtoken', JSON.stringify(value.data.jwtToken));
+                // //window.location.href = '/';
+                setOwnerDetails(value.data);
+                //console.log('OWNER DATA : ', OwnerData);
+              });
+          }
+        });
+    }
 
+    getuser_by_wallet();
     if (cardDetails && user && user.your_reactions.length != 0 && cardDetails.user) {
       let checkVideo = `${cardDetails.user.username}/${cardDetails.id}`;
       for (let i = 0; i < user.your_reactions.length; i++) {

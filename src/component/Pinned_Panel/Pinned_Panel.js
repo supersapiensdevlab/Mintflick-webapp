@@ -43,7 +43,7 @@ const PinnedPanel = () => {
         {userdata && pinnedData ? (
           <>
             {pinnedData.map((pinnedUser, i) => {
-              console.log(pinnedUser.username);
+              //console.log(pinnedUser.username);
               return (
                 <div key={i} className="flex justify-center content-center w-full cursor-pointer ">
                   <OverlayTrigger

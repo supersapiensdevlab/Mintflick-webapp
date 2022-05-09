@@ -550,30 +550,30 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
       </Modal>
       <Modal
         isOpen={showSavedChanges}
-        className="h-max lg:w-1/3  w-5/6 mx-auto absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-lg"
+        className="h-max lg:w-1/4  w-5/6 mx-auto absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-lg"
       >
         <div className={`${darkMode && 'dark'}`}>
-          <Container className="2xl:px-5 px-5 lg:px-1 pb-4 dark:bg-dbeats-dark-alt rounded-lg border">
+          <Container className="2xl:px-5 px-4 lg:px-1 pb-4 dark:bg-dbeats-dark-alt rounded-lg border">
             <Row>
-              <h2 className="flex justify-between items-center  w-full 2xl:text-2xl lg:text-md py-4 2xl:py-4 lg:py-2  pt-7  text-center relative  ">
-                <div className="col-span-5 text-gray-900 dark:text-gray-100 font-bold pl-48 ">
-                  Changes Saved SuccessFully
+              <h2 className="flex justify-between items-center  w-full 2xl:text-lg   py-4 2xl:py-4 lg:py-2  pt-7  text-center relative  ">
+                <div className="col-span-5 text-gray-900 dark:text-gray-100 font-bold  mx-auto pl-8">
+                  Changes Saved Successfully
                 </div>
                 <div
-                  className="rounded-3xl group w-max   p-2  mx-1  justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-secondary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
+                  className="rounded-3xl group w-max   p-1  mx-1  justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-secondary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
                   onClick={handleCloseSavedChanges}
                 >
-                  <span className="text-black dark:text-white  flex px-2 py-1 rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:nm-inset-dbeats-dark-secondary">
+                  <span className="text-black dark:text-white  flex px-3 py-2 rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:nm-inset-dbeats-dark-secondary">
                     <i className="fas fa-times"></i>
                   </span>
                 </div>
               </h2>
             </Row>
             <Row>
-              <div className="w-full flex justify-center items-center pt-5 pb-10">
+              <div className="w-full flex justify-center items-center pt-2 pb-2">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-28 w-28"
+                  className="h-16 w-16"
                   viewBox="0 0 20 20"
                   fill="white"
                 >

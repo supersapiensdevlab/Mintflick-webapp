@@ -34,7 +34,14 @@ export default function NFTStore(props) {
     //const tokenContract = new ethers.Contract(nftaddress, NFT.abi, provider);
     const marketContract = new web3.eth.Contract(Market, nftmarketaddress);
     const data = await marketContract.methods.fetchTotalMintedTokens().call();
-    console.log('TOTAL MINTED NFTs:', data);
+    // const res = await axios.get(
+    //   `https://api.covalenthq.com/v1/137/tokens/${nftmarketaddress}/nft_token_ids/?quote-currency=USD&format=JSON&key=ckey_b5245f3db18d4a2d999fef65fc0`,
+    // );
+
+    //const NFTIds = res.data.data.items;
+    //console.log('Covalent Data', NFTIds);
+
+    //console.log('TOTAL MINTED NFTs:', res.data.data.items.length);
     /*
      *  map over items returned from smart contract and format
      *  them as well as fetch their token metadata
@@ -43,6 +50,10 @@ export default function NFTStore(props) {
     const items = await Promise.all(
       data.map(async (i) => {
         const tokenUri = await marketContract.methods.tokenURI(i.tokenId).call();
+        // const meta = await axios.get(
+        //   `https://api.covalenthq.com/v1/137/tokens/${nftmarketaddress}/nft_metadata/${i}/?quote-currency=USD&format=JSON&key=ckey_b5245f3db18d4a2d999fef65fc0`,
+        // );
+
         const meta = await axios.get(tokenUri);
         //console.log('TOKEN URI:', tokenUri);
         let price = ethers.utils.formatUnits(i.price.toString(), 'ether');

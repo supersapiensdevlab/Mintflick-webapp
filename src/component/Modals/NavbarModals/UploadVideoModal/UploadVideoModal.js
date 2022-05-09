@@ -36,7 +36,7 @@ const UploadVideoModal = (props) => {
   const [hideButton, setHideButton] = useState(false);
   const darkMode = useSelector((darkmode) => darkmode.toggleDarkMode);
   const attribution = ['No Attribution', 'Allow Attribution'];
-
+  const [formData, setFormData] = useState(null);
   const commercialUse = ['Non Commercial', 'Commercial Use'];
   const [indexState, setindexState] = useState({ value: 0, previous: 0 });
 
@@ -192,6 +192,11 @@ const UploadVideoModal = (props) => {
     // eslint-disable-next-line
   }, [selectedCategory, selectedCommercialUse, selectedDerivativeWorks, selectedAttribution, tags]);
 
+  useEffect(() => {
+    async function uploadVideoToDB() {}
+  }),
+    [tokenId];
+
   const PostData = async (e) => {
     e.preventDefault();
     console.log(e.target.value);
@@ -223,143 +228,127 @@ const UploadVideoModal = (props) => {
       commercialUse,
       derivativeWorks,
     } = video;
-    await storeWithProgress(files).then(
-      async function (cidData) {
-        video.cid = cidData;
-        var ts = Math.round(new Date().getTime() / 1000);
+    const cidData = await storeWithProgress(files);
 
-        //Standard Metadata supported by OpenSea
-        let metadata = {
-          image: 'https://ipfs.infura.io/ipfs/' + video.cid + '/' + video.videoImage.name,
+    video.cid = cidData;
+    var ts = Math.round(new Date().getTime() / 1000);
 
-          external_url: 'https://ipfs.infura.io/ipfs/' + video.cid + '/' + video.videoFile.name,
+    //Standard Metadata supported by OpenSea
+    let metadata = {
+      image: 'https://ipfs.infura.io/ipfs/' + video.cid + '/' + video.videoImage.name,
 
-          description: video.description,
+      external_url: 'https://ipfs.infura.io/ipfs/' + video.cid + '/' + video.videoFile.name,
 
-          name: video.videoName,
+      description: video.description,
 
-          attributes: [
-            {
-              display_type: 'date',
-              trait_type: 'Created On',
-              value: ts,
-            },
-            {
-              trait_type: 'Category',
-              value: video.category,
-            },
-          ],
+      name: video.videoName,
 
-          animation_url: 'https://ipfs.infura.io/ipfs/' + video.cid + '/' + video.videoFile.name,
-        };
+      attributes: [
+        {
+          display_type: 'date',
+          trait_type: 'Created On',
+          value: ts,
+        },
+        {
+          trait_type: 'Category',
+          value: video.category,
+        },
+      ],
 
-        const blob = new Blob([JSON.stringify(metadata)], { type: 'application/json' });
+      animation_url: 'https://ipfs.infura.io/ipfs/' + video.cid + '/' + video.videoFile.name,
+    };
 
-        const files = [new File([blob], 'meta.json')];
-        //const client = makeStorageClient();
-        const cid = await storeWithProgress(files);
-        setUploading(10);
-        console.log('stored files with cid:', cid);
+    const blob = new Blob([JSON.stringify(metadata)], { type: 'application/json' });
 
-        console.log('meta', cid);
-        let formData = new FormData(); // Currently empty
-        formData.append('userName', user.username);
-        formData.append('userImage', user.profile_image);
+    const metaFile = [new File([blob], 'meta.json')];
+    //const client = makeStorageClient();
+    const cid = await storeWithProgress(metaFile);
+    setUploading(100);
+    console.log('stored files with cid:', cid);
 
-        formData.append('videoName', videoName);
+    console.log('meta', cid);
+    let formData = new FormData(); // Currently empty
+    formData.append('userName', user.username);
+    formData.append('userImage', user.profile_image);
 
-        tags.forEach((tag) => formData.append('tags', tag));
+    formData.append('videoName', videoName);
 
-        formData.append('description', description);
+    tags.forEach((tag) => formData.append('tags', tag));
 
-        formData.append('category', category);
-        formData.append('ratings', ratings);
-        formData.append('allowAttribution', allowAttribution);
-        formData.append('commercialUse', commercialUse);
-        formData.append('derivativeWorks', derivativeWorks);
+    formData.append('description', description);
 
-        formData.append('videoFile', videoFile, videoFile.name);
-        formData.append('videoImage', videoImage, videoImage.name);
-        formData.append('videoHash', video.cid);
+    formData.append('category', category);
+    formData.append('ratings', ratings);
+    formData.append('allowAttribution', allowAttribution);
+    formData.append('commercialUse', commercialUse);
+    formData.append('derivativeWorks', derivativeWorks);
 
-        formData.append('meta_url', cid); // meta_url is the IPFS hash of the meta.json file
+    formData.append('videoFile', videoFile, videoFile.name);
+    formData.append('videoImage', videoImage, videoImage.name);
+    formData.append('videoHash', video.cid);
 
-        if (
-          video.videoFile.length !== 0 &&
-          video.videoImage.length !== 0 &&
-          video.videoName.length !== 0
-        ) {
-          let url = 'https://ipfs.infura.io/ipfs/' + cid + '/meta.json';
-          setMinting(true);
-          await createToken(
-            url,
-            NFTprice,
-            formData,
-            provider,
-            setMinting,
-            setMintingProgress,
-            setShow,
-            setTokenId,
-          ).then(
-            function (value) {
-              setsharable_data(
-                `${process.env.REACT_APP_CLIENT_URL}/playback/${user.username}/${minting}`,
-              );
+    formData.append('meta_url', cid); // meta_url is the IPFS hash of the meta.json file
 
-              formData.append('tokenId', tokenId);
+    setFormData(formData);
 
-              axios
-                .post(`${process.env.REACT_APP_SERVER_URL}/upload_video`, formData, {
-                  headers: {
-                    'content-type': 'multipart/form-data',
-                    'auth-token': localStorage.getItem('authtoken'),
-                  },
-                })
-                .then(async () => {
-                  if (isNFT) await dispatch(loadUser());
-                  const res = await axios.get(
-                    `${process.env.REACT_APP_SERVER_URL}/user/getLoggedInUser`,
-                    tokenConfig(),
-                  );
+    if (
+      video.videoFile.length !== 0 &&
+      video.videoImage.length !== 0 &&
+      video.videoName.length !== 0
+    ) {
+      let url = 'https://ipfs.infura.io/ipfs/' + cid + '/meta.json';
+      setMinting(true);
+      let value = await createToken(
+        url,
+        NFTprice,
+        formData,
+        provider,
+        setMinting,
+        setMintingProgress,
+        setTokenId,
+      );
+      console.log('TOKEN ID', value);
+      formData.append('tokenId', value);
+      axios.post(`${process.env.REACT_APP_SERVER_URL}/upload_video`, formData, {
+        headers: {
+          'content-type': 'multipart/form-data',
+          'auth-token': localStorage.getItem('authtoken'),
+        },
+      });
 
-                  let latestVideoId = res.data.videos[res.data.videos.length - 1].videoId;
-                  setsharable_data(
-                    `${process.env.REACT_APP_CLIENT_URL}/playback/${res.data.username}/${latestVideoId}`,
-                  );
-                });
-
-              setVideo({
-                videoName: '',
-                videoImage: '',
-                videoFile: '',
-                category: '',
-                ratings: '',
-                tags: [],
-                description: '',
-                allowAttribution: '',
-                commercialUse: '',
-                derivativeWorks: '',
-              }); // reset the form
-              props.setLoader(true);
-            },
-            function (error) {
-              console.log(error);
-            },
+      if (isNFT) dispatch(loadUser());
+      axios
+        .get(`${process.env.REACT_APP_SERVER_URL}/user/getLoggedInUser`, tokenConfig())
+        .then((res) => {
+          let latestVideoId = res.data.videos[res.data.videos.length - 1].videoId;
+          setsharable_data(
+            `${process.env.REACT_APP_CLIENT_URL}/playback/${res.data.username}/${latestVideoId}`,
           );
-        } else {
-          Noty.closeAll();
-          new Noty({
-            type: 'error',
-            text: 'Choose Video File & Fill other Details',
-            theme: 'metroui',
-            layout: 'bottomRight',
-          }).show();
-        }
-      },
-      function (error) {
-        console.log(error);
-      },
-    );
+          setShow(true);
+        });
+
+      setVideo({
+        videoName: '',
+        videoImage: '',
+        videoFile: '',
+        category: '',
+        ratings: '',
+        tags: [],
+        description: '',
+        allowAttribution: '',
+        commercialUse: '',
+        derivativeWorks: '',
+      }); // reset the form
+      props.setLoader(true);
+    } else {
+      Noty.closeAll();
+      new Noty({
+        type: 'error',
+        text: 'Choose Video File & Fill other Details',
+        theme: 'metroui',
+        layout: 'bottomRight',
+      }).show();
+    }
   };
 
   useEffect(() => {
@@ -916,13 +905,13 @@ const UploadVideoModal = (props) => {
                 type="range"
                 defaultValue={uploading}
                 min="0"
-                max="10"
+                max="100"
                 hidden={props.loader}
                 className="appearance-none cursor-pointer w-full h-3 bg-green-400 
                 font-white rounded-full slider-thumb  backdrop-blur-md"
               />
               <p className="mx-2 text-base font-medium text-white" hidden={props.loader}>
-                {Math.round(uploading * 10)}%
+                {Math.round(uploading)}%
               </p>
             </div>
 
@@ -939,7 +928,7 @@ const UploadVideoModal = (props) => {
                 dark:text-white `}
             ></input>
             <div
-              className="animate-spin rounded-full h-7 w-7 ml-3 border   bg-gradient-to-r from-green-400 to-blue-500 "
+              className="animate-spin rounded-full h-7 w-7 ml-3 border-2   bg-gradient-to-r from-green-400 to-blue-500 "
               hidden={props.loader}
             ></div>
           </div>

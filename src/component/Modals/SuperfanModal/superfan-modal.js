@@ -243,35 +243,54 @@ const SuperfanModal = ({ show, handleClose, userDataDetails }) => {
         isOpen={show}
         className={`${
           darkMode && 'dark'
-        }  absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2    w-screen shadow md:w-max`}
+        }  absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2      shadow md:w-max`}
         ariaHideApp={false}
       >
         {userDataDetails && (
           <div
             className={`   mx-auto  bg-white dark:bg-dbeats-dark-alt w-full md:w-max lg:px-12 px-2`}
           >
-            <h2
-              className="flex justify-between items-center 2xl:text-2xl lg:text-md py-4 2xl:py-6 lg:py-2   text-center relative 
-bg-white dark:bg-dbeats-dark-alt    "
-            >
-              <div className="col-span-5    text-gray-900 dark:text-gray-100 font-bold md:pl-80 pl-32">
-                SUPERFAN
-              </div>
-              <div
-                onClick={handleClose}
-                className=" rounded-3xl group w-max   p-1  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-secondary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
+            <div className="flex justify-between items-center text-center">
+              <h2
+                className="flex items-center 2xl:text-3xl lg:text-md py-4 2xl:py-6 lg:py-2   text-center relative 
+bg-white dark:bg-dbeats-dark-alt   text-gray-900 dark:text-gray-100 font-bold   mx-auto pl-14"
               >
-                <span className="  text-black dark:text-white  flex p-1 rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:nm-inset-dbeats-dark-secondary ">
-                  <p className="self-center mx-2">
-                    {' '}
-                    <i className="fas fa-times"></i>{' '}
-                  </p>
-                </span>
+                SUPERFAN 😎
+              </h2>
+              <div className="align-middle ">
+                <div
+                  onClick={handleClose}
+                  className=" rounded-3xl group w-max   p-1  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-secondary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
+                >
+                  <span className="  text-black dark:text-white  flex p-1 rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:nm-inset-dbeats-dark-secondary ">
+                    <p className="self-center mx-2">
+                      {' '}
+                      <i className="fas fa-times"></i>{' '}
+                    </p>
+                  </span>
+                </div>
               </div>
-            </h2>
-
+            </div>
+            <button
+              className="group text-center flex shadow hover:shadow-none   hover:bg-purple-700 hover:text-white hover:border border border-transparent hover:scale-99  
+      transition-all duration-200 transform -mt-5 bg-white lg:px-4 lg:py-2 mb-2 px-2 py-1 text-md lg:text-base self-center align-middle text-purple-700  rounded font-semibold mx-auto"
+              onClick={buyCrypto}
+            >
+              {!showBuyCrypto ? (
+                <>
+                  Buy MATIC
+                  <img
+                    className="h-5 w-5 ml-1 mr-1 self-center align-middle items-center group-hover:bg-white  group-hover:text-white rounded-full  "
+                    src={maticLogo}
+                    alt="logo"
+                  ></img>
+                </>
+              ) : (
+                'Back'
+              )}
+            </button>
             <div>
-              <div className="  lg:px-4 lg:pb-4 px-2 pb-2    dark:bg-gradient-to-b dark:from-dbeats-dark-primary  dark:to-dbeats-dark-primary">
+              <div className="  lg:px-4 lg:pb-10 px-2 pb-2    dark:bg-gradient-to-b dark:from-dbeats-dark-primary  dark:to-dbeats-dark-primary">
                 <div className="flex items-center justify-center w-full lg:mb-4 mb-2">
                   <label className="flex items-center cursor-pointer">
                     <div className="mr-3 text-gray-700 dark:text-dbeats-white  font-medium ">
@@ -535,24 +554,6 @@ bg-white dark:bg-dbeats-dark-alt    "
                 ) : (
                   ''
                 )}
-                <button
-                  className="group text-center flex shadow hover:shadow-none   hover:border-purple-700 hover:border border border-transparent hover:scale-99  
-      transition-all duration-200 transform  bg-white lg:px-4 lg:py-2 mb-2 px-2 py-1 text-md lg:text-base self-center align-middle text-purple-700  rounded font-semibold mt-4 mx-auto"
-                  onClick={buyCrypto}
-                >
-                  {!showBuyCrypto ? (
-                    <>
-                      Buy MATIC
-                      <img
-                        className="h-5 w-5 ml-1 mr-1 self-center align-middle items-center group-hover:bg-white  group-hover:text-white"
-                        src={maticLogo}
-                        alt="logo"
-                      ></img>
-                    </>
-                  ) : (
-                    'Back'
-                  )}
-                </button>
                 {txHashCreated ? (
                   <div className="text-center flex">
                     <p className="no-underline">🚀</p>

@@ -31,17 +31,21 @@ const Login = () => {
   const [account, setAccount] = useState(null);
   const dispatch = useDispatch();
 
-  useEffect(async () => {
-    if (provider && !account) {
+  useEffect(() => {
+    async function fetchData() {
       const web3 = new Web3(provider);
       const address = (await web3.eth.getAccounts())[0];
       const balance = await web3.eth.getBalance(address);
-
-      setAccount(address);
+      return address;
     }
-  }, [provider]);
+    if (provider && !account) {
+      fetchData().then((address) => {
+        setAccount(address);
+      });
+    }
+  }, [provider, account]);
 
-  useEffect(async () => {
+  useEffect(() => {
     setAccount(null);
 
     console.log('logged out');
@@ -162,7 +166,7 @@ const Login = () => {
         <div className="bg-gradient-to-b from-blue-50 via-blue-50 to-white  dark:bg-gradient-to-b dark:from-dbeats-dark-secondary  dark:to-dbeats-dark-primary 2xl:pt-18 lg:pt-5 pt-5">
           <main className={` lg:w-1/2 w-11/12 self-center mx-auto mt-24 `}>
             <div
-              className={`2xl:py-10 2xl:px-8 lg:px-3 lg:py-3 bg-white dark:bg-dbeats-dark-alt lg:w-1/2  w-11/12 mx-auto     self-center 2xl:py-5 lg:py-3`}
+              className={`  2xl:px-8 lg:px-3 lg:py-3 bg-white dark:bg-dbeats-dark-alt lg:w-1/2  w-11/12 mx-auto     self-center 2xl:py-5  `}
             >
               {login && !forgotPassword ? (
                 <SignupForm
