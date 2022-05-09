@@ -10,7 +10,7 @@ const canvasStyles = {
   left: 0,
 };
 
-export default function Realistic({ spray }) {
+export default function Realistic({ spray, originX, originY, angle }) {
   const refAnimationInstance = useRef(null);
 
   const getInstance = useCallback((instance) => {
@@ -21,8 +21,9 @@ export default function Realistic({ spray }) {
     refAnimationInstance.current &&
       refAnimationInstance.current({
         ...opts,
-        origin: { y: 0.7 },
+        origin: { y: originY, x: originX },
         particleCount: Math.floor(200 * particleRatio),
+        angle: angle,
       });
   }, []);
 
