@@ -32,7 +32,7 @@ import ReportModal2 from '../../../../component/Modals/ReportModals/ReportModal2
 const NFTCard = ({ nft, buyNft, address }) => {
   //console.log(nft);
   const user = useSelector((state) => state.User.user);
-
+  const [commentsNumber,setCommentsNumber] = useState(0);
   const [seeMore, setSeeMore] = useState(false);
   const [nameSeeMore, setNameSeeMore] = useState(false);
 
@@ -134,9 +134,12 @@ const NFTCard = ({ nft, buyNft, address }) => {
       if (contentData.disableComments) {
         setCommentDisabled(true);
       }
+      if(contentData.comments){
+        setCommentsNumber(contentData.comments.length);
+      }
       if (cardDetails.user.reports) {
         cardDetails.user.reports.map((rep) => {
-          if (rep.reporter == user.username) {
+          if (rep.reporter == user.username && rep.videoId && rep.videoId == contentData.videoId) {
             setMyReport(rep.report);
           }
         });
@@ -712,7 +715,7 @@ const NFTCard = ({ nft, buyNft, address }) => {
                             onClick={() => setShowAllComments(true)}
                             className="text-xs cursor-pointer text-dbeats-light pr-2 flex  "
                           >
-                            {contentData.comments ? contentData.comments.length : 0} comments
+                            {commentsNumber} comments
                           </div>
                         ) : (
                           <></>
@@ -751,7 +754,7 @@ const NFTCard = ({ nft, buyNft, address }) => {
                             onClick={() => setShowAllComments(true)}
                             className="text-xs cursor-pointer text-dbeats-light pr-2 flex  "
                           >
-                            {contentData.comments ? contentData.comments.length : 0} comments
+                            {commentsNumber} comments
                           </div>
                         ) : (
                           <></>
@@ -851,6 +854,7 @@ const NFTCard = ({ nft, buyNft, address }) => {
                 contentData={contentData}
                 setMyComments={setMyComments}
                 myComments={myComments}
+                setCommentsNumber={setCommentsNumber}
               ></Addcomment>
             )}
             {showAllComments && !commentDisabled && (
