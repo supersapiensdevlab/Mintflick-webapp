@@ -32,7 +32,7 @@ import ReportModal2 from '../../../../component/Modals/ReportModals/ReportModal2
 const NFTCard = ({ nft, buyNft, address }) => {
   //console.log(nft);
   const user = useSelector((state) => state.User.user);
-  const [commentsNumber,setCommentsNumber] = useState(0);
+  const [commentsNumber, setCommentsNumber] = useState(0);
   const [seeMore, setSeeMore] = useState(false);
   const [nameSeeMore, setNameSeeMore] = useState(false);
 
@@ -137,7 +137,7 @@ const NFTCard = ({ nft, buyNft, address }) => {
       if (contentData.disableComments) {
         setCommentDisabled(true);
       }
-      if(contentData.comments){
+      if (contentData.comments) {
         setCommentsNumber(contentData.comments.length);
       }
       if (cardDetails.user.reports) {
@@ -283,15 +283,17 @@ const NFTCard = ({ nft, buyNft, address }) => {
         console.log('Biconomy is ready', user.wallet_id);
         const contract = new web3.eth.Contract(Market, nftmarketaddress);
         var NFTPrice = ethers.utils.parseEther(nft.price);
-        console.log(NFTPrice.toString(10), nft.price);
+        console.log(NFTPrice.toString(10), nft.price, nft.tokenId);
 
         let marketFees = await contract.methods.getListingPrice().call();
-        const transaction = await contract.methods
-          .createMarketSale(2)
-          .send({ from: user.wallet_id, value: NFTPrice.toString(10) })
-          .on('receipt', function () {
-            if (transaction) {
-              console.log('Transaction Receipt:', transaction);
+        console.log(marketFees);
+        const options = { from: provider.selectedAddress, value: NFTPrice };
+        contract.methods
+          .createMarketSale(nft.tokenId)
+          .sendAsync(options)
+          .on('receipt', function (receipt) {
+            if (receipt) {
+              console.log('Transaction Receipt:', receipt);
               console.log('Transferring Token with #:', nft.tokenId);
             }
           });
