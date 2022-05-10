@@ -24,6 +24,9 @@ import { tokenConfig } from '../../../../helper/tokenConfig';
 import { storeWithProgress, createToken } from '../../../../functions/NFTMinter';
 import 'react-step-progress-bar/styles.css';
 import { ProgressBar, Step } from 'react-step-progress-bar';
+import icon1 from '../../../../assets/icons/cryptocurrency-art.png';
+import icon2 from '../../../../assets/icons/nft.png';
+import icon3 from '../../../../assets/icons/cryptocurrency-token.png';
 
 const UploadVideoModal = (props) => {
   const dispatch = useDispatch();
@@ -242,6 +245,9 @@ const UploadVideoModal = (props) => {
     console.log(e.target.value);
     if (!videoUpload) {
       setWarning('Please select a video');
+      return;
+    } else if (NFTprice < 1) {
+      setWarning('selling price should be greater than 1 MATIC');
       return;
     } else if (!videoImageUpload) {
       setWarning('Please select video thumbnail');
@@ -680,7 +686,7 @@ const UploadVideoModal = (props) => {
                               </label>
                               <div className="mt-1 flex rounded-md shadow-sm nm-flat-dbeats-dark-secondary  p-0.5">
                                 <input
-                                  min={0.001}
+                                  min={1}
                                   type="number"
                                   name="NFTPrice"
                                   id="NFTPrice"
@@ -688,6 +694,7 @@ const UploadVideoModal = (props) => {
                                   onChange={(e) => setPrice(e.target.value)}
                                   className="focus:nm-inset-dbeats-dark-primary  border-0 bg-dbeats-dark-primary  ring-0   flex-1 block w-full rounded-md sm:text-sm  "
                                   placeholder=""
+                                  required
                                 />
                               </div>
                             </div>
@@ -887,15 +894,35 @@ const UploadVideoModal = (props) => {
                 </a>
               </div>
               <ProgressBar
+                className="w-full mx-auto"
                 percent={mintingProgress}
-                filledBackground="linear-gradient(to right, #fefb72, #f0bb31)"
+                transitionDuration={1000}
+                filledBackground="linear-gradient(to right,  #31c48D, #3f83f8)"
               >
                 <Step transition="scale">
                   {({ accomplished }) => (
                     <img
                       style={{ filter: `grayscale(${accomplished ? 0 : 80}%)` }}
-                      width="30"
-                      src="https://vignette.wikia.nocookie.net/pkmnshuffle/images/9/9d/Pichu.png/revision/latest?cb=20170407222851"
+                      className="w-6"
+                      src={icon3}
+                    />
+                  )}
+                </Step>
+                <Step transition="scale">
+                  {({ accomplished }) => (
+                    <img
+                      style={{ filter: `grayscale(${accomplished ? 0 : 80}%)` }}
+                      className="w-8"
+                      src={icon2}
+                    />
+                  )}
+                </Step>
+                <Step transition="scale">
+                  {({ accomplished }) => (
+                    <img
+                      style={{ filter: `grayscale(${accomplished ? 0 : 80}%)` }}
+                      className="w-6"
+                      src={icon1}
                     />
                   )}
                 </Step>
@@ -904,16 +931,7 @@ const UploadVideoModal = (props) => {
                     <img
                       style={{ filter: `grayscale(${accomplished ? 0 : 80}%)` }}
                       width="30"
-                      src="https://vignette.wikia.nocookie.net/pkmnshuffle/images/9/97/Pikachu_%28Smiling%29.png/revision/latest?cb=20170410234508"
-                    />
-                  )}
-                </Step>
-                <Step transition="scale">
-                  {({ accomplished }) => (
-                    <img
-                      style={{ filter: `grayscale(${accomplished ? 0 : 80}%)` }}
-                      width="30"
-                      src="https://vignette.wikia.nocookie.net/pkmnshuffle/images/9/9d/Pichu.png/revision/latest?cb=20170407222851"
+                      src={icon1}
                     />
                   )}
                 </Step>
@@ -961,7 +979,7 @@ const UploadVideoModal = (props) => {
         sharable_data={sharable_data}
         copybuttonText={buttonText}
         setCopyButtonText={setButtonText}
-        title={isNFT ? 'Share this freshly minted NFT with your Web2 Community' : null}
+        title={isNFT ? 'Share this freshly minted NFT with your Community' : null}
       />
     </Modal>
   );
