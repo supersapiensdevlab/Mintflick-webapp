@@ -51,7 +51,7 @@ const NFTCard = ({ nft, buyNft, address }) => {
   const [myPost, setMyPost] = useState(false);
   const [myReport, setMyReport] = useState(null);
   const [commentDisabled, setCommentDisabled] = useState(false);
-  //let sharable_data = `${process.env.REACT_APP_CLIENT_URL}/profile/${nft.username}`;
+  let sharable_data = `${process.env.REACT_APP_CLIENT_URL}/profile/${nft.username}`;
   useEffect(() => {
     async function getuser_by_wallet() {
       // console.log(nft);
@@ -1174,13 +1174,13 @@ const NFTCard = ({ nft, buyNft, address }) => {
         </div>
       ) : null}
       <BidModal isBidOpen={showBidModal} handleCloseBid={handleCloseBidModal}></BidModal>
-      {/* <ShareModal
+      <ShareModal
         show={showShare}
         handleClose={handleShareClose}
         sharable_data={sharable_data}
         copybuttonText={shareButtonText}
         setCopyButtonText={setShareButtonText}
-      /> */}
+      />
       <PostOptionModal
         cardDetails={cardDetails}
         contentData={contentData}
