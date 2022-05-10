@@ -72,7 +72,7 @@ export let createToken = (
           console.log('#transaction : ', res);
           tokenId = res.events.Transfer.returnValues.tokenId;
           setMinting('token created');
-          setMintingProgress(50);
+          setMintingProgress(33);
           console.log('#token created : ', tokenId);
           setTokenId(tokenId);
           await contract.methods
@@ -81,7 +81,7 @@ export let createToken = (
             .then(async (res) => {
               formData.append('tokenId', tokenId);
               setMinting(res.transactionHash);
-              setMintingProgress(100);
+              setMintingProgress(66);
             });
         });
       // transaction

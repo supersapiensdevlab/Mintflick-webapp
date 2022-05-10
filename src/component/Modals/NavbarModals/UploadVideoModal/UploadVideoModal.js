@@ -194,8 +194,48 @@ const UploadVideoModal = (props) => {
 
   useEffect(() => {
     async function uploadVideoToDB() {}
-  }),
-    [tokenId];
+
+    console.log('TOKEN ID', tokenId);
+    if (tokenId) {
+      if (isNFT) {
+        formData.append('tokenId', tokenId);
+        dispatch(loadUser());
+      }
+      axios
+        .post(`${process.env.REACT_APP_SERVER_URL}/upload_video`, formData, {
+          headers: {
+            'content-type': 'multipart/form-data',
+            'auth-token': localStorage.getItem('authtoken'),
+          },
+        })
+        .then((res) => {
+          setMintingProgress(100);
+          axios
+            .get(`${process.env.REACT_APP_SERVER_URL}/user/getLoggedInUser`, tokenConfig())
+            .then((res) => {
+              let latestVideoId = res.data.videos[res.data.videos.length - 1].videoId;
+              setsharable_data(
+                `${process.env.REACT_APP_CLIENT_URL}/playback/${res.data.username}/${latestVideoId}`,
+              );
+              setShow(true);
+            });
+
+          setVideo({
+            videoName: '',
+            videoImage: '',
+            videoFile: '',
+            category: '',
+            ratings: '',
+            tags: [],
+            description: '',
+            allowAttribution: '',
+            commercialUse: '',
+            derivativeWorks: '',
+          }); // reset the form
+          props.setLoader(true);
+        });
+    }
+  }, [tokenId]);
 
   const PostData = async (e) => {
     e.preventDefault();
@@ -298,7 +338,7 @@ const UploadVideoModal = (props) => {
     ) {
       let url = 'https://ipfs.infura.io/ipfs/' + cid + '/meta.json';
       setMinting(true);
-      let value = await createToken(
+      await createToken(
         url,
         NFTprice,
         formData,
@@ -307,39 +347,6 @@ const UploadVideoModal = (props) => {
         setMintingProgress,
         setTokenId,
       );
-      console.log('TOKEN ID', value);
-      formData.append('tokenId', value);
-      axios.post(`${process.env.REACT_APP_SERVER_URL}/upload_video`, formData, {
-        headers: {
-          'content-type': 'multipart/form-data',
-          'auth-token': localStorage.getItem('authtoken'),
-        },
-      });
-
-      if (isNFT) dispatch(loadUser());
-      axios
-        .get(`${process.env.REACT_APP_SERVER_URL}/user/getLoggedInUser`, tokenConfig())
-        .then((res) => {
-          let latestVideoId = res.data.videos[res.data.videos.length - 1].videoId;
-          setsharable_data(
-            `${process.env.REACT_APP_CLIENT_URL}/playback/${res.data.username}/${latestVideoId}`,
-          );
-          setShow(true);
-        });
-
-      setVideo({
-        videoName: '',
-        videoImage: '',
-        videoFile: '',
-        category: '',
-        ratings: '',
-        tags: [],
-        description: '',
-        allowAttribution: '',
-        commercialUse: '',
-        derivativeWorks: '',
-      }); // reset the form
-      props.setLoader(true);
     } else {
       Noty.closeAll();
       new Noty({
@@ -849,9 +856,22 @@ const UploadVideoModal = (props) => {
                   ✅ NFT Token Created Successfully. Confirm Market Listing on the Popup
                 </div>
               ) : null}
+
               <div
                 className={`${
-                  minting !== null && minting !== true && minting !== 'token created'
+                  mintingProgress === 66 ? 'block' : 'hidden'
+                } text-center flex mx-3 my-5`}
+              >
+                <p className="no-underline  text-white">Wrapping Up Things &nbsp;</p>
+                <p className="no-underline  text-white"> Please Wait...</p>
+              </div>
+
+              <div
+                className={`${
+                  minting !== null &&
+                  minting !== true &&
+                  mintingProgress === 100 &&
+                  minting !== 'token created'
                     ? 'block'
                     : 'hidden'
                 } text-center flex mx-3 my-5`}

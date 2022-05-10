@@ -40,7 +40,6 @@ export default function Realistic({ spray, originX, originY, angle }) {
     makeShot(0.35, {
       spread: 100,
       decay: 0.91,
-      scalar: 0.8,
     });
 
     makeShot(0.1, {
@@ -53,6 +52,7 @@ export default function Realistic({ spray, originX, originY, angle }) {
     makeShot(0.1, {
       spread: 120,
       startVelocity: 45,
+      scalar: 1.3,
     });
   }, [makeShot]);
 
