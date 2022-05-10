@@ -563,6 +563,7 @@ const NFTCard = ({ nft, buyNft, address }) => {
       return () => clearTimeout(timer);
     }
   };
+
   return (
     <>
       {contentData && address == cardDetails.user.wallet_id ? (
@@ -1020,7 +1021,7 @@ const NFTCard = ({ nft, buyNft, address }) => {
                             onClick={() => setShowAllComments(true)}
                             className="text-xs cursor-pointer text-dbeats-light pr-2 flex  "
                           >
-                            {contentData.comments ? contentData.comments.length : 0} comments
+                            {commentsNumber} comments
                           </div>
                         ) : (
                           <></>
@@ -1059,7 +1060,7 @@ const NFTCard = ({ nft, buyNft, address }) => {
                             onClick={() => setShowAllComments(true)}
                             className="text-xs cursor-pointer text-dbeats-light pr-2 flex  "
                           >
-                            {contentData.comments ? contentData.comments.length : 0} comments
+                            {commentsNumber} comments
                           </div>
                         ) : (
                           <></>
@@ -1158,6 +1159,7 @@ const NFTCard = ({ nft, buyNft, address }) => {
                 contentData={contentData}
                 setMyComments={setMyComments}
                 myComments={myComments}
+                setCommentsNumber={setCommentsNumber}
               ></Addcomment>
             )}
             {showAllComments && !commentDisabled && (
