@@ -45,8 +45,43 @@ function Addcomment({ user_id, contentData, myComments, setMyComments , setComme
       setCommentsNumber((commentsNumber) => commentsNumber + 1);
     }
   };
+  const handleButtonSubmit = async ()=>{
+    if (user && comment !== '') {
+      let data = {
+        user_data_id: user_id,
+        content: contentData,
+        comment: comment,
+      };
+      const res = await axios({
+        method: 'post',
+        url: `${process.env.REACT_APP_SERVER_URL}/user/addcomment`,
+        data: data,
+        headers: {
+          'content-type': 'application/json',
+          'auth-token': localStorage.getItem('authtoken'),
+        },
+      });
+      setMyComments((myComments) => [
+       
+        {
+          comment: comment,
+          _id: res.data.id,
+          user_id: user._id,
+          likes: [],
+          profile_image: user.profile_image,
+          username: user.username,
+          name: user.name,
+        }, 
+        ...myComments,
+      ]);
+      setComment('');
+      setCommentsNumber((commentsNumber) => commentsNumber + 1);
+    }
+  }
+
   return (
     user && (
+      <div>
       <div className="relative flex items-center mx-4 my-1">
         <img className="h-8 w-8 rounded-full mr-2" src={user.profile_image}></img>
         <div className="flex items-center flex-grow border-2 border-gray-700 rounded-2xl">
@@ -67,6 +102,9 @@ function Addcomment({ user_id, contentData, myComments, setMyComments , setComme
             </div>
           )}
         </div>
+      </div>
+      {comment !='' && <button onClick={handleButtonSubmit} type="button" className="ml-14 py-1 px-3 mr-2 mb-3 mt-1 text-sm font-medium text-dbeats-light focus:outline-none bg-dbeats-dark-secondary rounded-full border border-dbeats-light hover:bg-dbeats-light hover:text-dbeats-dark-secondary focus:z-10 focus:ring-4 focus:ring-gray-200 ">Post</button>}
+
       </div>
     )
   );
