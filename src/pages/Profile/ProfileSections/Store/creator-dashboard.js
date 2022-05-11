@@ -10,6 +10,7 @@ import Torus from '@toruslabs/torus-embed';
 import Web3 from 'web3';
 import axios from 'axios';
 import useWeb3Modal from '../../../../hooks/useWeb3Modal';
+import { Biconomy } from '@biconomy/mexa';
 
 const client = ipfsHttpClient('https://ipfs.infura.io:5001/api/v0');
 
@@ -65,6 +66,8 @@ export default function CreateItem() {
     }
   }
   async function createMarket() {
+    var ts = Math.round(new Date().getTime() / 1000);
+
     const { name, description, price } = formInput;
     if (!name || !description || !price || !fileUrl) return;
     /* first, upload to IPFS */
@@ -72,6 +75,15 @@ export default function CreateItem() {
       name,
       description,
       image: fileUrl,
+      external_url: fileUrl,
+      attributes: [
+        {
+          display_type: 'date',
+          trait_type: 'Created On',
+          value: ts,
+        },
+      ],
+      animation_url: fileUrl,
     });
     try {
       const added = await client.add(data);
@@ -86,23 +98,57 @@ export default function CreateItem() {
 
   async function createSale(url) {
     // const connection = await web3Modal.connect();
+    var tokenId = null;
+    var biconomy = new Biconomy(provider, {
+      apiKey: 'Ooz6qQnPL.10a08ea0-3611-432d-a7de-34cf9c44b49b',
+    });
+    console.log(provider);
+    console.log(biconomy);
+
+    const web3 = new Web3(biconomy);
+    window.web3 = web3;
+
     console.log('provider', provider);
 
-    const web3 = new Web3(provider);
-    const address = (await web3.eth.getAccounts())[0];
-    const balance = await web3.eth.getBalance(address);
-    console.log('address', address);
-    console.log('value', balance);
+    biconomy
+      .onEvent(biconomy.READY, async () => {
+        console.log('Biconomy is ready', provider, web3);
+        let contract = new web3.eth.Contract(Market, nftmarketaddress);
+        await contract.methods
+          .createToken(url)
+          .send({ from: provider.selectedAddress })
+          .then(async (res) => {
+            console.log('#transaction : ', res);
+            tokenId = res.events.Transfer.returnValues.tokenId;
 
-    /* next, create the item */
-    let contract = new web3.eth.Contract(Market.abi, nftmarketaddress);
-    const price = ethers.utils.parseUnits(formInput.price, 'ether');
+            console.log('#token created : ', tokenId);
 
-    contract.methods
-      .createToken(url, price)
-      .send({ from: address })
-      .on('receipt', function (receipt) {
-        console.log('Transaction complete', receipt);
+            await contract.methods
+              .createMarketItem(tokenId, ethers.utils.parseUnits(formInput.price, 'ether'))
+              .send({ from: provider.selectedAddress })
+              .then(async (res) => {})
+              .on('receipt', function (receipt) {
+                console.log('Transaction complete', receipt);
+              });
+          });
+      })
+      // transaction
+      //   .on('transactionHash', function (hash) {
+      //     console.log(`Transaction hash is ${hash}`);
+      //     console.log(`Transaction sent. Waiting for confirmation ..`);
+      //   })
+      //   .once('confirmation', function (confirmationNumber, receipt) {
+      //     console.log(receipt);
+      //     console.log(receipt.transactionHash);
+      //     setShow(true);
+      //     setMinting(false);
+      //     //do something with transaction hash
+      //   });
+
+      .onEvent(biconomy.ERROR, (error, message) => {
+        // Handle error while initializing mexa
+        console.log(error);
+        console.log(message);
       });
 
     //let event = tx.events[0];
@@ -115,6 +161,7 @@ export default function CreateItem() {
     //await transaction.wait();
     handleNFTnotification();
     history.push('/');
+    return tokenId;
   }
 
   // async function createSale(url) {
