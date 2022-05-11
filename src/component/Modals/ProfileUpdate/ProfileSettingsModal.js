@@ -28,15 +28,16 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
   const [hideGold, setHideGold] = useState(true);
   const [hidePlatinum, setHidePlatinum] = useState(true);
   const [hidePlus, setHidePlus] = useState(false);
+  const [hideSave, setHideSave] = useState(true);
 
   const [showSavedChanges, setShowSavedChanges] = useState(false);
   const handleShowSavedChanged = () => setShowSavedChanges(true);
   const handleCloseSavedChanges = () => setShowSavedChanges(false);
 
   const handleNewPlan = (e) => {
-    let name = e.target.name;
-    console.log(name);
-    setPlan(name);
+    // let name = e.target.name;
+    // console.log(name);
+    setPlan(e);
   };
 
   const handleUserInputs = (e) => {
@@ -75,6 +76,7 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
         setLoader(false);
         handleClose();
         handleShowSavedChanged();
+        setHideSave(true);
         console.log(res);
       })
       .catch(function (error) {
@@ -95,6 +97,20 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
         perks3: userData.superfan_data.perks3,
         price3: userData.superfan_data.price3,
       });
+    }
+  }, [userData.superfan_data]);
+
+  useEffect(() => {
+    if (userData.superfan_data.plan1 && userData.superfan_data.plan2) {
+      setHideGold(false);
+    } else if (
+      userData.superfan_data.perks &&
+      userData.superfan_data.perks2 &&
+      userData.superfan_data.perks3
+    ) {
+      setHideGold(false);
+      setHidePlatinum(false);
+      setHidePlus(true);
     }
   }, [userData.superfan_data]);
 
@@ -194,6 +210,8 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
                             type="text"
                             name="perks"
                             id="perks"
+                            onFocus={() => setHideSave(false)}
+                            onBlur={() => setHideSave(true)}
                             placeholder="Perks"
                             value={
                               currentPlan === 'silver'
@@ -223,6 +241,8 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
                             id="price"
                             min="0"
                             max="1000"
+                            onFocus={() => setHideSave(false)}
+                            onBlur={() => setHideSave(true)}
                             onChange={handleUserInputs}
                             value={
                               currentPlan === 'silver'
@@ -267,7 +287,7 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
                       <form
                         name="silver"
                         id="silver"
-                        onClick={handleNewPlan}
+                        onClick={() => handleNewPlan('silver')}
                         className={` ${
                           currentPlan === 'silver'
                             ? 'dark:border-dbeats-light  shadow-md '
@@ -275,7 +295,7 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
                         }   border   border-gray-500 self-center dark:bg-dbeats-dark-secondary bg-white 
                      2xl:h-56 2xl:w-48 2xl:mx-2 md:h-56 md:w-48 md:mx-2 w-2/3 mt-3 md:mt-0  rounded-md align-middle text-center cursor-pointer `}
                       >
-                        {' '}
+                        {/* {' '}
                         <input
                           className="form-check-input appearance-none rounded-full h-4 w-4 border
                          border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 
@@ -285,7 +305,7 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
                           name="silver"
                           onClick={handleNewPlan}
                           id="flexRadioDefault1"
-                        ></input>{' '}
+                        ></input>{' '} */}
                         <p
                           className={`${
                             !newData.plan
@@ -340,7 +360,7 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
                       <form
                         name="second"
                         id="second"
-                        onClick={handleNewPlan}
+                        onClick={() => handleNewPlan('gold')}
                         hidden={hideGold}
                         className={` ${
                           currentPlan === 'gold'
@@ -349,7 +369,7 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
                         }   border   border-gray-500 self-center dark:bg-dbeats-dark-secondary bg-white 
                      2xl:h-56 2xl:w-48 2xl:mx-2 md:h-56 md:w-48 md:mx-2 w-2/3 mt-3 md:mt-0  rounded-md align-middle text-center cursor-pointer `}
                       >
-                        <input
+                        {/* <input
                           className="form-check-input appearance-none rounded-full h-4 w-4 border
                          border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 
                          focus:outline-none transition m-2 duration-200   align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
@@ -358,7 +378,7 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
                           id="flexRadioDefault2"
                           name="gold"
                           onClick={handleNewPlan}
-                        ></input>
+                        ></input> */}
 
                         <p
                           className={`${
@@ -415,7 +435,7 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
                         name="platinum"
                         id="platinum"
                         hidden={hidePlatinum}
-                        onClick={handleNewPlan}
+                        onClick={() => handleNewPlan('platinum')}
                         className={` ${
                           currentPlan === 'platinum'
                             ? 'dark:border-dbeats-light  shadow-md '
@@ -423,7 +443,7 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
                         }   border   border-gray-500 self-center dark:bg-dbeats-dark-secondary bg-white 
                      2xl:h-56 2xl:w-48 2xl:mx-2 md:h-56 md:w-48 md:mx-2 w-2/3 mt-3 md:mt-0  rounded-md align-middle text-center cursor-pointer `}
                       >
-                        {' '}
+                        {/* {' '}
                         <input
                           className="form-check-input appearance-none rounded-full h-4 w-4 border
                          border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 
@@ -433,7 +453,7 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
                           onClick={handleNewPlan}
                           checked={currentPlan === 'platinum'}
                           id="flexRadioDefault3"
-                        ></input>{' '}
+                        ></input>{' '} */}
                         <p
                           className={`${
                             !newData.plan3
@@ -518,12 +538,13 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
                     </div>
                   </dl>
 
-                  <div className=" 2xl:pt-5 lg:pt-3 lg:pb-0 md:pt-5 pt-5 md:px-1 lg:text-right text-center px-12 flex justify-end items-center dark:bg-dbeats-dark-alt">
-                    <input
-                      type="button"
-                      value={'Save changes'}
-                      onClick={UpdateData}
-                      className={`
+                  <div hidden={hideSave}>
+                    <div className=" 2xl:pt-5 lg:pt-3 lg:pb-0 md:pt-5 pt-5 md:px-1 lg:text-right text-center px-12 flex justify-end items-center dark:bg-dbeats-dark-alt">
+                      <input
+                        type="button"
+                        value={'Save changes'}
+                        onClick={UpdateData}
+                        className={`
                flex justify-center 2xl:py-2 py-1 lg:px-5 
                 px-3 text-dbeats-light  rounded border-dbeats-light border
                 lg:text-md text-md my-auto font-semibold  bg-transparent
@@ -535,12 +556,15 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
                     : 'cursor-pointer hover:bg-dbeats-light hover:text-white'
                 }
                 `}
-                      disabled={newData.name === userData.name && newData.email === userData.email}
-                    />
-                    <div
-                      className="animate-spin rounded-full h-7 w-7 ml-3 border-t-2 border-b-2 bg-gradient-to-r from-green-400 to-blue-500 "
-                      hidden={!loader}
-                    ></div>
+                        disabled={
+                          newData.name === userData.name && newData.email === userData.email
+                        }
+                      />
+                      <div
+                        className="animate-spin rounded-full h-7 w-7 ml-3 border-t-2 border-b-2 bg-gradient-to-r from-green-400 to-blue-500 "
+                        hidden={!loader}
+                      ></div>
+                    </div>
                   </div>
                 </div>
               </div>

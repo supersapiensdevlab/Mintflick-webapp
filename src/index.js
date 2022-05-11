@@ -30,20 +30,20 @@ store.subscribe(() =>
     },
     function (error) {
       // Do something with request error
-      Noty.closeAll();
-      new Noty({
-        type: 'error',
-        text: error.message,
-        theme: 'metroui',
-        layout: 'bottomLeft',
-      }).show();
+      // Noty.closeAll();
+      // new Noty({
+      //   type: 'error',
+      //   text: error.message,
+      //   theme: 'metroui',
+      //   layout: 'bottomLeft',
+      // }).show();
 
       return Promise.reasyncject(error);
     },
   ),
 );
 
-// For POST requests
+//For POST requests
 axios.interceptors.response.use(
   (res) => {
     Noty.closeAll();
@@ -140,13 +140,13 @@ axios.interceptors.response.use(
     return res;
   },
   (err) => {
-    Noty.closeAll();
-    new Noty({
-      type: 'error',
-      text: err.message,
-      theme: 'metroui',
-      layout: 'bottomRight',
-    }).show();
+    // Noty.closeAll();
+    // // new Noty({
+    // //   type: 'error',
+    // //   text: err.message,
+    // //   theme: 'metroui',
+    // //   layout: 'bottomRight',
+    // }).show();
     return Promise.reject(err);
   },
 );

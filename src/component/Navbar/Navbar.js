@@ -26,7 +26,7 @@ moment().format();
 
 const NavBar = () => {
   // eslint-disable-next-line no-unused-vars
-  const [onlyOnce,setOnlyOnce] = useState(false);
+  const [onlyOnce, setOnlyOnce] = useState(false);
   const [loadWeb3Modal, logoutOfWeb3Modal, logoutweb3] = useWeb3Modal();
   const provider = useSelector((state) => state.web3Reducer.provider);
 
@@ -85,8 +85,8 @@ const NavBar = () => {
           'auth-token': localStorage.getItem('authtoken'),
         },
       })
-        .then((data)=>{
-          console.log(data)
+        .then((data) => {
+          console.log(data);
         })
         .catch(function (error) {
           console.log(error);
@@ -164,10 +164,9 @@ const NavBar = () => {
         console.log(error);
       });
 
-   
     // eslint-disable-next-line
   }, []);
-  useEffect(()=>{
+  useEffect(() => {
     if (user && user.notification && !onlyOnce) {
       setOnlyOnce(true);
       if (user.notification.length > 0) {
@@ -188,7 +187,7 @@ const NavBar = () => {
         setNotification(data.reverse());
       }
     }
-  },[user])
+  }, [user]);
 
   //console.log(notification);
 
@@ -208,7 +207,7 @@ const NavBar = () => {
     return (
       <div className="h-full my-1">
         <a
-          href={`/live/${data.username}`}
+          href={data.link ? data.link : `/live/${data.username}`}
           className="grid grid-cols-4 justify-center p-2 dark:bg-dbeats-dark-alt dark:hover:bg-dbeats-dark-secondary dark:text-white text-gray-500"
         >
           {data.post_image ? (
