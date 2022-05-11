@@ -290,7 +290,7 @@ const NFTCard = ({ nft, buyNft, address }) => {
         const options = { from: provider.selectedAddress, value: NFTPrice };
         contract.methods
           .createMarketSale(nft.tokenId)
-          .sendAsync(options)
+          .send(options)
           .on('receipt', function (receipt) {
             if (receipt) {
               console.log('Transaction Receipt:', receipt);

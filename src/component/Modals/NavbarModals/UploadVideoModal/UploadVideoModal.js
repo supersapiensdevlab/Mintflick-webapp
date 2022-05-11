@@ -213,6 +213,7 @@ const UploadVideoModal = (props) => {
         })
         .then((res) => {
           setMintingProgress(100);
+
           axios
             .get(`${process.env.REACT_APP_SERVER_URL}/user/getLoggedInUser`, tokenConfig())
             .then((res) => {
@@ -235,7 +236,6 @@ const UploadVideoModal = (props) => {
             commercialUse: '',
             derivativeWorks: '',
           }); // reset the form
-          props.setLoader(true);
         });
     }
   }, [tokenId]);
@@ -310,6 +310,7 @@ const UploadVideoModal = (props) => {
     //const client = makeStorageClient();
     const cid = await storeWithProgress(metaFile);
     setUploading(100);
+    props.setLoader(true);
     console.log('stored files with cid:', cid);
 
     console.log('meta', cid);
@@ -938,7 +939,7 @@ const UploadVideoModal = (props) => {
               </ProgressBar>
             </div>
 
-            <div className=" mx-5 flex items-center w-64">
+            <div hidden={props.loader} className=" mx-5 flex items-center w-64">
               <input
                 type="range"
                 defaultValue={uploading}

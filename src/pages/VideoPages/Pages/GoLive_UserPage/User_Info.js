@@ -15,6 +15,10 @@ import { tokenConfig } from '../../../../helper/tokenConfig';
 import Market from '../../../../artifacts/contracts/Market.sol/NFTMarket.json';
 import { nftmarketaddress } from '../../../../functions/config';
 import { loadUser } from '../../../../actions/userActions';
+import { ProgressBar, Step } from 'react-step-progress-bar';
+import icon1 from '../../../../assets/icons/cryptocurrency-art.png';
+import icon2 from '../../../../assets/icons/nft.png';
+import icon3 from '../../../../assets/icons/cryptocurrency-token.png';
 
 // import LiveChat from '../LivePublicPage/LiveChat';
 // import { io } from 'socket.io-client';
@@ -55,6 +59,9 @@ const UserInfo = (props) => {
   const [viewAnimate, setViewAnimate] = useState('animate-none');
 
   const [uploading, setUploading] = useState(0);
+
+  const [hideButton, setHideButton] = useState(false);
+
   //nft video
   const category = [
     'Autos & Vehicles',
@@ -87,6 +94,8 @@ const UserInfo = (props) => {
   const [livestreamViews, setLivestreamViews] = useState(0);
 
   const [minting, setMinting] = useState(null);
+  const [mintingProgress, setMintingProgress] = useState(0);
+
   const [isNFT, setIsNFT] = useState(true);
   const [NFTprice, setPrice] = useState(0);
   const [show, setShow] = useState(false);
@@ -94,8 +103,23 @@ const UserInfo = (props) => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const [sharable_data, setsharable_data] = useState();
+  const [tokenId, setTokenId] = useState(null);
+  const [formData, setFormData] = useState(null);
 
   const text = 'Copy Link To Clipboard';
+
+  const [video, setVideo] = useState({
+    videoName: '',
+    videoImage: '',
+    videoFile: '',
+    category: '',
+    ratings: '',
+    tags: [],
+    description: '',
+    allowAttribution: '',
+    commercialUse: '',
+    derivativeWorks: '',
+  });
 
   useEffect(() => {
     if (user && user.multistream_platform) {
@@ -270,7 +294,8 @@ const UserInfo = (props) => {
       uploaded += size;
       const pct = totalSize / uploaded;
 
-      setUploading(10 - pct);
+      let progress = Math.min(pct * 100, 100).toFixed(2);
+      setUploading(progress);
       console.log(`Uploading... ${Math.min(pct * 100, 100).toFixed(2)}% complete`);
     };
 
@@ -344,6 +369,53 @@ const UserInfo = (props) => {
     // eslint-disable-next-line
   }, [recordvideo.videoFile]);
 
+  const handleNFT = () => {
+    setIsNFT(!isNFT);
+  };
+
+  useEffect(() => {
+    async function uploadVideoToDB() {}
+
+    console.log('TOKEN ID', tokenId);
+    if (tokenId) {
+      dispatch(loadUser());
+      formData.append('tokenId', tokenId);
+      console.log('Saving FIles to DB', formData);
+      axios
+        .post(`${process.env.REACT_APP_SERVER_URL}/upload_video`, formData, {
+          headers: {
+            'content-type': 'multipart/form-data',
+            'auth-token': localStorage.getItem('authtoken'),
+          },
+        })
+        .then((res) => {
+          setMintingProgress(100);
+          axios
+            .get(`${process.env.REACT_APP_SERVER_URL}/user/getLoggedInUser`, tokenConfig())
+            .then((res) => {
+              let latestVideoId = res.data.videos[res.data.videos.length - 1].videoId;
+              setsharable_data(
+                `${process.env.REACT_APP_CLIENT_URL}/playback/${res.data.username}/${latestVideoId}`,
+              );
+              setShow(true);
+            });
+
+          setVideo({
+            videoName: '',
+            videoImage: '',
+            videoFile: '',
+            category: '',
+            ratings: '',
+            tags: [],
+            description: '',
+            allowAttribution: '',
+            commercialUse: '',
+            derivativeWorks: '',
+          }); // reset the form
+        });
+    }
+  }, [tokenId]);
+
   const mintNFT = () => {
     // const videoFile = new File(chunks, `${recordvideo.videoName}.webm`, { type: 'video/webm' });
     // console.log(videoFile.size);
@@ -384,6 +456,30 @@ const UserInfo = (props) => {
         console.log('stored files with cid:', cid);
 
         let url = 'https://ipfs.infura.io/ipfs/' + cid + '/meta.json';
+
+        //saveVideoDetails to FormData
+        let formData = new FormData(); // Currently empty
+        formData.append('userName', user.username);
+        formData.append('userImage', user.profile_image);
+
+        formData.append('videoName', recordvideo.videoName);
+
+        formData.append('description', recordvideo.description);
+
+        formData.append('category', category);
+
+        // formData.append('allowAttribution', allowAttribution);
+        // formData.append('commercialUse', commercialUse);
+        // formData.append('derivativeWorks', derivativeWorks);
+
+        formData.append('videoFile', recordvideo.videoFile);
+        formData.append('videoImage', user.thumbnail);
+        formData.append('videoHash', video.cid);
+
+        formData.append('meta_url', cid); // meta_url is the IPFS hash of the meta.json file
+
+        setFormData(formData);
+
         createToken(url, metadata);
       });
     }
@@ -411,16 +507,22 @@ const UserInfo = (props) => {
           .then(async (res) => {
             console.log('#transaction : ', res);
             tokenId = res.events.Transfer.returnValues.tokenId;
-
-            setMinting(res.transactionHash);
-
+            setMinting('token created');
+            setMintingProgress(33);
             console.log('#token created : ', tokenId);
-            contract.methods
-              .createMarketItem(tokenId, ethers.utils.parseUnits(recordvideo.price, 'ether'))
+
+            setTokenId(tokenId);
+
+            await contract.methods
+              .createMarketItem(
+                res.events.Transfer.returnValues.tokenId,
+                ethers.utils.parseUnits(recordvideo.price, 'ether'),
+              )
               .send({ from: user.wallet_id })
               .then(async (res) => {
-                //formData.append('tokenId', tokenId);
                 setShow(true);
+                setMinting(res.transactionHash);
+                setMintingProgress(66);
               });
           });
       })
@@ -786,22 +888,18 @@ const UserInfo = (props) => {
               </div>
 
               <div className="grid grid-cols-8 gap-6 sm:grid-cols-8">
-                <div className="lg:col-span-4 col-span-8 sm:col-span-4">
+                <div className="lg:col-span-4 col-span-8  sm:col-span-4">
                   <label
-                    htmlFor="videoName"
-                    className="block mr-2 2xl:text-sm text-sm lg:text-xs font-medium dark:text-gray-100 text-gray-700"
+                    htmlFor="company-website"
+                    className="block 2xl:text-sm text-sm lg:text-xs font-medium dark:text-gray-100 text-gray-700"
                   >
-                    Royality
+                    Category
                   </label>
-                  <div className="mt-1 flex rounded-md shadow-sm">
-                    <input
-                      type="text"
-                      name="royality"
-                      id="royality"
-                      value={recordvideo.royality}
-                      onChange={handleVideoInputs}
-                      className="focus:ring-dbeats-dark-primary border dark:border-dbeats-alt border-gray-300 dark:bg-dbeats-dark-primary ring-dbeats-dark-secondary  ring-0   flex-1 block w-full rounded-md sm:text-sm  "
-                      placeholder=""
+                  <div className="flex rounded-md shadow-sm">
+                    <Dropdown
+                      data={category}
+                      setSelected={setSelectedCategory}
+                      getSelected={selectedCategory}
                     />
                   </div>
                 </div>
@@ -821,23 +919,6 @@ const UserInfo = (props) => {
                       onChange={handleVideoInputs}
                       className="focus:ring-dbeats-dark-primary border dark:border-dbeats-alt border-gray-300 dark:bg-dbeats-dark-primary ring-dbeats-dark-secondary  ring-0   flex-1 block w-full rounded-md sm:text-sm  "
                       placeholder=""
-                    />
-                  </div>
-                </div>
-              </div>
-              <div className="grid grid-cols-8 gap-6 sm:grid-cols-8">
-                <div className="lg:col-span-4 col-span-8  sm:col-span-4">
-                  <label
-                    htmlFor="company-website"
-                    className="block 2xl:text-sm text-sm lg:text-xs font-medium dark:text-gray-100 text-gray-700"
-                  >
-                    Category
-                  </label>
-                  <div className="flex rounded-md shadow-sm">
-                    <Dropdown
-                      data={category}
-                      setSelected={setSelectedCategory}
-                      getSelected={selectedCategory}
                     />
                   </div>
                 </div>
@@ -866,7 +947,7 @@ const UserInfo = (props) => {
               <div className="float-right pt-20 flex items-center">
                 {recordvideo.cid != null ? (
                   <>
-                    <a
+                    {/* <a
                       className=" text-white cursor-pointer mr-2 underline"
                       target="_blank"
                       rel="noopener noreferrer"
@@ -874,14 +955,124 @@ const UserInfo = (props) => {
                     >
                       Click here to Download
                     </a>
+
+                     */}
+
+                    <div className="flex flex-col text-center">
+                      <div
+                        className={`${minting === true ? 'block' : 'hidden'} mx-3 text-white my-5 `}
+                      >
+                        👻 Confirm NFT Mint on the next Popup
+                      </div>
+                      {minting === 'token created' ? (
+                        <div className={`  mx-3 text-white my-5 `}>
+                          ✅ NFT Token Created Successfully. Confirm Market Listing on the Popup
+                        </div>
+                      ) : null}
+
+                      <div
+                        className={`${
+                          mintingProgress === 66 ? 'block' : 'hidden'
+                        } text-center flex mx-3 my-5`}
+                      >
+                        <p className="no-underline  text-white">Wrapping Up Things &nbsp;</p>
+                        <p className="no-underline  text-white"> Please Wait...</p>
+                      </div>
+
+                      <div
+                        className={`${
+                          minting !== null &&
+                          minting !== true &&
+                          mintingProgress === 100 &&
+                          minting !== 'token created'
+                            ? 'block'
+                            : 'hidden'
+                        } text-center flex mx-3 my-5`}
+                      >
+                        <p className="no-underline  text-dbeats-light">🚀 NFT Minted &nbsp;</p>
+                        <a
+                          target={'_blank'}
+                          rel="noopener noreferrer "
+                          className="dark:text-dbeats-light cursor-pointer underline  "
+                          href={`https://polygonscan.com/tx/${minting}`}
+                        >
+                          Check on Polygonscan
+                        </a>
+                      </div>
+                      <ProgressBar
+                        className="w-full mx-auto"
+                        percent={mintingProgress}
+                        transitionDuration={1000}
+                        filledBackground="linear-gradient(to right,  #31c48D, #3f83f8)"
+                      >
+                        <Step transition="scale">
+                          {({ accomplished }) => (
+                            <img
+                              style={{ filter: `grayscale(${accomplished ? 0 : 80}%)` }}
+                              className="w-6"
+                              src={icon3}
+                            />
+                          )}
+                        </Step>
+                        <Step transition="scale">
+                          {({ accomplished }) => (
+                            <img
+                              style={{ filter: `grayscale(${accomplished ? 0 : 80}%)` }}
+                              className="w-8"
+                              src={icon2}
+                            />
+                          )}
+                        </Step>
+                        <Step transition="scale">
+                          {({ accomplished }) => (
+                            <img
+                              style={{ filter: `grayscale(${accomplished ? 0 : 80}%)` }}
+                              className="w-6"
+                              src={icon1}
+                            />
+                          )}
+                        </Step>
+                        <Step transition="scale">
+                          {({ accomplished }) => (
+                            <img
+                              style={{ filter: `grayscale(${accomplished ? 0 : 80}%)` }}
+                              width="30"
+                              src={icon1}
+                            />
+                          )}
+                        </Step>
+                      </ProgressBar>
+                    </div>
                   </>
                 ) : null}
+
                 <div
-                  onClick={mintNFT}
+                  hidden={hideButton}
+                  onClick={() => {
+                    mintNFT();
+                    setHideButton(true);
+                  }}
                   className="w-max font-bold cursor-pointer px-12 nowrap py-2 rounded-md text-md text-white bg-dbeats-light"
                 >
                   Mint NFT
                 </div>
+
+                {recordvideo.cid == null ? (
+                  <div hidden={!hideButton} className=" mx-5 flex items-center w-64">
+                    <input
+                      type="range"
+                      defaultValue={uploading}
+                      min="0"
+                      max="100"
+                      hidden={!hideButton}
+                      className="appearance-none cursor-pointer w-full h-3 bg-green-400 
+                font-white rounded-full slider-thumb  backdrop-blur-md"
+                    />
+                    <p className="mx-2 text-base font-medium text-white" hidden={!hideButton}>
+                      {Math.round(uploading)}%
+                    </p>
+                  </div>
+                ) : null}
               </div>
             </div>
           </div>
