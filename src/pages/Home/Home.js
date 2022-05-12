@@ -467,7 +467,7 @@ const Home = () => {
                       })
                     : null}
                 </Splide>
-                <ReferAFriend className="z-500 " />
+                {user ? <ReferAFriend className="z-500 " /> : null}
               </div>
             </div>
           </div>
