@@ -257,7 +257,7 @@ export default function App() {
                   <Referral />
                 </Route>
 
-                <Route exact path="/referred-by/:username">
+                <Route exact path="/user/referred-by/:username">
                   {/* <OnboardingModal /> */}
                   <TopLoader page="home" />
                   <NavBar />

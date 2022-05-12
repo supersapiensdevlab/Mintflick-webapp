@@ -43,11 +43,12 @@ const Home = () => {
   // const [latestUploads, setLatestUploads] = useState(null);
 
   const params = useParams();
-
+  const urlUsername = params.username;
+  //localStorage.setItem('referrer', urlUsername);
   useEffect(() => {
     if (params.username) {
-      const urlUsername = params.username;
       localStorage.setItem('referrer', urlUsername);
+      console.log('referrer', urlUsername);
       axios
         .post(`${process.env.REACT_APP_SERVER_URL}/user/referred-by/${urlUsername}`)
         .then((value) => {
@@ -56,6 +57,7 @@ const Home = () => {
         .catch((err) => {});
     }
   }, [params.username]);
+
   Splide.defaults = {
     type: 'loop',
     perPage: 2,
