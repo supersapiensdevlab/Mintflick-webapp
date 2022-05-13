@@ -54,6 +54,7 @@ import useWeb3Modal from './hooks/useWeb3Modal';
 // Redux
 import { loadUser } from './actions/userActions';
 import SpinGame from './pages/SpinGame/SpinGame';
+import Referral from './pages/Referral/Referral';
 
 export default function App() {
   const user = useSelector((state) => state.User.user);
@@ -247,6 +248,24 @@ export default function App() {
                   <NavBar />
                   <PinnedPanel />
                   <SpinGame />
+                </Route>
+
+                <Route exact path="/referral">
+                  <TopLoader page="referral" />
+                  <NavBar />
+                  <PinnedPanel />
+                  <Referral />
+                </Route>
+
+                <Route exact path="/user/referred-by/:username">
+                  {/* <OnboardingModal /> */}
+                  <TopLoader page="home" />
+                  <NavBar />
+                  <PinnedPanel />
+                  {userType === 0 ? <VideoHome /> : null}
+
+                  {userType === 1 ? <GamerHome /> : null}
+                  {userType === 2 ? <VideoHome /> : null}
                 </Route>
 
                 {/* ADMIN ROUTES */}

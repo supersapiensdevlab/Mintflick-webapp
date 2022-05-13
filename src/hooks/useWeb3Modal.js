@@ -84,6 +84,7 @@ const useWeb3Modal = (config = {}) => {
         name: userInfo.name,
         email: userInfo.email,
         profileImage: userInfo.profileImage,
+        referrer: localStorage.getItem('referrer') || null,
       };
       await axios
         .post(`${process.env.REACT_APP_SERVER_URL}/user/getuser_by_wallet`, userData, {})

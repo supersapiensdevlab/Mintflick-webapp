@@ -4,6 +4,10 @@ import './SpinGame.css';
 import Confetti from './Confetti';
 
 import useWindowSize from 'react-use-window-size';
+import Lottie from 'lottie-react';
+import wheel from '../../assets/graphics/wheel.json';
+
+import fireworks from '../../assets/graphics/fireworks.json';
 
 function SpinGame() {
   const [isSpinning, setIsSpinning] = useState(false);
@@ -119,6 +123,18 @@ function SpinGame() {
           {win && <div className="mt-5 text-center text-2xl text-white">You Won</div>}
         </div>
       </div>
+      <Lottie
+        className="w-1/2 absolute bottom-0 sm:h-1/2 right-1/2"
+        autoplay={true}
+        loop={true}
+        animationData={fireworks}
+      />
+      <Lottie
+        className="w-1/2 absolute bottom-0 sm:h-1/2 left-1/2"
+        autoplay={true}
+        loop={true}
+        animationData={wheel}
+      />
     </>
   );
 }

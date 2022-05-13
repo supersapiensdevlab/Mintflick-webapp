@@ -51,6 +51,9 @@ const NFTCard = ({ nft, buyNft, address }) => {
   const [myPost, setMyPost] = useState(false);
   const [myReport, setMyReport] = useState(null);
   const [commentDisabled, setCommentDisabled] = useState(false);
+
+  const [type, setType] = useState();
+
   let sharable_data = `${process.env.REACT_APP_CLIENT_URL}/profile/${nft.username}`;
   useEffect(() => {
     async function getuser_by_wallet() {
@@ -63,7 +66,7 @@ const NFTCard = ({ nft, buyNft, address }) => {
       //Fetch Seller Details
       await axios
         .post(`${process.env.REACT_APP_SERVER_URL}/user/getuser_by_wallet`, userData, {})
-        .then((value) => {
+        .then(async (value) => {
           // window.localStorage.setItem('authtoken', JSON.stringify(value.data.jwtToken));
           // //window.location.href = '/';
           //console.log(value);
@@ -79,7 +82,7 @@ const NFTCard = ({ nft, buyNft, address }) => {
             setOwnerDetails('DAO');
           } else {
             //console.log('OWNER :', OwnerData, ownerDetails);
-            axios
+            await axios
               .post(`${process.env.REACT_APP_SERVER_URL}/user/getuser_by_wallet`, OwnerData, {})
               .then((value) => {
                 // window.localStorage.setItem('authtoken', JSON.stringify(value.data.jwtToken));
@@ -104,9 +107,10 @@ const NFTCard = ({ nft, buyNft, address }) => {
     setListingPrice(nft.price);
   }, []);
   useEffect(() => {
-    if (cardDetails) {
+    if (cardDetails && nft.external_url) {
       //console.log('creators details', cardDetails);
       const extension = nft.external_url.split(/[#?]/)[0].split('.').pop().trim();
+      console.log('extension', extension, nft.tokenId);
       if (
         extension == 'mp4' ||
         extension == 'mkv' ||
@@ -123,6 +127,39 @@ const NFTCard = ({ nft, buyNft, address }) => {
               temp.comments = temprevcomments;
             }
             setConentData(temp);
+            setType('video');
+            if (cardDetails.user._id == user._id) {
+              setMyPost(true);
+            }
+          }
+        });
+      } else if (extension == 'mp3' || extension == 'wav' || extension == 'ogg') {
+        cardDetails.user.tracks.map((track) => {
+          if (track.tokenId == nft.tokenId) {
+            let temp = track;
+            // for reversing the comments of tracks
+            if (temp.comments) {
+              let temprevcomments = track.comments.reverse();
+              temp.comments = temprevcomments;
+            }
+            setConentData(temp);
+            setType('track');
+            if (cardDetails.user._id == user._id) {
+              setMyPost(true);
+            }
+          }
+        });
+      } else if (extension == 'jpg' || extension == 'png' || extension == 'jpeg') {
+        cardDetails.user.images.map((image) => {
+          if (image.tokenId == nft.tokenId) {
+            let temp = image;
+            // for reversing the comments of images
+            if (temp.comments) {
+              let temprevcomments = image.comments.reverse();
+              temp.comments = temprevcomments;
+            }
+            setConentData(temp);
+            setType('image');
             if (cardDetails.user._id == user._id) {
               setMyPost(true);
             }
@@ -131,6 +168,10 @@ const NFTCard = ({ nft, buyNft, address }) => {
       }
     }
   }, [cardDetails]);
+
+  useEffect(() => {
+    if (type) console.log('Type', type);
+  }, [type]);
 
   useEffect(() => {
     if (contentData && cardDetails && !myPost) {

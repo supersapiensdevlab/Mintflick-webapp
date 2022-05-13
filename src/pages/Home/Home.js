@@ -11,12 +11,14 @@ import Dropdown from '../../component/dropdown.component';
 import FeedbackForm from '../../component/form/feedbackForm';
 import HowToUse from '../../component/form/howToUse';
 import GamesToolbar from '../../component/form/games-toolbar';
+import ReferAFriend from '../../component/form/ReferAFriend';
+
 import MainToolbar from '../../component/Toolbar/main-toolbar';
 import animationData from '../../lotties/gamers.json';
 import ResponsiveCarousel from './Cards/HomeSlider';
 import LiveCard from './Cards/LiveCard';
 import NFTCard from '../Profile/ProfileSections/Store/NFT_Store';
-
+import { useParams } from 'react-router-dom';
 import * as Scroll from 'react-scroll';
 import { loadTrending } from '../../actions/trendingActions';
 import NFTStore from '../Profile/ProfileSections/Store/NFT_Store';
@@ -39,6 +41,22 @@ const Home = () => {
     },
   };
   // const [latestUploads, setLatestUploads] = useState(null);
+
+  const params = useParams();
+  const urlUsername = params.username;
+  //localStorage.setItem('referrer', urlUsername);
+  useEffect(() => {
+    if (params.username) {
+      localStorage.setItem('referrer', urlUsername);
+      console.log('referrer', urlUsername);
+      axios
+        .post(`${process.env.REACT_APP_SERVER_URL}/user/referred-by/${urlUsername}`)
+        .then((value) => {
+          console.log(value);
+        })
+        .catch((err) => {});
+    }
+  }, [params.username]);
 
   Splide.defaults = {
     type: 'loop',
@@ -451,6 +469,7 @@ const Home = () => {
                       })
                     : null}
                 </Splide>
+                {user ? <ReferAFriend className="z-500 " /> : null}
               </div>
             </div>
           </div>
