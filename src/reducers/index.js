@@ -5,6 +5,7 @@ import User from './userReducer';
 import Trending from './trendingReducer'
 import { combineReducers } from 'redux';
 import web3Reducer from './web3Reducer';
+import nftUserData from './nftUsersDataReducer';
 
 const rootReducer = combineReducers({
   toggleDarkMode,
@@ -12,7 +13,8 @@ const rootReducer = combineReducers({
   toggleUserType,
   User,
   web3Reducer,
-  Trending
+  Trending,
+  nftUserData
 });
 
 export default rootReducer;

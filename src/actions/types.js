@@ -30,3 +30,7 @@ export const CREATE_POST = 'CREATE_POST';
 
 //for sharable Data
 export const SHARABLE = 'SHARABLE';
+
+// nftUserDataActions
+export const NFT_USER_DATA_LOADING = 'NFT_USER_DATA_LOADING';
+export const NFT_USER_DATA_LOADED = 'NFT_USER_DATA_LOADED';
