@@ -98,7 +98,7 @@ export default function NFTStore(props) {
 
   useEffect(async () => {
     setLoading(true);
-    for (var i = 0; i < (nfts.length > 5 ? 5 : nfts.length); i++) {
+    for (var i = 0; i < (nfts.length > 15 ? 15 : nfts.length); i++) {
       console.log('only five times')
       let creator_data = tempusercache.find((obj) => {
         if (obj.user) {
@@ -162,7 +162,7 @@ export default function NFTStore(props) {
       });
    
     }
-    setCurrentPage((prevState) => prevState + 1);
+    setCurrentPage((prevState) => prevState + 3);
     setLoading(false);
   }, [nfts]);
   const loadMoreNFTData = async () => {
@@ -313,7 +313,7 @@ export default function NFTStore(props) {
     <>
       {nfts ? (
         <div className="h-full lg:col-span-1 col-span-6 w-full     ">
-          {/* <h1 className="   dark:text-gray-300 w-full flex   text-dbeats-dark   px-3">
+        {/* <h1 className="   dark:text-gray-300 w-full flex   text-dbeats-dark   px-3">
           NFTs owned by you :{' '}
         </h1>
         <UserOwnedAssets resellOwnedItem={resellOwnedItem}></UserOwnedAssets>
@@ -326,8 +326,8 @@ export default function NFTStore(props) {
               props.address
                 ? 'grid sm:grid-cols-1  md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 grid-cols-1'
                 : ' grid grid-flow-row  grid-cols-1 '
-            }  w-full   sm:px-3  h-screen`}
-          >
+              }  w-full   sm:px-3  h-screen`}
+              >
             <InfiniteScroll
               pageStart={0}
               loadMore={()=>{
