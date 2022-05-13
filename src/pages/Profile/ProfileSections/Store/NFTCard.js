@@ -57,41 +57,45 @@ const NFTCard = ({ nft, buyNft, address }) => {
   let sharable_data = `${process.env.REACT_APP_CLIENT_URL}/profile/${nft.username}`;
   useEffect(() => {
     async function getuser_by_wallet() {
-      // console.log(nft);
-      const userData = {
-        walletId: nft.creator,
-      };
-      //console.log(nft);
-      //console.log('TOKEN ID', nft.tokenId);
-      //Fetch Seller Details
-      await axios
-        .post(`${process.env.REACT_APP_SERVER_URL}/user/getuser_by_wallet`, userData, {})
-        .then(async (value) => {
-          // window.localStorage.setItem('authtoken', JSON.stringify(value.data.jwtToken));
-          // //window.location.href = '/';
-          //console.log(value);
-          //console.log('ownerdetails', ownerDetails);
-          setCardDetails(value.data);
+      // // console.log(nft);
+      // const userData = {
+      //   walletId: nft.creator,
+      // };
+      // //console.log(nft);
+      // //console.log('TOKEN ID', nft.tokenId);
+      // //Fetch Seller Details
+      // await axios
+      //   .post(`${process.env.REACT_APP_SERVER_URL}/user/getuser_by_wallet`, userData, {})
+      //   .then(async (value) => {
+      //     // window.localStorage.setItem('authtoken', JSON.stringify(value.data.jwtToken));
+      //     // //window.location.href = '/';
+      //     //console.log(value);
+      //     //console.log('ownerdetails', ownerDetails);
+      if(nft.creator_data){
+          setCardDetails(nft.creator_data );
+        }
 
           //Fetch Owner details
           const OwnerData = {
             walletId: nft.owner,
           };
           //console.log('NFT DATA:', nft);
-          if (ownerDetails === nftmarketaddress) {
+          if (nft.owner === nftmarketaddress) {
             setOwnerDetails('DAO');
           } else {
             //console.log('OWNER :', OwnerData, ownerDetails);
-            await axios
-              .post(`${process.env.REACT_APP_SERVER_URL}/user/getuser_by_wallet`, OwnerData, {})
-              .then((value) => {
-                // window.localStorage.setItem('authtoken', JSON.stringify(value.data.jwtToken));
-                // //window.location.href = '/';
-                setOwnerDetails(value.data);
+            // await axios
+            //   .post(`${process.env.REACT_APP_SERVER_URL}/user/getuser_by_wallet`, OwnerData, {})
+            //   .then((value) => {
+            //     // window.localStorage.setItem('authtoken', JSON.stringify(value.data.jwtToken));
+            //     // //window.location.href = '/';
+            if(nft.owner_data){
+                setOwnerDetails(nft.owner_data);
+            }
                 //console.log('OWNER DATA : ', OwnerData);
-              });
+              // });
           }
-        });
+        // });
     }
 
     getuser_by_wallet();
@@ -110,7 +114,7 @@ const NFTCard = ({ nft, buyNft, address }) => {
     if (cardDetails && nft.external_url) {
       //console.log('creators details', cardDetails);
       const extension = nft.external_url.split(/[#?]/)[0].split('.').pop().trim();
-      console.log('extension', extension, nft.tokenId);
+      // console.log('extension', extension, nft.tokenId);
       if (
         extension == 'mp4' ||
         extension == 'mkv' ||
@@ -169,9 +173,9 @@ const NFTCard = ({ nft, buyNft, address }) => {
     }
   }, [cardDetails]);
 
-  useEffect(() => {
-    if (type) console.log('Type', type);
-  }, [type]);
+  // useEffect(() => {
+  //   if (type) console.log('Type', type);
+  // }, [type]);
 
   useEffect(() => {
     if (contentData && cardDetails && !myPost) {
