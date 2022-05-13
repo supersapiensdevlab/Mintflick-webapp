@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import personImg from '../../assets/images/profile.svg';
 import useWeb3Modal from '../../hooks/useWeb3Modal';
 import { useHistory } from 'react-router-dom';
+import { setMaxVisible } from 'noty';
 
 const PinnedPanel = () => {
   const darkMode = useSelector((state) => state.toggleDarkMode);
@@ -20,7 +21,7 @@ const PinnedPanel = () => {
         axios
           .get(`${process.env.REACT_APP_SERVER_URL}/user/${userdata.pinned[i]}`)
           .then((value) => {
-            setPinnedData((oldArray) => [...oldArray, value.data]);
+            setPinnedData([value.data]);
           });
       }
     }
