@@ -141,7 +141,10 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
               Settings
             </div>
             <div
-              onClick={handleClose}
+              onClick={() => {
+                handleClose();
+                setHideSave(true);
+              }}
               className=" rounded-3xl group w-max   p-1  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-secondary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
             >
               <span className="  text-black dark:text-white  flex rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:nm-inset-dbeats-dark-secondary ">
@@ -211,7 +214,7 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
                             name="perks"
                             id="perks"
                             onFocus={() => setHideSave(false)}
-                            onBlur={() => setHideSave(true)}
+                            // onBlur={() => setHideSave(true)}
                             placeholder="Perks"
                             value={
                               currentPlan === 'silver'
@@ -242,7 +245,7 @@ const ProfileUpdateModal = ({ show, handleClose, userData, darkMode, setDisplayN
                             min="0"
                             max="1000"
                             onFocus={() => setHideSave(false)}
-                            onBlur={() => setHideSave(true)}
+                            // onBlur={() => setHideSave(true)}
                             onChange={handleUserInputs}
                             value={
                               currentPlan === 'silver'
