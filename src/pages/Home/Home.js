@@ -132,7 +132,7 @@ const Home = () => {
       setSlides(slidesValue);
     });
     // fetchData();
-    dispatch(loadTrending());
+    // dispatch(loadTrending());
 
     axios.get(`${process.env.REACT_APP_SERVER_URL}/get_verifiedusers`).then(async (repos) => {
       let data = [];
