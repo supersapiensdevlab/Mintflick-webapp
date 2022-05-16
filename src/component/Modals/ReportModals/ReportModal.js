@@ -21,36 +21,36 @@ function ReportModal({
         ]);
         handleShowReport2(true);
         handleClose(false);
-        setReportSectionValue(0)
+        setReportSectionValue(0);
         break;
       case '2':
         setReportSection(['Violent Threat', 'Animal abuse', 'Death, severe injury, dangerous']);
         handleShowReport2(true);
         handleClose(false);
-        setReportSectionValue(0)
+        setReportSectionValue(0);
         break;
       case '3':
         setReportSection(['Animals', 'Firearms', 'Fake health documents']);
         handleShowReport2(true);
         handleClose(false);
-        setReportSectionValue(0)
+        setReportSectionValue(0);
         break;
       case '4':
         setReportSection(['Report Privacy']);
         handleShowReport2(true);
         handleClose(false);
-        setReportSectionValue(0)
+        setReportSectionValue(0);
         break;
       case '5':
         setReportSection(['Spam']);
         handleShowReport2(true);
         handleClose(false);
-        setReportSectionValue(0)
+        setReportSectionValue(0);
         break;
       case '6':
         setShowOtherReport(true);
         handleClose(false);
-        setReportSectionValue(0)
+        setReportSectionValue(0);
         break;
     }
   }, [reportSectionValue]);
@@ -96,9 +96,8 @@ function ReportModal({
       isOpen={show}
       className={`${'dark'} border lg:w-1/3  w-5/6  text-white h-max md:w-max rounded-lg bg-dbeats-dark-alt mx-auto absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 shadow `}
     >
-      <div className=" py-2 flex text-white items-center border-b-2 border-white">
-        <div className="text-center w-60 flex-1 font-bold">Report</div>
-
+      <h2 className="flex justify-between items-center w-full 2xl:text-2xl lg:text-md py-4 2xl:py-4 lg:py-2  pt-7  text-center relative  ">
+        <div className="col-span-5 ml-72 text-gray-900 dark:text-gray-100 font-bold">Report</div>
         <div
           className="rounded-3xl group w-max   p-2  mx-1 mr-8 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-secondary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
           onClick={() => handleClose(false)}
@@ -107,9 +106,9 @@ function ReportModal({
             <i className="fas fa-times"></i>
           </span>
         </div>
-      </div>
-      <h1 className="pt-2 pl-2 text-white text-xl mb-2">Please select a problem</h1>
-      <div className=" pl-3 mb-2 text-white text-lg">
+      </h2>
+      <h1 className="pl-7 text-white text-xl mb-2">Why are you reporting this post?</h1>
+      <div className=" pl-7 mb-5 text-white text-lg">
         <RadioGroup value={reportSectionValue} onChange={setReportSectionValue} className=" w-max">
           <RadioGroup.Option value="1" className="p-1 cursor-pointer flex items-center">
             {({ checked }) => (
@@ -229,7 +228,7 @@ function ReportModal({
           <RadioGroup.Option value="6" className="p-1 cursor-pointer flex items-center">
             {({ checked }) => (
               <>
-                <span className={checked ? 'text-dbeats-light' : ''}>Something Else</span>
+                <span className={checked ? 'text-dbeats-light' : ''}>Others</span>
                 {checked ? (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"

@@ -1576,7 +1576,7 @@ const NFTCard = ({ nft, buyNft, address }) => {
         <div className={`${darkMode && 'dark'} border rounded-lg`}>
           <Container className="2xl:px-5 px-5 lg:px-1 pb-4 dark:bg-dbeats-dark-alt rounded-lg">
             <Row>
-              <h2 className="flex justify-around w-full 2xl:text-2xl lg:text-md py-4 2xl:py-6 lg:py-2  pt-7  text-center relative  ">
+              <h2 className="flex justify-around items-center w-full 2xl:text-2xl lg:text-md py-4 2xl:py-6 lg:py-2  pt-7  text-center relative  ">
                 <div
                   onClick={() => {
                     setReportValue(null);
