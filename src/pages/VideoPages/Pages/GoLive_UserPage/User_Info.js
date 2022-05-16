@@ -377,7 +377,7 @@ const UserInfo = (props) => {
     async function uploadVideoToDB() {}
 
     console.log('TOKEN ID', tokenId);
-    if (tokenId) {
+    if (tokenId && mintingProgress == 66) {
       dispatch(loadUser());
       formData.append('tokenId', tokenId);
       console.log('Saving FIles to DB', formData);
@@ -414,7 +414,7 @@ const UserInfo = (props) => {
           }); // reset the form
         });
     }
-  }, [tokenId]);
+  }, [mintingProgress]);
 
   const mintNFT = () => {
     // const videoFile = new File(chunks, `${recordvideo.videoName}.webm`, { type: 'video/webm' });
@@ -445,7 +445,7 @@ const UserInfo = (props) => {
               value: recordvideo.category,
             },
           ],
-          animation_url: 'https://ipfs.infura.io/ipfs/' + recordvideo.cid + '/video.mp4',
+          animation_url: 'https://ipfs.infura.io/ipfs/' + recordvideo.cid + '/video.webm',
         };
 
         const blob = new Blob([JSON.stringify(metadata)], { type: 'application/json' });
@@ -472,8 +472,10 @@ const UserInfo = (props) => {
         // formData.append('commercialUse', commercialUse);
         // formData.append('derivativeWorks', derivativeWorks);
 
-        formData.append('videoFile', recordvideo.videoFile);
-        formData.append('videoImage', user.thumbnail);
+        formData.append('videoFile', recordvideo.videoFile, 'video.webm');
+        //formData.append('videoImage', user.thumbnail, 'thumbnail.jpg');
+        formData.append('videoImage', recordvideo.videoFile, 'video.webm');
+
         formData.append('videoHash', video.cid);
 
         formData.append('meta_url', cid); // meta_url is the IPFS hash of the meta.json file
@@ -491,7 +493,7 @@ const UserInfo = (props) => {
       apiKey: 'Ooz6qQnPL.10a08ea0-3611-432d-a7de-34cf9c44b49b',
     });
     console.log(provider);
-    console.log(biconomy);
+    //console.log(biconomy);
 
     const web3 = new Web3(biconomy);
     window.web3 = web3;
