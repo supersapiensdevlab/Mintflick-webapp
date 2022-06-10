@@ -38,7 +38,6 @@
     "@walletconnect/web3-provider": "^1.0.8",
     "@web3auth/base": "^0.3.1",
     "@web3auth/web3auth": "^0.3.3",
-    "autoprefixer": "^9.8.8",
     "axios": "^0.21.1",
     "bcryptjs": "^2.4.3",
     "chai": "^4.3.4",
@@ -65,7 +64,6 @@
     "nft.storage": "^3.4.0",
     "noty": "^3.2.0-beta-deprecated",
     "npm": "^8.5.3",
-    "postcss": "^7.0.39",
     "pretty-bytes": "^5.6.0",
     "react": "^17.0.2",
     "react-audio-player": "^0.17.0",
@@ -106,7 +104,6 @@
     "screenfull": "^5.1.0",
     "socket.io-client": "^4.4.1",
     "solana": "^1.0.4",
-    "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.2.17",
     "tailwindcss-filters": "^3.0.0",
     "tailwindcss-important": "^1.0.0",
     "tailwindcss-neumorphism": "^0.1.0",
@@ -115,6 +112,7 @@
     "wavesurfer.js": "^5.2.0",
     "web-vitals": "^1.0.1",
     "web3": "^1.7.3",
+    "web3-providers-http": "^1.7.3",
     "web3.storage": "^3.3.2",
     "web3modal": "^1.9.4",
     "webm-to-mp4": "^1.0.0",
@@ -145,10 +143,13 @@
   ],
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.0.4",
+    "autoprefixer": "^9.8.8",
     "eslint-plugin-react": "^7.29.3",
     "eslint-plugin-react-hooks": "^4.5.0",
     "ethereum-waffle": "^3.4.0",
+    "postcss": "^7.0.39",
     "prettier": "^2.4.1",
-    "react-error-overlay": "^6.0.9"
+    "react-error-overlay": "^6.0.9",
+    "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.2.17"
   }
 }
