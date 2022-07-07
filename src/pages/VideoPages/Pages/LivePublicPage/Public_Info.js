@@ -219,10 +219,7 @@ const PublicInfo = (props) => {
   }, []);
 
   useEffect(() => {
-    const socket = io(process.env.REACT_APP_VIEWS_URL, {
-      transports: ['websocket'], // you need to explicitly tell it to use websockets
-      upgrade: false,
-    });
+    const socket = io(process.env.REACT_APP_VIEWS_URL);
     socket.on('connection');
     socket.emit('joinlivestream', props.stream_id);
     socket.on('count', (details) => {
