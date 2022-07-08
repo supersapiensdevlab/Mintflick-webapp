@@ -21,7 +21,7 @@ const PinnedPanel = () => {
         axios
           .get(`${process.env.REACT_APP_SERVER_URL}/user/${userdata.pinned[i]}`)
           .then((value) => {
-            setPinnedData([value.data]);
+            setPinnedData((prev) => [...prev, value.data]);
           });
       }
     }
