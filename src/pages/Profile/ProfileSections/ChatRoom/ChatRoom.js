@@ -78,6 +78,7 @@ function ChatRoom(props) {
       const socket = io(process.env.REACT_APP_CHAT_URL, {
         transports: ['websocket', 'polling'],
         upgrade: false,
+        secure: true,
         withCredentials: true,
         extraHeaders: {
           'my-custom-header': 'abcd',
