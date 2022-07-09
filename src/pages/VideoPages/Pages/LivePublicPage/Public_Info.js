@@ -219,7 +219,15 @@ const PublicInfo = (props) => {
   }, []);
 
   useEffect(() => {
-    const socket = io("https://dbeats-live-view-heroku.herokuapp.com/");
+    const socket = io('https://dbeats-live-view-heroku.herokuapp.com/', {
+      transports: ['websocket', 'polling'],
+      upgrade: false,
+      secure: true,
+      withCredentials: true,
+      extraHeaders: {
+        'my-custom-header': 'abcd',
+      },
+    });
     socket.on('connection');
     socket.emit('joinlivestream', props.stream_id);
     socket.on('count', (details) => {
