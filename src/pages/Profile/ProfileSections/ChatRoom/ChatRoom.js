@@ -75,7 +75,8 @@ function ChatRoom(props) {
     if (user) {
       loadingRef.current.continuousStart();
       // https://dbeats-chat.herokuapp.com
-      const socket = io("https://mintflick-live-chat-heroku.herokuapp.com/", {
+      //"https://mintflick-live-chat-heroku.herokuapp.com/"
+      const socket = io(process.env.REACT_APP_CHAT_URL, {
         transports: ['websocket', 'polling'],
         upgrade: false,
         secure: true,
