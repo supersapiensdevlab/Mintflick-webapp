@@ -14,6 +14,7 @@ const PinnedPanel = () => {
   const history = useHistory();
   const [loadWeb3Modal, logoutOfWeb3Modal] = useWeb3Modal();
   const [pinnedData, setPinnedData] = useState([]);
+  const [showPinnedData, setShowPinnedData] = useState([]);
 
   useEffect(() => {
     if (userdata && userdata.pinned) {
@@ -22,11 +23,20 @@ const PinnedPanel = () => {
           .get(`${process.env.REACT_APP_SERVER_URL}/user/${userdata.pinned[i]}`)
           .then((value) => {
             setPinnedData((prev) => [...prev, value.data]);
+            window.localStorage.setItem('pinned_user', JSON.stringify(pinnedData));
           });
       }
     }
     // eslint-disable-next-line
   }, [userdata]);
+
+  useEffect(() => {
+    if (userdata) {
+      setShowPinnedData(JSON.parse(window.localStorage.getItem('pinned_user')));
+    }
+  }, [pinnedData]);
+
+  console.log(pinnedData);
 
   const handlePlusClick = async () => {
     if (userdata) {
@@ -41,9 +51,9 @@ const PinnedPanel = () => {
         className={`hidden   lg:block 2xl:pt-16 lg:pt-14 bg-white w-max shadow  z-10 h-full fixed  nm-flat-dbeats-dark-secondary  px-2  dark:text-gray-100  flex flex-col justify-center `}
       >
         {/* Subscribed User Avatar */}
-        {userdata && pinnedData ? (
+        {userdata && showPinnedData ? (
           <>
-            {pinnedData.map((pinnedUser, i) => {
+            {showPinnedData.map((pinnedUser, i) => {
               //console.log(pinnedUser.username);
               return (
                 <div key={i} className="flex justify-center content-center w-full cursor-pointer ">

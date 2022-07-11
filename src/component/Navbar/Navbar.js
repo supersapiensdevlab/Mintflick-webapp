@@ -9,6 +9,7 @@ import logoDark from '../../assets/images/dark-logo.svg';
 import CircleLogoDark from '../../assets/images/dark-logo-svg.svg';
 
 import CircleLogo from '../../assets/images/dbeats-logo.png';
+import mintflickNavbar from '../../assets/images/Logo/mintflick-navbar.svg';
 import logo from '../../assets/images/white-logo.svg';
 import useWeb3Modal from '../../hooks/useWeb3Modal';
 import getTorus from '../../hooks/useWeb3Modal';
@@ -387,25 +388,25 @@ const NavBar = () => {
             <div className="flex items-center">
               <Link to="/" className="  self-center cursor-pointer sm:flex hidden">
                 <img
-                  src={logo}
+                  src={mintflickNavbar}
                   alt="dbeats_logo"
-                  className="h-10 lg:h-7 2xl:h-10 w-max dark:hidden"
+                  className="h-112 lg:h-7 2xl:h-12 2xl:ml-5 w-max dark:hidden"
                 ></img>
                 <img
-                  src={logoDark}
+                  src={mintflickNavbar}
                   alt="dbeats_logo"
-                  className="h-10 lg:h-7 2xl:h-10 w-max hidden dark:block"
+                  className="h-10 lg:h-7 2xl:h-12 2xl:ml-5 w-max hidden dark:block"
                 ></img>
                 <span className="mr-5 text-lg font-bold   sm:ml-2"> </span>
               </Link>
               <Link to="/" className="flex self-center cursor-pointer sm:hidden ">
                 <img
-                  src={CircleLogo}
+                  src={mintflickNavbar}
                   alt="dbeats_logo"
                   className="h-10 lg:h-7 2xl:h-10 w-max dark:hidden"
                 ></img>
                 <img
-                  src={CircleLogoDark}
+                  src={mintflickNavbar}
                   alt="dbeats_logo"
                   className="h-10 lg:h-7 2xl:h-10 w-max hidden dark:block  "
                 ></img>
