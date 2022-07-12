@@ -10,7 +10,7 @@ import { useSelector } from 'react-redux';
 function LiveChat({ userp }) {
   // to get loggedin user from   localstorage
   const [loadWeb3Modal, logoutOfWeb3Modal, logoutweb3] = useWeb3Modal();
-  const user =  useSelector((state) => state.User.user); 
+  const user = useSelector((state) => state.User.user);
   const chatRef = useRef(null);
   const loadingRef = useRef(null);
   // the form state manages the form input for creating a new message
@@ -84,7 +84,7 @@ function LiveChat({ userp }) {
         room.chat.reply_to = formState.replyto;
       }
       console.log(room);
-      currentSocket.emit('live_chatMessage', room);
+      currentSocket ? currentSocket.emit('chatMessage', room) : null;
       setForm({
         message: '',
         replyto: null,
