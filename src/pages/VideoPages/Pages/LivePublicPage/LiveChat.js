@@ -36,7 +36,16 @@ function LiveChat({ userp }) {
     if (user) {
       loadingRef.current.continuousStart();
       // https://dbeats-chat.herokuapp.com
-      const socket = io(process.env.REACT_APP_CHAT_URL);
+      const socket = io(process.env.REACT_APP_CHAT_URL, {
+        transports: ['websocket', 'polling'],
+        upgrade: false,
+        secure: true,
+        withCredentials: true,
+        extraHeaders: {
+          'my-custom-header': 'abcd',
+        },
+      });
+      console.log(socket);
       setCurrentSocket(socket);
       socket.emit('live_joinroom', { user_id: user._id, room_id: userp._id });
       socket.on('live_init', (msgs) => {
@@ -63,7 +72,7 @@ function LiveChat({ userp }) {
       }
     };
     // eslint-disable-next-line
-  }, []);
+  }, [user]);
 
   // set a new message in gun, update the local state to reset the form field
   function saveMessage(e) {
@@ -84,7 +93,7 @@ function LiveChat({ userp }) {
         room.chat.reply_to = formState.replyto;
       }
       console.log(room);
-      currentSocket ? currentSocket.emit('chatMessage', room) : null;
+      currentSocket ? currentSocket.emit('live_chatMessage', room) : null;
       setForm({
         message: '',
         replyto: null,
