@@ -491,7 +491,7 @@ const PublicInfo = (props) => {
               </div>
             </div>
             <div className="  w-full col-span-1" style={{ height: '100vh' }}>
-              <LiveChat userp={userData} privateUser={user}></LiveChat>
+              {userData.username && <LiveChat userp={userData} privateUser={user}></LiveChat>}
             </div>
           </div>
 

@@ -64,7 +64,7 @@ function LiveChat({ userp }) {
         }
       });
     } else {
-      //   window.history.replaceState({}, 'Home', '/');
+      window.history.replaceState({}, 'Home', '/');
     }
     return () => {
       if (currentSocket) {
@@ -72,7 +72,7 @@ function LiveChat({ userp }) {
       }
     };
     // eslint-disable-next-line
-  }, [user]);
+  }, []);
 
   // set a new message in gun, update the local state to reset the form field
   function saveMessage(e) {
