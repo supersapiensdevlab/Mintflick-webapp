@@ -290,7 +290,7 @@ function VideoPlayer(props) {
       <Container style={{ width: '100%', height: '100%' }}>
         <div
           ref={playerContainerRef}
-          className="relative w-full 2xl:h-125 lg:h-110 md:h-120 xs:h-100 min-h-full"
+          className=" lg:pl-4 xl:pl-4 2xl:pl-7  w-full  min-h-full sticky top-0"
         >
           {location.pathname.includes('streamer') || location.pathname.includes('live') ? (
             <>

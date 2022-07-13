@@ -175,13 +175,14 @@ export default function App() {
           <div className=" ">
             <div className=" ">
               {/* {userType !== null ? '' : <OnboardingModal></OnboardingModal>} */}
-              <Tour
+              {/* <Tour
+              
                 steps={steps}
                 isOpen={showTour}
                 onRequestClose={handleTourClose}
                 accentColor="#000"
                 rounded={10}
-              />
+              /> */}
               <Switch>
                 <Route exact path="/">
                   {/* <OnboardingModal /> */}
