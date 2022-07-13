@@ -26,12 +26,12 @@ export const ShareModal = ({
 }) => {
   const darkMode = useSelector((darkmode) => darkmode.toggleDarkMode);
   return (
-    <div className="relative">
+    <div className=" ">
       <Modal
         isOpen={show}
         className={`${
           darkMode && 'dark'
-        } h-max md:w-max w-full bg-dbeats-dark-alt mx-auto absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 shadow `}
+        } h-max md:w-max w-full bg-dbeats-dark-alt mx-auto absolute bottom-0 left-1/2 transform -translate-x-1/2 lg:-translate-y-1/2 shadow z-500`}
       >
         <div className={``}>
           <h2 className="grid grid-cols-5 justify-between items-center ml-24 2xl:text-2xl lg:text-lg py-4 2xl:py-4 lg:py-2 dark:bg-dbeats-dark-alt dark:text-white">

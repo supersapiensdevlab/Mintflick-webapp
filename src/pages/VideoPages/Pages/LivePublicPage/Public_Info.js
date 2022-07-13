@@ -308,13 +308,13 @@ const PublicInfo = (props) => {
           <div
             className={`${
               darkMode && 'dark'
-            }  grid sm:grid-cols-1 lg:grid-cols-3 grid-flow-row   pb-50  lg:ml-12  bg-gradient-to-b from-blue-50 via-blue-50 to-white  dark:bg-gradient-to-b dark:from-dbeats-dark-secondary  dark:to-dbeats-dark-secondary`}
+            }  grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-3 grid-flow-row   pb-50  lg:ml-12  relative  h-full `}
           >
-            <div className=" md:col-span-2 pt-3 2xl:mt-16 xl:mt-10 lg:mt-10 mt-14 sticky top-0">
+            <div className="col-span-1 md:col-span-2 pt-3 2xl:mt-16 xl:mt-10 lg:mt-10 mt-14 sticky  top-14   z-10 lg:z-auto   ">
               <div>
                 {userData ? (
                   <VideoPlayer
-                    className="self-center lg:px-8 w-screen lg:w-full lg:mt-3 mt-0.5 "
+                    className="self-center lg:px-8 w-screen lg:w-full lg:mt-3   mt-0.5"
                     playbackUrl={playbackUrl}
                     creatorData={userData}
                     footer={true}
@@ -322,10 +322,10 @@ const PublicInfo = (props) => {
                 ) : null}
               </div>
 
-              <div className="2xl:ml-7 sm:p-2 p-3   dark:bg-dbeats-dark-red">
-                <div className=" flex  ">
-                  <div className="2xl:py-4 lg:py-2 w-full">
-                    <div className=" w-full text-left mt-0" style={{ padding: '0px' }}>
+              <div className="2xl:ml-7 sm:p-2 p-3  bg-dbeats-dark-alt shadow   ">
+                <div className=" flex sm:py-2 py-2">
+                  <div className="  w-full">
+                    <div className=" w-full text-left mt-0">
                       {userData.superfan_data ? (
                         <p className="font-semibold 2xl:text-xl lg:text-md ">
                           {userData.videos.videoName}
@@ -340,7 +340,7 @@ const PublicInfo = (props) => {
                         {user && userData ? (
                           <>
                             {' '}
-                            <div className="flex   text-black text-sm font-medium    md:py-3  py-2">
+                            <div className="flex    text-black text-sm font-medium   py-2  px-4  ">
                               <Link to={`/profile/${userData.username}/`} className="mr-4">
                                 <img
                                   src={userData.profile_image ? userData.profile_image : person}
@@ -469,7 +469,7 @@ const PublicInfo = (props) => {
                 </div>
               </div>
             </div>
-            <div className="  w-full col-span-1" style={{ height: '100vh' }}>
+            <div className="  w-full col-span-1   ">
               {userData.username && <LiveChat userp={userData} privateUser={user}></LiveChat>}
             </div>
           </div>

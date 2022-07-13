@@ -8,9 +8,7 @@ const PublicRoomPage = () => {
   return (
     <>
       <div id="outer-container" style={{ height: '100%' }}>
-        <main id="page-wrap">
-          <PublicInfo stream_id={params.username} />
-        </main>
+        <PublicInfo stream_id={params.username} />
       </div>
     </>
   );
