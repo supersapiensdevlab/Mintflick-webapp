@@ -220,7 +220,7 @@ const PublicInfo = (props) => {
 
   //https://dbeats-live-view-heroku.herokuapp.com/
   useEffect(() => {
-    const socket = io('https://dbeats-live-view-heroku.herokuapp.com/', {
+    const socket = io(`${process.env.REACT_APP_VIEWS_URL}`, {
       transports: ['websocket', 'polling'],
       upgrade: false,
       secure: true,
