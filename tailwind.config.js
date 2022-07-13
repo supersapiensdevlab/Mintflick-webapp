@@ -6,6 +6,7 @@ module.exports = {
       fontFamily: {},
       colors: {
         brand: "#2CE8E5",
+        alt: "#161616",
       },
     },
   },

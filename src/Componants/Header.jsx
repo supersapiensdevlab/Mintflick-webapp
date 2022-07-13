@@ -4,17 +4,16 @@ import TopNavigation from "./TopNavigation";
 
 function Header() {
   return (
-    <div className='absolute top-0 flex px-20 justify-between h-20 bg-gray-900/70 backdrop-blur-lg w-full rounded-b-xl shadow-lg'>
+    <div className='absolute z-50  top-0 flex px-20 justify-between h-20 bg-gray-900/70 backdrop-blur-lg w-full rounded-b-xl shadow-lg'>
       <div className='flex items-center h-full w-1/3'>
         <Main_logo></Main_logo>
-        <div className='flex flex-grow mx-8'>
+        <div className='flex items-center flex-grow  mx-8 focus:ring-2'>
           <input
             type='text'
             placeholder='Search for anything...'
-            className='input w-full max-w-lg rounded-l-full bg-gray-600 px-4'></input>
-          <button className='rounded-r-full bg-gray-600 px-4'>
-            <i class='fa fa-search' aria-hidden='true'></i>
-          </button>
+            className='input w-full max-w-lg rounded-full bg-gray-600 px-4 '></input>
+
+          <i className='fa fa-search -translate-x-8' aria-hidden='true'></i>
         </div>
       </div>
       <div className='flex items-center justify-center h-full w-1/3 '>
