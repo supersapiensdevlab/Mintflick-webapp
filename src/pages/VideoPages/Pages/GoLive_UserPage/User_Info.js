@@ -19,6 +19,7 @@ import { ProgressBar, Step } from 'react-step-progress-bar';
 import icon1 from '../../../../assets/icons/cryptocurrency-art.png';
 import icon2 from '../../../../assets/icons/nft.png';
 import icon3 from '../../../../assets/icons/cryptocurrency-token.png';
+import LiveChat from '../LivePublicPage/LiveChat';
 
 // import LiveChat from '../LivePublicPage/LiveChat';
 // import { io } from 'socket.io-client';
@@ -671,7 +672,7 @@ const UserInfo = (props) => {
         {user.livepeer_data.isActive ? (
           user.username && (
             <div className="  w-full col-span-1" style={{ height: '100vh' }}>
-              {/* <LiveChat userp={user} privateUser={user}></LiveChat> */}
+              <LiveChat userp={user} privateUser={user}></LiveChat>
             </div>
           )
         ) : (
