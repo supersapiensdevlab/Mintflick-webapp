@@ -12,7 +12,6 @@ import FeedbackForm from '../../component/form/feedbackForm';
 import HowToUse from '../../component/form/howToUse';
 import GamesToolbar from '../../component/form/games-toolbar';
 import ReferAFriend from '../../component/form/ReferAFriend';
-
 import MainToolbar from '../../component/Toolbar/main-toolbar';
 import animationData from '../../lotties/gamers.json';
 import ResponsiveCarousel from './Cards/HomeSlider';
@@ -406,7 +405,7 @@ const Home = () => {
                     )}
                   </div>
 
-                  <div className="my-2">
+                  <div className="my-2 third-step">
                     <div
                       className="mt-10 animate-spin rounded-full h-7 w-7 mx-auto border-t-2 border-b-2 bg-gradient-to-r from-green-400 to-blue-500 "
                       hidden={!Trending.loading ? true : false}
@@ -442,33 +441,34 @@ const Home = () => {
               </div>
             </div>
 
-            <div className="w-full   h-full    col-span-4 md:col-span-3 lg:col-span-2 xl:col-span-2  lg:block hidden  ">
-              <div className="my-4 ">
+            <div className="w-full   h-full   col-span-4 md:col-span-3 lg:col-span-2 xl:col-span-2  lg:block hidden  ">
+              <div className="my-4">
                 <FeedbackForm className="z-500" />
               </div>
               <div className="sticky top-20">
-                <h4 className="text-white  px-2 my-1 ">Recommended Creators</h4>
-
-                <Splide
-                  options={{
-                    type: 'loop',
-                    gap: '1rem',
-                    autoplay: true,
-                    pauseOnHover: false,
-                    arrows: false,
-                    interval: 300,
-                  }}
-                >
-                  {verifiedUser
-                    ? verifiedUser.map((verifieduser, i) => {
-                        return (
-                          <SplideSlide className="px-2" key={i} data-splide-interval="1000">
-                            <ProfileCard user={verifieduser} />
-                          </SplideSlide>
-                        );
-                      })
-                    : null}
-                </Splide>
+                <div className="first-step">
+                  <h4 className="text-white  px-2 my-1 ">Recommended Creators</h4>
+                  <Splide
+                    options={{
+                      type: 'loop',
+                      gap: '1rem',
+                      autoplay: true,
+                      pauseOnHover: false,
+                      arrows: false,
+                      interval: 300,
+                    }}
+                  >
+                    {verifiedUser
+                      ? verifiedUser.map((verifieduser, i) => {
+                          return (
+                            <SplideSlide className="px-2" key={i} data-splide-interval="1000">
+                              <ProfileCard user={verifieduser} />
+                            </SplideSlide>
+                          );
+                        })
+                      : null}
+                  </Splide>
+                </div>
                 {user ? <ReferAFriend className="z-500 " /> : null}
               </div>
             </div>

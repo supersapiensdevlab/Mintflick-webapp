@@ -100,6 +100,7 @@
     "react-top-loading-bar": "^2.1.0",
     "react-use-window-size": "^1.0.1",
     "reactjs-popup": "^2.0.5",
+    "reactour": "^1.18.7",
     "redux-thunk": "^2.4.1",
     "screenfull": "^5.1.0",
     "socket.io-client": "^4.4.1",

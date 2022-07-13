@@ -7,7 +7,6 @@ import { Link } from 'react-router-dom';
 import { toggleDarkMode } from '../../actions/index';
 import logoDark from '../../assets/images/dark-logo.svg';
 import CircleLogoDark from '../../assets/images/dark-logo-svg.svg';
-
 import CircleLogo from '../../assets/images/dbeats-logo.png';
 import mintflickNavbar from '../../assets/images/Logo/mintflick-navbar.svg';
 import logo from '../../assets/images/white-logo.svg';
@@ -579,7 +578,7 @@ const NavBar = () => {
                   to={`/streamer/${user.username}`}
                   className="border-dbeats-light 2xl:border-1   text-dbeats-light hover:bg-dbeats-light hover:text-white rounded font-bold mx-2 "
                 >
-                  <div className="flex lg:py-1   py-1.5 2xl:px-3 lg:px-2 px-1.5 ">
+                  <div className="flex lg:py-1 fifth-step  py-1.5 2xl:px-3 lg:px-2 px-1.5 ">
                     <i className="fas fa-video self-center md:mr-2"></i>
                     <span className="self-center     lg:text-xs 2xl:text-lg md:flex hidden">
                       Go Live

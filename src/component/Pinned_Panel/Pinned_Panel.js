@@ -85,7 +85,7 @@ const PinnedPanel = () => {
         ) : (
           <></>
         )}
-        <div className="flex justify-center cursor-pointer  ">
+        <div className="flex justify-center cursor-pointer second-step ">
           <a
             onClick={handlePlusClick}
             className="2xl:w-14 2xl:h-14 lg:h-10 lg:w-10  my-2 rounded-full hover:shadow hover:scale-99 transition-all transform  relative nm-flat-dbeats-dark-secondary hover:nm-inset-dbeats-dark-secondary "
