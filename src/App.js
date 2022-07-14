@@ -182,7 +182,12 @@ export default function App() {
           <div className=" ">
             <div className=" ">
               {/* {userType !== null ? '' : <OnboardingModal></OnboardingModal>} */}
+<<<<<<< HEAD
               {window.location.pathname == '/' ? (
+=======
+              {window.location.href ==
+              ('http://localhost:3000/' || '/') ? (
+>>>>>>> 4d4f6c7de8026587088689127406c792ba6053a0
                 <>
                   {tour == 'show' ? (
                     <Tour
