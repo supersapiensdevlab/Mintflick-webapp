@@ -174,6 +174,7 @@ export default function App() {
     // eslint-disable-next-line
   }, []);
 
+  console.log(window.location);
   return (
     <>
       <Router>
@@ -181,8 +182,7 @@ export default function App() {
           <div className=" ">
             <div className=" ">
               {/* {userType !== null ? '' : <OnboardingModal></OnboardingModal>} */}
-              {window.location.href ==
-              ('http://localhost:3000/' || 'https://beta.mintflick.app/') ? (
+              {window.location.pathname == '/' ? (
                 <>
                   {tour == 'show' ? (
                     <Tour
