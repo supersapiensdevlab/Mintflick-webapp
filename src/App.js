@@ -73,10 +73,16 @@ export default function App() {
   const [latestTrack, setLatestTrack] = useState([]);
   const [latestUploads, setLatestUploads] = useState(null);
 
+  let tour = JSON.parse(window.localStorage.getItem('tour'))
+    ? JSON.parse(window.localStorage.getItem('tour'))
+    : 'show';
   const [showTour, setShowTour] = useState(true);
   const handleTourShow = () => setShowTour(true);
 
-  const handleTourClose = () => setShowTour(false);
+  const handleTourClose = () => {
+    setShowTour(false);
+    window.localStorage.setItem('tour', JSON.stringify('hide'));
+  };
 
   const steps = [
     {
@@ -175,13 +181,22 @@ export default function App() {
           <div className=" ">
             <div className=" ">
               {/* {userType !== null ? '' : <OnboardingModal></OnboardingModal>} */}
-              <Tour
-                steps={steps}
-                isOpen={showTour}
-                onRequestClose={handleTourClose}
-                accentColor="#000"
-                rounded={10}
-              />
+              {window.location.href ==
+              ('http://localhost:3000/' || 'https://beta.mintflick.app/') ? (
+                <>
+                  {tour == 'show' ? (
+                    <Tour
+                      steps={steps}
+                      isOpen={showTour}
+                      onRequestClose={handleTourClose}
+                      accentColor="#000"
+                      rounded={10}
+                    />
+                  ) : (
+                    <></>
+                  )}
+                </>
+              ) : null}
               <Switch>
                 <Route exact path="/">
                   {/* <OnboardingModal /> */}
