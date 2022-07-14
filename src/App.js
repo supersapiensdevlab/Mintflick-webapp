@@ -182,7 +182,7 @@ export default function App() {
             <div className=" ">
               {/* {userType !== null ? '' : <OnboardingModal></OnboardingModal>} */}
               {window.location.href ==
-              ('http://localhost:3000/' || 'https://beta.mintflick.app/') ? (
+              ('http://localhost:3000/' || '/') ? (
                 <>
                   {tour == 'show' ? (
                     <Tour
