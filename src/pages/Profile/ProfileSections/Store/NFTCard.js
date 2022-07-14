@@ -315,7 +315,7 @@ const NFTCard = ({ nft, buyNft, address }) => {
 
   async function createMarketSale(nft) {
     var biconomy = new Biconomy(provider, {
-      apiKey: 'Ooz6qQnPL.10a08ea0-3611-432d-a7de-34cf9c44b49b',
+      apiKey: `${process.env.REACT_APP_BICONOMY_API}`,
     });
     console.log(provider);
     console.log(biconomy);

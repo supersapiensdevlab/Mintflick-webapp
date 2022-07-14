@@ -57,7 +57,7 @@ const ChannelSection = (props) => {
         className="w-full h-full   pt-8 lg:col-span-1 hidden lg:block sm:hidden  "
       >
         <div className="2xl:px-5 lg:px-0 2xl:pt-10 lg:pt-5 fixed ">
-          <h5 className="font-semibold text-base dark:text-gray-200 w-full 2xl:text-lg lg:text-sm relative pl-2">
+          {/* <h5 className="font-semibold text-base dark:text-gray-200 w-full 2xl:text-lg lg:text-sm relative pl-2">
             {' '}
             {props.user.username}&apos;s Channels
             {props.privateUser ? (
@@ -68,7 +68,7 @@ const ChannelSection = (props) => {
             ) : (
               false
             )}
-          </h5>
+          </h5> */}
 
           {server_channels.map((channel, i) => {
             return (

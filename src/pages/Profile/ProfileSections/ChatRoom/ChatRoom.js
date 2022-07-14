@@ -327,7 +327,9 @@ function ChatRoom(props) {
                               <p className="text-gray-400 text-xs">
                                 {message.url.split('/').pop()}
                               </p>
-                              <p className="text-gray-400 text-xs">Size: {prettyBytes(size)}</p>
+                              <p className="text-gray-400 text-xs hidden">
+                                Size: {prettyBytes(size)}
+                              </p>
                               <a
                                 className="text-opacity-25 text-white hover:text-opacity-100 "
                                 href={message.url}
@@ -352,7 +354,9 @@ function ChatRoom(props) {
                               <p className="text-gray-400 text-xs">
                                 {message.url.split('/').pop()}
                               </p>
-                              <p className="text-gray-400 text-xs">Size: {prettyBytes(size)}</p>
+                              <p className="text-gray-400 text-xs hidden">
+                                Size: {prettyBytes(size)}
+                              </p>
                               <p className="text-gray-400 text-xs">
                                 <a
                                   href={message.url}
@@ -371,7 +375,9 @@ function ChatRoom(props) {
                               <p className="text-gray-400 text-xs">
                                 {message.url.split('/').pop()}
                               </p>
-                              <p className="text-gray-400 text-xs">Size: {prettyBytes(size)}</p>
+                              <p className="text-gray-400 text-xs hidden">
+                                Size: {prettyBytes(size)}
+                              </p>
                               <p className="text-gray-400 text-xs">
                                 <a
                                   href={message.url}
@@ -390,7 +396,9 @@ function ChatRoom(props) {
                               <p className="text-gray-400 text-xs">
                                 {message.url.split('/').pop()}
                               </p>
-                              <p className="text-gray-400 text-xs">Size: {prettyBytes(size)}</p>
+                              <p className="text-gray-400 text-xs hidden">
+                                Size: {prettyBytes(size)}
+                              </p>
                               <p className="text-gray-400 text-xs">
                                 <a
                                   href={message.url}

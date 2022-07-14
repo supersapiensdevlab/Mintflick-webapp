@@ -14,7 +14,6 @@ import { Biconomy } from '@biconomy/mexa';
 import { random } from 'lodash';
 import InfiniteScroll from 'react-infinite-scroller';
 
-
 export default function NFTStore(props) {
   let tempusercache = [];
   const [nfts, setNfts] = useState([]);
@@ -99,7 +98,7 @@ export default function NFTStore(props) {
   useEffect(async () => {
     setLoading(true);
     for (var i = 0; i < (nfts.length > 15 ? 15 : nfts.length); i++) {
-      console.log('only five times')
+      console.log('only five times');
       let creator_data = tempusercache.find((obj) => {
         if (obj.user) {
           if (obj.user.wallet_id == nfts[i].creator) {
@@ -160,7 +159,6 @@ export default function NFTStore(props) {
           },
         ];
       });
-   
     }
     setCurrentPage((prevState) => prevState + 3);
     setLoading(false);
@@ -169,7 +167,7 @@ export default function NFTStore(props) {
     if (loading) {
       return;
     }
-    console.log('loadingmore nfts')
+    console.log('loadingmore nfts');
     setLoading(true);
     for (var i = currentPage * 5; i < currentPage * 5 + 5; i++) {
       if (nfts[i]) {
@@ -233,7 +231,6 @@ export default function NFTStore(props) {
             },
           ];
         });
-
       }
     }
     setCurrentPage((prevState) => prevState + 1);
@@ -243,7 +240,7 @@ export default function NFTStore(props) {
   async function buyNft(nft) {
     /* needs the user to sign the transaction, so will use Web3Provider and sign it */
     var biconomy = new Biconomy(provider, {
-      apiKey: 'Ooz6qQnPL.10a08ea0-3611-432d-a7de-34cf9c44b49b',
+      apiKey: `${process.env.REACT_APP_BICONOMY_API}`,
     });
 
     console.log('NFT buy Clicked', nft.tokenId);
@@ -313,7 +310,7 @@ export default function NFTStore(props) {
     <>
       {nfts ? (
         <div className="h-full lg:col-span-1 col-span-6 w-full     ">
-        {/* <h1 className="   dark:text-gray-300 w-full flex   text-dbeats-dark   px-3">
+          {/* <h1 className="   dark:text-gray-300 w-full flex   text-dbeats-dark   px-3">
           NFTs owned by you :{' '}
         </h1>
         <UserOwnedAssets resellOwnedItem={resellOwnedItem}></UserOwnedAssets>
@@ -326,14 +323,14 @@ export default function NFTStore(props) {
               props.address
                 ? 'grid sm:grid-cols-1  md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 grid-cols-1'
                 : ' grid grid-flow-row  grid-cols-1 '
-              }  w-full   sm:px-3  h-screen`}
-              >
+            }  w-full   sm:px-3  h-screen`}
+          >
             <InfiniteScroll
               pageStart={0}
-              loadMore={()=>{
-                if(currentPage < totalPages && !loading){
-                setLoading(true);
-                loadMoreNFTData();
+              loadMore={() => {
+                if (currentPage < totalPages && !loading) {
+                  setLoading(true);
+                  loadMoreNFTData();
                 }
               }}
               hasMore={currentPage < totalPages}

@@ -68,7 +68,7 @@ const PinnedPanel = () => {
                       </Tooltip>
                     }
                   >
-                    <Link to={`/profile/${pinnedUser.username}/`} className=" my-2 relative">
+                    <Link to={`/profile/${pinnedUser.username}/text`} className=" my-2 relative">
                       <div className="p-0.5 nm-flat-dbeats-dark-secondary rounded-full hover:nm-inset-dbeats-dark-secondary">
                         <img
                           src={pinnedUser.profile_image ? pinnedUser.profile_image : personImg}
