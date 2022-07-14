@@ -220,7 +220,7 @@ const PublicInfo = (props) => {
 
   //https://dbeats-live-view-heroku.herokuapp.com/
   useEffect(() => {
-    const socket = io('https://dbeats-live-view-heroku.herokuapp.com/', {
+    const socket = io(`${process.env.REACT_APP_VIEWS_URL}`, {
       transports: ['websocket', 'polling'],
       upgrade: false,
       secure: true,
@@ -308,19 +308,24 @@ const PublicInfo = (props) => {
           <div
             className={`${
               darkMode && 'dark'
-            }  grid sm:grid-cols-1 lg:grid-cols-3 grid-flow-row  pb-50  lg:ml-12  bg-gradient-to-b from-blue-50 via-blue-50 to-white  dark:bg-gradient-to-b dark:from-dbeats-dark-secondary  dark:to-dbeats-dark-primary`}
+            }  grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-3 grid-flow-row   pb-50  lg:ml-12  relative  h-full `}
           >
-            <div className=" lg:col-span-2 pt-3 mt-10">
-              <div className="self-center lg:px-8 w-screen lg:w-full lg:mt-3 mt-0.5  ">
+            <div className="col-span-1 md:col-span-2 pt-3 2xl:mt-16 xl:mt-10 lg:mt-10 mt-14 sticky  top-14   z-10 lg:z-auto   ">
+              <div>
                 {userData ? (
-                  <VideoPlayer playbackUrl={playbackUrl} creatorData={userData} footer={true} />
+                  <VideoPlayer
+                    className="self-center lg:px-8 w-screen lg:w-full lg:mt-3   mt-0.5"
+                    playbackUrl={playbackUrl}
+                    creatorData={userData}
+                    footer={true}
+                  />
                 ) : null}
               </div>
 
-              <div className="2xl:mx-7 sm:p-2 p-3   dark:bg-dbeats-dark-secondary">
-                <div className=" flex  ">
-                  <div className="2xl:py-4 lg:py-2 w-full">
-                    <div className=" w-full text-left mt-0" style={{ padding: '0px' }}>
+              <div className="2xl:ml-7 sm:p-2 p-3  bg-dbeats-dark-alt shadow   ">
+                <div className=" flex sm:py-2 py-2">
+                  <div className="  w-full">
+                    <div className=" w-full text-left mt-0">
                       {userData.superfan_data ? (
                         <p className="font-semibold 2xl:text-xl lg:text-md ">
                           {userData.videos.videoName}
@@ -335,7 +340,7 @@ const PublicInfo = (props) => {
                         {user && userData ? (
                           <>
                             {' '}
-                            <div className="flex   text-black text-sm font-medium   md:px-4  md:py-3 px-1 py-2">
+                            <div className="flex    text-black text-sm font-medium   py-2  px-4  ">
                               <Link to={`/profile/${userData.username}/`} className="mr-4">
                                 <img
                                   src={userData.profile_image ? userData.profile_image : person}
@@ -367,42 +372,16 @@ const PublicInfo = (props) => {
                                     {''}
                                   </div>
                                 </div>
-                                {/* Hiding Follow Button due to bugs 
-                <div>
-                  <div
-                    onClick={trackFollowers}
-                    className="  rounded-3xl group w-max ml-2 p-0.5  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-secondary      hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
-                  >
-                    <div className="  h-full w-full text-black dark:text-white p-1 flex   rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:nm-inset-dbeats-dark-secondary ">
-                      <p className="self-center mx-2 flex">
-                        <span>
-                          {buttonText === 'follow' ? (
-                            <i className="fas fa-plus self-center mx-2"></i>
-                          ) : null}
-                          &nbsp;{buttonText}
-                        </span>
-                        <div
-                          hidden={subscribeLoader}
-                          className="w-3 h-3 ml-2 border-t-4 border-b-4 border-white rounded-full animate-spin"
-                        ></div>
-                      </p>
-                    </div>
-                  </div>
-                </div> */}
                               </div>
                             </div>
-                            <div className="flex items-center   w-full">
+                            <div className="flex items-center   w-full px-4">
                               {subscribeButtonText === 'Follow' ? (
                                 <button
                                   id="subscribeButton"
-                                  className="flex items-center dark:bg-dbeats-dark-primary border border-dbeats-light dark:hover:bg-dbeats-light p-1 2xl:text-lg lg:text-sm text-md rounded-sm 2xl:px-4 px-4 lg:px-2 mr-3 font-semibold text-white "
+                                  className="flex items-center dark:bg-dbeats-light    border border-dbeats-light dark:hover:bg-dbeats-secondary-light p-1 2xl:text-lg lg:text-sm text-md rounded-sm 2xl:px-4 px-4 lg:px-2 mr-3 font-semibold text-white "
                                   onClick={user != null && trackFollowers}
                                 >
                                   <span>{subscribeButtonText}</span>
-                                  {/* <div
-                            hidden={loader}
-                            className="w-4 h-4 ml-2 border-t-4 border-b-4 border-white rounded-full animate-spin"
-                          ></div> */}
                                 </button>
                               ) : null}
 
@@ -437,7 +416,7 @@ const PublicInfo = (props) => {
                       </div>
                     ) : null}
                   </div>
-                  <div className="2xl:text-2xl lg:text-md text-xs 2xl:py-4 lg:py-2 py-2 flex justify-around dark:text-dbeats-white -ml-24 md:-ml-0">
+                  <div className="2xl:text-2xl lg:text-md text-xs 2xl:py-4 lg:py-2 py-2 flex justify-around dark:text-dbeats-white   ">
                     <p className={`text-white md:text-lg text-xs text-center pr-2 flex flex-col`}>
                       <span className={`text-${viewColor}  ${viewAnimate} font-bold`}>
                         {livestreamViews}
@@ -490,7 +469,7 @@ const PublicInfo = (props) => {
                 </div>
               </div>
             </div>
-            <div className="  w-full col-span-1" style={{ height: '100vh' }}>
+            <div className="  w-full col-span-1   ">
               {userData.username && <LiveChat userp={userData} privateUser={user}></LiveChat>}
             </div>
           </div>

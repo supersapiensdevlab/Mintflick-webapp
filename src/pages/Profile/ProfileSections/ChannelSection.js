@@ -36,35 +36,26 @@ const ChannelSection = (props) => {
 
   const [selected, setSelected] = useState(channels[0]);
 
-  const [activeChannel,setActiveChannel] = useState(null)
+  const [activeChannel, setActiveChannel] = useState(null);
 
-  const handleClick = (type) =>{
+  const handleClick = (type) => {
     setActiveChannel(type);
-  }
-  useEffect(()=>{
+  };
+  useEffect(() => {
     const last_segment = window.location.pathname.split('/').pop();
-    setActiveChannel(last_segment)
-  },[])
-  
+    setActiveChannel(last_segment);
+  }, []);
+
   return (
     <div
       className={`${
         darkMode && 'dark'
-      }  px-3 h-full pt-4 hidden md:block  bg-gradient-to-b from-blue-50 via-blue-50 to-white  dark:bg-gradient-to-b dark:from-dbeats-dark-secondary  dark:to-dbeats-dark-primary`}
+      }  px-3 h-screen pt-4 hidden md:block    dark:nm-dbeats-dark-secondary   `}
     >
       <div
         id="recommended_channel"
         className="w-full h-full   pt-8 lg:col-span-1 hidden lg:block sm:hidden  "
       >
-        {/* <div className="relative">
-          <img src={background} alt="background"></img>
-          {props.privateUser ? (
-            <i className="fas fa-edit absolute right-2 bottom-2 text-white p-3 rounded-full hover:bg-dbeats-dark-alt hover:opacity-100 opacity-25 cursor-pointer"></i>
-          ) : (
-            false
-          )}{' '}
-        </div> */}
-
         <div className="2xl:px-5 lg:px-0 2xl:pt-10 lg:pt-5 fixed ">
           <h5 className="font-semibold text-base dark:text-gray-200 w-full 2xl:text-lg lg:text-sm relative pl-2">
             {' '}
@@ -84,7 +75,14 @@ const ChannelSection = (props) => {
               <div key={i} className="  2xl:pb-2 2xl:pt-2 lg:my-1 lg:mt-3 2xl:mt-0">
                 <div>
                   <Link to={`/profile/${props.user.username}/${channel.type}`}>
-                    <div onClick={() => handleClick(channel.type)} className={activeChannel == channel.type ? `bg-dbeats-dark-alt text-dbeats-light   cursor-pointer 2xl:text-base lg:text-xs  hover:text-white w-full justify-between self-center hover:bg-dbeats-light dark:hover:bg-dbeats-dark-alt dark:hover:text-dbeats-light  rounded 2xl:p-2 lg:p-1.5 relative`:`text-gray-600   cursor-pointer 2xl:text-base lg:text-xs dark:text-gray-200 hover:text-white w-full justify-between self-center hover:bg-dbeats-light dark:hover:bg-dbeats-dark-alt dark:hover:text-dbeats-light  rounded 2xl:p-2 lg:p-1.5 relative`}>
+                    <div
+                      onClick={() => handleClick(channel.type)}
+                      className={
+                        activeChannel == channel.type
+                          ? `nm-convex-dbeats-dark-alt  text-dbeats-light   cursor-pointer 2xl:text-base lg:text-xs  hover:text-white w-full justify-between self-center hover:bg-dbeats-light dark:hover:bg-dbeats-dark-alt dark:hover:text-dbeats-light  rounded 2xl:p-2 lg:p-1.5 relative`
+                          : `text-gray-600   cursor-pointer 2xl:text-base lg:text-xs dark:text-gray-200 hover:text-white w-full justify-between self-center  hover:nm-concave-dbeats-dark-alt dark:hover:text-dbeats-light  rounded 2xl:p-2 lg:p-1.5 relative`
+                      }
+                    >
                       {' '}
                       {channel.type === 'text' ? <i className="fas fa-hashtag mr-2"></i> : ''}
                       {channel.type === 'voice' ? (
@@ -98,11 +96,6 @@ const ChannelSection = (props) => {
                       {/* <i className="fas fa-user-plus ml-5 absolute right-3 self-center text-center mt-1"></i> */}
                     </div>
                   </Link>
-
-                  {/* <span className="text-gray-400 text-sm cursor-pointer ml-5 dark:hover:text-white hover:text-dbeats-light">
-                    {' '}
-                    Counter Strike...{' '}
-                  </span> */}
                 </div>
               </div>
             );

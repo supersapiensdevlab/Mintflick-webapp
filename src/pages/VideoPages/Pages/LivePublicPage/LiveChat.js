@@ -200,7 +200,7 @@ function LiveChat({ userp }) {
               onClick={() => {
                 chatRef.current.scrollIntoView({ behavior: 'smooth' });
               }}
-              className="fas fa-angle-double-down text-xl text-dbeats-light absolute right-4 bottom-10 px-4 py-2 rounded-full bg-dbeats-dark-secondary xl:text-2xl xl:right-8 cursor-pointer"
+              className="fas fa-angle-down text-xl text-white absolute right-4 bottom-10 px-4 py-2 rounded-full bg-dbeats-dark-secondary xl:text-2xl xl:right-8 cursor-pointer"
             ></i>
             <div ref={chatRef} />
           </div>
@@ -212,7 +212,7 @@ function LiveChat({ userp }) {
         )}
         <div className="absolute bottom-0 left-0 right-0 py-4 md:px-4 rounded-lg bg-dbeats-dark-secondary shadow-md">
           {formState.replyto ? (
-            <div className="px-3 p-2 flex items-center	justify-between rounded-xl dark: bg-dbeats-dark-secondary	mb-2">
+            <div className="px-3 p-2 flex items-center	justify-between rounded-xl dark: bg-dbeats-dark-alt	mb-4">
               <div className="flex">
                 <div className="chat_message_profile pr-2">
                   <img
@@ -244,30 +244,29 @@ function LiveChat({ userp }) {
                 </div>
               </div>
               <button
+                className="px-3 py-1 rounded-full nm-convex-dbeats-dark-secondary hover:nm-concave-dbeats-dark-secondary-sm   cursor-pointer"
                 onClick={() => {
                   setForm({ ...formState, replyto: null });
                 }}
               >
-                X
+                <i className="fa-solid fa-xmark text-lg  "></i>
               </button>
             </div>
           ) : null}
           <div className="flex justify-start ">
-            <div
-              onClick={() => {
-                setShowEmojis(!showEmojis);
-              }}
-              className=" rounded-3xl group w-max   p-1  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-secondary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
-            >
-              <span className="  text-black dark:text-white  flex p-1 rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:nm-inset-dbeats-dark-secondary ">
-                <p className="self-center md:mx-2">
-                  {' '}
-                  <i className="far fa-laugh text-base md:text-2xl"></i>
-                </p>
-              </span>
+            <div>
+              <div
+                onClick={() => {
+                  setShowEmojis(!showEmojis);
+                }}
+                className=" rounded-3xl group w-max mx-2  p-1   justify-center  cursor-pointer     nm-convex-dbeats-dark-secondary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
+              >
+                {' '}
+                <i className="far fa-laugh text-base md:text-2xl px-2 py-1"></i>
+              </div>
             </div>
             <form className="flex flex-grow" id="chat-form" onSubmit={saveMessage}>
-              <div className="flex-grow rounded-md group w-fit  p-1  mx-1  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-secondary   hover:nm-inset-dbeats-dark-primary           font-medium          transform-gpu  transition-all duration-300 ease-in-out ">
+              <div className="flex-grow rounded-md group w-fit  p-1  mx-1  cursor-pointer            font-medium          transform-gpu  transition-all duration-300 ease-in-out ">
                 {' '}
                 <textarea
                   onChange={onChange}
@@ -279,7 +278,7 @@ function LiveChat({ userp }) {
                   placeholder="Enter Message"
                   required
                   autoComplete="false"
-                  className="w-full rounded-md border-0 ring-0 focus:ring-0 focus:border-0 text-black dark:text-white md:px-4 p-2  bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary group-hover:nm-inset-dbeats-dark-secondary focus:nm-inset-dbeats-dark-primary placeholder-white placeholder-opacity-25"
+                  className="w-full rounded-md border-0 ring-0 focus:ring-0 focus:border-0 text-black dark:text-white md:px-4 p-2  nm-flat-dbeats-dark-primary  hover:nm-inset-dbeats-dark-secondary focus:nm-inset-dbeats-dark-primary placeholder-white placeholder-opacity-25"
                 ></textarea>
               </div>
 
@@ -287,16 +286,16 @@ function LiveChat({ userp }) {
                 className={`${
                   formState.message.length < 1
                     ? 'text-opacity-25 text-white cursor-default'
-                    : 'hover:nm-inset-dbeats-dark-primary hover:text-dbeats-light'
+                    : '  hover:text-dbeats-light content-center items-center'
                 }
-                  p-1 rounded-3xl nm-flat-dbeats-dark-secondary cursor-pointer  `}
+                  p-1 rounded-3xl   cursor-pointer  `}
               >
                 <button
                   type="submit"
                   className={`${
                     formState.message.length < 1
-                      ? 'dark:bg-dbeats-dark-primary'
-                      : 'bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:dark:nm-inset-dbeats-dark-primary'
+                      ? 'dark:bg-dbeats-dark-primary hidden'
+                      : 'nm-convex-dbeats-dark-secondary  hover:nm-inset-dbeats-dark-primary'
                   }  px-4 py-2  rounded-3xl group flex items-center justify-center  `}
                 >
                   <i className="fas fa-paper-plane mr-2" />
