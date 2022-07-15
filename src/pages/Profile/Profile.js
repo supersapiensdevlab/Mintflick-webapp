@@ -129,7 +129,7 @@ const Profile = () => {
           <div id="outer-container" className={`${darkMode && 'dark'}`}>
             <div
               id="page-wrap"
-              className={` grid lg:pl-16 grid-cols-6  bg-dbeats-dark-secondary   `}
+              className={` grid lg:pl-16 grid-cols-8  bg-dbeats-dark-secondary   `}
             >
               <ChannelSection
                 privateUser={privateUser}

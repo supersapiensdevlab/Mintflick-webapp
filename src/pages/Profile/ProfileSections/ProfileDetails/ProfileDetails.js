@@ -514,7 +514,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
   };
 
   return (
-    <div className={`${darkMode && 'dark'}   h-max lg:col-span-5 col-span-6 w-full   `}>
+    <div className={`${darkMode && 'dark'}   h-max lg:col-span-7 col-span-8 w-full   `}>
       <div id="display_details" className="h-full 2xl:pt-16 lg:pt-12 pt-16">
         {!isMailVerified && privateUser ? (
           <div

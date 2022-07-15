@@ -2,9 +2,9 @@
   max-height: 100%;
 }
 .chat-container-height {
-  height: -moz-calc(100vh - 80px);
-  height: -webkit-calc(100vh - 80px);
-  height: calc(100vh - 80px);
+  height: -moz-calc(100vh - 105px);
+  height: -webkit-calc(100vh - 105px);
+  height: calc(100vh - 105px);
 }
 .flex-grow{
   flex-grow: 2;

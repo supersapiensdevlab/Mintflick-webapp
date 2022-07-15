@@ -88,12 +88,18 @@ function ChatRoom(props) {
       setCurrentSocket(socket);
       socket.emit('joinroom', { user_id: user._id, room_id: props.userp._id });
       socket.on('init', (msgs) => {
-        loadingRef.current.complete();
+        loadingRef.current ? loadingRef.current.complete() : null;
         setMessages(msgs.chats);
         setTotalpages(msgs.totalPages);
         setCurrentpage(msgs.currentPage);
         setTimeout(() => {
-          chatRef.current.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'nearest' });
+          chatRef.current
+            ? chatRef.current.scrollIntoView({
+                behavior: 'smooth',
+                block: 'end',
+                inline: 'nearest',
+              })
+            : null;
         }, 1000);
       });
       socket.on('getmore', (msgs) => {
@@ -246,11 +252,11 @@ function ChatRoom(props) {
     txt.split(' ').map((part) => (URL_REGEX.test(part) ? <a href={part}>{part} </a> : part + ' '));
 
   return (
-    <div className="text-gray-400 	 box-border px-2 h-max lg:col-span-5 col-span-6 w-full dark:bg-dbeats-dark-primary">
+    <div className="text-gray-400 relative	 box-border   h-max md:col-span-6 lg:col-span-7 col-span-8 w-full dark:bg-dbeats-dark-primary">
       <LoadingBar ref={loadingRef} color="#00d3ff" shadow={true} />
       <div className="full-height">
-        <main className=" pt-16 chat-container-height sticky bottom-0">
-          <div className="    p-2 chat-height overflow-y-scroll	overflow-x-hidden">
+        <main className=" pt-16 chat-container-height   ">
+          <div className="  p-4 chat-height overflow-y-scroll	overflow-x-hidden mb-4">
             <div ref={scrollTop}></div>
             <InfiniteScroll
               pageStart={0}
@@ -280,209 +286,232 @@ function ChatRoom(props) {
                     let urls = detectURLs(message.message);
                     let urlstext = renderText(message.message);
                     return (
-                      <div key={message._id} ref={(el) => (messageRef.current[message._id] = el)}>
+                      <>
                         {dates.has(dateNum.toDateString()) ? null : (
                           <p className="my-1 rounded-3xl bg-dbeats-dark-secondary px-3 py-1 block w-max mx-auto">
                             {renderDate(message, dateNum.toDateString())}
                           </p>
                         )}
-                        <div className=" px-3 p-2 rounded	 dark: bg-dbeats-dark-secondary	my-1 inline-block shadow">
-                          {message.reply_to ? (
+                        <div
+                          className={`${
+                            message.username
+                              ? message.username === user.username
+                                ? 'ml-auto mr-0  '
+                                : ' '
+                              : ' '
+                          }    w-max   my-2`}
+                          key={message._id}
+                          ref={(el) => (messageRef.current[message._id] = el)}
+                        >
+                          <div>
                             <div
-                              onClick={() => scrollTo(message.reply_to._id)}
-                              className="cursor-pointer flex justify-between items-center group  px-3 py-2 border-l-2 border-dbeats-light  dark: nm-inset-dbeats-dark-primary"
+                              className={`${
+                                message.reply_to
+                                  ? message.reply_to.username === user.username ||
+                                    message.username === user.username
+                                    ? 'ml-auto mr-0  '
+                                    : ' '
+                                  : ' '
+                              }  px-3 p-2 rounded	 dark: bg-dbeats-dark-secondary	my-1 w-max  shadow`}
                             >
-                              <div className="">
-                                <p
-                                  className={
-                                    message.reply_to.username === user.username
-                                      ? 'text-sm  mb-1  text-dbeats-light'
-                                      : 'text-sm  mb-1 text-white	'
-                                  }
+                              {message.reply_to ? (
+                                <div
+                                  onClick={() => scrollTo(message.reply_to._id)}
+                                  className="cursor-pointer flex justify-between items-center group  px-3 py-2 border-l-2 border-dbeats-light  dark: nm-inset-dbeats-dark-primary"
                                 >
-                                  {' '}
-                                  {message.reply_to.username}
-                                </p>
-                                <p className="text-xs">{message.reply_to.message}</p>
-                              </div>
-                              <div className="p-2">
-                                {message.reply_to.type == 'image' && (
-                                  <i className="fas fa-image text-2xl text-dbeats-light"></i>
-                                )}
-                                {message.reply_to.type == 'sound' && (
-                                  <i className="fas fa-music text-2xl text-dbeats-light"></i>
-                                )}
-                                {message.reply_to.type == 'video' && (
-                                  <i className="fas fa-video text-2xl text-dbeats-light"></i>
-                                )}
-                                {message.reply_to.type == 'file' && (
-                                  <i className="fas fa-file text-2xl text-dbeats-light"></i>
-                                )}
-                              </div>
-                            </div>
-                          ) : null}
-                          {message.type == 'image' ? (
-                            <div className="w-250">
-                              <img src={message.url}></img>
-                              <p className="text-gray-400 text-xs">
-                                {message.url.split('/').pop()}
-                              </p>
-                              <p className="text-gray-400 text-xs hidden">
-                                Size: {prettyBytes(size)}
-                              </p>
-                              <a
-                                className="text-opacity-25 text-white hover:text-opacity-100 "
-                                href={message.url}
-                                download
-                                target="_blank"
-                                rel="noopener noreferrer"
-                              >
-                                Download
-                              </a>
-                            </div>
-                          ) : null}
-                          {message.type == 'sound' ? (
-                            <div className=" md:ml-3 p-2 border border-dbeats-light rounded-md">
-                              <div className="md:flex items-center">
-                                <i className="fas fa-music text-4xl text-dbeats-light"></i>
-                                <ReactAudioPlayer
-                                  className="w-full md:w-44"
-                                  src={message.url}
-                                  controls
-                                />
-                              </div>
-                              <p className="text-gray-400 text-xs">
-                                {message.url.split('/').pop()}
-                              </p>
-                              <p className="text-gray-400 text-xs hidden">
-                                Size: {prettyBytes(size)}
-                              </p>
-                              <p className="text-gray-400 text-xs">
-                                <a
-                                  href={message.url}
-                                  download
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                >
-                                  Download
-                                </a>
-                              </p>
-                            </div>
-                          ) : null}
-                          {message.type == 'video' ? (
-                            <div className="w-250 ml-3 p-2 border border-dbeats-light rounded-md">
-                              <i className="fas fa-video text-4xl text-dbeats-light"></i>
-                              <p className="text-gray-400 text-xs">
-                                {message.url.split('/').pop()}
-                              </p>
-                              <p className="text-gray-400 text-xs hidden">
-                                Size: {prettyBytes(size)}
-                              </p>
-                              <p className="text-gray-400 text-xs">
-                                <a
-                                  href={message.url}
-                                  download
-                                  rel="noopener noreferrer"
-                                  target="_blank"
-                                >
-                                  Download
-                                </a>
-                              </p>
-                            </div>
-                          ) : null}
-                          {message.type == 'file' ? (
-                            <div className="w-250 ml-3 p-2 border border-dbeats-light rounded-md">
-                              <i className="fas fa-file text-4xl text-dbeats-light"></i>
-                              <p className="text-gray-400 text-xs">
-                                {message.url.split('/').pop()}
-                              </p>
-                              <p className="text-gray-400 text-xs hidden">
-                                Size: {prettyBytes(size)}
-                              </p>
-                              <p className="text-gray-400 text-xs">
-                                <a
-                                  href={message.url}
-                                  download
-                                  rel="noopener noreferrer"
-                                  target="_blank"
-                                >
-                                  Download
-                                </a>
-                              </p>
-                            </div>
-                          ) : null}
-                          <div className="inline-flex items-start group">
-                            <div className="chat_message_profile pr-2 pt-2 h-12 w-12">
-                              <img
-                                height="50px"
-                                width="50px"
-                                className="rounded-full"
-                                style={{ width: 'auto', maxWidth: '50px' }}
-                                alt="profile"
-                                src={message.profile_image ? message.profile_image : person}
-                              />
-                            </div>
-                            <div className="p-1 mt-1">
-                              <p
-                                className={
-                                  message.username === user.username
-                                    ? 'text-base font-bold   text-dbeats-light'
-                                    : 'text-base font-bold  text-white	'
-                                }
-                              >
-                                {message.username}{' '}
-                                {message.type == 'live' ? (
-                                  <span className="text-white bg-red-500 rounded-md font-normal px-2 mx-1 text-sm">
-                                    LIVE
-                                  </span>
-                                ) : null}
-                                <span className="text-xs text-gray-300 font-light">
-                                  {new Date(message.createdAt).toLocaleString('en-US', {
-                                    hour: '2-digit',
-                                    minute: '2-digit',
-                                    hour12: true,
-                                  })}
-                                </span>
-                              </p>
-                              <p className="text whitespace-pre-line">{urlstext}</p>
-                              {message.type == 'live' ? (
-                                <a
-                                  href={`https://dbeats.live/live/${props.userp.username}`}
-                                  target="__blank"
-                                >
-                                  {message.url ? (
-                                    <img
-                                      src={message.url}
-                                      className="w-full max-h-96 max-w-sm"
-                                    ></img>
-                                  ) : (
-                                    <h1 className="text-center text-4xl font-bold text-dbeats-light">
-                                      I am Live
-                                    </h1>
-                                  )}
-                                </a>
+                                  <div className="">
+                                    <p
+                                      className={
+                                        message.reply_to.username === user.username
+                                          ? 'text-sm  mb-1  text-dbeats-light'
+                                          : 'text-sm  mb-1 text-white	'
+                                      }
+                                    >
+                                      {' '}
+                                      {message.reply_to.username}
+                                    </p>
+                                    <p className="text-xs">{message.reply_to.message}</p>
+                                  </div>
+                                  <div className="p-2">
+                                    {message.reply_to.type == 'image' && (
+                                      <i className="fas fa-image text-2xl text-dbeats-light"></i>
+                                    )}
+                                    {message.reply_to.type == 'sound' && (
+                                      <i className="fas fa-music text-2xl text-dbeats-light"></i>
+                                    )}
+                                    {message.reply_to.type == 'video' && (
+                                      <i className="fas fa-video text-2xl text-dbeats-light"></i>
+                                    )}
+                                    {message.reply_to.type == 'file' && (
+                                      <i className="fas fa-file text-2xl text-dbeats-light"></i>
+                                    )}
+                                  </div>
+                                </div>
                               ) : null}
-
-                              {urls &&
-                                urls.map((u, index) => {
-                                  return (
-                                    <a href={u} key={index}>
-                                      <ChatLinkPreview
-                                        linkurl={u}
-                                        setShowLinkPreview={setShowLinkPreview}
-                                        setLinkPreviewData={setLinkPreviewData}
-                                      />
+                              {message.type == 'image' ? (
+                                <div className="w-250">
+                                  <img src={message.url}></img>
+                                  <p className="text-gray-400 text-xs">
+                                    {message.url.split('/').pop()}
+                                  </p>
+                                  <p className="text-gray-400 text-xs hidden">
+                                    Size: {prettyBytes(size)}
+                                  </p>
+                                  <a
+                                    className="text-opacity-25 text-white hover:text-opacity-100 "
+                                    href={message.url}
+                                    download
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                  >
+                                    Download
+                                  </a>
+                                </div>
+                              ) : null}
+                              {message.type == 'sound' ? (
+                                <div className=" md:ml-3 p-2 border border-dbeats-light rounded-md">
+                                  <div className="md:flex items-center">
+                                    <i className="fas fa-music text-4xl text-dbeats-light"></i>
+                                    <ReactAudioPlayer
+                                      className="w-full md:w-44"
+                                      src={message.url}
+                                      controls
+                                    />
+                                  </div>
+                                  <p className="text-gray-400 text-xs">
+                                    {message.url.split('/').pop()}
+                                  </p>
+                                  <p className="text-gray-400 text-xs hidden">
+                                    Size: {prettyBytes(size)}
+                                  </p>
+                                  <p className="text-gray-400 text-xs">
+                                    <a
+                                      href={message.url}
+                                      download
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                    >
+                                      Download
                                     </a>
-                                  );
-                                })}
+                                  </p>
+                                </div>
+                              ) : null}
+                              {message.type == 'video' ? (
+                                <div className="w-250 ml-3 p-2 border border-dbeats-light rounded-md">
+                                  <i className="fas fa-video text-4xl text-dbeats-light"></i>
+                                  <p className="text-gray-400 text-xs">
+                                    {message.url.split('/').pop()}
+                                  </p>
+                                  <p className="text-gray-400 text-xs hidden">
+                                    Size: {prettyBytes(size)}
+                                  </p>
+                                  <p className="text-gray-400 text-xs">
+                                    <a
+                                      href={message.url}
+                                      download
+                                      rel="noopener noreferrer"
+                                      target="_blank"
+                                    >
+                                      Download
+                                    </a>
+                                  </p>
+                                </div>
+                              ) : null}
+                              {message.type == 'file' ? (
+                                <div className="w-250 ml-3 p-2 border border-dbeats-light rounded-md">
+                                  <i className="fas fa-file text-4xl text-dbeats-light"></i>
+                                  <p className="text-gray-400 text-xs">
+                                    {message.url.split('/').pop()}
+                                  </p>
+                                  <p className="text-gray-400 text-xs hidden">
+                                    Size: {prettyBytes(size)}
+                                  </p>
+                                  <p className="text-gray-400 text-xs">
+                                    <a
+                                      href={message.url}
+                                      download
+                                      rel="noopener noreferrer"
+                                      target="_blank"
+                                    >
+                                      Download
+                                    </a>
+                                  </p>
+                                </div>
+                              ) : null}
+                              <div className="inline-flex items-start group">
+                                <div className="chat_message_profile pr-2 pt-2 h-12 w-12">
+                                  <img
+                                    height="50px"
+                                    width="50px"
+                                    className="rounded-full"
+                                    style={{ width: 'auto', maxWidth: '50px' }}
+                                    alt="profile"
+                                    src={message.profile_image ? message.profile_image : person}
+                                  />
+                                </div>
+                                <div className="p-1 mt-1">
+                                  <p
+                                    className={
+                                      message.username === user.username
+                                        ? 'text-base font-bold   text-dbeats-light'
+                                        : 'text-base font-bold  text-white	'
+                                    }
+                                  >
+                                    {message.username}{' '}
+                                    {message.type == 'live' ? (
+                                      <span className="text-white bg-red-500 rounded-md font-normal px-2 mx-1 text-sm">
+                                        LIVE
+                                      </span>
+                                    ) : null}
+                                    <span className="text-xs text-gray-300 font-light">
+                                      {new Date(message.createdAt).toLocaleString('en-US', {
+                                        hour: '2-digit',
+                                        minute: '2-digit',
+                                        hour12: true,
+                                      })}
+                                    </span>
+                                  </p>
+                                  <p className="text whitespace-pre-line">{urlstext}</p>
+                                  {message.type == 'live' ? (
+                                    <a
+                                      href={`https://dbeats.live/live/${props.userp.username}`}
+                                      target="__blank"
+                                    >
+                                      {message.url ? (
+                                        <img
+                                          src={message.url}
+                                          className="w-full max-h-96 max-w-sm"
+                                        ></img>
+                                      ) : (
+                                        <h1 className="text-center text-4xl font-bold text-dbeats-light">
+                                          I am Live
+                                        </h1>
+                                      )}
+                                    </a>
+                                  ) : null}
+
+                                  {urls &&
+                                    urls.map((u, index) => {
+                                      return (
+                                        <a href={u} key={index}>
+                                          <ChatLinkPreview
+                                            linkurl={u}
+                                            setShowLinkPreview={setShowLinkPreview}
+                                            setLinkPreviewData={setLinkPreviewData}
+                                          />
+                                        </a>
+                                      );
+                                    })}
+                                </div>
+                                <i
+                                  onClick={() => onreply(message)}
+                                  className="pt-8  opacity-0 group-hover:opacity-100 fas fa-reply ml-2 w-4 h-4 cursor-pointer text-dbeats-white text-opacity-40 hover:text-opacity-100"
+                                ></i>
+                              </div>
                             </div>
-                            <i
-                              onClick={() => onreply(message)}
-                              className="pt-8  opacity-0 group-hover:opacity-100 fas fa-reply ml-2 w-4 h-4 cursor-pointer text-dbeats-white text-opacity-40 hover:text-opacity-100"
-                            ></i>
                           </div>
                         </div>
-                      </div>
+                      </>
                     );
                   })
                 : '<></>'}
@@ -495,173 +524,174 @@ function ChatRoom(props) {
             ></i>
             <div ref={chatRef} />
           </div>
-        </main>
-        {showEmojis && (
-          <div className="absolute  bottom-40  shadow-none">
-            <Picker onEmojiClick={onEmojiClick} />
-          </div>
-        )}
-        {showAttachmentDropdown && (
-          <div className="ml-5 absolute  bottom-40  shadow-none w-60 p-2 rounded-lg bg-dbeats-dark-alt">
-            <ul>
-              <input
-                name="image"
-                type="file"
-                accept=".jpg,.png,.jpeg,.gif,.webp"
-                onChange={onFileChange}
-                className="hidden"
-                ref={imageInput}
-              />
-              <input
-                name="sound"
-                type="file"
-                accept=".mp3, .weba"
-                onChange={onFileChange}
-                className="hidden"
-                ref={soundInput}
-              />
-              <input
-                name="video"
-                type="file"
-                accept=".mp4, .mkv, .mov, .avi"
-                onChange={onFileChange}
-                className="hidden"
-                ref={videoInput}
-              />
-              <input
-                name="file"
-                type="file"
-                onChange={onFileChange}
-                className="hidden"
-                ref={fileInput}
-              />
-              <li
-                onClick={() => {
-                  imageInput.current.click();
-                }}
-                className="hover:bg-dbeats-dark-primary cursor-pointer p-2 px-4 hover:text-dbeats-light hover:nm-flat-dbeats-dark-secondary rounded-md"
-              >
-                <i className="fas fa-camera mr-2"></i>Image
-              </li>
-              <li
-                onClick={() => {
-                  soundInput.current.click();
-                }}
-                className="hover:bg-dbeats-dark-primary cursor-pointer p-2 px-4 hover:text-dbeats-light hover:nm-flat-dbeats-dark-secondary rounded-md"
-              >
-                <i className="fas fa-music mr-2"></i>Sound
-              </li>
-              <li
-                onClick={() => {
-                  videoInput.current.click();
-                }}
-                className="hover:bg-dbeats-dark-primary cursor-pointer p-2 px-4 hover:text-dbeats-light hover:nm-flat-dbeats-dark-secondary rounded-md"
-              >
-                <i className="fas fa-video mr-2"></i>Video
-              </li>
-              <li
-                onClick={() => {
-                  fileInput.current.click();
-                }}
-                className="hover:bg-dbeats-dark-primary cursor-pointer p-2 px-4 hover:text-dbeats-light hover:nm-flat-dbeats-dark-secondary rounded-md"
-              >
-                <i className="fas fa-file mr-2"></i>File
-              </li>
-            </ul>
-          </div>
-        )}
 
-        <div className="  py-4 md:px-4 rounded-lg bg-dbeats-dark-secondary  shadow">
-          {formState.replyto ? (
-            <div className="px-3 p-2 flex items-center	justify-between rounded-xl dark: bg-dbeats-dark-alt 	mb-4">
-              <div className="flex">
-                <div className="chat_message_profile pr-2">
-                  <img
-                    height="50px"
-                    width="50px"
-                    className="rounded-full"
-                    alt="profile"
-                    src={formState.replyto.profile_image}
+          <div className="   absolute  bottom-0 w-full">
+            {showEmojis && (
+              <div className="absolute  bottom-40  shadow-none">
+                <Picker onEmojiClick={onEmojiClick} />
+              </div>
+            )}
+            {showAttachmentDropdown && (
+              <div className="ml-5 absolute  bottom-40  shadow-none w-60 p-2 rounded-lg bg-dbeats-dark-alt">
+                <ul>
+                  <input
+                    name="image"
+                    type="file"
+                    accept=".jpg,.png,.jpeg,.gif,.webp"
+                    onChange={onFileChange}
+                    className="hidden"
+                    ref={imageInput}
                   />
-                </div>
-                <div className="p-1">
-                  <p
-                    className={
-                      formState.replyto.username === user.username
-                        ? 'text-base font-bold mb-1  text-dbeats-light'
-                        : 'text-base font-bold mb-1 text-white	'
-                    }
+                  <input
+                    name="sound"
+                    type="file"
+                    accept=".mp3, .weba"
+                    onChange={onFileChange}
+                    className="hidden"
+                    ref={soundInput}
+                  />
+                  <input
+                    name="video"
+                    type="file"
+                    accept=".mp4, .mkv, .mov, .avi"
+                    onChange={onFileChange}
+                    className="hidden"
+                    ref={videoInput}
+                  />
+                  <input
+                    name="file"
+                    type="file"
+                    onChange={onFileChange}
+                    className="hidden"
+                    ref={fileInput}
+                  />
+                  <li
+                    onClick={() => {
+                      imageInput.current.click();
+                    }}
+                    className="hover:bg-dbeats-dark-primary cursor-pointer p-2 px-4 hover:text-dbeats-light hover:nm-flat-dbeats-dark-secondary rounded-md"
                   >
-                    {formState.replyto.username}{' '}
-                    <span className="text-xs text-gray-300 font-light">
-                      {new Date(formState.replyto.createdAt).toLocaleString('en-US', {
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        hour12: true,
-                      })}
-                    </span>
-                  </p>
-                  <p className="text">{formState.replyto.message}</p>
-                </div>
+                    <i className="fas fa-camera mr-2"></i>Image
+                  </li>
+                  <li
+                    onClick={() => {
+                      soundInput.current.click();
+                    }}
+                    className="hover:bg-dbeats-dark-primary cursor-pointer p-2 px-4 hover:text-dbeats-light hover:nm-flat-dbeats-dark-secondary rounded-md"
+                  >
+                    <i className="fas fa-music mr-2"></i>Sound
+                  </li>
+                  <li
+                    onClick={() => {
+                      videoInput.current.click();
+                    }}
+                    className="hover:bg-dbeats-dark-primary cursor-pointer p-2 px-4 hover:text-dbeats-light hover:nm-flat-dbeats-dark-secondary rounded-md"
+                  >
+                    <i className="fas fa-video mr-2"></i>Video
+                  </li>
+                  <li
+                    onClick={() => {
+                      fileInput.current.click();
+                    }}
+                    className="hover:bg-dbeats-dark-primary cursor-pointer p-2 px-4 hover:text-dbeats-light hover:nm-flat-dbeats-dark-secondary rounded-md"
+                  >
+                    <i className="fas fa-file mr-2"></i>File
+                  </li>
+                </ul>
               </div>
-              <button
-                className="px-3 py-1 rounded-full nm-convex-dbeats-dark-secondary hover:nm-concave-dbeats-dark-secondary-sm   cursor-pointer"
-                onClick={() => {
-                  setForm({ ...formState, replyto: null });
-                }}
-              >
-                <i className="fa-solid fa-xmark text-lg  "></i>
-              </button>
-            </div>
-          ) : null}
-          {selectedFile ? (
-            <div className="flex justify-between">
-              {selectedFile.type == 'image' && (
-                <img src={selectedFile.localurl} className="w-24 h-24"></img>
-              )}
-              {selectedFile.type == 'sound' && (
-                <div className="ml-3 p-2 border border-dbeats-light rounded-md">
-                  <i className="fas fa-music text-3xl text-dbeats-light"></i>
-                  <p className="text-gray-400 text-xs">{selectedFile.file[0].name}</p>
+            )}
+
+            <div className="  py-4 md:px-4   bg-dbeats-dark-secondary  ">
+              {formState.replyto ? (
+                <div className="px-3 p-2 flex items-center	justify-between rounded-xl dark: bg-dbeats-dark-alt 	mb-4">
+                  <div className="flex">
+                    <div className="chat_message_profile pr-2">
+                      <img
+                        height="50px"
+                        width="50px"
+                        className="rounded-full"
+                        alt="profile"
+                        src={formState.replyto.profile_image}
+                      />
+                    </div>
+                    <div className="p-1">
+                      <p
+                        className={
+                          formState.replyto.username === user.username
+                            ? 'text-base font-bold mb-1  text-dbeats-light'
+                            : 'text-base font-bold mb-1 text-white	'
+                        }
+                      >
+                        {formState.replyto.username}{' '}
+                        <span className="text-xs text-gray-300 font-light">
+                          {new Date(formState.replyto.createdAt).toLocaleString('en-US', {
+                            hour: '2-digit',
+                            minute: '2-digit',
+                            hour12: true,
+                          })}
+                        </span>
+                      </p>
+                      <p className="text">{formState.replyto.message}</p>
+                    </div>
+                  </div>
+                  <button
+                    className="px-3 py-1 rounded-full nm-convex-dbeats-dark-secondary hover:nm-concave-dbeats-dark-secondary-sm   cursor-pointer"
+                    onClick={() => {
+                      setForm({ ...formState, replyto: null });
+                    }}
+                  >
+                    <i className="fa-solid fa-xmark text-lg  "></i>
+                  </button>
                 </div>
-              )}
-              {selectedFile.type == 'video' && (
-                <div className="ml-3 p-2 border border-dbeats-light rounded-md">
-                  <i className="fas fa-video text-3xl text-dbeats-light"></i>
-                  <p className="text-gray-400 text-xs">{selectedFile.file[0].name}</p>
+              ) : null}
+              {selectedFile ? (
+                <div className="flex justify-between">
+                  {selectedFile.type == 'image' && (
+                    <img src={selectedFile.localurl} className="w-24 h-24"></img>
+                  )}
+                  {selectedFile.type == 'sound' && (
+                    <div className="ml-3 p-2 border border-dbeats-light rounded-md">
+                      <i className="fas fa-music text-3xl text-dbeats-light"></i>
+                      <p className="text-gray-400 text-xs">{selectedFile.file[0].name}</p>
+                    </div>
+                  )}
+                  {selectedFile.type == 'video' && (
+                    <div className="ml-3 p-2 border border-dbeats-light rounded-md">
+                      <i className="fas fa-video text-3xl text-dbeats-light"></i>
+                      <p className="text-gray-400 text-xs">{selectedFile.file[0].name}</p>
+                    </div>
+                  )}
+                  {selectedFile.type == 'file' && (
+                    <div className="ml-3 p-2 border border-dbeats-light rounded-md">
+                      <i className="fas fa-file text-3xl text-dbeats-light"></i>
+                      <p className="text-gray-400 text-xs">{selectedFile.file[0].name}</p>
+                    </div>
+                  )}
+                  <button
+                    onClick={() => {
+                      setSelectedFile(null);
+                    }}
+                  >
+                    <i className="fas fa-times"></i>
+                  </button>
                 </div>
-              )}
-              {selectedFile.type == 'file' && (
-                <div className="ml-3 p-2 border border-dbeats-light rounded-md">
-                  <i className="fas fa-file text-3xl text-dbeats-light"></i>
-                  <p className="text-gray-400 text-xs">{selectedFile.file[0].name}</p>
+              ) : null}
+              <div className="flex justify-start ">
+                <div>
+                  <div
+                    onClick={() => {
+                      setShowAttachmentDropdown(
+                        showAttachmentDropdown ? !showAttachmentDropdown : showAttachmentDropdown,
+                      );
+                      setShowEmojis(!showEmojis);
+                    }}
+                    className=" rounded-3xl group w-max mx-2  p-1   justify-center  cursor-pointer     nm-convex-dbeats-dark-secondary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
+                  >
+                    {' '}
+                    <i className="far fa-laugh text-base md:text-2xl px-2 py-1"></i>
+                  </div>
                 </div>
-              )}
-              <button
-                onClick={() => {
-                  setSelectedFile(null);
-                }}
-              >
-                <i className="fas fa-times"></i>
-              </button>
-            </div>
-          ) : null}
-          <div className="flex justify-start ">
-            <div>
-              <div
-                onClick={() => {
-                  setShowAttachmentDropdown(
-                    showAttachmentDropdown ? !showAttachmentDropdown : showAttachmentDropdown,
-                  );
-                  setShowEmojis(!showEmojis);
-                }}
-                className=" rounded-3xl group w-max mx-2  p-1   justify-center  cursor-pointer     nm-convex-dbeats-dark-secondary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
-              >
-                {' '}
-                <i className="far fa-laugh text-base md:text-2xl px-2 py-1"></i>
-              </div>
-            </div>
-            {/* <div
+                {/* <div
               onClick={() => {
                 setShowAttachmentDropdown(
                   showAttachmentDropdown ? !showAttachmentDropdown : showAttachmentDropdown,
@@ -678,20 +708,20 @@ function ChatRoom(props) {
               </span>
             </div> */}
 
-            <div>
-              <div
-                onClick={() => {
-                  setShowAttachmentDropdown(!showAttachmentDropdown);
-                  setShowEmojis(showEmojis ? !showEmojis : showEmojis);
-                }}
-                className=" rounded-3xl group w-max mx-2  p-1   justify-center  cursor-pointer     nm-convex-dbeats-dark-secondary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
-              >
-                {' '}
-                <i className="fas fa-paperclip text-base md:text-2xl px-2 py-1"></i>
-              </div>
-            </div>
+                <div>
+                  <div
+                    onClick={() => {
+                      setShowAttachmentDropdown(!showAttachmentDropdown);
+                      setShowEmojis(showEmojis ? !showEmojis : showEmojis);
+                    }}
+                    className=" rounded-3xl group w-max mx-2  p-1   justify-center  cursor-pointer     nm-convex-dbeats-dark-secondary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
+                  >
+                    {' '}
+                    <i className="fas fa-paperclip text-base md:text-2xl px-2 py-1"></i>
+                  </div>
+                </div>
 
-            {/* <div
+                {/* <div
               onClick={() => {
                 setShowAttachmentDropdown(!showAttachmentDropdown);
                 setShowEmojis(showEmojis ? !showEmojis : showEmojis);
@@ -706,25 +736,25 @@ function ChatRoom(props) {
               </span>
             </div> */}
 
-            <form className="flex flex-grow" id="chat-form" onSubmit={saveMessage}>
-              <div className="flex-grow rounded-md group w-fit  p-1  mx-1  cursor-pointer            font-medium          transform-gpu  transition-all duration-300 ease-in-out ">
-                {' '}
-                <textarea
-                  onChange={onChange}
-                  value={formState.message}
-                  id="msg"
-                  rows={1}
-                  name="message"
-                  type="text"
-                  placeholder="Enter Message"
-                  required
-                  autoComplete="false"
-                  className="w-full rounded-md border-0 ring-0 focus:ring-0 focus:border-0 text-black dark:text-white md:px-4 p-2  nm-flat-dbeats-dark-primary  hover:nm-inset-dbeats-dark-secondary focus:nm-inset-dbeats-dark-primary placeholder-white placeholder-opacity-25"
-                ></textarea>
-              </div>
+                <form className="flex flex-grow" id="chat-form" onSubmit={saveMessage}>
+                  <div className="flex-grow rounded-md group w-fit  p-1  mx-1  cursor-pointer            font-medium          transform-gpu  transition-all duration-300 ease-in-out ">
+                    {' '}
+                    <textarea
+                      onChange={onChange}
+                      value={formState.message}
+                      id="msg"
+                      rows={1}
+                      name="message"
+                      type="text"
+                      placeholder="Enter Message"
+                      required
+                      autoComplete="false"
+                      className="w-full rounded-md border-0 ring-0 focus:ring-0 focus:border-0 text-black dark:text-white md:px-4 p-2  nm-flat-dbeats-dark-primary  hover:nm-inset-dbeats-dark-secondary focus:nm-inset-dbeats-dark-primary placeholder-white placeholder-opacity-25"
+                    ></textarea>
+                  </div>
 
-              <div className="">
-                {/* <button
+                  <div className="">
+                    {/* <button
                    
                   type="submit"
                   className={`${
@@ -736,26 +766,28 @@ function ChatRoom(props) {
                   <i className="fas fa-paper-plane mr-2" />
                   <p className="hidden md:inline">Send</p>
                 </button> */}
-                <button
-                  disabled={uploadingFile}
-                  type="submit"
-                  className={`${
-                    uploadingFile || formState.message.length < 1
-                      ? 'dark:bg-dbeats-dark-primary hidden'
-                      : 'nm-convex-dbeats-dark-secondary  hover:nm-inset-dbeats-dark-primary'
-                  }  px-4 py-2  rounded-3xl group flex items-center justify-center  `}
-                >
-                  <i className="fas fa-paper-plane mr-2" />
-                  <p className="hidden md:inline">Send</p>
-                </button>
+                    <button
+                      disabled={uploadingFile}
+                      type="submit"
+                      className={`${
+                        uploadingFile || formState.message.length < 1
+                          ? 'dark:bg-dbeats-dark-primary hidden'
+                          : 'nm-convex-dbeats-dark-secondary  hover:nm-inset-dbeats-dark-primary'
+                      }  px-4 py-2  rounded-3xl group flex items-center justify-center  `}
+                    >
+                      <i className="fas fa-paper-plane mr-2" />
+                      <p className="hidden md:inline">Send</p>
+                    </button>
+                  </div>
+                  <div
+                    className="animate-spin rounded-full h-7 w-7 ml-3 border-t-2 border-b-2 bg-gradient-to-r from-green-400 to-blue-500 "
+                    hidden={!uploadingFile}
+                  ></div>
+                </form>
               </div>
-              <div
-                className="animate-spin rounded-full h-7 w-7 ml-3 border-t-2 border-b-2 bg-gradient-to-r from-green-400 to-blue-500 "
-                hidden={!uploadingFile}
-              ></div>
-            </form>
+            </div>
           </div>
-        </div>
+        </main>
       </div>
     </div>
   );
