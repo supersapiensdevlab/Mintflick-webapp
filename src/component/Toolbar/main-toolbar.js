@@ -53,7 +53,7 @@ const MainToolbar = () => {
 
   return (
     <>
-      <div className="p-0.5 w-full  font-bold dark:text-white sm:rounded-xl bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary nm-flat-dbeats-dark-primary-sm">
+      <div className="p-0.5 w-full  font-bold dark:text-white sm:rounded-xl bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary nm-flat-dbeats-dark-primary-sm ">
         <div className=" p-2  font-bold dark:text-white sm:rounded-xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary">
           <div className="flex justify-between mb-2 px-2 fourth-step">
             <Link to={`/profile/${user.username}`} className="mr-4">
@@ -72,7 +72,7 @@ const MainToolbar = () => {
                 handleCloseNFTUpload();
               }}
               placeholder={iceBreaker}
-              className="border-2  border-dbeats-dark-secondary text-gray-200 rounded-3xl w-full nm-flat-dbeats-dark-primary placeholder-white placeholder-opacity-25 px-5 focus:nm-inset-dbeats-dark-primary "
+              className="border-2  border-dbeats-dark-secondary text-gray-200 rounded-3xl w-full nm-flat-dbeats-dark-primary-sm placeholder-white placeholder-opacity-25 px-5 focus:nm-inset-dbeats-dark-primary "
             ></input>
           </div>
 

@@ -569,7 +569,7 @@ function ChatRoom(props) {
                     onClick={() => {
                       imageInput.current.click();
                     }}
-                    className="hover:bg-dbeats-dark-primary cursor-pointer p-2 px-4 hover:text-dbeats-light hover:nm-flat-dbeats-dark-secondary rounded-md"
+                    className="hover:bg-dbeats-dark-primary cursor-pointer p-2 px-4 hover:text-dbeats-light hover:nm-flat-dbeats-dark-secondary-sm rounded-md"
                   >
                     <i className="fas fa-camera mr-2"></i>Image
                   </li>
@@ -577,7 +577,7 @@ function ChatRoom(props) {
                     onClick={() => {
                       soundInput.current.click();
                     }}
-                    className="hover:bg-dbeats-dark-primary cursor-pointer p-2 px-4 hover:text-dbeats-light hover:nm-flat-dbeats-dark-secondary rounded-md"
+                    className="hover:bg-dbeats-dark-primary cursor-pointer p-2 px-4 hover:text-dbeats-light hover:nm-flat-dbeats-dark-secondary-sm rounded-md"
                   >
                     <i className="fas fa-music mr-2"></i>Sound
                   </li>
@@ -585,7 +585,7 @@ function ChatRoom(props) {
                     onClick={() => {
                       videoInput.current.click();
                     }}
-                    className="hover:bg-dbeats-dark-primary cursor-pointer p-2 px-4 hover:text-dbeats-light hover:nm-flat-dbeats-dark-secondary rounded-md"
+                    className="hover:bg-dbeats-dark-primary cursor-pointer p-2 px-4 hover:text-dbeats-light hover:nm-flat-dbeats-dark-secondary-sm rounded-md"
                   >
                     <i className="fas fa-video mr-2"></i>Video
                   </li>
@@ -593,7 +593,7 @@ function ChatRoom(props) {
                     onClick={() => {
                       fileInput.current.click();
                     }}
-                    className="hover:bg-dbeats-dark-primary cursor-pointer p-2 px-4 hover:text-dbeats-light hover:nm-flat-dbeats-dark-secondary rounded-md"
+                    className="hover:bg-dbeats-dark-primary cursor-pointer p-2 px-4 hover:text-dbeats-light hover:nm-flat-dbeats-dark-secondary-sm rounded-md"
                   >
                     <i className="fas fa-file mr-2"></i>File
                   </li>
@@ -698,7 +698,7 @@ function ChatRoom(props) {
                 );
                 setShowEmojis(!showEmojis);
               }}
-              className=" rounded-3xl group w-max   p-1  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-secondary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
+              className=" rounded-3xl group w-max   p-1  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-secondary-sm   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
             >
               <span className="  text-black dark:text-white  flex p-1 rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:nm-inset-dbeats-dark-secondary ">
                 <p className="self-center md:mx-2">
@@ -726,7 +726,7 @@ function ChatRoom(props) {
                 setShowAttachmentDropdown(!showAttachmentDropdown);
                 setShowEmojis(showEmojis ? !showEmojis : showEmojis);
               }}
-              className=" rounded-3xl group w-max   p-1  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-secondary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
+              className=" rounded-3xl group w-max   p-1  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-secondary-sm   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
             >
               <span className="  text-black dark:text-white  flex p-1 rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:nm-inset-dbeats-dark-secondary ">
                 <p className="self-center md:mx-2">
@@ -749,7 +749,7 @@ function ChatRoom(props) {
                       placeholder="Enter Message"
                       required
                       autoComplete="false"
-                      className="w-full rounded-md border-0 ring-0 focus:ring-0 focus:border-0 text-black dark:text-white md:px-4 p-2  nm-flat-dbeats-dark-primary  hover:nm-inset-dbeats-dark-secondary focus:nm-inset-dbeats-dark-primary placeholder-white placeholder-opacity-25"
+                      className="w-full rounded-md border-0 ring-0 focus:ring-0 focus:border-0 text-black dark:text-white md:px-4 p-2  nm-flat-dbeats-dark-primary-sm  hover:nm-inset-dbeats-dark-secondary focus:nm-inset-dbeats-dark-primary placeholder-white placeholder-opacity-25"
                     ></textarea>
                   </div>
 

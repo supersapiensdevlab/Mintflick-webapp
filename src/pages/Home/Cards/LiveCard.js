@@ -18,7 +18,7 @@ const LiveCard = (props) => {
 
   return (
     <div className="w-full h-auto min-h-full  ">
-      <div className=" cursor-pointer hover:border-dbeats-light border border-transparent  sm:p-0.5 nm-flat-dbeats-dark-secondary   rounded-md">
+      <div className=" cursor-pointer hover:border-dbeats-light border border-transparent  sm:p-0.5 nm-flat-dbeats-dark-secondary-sm   rounded-md">
         <Link to={`/live/${props.username}/`}>
           <span className="fixed bg-red-600 text-white px-1 mx-1 my-1 rounded-sm font-semibold">
             {' '}

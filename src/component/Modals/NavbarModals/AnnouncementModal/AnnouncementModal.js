@@ -297,7 +297,7 @@ const AnnouncementModal = (props) => {
 
           <div
             onClick={props.handleCloseAnnouncement}
-            className=" rounded-3xl group w-max   p-1  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-secondary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
+            className=" rounded-3xl group w-max   p-1  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-secondary-sm   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
           >
             <span className="  text-black dark:text-white  flex p-1 rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:nm-inset-dbeats-dark-secondary ">
               <p className="self-center mx-2">
@@ -311,7 +311,7 @@ const AnnouncementModal = (props) => {
           <div className=" 2xl:pb-4 rounded-b-xl dark:rounded-b-sm  lg:px-7 lg:pb-2 h-full px-4 w-full dark:bg-dbeats-dark-alt overflow-y-auto lg:overflow-hidden bg-white   dark:text-gray-100 ">
             <div className="align-center bg-gray-100 h-full dark:bg-dbeats-dark-alt">
               <div className={`${classes.view_container} lg:h-72 2xl:h-96 h-80 overflow-y-auto`}>
-                <div className="p-1 nm-flat-dbeats-dark-secondary h-5/6 w-full">
+                <div className="p-1 nm-flat-dbeats-dark-secondary-sm h-5/6 w-full">
                   <textarea
                     className={`${classes.textarea_container} w-full h-full
                      lg:text-sm 2xl:text-lg border-b border-gray-300  placeholder-white placeholder-opacity-25 nm-flat-dbeats-dark-primary`}
@@ -426,7 +426,7 @@ const AnnouncementModal = (props) => {
                       cursor-pointer relative inline-flex items-center justify-center p-1 mb-2 
                       mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-3xl  
                       bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  
-                      nm-flat-dbeats-dark-secondary   hover:nm-inset-dbeats-dark-secondary   hover:text-white dark:text-white  "
+                      nm-flat-dbeats-dark-secondary-sm   hover:nm-inset-dbeats-dark-secondary   hover:text-white dark:text-white  "
                   >
                     <span
                       className="relative px-5 py-2.5   

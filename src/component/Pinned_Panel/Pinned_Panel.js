@@ -48,7 +48,7 @@ const PinnedPanel = () => {
   return (
     <div className={` w-full fixed top-0 ${darkMode && 'dark'} z-2  `}>
       <div
-        className={`hidden   lg:block 2xl:pt-16 lg:pt-14 bg-white w-max shadow  z-10 h-full fixed  nm-flat-dbeats-dark-secondary  px-2  dark:text-gray-100  flex flex-col justify-center `}
+        className={`hidden   lg:block 2xl:pt-16 lg:pt-14 bg-white w-max shadow  z-10 h-full fixed  nm-flat-dbeats-dark-secondary-sm  px-2  dark:text-gray-100  flex flex-col justify-center `}
       >
         {/* Subscribed User Avatar */}
         {userdata && showPinnedData ? (
@@ -69,7 +69,7 @@ const PinnedPanel = () => {
                     }
                   >
                     <Link to={`/profile/${pinnedUser.username}/text`} className=" my-2 relative">
-                      <div className="p-0.5 nm-flat-dbeats-dark-secondary rounded-full hover:nm-inset-dbeats-dark-secondary">
+                      <div className="p-0.5 nm-flat-dbeats-dark-secondary-sm rounded-full hover:nm-inset-dbeats-dark-secondary">
                         <img
                           src={pinnedUser.profile_image ? pinnedUser.profile_image : personImg}
                           alt=""
@@ -88,7 +88,7 @@ const PinnedPanel = () => {
         <div className="flex justify-center cursor-pointer second-step ">
           <a
             onClick={handlePlusClick}
-            className="2xl:w-14 2xl:h-14 lg:h-10 lg:w-10  my-2 rounded-full hover:shadow hover:scale-99 transition-all transform  relative nm-flat-dbeats-dark-secondary hover:nm-inset-dbeats-dark-secondary "
+            className="2xl:w-14 2xl:h-14 lg:h-10 lg:w-10  my-2 rounded-full hover:shadow hover:scale-99 transition-all transform  relative nm-flat-dbeats-dark-secondary-sm hover:nm-inset-dbeats-dark-secondary "
           >
             <div className="w-max mx-auto 2xl:mt-3.5 lg:mt-1.5 ">
               <i className="fas fa-plus 2xl:text-lg lg:text-sm text-center text-white dark:text-blue-200"></i>

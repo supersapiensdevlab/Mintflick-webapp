@@ -192,7 +192,7 @@ export default function CreateItem() {
   return (
     <div className={`${darkMode && 'dark'}  flex justify-center  `}>
       <div className="w-full flex flex-col px-5 pb-5">
-        <div className="p-0.5 nm-flat-dbeats-dark-secondary rounded-md mt-8">
+        <div className="p-0.5 nm-flat-dbeats-dark-secondary-sm rounded-md mt-8">
           {' '}
           <input
             required={true}
@@ -201,7 +201,7 @@ export default function CreateItem() {
             onChange={(e) => updateFormInput({ ...formInput, name: e.target.value })}
           />
         </div>
-        <div className="p-0.5 mt-2 nm-flat-dbeats-dark-secondary rounded-md">
+        <div className="p-0.5 mt-2 nm-flat-dbeats-dark-secondary-sm rounded-md">
           <textarea
             required={true}
             placeholder="Asset Description"
@@ -209,7 +209,7 @@ export default function CreateItem() {
             onChange={(e) => updateFormInput({ ...formInput, description: e.target.value })}
           />
         </div>
-        <div className="p-0.5 mt-2 nm-flat-dbeats-dark-secondary rounded-md">
+        <div className="p-0.5 mt-2 nm-flat-dbeats-dark-secondary-sm rounded-md">
           {' '}
           <input
             required={true}
@@ -234,7 +234,7 @@ export default function CreateItem() {
                       cursor-pointer relative inline-flex items-center justify-center p-1 mb-2 
                       mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-3xl  
                       bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  
-                      nm-flat-dbeats-dark-secondary   hover:nm-inset-dbeats-dark-secondary   hover:text-white dark:text-white  "
+                      nm-flat-dbeats-dark-secondary-sm   hover:nm-inset-dbeats-dark-secondary   hover:text-white dark:text-white  "
           >
             <span
               className="relative px-5 py-2.5   
@@ -245,7 +245,7 @@ export default function CreateItem() {
             </span>
           </div>
         </div>
-        {/* <div className="rounded-full p-1 nm-flat-dbeats-dark-alt  mt-4 w-max">
+        {/* <div className="rounded-full p-1 nm-flat-dbeats-dark-alt-sm   mt-4 w-max">
           <button
             onClick={createMarket}
             className="rounded-full  font-bold  bg-dbeats-dark-secondary hover:nm-inset-dbeats-secondary-light text-white   p-4 shadow-lg w-full h-full"

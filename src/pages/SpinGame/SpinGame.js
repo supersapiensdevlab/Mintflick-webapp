@@ -112,7 +112,7 @@ function SpinGame() {
             className="  transform-gpu  w-max  mx-auto   transition-all duration-300 ease-in-out mt-3 cursor-pointer
              items-center justify-center p-1   overflow-hidden 
             font-medium text-gray-900 rounded-full   bg-gradient-to-br 
-           from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-primary  
+           from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-primary-sm  
             hover:nm-inset-dbeats-dark-primary   hover:text-white dark:text-white  "
           >
             <span className="relative px-12 py-5 whitespace-nowrap font-bold text-xl   bg-gradient-to-br from-dbeats-light to-dbeats-secondary-light hover:nm-inset-dbeats-secondary-light  rounded-full">

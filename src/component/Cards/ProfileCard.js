@@ -47,7 +47,7 @@ const ProfileCard = ({ user }) => {
   return (
     <>
       {user ? (
-        <div className="flex items-center curso  text-center bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-secondary p-0.5  sm:rounded-xl nm-flat-dbeats-dark-primary mb-4">
+        <div className="flex items-center curso  text-center bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-secondary p-0.5  sm:rounded-xl nm-flat-dbeats-dark-primary-sm mb-4">
           <div className=" dark:text-gray-50  pb-4    border-opacity-30  shadow-sm dark:shadow-md  bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary  text-dbeats-dark-primary sm:rounded-xl   w-full ">
             <div className="flex items-center h-max w-full justify-center">
               <div className=" ">
@@ -68,7 +68,7 @@ const ProfileCard = ({ user }) => {
 
                       <div className=" photo-wrapper  rounded-full ">
                         <img
-                          className="w-24 h-24  rounded-full mx-auto p-1 nm-flat-dbeats-dark-primary -mt-14 "
+                          className="w-24 h-24  rounded-full mx-auto p-1 nm-flat-dbeats-dark-primary-sm -mt-14 "
                           src={user.profile_image !== '' ? user.profile_image : logo}
                           alt={user.username}
                         />
@@ -79,7 +79,7 @@ const ProfileCard = ({ user }) => {
                     ) : (
                       <button
                         onClick={handleFollow}
-                        className=" my-2 items-center align-middle text-center nm-flat-dbeats-dark-primary w-28 rounded-3xl p-1 hover:nm-inset-dbeats-dark-primary"
+                        className=" my-2 items-center align-middle text-center nm-flat-dbeats-dark-primary-sm w-28 rounded-3xl p-1 hover:nm-inset-dbeats-dark-primary"
                       >
                         <div className="items-center  align-middle text-center bg-dbeats-secondary-light rounded-3xl hover:nm-inset-dbeats-light">
                           follow

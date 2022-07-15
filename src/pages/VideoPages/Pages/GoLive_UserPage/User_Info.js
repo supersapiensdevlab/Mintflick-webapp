@@ -766,17 +766,17 @@ const UserInfo = (props) => {
                     required={true}
                     onChange={onFileChange}
                   />
-                  <div className="p-1 nm-flat-dbeats-dark-primary rounded-3xl hover:nm-inset-dbeats-dark-primary">
+                  <div className="p-1 nm-flat-dbeats-dark-primary-sm rounded-3xl hover:nm-inset-dbeats-dark-primary">
                     <button
                       disabled={uploadingFile}
                       type="submit"
                       className={`${
-                        uploadingFile
-                          ? 'dark:bg-dbeats-dark-primary'
+                        uploadingFile || !selectedFile
+                          ? 'dark:bg-dbeats-dark-primary hidden'
                           : 'bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:nm-inset-dbeats-light-xs'
                       }  px-4 py-2  rounded-3xl group flex items-center justify-center  `}
                     >
-                      <p className="hidden md:inline">Upload</p>
+                      <p>Upload</p>
                     </button>
                   </div>
                   <div
@@ -802,10 +802,10 @@ const UserInfo = (props) => {
                       );
                     })}
                   </div>
-                  <div className="nm-flat-dbeats-dark-primary p-1 rounded-3xl hover:nm-inset-dbeats-dark w-max mx-auto">
+                  <div className="nm-flat-dbeats-dark-primary-sm p-1 rounded-3xl hover:nm-inset-dbeats-dark-secondary-xs w-max mx-auto">
                     <button
                       variant="primary"
-                      className="bg-dbeats-dark-secondary text-center content-center justify-center align-middle hover:nm-inset-dbeats-light flex text-white rounded-3xl font-bold px-4 py-3 tracking-widest w-max"
+                      className="bg-dbeats-dark-secondary text-center content-center justify-center align-middle hover:nm-inset-dbeats-light flex text-white rounded-3xl font-bold px-2 py-3 tracking-widest w-max"
                       type="button"
                       onClick={
                         multiStreamConnected.length < 3
@@ -814,7 +814,7 @@ const UserInfo = (props) => {
                       }
                     >
                       Add MultiStream Platforms
-                      <i className="fas fa-solid fa-video mx-4 cursor-pointer pt-1"></i>
+                      <i className="fas fa-solid fa-video mx-2 cursor-pointer pt-1"></i>
                     </button>
                   </div>
                   <div className={classes.multistream_form_spinner}>
@@ -1329,7 +1329,7 @@ const UserInfo = (props) => {
                   required={true}
                   onChange={onFileChange}
                 />
-                <div className="p-1 nm-flat-dbeats-dark-primary rounded-3xl hover:nm-inset-dbeats-dark-primary">
+                <div className="p-1 nm-flat-dbeats-dark-primary-sm rounded-3xl hover:nm-inset-dbeats-dark-primary">
                   <button
                     disabled={uploadingFile}
                     type="submit"
@@ -1361,7 +1361,7 @@ const UserInfo = (props) => {
                     );
                   })}
                 </div>
-                <div className="nm-flat-dbeats-dark-primary p-1 rounded-3xl hover:nm-inset-dbeats-dark w-max mx-auto">
+                <div className="nm-flat-dbeats-dark-primary-sm p-1 rounded-3xl hover:nm-inset-dbeats-dark w-max mx-auto">
                   <button
                     variant="primary"
                     className="bg-dbeats-dark-secondary text-center content-center justify-center align-middle hover:nm-inset-dbeats-light flex text-white rounded-3xl font-bold px-4 py-3 tracking-widest w-max"

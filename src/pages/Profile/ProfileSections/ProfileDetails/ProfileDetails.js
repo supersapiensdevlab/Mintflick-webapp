@@ -605,7 +605,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                           onClick={handleShowSubscriptionModal}
                           className={
                             superfan_data
-                              ? ' flex nm-flat-dbeats-dark-primary md:ml-72 lg:ml-0 border border-dbeats-light dark:hover:bg-dbeats-light p-1 2xl:text-lg lg:text-sm text-md  rounded  2xl:px-4 px-2 md:px-2 lg:px-2      mr-3   text-white   '
+                              ? ' flex nm-flat-dbeats-dark-primary-sm md:ml-72 lg:ml-0 border border-dbeats-light dark:hover:bg-dbeats-light p-1 2xl:text-lg lg:text-sm text-md  rounded  2xl:px-4 px-2 md:px-2 lg:px-2      mr-3   text-white   '
                               : 'hidden'
                           }
                         >
@@ -1271,7 +1271,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
               <div className="col-span-4 pl-14 ">Followers</div>
               <div
                 onClick={handleCloseFollowers}
-                className=" rounded-3xl group w-max   p-1  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-secondary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
+                className=" rounded-3xl group w-max   p-1  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-secondary-sm   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
               >
                 <span className="  text-black dark:text-white  flex p-1 rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:nm-inset-dbeats-dark-secondary ">
                   <p className="self-center mx-2">
@@ -1355,7 +1355,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
               <div className="col-span-4 pl-14 ">Following</div>
               <div
                 onClick={handleCloseFollowing}
-                className=" rounded-3xl group w-max   p-1  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-secondary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
+                className=" rounded-3xl group w-max   p-1  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-secondary-sm   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
               >
                 <span className="  text-black dark:text-white  flex p-1 rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:nm-inset-dbeats-dark-secondary ">
                   <p className="self-center mx-2">
@@ -1439,7 +1439,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
               <div className="col-span-4 pl-14 ">Superfan</div>
               <div
                 onClick={handleCloseSuperfan}
-                className=" rounded-3xl group w-max   p-1  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-secondary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
+                className=" rounded-3xl group w-max   p-1  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-secondary-sm   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
               >
                 <span className="  text-black dark:text-white  flex p-1 rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:nm-inset-dbeats-dark-secondary ">
                   <p className="self-center mx-2">

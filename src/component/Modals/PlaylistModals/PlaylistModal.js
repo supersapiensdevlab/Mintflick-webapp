@@ -62,7 +62,7 @@ const NewPlaylist = (props) => {
         <div className={`${darkMode && 'dark'} dark:text-white p-2 bg-dbeats-dark-alt rounded-lg`}>
           <div
             onClick={props.handleCloseNewPlaylist}
-            className=" rounded-3xl group w-max p-1  mx-2 mt-2  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-secondary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
+            className=" rounded-3xl group w-max p-1  mx-2 mt-2  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-secondary-sm   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
           >
             <span className="  text-black dark:text-white  flex p-1 rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:nm-inset-dbeats-dark-secondary ">
               <p className="self-center mx-2">
@@ -72,7 +72,7 @@ const NewPlaylist = (props) => {
             </span>
           </div>
           <div className="h-32 w-full flex flex-col justify-center items-center px-5">
-            <div className="mt-1 flex rounded-md w-full shadow-sm nm-flat-dbeats-dark-secondary  p-0.5 mb-4">
+            <div className="mt-1 flex rounded-md w-full shadow-sm nm-flat-dbeats-dark-secondary-sm  p-0.5 mb-4">
               <input
                 type="text"
                 placeholder="Enter Playlist Name"
@@ -151,7 +151,7 @@ export const Playlist = (props) => {
         <div className={`${darkMode && 'dark'} dark:text-white z-100 bg-dbeats-dark-alt relative`}>
           <div
             onClick={props.handleClosePlaylist}
-            className=" rounded-3xl group w-max   p-1  mx-2 mt-2 absolute right-0  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-secondary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
+            className=" rounded-3xl group w-max   p-1  mx-2 mt-2 absolute right-0  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-secondary-sm   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
           >
             <span className="  text-black dark:text-white  flex p-1 rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:nm-inset-dbeats-dark-secondary ">
               <p className="self-center mx-2">

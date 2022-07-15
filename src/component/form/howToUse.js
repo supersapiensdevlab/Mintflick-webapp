@@ -69,7 +69,7 @@ const HowToUse = () => {
         leaveFrom="transform opacity-500   "
         leaveTo="transform   opacity-0  "
       >
-        <div className="mb-4 border border-gray-100 dark:text-gray-50 dark:border-dbeats-light dark:border-opacity-10 bg-white nm-flat-dbeats-dark-primary  rounded-xl shadow-sm dark:shadow-md    text-dbeats-dark-primary p-4    dialog ">
+        <div className="mb-4 border border-gray-100 dark:text-gray-50 dark:border-dbeats-light dark:border-opacity-10 bg-white nm-flat-dbeats-dark-primary-sm  rounded-xl shadow-sm dark:shadow-md    text-dbeats-dark-primary p-4    dialog ">
           <div>
             <div className="justify-between flex">
               <p className=" text-dbeats-light text-lg font-bold">Get Started 🚀</p>

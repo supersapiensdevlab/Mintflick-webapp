@@ -278,7 +278,7 @@ function LiveChat({ userp }) {
                   placeholder="Enter Message"
                   required
                   autoComplete="false"
-                  className="w-full rounded-md border-0 ring-0 focus:ring-0 focus:border-0 text-black dark:text-white md:px-4 p-2  nm-flat-dbeats-dark-primary  hover:nm-inset-dbeats-dark-secondary focus:nm-inset-dbeats-dark-primary placeholder-white placeholder-opacity-25"
+                  className="w-full rounded-md border-0 ring-0 focus:ring-0 focus:border-0 text-black dark:text-white md:px-4 p-2  nm-flat-dbeats-dark-primary-sm  hover:nm-inset-dbeats-dark-secondary focus:nm-inset-dbeats-dark-primary placeholder-white placeholder-opacity-25"
                 ></textarea>
               </div>
 

@@ -543,7 +543,7 @@ const UploadVideoModal = (props) => {
           <div className="col-span-4 pl-14 ">Upload Video</div>
           <div
             onClick={props.handleCloseVideoUpload}
-            className=" rounded-3xl group w-max   p-1  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-secondary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
+            className=" rounded-3xl group w-max   p-1  mx-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-secondary-sm   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
           >
             <span className="  text-black dark:text-white  flex p-1 rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:nm-inset-dbeats-dark-secondary ">
               <p className="self-center mx-2">
@@ -685,7 +685,7 @@ const UploadVideoModal = (props) => {
                               >
                                 Price in MATIC
                               </label>
-                              <div className="mt-1 flex rounded-md shadow-sm nm-flat-dbeats-dark-secondary  p-0.5">
+                              <div className="mt-1 flex rounded-md shadow-sm nm-flat-dbeats-dark-secondary-sm  p-0.5">
                                 <input
                                   min={1}
                                   type="number"
@@ -718,7 +718,7 @@ const UploadVideoModal = (props) => {
                         >
                           Video Title <span className="text-red-600 text-xl">*</span>
                         </label>
-                        <div className="mt-1 flex rounded-md shadow-sm nm-flat-dbeats-dark-secondary  p-0.5">
+                        <div className="mt-1 flex rounded-md shadow-sm nm-flat-dbeats-dark-secondary-sm  p-0.5">
                           <input
                             type="text"
                             name="videoName"
@@ -779,7 +779,7 @@ const UploadVideoModal = (props) => {
                       >
                         Description
                       </label>
-                      <div className="mt-1 nm-flat-dbeats-dark-secondary  p-0.5 rounded-md">
+                      <div className="mt-1 nm-flat-dbeats-dark-secondary-sm  p-0.5 rounded-md">
                         <textarea
                           id="videoDescription"
                           name="description"

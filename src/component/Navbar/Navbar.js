@@ -629,7 +629,7 @@ const NavBar = () => {
                         </>
                       ) : (
                         <div className="px-1   ">
-                          <Dropdown.Item className="w-full h-full self-center  nm-flat-dbeats-dark-primary rounded">
+                          <Dropdown.Item className="w-full h-full self-center  nm-flat-dbeats-dark-primary-sm rounded">
                             <EmptyNotificationContent />
                           </Dropdown.Item>
                         </div>
@@ -640,7 +640,7 @@ const NavBar = () => {
 
                 <Link
                   to={`/profile/${user.username}`}
-                  className="shadow-sm 2xl:h-10  2xl:w-10 self-center  h-8 w-8 p-0.5 nm-flat-dbeats-dark-primary hover:nm-inset-dbeats-dark-primary text-white rounded-full font-bold mx-2 flex"
+                  className="shadow-sm 2xl:h-10  2xl:w-10 self-center  h-8 w-8 p-0.5 nm-flat-dbeats-dark-primary-sm hover:nm-inset-dbeats-dark-primary text-white rounded-full font-bold mx-2 flex"
                 >
                   <img
                     src={user.profile_image ? user.profile_image : person}
@@ -654,7 +654,7 @@ const NavBar = () => {
                 className="shadow-sm p-0.5 dark:bg-gradient-to-r 
                 dark:from-dbeats-secondary-light dark:to-dbeats-light  ml-2 md:mx-2 md:ml-0 transform-gpu  transition-all duration-300 ease-in-out my-1 
                 cursor-pointer relative inline-flex items-center justify-center   mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-3xl 
-                 bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-primary   hover:nm-inset-dbeats-dark-primary   hover:text-white dark:text-white  "
+                 bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-primary-sm   hover:nm-inset-dbeats-dark-primary   hover:text-white dark:text-white  "
               >
                 <div className=" px-5 py-1   bg-gradient-to-br from-dbeats-light to-dbeats-secondary-light hover:nm-inset-dbeats-secondary-light  rounded-3xl flex self-center align-middle">
                   <i className="fas fa-sign-in-alt text-xs lg:text-sm 2xl:text-lg self-center mr-2 hidden md:block align-middle justify-center"></i>{' '}

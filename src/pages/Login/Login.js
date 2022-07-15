@@ -53,7 +53,7 @@ const Login = () => {
   // Metamask Auth
   function WalletButton({ provider, loadWeb3Modal, logoutOfWeb3Modal }) {
     return (
-      <div className="nm-flat-dbeats-dark-secondary p-1 rounded-3xl hover:nm-inset-dbeats-dark-secondary   transform-gpu  transition-all duration-300 ease-in-out ">
+      <div className="nm-flat-dbeats-dark-secondary-sm p-1 rounded-3xl hover:nm-inset-dbeats-dark-secondary   transform-gpu  transition-all duration-300 ease-in-out ">
         <button
           className={` relative px-5 py-2.5 whitespace-nowrap text-xs sm:text-sm text-white  bg-gradient-to-br from-yellow-500 to-yellow-600  hover:nm-inset-yellow-500 rounded-3xl  `}
           onClick={async () => {
@@ -93,7 +93,7 @@ const Login = () => {
         <div
           className="    transform-gpu  transition-all duration-300 ease-in-out mt-3 cursor-pointer
          relative inline-flex items-center justify-center p-1 mb-2 mr-2 overflow-hidden text-sm font-medium 
-         text-gray-900 rounded-3xl  bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-secondary   hover:nm-inset-dbeats-dark-secondary   hover:text-white dark:text-white  "
+         text-gray-900 rounded-3xl  bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-secondary-sm   hover:nm-inset-dbeats-dark-secondary   hover:text-white dark:text-white  "
         >
           <Button
             className="relative px-5 py-2.5 whitespace-nowrap text-xs sm:text-sm  bg-gradient-to-br from-yellow-500 to-yellow-600 hover:nm-inset-yellow-500 rounded-3xl"
