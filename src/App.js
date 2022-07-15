@@ -185,13 +185,14 @@ export default function App() {
               {window.location.pathname == '/' ? (
                 <>
                   {tour == 'show' ? (
-                    <Tour
-                      steps={steps}
-                      isOpen={showTour}
-                      onRequestClose={handleTourClose}
-                      accentColor="#000"
-                      rounded={10}
-                    />
+//                     <Tour
+//                       steps={steps}
+//                       isOpen={showTour}
+//                       onRequestClose={handleTourClose}
+//                       accentColor="#000"
+//                       rounded={10}
+//                     />
+<></>
                   ) : (
                     <></>
                   )}
