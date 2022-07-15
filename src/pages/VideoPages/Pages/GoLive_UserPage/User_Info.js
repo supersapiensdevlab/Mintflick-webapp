@@ -122,6 +122,10 @@ const UserInfo = (props) => {
     derivativeWorks: '',
   });
 
+  const[streamDetails, setStreamDetails] = useState({
+    name:"",
+    description:""
+  });
   useEffect(() => {
     if (user && user.multistream_platform) {
       ////console.log("hello",user.multistream_platform)
@@ -375,7 +379,7 @@ const UserInfo = (props) => {
   };
 
   useEffect(() => {
-    async function uploadVideoToDB() {}
+    async function uploadVideoToDB() { }
 
     console.log('TOKEN ID', tokenId);
     if (tokenId && mintingProgress == 66) {
@@ -538,7 +542,7 @@ const UserInfo = (props) => {
   // Thumbnail
   async function storeThumbnail(files) {
     // show the root cid as soon as it's ready
-    const onRootCidReady = (cid) => {};
+    const onRootCidReady = (cid) => { };
     const file = [files[0]];
     const totalSize = files[0].size;
     let uploaded = 0;
@@ -621,6 +625,34 @@ const UserInfo = (props) => {
     }
   }, []);
 
+  useEffect(()=>{
+    console.log(streamDetails);
+  },[streamDetails]);
+  useEffect(()=>{
+    if(user.streamDetails){
+    setStreamDetails(user.streamDetails)
+    }
+  },[user]);
+  // on Stream Details Submit
+  const handleStreamDetails = async(e) =>{
+    e.preventDefault();
+    if(streamDetails.name !='' && streamDetails.description !=''){
+      try {
+       await axios.post(`${process.env.REACT_APP_SERVER_URL}/user/streamDetails`,streamDetails, tokenConfig()).then((data)=>{
+          dispatch(loadUser());
+        });
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  }
+
+const cancelStreamDetails = () =>{
+  if(user.streamDetails){
+  setStreamDetails(user.streamDetails)
+  }
+}
+
   return user ? (
     <div className={`${darkMode && 'dark'}`}>
       <div className="grid sm:grid-cols-1 lg:grid-cols-3 grid-flow-row  pb-50  lg:ml-12  bg-gradient-to-b from-blue-50 via-blue-50 to-white  dark:bg-gradient-to-b dark:from-dbeats-dark-secondary  dark:to-dbeats-dark-primary">
@@ -632,40 +664,40 @@ const UserInfo = (props) => {
             ) : null}
             {user.livepeer_data
               ? user.livepeer_data.isActive && (
-                  <div className="dark:text-dbeats-white mt-3 ml-2">
-                    <p className="text-md">To create NFT start Recording</p>
-                    <div className="flex justify-between items-center w-full pt-2 text-white">
-                      <div className="flex w-1/2">
+                <div className="dark:text-dbeats-white mt-3 ml-2">
+                  <p className="text-md">To create NFT start Recording</p>
+                  <div className="flex justify-between items-center w-full pt-2 text-white">
+                    <div className="flex w-1/2">
+                      <button
+                        className={`text-center rounded-md w-60 
+                    ${recording ? 'bg-green-300' : 'bg-green-600'} mx-2 py-2`}
+                        disabled={recording}
+                        onClick={startRecording}
+                      >
+                        Start Recording
+                      </button>
+                      {recording ? (
                         <button
                           className={`text-center rounded-md w-60 
-                    ${recording ? 'bg-green-300' : 'bg-green-600'} mx-2 py-2`}
-                          disabled={recording}
-                          onClick={startRecording}
-                        >
-                          Start Recording
-                        </button>
-                        {recording ? (
-                          <button
-                            className={`text-center rounded-md w-60 
                     ${!recording ? 'bg-red-300' : 'bg-red-600'} mx-2 py-2`}
-                            disabled={!recording}
-                            onClick={stopRecording}
-                          >
-                            Stop Recording
-                          </button>
-                        ) : (
-                          <></>
-                        )}
-                      </div>
-                      <p className={`text-white text-lg text-center pr-2 flex flex-col`}>
-                        <span className={` text-${viewColor}  ${viewAnimate} font-bold`}>
-                          {livestreamViews}
-                        </span>
-                        viewers
-                      </p>
+                          disabled={!recording}
+                          onClick={stopRecording}
+                        >
+                          Stop Recording
+                        </button>
+                      ) : (
+                        <></>
+                      )}
                     </div>
+                    <p className={`text-white text-lg text-center pr-2 flex flex-col`}>
+                      <span className={` text-${viewColor}  ${viewAnimate} font-bold`}>
+                        {livestreamViews}
+                      </span>
+                      viewers
+                    </p>
                   </div>
-                )
+                </div>
+              )
               : null}
           </div>
         </div>
@@ -732,7 +764,7 @@ const UserInfo = (props) => {
                 <p>
                   <a
                     className="opacity-50"
-                    href={`https://dbeats.live/live/${user.username}`}
+                    href={`https://beta.mintflick.app/live/${user.username}`}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -770,11 +802,10 @@ const UserInfo = (props) => {
                     <button
                       disabled={uploadingFile}
                       type="submit"
-                      className={`${
-                        uploadingFile || !selectedFile
-                          ? 'dark:bg-dbeats-dark-primary hidden'
-                          : 'bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:nm-inset-dbeats-light-xs'
-                      }  px-4 py-2  rounded-3xl group flex items-center justify-center  `}
+                      className={`${uploadingFile || !selectedFile
+                        ? 'dark:bg-dbeats-dark-primary hidden'
+                        : 'bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:nm-inset-dbeats-light-xs'
+                        }  px-4 py-2  rounded-3xl group flex items-center justify-center  `}
                     >
                       <p>Upload</p>
                     </button>
@@ -785,7 +816,27 @@ const UserInfo = (props) => {
                   ></div>
                 </form>
               </div>
+              {/* Stream Title */}
               <div>
+                <form onSubmit={handleStreamDetails}>
+                  <div>
+                    <label className='font-semibold text-sm'>Stream Title: </label>
+                    <input value={streamDetails.name} onChange={(e)=> setStreamDetails({...streamDetails,name:e.target.value})} className='w-full bg-transparent' type="text" />
+                  </div>
+                  <div className='mt-2'>
+                    <label className='font-semibold text-sm'>Stream Description: </label>
+                    <textarea value={streamDetails.description} onChange={(e)=> setStreamDetails({...streamDetails,description:e.target.value})} rows={2} className='w-full bg-transparent' type="text" />
+                  </div>
+                  <div className='flex mt-1 justify-end'>
+                
+                    <input className='bg-dbeats-alt ml-1 text-dbeats-light border-dbeats-light px-3 py-2  rounded-md' type="submit" value="Save" />
+              
+                    <button onClick={cancelStreamDetails} className='bg-dbeats-alt ml-1 text-gray-400 border-gray-400 px-3 py-2  rounded-md'>Cancel</button>
+                  
+                  </div>
+                </form>
+              </div>
+              <div className='hidden'>
                 <div className="flex flex-col">
                   <p className="text-center mb-1">Currently Connected :</p>
                   <div className="flex flex-wrap justify-center">
@@ -974,23 +1025,21 @@ const UserInfo = (props) => {
                       ) : null}
 
                       <div
-                        className={`${
-                          mintingProgress === 66 ? 'block' : 'hidden'
-                        } text-center flex mx-3 my-5`}
+                        className={`${mintingProgress === 66 ? 'block' : 'hidden'
+                          } text-center flex mx-3 my-5`}
                       >
                         <p className="no-underline  text-white">Wrapping Up Things &nbsp;</p>
                         <p className="no-underline  text-white"> Please Wait...</p>
                       </div>
 
                       <div
-                        className={`${
-                          minting !== null &&
+                        className={`${minting !== null &&
                           minting !== true &&
                           mintingProgress === 100 &&
                           minting !== 'token created'
-                            ? 'block'
-                            : 'hidden'
-                        } text-center flex mx-3 my-5`}
+                          ? 'block'
+                          : 'hidden'
+                          } text-center flex mx-3 my-5`}
                       >
                         <p className="no-underline  text-dbeats-light">🚀 NFT Minted &nbsp;</p>
                         <a
