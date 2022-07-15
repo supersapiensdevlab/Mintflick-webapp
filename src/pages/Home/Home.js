@@ -330,7 +330,7 @@ const Home = () => {
                         setSelected={setSelectedCategory}
                         getSelected={selectedCategory}
                       />
-                      <button className="self-center rounded-3xl group w-max ml-2 p-1 mr-1  justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-primary   hover:nm-inset-dbeats-dark-primary          flex items-center            transform-gpu  transition-all duration-300 ease-in-out ">
+                      <button className="self-center rounded-3xl group w-max ml-2 p-1 mr-1  justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-primary-sm   hover:nm-inset-dbeats-dark-primary          flex items-center            transform-gpu  transition-all duration-300 ease-in-out ">
                         <span
                           onClick={() => setSelectedFilter(filter[0])}
                           className={`${
@@ -342,7 +342,7 @@ const Home = () => {
                           <p className="self-center mx-2 sm:font-normal text-xs">All</p>
                         </span>
                       </button>
-                      <button className="self-center rounded-3xl group w-max ml-1 p-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-primary   hover:nm-inset-dbeats-dark-primary          flex items-center            transform-gpu  transition-all duration-300 ease-in-out ">
+                      <button className="self-center rounded-3xl group w-max ml-1 p-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-primary-sm   hover:nm-inset-dbeats-dark-primary          flex items-center            transform-gpu  transition-all duration-300 ease-in-out ">
                         <span
                           onClick={() => setSelectedFilter(filter[1])}
                           className={`${
@@ -354,7 +354,7 @@ const Home = () => {
                           <p className="self-center mx-2 sm:font-normal text-xs">Music</p>
                         </span>
                       </button>
-                      <button className="self-center rounded-3xl group w-max ml-1 p-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-primary   hover:nm-inset-dbeats-dark-primary          flex items-center            transform-gpu  transition-all duration-300 ease-in-out ">
+                      <button className="self-center rounded-3xl group w-max ml-1 p-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-primary-sm   hover:nm-inset-dbeats-dark-primary          flex items-center            transform-gpu  transition-all duration-300 ease-in-out ">
                         <span
                           onClick={() => setSelectedFilter(filter[2])}
                           className={`${
@@ -366,7 +366,7 @@ const Home = () => {
                           <p className="self-center mx-2 sm:font-normal text-xs">Videos</p>
                         </span>
                       </button>
-                      <button className="self-center rounded-3xl group w-max ml-1 p-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-primary   hover:nm-inset-dbeats-dark-primary          flex items-center            transform-gpu  transition-all duration-300 ease-in-out ">
+                      <button className="self-center rounded-3xl group w-max ml-1 p-1 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-primary-sm   hover:nm-inset-dbeats-dark-primary          flex items-center            transform-gpu  transition-all duration-300 ease-in-out ">
                         <span
                           onClick={() => setSelectedFilter(filter[3])}
                           className={`${
@@ -382,7 +382,7 @@ const Home = () => {
                     {showNewPost ? (
                       <div className="2xl:w-1/3 lg:w-1/3 w-screen 2xl:ml-5 cursor-pointer flex justify-center items-center text-xs 2xl:text-base fixed 2xl:top-16 lg:top-12 top-16 z-10 h-max ">
                         <button
-                          className="w-max flex 2xl:px-3 2xl:py-2 px-2 py-1 rounded-lg text-black dark:text-white  rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-secondary hover:nm-inset-dbeats-dark-secondary"
+                          className="w-max flex 2xl:px-3 2xl:py-2 px-2 py-1 rounded-lg text-black dark:text-white  rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-secondary hover:nm-inset-dbeats-dark-secondary-sm"
                           onClick={scrollTop}
                         >
                           <p className="font-bold w-full self-center">New Post</p>

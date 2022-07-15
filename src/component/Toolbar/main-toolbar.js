@@ -53,7 +53,7 @@ const MainToolbar = () => {
 
   return (
     <>
-      <div className="p-0.5 w-full  font-bold dark:text-white sm:rounded-xl bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary nm-flat-dbeats-dark-primary-lg">
+      <div className="p-0.5 w-full  font-bold dark:text-white sm:rounded-xl bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary nm-flat-dbeats-dark-primary-sm">
         <div className=" p-2  font-bold dark:text-white sm:rounded-xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary">
           <div className="flex justify-between mb-2 px-2 fourth-step">
             <Link to={`/profile/${user.username}`} className="mr-4">
