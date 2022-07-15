@@ -15,7 +15,7 @@
 
 .ReactModal__Overlay--after-open {
   z-index: 2;
-  background-color: rgba(255, 255, 255, 0.1) !important;
+  background-color: rgba(36, 34, 34, 0.8) !important;
 }
 
 /* Toggle B */

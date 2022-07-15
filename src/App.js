@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useEffect } from 'react';
 
 import { Redirect } from 'react-router-dom';
-
+import { IntroModal } from './component/Modals/IntroModal/IntroModal';
 import { useDispatch, useSelector } from 'react-redux';
 import { clearProvider, createProvider } from './actions/web3Actions';
 import Tour from 'reactour';
@@ -66,6 +66,32 @@ export default function App() {
   const provider = useSelector((state) => state.web3Reducer.provider);
   const userType = useSelector((state) => state.toggleUserType);
   //dispatch(toggleUserType(userType));
+
+  //Introduction Modal Show & Hide
+  const [see, setSee] = useState('');
+  const [show, setShow] = useState(false);
+  const handleClose = () => {
+    let data = {
+      seen: 'seen',
+    };
+    axios({
+      method: 'POST',
+      url: `${process.env.REACT_APP_SERVER_URL}/user/seen_intro`,
+      data: data,
+      headers: {
+        'content-type': 'application/json',
+        'auth-token': localStorage.getItem('authtoken'),
+      },
+    })
+      .then((response) => {
+        console.log('success');
+        window.location.href = '/';
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  const handleShow = () => setShow(true);
 
   const [arrayData, setArrayData] = useState([]);
 
@@ -174,7 +200,16 @@ export default function App() {
     // eslint-disable-next-line
   }, []);
 
-  console.log(window.location);
+  useEffect(async () => {
+    if (provider) {
+      if (user && user.seenIntro) {
+        if (user.seenIntro == 'notseen') {
+          handleShow();
+        }
+      }
+    }
+  });
+
   return (
     <>
       <Router>
@@ -182,22 +217,6 @@ export default function App() {
           <div className=" ">
             <div className=" ">
               {/* {userType !== null ? '' : <OnboardingModal></OnboardingModal>} */}
-              {window.location.pathname == '/' ? (
-                <>
-                  {tour == 'show' ? (
-//                     <Tour
-//                       steps={steps}
-//                       isOpen={showTour}
-//                       onRequestClose={handleTourClose}
-//                       accentColor="#000"
-//                       rounded={10}
-//                     />
-<></>
-                  ) : (
-                    <></>
-                  )}
-                </>
-              ) : null}
               <Switch>
                 <Route exact path="/">
                   {/* <OnboardingModal /> */}
@@ -371,6 +390,7 @@ export default function App() {
                 </Route>
               </Switch>
             </div>
+            <IntroModal show={show} handleClose={handleClose} />
           </div>
         </div>
       </Router>
