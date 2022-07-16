@@ -9,28 +9,34 @@ export const IntroModal = ({ show, handleClose }) => {
 
   const data = [
     {
-      image:
-        'https://ipfs.io/ipfs/bafybeidw3lu7gjqbme7gfl2p4xvqmyfbrqbiqpfgtbscdsavq4rf44ew3y/10A9F038-BD10-4945-8927-5DEC6969F99C.jpeg',
-      subHeader: 'head1',
-      text: 'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Aperiam veritatis dolorem repudiandae corporis vitae omnis, repellat esse quod deserunt, doloribus ullam quam officia, voluptas itaque dolore ut beatae maiores maxime!',
+      image: 'https://ipfs.infura.io/ipfs/QmVRkaDbu2g1awSQLegYY9ppdSNPUTNSnJDGnvSJewk5Kc',
+      subHeader: 'NFTfied Social Media',
+      text: `Blogs, Pictures, Videos, Music, Tweets, everything else you can think of but NFTs.
+
+      Always wanted to sell that Photograph you captured on your trip to Himalayas? Post your favorite Digital Painting & make it a NFT. You can set royalties for every sale`,
+    },
+    {
+      image: 'https://ipfs.infura.io/ipfs/QmVHnqx1s77gpoC4pytK68rQKcWnjJR3LNJvRA4Qv6j8Au',
+      subHeader: 'Livestreaming',
+      text: `Gamestreamers can livestream their favorite games live while they play.  ${'\n'}  Host Live Concerts and Live Events. ${'\n'}Build a community & chat with your audience live.`,
     },
     {
       image:
-        'https://ipfs.io/ipfs/bafybeidw3lu7gjqbme7gfl2p4xvqmyfbrqbiqpfgtbscdsavq4rf44ew3y/10A9F038-BD10-4945-8927-5DEC6969F99C.jpeg',
-      subHeader: 'head2',
-      text: '2 Lorem ipsum dolor sit, amet consectetur adipisicing elit. Aperiam veritatis dolorem repudiandae corporis vitae omnis, repellat esse quod deserunt, doloribus ullam quam officia, voluptas itaque dolore ut beatae maiores maxime!',
+        'https://bafybeid2simaplpbzur2d6etd4nxnzd52vbok6biumkjbpi5aepqu6c2cm.ipfs.infura-ipfs.io/',
+      subHeader: 'Superfans',
+      text: ' Let your most passionate fans support your creative work via monthly memberships paid to you in cryptos. You can let your fans become active participants in the work they love by offering them a monthly membership.',
     },
     {
       image:
-        'https://ipfs.io/ipfs/bafybeidw3lu7gjqbme7gfl2p4xvqmyfbrqbiqpfgtbscdsavq4rf44ew3y/10A9F038-BD10-4945-8927-5DEC6969F99C.jpeg',
-      subHeader: 'head3',
-      text: '3 Lorem ipsum dolor sit, amet consectetur adipisicing elit. Aperiam veritatis dolorem repudiandae corporis vitae omnis, repellat esse quod deserunt, doloribus ullam quam officia, voluptas itaque dolore ut beatae maiores maxime!',
+        'https://bafybeig53vlqdpomgvtim7o2vjra6c5dsqv5frj43hzaz3kn7tca5ya57m.ipfs.infura-ipfs.io/',
+      subHeader: 'Community Chatrooms',
+      text: 'Text Channels with community chatrooms. Host live podcasts or schedule events. You are in control. Run your community in the same place as you sell digital NFTs, Music, Art, host Events, post Articles much more. Get the conversation going.',
     },
     {
       image:
-        'https://ipfs.io/ipfs/bafybeidw3lu7gjqbme7gfl2p4xvqmyfbrqbiqpfgtbscdsavq4rf44ew3y/10A9F038-BD10-4945-8927-5DEC6969F99C.jpeg',
-      subHeader: 'head4',
-      text: '4 Lorem ipsum dolor sit, amet consectetur adipisicing elit. Aperiam veritatis dolorem repudiandae corporis vitae omnis, repellat esse quod deserunt, doloribus ullam quam officia, voluptas itaque dolore ut beatae maiores maxime!',
+        'https://bafybeici6pfqja4dcpkvvq7pox6kxprnvgvgrhigowkjcv5xikc7ft4itm.ipfs.infura-ipfs.io/',
+      subHeader: 'NFT Marketplace',
+      text: 'Import your NFTs from Opensea or Publish MintFlick exclusive collections. Built on top of Polygon chain means all your experience will be gasless, swift & super-easy. Buying & Selling NFTs will be much smoother with our experience focused Marketplace.',
     },
   ];
 
@@ -40,10 +46,10 @@ export const IntroModal = ({ show, handleClose }) => {
         isOpen={show}
         className={`${
           darkMode && 'dark'
-        } h-max md:w-1/3 w-11/12 rounded-2xl bg-dbeats-dark-alt mx-auto absolute bottom-0 left-1/2 transform -translate-x-1/2 lg:-translate-y-1/2 shadow z-500`}
+        } h-max lg:w-1/3 md:w-2/3 w-11/12 rounded-2xl bg-dbeats-dark-alt mx-auto absolute top-1/2 left-1/2 transform -translate-x-1/2  -translate-y-1/2 shadow z-500 `}
       >
         <div
-          className={`border-2 border-white border-opacity-50 rounded-2xl shadow-lg shadow-black`}
+          className={`border-2 border-white border-opacity-50 rounded-2xl shadow-lg shadow-black  `}
         >
           <h2 className="grid grid-cols-5 justify-between items-center ml-24 2xl:text-2xl lg:text-lg py-4 2xl:py-4  lg:py-2 dark:bg-dbeats-dark-alt dark:text-white">
             <div className="col-span-4 md:ml-2 -ml-4 text-center text-white justify-center align-middle mt-1.5">
@@ -67,33 +73,17 @@ export const IntroModal = ({ show, handleClose }) => {
           </h2>
           <hr className="pt-4 dark:bg-dbeats-dark-alt" />
           <div className="w-full h-max">
-            <div className="h-full w-full p-3">
-              <div className="w-full flex justify-between  px-3">
+            <div className="h-full w-full p-3 ">
+              <div className="w-full flex justify-between  px-3 mx-auto">
                 {index > 0 ? (
                   <button
-                    className="text-white w-max h-max px-3 py-1"
+                    className="text-white w-max h-max px-3 py-1 cursor-pointer hover:text-dbeats-light"
                     onClick={() => setIndex(index - 1)}
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-8 w-8"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      strokeWidth={2}
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M7 16l-4-4m0 0l4-4m-4 4h18"
-                      />
-                    </svg>
+                    <i className="fa-solid fa-circle-chevron-left text-2xl"></i>
                   </button>
                 ) : (
-                  <button
-                    className="dark:bg-dbeats-dark-alt text-dbeats-dark-alt w-max h-max px-3 py-1"
-                    onClick={() => setIndex(index - 1)}
-                  >
+                  <button className="dark:bg-dbeats-dark-alt text-dbeats-dark-alt w-max h-max px-3 py-1 ">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       className="h-8 w-8"
@@ -110,32 +100,18 @@ export const IntroModal = ({ show, handleClose }) => {
                     </svg>
                   </button>
                 )}
-                <p className="text-white text-lg">{data[index].subHeader}</p>
-                {index < 3 ? (
+                <p className="text-white text-lg font-semibold tracking-widest">
+                  {data[index].subHeader}
+                </p>
+                {index < 4 ? (
                   <button
-                    className="text-white w-max h-max px-3 py-1"
+                    className="text-white w-max h-max px-3 py-1 cursor-pointer hover:text-dbeats-light"
                     onClick={() => setIndex(index + 1)}
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-8 w-8"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      strokeWidth={2}
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M17 8l4 4m0 0l-4 4m4-4H3"
-                      />
-                    </svg>
+                    <i className="fa-solid fa-circle-chevron-right text-2xl"></i>
                   </button>
                 ) : (
-                  <button
-                    className="dark:bg-dbeats-dark-alt text-dbeats-dark-alt w-max h-max px-3 py-1"
-                    onClick={() => setIndex(index + 1)}
-                  >
+                  <button className="dark:bg-dbeats-dark-alt text-dbeats-dark-alt w-max h-max px-3 py-1 ">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       className="h-8 w-8"
@@ -154,14 +130,10 @@ export const IntroModal = ({ show, handleClose }) => {
                 )}
               </div>
               <div className="w-full flex justify-center items-center">
-                <img
-                  src="https://ipfs.io/ipfs/bafybeidw3lu7gjqbme7gfl2p4xvqmyfbrqbiqpfgtbscdsavq4rf44ew3y/10A9F038-BD10-4945-8927-5DEC6969F99C.jpeg"
-                  alt="Intro Image"
-                  className="h-72 w-auto"
-                />
+                <img src={data[index].image} alt="Intro Image" className="h-72 w-auto p-4" />
               </div>
               <div className="w-full py-5">
-                <p className="text-white text-center">{data[index].text}</p>
+                <div className="text-white text-left xl:px-8 px-4">{data[index].text}</div>
               </div>
             </div>
           </div>
