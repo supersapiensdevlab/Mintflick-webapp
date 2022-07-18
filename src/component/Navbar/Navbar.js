@@ -389,12 +389,12 @@ const NavBar = () => {
                 <img
                   src={mintflickNavbar}
                   alt="dbeats_logo"
-                  className="h-112 lg:h-7 2xl:h-12 2xl:ml-5 w-max dark:hidden"
+                  className="h-10 lg:h-7 ml-2 2xl:h-12 2xl:ml-5 w-max dark:hidden"
                 ></img>
                 <img
                   src={mintflickNavbar}
                   alt="dbeats_logo"
-                  className="h-10 lg:h-7 2xl:h-12 2xl:ml-5 w-max hidden dark:block"
+                  className="h-10 lg:h-7 ml-2 2xl:h-12 2xl:ml-5 w-max hidden dark:block"
                 ></img>
                 <span className="mr-5 text-lg font-bold   sm:ml-2"> </span>
               </Link>
@@ -402,29 +402,29 @@ const NavBar = () => {
                 <img
                   src={mintflickNavbar}
                   alt="dbeats_logo"
-                  className="h-10 lg:h-7 2xl:h-10 w-max dark:hidden"
+                  className="h-10 lg:h-7 2xl:h-10 ml-2 w-max dark:hidden"
                 ></img>
                 <img
                   src={mintflickNavbar}
                   alt="dbeats_logo"
-                  className="h-10 lg:h-7 2xl:h-10 w-max hidden dark:block  "
+                  className="h-10 lg:h-7 2xl:h-10 w-max ml-1 md:ml-0 hidden dark:block  "
                 ></img>
-                <span className="mr-5 text-lg font-bold   sm:ml-2"> </span>
+                <span className="mr-2 md:mr-5 text-lg font-bold   sm:ml-2"> </span>
               </Link>
               <p
-                className="px-2 -ml-3.5 flex pb-0.5 mt-1 text-xs text-white dark:text-dbeats-light 
+                className="px-2 -ml-3.5 pb-0.5 mt-1 text-xs hidden md:block text-white dark:text-dbeats-light 
               bg-dbeats-light dark:bg-dbeats-alt border border-white dark:border-dbeats-light font-semibold rounded-lg"
               >
                 beta
               </p>
             </div>
 
-            <div className="w-2/5 sm:w-1/3 mx-auto  self-center dark:focus:ring-dbeats-light">
+            <div className="w-3/5 sm:w-1/3 mx-2 md:mx-auto  self-center dark:focus:ring-dbeats-light">
               <div className="dark:focus:ring-dbeats-light  self-center rounded-full  flex bg-gray-100 dark:bg-dbeats-dark-primary">
                 <input
                   type="text"
                   placeholder="Search"
-                  className="dark:focus:ring-dbeats-light   w-full lg:h-8 2xl:h-10 h-10 rounded-full border-0 bg-gray-100 self-center    px-5 dark:bg-dbeats-dark-secondary"
+                  className="dark:focus:ring-dbeats-light   w-full lg:h-8 2xl:h-10 h-9 rounded-full border-0 bg-gray-100 self-center    px-5 dark:bg-dbeats-dark-secondary"
                   value={wordEntered}
                   onChange={handleFilter}
                 ></input>
@@ -440,7 +440,7 @@ const NavBar = () => {
                   }}
                 >
                   {' '}
-                  <i className="fas fa-search text-gray-500 hover:text-dbeats-light self-center mx-3 text-lg"></i>
+                  <i className="fas fa-search text-gray-500 hover:text-dbeats-light self-center md:mx-3 mx-1 text-lg"></i>
                 </Link>
               </div>
               <div
@@ -576,7 +576,7 @@ const NavBar = () => {
               <div id="login-btn" className="flex items-center">
                 <Link
                   to={`/streamer/${user.username}`}
-                  className="border-dbeats-light 2xl:border-1   text-dbeats-light hover:bg-dbeats-light hover:text-white rounded font-bold mx-2 "
+                  className="border-dbeats-light 2xl:border-1  hidden md:block text-dbeats-light hover:bg-dbeats-light hover:text-white rounded font-bold mx-2 "
                 >
                   <div className="flex lg:py-1 fifth-step  py-1.5 2xl:px-3 lg:px-2 px-1.5 ">
                     <i className="fas fa-video self-center md:mr-2"></i>
@@ -585,7 +585,10 @@ const NavBar = () => {
                     </span>
                   </div>
                 </Link>
-                <Dropdown as="div" className="relative inline-block text-left  self-center mr-1">
+                <Dropdown
+                  as="div"
+                  className="relative inline-block text-left  self-center ml-1 md:mx-1"
+                >
                   <Dropdown.Button className="flex h-full items-center">
                     <div onClick={handleNotification}>
                       <i className="fas fa-bell text-dbeats-light text-lg hover:text-dbeats-secondary-light"></i>
@@ -640,11 +643,11 @@ const NavBar = () => {
 
                 <Link
                   to={`/profile/${user.username}`}
-                  className="shadow-sm 2xl:h-10  2xl:w-10 self-center  h-8 w-8 p-0.5 nm-flat-dbeats-dark-primary-sm hover:nm-inset-dbeats-dark-primary text-white rounded-full font-bold mx-2 flex"
+                  className="shadow-sm 2xl:h-10  2xl:w-10 self-center  h-8 w-8 p-0.5 nm-flat-dbeats-dark-primary-sm hover:nm-inset-dbeats-dark-primary text-white rounded-full font-bold ml-2 md:mx-2 flex"
                 >
                   <img
                     src={user.profile_image ? user.profile_image : person}
-                    className=" mx-auto self-center rounded-full"
+                    className=" mx-auto self-center rounded-full h-full w-full"
                   ></img>
                 </Link>
               </div>

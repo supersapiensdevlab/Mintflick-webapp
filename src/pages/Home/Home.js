@@ -322,8 +322,8 @@ const Home = () => {
               <div className="2xl:px-4 lg:px-3  my-2 sm:my-4">
                 <div>
                   {user ? <MainToolbar></MainToolbar> : ''}
-                  <div className=" ">
-                    <div className="flex mt-3 align-middle justify-center ">
+                  <div className="">
+                    <div className="flex mt-3 align-middle justify-center text-xs md:text-lg">
                       <Dropdown
                         className="sm:font-normal text-xs "
                         data={category}
