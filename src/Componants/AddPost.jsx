@@ -3,7 +3,7 @@ import OutlineButton from "../UiComponants/OutlineButton";
 
 function AddPost() {
   return (
-    <div className='w-full h-fit bg-brand/5 rounded-xl py-5 px-28 space-y-8'>
+    <div className='hidden lg:block w-full max-w-2xl h-fit bg-brand/5  rounded-xl py-5 px-28 space-y-8'>
       <div className='flex space-x-4'>
         <img
           className='h-12 rounded-full'
@@ -11,7 +11,7 @@ function AddPost() {
           alt='Tailwind-CSS-Avatar-component'
         />
         <textarea
-          className='flex-grow textarea h-12 rounded-3xl'
+          className='flex-grow textarea h-12 rounded-3xl '
           placeholder="What's on your mind?"></textarea>
       </div>
       <div className='flex justify-between'>

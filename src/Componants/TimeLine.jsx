@@ -75,7 +75,7 @@ function TimeLine() {
     },
   ]);
   return (
-    <>
+    <div className='w-full max-w-2xl space-y-6'>
       {posts.map((post) => (
         <PhotoPost
           key={post.id}
@@ -89,7 +89,7 @@ function TimeLine() {
           commentCount={post.commentCount}
           ownerId={post.ownerId}></PhotoPost>
       ))}
-    </>
+    </div>
   );
 }
 

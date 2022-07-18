@@ -3,11 +3,7 @@ import Header from "./Componants/Header";
 import HomeScreen from "./Screens/HomeScreen";
 
 function App() {
-  return (
-    <div className=''>
-      <HomeScreen className=''></HomeScreen>
-    </div>
-  );
+  return <HomeScreen className=''></HomeScreen>;
 }
 
 export default App;
