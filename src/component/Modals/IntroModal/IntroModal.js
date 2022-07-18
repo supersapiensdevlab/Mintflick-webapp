@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Modal from 'react-modal';
 import { useSelector } from 'react-redux';
 
-export const IntroModal = ({ show, handleClose }) => {
+export const IntroModal = ({ show, handleClose, handleIntroduction }) => {
   const darkMode = useSelector((darkmode) => darkmode.toggleDarkMode);
 
   const [index, setIndex] = useState(0);
@@ -57,7 +57,10 @@ export const IntroModal = ({ show, handleClose }) => {
             </div>
             {index == data.length - 1 ? (
               <div
-                onClick={handleClose}
+                onClick={() => {
+                  handleClose();
+                  handleIntroduction();
+                }}
                 className=" rounded-3xl group w-max   p-1  mx-1 md:mr-3 lg:mr-3 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-secondary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
               >
                 <span className="  text-black dark:text-white  flex p-1 rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:nm-inset-dbeats-dark-secondary ">

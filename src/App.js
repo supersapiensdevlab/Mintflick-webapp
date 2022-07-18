@@ -70,7 +70,12 @@ export default function App() {
   //Introduction Modal Show & Hide
   const [see, setSee] = useState('');
   const [show, setShow] = useState(false);
-  const handleClose = () => {
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  const [closeAfterSee, setCloseAfterSee] = useState(false);
+
+  const handleIntroduction = () => {
     let data = {
       seen: 'seen',
     };
@@ -85,13 +90,11 @@ export default function App() {
     })
       .then((response) => {
         console.log('success');
-        window.location.href = '/';
       })
       .catch((err) => {
         console.log(err);
       });
   };
-  const handleShow = () => setShow(true);
 
   const [arrayData, setArrayData] = useState([]);
 
@@ -203,8 +206,9 @@ export default function App() {
   useEffect(async () => {
     if (provider) {
       if (user && user.seenIntro) {
-        if (user.seenIntro == 'notseen') {
+        if (user.seenIntro == 'notseen' && !closeAfterSee) {
           handleShow();
+          setCloseAfterSee(true);
         }
       }
     }
@@ -390,7 +394,11 @@ export default function App() {
                 </Route>
               </Switch>
             </div>
-            <IntroModal show={show} handleClose={handleClose} />
+            <IntroModal
+              show={show}
+              handleClose={handleClose}
+              handleIntroduction={handleIntroduction}
+            />
           </div>
         </div>
       </Router>
