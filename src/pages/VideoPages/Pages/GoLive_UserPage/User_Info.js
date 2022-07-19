@@ -122,10 +122,26 @@ const UserInfo = (props) => {
     derivativeWorks: '',
   });
 
-  const[streamDetails, setStreamDetails] = useState({
-    name:"",
-    description:""
+  const [streamDetails, setStreamDetails] = useState({
+    name: "",
+    description: ""
   });
+  const [streamLink, setStreamLink] = useState({
+    image: "",
+    url: ""
+  })
+  const [uploadingLink, setUploadingLink] = useState(false);
+  const [selectedLinkFile, setSelectedLinkFile] = useState(null);
+  const onLinkFileChange = (event) => {
+    // Update the state
+    setSelectedLinkFile({
+      file: event.target.files,
+      localurl: URL.createObjectURL(event.target.files[0]),
+    });
+  };
+
+
+
   useEffect(() => {
     if (user && user.multistream_platform) {
       ////console.log("hello",user.multistream_platform)
@@ -625,20 +641,20 @@ const UserInfo = (props) => {
     }
   }, []);
 
-  useEffect(()=>{
+  useEffect(() => {
     console.log(streamDetails);
-  },[streamDetails]);
-  useEffect(()=>{
-    if(user.streamDetails){
-    setStreamDetails(user.streamDetails)
+  }, [streamDetails]);
+  useEffect(() => {
+    if (user.streamDetails) {
+      setStreamDetails(user.streamDetails)
     }
-  },[user]);
+  }, [user]);
   // on Stream Details Submit
-  const handleStreamDetails = async(e) =>{
+  const handleStreamDetails = async (e) => {
     e.preventDefault();
-    if(streamDetails.name !='' && streamDetails.description !=''){
+    if (streamDetails.name != '' && streamDetails.description != '') {
       try {
-       await axios.post(`${process.env.REACT_APP_SERVER_URL}/user/streamDetails`,streamDetails, tokenConfig()).then((data)=>{
+        await axios.post(`${process.env.REACT_APP_SERVER_URL}/user/streamDetails`, streamDetails, tokenConfig()).then((data) => {
           dispatch(loadUser());
         });
       } catch (err) {
@@ -647,11 +663,47 @@ const UserInfo = (props) => {
     }
   }
 
-const cancelStreamDetails = () =>{
-  if(user.streamDetails){
-  setStreamDetails(user.streamDetails)
+  const cancelStreamDetails = () => {
+    if (user.streamDetails) {
+      setStreamDetails(user.streamDetails)
+    }
   }
-}
+
+  async function uploadLink(e) {
+    e.preventDefault();
+    if (selectedLinkFile) {
+      setUploadingLink(true);
+      storeThumbnail(selectedLinkFile.file)
+        .then(async (cid) => {
+          setUploadingLink(false);
+          console.log('https://ipfs.infura.io/ipfs/' + cid + '/' + selectedLinkFile.file[0].name);
+          const data = {
+            image: 'https://ipfs.infura.io/ipfs/' + cid + '/' + selectedLinkFile.file[0].name,
+            url: streamLink.url,
+          };
+
+          axios({
+            method: 'POST',
+            url: `${process.env.REACT_APP_SERVER_URL}/user/uploadStreamLink`,
+            data: data,
+            headers: {
+              'content-type': 'application/json',
+              'auth-token': localStorage.getItem('authtoken'),
+            },
+          });
+        }).then((res) => {
+         
+            dispatch(loadUser());
+          
+        })
+        .catch((err) => {
+          setUploadingLink(false);
+          console.log(err);
+          setSelectedLinkFile(null);
+        });
+      return;
+    }
+  }
 
   return user ? (
     <div className={`${darkMode && 'dark'}`}>
@@ -821,20 +873,57 @@ const cancelStreamDetails = () =>{
                 <form onSubmit={handleStreamDetails}>
                   <div>
                     <label className='font-semibold text-sm'>Stream Title: </label>
-                    <input value={streamDetails.name} onChange={(e)=> setStreamDetails({...streamDetails,name:e.target.value})} className='w-full bg-transparent' type="text" />
+                    <input value={streamDetails.name} onChange={(e) => setStreamDetails({ ...streamDetails, name: e.target.value })} className='w-full bg-transparent' type="text" />
                   </div>
                   <div className='mt-2'>
                     <label className='font-semibold text-sm'>Stream Description: </label>
-                    <textarea value={streamDetails.description} onChange={(e)=> setStreamDetails({...streamDetails,description:e.target.value})} rows={2} className='w-full bg-transparent' type="text" />
+                    <textarea value={streamDetails.description} onChange={(e) => setStreamDetails({ ...streamDetails, description: e.target.value })} rows={2} className='w-full bg-transparent' type="text" />
                   </div>
                   <div className='flex mt-1 justify-end'>
-                
+
                     <input className='bg-dbeats-alt ml-1 text-dbeats-light border-dbeats-light px-3 py-2  rounded-md' type="submit" value="Save" />
-              
+
                     <button onClick={cancelStreamDetails} className='bg-dbeats-alt ml-1 text-gray-400 border-gray-400 px-3 py-2  rounded-md'>Cancel</button>
-                  
+
                   </div>
                 </form>
+              </div>
+              {/* Stream Links */}
+              <div>
+                <div className='text-white text-base font-semibold mb-2'>Links</div>
+                {user.streamLinks ? user.streamLinks.map((link, index) => {
+                  return (
+                    <div key={index} className="my-1">
+                      <div className='text-sm'>Link {index + 1}</div>
+                      <div className='flex items-center justify-between'>
+                        <div  >{link.url}</div>
+                        <button><i className="text-md fa-solid mx-2 fa-trash"></i></button>
+                      </div>
+                      <hr />
+                    </div>
+                  )
+                }) : null}
+                <div className='mt-3'>
+                  <form onSubmit={uploadLink}>
+                    <div>Add New Link </div>
+                    <div className='flex items-center'>
+                      <input value={streamLink.url} onChange={(e) => setStreamLink({ ...streamLink, url: e.target.value })} placeholder='URL' className='w-full bg-transparent text-sm' type="text" />
+                      <label htmlFor="file" className='text-2xl mx-2'><i className="fa-solid fa-image"></i></label>
+                      <input accept=".jpg,.png,.jpeg,.gif,.webp"
+                        required={true}
+                        onChange={onLinkFileChange}
+                        type="file" id="file"
+                        className="hidden" />
+                    </div>
+                    <div className='flex mt-1 justify-end mr-20 items-center'>
+                      <input disabled={uploadingLink} type={'submit'} value='save' className='cursor-pointer bg-dbeats-alt  text-sm text-dbeats-light border-dbeats-light px-2 py-1  rounded-md' />
+                      <div
+                        className="animate-spin rounded-full h-5 w-5 ml-3 border-t-2 border-b-2 bg-gradient-to-r from-green-400 to-blue-500 "
+                        hidden={!uploadingLink}
+                      ></div>
+                    </div>
+                  </form>
+                </div>
               </div>
               <div className='hidden'>
                 <div className="flex flex-col">
