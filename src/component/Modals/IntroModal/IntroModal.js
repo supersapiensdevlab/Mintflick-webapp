@@ -46,13 +46,13 @@ export const IntroModal = ({ show, handleClose, handleIntroduction }) => {
         isOpen={show}
         className={`${
           darkMode && 'dark'
-        } h-max lg:w-1/3 md:w-2/3 w-11/12 rounded-2xl bg-dbeats-dark-alt mx-auto absolute top-1/2 left-1/2 transform -translate-x-1/2  -translate-y-1/2 shadow z-500 `}
+        } h-max lg:w-1/3 md:w-2/3 w-11/12 mt-7 rounded-2xl bg-dbeats-dark-alt mx-auto absolute top-1/2 left-1/2 transform -translate-x-1/2  -translate-y-1/2 shadow z-500 `}
       >
         <div
           className={`border-2 border-white border-opacity-50 rounded-2xl shadow-lg shadow-black  `}
         >
-          <h2 className="grid grid-cols-5 justify-between items-center ml-24 2xl:text-2xl lg:text-lg py-4 2xl:py-4  lg:py-2 dark:bg-dbeats-dark-alt dark:text-white">
-            <div className="col-span-4 md:ml-2 -ml-4 text-center text-white justify-center align-middle mt-1.5">
+          <h2 className="grid grid-cols-5 justify-between items-center ml-24 2xl:text-2xl lg:text-lg text-lg py-4 2xl:py-4  lg:py-2 dark:bg-dbeats-dark-alt dark:text-white">
+            <div className="col-span-4 md:ml-2 -ml-12 text-center text-white justify-center align-middle mt-1.5">
               What&apos;s MintFlick ?
             </div>
             {index == data.length - 1 ? (
@@ -61,7 +61,7 @@ export const IntroModal = ({ show, handleClose, handleIntroduction }) => {
                   handleClose();
                   handleIntroduction();
                 }}
-                className=" rounded-3xl group w-max   p-1  mx-1 md:mr-3 lg:mr-3 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-secondary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
+                className=" rounded-3xl group w-max   p-1  mx-1 md:mr-3 lg:mr-3  justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-secondary   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
               >
                 <span className="  text-black dark:text-white  flex p-1 rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:nm-inset-dbeats-dark-secondary ">
                   <p className="self-center mx-2">
@@ -77,7 +77,7 @@ export const IntroModal = ({ show, handleClose, handleIntroduction }) => {
           <hr className="pt-4 dark:bg-dbeats-dark-alt" />
           <div className="w-full h-max">
             <div className="h-full w-full p-3 ">
-              <div className="w-full flex justify-between  px-3 mx-auto">
+              <div className="w-full flex justify-between items-center px-3 mx-auto">
                 {index > 0 ? (
                   <button
                     className="text-white w-max h-max px-3 py-1 cursor-pointer hover:text-dbeats-light"
@@ -103,7 +103,7 @@ export const IntroModal = ({ show, handleClose, handleIntroduction }) => {
                     </svg>
                   </button>
                 )}
-                <p className="text-white text-lg font-semibold tracking-widest">
+                <p className="text-white md:text-xl text-center text-md font-semibold tracking-widest">
                   {data[index].subHeader}
                 </p>
                 {index < 4 ? (
@@ -133,10 +133,16 @@ export const IntroModal = ({ show, handleClose, handleIntroduction }) => {
                 )}
               </div>
               <div className="w-full flex justify-center items-center">
-                <img src={data[index].image} alt="Intro Image" className="h-72 w-auto p-4" />
+                <img
+                  src={data[index].image}
+                  alt="Intro Image"
+                  className="md:h-72 h-56 w-auto p-4"
+                />
               </div>
               <div className="w-full py-5">
-                <div className="text-white text-left xl:px-8 px-4">{data[index].text}</div>
+                <div className="text-white text-left text:sm md:text-xl xl:px-8 px-4">
+                  {data[index].text}
+                </div>
               </div>
             </div>
           </div>
