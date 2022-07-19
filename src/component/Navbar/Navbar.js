@@ -643,12 +643,17 @@ const NavBar = () => {
 
                 <Link
                   to={`/profile/${user.username}`}
-                  className="shadow-sm 2xl:h-10  2xl:w-10 self-center  h-8 w-8 p-0.5 nm-flat-dbeats-dark-primary-sm hover:nm-inset-dbeats-dark-primary text-white rounded-full font-bold ml-2 md:mx-2 flex"
+                  className="shadow-sm 2xl:h-10  2xl:w-10 self-center relative h-8 w-8 p-0.5 nm-flat-dbeats-dark-primary-sm hover:nm-inset-dbeats-dark-primary text-white rounded-full font-bold ml-2 md:mx-2 flex"
                 >
                   <img
                     src={user.profile_image ? user.profile_image : person}
-                    className=" mx-auto self-center rounded-full h-full w-full"
+                    className=" mx-auto self-center rounded-full h-full w-full "
                   ></img>
+                  <div
+                    className={`h-2 w-2 ${
+                      provider ? 'bg-green-500' : 'bg-red-500'
+                    } absolute bottom-0 left-0 rounded-full`}
+                  ></div>
                 </Link>
               </div>
             ) : (

@@ -45,8 +45,10 @@ export let createToken = (
   provider,
   setMinting,
   setMintingProgress,
-
   setTokenId,
+  show,
+  setShow,
+  setsharable_data,
 ) => {
   var tokenId = null;
   var biconomy = new Biconomy(provider, {
@@ -81,7 +83,18 @@ export let createToken = (
             .then(async (res) => {
               formData.append('tokenId', tokenId);
               setMinting(res.transactionHash);
-              setMintingProgress(66);
+              setMintingProgress(100);
+
+              /////
+              axios
+                .get(`${process.env.REACT_APP_SERVER_URL}/user/getLoggedInUser`, tokenConfig())
+                .then((res) => {
+                  let latestVideoId = res.data.videos[res.data.videos.length - 1].videoId;
+                  setsharable_data(
+                    `${process.env.REACT_APP_CLIENT_URL}/playback/${res.data.username}/${latestVideoId}`,
+                  );
+                  setShow(true);
+                });
             });
         });
       // transaction

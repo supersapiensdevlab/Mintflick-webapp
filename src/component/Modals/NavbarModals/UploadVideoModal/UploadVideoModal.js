@@ -195,7 +195,7 @@ const UploadVideoModal = (props) => {
     // eslint-disable-next-line
   }, [selectedCategory, selectedCommercialUse, selectedDerivativeWorks, selectedAttribution, tags]);
 
-  useEffect(() => {
+  useEffect(async () => {
     async function uploadVideoToDB() {}
 
     console.log('TOKEN ID', tokenId);
@@ -204,7 +204,7 @@ const UploadVideoModal = (props) => {
         formData.append('tokenId', tokenId);
         dispatch(loadUser());
       }
-      axios
+      await axios
         .post(`${process.env.REACT_APP_SERVER_URL}/upload_video`, formData, {
           headers: {
             'content-type': 'multipart/form-data',
@@ -212,17 +212,17 @@ const UploadVideoModal = (props) => {
           },
         })
         .then((res) => {
-          setMintingProgress(100);
+          setMintingProgress(66);
 
-          axios
-            .get(`${process.env.REACT_APP_SERVER_URL}/user/getLoggedInUser`, tokenConfig())
-            .then((res) => {
-              let latestVideoId = res.data.videos[res.data.videos.length - 1].videoId;
-              setsharable_data(
-                `${process.env.REACT_APP_CLIENT_URL}/playback/${res.data.username}/${latestVideoId}`,
-              );
-              setShow(true);
-            });
+          // axios
+          //   .get(`${process.env.REACT_APP_SERVER_URL}/user/getLoggedInUser`, tokenConfig())
+          //   .then((res) => {
+          //     let latestVideoId = res.data.videos[res.data.videos.length - 1].videoId;
+          //     setsharable_data(
+          //       `${process.env.REACT_APP_CLIENT_URL}/playback/${res.data.username}/${latestVideoId}`,
+          //     );
+          //     setShow(true);
+          //   });
 
           setVideo({
             videoName: '',
@@ -353,6 +353,9 @@ const UploadVideoModal = (props) => {
         setMinting,
         setMintingProgress,
         setTokenId,
+        show,
+        setShow,
+        setsharable_data,
       );
     } else {
       Noty.closeAll();

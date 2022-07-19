@@ -57,7 +57,6 @@ const NFTCard = ({ nft, buyNft, address }) => {
   let sharable_data = `${process.env.REACT_APP_CLIENT_URL}/profile/${
     nft ? nft.creator_data.user.username : ''
   }`;
-  console.log(nft);
   useEffect(() => {
     async function getuser_by_wallet() {
       // // console.log(nft);

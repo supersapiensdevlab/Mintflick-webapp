@@ -36,8 +36,6 @@ const PinnedPanel = () => {
     }
   }, [pinnedData]);
 
-  console.log(pinnedData);
-
   const handlePlusClick = async () => {
     if (userdata) {
       history.push(`/profile/${userdata.username}/following`);
