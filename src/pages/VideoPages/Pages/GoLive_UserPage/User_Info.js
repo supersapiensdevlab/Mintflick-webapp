@@ -907,7 +907,7 @@ const UserInfo = (props) => {
                   <form onSubmit={uploadLink}>
                     <div>Add New Link </div>
                     <div className='flex items-center'>
-                      <input value={streamLink.url} onChange={(e) => setStreamLink({ ...streamLink, url: e.target.value })} placeholder='URL' className='w-full bg-transparent text-sm' type="text" />
+                      <input required={true} value={streamLink.url} onChange={(e) => setStreamLink({ ...streamLink, url: e.target.value })} placeholder='URL' className='w-full bg-transparent text-sm' type={'url'} />
                       <label htmlFor="file" className='text-2xl mx-2'><i className="fa-solid fa-image"></i></label>
                       <input accept=".jpg,.png,.jpeg,.gif,.webp"
                         required={true}
