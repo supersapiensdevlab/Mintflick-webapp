@@ -246,7 +246,7 @@ const UploadVideoModal = (props) => {
     if (!videoUpload) {
       setWarning('Please select a video');
       return;
-    } else if (NFTprice < 1) {
+    } else if (isNFT && NFTprice < 1) {
       setWarning('selling price should be greater than 1 MATIC');
       return;
     } else if (!videoImageUpload) {
@@ -338,10 +338,27 @@ const UploadVideoModal = (props) => {
 
     setFormData(formData);
 
+    if (!isNFT) {
+      await axios
+        .post(`${process.env.REACT_APP_SERVER_URL}/upload_video`, formData, {
+          headers: {
+            'content-type': 'multipart/form-data',
+            'auth-token': localStorage.getItem('authtoken'),
+          },
+        })
+        .then((res) => {
+          console.log('successfull without nft');
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+
     if (
       video.videoFile.length !== 0 &&
       video.videoImage.length !== 0 &&
-      video.videoName.length !== 0
+      video.videoName.length !== 0 &&
+      isNFT
     ) {
       let url = 'https://ipfs.infura.io/ipfs/' + cid + '/meta.json';
       setMinting(true);
@@ -357,7 +374,11 @@ const UploadVideoModal = (props) => {
         setShow,
         setsharable_data,
       );
-    } else {
+    } else if (
+      video.videoFile.length == 0 ||
+      video.videoImage.length == 0 ||
+      video.videoName.length == 0
+    ) {
       Noty.closeAll();
       new Noty({
         type: 'error',

@@ -431,14 +431,14 @@ const Home = () => {
                 </div>
               </div>
 
-              <div className="bottom-0  ">
+              {/* <div className="bottom-0  ">
                 <div className="LottieButton opacity-10   ">
                   <Lottie options={defaultOptions} height={150} width={225} />
                 </div>
                 <p className="text-black   capitalize text-center proxima-reg dark:text-white dark:text-opacity-20">
                   Developed by Creators for the Creators on a Decentralised Web
                 </p>
-              </div>
+              </div> */}
             </div>
 
             <div className="w-full   h-full   col-span-4 md:col-span-3 lg:col-span-2 xl:col-span-2  lg:block hidden  ">

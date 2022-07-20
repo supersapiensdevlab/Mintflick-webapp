@@ -314,7 +314,7 @@ function VideoPlayer(props) {
             url={props.playbackUrl}
             pip={pip}
             playing={playing}
-            controls={false}
+            controls={true}
             light={light}
             loop={loop}
             playbackRate={playbackRate}

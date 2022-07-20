@@ -414,7 +414,7 @@ const UploadTrackModal = (props) => {
     if (!trackUpload) {
       setWarning('Please select a video');
       return;
-    } else if (NFTprice < 1) {
+    } else if (isNFT && NFTprice < 1) {
       setWarning('selling price should be greater than 1 MATIC');
       return;
     } else if (!trackImageUpload) {
@@ -522,11 +522,28 @@ const UploadTrackModal = (props) => {
     formData.append('trackHash', track.cid);
 
     setFormData(formData);
+
+    if (!isNFT) {
+      await axios
+        .post(`${process.env.REACT_APP_SERVER_URL}/upload_music`, formData, {
+          headers: {
+            'content-type': 'multipart/form-data',
+            'auth-token': localStorage.getItem('authtoken'),
+          },
+        })
+        .then((res) => {
+          console.log('successfull without nft');
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
     if (
       track.trackFile.length !== 0 &&
       track.trackImage.length !== 0 &&
       track.trackName.length !== 0 &&
-      track.cid.length !== 0
+      track.cid.length !== 0 &&
+      isNFT
     ) {
       //   axios
       //     .post(`${process.env.REACT_APP_SERVER_URL}/upload_music`, formData, {
@@ -603,7 +620,11 @@ const UploadTrackModal = (props) => {
         setShow,
         setsharable_data,
       );
-    } else {
+    } else if (
+      track.videoFile.length == 0 ||
+      track.videoImage.length == 0 ||
+      track.videoName.length == 0
+    ) {
       Noty.closeAll();
       new Noty({
         type: 'error',

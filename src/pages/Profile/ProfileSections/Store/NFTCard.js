@@ -17,7 +17,7 @@ import { RadioGroup } from '@headlessui/react';
 import { useHistory } from 'react-router-dom';
 import useWeb3Modal from '../../../../hooks/useWeb3Modal';
 import SuperfanModal from '../../../../component/Modals/SuperfanModal/superfan-modal';
-import dbeatsDAOLogo from '../../../../assets/images/dbeats-logo.png';
+import dbeatsDAOLogo from '../../../../assets/images/Logo/mintflick-navbar.svg';
 import Addcomment from './comments/Addcomment';
 import Allcomments from './comments/Allcomments';
 import { nftmarketaddress } from '../../../../functions/config';
@@ -755,7 +755,7 @@ const NFTCard = ({ nft, buyNft, address }) => {
                         to={`/profile/dbeatsDAO/`}
                         className="2xl:text-sm lg:text-xs text-sm text-gray-500  mb-2"
                       >
-                        <h4>DBeats DAO</h4>
+                        <h4>MintFlick</h4>
                       </Link>{' '}
                       <div className="2xl:text-sm lg:text-xs text-sm text-gray-500 pr-2 flex  ">
                         owner
@@ -1057,7 +1057,7 @@ const NFTCard = ({ nft, buyNft, address }) => {
                         to={`/profile/dbeatsDAO/`}
                         className="2xl:text-sm lg:text-xs text-sm text-gray-500  mb-2"
                       >
-                        <h4>DBeats DAO</h4>
+                        <h4>Mintflick</h4>
                       </Link>{' '}
                       <div className="2xl:text-sm lg:text-xs text-sm text-gray-500 pr-2 flex  ">
                         owner

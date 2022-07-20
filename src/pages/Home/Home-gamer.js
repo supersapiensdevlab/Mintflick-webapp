@@ -262,14 +262,14 @@ const Home = () => {
                   </div>
                 </div>
               </div>
-              <div className="bottom-0  ">
+              {/* <div className="bottom-0  ">
                 <div className="LottieButton opacity-10   ">
                   <Lottie options={defaultOptions} height={200} width={300} />
                 </div>
                 <h3 className="text-black   capitalize text-center proxima-reg dark:text-white dark:text-opacity-20">
                   Developed by Creators for the Creators on a Decentralised Web
                 </h3>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
