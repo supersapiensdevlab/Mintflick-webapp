@@ -690,11 +690,9 @@ const UserInfo = (props) => {
               'content-type': 'application/json',
               'auth-token': localStorage.getItem('authtoken'),
             },
-          });
-        }).then((res) => {
-         
+          }).then((res) => {
             dispatch(loadUser());
-          
+          })
         })
         .catch((err) => {
           setUploadingLink(false);
@@ -703,6 +701,21 @@ const UserInfo = (props) => {
         });
       return;
     }
+  }
+
+  // Delete a stream link
+  const deleteStreamLink = (link) => {
+    axios({
+      method: 'POST',
+      url: `${process.env.REACT_APP_SERVER_URL}/user/deleteStreamLink`,
+      data: link,
+      headers: {
+        'content-type': 'application/json',
+        'auth-token': localStorage.getItem('authtoken'),
+      },
+    }).then((res) => {
+      dispatch(loadUser());
+    })
   }
 
   return user ? (
@@ -873,15 +886,15 @@ const UserInfo = (props) => {
                 <form onSubmit={handleStreamDetails}>
                   <div>
                     <label className='font-semibold text-sm'>Stream Title: </label>
-                    <input value={streamDetails.name} onChange={(e) => setStreamDetails({ ...streamDetails, name: e.target.value })} className='w-full bg-transparent' type="text" />
+                    <input required={true} value={streamDetails.name} onChange={(e) => setStreamDetails({ ...streamDetails, name: e.target.value })} className='w-full bg-transparent' type="text" />
                   </div>
                   <div className='mt-2'>
                     <label className='font-semibold text-sm'>Stream Description: </label>
-                    <textarea value={streamDetails.description} onChange={(e) => setStreamDetails({ ...streamDetails, description: e.target.value })} rows={2} className='w-full bg-transparent' type="text" />
+                    <textarea required={true} value={streamDetails.description} onChange={(e) => setStreamDetails({ ...streamDetails, description: e.target.value })} rows={2} className='w-full bg-transparent' type="text" />
                   </div>
                   <div className='flex mt-1 justify-end'>
 
-                    <input className='bg-dbeats-alt ml-1 text-dbeats-light border-dbeats-light px-3 py-2  rounded-md' type="submit" value="Save" />
+                    <input className='bg-dbeats-alt ml-1 text-dbeats-light border-dbeats-light px-3 py-2  rounded-md cursor-pointer' type="submit" value="Save" />
 
                     <button onClick={cancelStreamDetails} className='bg-dbeats-alt ml-1 text-gray-400 border-gray-400 px-3 py-2  rounded-md'>Cancel</button>
 
@@ -890,39 +903,56 @@ const UserInfo = (props) => {
               </div>
               {/* Stream Links */}
               <div>
-                <div className='text-white text-base font-semibold mb-2'>Links</div>
-                {user.streamLinks ? user.streamLinks.map((link, index) => {
-                  return (
-                    <div key={index} className="my-1">
-                      <div className='text-sm'>Link {index + 1}</div>
-                      <div className='flex items-center justify-between'>
-                        <div  >{link.url}</div>
-                        <button><i className="text-md fa-solid mx-2 fa-trash"></i></button>
-                      </div>
-                      <hr />
-                    </div>
-                  )
-                }) : null}
+                <div className='text-white text-base font-semibold mb-2'>Banners (Max 4)</div>
+
                 <div className='mt-3'>
                   <form onSubmit={uploadLink}>
-                    <div>Add New Link </div>
-                    <div className='flex items-center'>
-                      <input required={true} value={streamLink.url} onChange={(e) => setStreamLink({ ...streamLink, url: e.target.value })} placeholder='URL' className='w-full bg-transparent text-sm' type={'url'} />
-                      <label htmlFor="file" className='text-2xl mx-2'><i className="fa-solid fa-image"></i></label>
-                      <input accept=".jpg,.png,.jpeg,.gif,.webp"
-                        required={true}
-                        onChange={onLinkFileChange}
-                        type="file" id="file"
-                        className="hidden" />
+                    <div>Create new banner </div>
+                    <div className='flex'>
+                      <div className='border-2 border-white border-dashed p-3 mt-1'>
+                        <div className='text-center'><i className="fa-solid text-3xl fa-file-image"></i></div>
+                        <label htmlFor="file" className='whitespace-nowrap text-sm text-center rounded py-1 px-2 text-dbeats-light bg-dbeats-alt cursor-pointer'>
+                          {selectedLinkFile ? (selectedLinkFile.file ? `${selectedLinkFile.file[0].name.substring(0, 10)}` : null) : <>Choose Image <span className="text-red-600 text-xl">*</span></>}
+                          <input accept=".jpg,.png,.jpeg,.gif,.webp"
+                            required={true}
+                            onChange={onLinkFileChange}
+                            type="file" id="file"
+                            className="sr-only" />
+                        </label>
+
+                        <div className='text-center text-sm text-gray-500'>PNG, JPG, GIF</div>
+                      </div>
+                      <div className='flex-1 mt-1'>
+                        <input required={true} value={streamLink.url} onChange={(e) => setStreamLink({ ...streamLink, url: e.target.value })} placeholder='URL' className='w-full bg-transparent text-sm ml-2' type={'url'} />
+                        <div className='flex mt-1 justify-end  items-center'>
+                          <input disabled={uploadingLink} type={'submit'} value='Add Banner' className='mt-1 cursor-pointer bg-dbeats-alt   text-dbeats-light border-dbeats-light px-2 py-1  rounded-md' />
+                          <div
+                            className="animate-spin rounded-full h-5 w-5 ml-3 border-t-2 border-b-2 bg-gradient-to-r from-green-400 to-blue-500 "
+                            hidden={!uploadingLink}
+                          ></div>
+                        </div>
+                      </div>
                     </div>
-                    <div className='flex mt-1 justify-end mr-20 items-center'>
-                      <input disabled={uploadingLink} type={'submit'} value='save' className='cursor-pointer bg-dbeats-alt  text-sm text-dbeats-light border-dbeats-light px-2 py-1  rounded-md' />
-                      <div
-                        className="animate-spin rounded-full h-5 w-5 ml-3 border-t-2 border-b-2 bg-gradient-to-r from-green-400 to-blue-500 "
-                        hidden={!uploadingLink}
-                      ></div>
-                    </div>
+
                   </form>
+                </div>
+                <div className="mt-3">
+                  <div className='text-white text-base font-semibold mb-2'>Banners</div>
+                  <div className='flex flex-wrap mx-6'>
+
+                    {user.streamLinks ? user.streamLinks.map((link, index) => {
+                      return (
+                        <div key={index} className="border border-dbeats-light rounded-md w-32 mx-6 pb-2 pt-1 my-1">
+                          <div className='text-dbeats-light text-right'><i onClick={() => deleteStreamLink(link)} className="fa-solid fa-xmark text-xl pr-1 cursor-pointer"></i></div>
+                          <img src={link.image} className='w-full pt-2' />
+                          <div className='text-center p-1 pt-3'>
+                            <div className='break-words'>{link.url}</div>
+                            {/* <button><i className="text-md fa-solid mx-2 fa-trash"></i></button> */}
+                          </div>
+                        </div>
+                      )
+                    }) : null}
+                  </div>
                 </div>
               </div>
               <div className='hidden'>

@@ -306,9 +306,8 @@ const PublicInfo = (props) => {
       {user ? (
         <div className="">
           <div
-            className={`${
-              darkMode && 'dark'
-            }  grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-3 grid-flow-row   pb-50  lg:ml-12  relative  h-full `}
+            className={`${darkMode && 'dark'
+              }  grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-3 grid-flow-row   pb-50  lg:ml-12  relative  h-full `}
           >
             <div className="col-span-1 md:col-span-2 pt-3 2xl:mt-16 xl:mt-10 lg:mt-10 mt-14 sticky  top-14   z-10 lg:z-auto   ">
               <div>
@@ -335,6 +334,11 @@ const PublicInfo = (props) => {
                     <p className="  2xl:text-lg lg:text-xs text-md text-gray-400 pb-4">{time}</p>
                   ) : null} */}
                     </div>
+                    <>
+                      <h1 className="text-white mr-1 md:text-2xl ml-20 text-sm tracking-wider">
+                        {userData && userData.streamDetails ? userData.streamDetails.name : null}
+                      </h1>
+                    </>
                     {!privateUser ? (
                       <div>
                         {user && userData ? (
@@ -394,9 +398,8 @@ const PublicInfo = (props) => {
                                 }
                               >
                                 <span
-                                  className={`${
-                                    userData.superfan_data ? '' : 'hidden'
-                                  } whitespace-nowrap flex`}
+                                  className={`${userData.superfan_data ? '' : 'hidden'
+                                    } whitespace-nowrap flex`}
                                 >
                                   🥳 Become a Superfan
                                 </span>
@@ -415,6 +418,14 @@ const PublicInfo = (props) => {
                         )}
                       </div>
                     ) : null}
+                    <div className='mt-2'>
+                      <>
+                        <p >
+                          <span className="text-white mr-1 font-bold md:text-lg md:ml-20 text-sm tracking-wider">Description:</span>  <span className='text-base text-white ml-5'>{userData && userData.streamDetails ? userData.streamDetails.description : null}</span>
+                        </p>
+                       
+                      </>
+                    </div>
                   </div>
                   <div className="2xl:text-2xl lg:text-md text-xs 2xl:py-4 lg:py-2 py-2 flex justify-around dark:text-dbeats-white   ">
                     <p className={`text-white md:text-lg text-xs text-center pr-2 flex flex-col`}>
