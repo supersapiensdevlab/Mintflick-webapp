@@ -4,12 +4,17 @@ import Noty from 'noty';
 import React, { useEffect, useState } from 'react';
 import Chips from 'react-chips';
 import Modal from 'react-modal';
+import icon1 from '../../../../assets/icons/cryptocurrency-art.png';
+import icon2 from '../../../../assets/icons/nft.png';
+import icon3 from '../../../../assets/icons/cryptocurrency-token.png';
 import { useSelector } from 'react-redux';
+import { storeWithProgress, createToken } from '../../../../functions/NFTMinter';
 import { Link } from 'react-router-dom';
 import Dropdown from '../../../dropdown.component';
 import { makeStorageClient } from '../../../uploadHelperFunction';
 import { chipTheme, theme } from '../Theme';
 import { useDispatch } from 'react-redux';
+import { ProgressBar, Step } from 'react-step-progress-bar';
 import { loadUser } from '../../../../actions/userActions';
 
 const UploadTrackModal = (props) => {
@@ -18,6 +23,10 @@ const UploadTrackModal = (props) => {
   const user = useSelector((state) => state.User.user);
 
   const darkMode = useSelector((state) => state.toggleDarkMode);
+
+  const provider = useSelector((state) => state.web3Reducer.provider);
+  const [minting, setMinting] = useState(null);
+  const [mintingProgress, setMintingProgress] = useState(0);
 
   const genre = [
     'EDM',
@@ -50,6 +59,25 @@ const UploadTrackModal = (props) => {
   const derivativeWorks = ['No-Selection', 'No Derivative Works', 'Share-Alike'];
 
   const suggestions = ['Games', 'Edu', 'Sci-Fi', 'Counter-Strike'];
+
+  const [isNFT, setIsNFT] = useState(true);
+  const [NFTprice, setPrice] = useState(0);
+
+  const [hideButton, setHideButton] = useState(false);
+
+  const [formData, setFormData] = useState(null);
+
+  const [tokenId, setTokenId] = useState(null);
+
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  const [sharable_data, setsharable_data] = useState();
+  const text = 'Copy Link To Clipboard';
+  const [buttonText, setButtonText] = useState(text);
+
+  const [warning, setWarning] = useState(null);
 
   const [selectedGenre, setSelectedGenre] = useState(genre[0]);
   const [selectedMood, setSelectedMood] = useState(mood[0]);
@@ -112,6 +140,10 @@ const UploadTrackModal = (props) => {
     }
   };
 
+  const handleNFT = () => {
+    setIsNFT(!isNFT);
+  };
+
   const fetchSuggestions = (value) => {
     return new Promise((resolve) => {
       if (value.length >= 1) {
@@ -134,157 +166,157 @@ const UploadTrackModal = (props) => {
     });
   };
 
-  async function storeWithProgress() {
-    const contract_address = process.env.CONTRACT_ADDRESS;
-    // show the root cid as soon as it's ready
-    const onRootCidReady = async (cid) => {
-      //console.log('uploading files with cid:', cid);
-      track.cid = cid;
+  // async function storeWithProgress() {
+  //   const contract_address = process.env.CONTRACT_ADDRESS;
+  //   // show the root cid as soon as it's ready
+  //   const onRootCidReady = async (cid) => {
+  //     //console.log('uploading files with cid:', cid);
+  //     track.cid = cid;
 
-      const apiKey =
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDhhMzIwRGQxRDBBNTBmMUQyYjNGNmZGZDM0MUI3ODdkNTYzQzBFYjUiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTYzNDQ0ODE3MDg4MCwibmFtZSI6IkRCZWF0cyJ9.wGuicvEMGBKmKxqsiC4YhesIjBF11oP9EZXNYYN6w5k';
-      const client = new NFTStorage({ token: apiKey });
+  //     const apiKey =
+  //       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDhhMzIwRGQxRDBBNTBmMUQyYjNGNmZGZDM0MUI3ODdkNTYzQzBFYjUiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTYzNDQ0ODE3MDg4MCwibmFtZSI6IkRCZWF0cyJ9.wGuicvEMGBKmKxqsiC4YhesIjBF11oP9EZXNYYN6w5k';
+  //     const client = new NFTStorage({ token: apiKey });
 
-      const metadata = await client.store({
-        name: track.trackName,
-        image: track.trackImage,
-        animation_url: 'https://ipfs.io/ipfs/' + cid + '/' + track.trackFile.name,
-        description: track.description,
-        attributes: [
-          {
-            trait_type: 'Genre',
-            value: track.genre,
-          },
-          {
-            trait_type: 'Mood',
-            value: track.mood,
-          },
-          {
-            trait_type: 'Tags',
-            value: track.tags,
-          },
-          {
-            display_type: 'boost_percentage',
-            trait_type: 'royalty',
-            value: track.royalty,
-          },
-          {
-            display_type: 'number',
-            trait_type: 'ISRC',
-            value: track.isrc,
-          },
-          {
-            display_type: 'number',
-            trait_type: 'ISWC',
-            value: track.iswc,
-          },
-          {
-            trait_type: 'Allow Attribution',
-            value: track.allowAttribution,
-          },
-          {
-            trait_type: 'Commercial Use',
-            value: track.commercialUse,
-          },
-          {
-            trait_type: 'Derivative Works',
-            value: track.derivativeWorks,
-          },
-        ],
-      });
-      // Split ipfs metadata link into two parts
-      const ipfsMetadata = metadata.url.split('ipfs://')[1];
+  //     const metadata = await client.store({
+  //       name: track.trackName,
+  //       image: track.trackImage,
+  //       animation_url: 'https://ipfs.io/ipfs/' + cid + '/' + track.trackFile.name,
+  //       description: track.description,
+  //       attributes: [
+  //         {
+  //           trait_type: 'Genre',
+  //           value: track.genre,
+  //         },
+  //         {
+  //           trait_type: 'Mood',
+  //           value: track.mood,
+  //         },
+  //         {
+  //           trait_type: 'Tags',
+  //           value: track.tags,
+  //         },
+  //         {
+  //           display_type: 'boost_percentage',
+  //           trait_type: 'royalty',
+  //           value: track.royalty,
+  //         },
+  //         {
+  //           display_type: 'number',
+  //           trait_type: 'ISRC',
+  //           value: track.isrc,
+  //         },
+  //         {
+  //           display_type: 'number',
+  //           trait_type: 'ISWC',
+  //           value: track.iswc,
+  //         },
+  //         {
+  //           trait_type: 'Allow Attribution',
+  //           value: track.allowAttribution,
+  //         },
+  //         {
+  //           trait_type: 'Commercial Use',
+  //           value: track.commercialUse,
+  //         },
+  //         {
+  //           trait_type: 'Derivative Works',
+  //           value: track.derivativeWorks,
+  //         },
+  //       ],
+  //     });
+  //     // Split ipfs metadata link into two parts
+  //     const ipfsMetadata = metadata.url.split('ipfs://')[1];
 
-      const options = {
-        method: 'POST',
-        url: 'https://api.nftport.xyz/v0/mints/customizable',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: 'ad092d8e-feb0-4430-92f7-1fa501b83bec',
-        },
-        data: {
-          chain: 'polygon',
-          contract_address: contract_address || '0x03160747B94BE986261D9340D01128d4d5566383',
-          metadata_uri: `https://ipfs.io/ipfs/${ipfsMetadata}`,
-          mint_to_address: user.wallet_id,
-        },
-      };
-      axios
-        .request(options)
-        .then(function (response) {
-          // //console.log(response.data);
-          // //console.log(response.status);
-          track.mintTrxHash = response.data.transaction_hash;
+  //     const options = {
+  //       method: 'POST',
+  //       url: 'https://api.nftport.xyz/v0/mints/customizable',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         Authorization: 'ad092d8e-feb0-4430-92f7-1fa501b83bec',
+  //       },
+  //       data: {
+  //         chain: 'polygon',
+  //         contract_address: contract_address || '0x03160747B94BE986261D9340D01128d4d5566383',
+  //         metadata_uri: `https://ipfs.io/ipfs/${ipfsMetadata}`,
+  //         mint_to_address: user.wallet_id,
+  //       },
+  //     };
+  //     axios
+  //       .request(options)
+  //       .then(function (response) {
+  //         // //console.log(response.data);
+  //         // //console.log(response.status);
+  //         track.mintTrxHash = response.data.transaction_hash;
 
-          const nftTokenOptions = {
-            method: 'GET',
-            url: `https://api.nftport.xyz/v0/mints/${response.data.transaction_hash}?chain=polygon`,
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: 'ad092d8e-feb0-4430-92f7-1fa501b83bec',
-            },
-          };
-          document.getElementById('nftAddress').innerHTML = `Sailing Data from OpenSea...`;
-          setTimeout(() => {
-            axios
-              .request(nftTokenOptions)
-              .then(function (tokenIdRes) {
-                track.tokenId = tokenIdRes.data.token_id;
+  //         const nftTokenOptions = {
+  //           method: 'GET',
+  //           url: `https://api.nftport.xyz/v0/mints/${response.data.transaction_hash}?chain=polygon`,
+  //           headers: {
+  //             'Content-Type': 'application/json',
+  //             Authorization: 'ad092d8e-feb0-4430-92f7-1fa501b83bec',
+  //           },
+  //         };
+  //         document.getElementById('nftAddress').innerHTML = `Sailing Data from OpenSea...`;
+  //         setTimeout(() => {
+  //           axios
+  //             .request(nftTokenOptions)
+  //             .then(function (tokenIdRes) {
+  //               track.tokenId = tokenIdRes.data.token_id;
 
-                // //console.log('TOKEN ID DATA: ', tokenIdRes.data);
-                // //console.log(
-                //   'OpenSea Url of nft: ',
-                //   `https://opensea.io/assets/matic/0x03160747b94be986261d9340d01128d4d5566383/${tokenIdRes.data.token_id}`,
-                // );
+  //               // //console.log('TOKEN ID DATA: ', tokenIdRes.data);
+  //               // //console.log(
+  //               //   'OpenSea Url of nft: ',
+  //               //   `https://opensea.io/assets/matic/0x03160747b94be986261d9340d01128d4d5566383/${tokenIdRes.data.token_id}`,
+  //               // );
 
-                document.getElementById('nftAddress').innerHTML = `Check on OpenSea`;
-                document.getElementById(
-                  'nftAddress',
-                ).href = `https://opensea.io/assets/matic/0x03160747b94be986261d9340d01128d4d5566383/${tokenIdRes.data.token_id}`;
-              })
-              .catch(function (e) {
-                console.error(e);
-              });
-          }, 10000);
-        })
+  //               document.getElementById('nftAddress').innerHTML = `Check on OpenSea`;
+  //               document.getElementById(
+  //                 'nftAddress',
+  //               ).href = `https://opensea.io/assets/matic/0x03160747b94be986261d9340d01128d4d5566383/${tokenIdRes.data.token_id}`;
+  //             })
+  //             .catch(function (e) {
+  //               console.error(e);
+  //             });
+  //         }, 10000);
+  //       })
 
-        .catch(function (error) {
-          console.error(error);
-        });
+  //       .catch(function (error) {
+  //         console.error(error);
+  //       });
 
-      // axios.post('https://api.nftport.xyz/v0/mints/customizable', {
-      //   "chain": "polygon",
-      //   "contract_address": "0x5dbea8eb2b4e407b31663a4148724114178b5494",
-      //   "metadata_uri": "https://ipfs.io/ipfs/bafyreidmdlj6xr55taqq6gglmjnjdegqmyn47sqlgqxdxv3ro5vpyyxxti/metadata.json",
-      //   "mint_to_address": "0x5d55407a341d96418cEDa98E06C244a502fC9572"
-      // });
-      ////console.log('Metada.json URL', metadata.url);
-    };
-    track.albumArt = track.trackImage.name;
-    track.fileName = track.trackFile.name;
-    ////console.log(track);
+  //     // axios.post('https://api.nftport.xyz/v0/mints/customizable', {
+  //     //   "chain": "polygon",
+  //     //   "contract_address": "0x5dbea8eb2b4e407b31663a4148724114178b5494",
+  //     //   "metadata_uri": "https://ipfs.io/ipfs/bafyreidmdlj6xr55taqq6gglmjnjdegqmyn47sqlgqxdxv3ro5vpyyxxti/metadata.json",
+  //     //   "mint_to_address": "0x5d55407a341d96418cEDa98E06C244a502fC9572"
+  //     // });
+  //     ////console.log('Metada.json URL', metadata.url);
+  //   };
+  //   track.albumArt = track.trackImage.name;
+  //   track.fileName = track.trackFile.name;
+  //   ////console.log(track);
 
-    // const blob = new Blob([JSON.stringify(metadata)], { type: 'application/json' });
+  //   // const blob = new Blob([JSON.stringify(metadata)], { type: 'application/json' });
 
-    const files = [track.trackFile, track.trackImage];
-    const totalSize = track.trackFile.size;
-    let uploaded = 0;
-    const onStoredChunk = (size) => {
-      uploaded += size;
-      const pct = totalSize / uploaded;
-      setUploading(10 - pct);
-      console.log(`Uploading... ${pct.toFixed(2)}% complete`);
-    };
+  //   const files = [track.trackFile, track.trackImage];
+  //   const totalSize = track.trackFile.size;
+  //   let uploaded = 0;
+  //   const onStoredChunk = (size) => {
+  //     uploaded += size;
+  //     const pct = totalSize / uploaded;
+  //     setUploading(10 - pct);
+  //     console.log(`Uploading... ${pct.toFixed(2)}% complete`);
+  //   };
 
-    // makeStorageClient returns an authorized Web3.Storage client instance
-    const client = makeStorageClient();
+  //   // makeStorageClient returns an authorized Web3.Storage client instance
+  //   const client = makeStorageClient();
 
-    // client.put will invoke our callbacks during the upload
-    // and return the root cid when the upload completes
-    // client.put(files, { onRootCidReady, onStoredChunk });
+  //   // client.put will invoke our callbacks during the upload
+  //   // and return the root cid when the upload completes
+  //   // client.put(files, { onRootCidReady, onStoredChunk });
 
-    return client.put(files, { onRootCidReady, onStoredChunk });
-  }
+  //   return client.put(files, { onRootCidReady, onStoredChunk });
+  // }
 
   const onFileChange = (e) => {
     if (e.target.name === 'trackFile') {
@@ -322,11 +354,80 @@ const UploadTrackModal = (props) => {
     tags,
   ]);
 
+  useEffect(async () => {
+    async function uploadVideoToDB() {}
+
+    console.log('TOKEN ID', tokenId);
+    if (tokenId) {
+      if (isNFT) {
+        formData.append('tokenId', tokenId);
+        dispatch(loadUser());
+      }
+      await axios
+        .post(`${process.env.REACT_APP_SERVER_URL}/upload_music`, formData, {
+          headers: {
+            'content-type': 'multipart/form-data',
+            'auth-token': localStorage.getItem('authtoken'),
+          },
+        })
+        .then((res) => {
+          setMintingProgress(66);
+
+          // axios
+          //   .get(`${process.env.REACT_APP_SERVER_URL}/user/getLoggedInUser`, tokenConfig())
+          //   .then((res) => {
+          //     let latestVideoId = res.data.videos[res.data.videos.length - 1].videoId;
+          //     setsharable_data(
+          //       `${process.env.REACT_APP_CLIENT_URL}/playback/${res.data.username}/${latestVideoId}`,
+          //     );
+          //     setShow(true);
+          //   });
+
+          setTrack({
+            trackName: '',
+            trackImage: '',
+            trackFile: '',
+            albumArt: '',
+            fileName: '',
+            cid: '',
+            genre: '',
+            mood: '',
+            tags: [],
+            description: '',
+            royalty: 5,
+            isrc: '',
+            iswc: '',
+            allowAttribution: '',
+            commercialUse: '',
+            derivativeWorks: '',
+            tokenId: '',
+            mintTrxHash: '',
+          }); // reset the form
+        });
+    }
+  }, [tokenId]);
+
   const PostData = async (e) => {
-    props.setLoader(false);
     e.preventDefault();
     let formDatanft = new FormData();
     formDatanft.append('videoFile', track.trackFile);
+    if (!trackUpload) {
+      setWarning('Please select a video');
+      return;
+    } else if (NFTprice < 1) {
+      setWarning('selling price should be greater than 1 MATIC');
+      return;
+    } else if (!trackImageUpload) {
+      setWarning('Please select video thumbnail');
+      return;
+    } else if (track.trackName == '') {
+      setWarning('Please enter a video name');
+      return;
+    } else {
+      setWarning(null);
+    }
+    setHideButton(true);
+    props.setLoader(false);
 
     // if (document.getElementById('is_nft').checked) {
     //   await mintNFT(
@@ -348,6 +449,7 @@ const UploadTrackModal = (props) => {
     //   });
     //   //console.log(metadata.url);
     // }
+    const files = [track.trackFile, track.trackImage];
     const {
       trackName,
       trackImage,
@@ -362,96 +464,162 @@ const UploadTrackModal = (props) => {
       commercialUse,
       derivativeWorks,
     } = track;
+    const cidData = await storeWithProgress(files);
 
-    storeWithProgress(e.target.value).then(() => {
-      let formData = new FormData(); // Currently empty
-      formData.append('userName', user.username);
-      formData.append('userImage', user.profile_image);
-      formData.append('trackName', trackName);
-      formData.append('genre', genre);
-      formData.append('mood', mood);
+    track.cid = cidData;
+    var ts = Math.round(new Date().getTime() / 1000);
 
-      tags.forEach((tag) => formData.append('tags', tag));
+    //Standard Metadata supported by OpenSea
+    let metadata = {
+      image: 'https://ipfs.infura.io/ipfs/' + track.cid + '/' + track.trackImage.name,
 
-      formData.append('description', description);
-      formData.append('isrc', isrc);
-      formData.append('iswc', iswc);
-      formData.append('allowAttribution', allowAttribution);
-      formData.append('commercialUse', commercialUse);
-      formData.append('derivativeWorks', derivativeWorks);
-      formData.append('trackFile', trackFile, trackFile.name);
-      formData.append('trackImage', trackImage, trackImage.name);
-      formData.append('trackHash', track.cid);
-      if (
-        track.trackFile.length !== 0 &&
-        track.trackImage.length !== 0 &&
-        track.trackName.length !== 0 &&
-        track.cid.length !== 0
-      ) {
-        axios
-          .post(`${process.env.REACT_APP_SERVER_URL}/upload_music`, formData, {
-            headers: {
-              'content-type': 'multipart/form-data',
-              'auth-token': localStorage.getItem('authtoken'),
-            },
-          })
-          .then(function (response) {
-            dispatch(loadUser());
+      external_url: 'https://ipfs.infura.io/ipfs/' + track.cid + '/' + track.trackFile.name,
 
-            setTrack({
-              trackName: '',
-              trackImage: '',
-              trackFile: '',
-              albumArt: '',
-              fileName: '',
-              cid: '',
-              genre: '',
-              mood: '',
-              tags: [],
-              description: '',
-              royalty: 5,
-              isrc: '',
-              iswc: '',
-              allowAttribution: '',
-              commercialUse: '',
-              derivativeWorks: '',
-              tokenId: '',
-              mintTrxHash: '',
-            });
-            setUploading(0);
-            props.setLoader(true);
-            props.handleCloseTrackUpload();
-            Noty.closeAll();
-            new Noty({
-              type: 'success',
-              text: response.data,
-              theme: 'metroui',
-              layout: 'bottomRight',
-            }).show();
-            // //console.log(response.data);
-          })
-          .catch((error) => {
-            Noty.closeAll();
-            new Noty({
-              type: 'error',
-              text: error.data,
-              theme: 'metroui',
-              layout: 'bottomRight',
-            }).show();
-            // console.log(error);
-            // //console.log(error.data);
-          });
-      } else {
-        Noty.closeAll();
-        new Noty({
-          type: 'error',
-          text: 'Choose Audio File & Fill other Details',
-          theme: 'metroui',
-          layout: 'bottomRight',
-        }).show();
-      }
-    });
+      description: track.description,
+
+      name: track.trackName,
+
+      attributes: [
+        {
+          display_type: 'date',
+          trait_type: 'Created On',
+          value: ts,
+        },
+        {
+          trait_type: 'Category',
+          value: track.category,
+        },
+      ],
+
+      animation_url: 'https://ipfs.infura.io/ipfs/' + track.cid + '/' + track.trackFile.name,
+    };
+
+    const blob = new Blob([JSON.stringify(metadata)], { type: 'application/json' });
+    const metaFile = [new File([blob], 'meta.json')];
+    //const client = makeStorageClient();
+    const cid = await storeWithProgress(metaFile);
+    props.setLoader(true);
+    console.log('stored files with cid:', cid);
+    console.log('meta', cid);
+
+    let formData = new FormData(); // Currently empty
+    formData.append('userName', user.username);
+    formData.append('userImage', user.profile_image);
+    formData.append('trackName', trackName);
+    formData.append('genre', genre);
+    formData.append('mood', mood);
+
+    tags.forEach((tag) => formData.append('tags', tag));
+
+    formData.append('description', description);
+    formData.append('isrc', isrc);
+    formData.append('iswc', iswc);
+    formData.append('allowAttribution', allowAttribution);
+    formData.append('commercialUse', commercialUse);
+    formData.append('derivativeWorks', derivativeWorks);
+    formData.append('trackFile', trackFile, trackFile.name);
+    formData.append('trackImage', trackImage, trackImage.name);
+    formData.append('trackHash', track.cid);
+
+    setFormData(formData);
+    if (
+      track.trackFile.length !== 0 &&
+      track.trackImage.length !== 0 &&
+      track.trackName.length !== 0 &&
+      track.cid.length !== 0
+    ) {
+      //   axios
+      //     .post(`${process.env.REACT_APP_SERVER_URL}/upload_music`, formData, {
+      //       headers: {
+      //         'content-type': 'multipart/form-data',
+      //         'auth-token': localStorage.getItem('authtoken'),
+      //       },
+      //     })
+      //     .then(function (response) {
+      //       dispatch(loadUser());
+
+      //       setTrack({
+      //         trackName: '',
+      //         trackImage: '',
+      //         trackFile: '',
+      //         albumArt: '',
+      //         fileName: '',
+      //         cid: '',
+      //         genre: '',
+      //         mood: '',
+      //         tags: [],
+      //         description: '',
+      //         royalty: 5,
+      //         isrc: '',
+      //         iswc: '',
+      //         allowAttribution: '',
+      //         commercialUse: '',
+      //         derivativeWorks: '',
+      //         tokenId: '',
+      //         mintTrxHash: '',
+      //       });
+      //       setUploading(0);
+      //       props.setLoader(true);
+      //       props.handleCloseTrackUpload();
+      //       Noty.closeAll();
+      //       new Noty({
+      //         type: 'success',
+      //         text: response.data,
+      //         theme: 'metroui',
+      //         layout: 'bottomRight',
+      //       }).show();
+      //       // //console.log(response.data);
+      //     })
+      //     .catch((error) => {
+      //       Noty.closeAll();
+      //       new Noty({
+      //         type: 'error',
+      //         text: error.data,
+      //         theme: 'metroui',
+      //         layout: 'bottomRight',
+      //       }).show();
+      //       // console.log(error);
+      //       // //console.log(error.data);
+      //     });
+      // } else {
+      //   Noty.closeAll();
+      //   new Noty({
+      //     type: 'error',
+      //     text: 'Choose Audio File & Fill other Details',
+      //     theme: 'metroui',
+      //     layout: 'bottomRight',
+      //   }).show();
+      let url = 'https://ipfs.infura.io/ipfs/' + cid + '/meta.json';
+      setMinting(true);
+      await createToken(
+        url,
+        NFTprice,
+        formData,
+        provider,
+        setMinting,
+        setMintingProgress,
+        setTokenId,
+        show,
+        setShow,
+        setsharable_data,
+      );
+    } else {
+      Noty.closeAll();
+      new Noty({
+        type: 'error',
+        text: 'Choose Audio File & Fill other Details',
+        theme: 'metroui',
+        layout: 'bottomRight',
+      }).show();
+    }
   };
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setButtonText(text);
+    }, 2000);
+    return () => clearTimeout(timer);
+  }, [buttonText]);
 
   const customStyles = {
     content: {
@@ -588,6 +756,67 @@ const UploadTrackModal = (props) => {
                 <div className=" sm:rounded-md  ">
                   <div className="2xl:p-5 lg:p-1.5 p-5  space-y-6">
                     <div className="grid grid-cols-1 gap-6 sm:grid-cols-1">
+                      <div className="flex flex-col">
+                        <div className="col-span-2 mb-5 sm:col-span-1">
+                          <div className="flex   content-center items-center align-middle">
+                            <div className="flex items-center h-5">
+                              <input
+                                id="nftCheckbox"
+                                aria-describedby="nftCheckbox"
+                                type="checkbox"
+                                className="cursor-pointer w-4 h-4 text-dbeats-secondary-light rounded  "
+                                required
+                                checked={isNFT}
+                                onChange={handleNFT}
+                              />
+                            </div>
+                            <div className="ml-3 text-sm">
+                              <label
+                                htmlFor="nftCheckbox"
+                                className="font-medium text-gray-900 dark:text-gray-300"
+                              >
+                                Mint NFT
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+                        {isNFT ? (
+                          <>
+                            <div className="grid lg:grid-cols-3 grid-col-6 gap-6 ">
+                              <div className="col-span-2  sm:col-span-1 ">
+                                <label
+                                  htmlFor="company-website"
+                                  className="block 2xl:text-sm text-sm lg:text-xs font-medium dark:text-gray-100 text-gray-700"
+                                >
+                                  Price in MATIC
+                                </label>
+                                <div className="mt-1 flex rounded-md shadow-sm nm-flat-dbeats-dark-secondary-sm  p-0.5">
+                                  <input
+                                    min={1}
+                                    type="number"
+                                    name="NFTPrice"
+                                    id="NFTPrice"
+                                    value={NFTprice}
+                                    onChange={(e) => setPrice(e.target.value)}
+                                    className="focus:nm-inset-dbeats-dark-primary  border-0 bg-dbeats-dark-primary  ring-0   flex-1 block w-full rounded-md sm:text-sm  "
+                                    placeholder=""
+                                    required
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                            <div className=" col-span-6  align-middle md:flex">
+                              <p className="text-xs   text-dbeats-white opacity-40 ">
+                                Royalty of 10% on secondary sales will be sent to &nbsp;{' '}
+                              </p>
+                              <span className="text-xs  font-medium   text-dbeats-white opacity-100 justify-center align-middle">
+                                {' '}
+                                {user.wallet_id}
+                              </span>
+                            </div>
+                          </>
+                        ) : null}
+                      </div>
                       <div className="col-span-3 sm:col-span-3">
                         <label
                           htmlFor="trackName"
@@ -814,6 +1043,94 @@ const UploadTrackModal = (props) => {
           </div>
 
           <div className="lg:px-4 2xl:py-3 lg:py-2 lg:pt-3 lg:text-right text-center flex justify-end items-center">
+            {warning && (
+              <span className="mr-16 text-red-500">
+                <i className="fa-solid fa-triangle-exclamation"></i> {warning}
+              </span>
+            )}
+            <div className="flex flex-col text-center">
+              <div className={`${minting === true ? 'block' : 'hidden'} mx-3 text-white my-5 `}>
+                👻 Confirm NFT Mint on the next Popup
+              </div>
+              {minting === 'token created' ? (
+                <div className={`  mx-3 text-white my-5 `}>
+                  ✅ NFT Token Created Successfully. Confirm Market Listing on the Popup
+                </div>
+              ) : null}
+
+              <div
+                className={`${
+                  mintingProgress === 66 ? 'block' : 'hidden'
+                } text-center flex mx-3 my-5`}
+              >
+                <p className="no-underline  text-white">Wrapping Up Things &nbsp;</p>
+                <p className="no-underline  text-white"> Please Wait...</p>
+              </div>
+
+              <div
+                className={`${
+                  minting !== null &&
+                  minting !== true &&
+                  mintingProgress === 100 &&
+                  minting !== 'token created'
+                    ? 'block'
+                    : 'hidden'
+                } text-center flex mx-3 my-5`}
+              >
+                <p className="no-underline  text-dbeats-light">🚀 NFT Minted &nbsp;</p>
+                <a
+                  target={'_blank'}
+                  rel="noopener noreferrer "
+                  className="dark:text-dbeats-light cursor-pointer underline  "
+                  href={`https://polygonscan.com/tx/${minting}`}
+                >
+                  Check on Polygonscan
+                </a>
+              </div>
+              <ProgressBar
+                className="w-full mx-auto"
+                percent={mintingProgress}
+                transitionDuration={1000}
+                filledBackground="linear-gradient(to right,  #31c48D, #3f83f8)"
+              >
+                <Step transition="scale">
+                  {({ accomplished }) => (
+                    <img
+                      style={{ filter: `grayscale(${accomplished ? 0 : 80}%)` }}
+                      className="w-6"
+                      src={icon3}
+                    />
+                  )}
+                </Step>
+                <Step transition="scale">
+                  {({ accomplished }) => (
+                    <img
+                      style={{ filter: `grayscale(${accomplished ? 0 : 80}%)` }}
+                      className="w-8"
+                      src={icon2}
+                    />
+                  )}
+                </Step>
+                <Step transition="scale">
+                  {({ accomplished }) => (
+                    <img
+                      style={{ filter: `grayscale(${accomplished ? 0 : 80}%)` }}
+                      className="w-6"
+                      src={icon1}
+                    />
+                  )}
+                </Step>
+                <Step transition="scale">
+                  {({ accomplished }) => (
+                    <img
+                      style={{ filter: `grayscale(${accomplished ? 0 : 80}%)` }}
+                      width="30"
+                      src={icon1}
+                    />
+                  )}
+                </Step>
+              </ProgressBar>
+            </div>
             <div className=" mx-5 flex items-center w-64">
               <input
                 type="range"
@@ -828,14 +1145,6 @@ const UploadTrackModal = (props) => {
                 {Math.round(uploading * 10)}%
               </p>
             </div>
-            <Link
-              className="text-sm font-medium dark:text-gray-100 text-gray-700 px-2"
-              id="nftAddress"
-              target="_blank"
-              to="/"
-            >
-              NFT
-            </Link>
             <input
               type="submit"
               onClick={PostData}
@@ -844,7 +1153,7 @@ const UploadTrackModal = (props) => {
                 trackUpload && trackImageUpload && !invalidISRC && !invalidISWC
                   ? 'cursor-pointer hover:bg-dbeats-light'
                   : ''
-              } 
+              }  ${hideButton ? 'hidden' : ''} 
                flex justify-center 2xl:py-2 py-1 lg:px-5 
                   2xl:text-lg rounded  border-dbeats-light border
                 lg:text-md text-md my-auto font-semibold px-3 bg-transparent
