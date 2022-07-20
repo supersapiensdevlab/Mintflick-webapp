@@ -1,19 +1,27 @@
 import axios from 'axios';
+import Noty from 'noty';
 import moment from 'moment';
 import { NFTStorage } from 'nft.storage';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Modal from 'react-modal';
+import { ProgressBar, Step } from 'react-step-progress-bar';
 import { useDispatch, useSelector } from 'react-redux';
 import { detectURLs, makeStorageClient } from '../../../uploadHelperFunction';
 import LinkPreview from './LinkPreview';
 import classes from './LinkPreview.module.css';
 import { loadUser } from '../../../../actions/userActions';
+import icon1 from '../../../../assets/icons/cryptocurrency-art.png';
+import icon2 from '../../../../assets/icons/nft.png';
+import icon3 from '../../../../assets/icons/cryptocurrency-token.png';
+import { storeWithProgress, createToken } from '../../../../functions/NFTMinter';
 moment().format();
 
 const AnnouncementModal = (props) => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.User.user);
-
+  const provider = useSelector((state) => state.web3Reducer.provider);
+  const [minting, setMinting] = useState(null);
+  const [mintingProgress, setMintingProgress] = useState(0);
   const darkMode = useSelector((darkmode) => darkmode.toggleDarkMode);
 
   //const [postImage, setPostImage] = useState(null);
@@ -33,6 +41,25 @@ const AnnouncementModal = (props) => {
   const [linkPreviewUrl, setLinkPreviewUrl] = useState(null);
   const [linkPreviewData, setLinkPreviewData] = useState(null);
   const [uploading, setUploading] = useState(0);
+
+  const [isNFT, setIsNFT] = useState(true);
+  const [NFTprice, setPrice] = useState(0);
+
+  const [hideButton, setHideButton] = useState(false);
+
+  const [formData, setFormData] = useState(null);
+
+  const [tokenId, setTokenId] = useState(null);
+
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  const [sharable_data, setsharable_data] = useState();
+  const text = 'Copy Link To Clipboard';
+  const [buttonText, setButtonText] = useState(text);
+
+  const [warning, setWarning] = useState(null);
 
   const handleInputChange = (e) => {
     e.preventDefault();
@@ -68,168 +95,343 @@ const AnnouncementModal = (props) => {
     setAnnouncement({ ...announcement, event_link: value });
   };
 
-  async function storeWithProgress() {
-    const contract_address = process.env.CONTRACT_ADDRESS;
+  const handleNFT = () => {
+    setIsNFT(!isNFT);
+  };
 
-    const onRootCidReady = async (cid) => {
-      announcement.cid = cid;
+  useEffect(async () => {
+    async function uploadVideoToDB() {}
 
-      const apiKey =
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDhhMzIwRGQxRDBBNTBmMUQyYjNGNmZGZDM0MUI3ODdkNTYzQzBFYjUiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTYzNDQ0ODE3MDg4MCwibmFtZSI6IkRCZWF0cyJ9.wGuicvEMGBKmKxqsiC4YhesIjBF11oP9EZXNYYN6w5k';
-      const client = new NFTStorage({ token: apiKey });
-
-      const metadata = await client.store({
-        name: announcement.announcementText,
-        description: '',
-        image: announcement.postImage ? announcement.postImage : null,
-        animation_url: announcement.postVideo
-          ? 'https://ipfs.io/ipfs/' + cid + '/' + announcement.postVideo.name
-          : null,
-        event_link: announcement.event_link ? announcement.event_link : null,
-        attributes: [
-          {
-            trait_type: 'Event Link',
-            value: announcement.event_link ? announcement.event_link : null,
+    console.log('TOKEN ID', tokenId);
+    if (tokenId) {
+      if (isNFT) {
+        formData.append('tokenId', tokenId);
+        dispatch(loadUser());
+      }
+      await axios
+        .post(`${process.env.REACT_APP_SERVER_URL}/user/announcement`, formData, {
+          headers: {
+            'content-type': 'multipart/form-data',
+            'auth-token': localStorage.getItem('authtoken'),
           },
-        ],
-      });
-
-      // Split ipfs metadata link into two parts
-      const ipfsMetadata = metadata.url.split('ipfs://')[1];
-      const options = {
-        method: 'POST',
-        url: 'https://api.nftport.xyz/v0/mints/customizable',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: 'ad092d8e-feb0-4430-92f7-1fa501b83bec',
-        },
-        data: {
-          chain: 'polygon',
-          contract_address: contract_address || '0x03160747B94BE986261D9340D01128d4d5566383',
-          metadata_uri: `https://ipfs.io/ipfs/${ipfsMetadata}`,
-          mint_to_address: user.wallet_id,
-        },
-      };
-
-      axios
-        .request(options)
-        .then(function (response) {
-          // //console.log(response.data);
-          // //console.log(response.status);
-          announcement.mintTrxHash = response.data.transaction_hash;
-
-          const nftTokenOptions = {
-            method: 'GET',
-            url: `https://api.nftport.xyz/v0/mints/${response.data.transaction_hash}?chain=polygon`,
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: 'ad092d8e-feb0-4430-92f7-1fa501b83bec',
-            },
-          };
-          document.getElementById('nftAddress').innerHTML = `Sailing Data from OpenSea...`;
-          setTimeout(() => {
-            axios
-              .request(nftTokenOptions)
-              .then(function (tokenIdRes) {
-                announcement.tokenId = tokenIdRes.data.token_id;
-
-                // //console.log('TOKEN ID DATA: ', tokenIdRes.data);
-                // //console.log(
-                //   'OpenSea Url of nft: ',
-                //   `https://opensea.io/assets/matic/0x03160747b94be986261d9340d01128d4d5566383/${tokenIdRes.data.token_id}`,
-                // );
-
-                document.getElementById('nftAddress').innerHTML = `Check on OpenSea`;
-                document.getElementById(
-                  'nftAddress',
-                ).href = `https://opensea.io/assets/matic/0x03160747b94be986261d9340d01128d4d5566383/${tokenIdRes.data.token_id}`;
-              })
-              .catch(function (e) {
-                console.error(e);
-              });
-          }, 10000);
         })
+        .then((res) => {
+          setMintingProgress(66);
 
-        .catch(function (error) {
-          console.error(error);
+          // axios
+          //   .get(`${process.env.REACT_APP_SERVER_URL}/user/getLoggedInUser`, tokenConfig())
+          //   .then((res) => {
+          //     let latestVideoId = res.data.videos[res.data.videos.length - 1].videoId;
+          //     setsharable_data(
+          //       `${process.env.REACT_APP_CLIENT_URL}/playback/${res.data.username}/${latestVideoId}`,
+          //     );
+          //     setShow(true);
+          //   });
+
+          setAnnouncement({
+            announcementText: '',
+            postImage: null,
+            postVideo: null,
+            event_link: '',
+            cid: '',
+            royalty: 5,
+            tokenId: '',
+            mintTrxHash: '',
+          }); // reset the form
         });
-    };
-
-    const blob = new Blob([JSON.stringify(announcement)], { type: 'application/json' });
-
-    let files;
-    if (announcement.postVideo !== null && announcement.postImage !== null) {
-      files = [announcement.postVideo, announcement.postImage, new File([blob], 'meta.json')];
-    } else if (announcement.postImage !== null) {
-      files = [announcement.postImage, new File([blob], 'meta.json')];
-    } else {
-      files = [announcement.postVideo, new File([blob], 'meta.json')];
     }
-    const totalSize = announcement.postVideo
-      ? announcement.postVideo.size
-      : announcement.postImage.size;
+  }, [tokenId]);
 
-    let uploaded = 0;
-    const onStoredChunk = (size) => {
-      uploaded += size;
-      const pct = totalSize / uploaded;
-      setUploading(10 - pct);
-      console.log(`Uploading... ${pct.toFixed(2)}% complete`);
-    };
+  // async function storeWithProgress() {
+  //   const contract_address = process.env.CONTRACT_ADDRESS;
 
-    // makeStorageClient returns an authorized Web3.Storage client instance
-    const client = makeStorageClient();
+  //   const onRootCidReady = async (cid) => {
+  //     announcement.cid = cid;
 
-    // client.put will invoke our callbacks during the upload
-    // and return the root cid when the upload completes
-    return client.put(files, { onRootCidReady, onStoredChunk });
-  }
+  //     const apiKey =
+  //       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDhhMzIwRGQxRDBBNTBmMUQyYjNGNmZGZDM0MUI3ODdkNTYzQzBFYjUiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTYzNDQ0ODE3MDg4MCwibmFtZSI6IkRCZWF0cyJ9.wGuicvEMGBKmKxqsiC4YhesIjBF11oP9EZXNYYN6w5k';
+  //     const client = new NFTStorage({ token: apiKey });
+
+  //     const metadata = await client.store({
+  //       name: announcement.announcementText,
+  //       description: '',
+  //       image: announcement.postImage ? announcement.postImage : null,
+  //       animation_url: announcement.postVideo
+  //         ? 'https://ipfs.io/ipfs/' + cid + '/' + announcement.postVideo.name
+  //         : null,
+  //       event_link: announcement.event_link ? announcement.event_link : null,
+  //       attributes: [
+  //         {
+  //           trait_type: 'Event Link',
+  //           value: announcement.event_link ? announcement.event_link : null,
+  //         },
+  //       ],
+  //     });
+
+  //     // Split ipfs metadata link into two parts
+  //     const ipfsMetadata = metadata.url.split('ipfs://')[1];
+  //     const options = {
+  //       method: 'POST',
+  //       url: 'https://api.nftport.xyz/v0/mints/customizable',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         Authorization: 'ad092d8e-feb0-4430-92f7-1fa501b83bec',
+  //       },
+  //       data: {
+  //         chain: 'polygon',
+  //         contract_address: contract_address || '0x03160747B94BE986261D9340D01128d4d5566383',
+  //         metadata_uri: `https://ipfs.io/ipfs/${ipfsMetadata}`,
+  //         mint_to_address: user.wallet_id,
+  //       },
+  //     };
+
+  //     axios
+  //       .request(options)
+  //       .then(function (response) {
+  //         // //console.log(response.data);
+  //         // //console.log(response.status);
+  //         announcement.mintTrxHash = response.data.transaction_hash;
+
+  //         const nftTokenOptions = {
+  //           method: 'GET',
+  //           url: `https://api.nftport.xyz/v0/mints/${response.data.transaction_hash}?chain=polygon`,
+  //           headers: {
+  //             'Content-Type': 'application/json',
+  //             Authorization: 'ad092d8e-feb0-4430-92f7-1fa501b83bec',
+  //           },
+  //         };
+  //         document.getElementById('nftAddress').innerHTML = `Sailing Data from OpenSea...`;
+  //         setTimeout(() => {
+  //           axios
+  //             .request(nftTokenOptions)
+  //             .then(function (tokenIdRes) {
+  //               announcement.tokenId = tokenIdRes.data.token_id;
+
+  //               // //console.log('TOKEN ID DATA: ', tokenIdRes.data);
+  //               // //console.log(
+  //               //   'OpenSea Url of nft: ',
+  //               //   `https://opensea.io/assets/matic/0x03160747b94be986261d9340d01128d4d5566383/${tokenIdRes.data.token_id}`,
+  //               // );
+
+  //               document.getElementById('nftAddress').innerHTML = `Check on OpenSea`;
+  //               document.getElementById(
+  //                 'nftAddress',
+  //               ).href = `https://opensea.io/assets/matic/0x03160747b94be986261d9340d01128d4d5566383/${tokenIdRes.data.token_id}`;
+  //             })
+  //             .catch(function (e) {
+  //               console.error(e);
+  //             });
+  //         }, 10000);
+  //       })
+
+  //       .catch(function (error) {
+  //         console.error(error);
+  //       });
+  //   };
+
+  //   const blob = new Blob([JSON.stringify(announcement)], { type: 'application/json' });
+
+  //   let files;
+  //   if (announcement.postVideo !== null && announcement.postImage !== null) {
+  //     files = [announcement.postVideo, announcement.postImage, new File([blob], 'meta.json')];
+  //   } else if (announcement.postImage !== null) {
+  //     files = [announcement.postImage, new File([blob], 'meta.json')];
+  //   } else {
+  //     files = [announcement.postVideo, new File([blob], 'meta.json')];
+  //   }
+  //   const totalSize = announcement.postVideo
+  //     ? announcement.postVideo.size
+  //     : announcement.postImage.size;
+
+  //   let uploaded = 0;
+  //   const onStoredChunk = (size) => {
+  //     uploaded += size;
+  //     const pct = totalSize / uploaded;
+  //     setUploading(10 - pct);
+  //     console.log(`Uploading... ${pct.toFixed(2)}% complete`);
+  //   };
+
+  //   // makeStorageClient returns an authorized Web3.Storage client instance
+  //   const client = makeStorageClient();
+
+  //   // client.put will invoke our callbacks during the upload
+  //   // and return the root cid when the upload completes
+  //   return client.put(files, { onRootCidReady, onStoredChunk });
+  // }
 
   //TODO : Send linkPreview data to backed and save it in user announcement
-  const handleAnnouncement = () => {
+  const handleAnnouncement = async () => {
     props.setLoader(false);
     if (announcement.postImage !== null || announcement.postVideo !== null) {
-      storeWithProgress('upload announcement image').then(() => {
-        const formData = new FormData();
-        formData.append('username', user.username);
-        formData.append('announcement', announcement.announcementText);
-        formData.append('postImage', announcement.postImage);
-        formData.append('postVideo', announcement.postVideo);
-        const timestamp = moment().toDate().getTime();
-        formData.append('timestamp', timestamp);
+      console.log('if called');
+      let files;
+      if (announcement.postVideo !== null && announcement.postImage !== null) {
+        files = [announcement.postImage, announcement.postVideo];
+      } else if (announcement.postImage !== null) {
+        files = [announcement.postImage];
+      } else {
+        files = [announcement.postVideo];
+      }
 
-        formData.append('eventlink', announcement.event_link);
-        formData.append('announcementHash', announcement.cid);
-        formData.append('previewData', JSON.stringify(linkPreviewData));
+      const cidData = await storeWithProgress(files);
+      announcement.cid = cidData;
+      var ts = Math.round(new Date().getTime() / 1000);
 
-        console.log('anu', announcement);
+      // if (announcement.postImage !== null || announcement.postVideo !== null) {
+      let metadata = {
+        image: announcement.postImage
+          ? 'https://ipfs.infura.io/ipfs/' + announcement.cid + '/' + announcement.postImage.name
+          : 'https://ipfs.infura.io/ipfs/' + announcement.cid + '/' + announcement.postVideo.name,
 
-        if (announcement.postImage?.length !== 0 || announcement.postVideo?.length !== 0) {
-          axios
-            .post(`${process.env.REACT_APP_SERVER_URL}/user/announcement`, formData, {
-              headers: {
-                'content-type': 'multipart/form-data',
-                'auth-token': localStorage.getItem('authtoken'),
-              },
-            })
-            .then(() => {
-              dispatch(loadUser());
-              setAnnouncement({
-                announcementText: '',
-                postImage: null,
-                postVideo: null,
-                event_link: '',
-              });
-              setPostImage(null);
-              props.setShowAnnouncement(false);
-              props.setLoader(true);
-            })
-            .catch((error) => {
-              console.log(error);
-            });
-        }
-      });
+        external_url: announcement.postVideo
+          ? 'https://ipfs.infura.io/ipfs/' + announcement.cid + '/' + announcement.postVideo.name
+          : 'https://ipfs.infura.io/ipfs/' + announcement.cid + '/' + announcement.postImage.name,
+
+        description: `Post description`,
+
+        name: announcement.announcementText,
+
+        attributes: [
+          {
+            display_type: 'date',
+            trait_type: 'Created On',
+            value: ts,
+          },
+          {
+            trait_type: 'Category',
+            value: 'Category',
+          },
+        ],
+
+        animation_url: announcement.postVideo
+          ? 'https://ipfs.infura.io/ipfs/' + announcement.cid + '/' + announcement.postVideo.name
+          : 'https://ipfs.infura.io/ipfs/' + announcement.cid + '/' + announcement.postImage.name,
+      };
+      // } else if (announcement.postImage !== null) {
+      //   let metadata = {
+      //     image:
+      //       'https://ipfs.infura.io/ipfs/' + announcement.cid + '/' + announcement.postImage.name,
+
+      //     external_url:
+      //       'https://ipfs.infura.io/ipfs/' + announcement.cid + '/' + announcement.postImage.name,
+
+      //     description: `Post description`,
+
+      //     name: announcement.announcementText,
+
+      //     attributes: [
+      //       {
+      //         display_type: 'date',
+      //         trait_type: 'Created On',
+      //         value: ts,
+      //       },
+      //       {
+      //         trait_type: 'Category',
+      //         value: 'Category',
+      //       },
+      //     ],
+
+      //     animation_url:
+      //       'https://ipfs.infura.io/ipfs/' + announcement.cid + '/' + announcement.postImage.name,
+      //   };
+      // } else {
+      //   let metadata = {
+      //     image:
+      //       'https://ipfs.infura.io/ipfs/' + announcement.cid + '/' + announcement.postVideo.name,
+
+      //     external_url:
+      //       'https://ipfs.infura.io/ipfs/' + announcement.cid + '/' + announcement.postVideo.name,
+
+      //     description: `Post description`,
+
+      //     name: announcement.announcementText,
+
+      //     attributes: [
+      //       {
+      //         display_type: 'date',
+      //         trait_type: 'Created On',
+      //         value: ts,
+      //       },
+      //       {
+      //         trait_type: 'Category',
+      //         value: 'Category',
+      //       },
+      //     ],
+
+      //     animation_url:
+      //       'https://ipfs.infura.io/ipfs/' + announcement.cid + '/' + announcement.postVideo.name,
+      //   };
+      // }
+
+      const blob = new Blob([JSON.stringify(metadata)], { type: 'application/json' });
+      const metaFile = [new File([blob], 'meta.json')];
+      const cid = await storeWithProgress(metaFile);
+      console.log('stored files with cid:', cid);
+      console.log('meta', cid);
+
+      let formData = new FormData();
+      formData.append('username', user.username);
+      formData.append('announcement', announcement.announcementText);
+      formData.append('postImage', announcement.postImage);
+      formData.append('postVideo', announcement.postVideo);
+      const timestamp = moment().toDate().getTime();
+      formData.append('timestamp', timestamp);
+
+      formData.append('eventlink', announcement.event_link);
+      formData.append('announcementHash', announcement.cid);
+      formData.append('previewData', JSON.stringify(linkPreviewData));
+
+      console.log('anu', announcement);
+      setFormData(formData);
+
+      if (announcement.postImage?.length !== 0 || announcement.postVideo?.length !== 0) {
+        // axios
+        //   .post(`${process.env.REACT_APP_SERVER_URL}/user/announcement`, formData, {
+        //     headers: {
+        //       'content-type': 'multipart/form-data',
+        //       'auth-token': localStorage.getItem('authtoken'),
+        //     },
+        //   })
+        //   .then(() => {
+        //     dispatch(loadUser());
+        //     setAnnouncement({
+        //       announcementText: '',
+        //       postImage: null,
+        //       postVideo: null,
+        //       event_link: '',
+        //     });
+        //     setPostImage(null);
+        //     props.setShowAnnouncement(false);
+        //     props.setLoader(true);
+        //   })
+        //   .catch((error) => {
+        //     console.log(error);
+        //   });
+        let url = 'https://ipfs.infura.io/ipfs/' + cid + '/meta.json';
+        setMinting(true);
+        await createToken(
+          url,
+          NFTprice,
+          formData,
+          provider,
+          setMinting,
+          setMintingProgress,
+          setTokenId,
+          show,
+          setShow,
+          setsharable_data,
+        );
+      } else {
+        Noty.closeAll();
+        new Noty({
+          type: 'error',
+          text: 'Choose Audio File & Fill other Details',
+          theme: 'metroui',
+          layout: 'bottomRight',
+        }).show();
+      }
     } else {
+      console.log('else called');
       const formData = new FormData();
       formData.append('username', user.username);
       formData.append('announcement', announcement.announcementText);
@@ -264,6 +466,13 @@ const AnnouncementModal = (props) => {
     }
     console.log(announcement);
   };
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setButtonText(text);
+    }, 2000);
+    return () => clearTimeout(timer);
+  }, [buttonText]);
 
   const customStyles = {
     content: {
@@ -312,6 +521,67 @@ const AnnouncementModal = (props) => {
             <div className="align-center bg-gray-100 h-full dark:bg-dbeats-dark-alt">
               <div className={`${classes.view_container} lg:h-72 2xl:h-96 h-80 overflow-y-auto`}>
                 <div className="p-1 nm-flat-dbeats-dark-secondary-sm h-5/6 w-full">
+                  <div className="flex flex-col">
+                    <div className="col-span-2 mb-5 sm:col-span-1">
+                      <div className="flex   content-center items-center align-middle">
+                        <div className="flex items-center h-5">
+                          <input
+                            id="nftCheckbox"
+                            aria-describedby="nftCheckbox"
+                            type="checkbox"
+                            className="cursor-pointer w-4 h-4 text-dbeats-secondary-light rounded  "
+                            required
+                            checked={isNFT}
+                            onChange={handleNFT}
+                          />
+                        </div>
+                        <div className="ml-3 text-sm">
+                          <label
+                            htmlFor="nftCheckbox"
+                            className="font-medium text-gray-900 dark:text-gray-300"
+                          >
+                            Mint NFT
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                    {isNFT ? (
+                      <>
+                        <div className="grid lg:grid-cols-3 grid-col-6 gap-6 ">
+                          <div className="col-span-2  sm:col-span-1 ">
+                            <label
+                              htmlFor="company-website"
+                              className="block 2xl:text-sm text-sm lg:text-xs font-medium dark:text-gray-100 text-gray-700"
+                            >
+                              Price in MATIC
+                            </label>
+                            <div className="mt-1 flex rounded-md shadow-sm nm-flat-dbeats-dark-secondary-sm  p-0.5">
+                              <input
+                                min={1}
+                                type="number"
+                                name="NFTPrice"
+                                id="NFTPrice"
+                                value={NFTprice}
+                                onChange={(e) => setPrice(e.target.value)}
+                                className="focus:nm-inset-dbeats-dark-primary  border-0 bg-dbeats-dark-primary  ring-0   flex-1 block w-full rounded-md sm:text-sm  "
+                                placeholder=""
+                                required
+                              />
+                            </div>
+                          </div>
+                        </div>
+                        <div className=" col-span-3 my-3 align-middle md:flex">
+                          <p className="text-xs   text-dbeats-white opacity-40 ">
+                            Royalty of 10% on secondary sales will be sent to &nbsp;{' '}
+                          </p>
+                          <span className="text-xs  font-medium   text-dbeats-white opacity-100 justify-center align-middle">
+                            {' '}
+                            {user.wallet_id}
+                          </span>
+                        </div>
+                      </>
+                    ) : null}
+                  </div>
                   <textarea
                     className={`${classes.textarea_container} w-full h-full
                      lg:text-sm 2xl:text-lg border-b border-gray-300  placeholder-white placeholder-opacity-25 nm-flat-dbeats-dark-primary`}
@@ -405,6 +675,96 @@ const AnnouncementModal = (props) => {
                   </div>
                 </div>
                 <div className=" mx-2 flex justify-end  ">
+                  {warning && (
+                    <span className="mr-16 text-red-500">
+                      <i className="fa-solid fa-triangle-exclamation"></i> {warning}
+                    </span>
+                  )}
+                  <div className="flex flex-col text-center">
+                    <div
+                      className={`${minting === true ? 'block' : 'hidden'} mx-3 text-white my-5 `}
+                    >
+                      👻 Confirm NFT Mint on the next Popup
+                    </div>
+                    {minting === 'token created' ? (
+                      <div className={`  mx-3 text-white my-5 `}>
+                        ✅ NFT Token Created Successfully. Confirm Market Listing on the Popup
+                      </div>
+                    ) : null}
+
+                    <div
+                      className={`${
+                        mintingProgress === 66 ? 'block' : 'hidden'
+                      } text-center flex mx-3 my-5`}
+                    >
+                      <p className="no-underline  text-white">Wrapping Up Things &nbsp;</p>
+                      <p className="no-underline  text-white"> Please Wait...</p>
+                    </div>
+
+                    <div
+                      className={`${
+                        minting !== null &&
+                        minting !== true &&
+                        mintingProgress === 100 &&
+                        minting !== 'token created'
+                          ? 'block'
+                          : 'hidden'
+                      } text-center flex mx-3 my-5`}
+                    >
+                      <p className="no-underline  text-dbeats-light">🚀 NFT Minted &nbsp;</p>
+                      <a
+                        target={'_blank'}
+                        rel="noopener noreferrer "
+                        className="dark:text-dbeats-light cursor-pointer underline  "
+                        href={`https://polygonscan.com/tx/${minting}`}
+                      >
+                        Check on Polygonscan
+                      </a>
+                    </div>
+                    <ProgressBar
+                      className="w-full mx-auto"
+                      percent={mintingProgress}
+                      transitionDuration={1000}
+                      filledBackground="linear-gradient(to right,  #31c48D, #3f83f8)"
+                    >
+                      <Step transition="scale">
+                        {({ accomplished }) => (
+                          <img
+                            style={{ filter: `grayscale(${accomplished ? 0 : 80}%)` }}
+                            className="w-6"
+                            src={icon3}
+                          />
+                        )}
+                      </Step>
+                      <Step transition="scale">
+                        {({ accomplished }) => (
+                          <img
+                            style={{ filter: `grayscale(${accomplished ? 0 : 80}%)` }}
+                            className="w-8"
+                            src={icon2}
+                          />
+                        )}
+                      </Step>
+                      <Step transition="scale">
+                        {({ accomplished }) => (
+                          <img
+                            style={{ filter: `grayscale(${accomplished ? 0 : 80}%)` }}
+                            className="w-6"
+                            src={icon1}
+                          />
+                        )}
+                      </Step>
+                      <Step transition="scale">
+                        {({ accomplished }) => (
+                          <img
+                            style={{ filter: `grayscale(${accomplished ? 0 : 80}%)` }}
+                            width="30"
+                            src={icon1}
+                          />
+                        )}
+                      </Step>
+                    </ProgressBar>
+                  </div>
                   <div className=" mx-5  items-center  hidden">
                     <input
                       type="range"

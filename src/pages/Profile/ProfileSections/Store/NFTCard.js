@@ -155,22 +155,23 @@ const NFTCard = ({ nft, buyNft, address }) => {
             }
           }
         });
-      } else if (extension == 'jpg' || extension == 'png' || extension == 'jpeg') {
-        cardDetails.user.images.map((image) => {
-          if (image.tokenId == nft.tokenId) {
-            let temp = image;
-            // for reversing the comments of images
-            if (temp.comments) {
-              let temprevcomments = image.comments.reverse();
-              temp.comments = temprevcomments;
-            }
-            setConentData(temp);
-            setType('image');
-            if (cardDetails.user._id == user._id) {
-              setMyPost(true);
-            }
-          }
-        });
+        // } else if (extension == 'jpg' || extension == 'png' || extension == 'jpeg') {
+        //   cardDetails.user.images.map((image) => {
+        //     if (image.tokenId == nft.tokenId) {
+        //       let temp = image;
+        //       // for reversing the comments of images
+        //       if (temp.comments) {
+        //         let temprevcomments = image.comments.reverse();
+        //         temp.comments = temprevcomments;
+        //       }
+        //       setConentData(temp);
+        //       setType('image');
+        //       if (cardDetails.user._id == user._id) {
+        //         setMyPost(true);
+        //       }
+        //     }
+        //   });
+        // }
       }
     }
   }, [cardDetails]);
