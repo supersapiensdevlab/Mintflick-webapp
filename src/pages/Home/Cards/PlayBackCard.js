@@ -349,7 +349,7 @@ const PlayBackCard = (props) => {
   // };
   const handleClick = () => {
     if (user) {
-      history.push(`/profile/${props.playbackUserData.user.username}/`);
+      history.push(`/profile/${props.playbackUserData.user.username}/posts`);
     } else {
       loadWeb3Modal();
     }
@@ -491,7 +491,7 @@ const PlayBackCard = (props) => {
                 <div>
                   <div className="w-full self-center  ">
                     <Link
-                      to={`/profile/${props.playbackUserData.user.username}/`}
+                      to={`/profile/${props.playbackUserData.user.username}/posts`}
                       className="2xl:text-sm lg:text-xs text-sm text-gray-500  mb-2"
                     >
                       <h4>{props.playbackUserData.user.name} </h4>

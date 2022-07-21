@@ -56,7 +56,7 @@ const MainToolbar = () => {
       <div className="p-0.5 w-full  font-bold dark:text-white sm:rounded-xl bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary nm-flat-dbeats-dark-primary-sm ">
         <div className=" p-2  font-bold dark:text-white sm:rounded-xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary">
           <div className="flex justify-between mb-2 px-2 fourth-step">
-            <Link to={`/profile/${user.username}`} className="mr-4">
+            <Link to={`/profile/${user.username}/posts`} className="mr-4">
               <img
                 src={user.profile_image !== '' ? user.profile_image : person}
                 alt=""

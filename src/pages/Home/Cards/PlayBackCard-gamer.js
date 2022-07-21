@@ -73,7 +73,7 @@ const PlayBackCard = (props) => {
 
           <div className="col-start-1 row-start-3 pb-2 pt-4">
             <div className="flex   text-black text-sm font-medium">
-              <Link to={`/profile/${props.playbackUserData.username}/`} className="mr-4">
+              <Link to={`/profile/${props.playbackUserData.username}/posts`} className="mr-4">
                 <img
                   src={
                     props.playbackUserData.profile_image
@@ -94,7 +94,7 @@ const PlayBackCard = (props) => {
                   <div className="w-full   ">
                     <div className="flex items-center">
                       <Link
-                        to={`/profile/${props.playbackUserData.username}/`}
+                        to={`/profile/${props.playbackUserData.username}/posts`}
                         className="2xl:text-sm lg:text-xs text-sm text-gray-500"
                       >
                         {props.playbackUserData.username}

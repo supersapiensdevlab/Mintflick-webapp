@@ -642,7 +642,7 @@ const NavBar = () => {
                 </Dropdown>
 
                 <Link
-                  to={`/profile/${user.username}`}
+                  to={`/profile/${user.username}/posts`}
                   className="shadow-sm 2xl:h-10  2xl:w-10 self-center relative h-8 w-8 p-0.5 nm-flat-dbeats-dark-primary-sm hover:nm-inset-dbeats-dark-primary text-white rounded-full font-bold ml-2 md:mx-2 flex"
                 >
                   <img

@@ -586,7 +586,7 @@ const NFTCard = ({ nft, buyNft, address }) => {
   // };
   const handleClick = () => {
     if (user) {
-      history.push(`/profile/${cardDetails.user.username}/`);
+      history.push(`/profile/${cardDetails.user.username}/posts`);
     } else {
       loadWeb3Modal();
     }
@@ -785,7 +785,7 @@ const NFTCard = ({ nft, buyNft, address }) => {
                           ownerDetails &&
                           ownerDetails.user &&
                           ownerDetails.user.username
-                        }/`}
+                        }/posts`}
                         className="2xl:text-sm lg:text-xs text-sm text-gray-500  mb-2"
                       >
                         <h4>
@@ -1087,7 +1087,7 @@ const NFTCard = ({ nft, buyNft, address }) => {
                           ownerDetails &&
                           ownerDetails.user &&
                           ownerDetails.user.username
-                        }/`}
+                        }/posts`}
                         className="2xl:text-sm lg:text-xs text-sm text-gray-500  mb-2"
                       >
                         <h4>

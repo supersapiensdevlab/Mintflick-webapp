@@ -306,8 +306,9 @@ const PublicInfo = (props) => {
       {user ? (
         <div className="">
           <div
-            className={`${darkMode && 'dark'
-              }  grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-3 grid-flow-row   pb-50  lg:ml-12  relative  h-full `}
+            className={`${
+              darkMode && 'dark'
+            }  grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-3 grid-flow-row   pb-50  lg:ml-12  relative  h-full `}
           >
             <div className="col-span-1 md:col-span-2 pt-3 2xl:mt-16 xl:mt-10 lg:mt-10 mt-14 sticky  top-14   z-10 lg:z-auto   ">
               <div>
@@ -345,7 +346,7 @@ const PublicInfo = (props) => {
                           <>
                             {' '}
                             <div className="flex    text-black text-sm font-medium   py-2  px-4  ">
-                              <Link to={`/profile/${userData.username}/`} className="mr-4">
+                              <Link to={`/profile/${userData.username}/posts`} className="mr-4">
                                 <img
                                   src={userData.profile_image ? userData.profile_image : person}
                                   alt=""
@@ -356,7 +357,7 @@ const PublicInfo = (props) => {
                                 <div>
                                   <div className="w-full self-center  ">
                                     <Link
-                                      to={`/profile/${userData.username}/`}
+                                      to={`/profile/${userData.username}/posts`}
                                       className="2xl:text-sm lg:text-xs text-xs text-gray-500  mb-2"
                                     >
                                       <div className="flex align-middle">
@@ -398,8 +399,9 @@ const PublicInfo = (props) => {
                                 }
                               >
                                 <span
-                                  className={`${userData.superfan_data ? '' : 'hidden'
-                                    } whitespace-nowrap flex`}
+                                  className={`${
+                                    userData.superfan_data ? '' : 'hidden'
+                                  } whitespace-nowrap flex`}
                                 >
                                   🥳 Become a Superfan
                                 </span>
@@ -418,12 +420,18 @@ const PublicInfo = (props) => {
                         )}
                       </div>
                     ) : null}
-                    <div className='mt-2'>
+                    <div className="mt-2">
                       <>
-                        <p >
-                          <span className="text-white mr-1 font-bold md:text-lg md:ml-20 text-sm tracking-wider">Description:</span>  <span className='text-base text-white ml-5'>{userData && userData.streamDetails ? userData.streamDetails.description : null}</span>
+                        <p>
+                          <span className="text-white mr-1 font-bold md:text-lg md:ml-20 text-sm tracking-wider">
+                            Description:
+                          </span>{' '}
+                          <span className="text-base text-white ml-5">
+                            {userData && userData.streamDetails
+                              ? userData.streamDetails.description
+                              : null}
+                          </span>
                         </p>
-                       
                       </>
                     </div>
                   </div>

@@ -60,7 +60,7 @@ const Footer = (props) => {
           ></img>
           <div className=" flex lg:block flex-row my-auto 2xl:pt-3 lg:pt-1">
             <Link
-              to={`/profile/${props.creatorData.username}`}
+              to={`/profile/${props.creatorData.username}/posts`}
               className="no-underline cursor-pointer text-black hover:no-underline"
             >
               <span className="2xl:text-2xl lg:text-md font-semibold dark:text-white">

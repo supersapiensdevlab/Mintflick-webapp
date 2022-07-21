@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import logo from '../../assets/images/logo.svg';
 import CarouselCard from '../../pages/Profile/Cards/CarouselCard';
 import person from '../../assets/images/profile.svg';
-import { useHistory } from "react-router-dom";
+import { useHistory } from 'react-router-dom';
 import useWeb3Modal from '../../hooks/useWeb3Modal';
 
 const SearchResult = () => {
@@ -16,20 +16,20 @@ const SearchResult = () => {
   const [loadWeb3Modal, logoutOfWeb3Modal] = useWeb3Modal();
 
   //console.log(data);
-  const user = useSelector((state) => state.User.user); 
+  const user = useSelector((state) => state.User.user);
   useEffect(() => {
     setData(JSON.parse(window.sessionStorage.getItem('searchResult')));
 
     // eslint-disable-next-line
   }, [JSON.parse(window.sessionStorage.getItem('searchResult'))]);
-  
-  const handleUserClick = async (username) =>{
-    if(user){
-      history.push(`/profile/${username}`);
-    }else{
+
+  const handleUserClick = async (username) => {
+    if (user) {
+      history.push(`/profile/${username}/posts`);
+    } else {
       await loadWeb3Modal();
     }
-  }
+  };
 
   return (
     <div id="outer-container" className="h-full ">
@@ -58,7 +58,7 @@ const SearchResult = () => {
                       {data.usernameData.map((value, i) => {
                         return (
                           <SplideSlide className=" md:px-5 " key={i}>
-                            <a onClick={()=>handleUserClick(value.username)}>
+                            <a onClick={() => handleUserClick(value.username)}>
                               <img
                                 className="mx-auto  h-32 w-32 rounded-full self-center  cursor-pointer"
                                 src={value.profile_image ? value.profile_image : person}

@@ -45,7 +45,7 @@ const Profile = () => {
     if (value) {
       if (value.username === urlUsername) {
         setUser(value);
-        setSharable_data(`${process.env.REACT_APP_CLIENT_URL}/profile/${value.username}`);
+        setSharable_data(`${process.env.REACT_APP_CLIENT_URL}/profile/${value.username}/posts`);
         setPrivate(true);
         //get_NFT(value);
       } else {
@@ -66,7 +66,9 @@ const Profile = () => {
         setNotFound(true);
       } else {
         setUser(value.data);
-        setSharable_data(`${process.env.REACT_APP_CLIENT_URL}/profile/${value.data.username}`);
+        setSharable_data(
+          `${process.env.REACT_APP_CLIENT_URL}/profile/${value.data.username}/posts`,
+        );
         //get_NFT(value.data);
       }
     });

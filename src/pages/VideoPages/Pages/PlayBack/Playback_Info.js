@@ -486,6 +486,12 @@ const PlayBackInfo = (props) => {
     setReportValue(e.target.value);
   };
 
+  useEffect(() => {
+    if (userData) {
+      document.title = `${userData.videos.videoName} - ${userData.username}`;
+    }
+  });
+
   // const handleLikes = () =>{
   //   if(user){
   //     let likeData = {

@@ -114,9 +114,15 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
   //console.log(user.username);
 
   useEffect(() => {
+    if (user) {
+      document.title = `Mintflick - ${user.username}`;
+    }
+  }, []);
+
+  useEffect(() => {
     if (myData) {
       if (myData.username === urlUsername) {
-        setSharable_data(`${process.env.REACT_APP_CLIENT_URL}/profile/${myData.username}`);
+        setSharable_data(`${process.env.REACT_APP_CLIENT_URL}/profile/${myData.username}/posts`);
         setPrivate(true);
         setFollowers(myData.follower_count.length);
         setFollowing(myData.followee_count.length);
@@ -252,7 +258,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
           break;
         }
       }
-      setSharable_data(`${process.env.REACT_APP_CLIENT_URL}/profile/${value.data.username}`);
+      setSharable_data(`${process.env.REACT_APP_CLIENT_URL}/profile/${value.data.username}/posts`);
       setFollowers(value.data.follower_count.length);
       setFollowing(value.data.followee_count.length);
       setSuperfan(value.data.superfan_to.length);
@@ -1296,7 +1302,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                   {followerSearchOutput.map((value, i) => {
                     return (
                       <div key={i} className="w-full flex justify-between px-3">
-                        <a key={i} href={`/profile/${value}`} onClick={handleCloseFollowers}>
+                        <a key={i} href={`/profile/${value}/posts`} onClick={handleCloseFollowers}>
                           <p className="mb-1.5 w-full px-3 lg:py-1.5 py-1 text-sm md:text-lg lg:text-base  hover:text-dbeats-light cursor-pointer">
                             {value}
                           </p>
@@ -1380,7 +1386,7 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                   {searchOutput.map((value, i) => {
                     return (
                       <div key={i} className="flex justify-between px-2 mb-1.5">
-                        <a href={`/profile/${value}`} onClick={handleCloseFollowing}>
+                        <a href={`/profile/${value}/posts`} onClick={handleCloseFollowing}>
                           <p className=" w-full px-3 lg:py-1.5 py-1 text-sm md:text-lg lg:text-base  hover:text-dbeats-light cursor-pointer">
                             {value}
                           </p>
@@ -1463,7 +1469,11 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                 <div className="w-full max-h-60 overflow-y-scroll px-6">
                   {user.superfan_to.map((value, i) => {
                     return (
-                      <a key={i} href={`/profile/${value.username}`} onClick={handleCloseSuperfan}>
+                      <a
+                        key={i}
+                        href={`/profile/${value.username}/posts`}
+                        onClick={handleCloseSuperfan}
+                      >
                         <p className="mb-1.5 w-full px-3 lg:py-1.5 py-1 md:text-lg text-sm lg:text-base  hover:text-dbeats-light cursor-pointer">
                           {value.username}
                         </p>

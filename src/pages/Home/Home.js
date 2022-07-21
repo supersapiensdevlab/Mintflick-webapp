@@ -97,6 +97,10 @@ const Home = () => {
     };
   }, []);
 
+  useEffect(() => {
+    document.title = 'Mintflick';
+  }, []);
+
   const scrollTop = () => {
     console.log('called');
     var scroll = Scroll.animateScroll;

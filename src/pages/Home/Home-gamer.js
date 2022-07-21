@@ -134,7 +134,7 @@ const Home = () => {
                                 className="border flex border-gray-100 dark:text-gray-50 dark:border-dbeats-light dark:border-opacity-10 
                               bg-white dark:bg-dbeats-dark-primary lg:rounded md:rounded sm:rounded shadow-sm dark:shadow-md    text-dbeats-dark-primary p-2 rounded    w-full  dialog "
                               >
-                                <Link to={`/profile/${video.username}`}>
+                                <Link to={`/profile/${video.username}/posts`}>
                                   <img
                                     src={
                                       video.profile_image !== ''
