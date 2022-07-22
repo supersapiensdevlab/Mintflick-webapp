@@ -50,7 +50,9 @@ module.exports = {
   },
   theme: {
     extend: {
-      fontFamily: {},
+      fontFamily: {
+        Gilroy: ["Gilroy"],
+      },
       colors: {
         alt: "#161616",
         "brand-100": "#a0f5f3",

@@ -1,0 +1,8 @@
+@font-face {
+  font-family: Gilroy;
+  src: url("./Assets/fonts/Gilroy-Font/Gilroy-Regular.woff");
+}
+
+* {
+  font-family: "Gilroy";
+}

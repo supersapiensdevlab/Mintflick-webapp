@@ -1,7 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
+@font-face {
+  font-family: "Gilroy";
+  src: url("./Assets/fonts/Gilroy-Font/Gilroy-Regular.woff");
+}
 /* width */
 ::-webkit-scrollbar {
   width: 0px;
