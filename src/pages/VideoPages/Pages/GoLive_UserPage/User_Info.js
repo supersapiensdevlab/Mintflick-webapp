@@ -160,41 +160,45 @@ const UserInfo = (props) => {
     // eslint-disable-next-line
   }, []);
 
-  // useEffect(() => {
-  //   const socket = io(process.env.REACT_APP_VIEWS_URL, {
-  //     transports: ['websocket'],
-  //     upgrade: false,
-  //   });
-  //   socket.on('connection');
-  //   socket.emit('joinlivestream', props.stream_id);
-  //   socket.on('count', (details) => {
-  //     if (details.room === props.stream_id) {
-  //       setLivestreamViews(details.roomSize);
-  //     }
-  //   });
-  //   socket.on('livecount', (details) => {
-  //     setLivestreamViews(details.roomSize);
-  //     // console.log('emitted');
-  //     // console.log('inc', livestreamViews);
-  //     setViewColor('green-500');
-  //     setViewAnimate('animate-pulse');
-  //     setTimeout(() => {
-  //       setViewColor('white');
-  //       setViewAnimate('animate-none');
-  //     }, 3000);
-  //   });
-  //   socket.on('removecount', (roomSize) => {
-  //     setLivestreamViews(roomSize);
-  //     // console.log('removecount emitted');
-  //     // console.log('dec', livestreamViews);
-  //     setViewColor('red-500');
-  //     setViewAnimate('animate-pulse');
-  //     setTimeout(() => {
-  //       setViewColor('white');
-  //       setViewAnimate('animate-none');
-  //     }, 3000);
-  //   });
-  // }, []);
+  useEffect(() => {
+    const socket = io(`${process.env.REACT_APP_VIEWS_URL}`, {
+      transports: ['websocket', 'polling'],
+      upgrade: false,
+      secure: true,
+      withCredentials: true,
+      extraHeaders: {
+        'my-custom-header': 'abcd',
+    });
+    socket.on('connection');
+    socket.emit('joinlivestream', props.stream_id);
+    socket.on('count', (details) => {
+      if (details.room === props.stream_id) {
+        setLivestreamViews(details.roomSize);
+      }
+    });
+    socket.on('livecount', (details) => {
+      setLivestreamViews(details.roomSize);
+      // console.log('emitted');
+      // console.log('inc', livestreamViews);
+      setViewColor('green-500');
+      setViewAnimate('animate-pulse');
+      setTimeout(() => {
+        setViewColor('white');
+        setViewAnimate('animate-none');
+      }, 3000);
+    });
+    socket.on('removecount', (roomSize) => {
+      setLivestreamViews(roomSize);
+      // console.log('removecount emitted');
+      // console.log('dec', livestreamViews);
+      setViewColor('red-500');
+      setViewAnimate('animate-pulse');
+      setTimeout(() => {
+        setViewColor('white');
+        setViewAnimate('animate-none');
+      }, 3000);
+    });
+  }, []);
 
   //set Stream Key
   const handleChange = (e) => {
