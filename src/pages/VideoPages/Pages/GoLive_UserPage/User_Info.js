@@ -904,8 +904,7 @@ const UserInfo = (props) => {
               {/* Stream Links */}
               <div>
                 <div className='text-white text-base font-semibold mb-2'>Banners (Max 4)</div>
-
-                <div className='mt-3'>
+                {user.streamLinks.length < 4 && <div className='mt-3'>
                   <form onSubmit={uploadLink}>
                     <div>Create new banner </div>
                     <div className='flex'>
@@ -936,6 +935,7 @@ const UserInfo = (props) => {
 
                   </form>
                 </div>
+                }
                 <div className="mt-3">
                   <div className='text-white text-base font-semibold mb-2'>Banners</div>
                   <div className='flex flex-wrap mx-6'>

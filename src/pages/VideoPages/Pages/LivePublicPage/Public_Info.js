@@ -306,9 +306,8 @@ const PublicInfo = (props) => {
       {user ? (
         <div className="">
           <div
-            className={`${
-              darkMode && 'dark'
-            }  grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-3 grid-flow-row   pb-50  lg:ml-12  relative  h-full `}
+            className={`${darkMode && 'dark'
+              }  grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-3 grid-flow-row   pb-50  lg:ml-12  relative  h-full `}
           >
             <div className="col-span-1 md:col-span-2 pt-3 2xl:mt-16 xl:mt-10 lg:mt-10 mt-14 sticky  top-14   z-10 lg:z-auto   ">
               <div>
@@ -399,9 +398,8 @@ const PublicInfo = (props) => {
                                 }
                               >
                                 <span
-                                  className={`${
-                                    userData.superfan_data ? '' : 'hidden'
-                                  } whitespace-nowrap flex`}
+                                  className={`${userData.superfan_data ? '' : 'hidden'
+                                    } whitespace-nowrap flex`}
                                 >
                                   🥳 Become a Superfan
                                 </span>
@@ -433,7 +431,21 @@ const PublicInfo = (props) => {
                           </span>
                         </p>
                       </>
+
+                      <div className='flex flex-wrap mt-4  md:ml-10 2xl:ml-36 xl:ml-20'>
+                        {console.log(userData.streamLinks)}
+                        {userData.streamLinks ? userData.streamLinks.map((link, index) => {
+                          return (
+                            <div key={index} className='h-20 w-48 2xl:h-24 2xl:w-72 mx-5 my-4 border-2 border-dbeats-light rounded-lg shadow-md'>
+                              <a href={link.url} target="_blank" rel="noopener noreferrer"><img className='rounded-lg pb-1 h-20 w-48 2xl:h-24 2xl:w-72' src={link.image} /></a>
+                            </div>
+                          )
+                        }) : <></>}
+                      </div>
+
                     </div>
+
+
                   </div>
                   <div className="2xl:text-2xl lg:text-md text-xs 2xl:py-4 lg:py-2 py-2 flex justify-around dark:text-dbeats-white   ">
                     <p className={`text-white md:text-lg text-xs text-center pr-2 flex flex-col`}>
@@ -486,6 +498,7 @@ const PublicInfo = (props) => {
                     </Menu>
                   </div>
                 </div>
+
               </div>
             </div>
             <div className="  w-full col-span-1   ">
