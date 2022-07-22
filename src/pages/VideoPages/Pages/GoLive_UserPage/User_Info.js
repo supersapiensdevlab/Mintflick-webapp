@@ -22,7 +22,7 @@ import icon3 from '../../../../assets/icons/cryptocurrency-token.png';
 import LiveChat from '../LivePublicPage/LiveChat';
 
 // import LiveChat from '../LivePublicPage/LiveChat';
-// import { io } from 'socket.io-client';
+import { io } from 'socket.io-client';
 
 const UserInfo = (props) => {
   const user = useSelector((state) => state.User.user);
