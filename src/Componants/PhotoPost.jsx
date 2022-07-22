@@ -2,7 +2,7 @@ import React from "react";
 
 function PhotoPost(props) {
   return (
-    <div className='w-full h-fit bg-brand/5 rounded-xl py-5 px-12 space-y-4'>
+    <div className='w-full h-fit bg-brand/5 rounded-xl p-4 lg:p-12 space-y-4'>
       <div className='flex justify-between items-center'>
         <div className='flex items-center space-x-4'>
           <img

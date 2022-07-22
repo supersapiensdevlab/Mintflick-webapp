@@ -10,7 +10,7 @@ function HomeScreen() {
   return (
     <div className='relative flex h-screen bg-gray-900 '>
       <Header className=''></Header>
-      <div className='hidden lg:flex flex-col h-full w-1/4 ml-20 pt-36 space-y-6 overflow-y-auto'>
+      <div className='hidden lg:flex flex-col h-full w-1/4 ml-12 pt-36 space-y-6 overflow-y-auto'>
         <Channels></Channels>
         <LiveChannels></LiveChannels>
       </div>
@@ -18,7 +18,7 @@ function HomeScreen() {
         <AddPost></AddPost>
         <TimeLine className='z-10'></TimeLine>
       </div>
-      <div className='hidden lg:flex flex-col items-end h-full w-1/4 pt-36 mr-20'>
+      <div className='hidden xl:flex flex-col items-end h-full w-1/4 pt-36 mr-12'>
         <GameOfLuck></GameOfLuck>
       </div>
     </div>

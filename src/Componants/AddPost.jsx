@@ -1,5 +1,4 @@
 import React from "react";
-import OutlineButton from "../UiComponants/OutlineButton";
 
 function AddPost() {
   return (
@@ -15,21 +14,18 @@ function AddPost() {
           placeholder="What's on your mind?"></textarea>
       </div>
       <div className='flex justify-between'>
-        <OutlineButton
-          text='Photo'
-          leftIcon={
-            <i className='fa-solid fa-camera fa-xl text-brand'></i>
-          }></OutlineButton>
-        <OutlineButton
-          text='Video'
-          leftIcon={
-            <i className='fa-solid fa-video fa-xl text-brand'></i>
-          }></OutlineButton>
-        <OutlineButton
-          text='Music'
-          leftIcon={
-            <i className='fa-solid fa-music fa-xl text-brand'></i>
-          }></OutlineButton>
+        <button className='btn btn-outline gap-2 hover:bg-alt hover:text-white text-brand'>
+          <i className='fa-solid fa-camera fa-xl '></i>
+          Photo
+        </button>
+        <button className='btn btn-outline gap-2 hover:bg-alt hover:text-white text-brand'>
+          <i className='fa-solid fa-video fa-xl '></i>
+          Video
+        </button>
+        <button className='btn btn-outline gap-2 hover:bg-alt hover:text-white text-brand'>
+          <i className='fa-solid fa-music fa-xl '></i>
+          Music
+        </button>
       </div>
     </div>
   );

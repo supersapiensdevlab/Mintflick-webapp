@@ -16,7 +16,7 @@ function Channels() {
     },
   ]);
   return (
-    <div className='w-72 h-fit bg-brand/5 rounded-xl p-5'>
+    <div className='w-full h-fit bg-brand/5 rounded-xl p-5'>
       <p className='font-black text-lg text-brand mb-8'>CHANNELS</p>
       {channels.map((channel) => (
         <div className='flex  items-center space-x-2 h-10 my-2'>
