@@ -1,30 +1,36 @@
 import React from "react";
+import { Camera, Music, PlayCard, Send, Video } from "tabler-icons-react";
 
 function AddPost() {
   return (
-    <div className='hidden lg:block w-full max-w-2xl h-fit bg-brand/5  rounded-xl py-5 px-28 space-y-8'>
-      <div className='flex space-x-4'>
-        <img
-          className='h-12 rounded-full'
-          src='https://placeimg.com/192/192/people'
-          alt='Tailwind-CSS-Avatar-component'
-        />
+    <div className="hidden lg:flex flex-col items-center w-full max-w-2xl h-fit bg-gray-100 dark:bg-slate-800  rounded-xl p-8  space-y-4">
+      <div className="flex items-center w-full  space-x-4 rounded-3xl">
         <textarea
-          className='flex-grow textarea h-12 rounded-3xl '
-          placeholder="What's on your mind?"></textarea>
+          className="flex-grow textarea h-12 rounded-3xl w-full dark:bg-gray-700 dark:text-gray-400"
+          placeholder="What's on your mind?"
+        ></textarea>
+        <button className="btn btn-primary text-brand rounded-full gap-2 ">
+          <Send size={20}></Send>
+          post
+        </button>
       </div>
-      <div className='flex justify-between'>
-        <button className='btn btn-outline gap-2 hover:bg-alt hover:text-white text-brand'>
-          <i className='fa-solid fa-camera fa-xl '></i>
+      <div className="btn-group">
+        <button className="btn btn-primary btn-outline text-brand gap-2">
+          <Camera></Camera>
           Photo
         </button>
-        <button className='btn btn-outline gap-2 hover:bg-alt hover:text-white text-brand'>
-          <i className='fa-solid fa-video fa-xl '></i>
+
+        <button className="btn btn-primary  btn-outline text-brand gap-2">
+          <Video></Video>
           Video
         </button>
-        <button className='btn btn-outline gap-2 hover:bg-alt hover:text-white text-brand'>
-          <i className='fa-solid fa-music fa-xl '></i>
+        <button className="btn btn-primary  btn-outline text-brand gap-2">
+          <Music></Music>
           Music
+        </button>
+        <button className="btn btn-primary  btn-outline text-brand gap-2">
+          <PlayCard></PlayCard>
+          NFT
         </button>
       </div>
     </div>

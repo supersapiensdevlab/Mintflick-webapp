@@ -1,9 +1,41 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 @font-face {
   font-family: "Gilroy";
   src: url("./Assets/fonts/Gilroy-Font/Gilroy-Regular.woff");
+  font-weight: regular;
+}
+@font-face {
+  font-family: "Gilroy";
+  src: url("./Assets/fonts/Gilroy-Font/Gilroy-Medium.woff");
+  font-weight: medium;
+}
+@font-face {
+  font-family: "Gilroy";
+  src: url("./Assets/fonts/Gilroy-Font/Gilroy-Light.woff");
+  font-weight: light;
+}
+@font-face {
+  font-family: "Gilroy";
+  src: url("./Assets/fonts/Gilroy-Font/Gilroy-Heavy.woff");
+  font-weight: heavy;
+}
+@font-face {
+  font-family: "Gilroy";
+  src: url("./Assets/fonts/Gilroy-Font/Gilroy-ExtraBold.woff");
+  font-weight: extraBold;
+}
+@font-face {
+  font-family: "Gilroy";
+  src: url("./Assets/fonts/Gilroy-Font/Gilroy-Bold.woff");
+  font-weight: bold;
+}
+@font-face {
+  font-family: "Gilroy";
+  src: url("./Assets/fonts/Gilroy-Font/Gilroy-Black.woff");
+  font-weight: black;
 }
 /* width */
 ::-webkit-scrollbar {
@@ -23,4 +55,19 @@
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
+}
+
+.btn-primary {
+  @apply text-brand;
+}
+
+.btn-circle {
+  @apply dark:text-gray-100;
+}
+.btn-square {
+  @apply dark:text-gray-100;
+}
+.input {
+  @apply dark:bg-gray-700;
+  @apply dark:text-gray-400;
 }

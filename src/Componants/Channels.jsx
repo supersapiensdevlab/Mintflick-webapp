@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Pinned, PinnedOff } from "tabler-icons-react";
 
 function Channels() {
   const [channels, setChannels] = useState([
@@ -16,30 +17,26 @@ function Channels() {
     },
   ]);
   return (
-    <div className='w-full h-fit bg-brand/5 rounded-xl p-5'>
-      <p className='font-black text-lg text-brand mb-8'>CHANNELS</p>
+    <div className="w-full h-fit space-y-4 ">
+      <p className=" font-extrabold text-lg text-gray-400 mb-2">Channels</p>
       {channels.map((channel) => (
-        <div className='flex  items-center space-x-2 h-10 my-2'>
-          <div className='h-full flex items-center flex-grow space-x-2'>
+        <div className="flex  items-center space-x-2 h-8">
+          <div className="h-full flex items-center flex-grow space-x-2">
             <img
-              className='h-full rounded-full'
+              className="h-full rounded-full"
               src={channel.img}
-              alt='Tailwind-CSS-Avatar-component'
+              alt="Tailwind-CSS-Avatar-component"
             />
 
-            <p className='cursor-pointer text-base font-medium text-gray-300'>
+            <p className="cursor-pointer text-base font-bold text-gray-600">
               {channel.name}
             </p>
           </div>
-          <div className='h-full avatar'></div>
-          {channel.isPinned ? (
-            <i className='cursor-pointer text-brand fa-solid fa-thumbtack fa-lg'></i>
-          ) : (
-            <i className='cursor-pointer text-brand/25 fa-solid fa-thumbtack fa-lg'></i>
-          )}
-
-          <div className='flex items-center h-6 w-fit p-2 bg-red-800 rounded-full'>
-            <p className='text-white'>{channel.msgs}</p>
+          <button className="btn btn-circle btn-ghost">
+            {channel.isPinned ? <PinnedOff /> : <Pinned />}
+          </button>
+          <div className="flex items-center h-6 w-fit p-2 bg-rose-600 rounded-full">
+            <p className="text-white">{channel.msgs}</p>
           </div>
         </div>
       ))}

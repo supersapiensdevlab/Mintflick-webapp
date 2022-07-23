@@ -3,7 +3,7 @@ import React, { createContext, useState } from "react";
 export const UserContext = createContext();
 
 function Store(props) {
-  const [store, setstore] = useState({ name: "fgsdg" });
+  const [store, setstore] = useState({ dark: true });
   const updateStore = (data) => {
     setstore({
       ...store,
@@ -15,7 +15,8 @@ function Store(props) {
       value={{
         database: store,
         updateDatabase: updateStore,
-      }}>
+      }}
+    >
       {props.data}
     </UserContext.Provider>
   );

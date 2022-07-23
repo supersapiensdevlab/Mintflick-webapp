@@ -1,11 +1,17 @@
-import { createContext } from "react";
+import { useContext, useEffect } from "react";
 import "./App.css";
-import Header from "./Componants/Header";
 import HomeScreen from "./Screens/HomeScreen";
-import Store from "./Store";
+import { UserContext } from "./Store";
 
 function App() {
-  return <Store data={<HomeScreen className=''></HomeScreen>}></Store>;
+  const State = useContext(UserContext);
+  useEffect(() => {}, []);
+
+  return (
+    <div className={State.database.dark ? `dark` : " "}>
+      <HomeScreen />
+    </div>
+  );
 }
 
 export default App;

@@ -1,35 +1,20 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
+  darkMode: "class",
   daisyui: {
     themes: [
       {
         mytheme: {
-          primary: "#2CE8E5",
-          "primary-2": "#16C3C0",
-          "primary-3": "#129F9D",
-          "primary-4": "#0E7C7A",
-          "primary-5": "#0A5957",
-          "primary-6": "#063534",
-          "primary-7": "#021211",
+          primary: "#2C6EE8",
 
-          "primary-focus": "#1EB4B1",
+          secondary: "#D926A9",
 
-          "primary-content": "#021212",
-
-          secondary: "#2C6EE8",
-
-          "secondary-focus": "#1B438B",
-
-          "secondary-content": "#FFFFFF",
-
-          accent: "#872CE8",
-
-          "accent-focus": "#50198A",
-
-          "accent-content": "#FFFFFF",
+          accent: "#1FB2A6",
 
           neutral: "#191D24",
+
+          "base-100": "#ffffff",
 
           info: "#3ABFF8",
 
@@ -38,12 +23,6 @@ module.exports = {
           warning: "#FBBD23",
 
           error: "#F87272",
-
-          "base-100": "#2A303C",
-
-          "base-200": "#121A2B",
-
-          "base-300": "#0B1529",
         },
       },
     ],
@@ -64,6 +43,7 @@ module.exports = {
         "brand-700": "#0f5150",
         "brand-800": "#0b3a39",
         "brand-900": "#051a19",
+        "brand-secondary": "#2C6EE8",
       },
     },
   },
