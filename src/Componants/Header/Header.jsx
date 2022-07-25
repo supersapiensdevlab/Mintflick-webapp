@@ -7,16 +7,16 @@ import {
   Search,
   Sun,
 } from "tabler-icons-react";
-import { UserContext } from "../Store";
-import Main_logo from "../Assets/logos/Main_logo";
+import { UserContext } from "../../Store";
+import Main_logo from "../../Assets/logos/Main_logo";
 import TopNavigation from "./TopNavigation";
-import Main_logo_dark from "../Assets/logos/Main_logo_dark";
+import Main_logo_dark from "../../Assets/logos/Main_logo_dark";
 
 function Header() {
   const State = useContext(UserContext);
 
   return (
-    <div className="absolute z-50  top-0 flex px-4 lg:px-12 justify-between items-center h-20 bg-white dark:bg-gray-900 w-full shadow-lg">
+    <div className="absolute z-50  top-0 flex px-4 lg:px-12 justify-between items-center h-20 bg-white dark:bg-slate-900 w-full shadow-lg">
       <div className="flex items-center space-x-4 h-full w-1/3">
         {State.database.dark ? (
           <Main_logo_dark></Main_logo_dark>
@@ -48,19 +48,6 @@ function Header() {
         <button class="btn btn-circle btn-ghost ">
           <MessageDots size={28}></MessageDots>
         </button>
-        <label className="swap swap-rotate dark:text-gray-100">
-          <input
-            onChange={() =>
-              State.updateDatabase({
-                dark: !State.database.dark,
-              })
-            }
-            type="checkbox"
-          />
-
-          <MoonStars className="swap-on"></MoonStars>
-          <Sun className="swap-off"></Sun>
-        </label>
 
         <div class="dropdown dropdown-end">
           <label tabindex="0" className=" avatar">
@@ -70,16 +57,47 @@ function Header() {
           </label>
           <ul
             tabindex="0"
-            className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-gray-100 dark:bg-slate-400 rounded-lg w-52"
+            className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-gray-100 dark:bg-slate-800 rounded-lg w-52"
           >
             <li>
-              <a className="">Profile</a>
+              <a className="dark:text-gray-100 hover:dark:bg-slate-900">
+                Profile
+              </a>
             </li>
             <li>
-              <a>Settings</a>
+              <a className="dark:text-gray-100 hover:dark:bg-slate-900">
+                Settings
+              </a>
+            </li>
+            {/* <label className="swap swap-rotate dark:text-gray-100">
+              <input
+                onChange={() =>
+                  State.updateDatabase({
+                    dark: !State.database.dark,
+                  })
+                }
+                type="checkbox"
+              />
+
+              <MoonStars className="swap-on"></MoonStars>
+              <Sun className="swap-off"></Sun>
+            </label> */}
+            <li>
+              <a
+                className="dark:text-gray-100 hover:dark:bg-slate-900"
+                onClick={() =>
+                  State.updateDatabase({
+                    dark: !State.database.dark,
+                  })
+                }
+              >
+                Dark mode {State.database.dark ? "off" : "on"}
+              </a>
             </li>
             <li>
-              <a>Logout</a>
+              <a className="dark:text-gray-100 hover:dark:bg-slate-900">
+                Logout
+              </a>
             </li>
           </ul>
         </div>

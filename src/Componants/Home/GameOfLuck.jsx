@@ -11,7 +11,7 @@ function GameOfLuck() {
         big. You can play the game by clicking on the button below.
       </p>
 
-      <button className="btn btn-primary" onClick={() => {}}>
+      <button className="btn  btn-primary" onClick={() => {}}>
         Lets Go!
       </button>
     </div>

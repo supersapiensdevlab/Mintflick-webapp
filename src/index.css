@@ -60,14 +60,31 @@
 .btn-primary {
   @apply text-brand;
 }
+.btn-ghost {
+  @apply hover:dark:bg-slate-900;
+}
 
 .btn-circle {
-  @apply dark:text-gray-100;
+  @apply dark:text-slate-100;
+  @apply hover:dark:bg-slate-700;
 }
 .btn-square {
-  @apply dark:text-gray-100;
+  @apply dark:text-slate-100;
+  @apply hover:dark:bg-slate-700;
 }
 .input {
-  @apply dark:bg-gray-700;
-  @apply dark:text-gray-400;
+  @apply dark:bg-slate-700;
+  @apply dark:text-slate-400;
+}
+.textarea {
+  @apply dark:bg-slate-700;
+  @apply dark:text-slate-400;
+}
+.btn-brand {
+  @apply bg-gradient-to-r from-[#904AFF] via-[#2FCDF5]  to-brand bg-left-bottom 
+  text-white
+   border-none;
+}
+.btn-brand:hover {
+  @apply bg-right-top;
 }
