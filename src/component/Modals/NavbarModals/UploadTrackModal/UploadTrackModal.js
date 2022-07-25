@@ -111,7 +111,6 @@ const UploadTrackModal = (props) => {
     allowAttribution: '',
     commercialUse: '',
     derivativeWorks: '',
-    tokenId: '',
     mintTrxHash: '',
   });
 
@@ -400,7 +399,6 @@ const UploadTrackModal = (props) => {
             allowAttribution: '',
             commercialUse: '',
             derivativeWorks: '',
-            tokenId: '',
             mintTrxHash: '',
           }); // reset the form
         });
@@ -524,6 +522,7 @@ const UploadTrackModal = (props) => {
     setFormData(formData);
 
     if (!isNFT) {
+      console.log('! called');
       await axios
         .post(`${process.env.REACT_APP_SERVER_URL}/upload_music`, formData, {
           headers: {
