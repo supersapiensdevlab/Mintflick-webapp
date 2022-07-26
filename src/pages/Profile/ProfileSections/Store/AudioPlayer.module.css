@@ -36,6 +36,7 @@
     margin-right: 10px;
   }
   
+  
   .play {
     position: relative;
     left: 5px;
@@ -63,6 +64,22 @@
     border-radius: 10px;
     position: relative;
     width: 20rem;
+    height: 11px;
+    outline: none;
+  }
+
+  .progressBarMobile {
+    --bar-bg: #0fffff;
+    --seek-before-width: 0;
+    --seek-before-color: #00d3ff;
+    --knobby: #3452a5;
+    --selectedKnobby: #26c9c3;
+  
+    appearance: none;
+    background: var(--bar-bg);;
+    border-radius: 10px;
+    position: relative;
+    width: 10rem;
     height: 11px;
     outline: none;
   }

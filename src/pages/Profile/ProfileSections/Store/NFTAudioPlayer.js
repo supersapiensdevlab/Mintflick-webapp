@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styles from './AudioPlayer.module.css';
+import axios from 'axios';
 
-const NFTAudioPlayer = ({ track }) => {
+const NFTAudioPlayer = ({ track, cardDetails, user, trackId }) => {
   // state
   const [isPlaying, setIsPlaying] = useState(false);
   const [duration, setDuration] = useState(0);
@@ -10,6 +11,7 @@ const NFTAudioPlayer = ({ track }) => {
   // references
   const audioPlayer = useRef(); // reference our audio component
   const progressBar = useRef(); // reference our progress bar
+  const progressBarMobile = useRef();
   const animationRef = useRef(); // reference the animation
 
   useEffect(() => {
@@ -38,6 +40,35 @@ const NFTAudioPlayer = ({ track }) => {
     }
   };
 
+  const trackStarted = () => {
+    console.log(duration);
+    const time = Math.floor(duration / 3);
+    // console.log(time);
+    // console.log(currentTime);
+    if (currentTime > time) {
+      if (user ? user.username !== cardDetails.user.username : false) {
+        //   const timer = setTimeout(() => {
+        const trackDetails = {
+          trackusername: `${cardDetails.user.username}`,
+          trackindex: `${trackId}`,
+          viewed_user: `${user.username}`,
+        };
+
+        axios({
+          method: 'POST',
+          url: `${process.env.REACT_APP_SERVER_URL}/user/plays`,
+          headers: {
+            'content-type': 'application/json',
+            'auth-token': localStorage.getItem('authtoken'),
+          },
+          data: trackDetails,
+        }).then(function (response) {});
+        //   }, time);
+        //   return () => clearTimeout(timer);
+      }
+    }
+  };
+
   const whilePlaying = () => {
     progressBar.current.value = audioPlayer.current.currentTime;
     changePlayerCurrentTime();
@@ -45,6 +76,11 @@ const NFTAudioPlayer = ({ track }) => {
   };
 
   const changeRange = () => {
+    audioPlayer.current.currentTime = progressBar.current.value;
+    changePlayerCurrentTime();
+  };
+
+  const changeRangeMobile = () => {
     audioPlayer.current.currentTime = progressBar.current.value;
     changePlayerCurrentTime();
   };
@@ -68,14 +104,14 @@ const NFTAudioPlayer = ({ track }) => {
   };
 
   return (
-    <div className="w-full h-max -ml-1">
+    <div className="w-full h-max -ml-1 md:-ml-2">
       <div className="flex flex-col w-full ">
-        <div className="flex justify-center mb-4 ">
+        <div className="flex justify-center items-center mb-4 ">
           {/* current time */}
-          <div className="text-md">{calculateTime(currentTime)}</div>
+          <div className="text-xs md:text-sm">{calculateTime(currentTime)}</div>
 
           {/* progress bar */}
-          <div>
+          <div className="md:block hidden">
             <input
               type="range"
               className={`${styles.progressBar} mx-2`}
@@ -85,8 +121,20 @@ const NFTAudioPlayer = ({ track }) => {
             />
           </div>
 
+          <div className="md:hidden block">
+            <input
+              type="range"
+              className={`${styles.progressBarMobile} md:mx-2 mx-1`}
+              defaultValue="0"
+              ref={progressBarMobile}
+              onChange={changeRangeMobile}
+            />
+          </div>
+
           {/* duration */}
-          <div>{duration && !isNaN(duration) && calculateTime(duration)}</div>
+          <div className="text-xs md:text-sm">
+            {duration && !isNaN(duration) && calculateTime(duration)}
+          </div>
         </div>
         <div className="flex w-full justify-center">
           <audio ref={audioPlayer} src={track} preload="metadata"></audio>
@@ -101,13 +149,16 @@ const NFTAudioPlayer = ({ track }) => {
             </svg>
           </button>
           <button
-            onClick={togglePlayPause}
-            className="bg-white h-16 w-16 flex justify-center items-center rounded-full mx-3"
+            onClick={() => {
+              togglePlayPause();
+              trackStarted();
+            }}
+            className="bg-white md:h-16 md:w-16 h-12 w-12 flex justify-center items-center rounded-full mx-3"
           >
             {isPlaying ? (
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-14 w-14 text-dbeats-light"
+                className="md:h-14 md:w-14 h-11 w-11 text-dbeats-light"
                 viewBox="0 0 20 20"
                 fill="currentColor"
               >
@@ -120,7 +171,7 @@ const NFTAudioPlayer = ({ track }) => {
             ) : (
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-14 w-14 text-dbeats-light "
+                className="md:h-14 md:w-14 h-11 w-11 text-dbeats-light "
                 viewBox="0 0 20 20"
                 fill="currentColor"
               >

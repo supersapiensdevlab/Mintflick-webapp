@@ -1990,7 +1990,11 @@ const NFTCard = ({ nft, buyNft, address }) => {
                     {/* <audio controls>
                       <source src={contentData.link}></source>
                     </audio> */}
-                    <NFTAudioPlayer track={contentData.link} />
+                    <NFTAudioPlayer
+                      track={contentData.link}
+                      cardDetails={cardDetails}
+                      user={user}
+                    />
                   </div>
                 ) : null}
 
@@ -2027,7 +2031,7 @@ const NFTCard = ({ nft, buyNft, address }) => {
                               <></>
                             ) : (
                               <div className="text-xs text-dbeats-light  flex pr-2 ">
-                                {`${contentData.views ? contentData.views.length : 0} views`}
+                                {`${contentData.plays ? contentData.plays.length : 0} plays`}
                               </div>
                             )}
                             {!commentDisabled ? (
@@ -2286,16 +2290,23 @@ const NFTCard = ({ nft, buyNft, address }) => {
                 <div
                   className={`cursor-pointer w-full 2xl:h-max lg:h-max md:h-max xs:h-max min-h-full    `}
                 >
-                  <div className="w-full flex items-center p-5">
+                  <div className="w-full flex items-center md:p-5 p-2">
                     <div className="w-1/3">
-                      <img src={contentData.trackImage} className="h-40 w-40"></img>
+                      <img src={contentData.trackImage} className="md:h-40 md:w-40 h-20 w-20"></img>
                     </div>
                     <div className="w-2/3">
-                      <div className=" text-lg w-full  text-dbeats-light mb-3  ">{nft.name}</div>
+                      <div className=" md:text-lg w-full text-md  text-dbeats-light mb-3 text-center md:text-left ">
+                        {nft.name}
+                      </div>
                       {/* <audio controls>
                         <source src={contentData.link}></source>
                       </audio> */}
-                      <NFTAudioPlayer track={contentData.link} />
+                      <NFTAudioPlayer
+                        track={contentData.link}
+                        cardDetails={cardDetails}
+                        user={user}
+                        trackId={contentData.trackId}
+                      />
                     </div>
                   </div>
                 </div>
@@ -2332,7 +2343,7 @@ const NFTCard = ({ nft, buyNft, address }) => {
                               <></>
                             ) : (
                               <div className="text-xs text-dbeats-light  flex pr-2 ">
-                                {`${contentData.views ? contentData.views.length : 0} views`}
+                                {`${contentData.plays ? contentData.plays.length : 0} plays`}
                               </div>
                             )}
                             {!commentDisabled ? (
@@ -2375,7 +2386,7 @@ const NFTCard = ({ nft, buyNft, address }) => {
                               <></>
                             ) : (
                               <div className="text-xs text-dbeats-light  flex pr-2 ">
-                                {`${contentData.views ? contentData.views.length : 0} views`}
+                                {`${contentData.plays ? contentData.plays.length : 0} plays`}
                               </div>
                             )}
                             {!commentDisabled ? (
