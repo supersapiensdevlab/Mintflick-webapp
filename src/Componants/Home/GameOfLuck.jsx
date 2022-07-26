@@ -2,16 +2,16 @@ import React from "react";
 
 function GameOfLuck() {
   return (
-    <div className="flex flex-col items-center  w-full h-fit bg-gray-100 dark:bg-slate-800 rounded-xl p-5 space-y-2">
-      <p className="w-full font-black text-lg text-gray-400 flex items-center">
-        LIVE NOW<div className="badge bg-brand border-none badge-sm mx-2"></div>
+    <div className="flex flex-col items-center  w-full h-fit bg-slate-100 dark:bg-slate-800 rounded-xl p-5 space-y-2">
+      <p className="w-full font-black text-lg text-brand5 flex items-center">
+        Live Now<div className="badge bg-brand border-none badge-sm mx-2"></div>
       </p>
-      <p className="w-full font-medium dark:text-white">
+      <p className="w-full font-medium text-sm text-brand3">
         Welcome to the Spin Game, here you can play the game of chance and win
         big. You can play the game by clicking on the button below.
       </p>
 
-      <button className="btn  btn-primary" onClick={() => {}}>
+      <button className="btn  btn-brand" onClick={() => {}}>
         Lets Go!
       </button>
     </div>

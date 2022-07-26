@@ -15,7 +15,7 @@ function LiveChannels() {
   ]);
   return (
     <div className="w-full h-fit space-y-4">
-      <p className="font-extrabold text-lg text-gray-400 mb-2">Live now</p>
+      <p className="font-extrabold text-lg text-brand5 mb-2">Live now</p>
       {channels.map((channel) => (
         <div className="flex  items-center space-x-2 h-8 ">
           <div className="h-full flex items-center flex-grow space-x-2">
@@ -25,7 +25,7 @@ function LiveChannels() {
               alt="profileImage"
             />
 
-            <p className="cursor-pointer text-base font-bold text-gray-600">
+            <p className="cursor-pointer text-base font-medium text-brand3">
               {channel.name}
             </p>
           </div>

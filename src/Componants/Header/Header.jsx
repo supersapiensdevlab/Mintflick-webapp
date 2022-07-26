@@ -16,7 +16,7 @@ function Header() {
   const State = useContext(UserContext);
 
   return (
-    <div className="absolute z-50  top-0 flex px-4 lg:px-12 justify-between items-center h-20 bg-white dark:bg-slate-900 w-full shadow-lg">
+    <div className="hidden lg:flex fixed z-50  top-0  px-4 lg:px-12 justify-between items-center h-20 bg-white dark:bg-slate-900 w-full shadow-mintflick	">
       <div className="flex items-center space-x-4 h-full w-1/3">
         {State.database.dark ? (
           <Main_logo_dark></Main_logo_dark>
@@ -28,15 +28,15 @@ function Header() {
           <input
             type="text"
             placeholder="Search for anything..."
-            className="input input-bordered w-full max-w-2xl "
+            className="input input-bordered w-full max-w-xl "
           ></input>
-          <Search className="-translate-x-8 dark:text-gray-100"></Search>
+          <Search className="-translate-x-8 dark:text-slate-100"></Search>
         </div>
       </div>
-      <div className="hidden lg:flex items-center justify-center h-full  ">
+      <div className="hidden lg:flex w-1/3 items-center justify-center h-full  ">
         <TopNavigation></TopNavigation>
       </div>
-      <div className="flex justify-end items-center space-x-4 h-full   ">
+      <div className="flex w-1/3 justify-end items-center space-x-4 h-full   ">
         <div className="hidden lg:flex  btn btn-outline btn-primary gap-2 rounded-full ">
           <AccessPoint size={28}></AccessPoint>
           GO LIVE
@@ -57,17 +57,13 @@ function Header() {
           </label>
           <ul
             tabindex="0"
-            className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-gray-100 dark:bg-slate-800 rounded-lg w-52"
+            className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-slate-100 dark:bg-slate-800 text-brand1 text-base font-medium rounded-lg w-52"
           >
             <li>
-              <a className="dark:text-gray-100 hover:dark:bg-slate-900">
-                Profile
-              </a>
+              <a className="  hover:dark:bg-slate-900">Profile</a>
             </li>
             <li>
-              <a className="dark:text-gray-100 hover:dark:bg-slate-900">
-                Settings
-              </a>
+              <a className=" hover:dark:bg-slate-900">Settings</a>
             </li>
             {/* <label className="swap swap-rotate dark:text-gray-100">
               <input
@@ -84,7 +80,7 @@ function Header() {
             </label> */}
             <li>
               <a
-                className="dark:text-gray-100 hover:dark:bg-slate-900"
+                className=" hover:dark:bg-slate-900"
                 onClick={() =>
                   State.updateDatabase({
                     dark: !State.database.dark,
@@ -95,9 +91,7 @@ function Header() {
               </a>
             </li>
             <li>
-              <a className="dark:text-gray-100 hover:dark:bg-slate-900">
-                Logout
-              </a>
+              <a className="hover:bg-rose-500 ">Logout</a>
             </li>
           </ul>
         </div>

@@ -32,6 +32,10 @@ module.exports = {
       fontFamily: {
         Gilroy: ["Gilroy"],
       },
+      boxShadow: {
+        mintflick: "0px 12px 12px rgba(0, 0, 0, 0.02)",
+      },
+
       colors: {
         alt: "#161616",
         "brand-100": "#a0f5f3",

@@ -1,8 +1,14 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { AccessPoint, Confetti, SmartHome } from "tabler-icons-react";
+import {
+  AccessPoint,
+  Bell,
+  Confetti,
+  Search,
+  SmartHome,
+} from "tabler-icons-react";
 
-function TopNavigation() {
+function BottomNavigation() {
   const navigateTo = useNavigate();
   const [active, setActive] = useState(1);
   const data = [
@@ -17,9 +23,19 @@ function TopNavigation() {
       isActive: 3,
       link: "/marketPlace",
     },
+    {
+      icon: <Search size={24}></Search>,
+      isActive: 4,
+      link: "/marketPlace",
+    },
+    {
+      icon: <Bell size={24}></Bell>,
+      isActive: 5,
+      link: "/marketPlace",
+    },
   ];
   return (
-    <div className="flex items-center justify-center h-fit p-1 rounded-lg space-x-10 ">
+    <div className="flex items-center justify-evenly h-fit p-4 pb-6 bg-white dark:bg-slate-900">
       {data.map((item) => (
         <button
           onClick={() => {
@@ -39,4 +55,4 @@ function TopNavigation() {
   );
 }
 
-export default TopNavigation;
+export default BottomNavigation;
