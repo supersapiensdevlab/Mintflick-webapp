@@ -29,6 +29,7 @@ import PostOptionModal from '../../../../component/Modals/ReportModals/PostOptio
 import ReportModal from '../../../../component/Modals/ReportModals/ReportModal';
 import ReportModal2 from '../../../../component/Modals/ReportModals/ReportModal2';
 import { template } from 'lodash';
+import NFTAudioPlayer from './NFTAudioPlayer';
 
 const NFTCard = ({ nft, buyNft, address }) => {
   //console.log(nft);
@@ -1986,9 +1987,10 @@ const NFTCard = ({ nft, buyNft, address }) => {
                   <div
                     className={`cursor-pointer w-full 2xl:h-max lg:h-max md:h-max xs:h-max min-h-full   dark:bg-black bg-black `}
                   >
-                    <audio controls>
+                    {/* <audio controls>
                       <source src={contentData.link}></source>
-                    </audio>
+                    </audio> */}
+                    <NFTAudioPlayer track={contentData.link} />
                   </div>
                 ) : null}
 
@@ -2282,15 +2284,18 @@ const NFTCard = ({ nft, buyNft, address }) => {
                   ) : null}
                 </div>
                 <div
-                  className={`cursor-pointer w-full 2xl:h-max lg:h-max md:h-max xs:h-max min-h-full   bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary nm-flat-dbeats-dark-primary-lg bg-black `}
+                  className={`cursor-pointer w-full 2xl:h-max lg:h-max md:h-max xs:h-max min-h-full    `}
                 >
                   <div className="w-full flex items-center p-5">
-                    <img src={contentData.trackImage} className="h-40 w-40"></img>
-                    <div className="block mx-auto">
-                      <div className=" text-lg  pl-5  text-dbeats-light mb-3  ">{nft.name}</div>
-                      <audio controls>
+                    <div className="w-1/3">
+                      <img src={contentData.trackImage} className="h-40 w-40"></img>
+                    </div>
+                    <div className="w-2/3">
+                      <div className=" text-lg w-full  text-dbeats-light mb-3  ">{nft.name}</div>
+                      {/* <audio controls>
                         <source src={contentData.link}></source>
-                      </audio>
+                      </audio> */}
+                      <NFTAudioPlayer track={contentData.link} />
                     </div>
                   </div>
                 </div>
