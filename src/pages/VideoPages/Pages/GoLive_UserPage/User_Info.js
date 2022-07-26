@@ -842,16 +842,16 @@ const UserInfo = (props) => {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    https://dbeats.live/live/{user.username}
+                  {`${process.env.REACT_APP_CLIENT_URL}/live/${user.username}`}
                   </a>
                   <i
                     onClick={() => {
-                      navigator.clipboard.writeText('https://dbeats.live/live/' + user.username);
-                      setCopied('https://dbeats.live/live/' + user.username);
+                      navigator.clipboard.writeText(`${process.env.REACT_APP_CLIENT_URL}/live/${user.username}`);
+                      setCopied(`${process.env.REACT_APP_CLIENT_URL}/live/${user.username}`);
                     }}
                     className="fas fa-solid fa-copy mx-4 hover:text-dbeats-light cursor-pointer pt-1 "
                   ></i>
-                  {copied == 'https://dbeats.live/live/' + user.username ? (
+                  {copied == `${process.env.REACT_APP_CLIENT_URL}/live/${user.username}` ? (
                     <span className="text-dbeats-light">copied</span>
                   ) : null}
                 </p>

@@ -28,6 +28,7 @@ import LiveChat from './LiveChat';
 import { io } from 'socket.io-client';
 import { RadioGroup } from '@headlessui/react';
 import useWeb3Modal from '../../../../hooks/useWeb3Modal';
+import Collapsible from 'react-collapsible';
 
 const PublicInfo = (props) => {
   // const socket = io('http://localhost:800');
@@ -79,6 +80,9 @@ const PublicInfo = (props) => {
 
   const [viewColor, setViewColor] = useState('white');
   const [viewAnimate, setViewAnimate] = useState('animate-none');
+
+  // Description Read More
+  const [readMore, setReadMore] = useState(false);
 
   // eslint-disable-next-line no-unused-vars
   const [arrayData, setArrayData] = useState([]);
@@ -321,7 +325,7 @@ const PublicInfo = (props) => {
                 ) : null}
               </div>
 
-              <div className="2xl:ml-7 sm:p-2 p-3  bg-dbeats-dark-alt shadow   ">
+              <div className="2xl:ml-7 sm:p-2 p-3  bg-dbeats-dark-alt shadow   md:px-6">
                 <div className=" flex sm:py-2 py-2">
                   <div className="  w-full">
                     <div className=" w-full text-left mt-0">
@@ -335,7 +339,7 @@ const PublicInfo = (props) => {
                   ) : null} */}
                     </div>
                     <>
-                      <h1 className="text-white mr-1 md:text-2xl ml-20 text-sm tracking-wider">
+                      <h1 className="text-white mr-1 md:text-2xl ml-5 text-sm tracking-wider">
                         {userData && userData.streamDetails ? userData.streamDetails.name : null}
                       </h1>
                     </>
@@ -418,7 +422,7 @@ const PublicInfo = (props) => {
                         )}
                       </div>
                     ) : null}
-                    <div className="mt-2">
+                    {/* <div className="mt-2">
                       <>
                         <p>
                           <span className="text-white mr-1 font-bold md:text-lg md:ml-20 text-sm tracking-wider">
@@ -431,19 +435,27 @@ const PublicInfo = (props) => {
                           </span>
                         </p>
                       </>
+                    </div> */}
+                    {userData && userData.streamDetails && !readMore
 
-                      <div className='flex flex-wrap mt-4  md:ml-10 2xl:ml-36 xl:ml-20'>
-                        {console.log(userData.streamLinks)}
-                        {userData.streamLinks ? userData.streamLinks.map((link, index) => {
-                          return (
-                            <div key={index} className='h-20 w-48 2xl:h-24 2xl:w-72 mx-5 my-4 border-2 border-dbeats-light rounded-lg shadow-md'>
-                              <a href={link.url} target="_blank" rel="noopener noreferrer"><img className='rounded-lg pb-1 h-20 w-48 2xl:h-24 2xl:w-72' src={link.image} /></a>
-                            </div>
-                          )
-                        }) : <></>}
+                      ?
+                      <div className='mt-2 md:ml-10 text-lg text-white p-2' >
+                        <p>
+                          {userData.streamDetails.description.length > 100 ? <>{userData.streamDetails.description.substring(0, 100)} <span className='text-dbeats-light cursor-pointer' onClick={() => setReadMore(true)}>...Read More</span></> : userData.streamDetails.description}
+                        </p>
                       </div>
+                      : null}
 
-                    </div>
+                    {userData && userData.streamDetails && readMore
+
+                      ?
+                      <div className='mt-2 md:ml-10 text-lg text-white p-2' >
+                        <p>
+                          {userData.streamDetails.description.length > 100 ? <>{userData.streamDetails.description} <span className='text-dbeats-light cursor-pointer' onClick={() => setReadMore(false)}>  Show Less</span></> : userData.streamDetails.description}
+                        </p>
+                      </div>
+                      : null}
+
 
 
                   </div>
@@ -498,8 +510,18 @@ const PublicInfo = (props) => {
                     </Menu>
                   </div>
                 </div>
-
+                <div className='grid grid-cols-2 gap-4 grid-flow-row mt-4  '>
+                  {console.log(userData.streamLinks)}
+                  {userData.streamLinks ? userData.streamLinks.map((link, index) => {
+                    return (
+                      <div key={index} className='h-full w-full p-2 rounded'>
+                        <a href={link.url} target="_blank" rel="noopener noreferrer"><img className='  h-full w-full rounded' src={link.image} /></a>
+                      </div>
+                    )
+                  }) : <></>}
+                </div>
               </div>
+
             </div>
             <div className="  w-full col-span-1   ">
               {userData.username && <LiveChat userp={userData} privateUser={user}></LiveChat>}
