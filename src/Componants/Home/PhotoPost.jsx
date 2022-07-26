@@ -10,7 +10,7 @@ import PolygonToken from "../../Assets/logos/PolygonToken";
 
 function PhotoPost(props) {
   return (
-    <div className="w-full h-fit  lg:bg-slate-100 lg:dark:bg-slate-800 lg:rounded-xl p-2 lg:p-8 space-y-4">
+    <div className="w-full h-fit  lg:bg-slate-100 lg:dark:bg-slate-800 lg:rounded-xl p-4 lg:p-8 space-y-4 pb-4 border-b-2 lg:border-none  border-slate-200 dark:border-slate-900">
       <div className="flex justify-between items-center">
         <div className="flex items-center space-x-4">
           <img
@@ -40,7 +40,7 @@ function PhotoPost(props) {
         <div className=" flex flex-grow  h-fit  items-center justify-end rounded-full ">
           <div className="flex h-fit w-fit items-center justify-end rounded-full btn-primary btn-outline rounded-full p-1">
             <PolygonToken></PolygonToken>
-            <p className="text-sm  ml-1">{props.price}</p>
+            <p className="text-sm  mx-1">{props.price}</p>
           </div>
         </div>
       </div>

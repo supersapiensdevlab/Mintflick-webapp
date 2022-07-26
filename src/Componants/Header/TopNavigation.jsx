@@ -28,7 +28,7 @@ function TopNavigation() {
           }}
           className={`  ${
             active === item.isActive
-              ? `btn  btn-primary btn-brand`
+              ? `btn   btn-brand`
               : `btn  btn-ghost dark:text-gray-100`
           }`}
         >

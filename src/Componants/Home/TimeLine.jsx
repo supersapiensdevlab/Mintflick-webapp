@@ -9,8 +9,7 @@ function TimeLine() {
       profileName: "Loren Ipsum",
       timestamp: "1 hour ago",
       text: "I am the hope of the Universe…I am the answer to all living things that cry out for peace…I am the protector of the innocent…I am the light in the darkness…I am the truth. Ally to good…Nightmare to you!",
-      image:
-        "https://pixabay.com/get/g0ca9e7cce5133e5666f5af66a38b40721f3bfdf950b1359496a2446e3c1ae95e318e7abd5e9298ecbcd5f4514a55c59beb43ccce7747d7a1291bcb8bac10877485603e1c1e1d59795dbd393fb6ba0b2b_1920.jpg",
+      image: "https://picsum.photos/200",
       timestamp: "1 hour ago",
       price: 53,
       likeCount: 323,
@@ -23,8 +22,7 @@ function TimeLine() {
       profileName: "Loren Ipsum",
       timestamp: "1 hour ago",
       text: "I am the hope of the Universe…I am the answer to all living things that cry out for peace…I am the protector of the innocent…I am the light in the darkness…I am the truth. Ally to good…Nightmare to you!",
-      image:
-        "https://pixabay.com/get/g0ca9e7cce5133e5666f5af66a38b40721f3bfdf950b1359496a2446e3c1ae95e318e7abd5e9298ecbcd5f4514a55c59beb43ccce7747d7a1291bcb8bac10877485603e1c1e1d59795dbd393fb6ba0b2b_1920.jpg",
+      image: "https://picsum.photos/200/100",
       timestamp: "1 hour ago",
       price: 53,
       likeCount: 323,
@@ -37,8 +35,7 @@ function TimeLine() {
       profileName: "Loren Ipsum",
       timestamp: "1 hour ago",
       text: "I am the hope of the Universe…I am the answer to all living things that cry out for peace…I am the protector of the innocent…I am the light in the darkness…I am the truth. Ally to good…Nightmare to you!",
-      image:
-        "https://pixabay.com/get/g0ca9e7cce5133e5666f5af66a38b40721f3bfdf950b1359496a2446e3c1ae95e318e7abd5e9298ecbcd5f4514a55c59beb43ccce7747d7a1291bcb8bac10877485603e1c1e1d59795dbd393fb6ba0b2b_1920.jpg",
+      image: "https://picsum.photos/200/100",
       timestamp: "1 hour ago",
       price: 53,
       likeCount: 323,
@@ -51,8 +48,7 @@ function TimeLine() {
       profileName: "Loren Ipsum",
       timestamp: "1 hour ago",
       text: "I am the hope of the Universe…I am the answer to all living things that cry out for peace…I am the protector of the innocent…I am the light in the darkness…I am the truth. Ally to good…Nightmare to you!",
-      image:
-        "https://pixabay.com/get/g0ca9e7cce5133e5666f5af66a38b40721f3bfdf950b1359496a2446e3c1ae95e318e7abd5e9298ecbcd5f4514a55c59beb43ccce7747d7a1291bcb8bac10877485603e1c1e1d59795dbd393fb6ba0b2b_1920.jpg",
+      image: "https://picsum.photos/200",
       timestamp: "1 hour ago",
       price: 53,
       likeCount: 323,
@@ -65,8 +61,7 @@ function TimeLine() {
       profileName: "Loren Ipsum",
       timestamp: "1 hour ago",
       text: "I am the hope of the Universe…I am the answer to all living things that cry out for peace…I am the protector of the innocent…I am the light in the darkness…I am the truth. Ally to good…Nightmare to you!",
-      image:
-        "https://pixabay.com/get/g0ca9e7cce5133e5666f5af66a38b40721f3bfdf950b1359496a2446e3c1ae95e318e7abd5e9298ecbcd5f4514a55c59beb43ccce7747d7a1291bcb8bac10877485603e1c1e1d59795dbd393fb6ba0b2b_1920.jpg",
+      image: "https://picsum.photos/200",
       timestamp: "1 hour ago",
       price: 53,
       likeCount: 323,

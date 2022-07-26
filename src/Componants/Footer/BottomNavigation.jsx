@@ -35,7 +35,7 @@ function BottomNavigation() {
     },
   ];
   return (
-    <div className="flex items-center justify-evenly h-fit p-4 pb-6 bg-white dark:bg-slate-900">
+    <div className="flex items-center justify-evenly h-fit pt-2 pb-6  bg-white dark:bg-slate-900">
       {data.map((item) => (
         <button
           onClick={() => {
@@ -44,7 +44,7 @@ function BottomNavigation() {
           }}
           className={`  ${
             active === item.isActive
-              ? `btn  btn-primary btn-brand`
+              ? `btn btn-brand btn-brand `
               : `btn  btn-ghost dark:text-gray-100`
           }`}
         >
