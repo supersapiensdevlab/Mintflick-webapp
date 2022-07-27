@@ -439,7 +439,7 @@ const PublicInfo = (props) => {
                     {userData && userData.streamDetails && !readMore
 
                       ?
-                      <div className='mt-2 md:ml-10 text-lg text-white p-2' >
+                      <div className='mt-2 ml-1 text-lg text-white p-2' >
                         <p>
                           {userData.streamDetails.description.length > 100 ? <>{userData.streamDetails.description.substring(0, 100)} <span className='text-dbeats-light cursor-pointer' onClick={() => setReadMore(true)}>...Read More</span></> : userData.streamDetails.description}
                         </p>
@@ -449,7 +449,7 @@ const PublicInfo = (props) => {
                     {userData && userData.streamDetails && readMore
 
                       ?
-                      <div className='mt-2 md:ml-10 text-lg text-white p-2' >
+                      <div className='mt-2 ml-1 text-lg text-white p-2' >
                         <p>
                           {userData.streamDetails.description.length > 100 ? <>{userData.streamDetails.description} <span className='text-dbeats-light cursor-pointer' onClick={() => setReadMore(false)}>  Show Less</span></> : userData.streamDetails.description}
                         </p>
