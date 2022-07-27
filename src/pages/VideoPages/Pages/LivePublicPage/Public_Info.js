@@ -28,7 +28,7 @@ import LiveChat from './LiveChat';
 import { io } from 'socket.io-client';
 import { RadioGroup } from '@headlessui/react';
 import useWeb3Modal from '../../../../hooks/useWeb3Modal';
-import Collapsible from 'react-collapsible';
+
 
 const PublicInfo = (props) => {
   // const socket = io('http://localhost:800');
