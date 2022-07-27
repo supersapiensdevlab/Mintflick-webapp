@@ -30,6 +30,7 @@ import ReportModal from '../../../../component/Modals/ReportModals/ReportModal';
 import ReportModal2 from '../../../../component/Modals/ReportModals/ReportModal2';
 import { template } from 'lodash';
 import NFTAudioPlayer from './NFTAudioPlayer';
+import { id } from 'date-fns/locale';
 
 const NFTCard = ({ nft, buyNft, address }) => {
   //console.log(nft);
@@ -55,6 +56,15 @@ const NFTCard = ({ nft, buyNft, address }) => {
   const [commentDisabled, setCommentDisabled] = useState(false);
 
   const [type, setType] = useState();
+
+  const [trackLikes, setTrackLikes] = useState(0);
+  const [trackLiked, setTrackLiked] = useState(null);
+
+  const [postLikes, setPostLikes] = useState(0);
+  const [postLiked, setPostLiked] = useState(null);
+
+  const [videoLikes, setVideoLikes] = useState(0);
+  const [videoLiked, setVideoLiked] = useState(null);
 
   const [playButtonText, setPlayButtonText] = useState('Play');
 
@@ -453,139 +463,297 @@ const NFTCard = ({ nft, buyNft, address }) => {
     }
   };
 
-  // const handleLike = () => {
-  //   if (user) {
-  //     // Code For Like
-  //   } else {
-  //     window.location.href = '/signup';
-  //   }
-  // };
-
   const handleInputChange = (e) => {
     setReportValue(e.target.value);
   };
 
-  const handlereaction = (videoprops) => {
+  useEffect(() => {
+    if (contentData && contentData.likes) {
+      if (contentData.trackId) {
+        setTrackLikes(contentData.likes.length);
+      } else if (contentData.announcement) {
+        setPostLikes(contentData.likes.length);
+      } else if (contentData.videoId) {
+        setVideoLikes(contentData.likes.length);
+      }
+      if (contentData.likes.includes(user.username)) {
+        if (contentData.trackId) {
+          setTrackLiked(true);
+        } else if (contentData.announcement) {
+          setPostLiked(true);
+        } else if (contentData.videoId) {
+          setVideoLiked(true);
+        }
+      } else {
+        if (contentData.trackId) {
+          setTrackLiked(false);
+        } else if (contentData.announcement) {
+          setPostLiked(false);
+        } else if (contentData.videoId) {
+          setVideoLiked(false);
+        }
+      }
+    }
+  }, [contentData && contentData.likes]);
+
+  const handleTrackLikes = () => {
     if (!user) {
       loadWeb3Modal();
       return;
     }
-    if (userreact === '') {
-      const reactionData = {
-        reactusername: `${user.username}`,
-        videousername: `${cardDetails.user.username}`,
-        reaction: videoprops,
-        videostreamid: `${cardDetails.user.username}`,
-        videoindex: `${cardDetails.id}`,
-        videolink: `${cardDetails.link}`,
-      };
 
-      if (videoprops === 'like') {
-        setLike(like + 1);
-        setUserreact('like');
-      }
-      // else if (videoprops === 'dislike') {
-      //   setDislike(dislike + 1);
-      //   setUserreact('dislike');
-      // } else if (videoprops === 'happy') {
-      //   setHappy(happy + 1);
-      //   setUserreact('happy');
-      // } else {
-      //   setAngry(angry + 1);
-      //   setUserreact('angry');
-      // }
-
-      axios({
-        method: 'POST',
-        url: `${process.env.REACT_APP_SERVER_URL}/user/reactions`,
-        headers: {
-          'content-type': 'application/json',
-          'auth-token': localStorage.getItem('authtoken'),
-        },
-        data: reactionData,
-      })
-        .then(function (response) {
-          if (response) {
-            ////console.log(response);
-          } else {
-            alert('Invalid Login');
-          }
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
+    setTrackLiked(!trackLiked);
+    if (trackLiked) {
+      setTrackLikes(trackLikes - 1);
     } else {
-      const reactionData = {
-        reactusername: `${user.username}`,
-        videousername: `${cardDetails.user.username}`,
-        newreaction: videoprops,
-        oldreaction: userreact,
-        videostreamid: `${cardDetails.user.username}`,
-        videoindex: `${cardDetails.id}`,
-        videolink: `${cardDetails.link}`,
-      };
-
-      if (videoprops === userreact) {
-        if (videoprops === 'like') {
-          setLike(like - 1);
-        }
-        // else if (videoprops === 'dislike') {
-        //   setDislike(dislike - 1);
-        // } else if (videoprops === 'happy') {
-        //   setHappy(happy - 1);
-        // } else {
-        //   setAngry(angry - 1);
-        // }
-        setUserreact('');
-      } else {
-        if (videoprops === 'like') {
-          setLike(like + 1);
-          setUserreact('like');
-        }
-        // else if (videoprops === 'dislike') {
-        //   setDislike(dislike + 1);
-        //   setUserreact('dislike');
-        // } else if (videoprops === 'happy') {
-        //   setHappy(happy + 1);
-        //   setUserreact('happy');
-        // } else {
-        //   setAngry(angry + 1);
-        //   setUserreact('angry');
-        // }
-
-        if (userreact === 'like') {
-          setLike(like - 1);
-        }
-        // else if (userreact === 'dislike') {
-        //   setDislike(dislike - 1);
-        // } else if (userreact === 'happy') {
-        //   setHappy(happy - 1);
-        // } else {
-        //   setAngry(angry - 1);
-        // }
-      }
-
-      axios({
-        method: 'POST',
-        url: `${process.env.REACT_APP_SERVER_URL}/user/removeuserreaction`,
-        headers: {
-          'content-type': 'application/json',
-          'auth-token': localStorage.getItem('authtoken'),
-        },
-        data: reactionData,
-      })
-        .then(function (response) {
-          if (response) {
-            ////console.log(response);
-          } else {
-            alert('Invalid Login');
-          }
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
+      setTrackLikes(trackLikes + 1);
     }
+    // if (trackLikes.includes(user.username)) {
+    //   let newArr = trackLikes.filter((item, index) => item != user.username);
+    //   setTrackLikes(newArr);
+    //   set
+    // } else {
+    //   let temp = trackLikes;
+    //   temp.push(user.username);
+    //   setTrackLikes(temp);
+    //   console.log(trackLikes, 'in else');
+    // }
+
+    const likeData = {
+      reactusername: `${user.username}`,
+      trackusername: `${cardDetails.user.username}`,
+      trackId: `${contentData.trackId}`,
+    };
+    axios({
+      method: 'POST',
+      url: `${process.env.REACT_APP_SERVER_URL}/user/trackreactions`,
+      headers: {
+        'content-type': 'application/json',
+        'auth-token': localStorage.getItem('authtoken'),
+      },
+      data: likeData,
+    })
+      .then(function (response) {
+        if (response) {
+          ////console.log(response);
+        } else {
+          console.log('error');
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   };
+
+  const handlePostLikes = () => {
+    if (!user) {
+      loadWeb3Modal();
+      return;
+    }
+
+    setPostLiked(!postLiked);
+    if (postLiked) {
+      setPostLikes(postLikes - 1);
+    } else {
+      setPostLikes(postLikes + 1);
+    }
+    // if (trackLikes.includes(user.username)) {
+    //   let newArr = trackLikes.filter((item, index) => item != user.username);
+    //   setTrackLikes(newArr);
+    //   set
+    // } else {
+    //   let temp = trackLikes;
+    //   temp.push(user.username);
+    //   setTrackLikes(temp);
+    //   console.log(trackLikes, 'in else');
+    // }
+
+    const likeData = {
+      reactusername: `${user.username}`,
+      postusername: `${cardDetails.user.username}`,
+      postId: `${contentData.tokenId}`,
+    };
+    axios({
+      method: 'POST',
+      url: `${process.env.REACT_APP_SERVER_URL}/user/postreactions`,
+      headers: {
+        'content-type': 'application/json',
+        'auth-token': localStorage.getItem('authtoken'),
+      },
+      data: likeData,
+    })
+      .then(function (response) {
+        if (response) {
+          ////console.log(response);
+        } else {
+          console.log('error');
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+  const handleVideoLikes = () => {
+    if (!user) {
+      loadWeb3Modal();
+      return;
+    }
+
+    setVideoLiked(!videoLiked);
+    if (videoLiked) {
+      setVideoLikes(videoLikes - 1);
+    } else {
+      setVideoLikes(videoLikes + 1);
+    }
+
+    const likeData = {
+      reactusername: `${user.username}`,
+      videousername: `${cardDetails.user.username}`,
+      videoId: `${contentData.videoId}`,
+    };
+    axios({
+      method: 'POST',
+      url: `${process.env.REACT_APP_SERVER_URL}/user/videoreactions`,
+      headers: {
+        'content-type': 'application/json',
+        'auth-token': localStorage.getItem('authtoken'),
+      },
+      data: likeData,
+    })
+      .then(function (response) {
+        if (response) {
+          ////console.log(response);
+        } else {
+          console.log('error');
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+  // const handlereaction = (videoprops) => {
+  //   if (!user) {
+  //     loadWeb3Modal();
+  //     return;
+  //   }
+  //   if (userreact === '') {
+  //     const reactionData = {
+  //       reactusername: `${user.username}`,
+  //       videousername: `${cardDetails.user.username}`,
+  //       reaction: videoprops,
+  //       videostreamid: `${cardDetails.user.username}`,
+  //       videoindex: `${cardDetails.id}`,
+  //       videolink: `${cardDetails.link}`,
+  //     };
+
+  //     if (videoprops === 'like') {
+  //       setLike(like + 1);
+  //       setUserreact('like');
+  //     }
+  //     // else if (videoprops === 'dislike') {
+  //     //   setDislike(dislike + 1);
+  //     //   setUserreact('dislike');
+  //     // } else if (videoprops === 'happy') {
+  //     //   setHappy(happy + 1);
+  //     //   setUserreact('happy');
+  //     // } else {
+  //     //   setAngry(angry + 1);
+  //     //   setUserreact('angry');
+  //     // }
+
+  //     axios({
+  //       method: 'POST',
+  //       url: `${process.env.REACT_APP_SERVER_URL}/user/reactions`,
+  //       headers: {
+  //         'content-type': 'application/json',
+  //         'auth-token': localStorage.getItem('authtoken'),
+  //       },
+  //       data: reactionData,
+  //     })
+  //       .then(function (response) {
+  //         if (response) {
+  //           ////console.log(response);
+  //         } else {
+  //           alert('Invalid Login');
+  //         }
+  //       })
+  //       .catch(function (error) {
+  //         console.log(error);
+  //       });
+  //   } else {
+  //     const reactionData = {
+  //       reactusername: `${user.username}`,
+  //       videousername: `${cardDetails.user.username}`,
+  //       newreaction: videoprops,
+  //       oldreaction: userreact,
+  //       videostreamid: `${cardDetails.user.username}`,
+  //       videoindex: `${cardDetails.id}`,
+  //       videolink: `${cardDetails.link}`,
+  //     };
+
+  //     if (videoprops === userreact) {
+  //       if (videoprops === 'like') {
+  //         setLike(like - 1);
+  //       }
+  //       // else if (videoprops === 'dislike') {
+  //       //   setDislike(dislike - 1);
+  //       // } else if (videoprops === 'happy') {
+  //       //   setHappy(happy - 1);
+  //       // } else {
+  //       //   setAngry(angry - 1);
+  //       // }
+  //       setUserreact('');
+  //     } else {
+  //       if (videoprops === 'like') {
+  //         setLike(like + 1);
+  //         setUserreact('like');
+  //       }
+  //       // else if (videoprops === 'dislike') {
+  //       //   setDislike(dislike + 1);
+  //       //   setUserreact('dislike');
+  //       // } else if (videoprops === 'happy') {
+  //       //   setHappy(happy + 1);
+  //       //   setUserreact('happy');
+  //       // } else {
+  //       //   setAngry(angry + 1);
+  //       //   setUserreact('angry');
+  //       // }
+
+  //       if (userreact === 'like') {
+  //         setLike(like - 1);
+  //       }
+  //       // else if (userreact === 'dislike') {
+  //       //   setDislike(dislike - 1);
+  //       // } else if (userreact === 'happy') {
+  //       //   setHappy(happy - 1);
+  //       // } else {
+  //       //   setAngry(angry - 1);
+  //       // }
+  //     }
+
+  //     axios({
+  //       method: 'POST',
+  //       url: `${process.env.REACT_APP_SERVER_URL}/user/removeuserreaction`,
+  //       headers: {
+  //         'content-type': 'application/json',
+  //         'auth-token': localStorage.getItem('authtoken'),
+  //       },
+  //       data: reactionData,
+  //     })
+  //       .then(function (response) {
+  //         if (response) {
+  //           ////console.log(response);
+  //         } else {
+  //           alert('Invalid Login');
+  //         }
+  //       })
+  //       .catch(function (error) {
+  //         console.log(error);
+  //       });
+  //   }
+  // };
   // const handleReport = () => {
   //   if (user) {
   //     // Code For Report
@@ -1206,21 +1374,28 @@ const NFTCard = ({ nft, buyNft, address }) => {
                 <div className="flex justify-around border-t border-opacity-20 mx-2">
                   <div className="flex text-white  items-center justify-center text-sm font-medium  text-center px-4  py-3">
                     <p
-                      onClick={handlereaction}
+                      onClick={handleVideoLikes}
                       className="w-full mt-2 text-center cursor-pointer opacity-50 hover:opacity-100"
                     >
-                      <i
-                        className={
-                          userreact === 'like'
-                            ? `fas fa-heart mr-2 text-red-700 animate-pulse`
-                            : `fas fa-heart mr-2`
-                        }
-                      ></i>
-                      {contentData.reaction ? (
-                        <span className="text-dbeats-light font-extrabold	">
-                          {contentData.reaction.like.length} Like
-                        </span>
-                      ) : null}
+                      {videoLikes > 0 ? (
+                        <>
+                          <i
+                            className={
+                              videoLiked
+                                ? `fas fa-heart mr-2 text-red-600 animate-pulse`
+                                : `fas fa-heart mr-2`
+                            }
+                          ></i>
+                          <span className="text-dbeats-light font-extrabold	">
+                            {videoLikes} Likes
+                          </span>
+                        </>
+                      ) : (
+                        <>
+                          <i className={`fas fa-heart mr-2`}></i>
+                          <span className="text-dbeats-light font-extrabold	">0 Likes</span>
+                        </>
+                      )}
                     </p>
                   </div>
                   {commentDisabled ? (
@@ -1817,21 +1992,28 @@ const NFTCard = ({ nft, buyNft, address }) => {
                 <div className="flex justify-around border-t border-opacity-20 mx-2">
                   <div className="flex text-white  items-center justify-center text-sm font-medium  text-center px-4  py-3">
                     <p
-                      onClick={handlereaction}
+                      onClick={handlePostLikes}
                       className="w-full mt-2 text-center cursor-pointer opacity-50 hover:opacity-100"
                     >
-                      <i
-                        className={
-                          userreact === 'like'
-                            ? `fas fa-heart mr-2 text-red-700 animate-pulse`
-                            : `fas fa-heart mr-2`
-                        }
-                      ></i>
-                      {contentData.reaction ? (
-                        <span className="text-dbeats-light font-extrabold	">
-                          {contentData.reaction.like.length} Like
-                        </span>
-                      ) : null}
+                      {postLikes > 0 ? (
+                        <>
+                          <i
+                            className={
+                              postLiked
+                                ? `fas fa-heart mr-2 text-red-600 animate-pulse`
+                                : `fas fa-heart mr-2`
+                            }
+                          ></i>
+                          <span className="text-dbeats-light font-extrabold	">
+                            {postLikes} Likes
+                          </span>
+                        </>
+                      ) : (
+                        <>
+                          <i className={`fas fa-heart mr-2`}></i>
+                          <span className="text-dbeats-light font-extrabold	">0 Likes</span>
+                        </>
+                      )}
                     </p>
                   </div>
                   {commentDisabled ? (
@@ -2443,21 +2625,28 @@ const NFTCard = ({ nft, buyNft, address }) => {
                 <div className="flex justify-around border-t border-opacity-20 mx-2">
                   <div className="flex text-white  items-center justify-center text-sm font-medium  text-center px-4  py-3">
                     <p
-                      onClick={handlereaction}
+                      onClick={handleTrackLikes}
                       className="w-full mt-2 text-center cursor-pointer opacity-50 hover:opacity-100"
                     >
-                      <i
-                        className={
-                          userreact === 'like'
-                            ? `fas fa-heart mr-2 text-red-700 animate-pulse`
-                            : `fas fa-heart mr-2`
-                        }
-                      ></i>
-                      {contentData.reaction ? (
-                        <span className="text-dbeats-light font-extrabold	">
-                          {contentData.reaction.like.length} Like
-                        </span>
-                      ) : null}
+                      {trackLikes > 0 ? (
+                        <>
+                          <i
+                            className={
+                              trackLiked
+                                ? `fas fa-heart mr-2 text-red-600 animate-pulse`
+                                : `fas fa-heart mr-2`
+                            }
+                          ></i>
+                          <span className="text-dbeats-light font-extrabold	">
+                            {trackLikes} Likes
+                          </span>
+                        </>
+                      ) : (
+                        <>
+                          <i className={`fas fa-heart mr-2`}></i>
+                          <span className="text-dbeats-light font-extrabold	">0 Likes</span>
+                        </>
+                      )}
                     </p>
                   </div>
                   {commentDisabled ? (
