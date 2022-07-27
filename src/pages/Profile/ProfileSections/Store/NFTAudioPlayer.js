@@ -104,17 +104,17 @@ const NFTAudioPlayer = ({ track, cardDetails, user, trackId }) => {
   };
 
   return (
-    <div className="w-full h-max -ml-1 md:-ml-2">
+    <div className="w-full h-max ">
       <div className="flex flex-col w-full ">
         <div className="flex justify-center items-center mb-4 ">
           {/* current time */}
           <div className="text-xs md:text-sm">{calculateTime(currentTime)}</div>
 
           {/* progress bar */}
-          <div className="md:block hidden">
+          <div className="md:contents hidden z-0">
             <input
               type="range"
-              className={`${styles.progressBar} mx-2`}
+              className={`${styles.progressBar} mx-2 z-0`}
               defaultValue="0"
               ref={progressBar}
               onChange={changeRange}

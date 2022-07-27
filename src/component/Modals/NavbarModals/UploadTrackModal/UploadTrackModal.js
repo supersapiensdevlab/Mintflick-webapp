@@ -648,6 +648,8 @@ const UploadTrackModal = (props) => {
       right: 'auto',
       bottom: 'auto',
       marginRight: '-50%',
+      height: '80vh',
+
       transform: 'translate(-50%, -50%)',
       background: '#181818',
     },
@@ -665,9 +667,9 @@ const UploadTrackModal = (props) => {
       <div
         className={`${
           darkMode && 'dark'
-        } font-proxima-reg z-100  transition duration-1000 ease-in-out mx-auto p-5 lg:p-2 2xl:p-5`}
+        } font-proxima-reg z-100  transition duration-1000 ease-in-out  px-5 py-5 lg:px-3 lg:py-3 2xl:px-5 2xl:py-5 h-max max-w-5xl mx-auto`}
       >
-        <h2 className="grid grid-cols-5 justify-items-center 2xl:text-2xl text-lg 2xl:py-4 py-4 lg:py-2 dark:bg-dbeats-dark-secondary bg-white dark:text-white">
+        <h2 className="grid grid-cols-5 justify-items-center 2xl:text-2xl text-lg 2xl:py-3 py-3 lg:py-2 dark:bg-dbeats-dark-secondary bg-white dark:text-white">
           <div className="col-span-4 pl-14">Upload Track</div>
           <div
             onClick={props.handleCloseTrackUpload}
@@ -683,8 +685,8 @@ const UploadTrackModal = (props) => {
         </h2>
 
         <form method="POST" encType="multipart/formdata">
-          <div className=" bg-white text-gray-500  dark:bg-dbeats-dark-secondary dark:text-gray-100   shadow-sm rounded-lg  2xl:px-5 2xl:py-5 lg:py-2 lg:px-2 px-2 py-1 mb-5 lg:mb-0 2xl:mb-5 lg:max-h-full  max-h-96  overflow-y-auto overflow-hidden">
-            <div className="md:grid md:grid-cols-3 md:gap-6  mt-5 lg:mt-0 2xl:mt-5 ">
+          <div className=" bg-white text-gray-500  dark:bg-dbeats-dark-secondary dark:text-gray-100   shadow-sm rounded-lg  2xl:px-5 2xl:py-2 lg:py-2 lg:px-2 px-2 py-1 mb-5 lg:mb-0 2xl:mb-5 lg:max-h-full  max-h-96  overflow-y-auto overflow-hidden">
+            <div className="md:grid md:grid-cols-3 md:gap-6  mt-3 lg:mt-0 2xl:mt-3 ">
               <div className="md:col-span-1  ">
                 <div className="lg:mt-0 2xl:mt-5 mt-0 md:col-span-2 2xl:p-5 lg:p-3 p-2  ">
                   <label className="block 2xl:text-sm text-sm lg:text-xs font-medium text-gray-700"></label>

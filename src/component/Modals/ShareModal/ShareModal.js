@@ -87,7 +87,7 @@ export const ShareModal = ({
                     </EmailShareButton>
                   </div>
                   <div className="px-1 py-1">
-                    <PinterestShareButton url={sharable_data}>
+                    <PinterestShareButton url={sharable_data} media={'https://pbs.twimg.com/profile_images/1546571496050798592/bJ_opOhj_400x400.jpg'}>
                       <PinterestIcon
                         iconFillColor="white"
                         size={window.innerWidth >= '1536' ? 60 : 50}
