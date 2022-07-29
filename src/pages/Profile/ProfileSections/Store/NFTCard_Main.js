@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Image } from 'react-img-placeholder';
 import maticLogo from '../../../../assets/graphics/polygon-matic-logo.svg';
-import dbeatsLogoBnW from '../../../../assets/images/Logo/logo-blacknwhite.png';
+import dbeatsLogoBnW from '../../../../assets/images/placeholder-logo.svg';
 
 const NFTCard = ({ nft, buyNft }) => {
   //console.log(nft);

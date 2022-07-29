@@ -4,7 +4,7 @@ import { Image } from 'react-img-placeholder';
 import ReactPlayer from 'react-player';
 import { Link } from 'react-router-dom';
 import maticLogo from '../../../assets/graphics/polygon-matic-logo.svg';
-import dbeatsLogoBnW from '../../../assets/images/Logo/logo-blacknwhite.png';
+import dbeatsLogoBnW from '../../../assets/images/placeholder-logo.svg';
 import person from '../../../assets/images/profile.svg';
 import { ReactComponent as Verified } from '../../../assets/icons/verified-account.svg';
 

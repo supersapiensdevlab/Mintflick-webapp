@@ -19,7 +19,7 @@ import CarouselCard from '../../Cards/CarouselCard';
 import PlaylistCard from '../../Cards/PlaylistCard';
 import ReactionCard from '../../Cards/ReactionCard';
 import TrackCard from '../../Cards/TrackCard';
-import dbeatsLogoBnW from '../../../../assets/images/Logo/logo-blacknwhite.png';
+import dbeatsLogoBnW from '../../../../assets/images/placeholder-logo.svg';
 import { Image } from 'react-img-placeholder';
 import SuperfanModal from '../../../../component/Modals/SuperfanModal/superfan-modal';
 import Modal from 'react-modal';

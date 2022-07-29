@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Image } from 'react-img-placeholder';
 import maticLogo from '../../../../assets/graphics/polygon-matic-logo.svg';
-import dbeatsLogoBnW from '../../../../assets/images/Logo/logo-blacknwhite.png';
+import dbeatsLogoBnW from '../../../../assets/images/placeholder-logo.svg';
 import axios from 'axios';
 
 import moment from 'moment';

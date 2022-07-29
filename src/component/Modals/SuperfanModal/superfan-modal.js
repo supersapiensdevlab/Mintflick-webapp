@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import Modal from 'react-modal';
 import { useSelector } from 'react-redux';
 
-import dbeatsLogoBnW from '../../../assets/images/Logo/logo-blacknwhite.png';
+import dbeatsLogoBnW from '../../../assets/images/placeholder-logo.svg';
 
 import maticLogo from '../../../assets/graphics/polygon-matic-logo.svg';
 

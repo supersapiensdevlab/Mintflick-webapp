@@ -1,13 +1,11 @@
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
-import { Image } from 'react-img-placeholder';
 import ReactPlayer from 'react-player/lazy';
 import { Link } from 'react-router-dom';
 import { Container, Row } from 'react-bootstrap';
 import Modal from 'react-modal';
 import maticLogo from '../../../assets/graphics/polygon-matic-logo.svg';
 import { useDispatch, useSelector } from 'react-redux';
-import dbeatsLogoBnW from '../../../assets/images/Logo/logo-blacknwhite.png';
 import person from '../../../assets/images/profile.svg';
 import axios from 'axios';
 import BidModal from '../../../component/Modals/BidModal/BidModal';

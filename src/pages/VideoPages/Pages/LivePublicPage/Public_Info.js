@@ -12,7 +12,7 @@ import Modal from 'react-modal';
 import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-import person from '../../../../assets/images/profile.svg';
+import person from '../../../../assets/images/placeholder-logo.svg';
 // import superfluid from '../../../../assets/images/superfluid-black.svg';
 import { ShareModal } from '../../../../component/Modals/ShareModal/ShareModal';
 import SuperfanModal from '../../../../component/Modals/SuperfanModal/superfan-modal';

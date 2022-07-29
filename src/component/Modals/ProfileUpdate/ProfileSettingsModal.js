@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useState } from 'react';
 import Modal from 'react-modal';
 import { Image } from 'react-img-placeholder';
-import dbeatsLogoBnW from '../../../assets/images/Logo/logo-blacknwhite.png';
+import dbeatsLogoBnW from '../../../assets/images/placeholder-logo.svg';
 import maticLogo from '../../../assets/graphics/polygon-matic-logo.svg';
 import { useEffect } from 'react';
 import { Container, Row } from 'react-bootstrap';

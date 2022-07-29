@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import personImg from '../../assets/images/profile.svg';
+import personImg from '../../assets/images/placeholder-logo.svg';
 import useWeb3Modal from '../../hooks/useWeb3Modal';
 import { useHistory } from 'react-router-dom';
 import { setMaxVisible } from 'noty';

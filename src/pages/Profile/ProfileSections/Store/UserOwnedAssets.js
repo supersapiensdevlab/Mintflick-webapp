@@ -6,7 +6,7 @@ import Web3Modal from 'web3modal';
 import Market from '../../../../artifacts/contracts/Market.sol/NFTMarket.json';
 import NFT from '../../../../artifacts/contracts/NFT.sol/NFT.json';
 import maticLogo from '../../../../assets/graphics/polygon-matic-logo.svg';
-import dbeatsLogoBnW from '../../../../assets/images/Logo/logo-blacknwhite.png';
+import dbeatsLogoBnW from '../../../../assets/images/placeholder-logo.svg';
 import { nftaddress, nftmarketaddress } from '../../../../functions/config';
 import Web3 from 'web3';
 import { useSelector } from 'react-redux';
