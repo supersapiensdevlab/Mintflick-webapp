@@ -308,20 +308,23 @@ const PublicInfo = (props) => {
       {user ? (
         <div className="">
           <div
-            className={`${
-              darkMode && 'dark'
-            }  grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-3 grid-flow-row   pb-50  lg:ml-12  relative  h-full `}
+            className={`${darkMode && 'dark'
+              }  grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-3 grid-flow-row   pb-50  lg:ml-12  relative  h-full `}
           >
             <div className="col-span-1 md:col-span-2 pt-3 2xl:mt-16 xl:mt-10 lg:mt-10 mt-14 sticky  top-14   z-10 lg:z-auto   ">
               <div>
-                {userData ? (
+                {userData ? (userData.thumbnail && !userData.livepeer_data.isActive && new Date(userData.streamSchedule) > new Date()  ? (<>
+                  <img className='max-h-120 self-center lg:px-8 w-screen lg:w-full lg:mt-3   mt-0.5'
+                  src={userData.thumbnail}
+                  />
+                </>) : (
                   <VideoPlayer
                     className="self-center lg:px-8 w-screen lg:w-full lg:mt-3   mt-0.5"
                     playbackUrl={playbackUrl}
                     creatorData={userData}
                     footer={true}
                   />
-                ) : null}
+                )) : null}
               </div>
 
               <div className="2xl:ml-7 sm:p-2 p-3  bg-dbeats-dark-alt shadow   md:px-6">
@@ -338,7 +341,13 @@ const PublicInfo = (props) => {
                   ) : null} */}
                     </div>
                     <>
-                      <h1 className="text-white mr-1 md:text-2xl ml-5 text-sm tracking-wider">
+                      {userData && new Date(userData.streamSchedule) > new Date() && !userData.livepeer_data.isActive ?
+                        <span className="text-dbeats-light border px-5 py-3 border-dbeats-light rounded  mr-1 md:text-lg ml-5 text-sm tracking-wider">
+                          <i className="fa-solid text-red-500 fa-circle text-sm mr-2"></i>Stream Starting on {moment(userData.streamSchedule, "YYYY-MM-DDThh:mm").format('MMMM Do YYYY, h:mm a')}
+                        </span> : null}
+                    </>
+                    <>
+                      <h1 className="text-white mt-3 mr-1 md:text-2xl ml-5 text-sm tracking-wider">
                         {userData && userData.streamDetails ? userData.streamDetails.name : null}
                       </h1>
                     </>
@@ -401,9 +410,8 @@ const PublicInfo = (props) => {
                                 }
                               >
                                 <span
-                                  className={`${
-                                    userData.superfan_data ? '' : 'hidden'
-                                  } whitespace-nowrap flex`}
+                                  className={`${userData.superfan_data ? '' : 'hidden'
+                                    } whitespace-nowrap flex`}
                                 >
                                   🥳 Become a Superfan
                                 </span>

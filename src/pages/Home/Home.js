@@ -72,7 +72,7 @@ const Home = () => {
   ];
   const [selectedCategory, setSelectedCategory] = useState(category[0]);
 
-  const filter = ['All', 'Music', 'Gaming', 'Movies', 'Videos', 'NFT'];
+  const filter = ['All', 'Music','Videos', 'Posts'];
   const [selectedFilter, setSelectedFilter] = useState(filter[0]);
 
   const [showNewPost, setShowNewPost] = useState(false);
@@ -378,7 +378,7 @@ const Home = () => {
                               : ''
                           }  text-black dark:text-white  flex p-1 rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-secondary`}
                         >
-                          <p className="self-center mx-2 sm:font-normal text-xs">NFT</p>
+                          <p className="self-center mx-2 sm:font-normal text-xs">Posts</p>
                         </span>
                       </button>
                     </div>
@@ -420,7 +420,7 @@ const Home = () => {
                         </div>
                       );
                     })} */}
-                    <NFTStore></NFTStore>
+                    <NFTStore selectedFilter={selectedFilter}></NFTStore>
                     {/* {Trending.trending &&
                       Trending.trending.map((playbackUser, i) => {
                         return (

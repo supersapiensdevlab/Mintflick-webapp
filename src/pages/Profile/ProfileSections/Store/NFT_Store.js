@@ -350,7 +350,7 @@ export default function NFTStore(props) {
                       key={nft.tokenId}
                       className={`  self-center  col-span-1   rounded-lg sm:mx-2  transition-all duration-300 `}
                     >
-                      <NFTCard nft={nft} buyNft={buyNft} />
+                      <NFTCard selectedFilter={props.selectedFilter} nft={nft} buyNft={buyNft} />
                       {/* <NFTMarket nft={nft}></NFTMarket> */}
                     </div>
                   );
@@ -360,7 +360,7 @@ export default function NFTStore(props) {
                       key={nft.tokenId}
                       className={`  self-center  col-span-1   rounded-lg sm:mx-2  transition-all duration-300 `}
                     >
-                      <NFTCard nft={nft} buyNft={buyNft} address={props.address} />
+                      <NFTCard selectedFilter={props.selectedFilter}  nft={nft} buyNft={buyNft} address={props.address} />
                       {console.log('MY NFT LENGTH:')}
                       {/* <NFTMarket nft={nft}></NFTMarket> */}
                     </div>
