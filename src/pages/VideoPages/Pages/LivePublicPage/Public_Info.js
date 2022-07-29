@@ -9,7 +9,6 @@ import { Container, Row } from 'react-bootstrap';
 import Modal from 'react-modal';
 // import Modal from 'react-awesome-modal';
 // import { Container, Row } from 'react-bootstrap';
-// import Lottie from 'react-lottie';
 import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { Link } from 'react-router-dom';
@@ -28,7 +27,6 @@ import LiveChat from './LiveChat';
 import { io } from 'socket.io-client';
 import { RadioGroup } from '@headlessui/react';
 import useWeb3Modal from '../../../../hooks/useWeb3Modal';
-
 
 const PublicInfo = (props) => {
   // const socket = io('http://localhost:800');
@@ -310,8 +308,9 @@ const PublicInfo = (props) => {
       {user ? (
         <div className="">
           <div
-            className={`${darkMode && 'dark'
-              }  grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-3 grid-flow-row   pb-50  lg:ml-12  relative  h-full `}
+            className={`${
+              darkMode && 'dark'
+            }  grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-3 grid-flow-row   pb-50  lg:ml-12  relative  h-full `}
           >
             <div className="col-span-1 md:col-span-2 pt-3 2xl:mt-16 xl:mt-10 lg:mt-10 mt-14 sticky  top-14   z-10 lg:z-auto   ">
               <div>
@@ -402,8 +401,9 @@ const PublicInfo = (props) => {
                                 }
                               >
                                 <span
-                                  className={`${userData.superfan_data ? '' : 'hidden'
-                                    } whitespace-nowrap flex`}
+                                  className={`${
+                                    userData.superfan_data ? '' : 'hidden'
+                                  } whitespace-nowrap flex`}
                                 >
                                   🥳 Become a Superfan
                                 </span>
@@ -436,28 +436,46 @@ const PublicInfo = (props) => {
                         </p>
                       </>
                     </div> */}
-                    {userData && userData.streamDetails && !readMore
-
-                      ?
-                      <div className='mt-2 ml-1 text-lg text-white p-2' >
+                    {userData && userData.streamDetails && !readMore ? (
+                      <div className="mt-2 ml-1 text-lg text-white p-2">
                         <p>
-                          {userData.streamDetails.description.length > 100 ? <>{userData.streamDetails.description.substring(0, 100)} <span className='text-dbeats-light cursor-pointer' onClick={() => setReadMore(true)}>...Read More</span></> : userData.streamDetails.description}
+                          {userData.streamDetails.description.length > 100 ? (
+                            <>
+                              {userData.streamDetails.description.substring(0, 100)}{' '}
+                              <span
+                                className="text-dbeats-light cursor-pointer"
+                                onClick={() => setReadMore(true)}
+                              >
+                                ...Read More
+                              </span>
+                            </>
+                          ) : (
+                            userData.streamDetails.description
+                          )}
                         </p>
                       </div>
-                      : null}
+                    ) : null}
 
-                    {userData && userData.streamDetails && readMore
-
-                      ?
-                      <div className='mt-2 ml-1 text-lg text-white p-2' >
+                    {userData && userData.streamDetails && readMore ? (
+                      <div className="mt-2 ml-1 text-lg text-white p-2">
                         <p>
-                          {userData.streamDetails.description.length > 100 ? <>{userData.streamDetails.description} <span className='text-dbeats-light cursor-pointer' onClick={() => setReadMore(false)}>  Show Less</span></> : userData.streamDetails.description}
+                          {userData.streamDetails.description.length > 100 ? (
+                            <>
+                              {userData.streamDetails.description}{' '}
+                              <span
+                                className="text-dbeats-light cursor-pointer"
+                                onClick={() => setReadMore(false)}
+                              >
+                                {' '}
+                                Show Less
+                              </span>
+                            </>
+                          ) : (
+                            userData.streamDetails.description
+                          )}
                         </p>
                       </div>
-                      : null}
-
-
-
+                    ) : null}
                   </div>
                   <div className="2xl:text-2xl lg:text-md text-xs 2xl:py-4 lg:py-2 py-2 flex justify-around dark:text-dbeats-white   ">
                     <p className={`text-white md:text-lg text-xs text-center pr-2 flex flex-col`}>
@@ -510,18 +528,23 @@ const PublicInfo = (props) => {
                     </Menu>
                   </div>
                 </div>
-                <div className='grid grid-cols-2 gap-4 grid-flow-row mt-4  '>
+                <div className="grid grid-cols-2 gap-4 grid-flow-row mt-4  ">
                   {console.log(userData.streamLinks)}
-                  {userData.streamLinks ? userData.streamLinks.map((link, index) => {
-                    return (
-                      <div key={index} className='h-full w-full p-2 rounded'>
-                        <a href={link.url} target="_blank" rel="noopener noreferrer"><img className='  h-full w-full rounded' src={link.image} /></a>
-                      </div>
-                    )
-                  }) : <></>}
+                  {userData.streamLinks ? (
+                    userData.streamLinks.map((link, index) => {
+                      return (
+                        <div key={index} className="h-full w-full p-2 rounded">
+                          <a href={link.url} target="_blank" rel="noopener noreferrer">
+                            <img className="  h-full w-full rounded" src={link.image} />
+                          </a>
+                        </div>
+                      );
+                    })
+                  ) : (
+                    <></>
+                  )}
                 </div>
               </div>
-
             </div>
             <div className="  w-full col-span-1   ">
               {userData.username && <LiveChat userp={userData} privateUser={user}></LiveChat>}

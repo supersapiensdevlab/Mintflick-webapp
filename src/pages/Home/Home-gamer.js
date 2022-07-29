@@ -1,7 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import Carousel from 'react-grid-carousel';
-import Lottie from 'react-lottie';
 import { useSelector } from 'react-redux';
 // import {Helmet} from "react-helmet";
 import { Link } from 'react-router-dom';

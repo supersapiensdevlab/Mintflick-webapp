@@ -2,7 +2,6 @@ import { Splide, SplideSlide } from '@splidejs/react-splide';
 import '@splidejs/splide/dist/css/themes/splide-skyblue.min.css';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import Lottie from 'react-lottie';
 import Modal from 'react-modal';
 import { useDispatch, useSelector } from 'react-redux';
 import Billboard from '../../component/Billboard/Billboard-Card';

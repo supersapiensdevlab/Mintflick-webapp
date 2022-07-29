@@ -91,7 +91,7 @@ const Dropdown = ({ data, setSelected, getSelected }) => {
           <div className="  relative p-0.5  nm-flat-dbeats-dark-secondary-sm rounded-md w-max">
             <Listbox.Button className="relative w-full text-black dark:text-white   bg-dbeats-dark-primary  hover:nm-inset-dbeats-dark-primary-lg cursor-pointer rounded-md  shadow-sm pl-3 pr-10 py-2 text-left   focus:outline-none focus:ring-0 focus:ring-dbeats-light focus:border-dbearing-dbeats-light sm:text-sm lg:text-xs 2xl:text-sm">
               <span className="flex items-center">
-                <span className="ml-2 sm:ml-3 block truncate">{selectedItem}</span>
+                <span className="ml-2 sm:ml-3 block ">{selectedItem}</span>
               </span>
               <span className="ml-2 sm:ml-3 absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
                 <SelectorIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
@@ -123,7 +123,7 @@ const Dropdown = ({ data, setSelected, getSelected }) => {
                           <span
                             className={classNames(
                               selected ? 'font-semibold' : 'font-normal',
-                              'ml-3 block truncate',
+                              'ml-3 block ',
                             )}
                           >
                             {value}

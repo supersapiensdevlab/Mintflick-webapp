@@ -5,7 +5,6 @@ import { Redirect } from 'react-router-dom';
 import { IntroModal } from './component/Modals/IntroModal/IntroModal';
 import { useDispatch, useSelector } from 'react-redux';
 import { clearProvider, createProvider } from './actions/web3Actions';
-import Tour from 'reactour';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import '../node_modules/noty/lib/noty.css';
 import '../node_modules/noty/lib/themes/metroui.css';
@@ -102,39 +101,39 @@ export default function App() {
   const [latestTrack, setLatestTrack] = useState([]);
   const [latestUploads, setLatestUploads] = useState(null);
 
-  let tour = JSON.parse(window.localStorage.getItem('tour'))
-    ? JSON.parse(window.localStorage.getItem('tour'))
-    : 'show';
-  const [showTour, setShowTour] = useState(true);
-  const handleTourShow = () => setShowTour(true);
+  // let tour = JSON.parse(window.localStorage.getItem('tour'))
+  //   ? JSON.parse(window.localStorage.getItem('tour'))
+  //   : 'show';
+  // const [showTour, setShowTour] = useState(true);
+  // const handleTourShow = () => setShowTour(true);
 
-  const handleTourClose = () => {
-    setShowTour(false);
-    window.localStorage.setItem('tour', JSON.stringify('hide'));
-  };
+  // const handleTourClose = () => {
+  //   setShowTour(false);
+  //   window.localStorage.setItem('tour', JSON.stringify('hide'));
+  // };
 
-  const steps = [
-    {
-      selector: '.first-step',
-      content: 'Here are some top content creators to follow 🥳',
-    },
-    {
-      selector: '.second-step',
-      content: 'Pin your favorite creators 📌',
-    },
-    {
-      selector: '.third-step',
-      content: 'Check out some trending nft content 🔥',
-    },
-    {
-      selector: '.fourth-step',
-      content: 'Create your first post ✍🏻',
-    },
-    {
-      selector: '.fifth-step',
-      content: 'Stream live to the world 🕺🏽',
-    },
-  ];
+  // const steps = [
+  //   {
+  //     selector: '.first-step',
+  //     content: 'Here are some top content creators to follow 🥳',
+  //   },
+  //   {
+  //     selector: '.second-step',
+  //     content: 'Pin your favorite creators 📌',
+  //   },
+  //   {
+  //     selector: '.third-step',
+  //     content: 'Check out some trending nft content 🔥',
+  //   },
+  //   {
+  //     selector: '.fourth-step',
+  //     content: 'Create your first post ✍🏻',
+  //   },
+  //   {
+  //     selector: '.fifth-step',
+  //     content: 'Stream live to the world 🕺🏽',
+  //   },
+  // ];
 
   const fetchData = async () => {
     const fileRes = await axios.get(`${process.env.REACT_APP_SERVER_URL}/user`);

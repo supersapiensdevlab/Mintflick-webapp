@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import Lottie from 'react-lottie';
+import Lottie from 'lottie-react';
 import './PageNotFound.css';
 
 import animationData from '../../lotties/error-animation.json';
