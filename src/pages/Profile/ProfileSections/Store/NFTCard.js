@@ -32,7 +32,7 @@ import { template } from 'lodash';
 import NFTAudioPlayer from './NFTAudioPlayer';
 import { id } from 'date-fns/locale';
 
-const NFTCard = ({ nft, buyNft, address }) => {
+const NFTCard = ({ nft, buyNft, address,selectedFilter }) => {
   //console.log(nft);
   const user = useSelector((state) => state.User.user);
   const [commentsNumber, setCommentsNumber] = useState(0);
@@ -793,7 +793,7 @@ const NFTCard = ({ nft, buyNft, address }) => {
 
   return (
     <>
-      {type == 'video' ? (
+      {type == 'video' && (selectedFilter == 'All' || selectedFilter =='Videos' ) ? (
         <>
           {contentData && address == cardDetails.user.wallet_id ? (
             <div
@@ -1451,7 +1451,7 @@ const NFTCard = ({ nft, buyNft, address }) => {
       ) : (
         <></>
       )}
-      {type == 'image' ? (
+      {type == 'image' && (selectedFilter == 'All' || selectedFilter =='Posts' ) ? (
         <>
           {contentData && address == cardDetails.user.wallet_id ? (
             <div
@@ -2069,7 +2069,7 @@ const NFTCard = ({ nft, buyNft, address }) => {
       ) : (
         <></>
       )}
-      {type == 'track' ? (
+      {type == 'track' && (selectedFilter == 'All' || selectedFilter =='Music' ) ? (
         <>
           {contentData && address == cardDetails.user.wallet_id ? (
             <div

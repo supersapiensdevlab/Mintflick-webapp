@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { Fragment, useEffect, useState } from 'react';
-import { Spinner } from 'react-bootstrap';
+import { Container, Row, Spinner } from 'react-bootstrap';
 import Modal from 'react-modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { MultiStreamData } from '../../../../assets/Data';
@@ -23,6 +23,7 @@ import LiveChat from '../LivePublicPage/LiveChat';
 
 // import LiveChat from '../LivePublicPage/LiveChat';
 import { io } from 'socket.io-client';
+import moment from 'moment';
 
 const UserInfo = (props) => {
   const user = useSelector((state) => state.User.user);
@@ -33,11 +34,14 @@ const UserInfo = (props) => {
   const [loader, setLoader] = useState(true);
   const provider = useSelector((state) => state.web3Reducer.provider);
 
+
+
   //Modal
   const [modalShow, setModalShow] = useState(false);
   const [showStreamModal, setShowStreamModal] = useState(false);
   const [showDestinationModal, setShowDestinationModal] = useState(false);
   const [showPriceModal, setShowPriceModal] = useState(false);
+  const [scheduleStreamModal, setScheduleStreamModal] = useState(false);
 
   //MultiStreams
   const [userStreams, setUserStreams] = useState([]);
@@ -106,6 +110,12 @@ const UserInfo = (props) => {
   const [sharable_data, setsharable_data] = useState();
   const [tokenId, setTokenId] = useState(null);
   const [formData, setFormData] = useState(null);
+
+  // Schedule Date & Time
+  const [streamSchedule,setStreamSchedule] = useState(null);
+  useEffect(()=>{
+    console.log(streamSchedule)
+  },[streamSchedule])
 
   const text = 'Copy Link To Clipboard';
 
@@ -398,7 +408,7 @@ const UserInfo = (props) => {
   };
 
   useEffect(() => {
-    async function uploadVideoToDB() {}
+    async function uploadVideoToDB() { }
 
     console.log('TOKEN ID', tokenId);
     if (tokenId && mintingProgress == 66) {
@@ -561,7 +571,7 @@ const UserInfo = (props) => {
   // Thumbnail
   async function storeThumbnail(files) {
     // show the root cid as soon as it's ready
-    const onRootCidReady = (cid) => {};
+    const onRootCidReady = (cid) => { };
     const file = [files[0]];
     const totalSize = files[0].size;
     let uploaded = 0;
@@ -727,6 +737,24 @@ const UserInfo = (props) => {
     });
   };
 
+  const handleStreamSchedule = (e)=>{
+    e.preventDefault();
+    axios({
+      method: 'POST',
+      url: `${process.env.REACT_APP_SERVER_URL}/user/streamSchedule`,
+      data: {streamSchedule},
+      headers: {
+        'content-type': 'application/json',
+        'auth-token': localStorage.getItem('authtoken'),
+      },
+    }).then((res) => {
+      setScheduleStreamModal(false);
+      dispatch(loadUser());
+    }).catch((err)=>{
+      console.log(err)
+    });
+  }
+
   return user ? (
     <div className={`${darkMode && 'dark'}`}>
       <div className="grid sm:grid-cols-1 lg:grid-cols-3 grid-flow-row  pb-50  lg:ml-12  bg-gradient-to-b from-blue-50 via-blue-50 to-white  dark:bg-gradient-to-b dark:from-dbeats-dark-secondary  dark:to-dbeats-dark-primary">
@@ -738,40 +766,40 @@ const UserInfo = (props) => {
             ) : null}
             {user.livepeer_data
               ? user.livepeer_data.isActive && (
-                  <div className="dark:text-dbeats-white mt-3 ml-2">
-                    <p className="text-md">To create NFT start Recording</p>
-                    <div className="flex justify-between items-center w-full pt-2 text-white">
-                      <div className="flex w-1/2">
+                <div className="dark:text-dbeats-white mt-3 ml-2">
+                  <p className="text-md">To create NFT start Recording</p>
+                  <div className="flex justify-between items-center w-full pt-2 text-white">
+                    <div className="flex w-1/2">
+                      <button
+                        className={`text-center rounded-md w-60 
+                    ${recording ? 'bg-green-300' : 'bg-green-600'} mx-2 py-2`}
+                        disabled={recording}
+                        onClick={startRecording}
+                      >
+                        Start Recording
+                      </button>
+                      {recording ? (
                         <button
                           className={`text-center rounded-md w-60 
-                    ${recording ? 'bg-green-300' : 'bg-green-600'} mx-2 py-2`}
-                          disabled={recording}
-                          onClick={startRecording}
-                        >
-                          Start Recording
-                        </button>
-                        {recording ? (
-                          <button
-                            className={`text-center rounded-md w-60 
                     ${!recording ? 'bg-red-300' : 'bg-red-600'} mx-2 py-2`}
-                            disabled={!recording}
-                            onClick={stopRecording}
-                          >
-                            Stop Recording
-                          </button>
-                        ) : (
-                          <></>
-                        )}
-                      </div>
-                      <p className={`text-white text-lg text-center pr-2 flex flex-col`}>
-                        <span className={` text-${viewColor}  ${viewAnimate} font-bold`}>
-                          {livestreamViews}
-                        </span>
-                        viewers
-                      </p>
+                          disabled={!recording}
+                          onClick={stopRecording}
+                        >
+                          Stop Recording
+                        </button>
+                      ) : (
+                        <></>
+                      )}
                     </div>
+                    <p className={`text-white text-lg text-center pr-2 flex flex-col`}>
+                      <span className={` text-${viewColor}  ${viewAnimate} font-bold`}>
+                        {livestreamViews}
+                      </span>
+                      viewers
+                    </p>
                   </div>
-                )
+                </div>
+              )
               : null}
           </div>
         </div>
@@ -842,7 +870,7 @@ const UserInfo = (props) => {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                  {`${process.env.REACT_APP_CLIENT_URL}/live/${user.username}`}
+                    {`${process.env.REACT_APP_CLIENT_URL}/live/${user.username}`}
                   </a>
                   <i
                     onClick={() => {
@@ -876,11 +904,10 @@ const UserInfo = (props) => {
                     <button
                       disabled={uploadingFile}
                       type="submit"
-                      className={`${
-                        uploadingFile || !selectedFile
-                          ? 'dark:bg-dbeats-dark-primary hidden'
-                          : 'bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:nm-inset-dbeats-light-xs'
-                      }  px-4 py-2  rounded-3xl group flex items-center justify-center  `}
+                      className={`${uploadingFile || !selectedFile
+                        ? 'dark:bg-dbeats-dark-primary hidden'
+                        : 'bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:nm-inset-dbeats-light-xs'
+                        }  px-4 py-2  rounded-3xl group flex items-center justify-center  `}
                     >
                       <p>Upload</p>
                     </button>
@@ -932,9 +959,16 @@ const UserInfo = (props) => {
                     </button>
                   </div>
                 </form>
+                <hr />
               </div>
+
+              {/* Stream Schedule */}
+              <div className='mt-2'>
+                <button onClick={() => setScheduleStreamModal(true)} className=' text-base px-3 py-2 cursor-pointer rounded border border-dbeats-light text-dbeats-light hover:text-white hover:bg-dbeats-light'>Schedule The Stream</button>
+              </div>
+
               {/* Stream Links */}
-              <div>
+              <div className='mt-2'>
                 <div className="text-white text-base font-semibold mb-2">Banners (Max 4)</div>
                 {user.streamLinks.length < 4 && (
                   <div className="mt-3">
@@ -1001,25 +1035,25 @@ const UserInfo = (props) => {
                   <div className="flex flex-wrap mx-6">
                     {user.streamLinks
                       ? user.streamLinks.map((link, index) => {
-                          return (
-                            <div
-                              key={index}
-                              className="border border-dbeats-light rounded-md w-32 mx-6 pb-2 pt-1 my-1"
-                            >
-                              <div className="text-dbeats-light text-right">
-                                <i
-                                  onClick={() => deleteStreamLink(link)}
-                                  className="fa-solid fa-xmark text-xl pr-1 cursor-pointer"
-                                ></i>
-                              </div>
-                              <img src={link.image} className="w-full pt-2" />
-                              <div className="text-center p-1 pt-3">
-                                <div className="break-words">{link.url}</div>
-                                {/* <button><i className="text-md fa-solid mx-2 fa-trash"></i></button> */}
-                              </div>
+                        return (
+                          <div
+                            key={index}
+                            className="border border-dbeats-light rounded-md w-32 mx-6 pb-2 pt-1 my-1"
+                          >
+                            <div className="text-dbeats-light text-right">
+                              <i
+                                onClick={() => deleteStreamLink(link)}
+                                className="fa-solid fa-xmark text-xl pr-1 cursor-pointer"
+                              ></i>
                             </div>
-                          );
-                        })
+                            <img src={link.image} className="w-full pt-2" />
+                            <div className="text-center p-1 pt-3">
+                              <div className="break-words">{link.url}</div>
+                              {/* <button><i className="text-md fa-solid mx-2 fa-trash"></i></button> */}
+                            </div>
+                          </div>
+                        );
+                      })
                       : null}
                   </div>
                 </div>
@@ -1213,23 +1247,21 @@ const UserInfo = (props) => {
                       ) : null}
 
                       <div
-                        className={`${
-                          mintingProgress === 66 ? 'block' : 'hidden'
-                        } text-center flex mx-3 my-5`}
+                        className={`${mintingProgress === 66 ? 'block' : 'hidden'
+                          } text-center flex mx-3 my-5`}
                       >
                         <p className="no-underline  text-white">Wrapping Up Things &nbsp;</p>
                         <p className="no-underline  text-white"> Please Wait...</p>
                       </div>
 
                       <div
-                        className={`${
-                          minting !== null &&
+                        className={`${minting !== null &&
                           minting !== true &&
                           mintingProgress === 100 &&
                           minting !== 'token created'
-                            ? 'block'
-                            : 'hidden'
-                        } text-center flex mx-3 my-5`}
+                          ? 'block'
+                          : 'hidden'
+                          } text-center flex mx-3 my-5`}
                       >
                         <p className="no-underline  text-dbeats-light">🚀 NFT Minted &nbsp;</p>
                         <a
@@ -1320,6 +1352,39 @@ const UserInfo = (props) => {
           </div>
         </div>
       ) : null}
+
+      {/* Schedule A Stream Modal */}
+      <Modal isOpen={scheduleStreamModal} className="h-max lg:w-1/3  w-5/6  mx-auto lg:mt-56 mt-32 rounded-lg">
+        <div className={`${darkMode && 'dark'} border rounded-lg`}>
+          <Container className="2xl:px-5 px-5 lg:px-1 pb-4 dark:bg-dbeats-dark-alt rounded-lg">
+            <Row>
+              <h2 className="flex items-center justify-between w-full 2xl:text-2xl lg:text-md py-4 2xl:py-4 lg:py-2  pt-7  text-center relative  ">
+                <div className="col-span-5 text-center ml-28 text-gray-900 dark:text-gray-100 font-bold">
+                  Schedule A Stream
+                </div>
+                <div
+                  className="rounded-3xl group w-max   p-2  mx-1 mr-8 justify-center  cursor-pointer bg-gradient-to-br from-dbeats-dark-alt to-dbeats-dark-primary  nm-flat-dbeats-dark-secondary-sm   hover:nm-inset-dbeats-dark-primary          flex items-center   font-medium          transform-gpu  transition-all duration-300 ease-in-out "
+                  onClick={() => setScheduleStreamModal(false)}
+                >
+                  <span className="text-black dark:text-white  flex px-2 py-1 rounded-3xl bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:nm-inset-dbeats-dark-secondary">
+                    <i className="fas fa-times"></i>
+                  </span>
+                </div>
+              </h2>
+            </Row>
+            <div className='mx-10 mb-5'>
+              <form onSubmit={handleStreamSchedule}>
+                <label className='text-sm text-white'>Select Date & Time</label>
+                <input value={streamSchedule} onChange={(e)=> setStreamSchedule(e.target.value)} className='w-full' type={"datetime-local"} min={moment().format("YYYY-MM-DDThh:mm")} required={true} />
+                <div className='flex justify-end'>
+                  <input className='mt-5  bg-transparent text-base px-3 py-2 cursor-pointer rounded border border-dbeats-light text-dbeats-light hover:text-white hover:bg-dbeats-light' value={'Schedule'} type={"submit"} />
+                </div>
+              </form>
+            </div>
+          </Container>
+        </div>
+      </Modal>
+
 
       <Modal
         isOpen={showDestinationModal}
