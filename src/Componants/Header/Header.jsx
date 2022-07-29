@@ -17,8 +17,8 @@ function Header() {
 
   return (
     <div className="hidden lg:flex fixed z-50  top-0  px-4 lg:px-12 justify-between items-center h-20 bg-white dark:bg-slate-900 w-full shadow-mintflick	">
-      <div className="flex items-center space-x-4 h-full w-1/3">
-        {State.database.dark ? (
+      <div className="flex items-center space-x-4 h-full w-1/3 -ml-2">
+        {!State.database.dark ? (
           <Main_logo_dark></Main_logo_dark>
         ) : (
           <Main_logo></Main_logo>
@@ -65,6 +65,7 @@ function Header() {
             <li>
               <a className=" hover:dark:bg-slate-900">Settings</a>
             </li>
+
             {/* <label className="swap swap-rotate dark:text-gray-100">
               <input
                 onChange={() =>
@@ -92,6 +93,11 @@ function Header() {
             </li>
             <li>
               <a className="hover:bg-rose-500 ">Logout</a>
+            </li>
+            <li>
+              <a className="truncate hover:dark:bg-slate-900 text-emerald-600">
+                {State.database.walletAddress && "Wallet connected"}
+              </a>
             </li>
           </ul>
         </div>

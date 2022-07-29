@@ -117,3 +117,44 @@
 .text-brand9 {
   @apply text-slate-100 dark:text-slate-900;
 }
+.slideshow {
+  margin: 0 auto;
+  overflow: hidden;
+  height: 100%;
+}
+
+.slideshowSlider {
+  height: 100%;
+  white-space: nowrap;
+  transition: ease 1000ms;
+  @apply space-x-2;
+}
+
+.slide {
+  display: inline-block;
+
+  height: 100%;
+  @apply w-full sm:w-1/2 rounded-md;
+}
+
+/* Buttons */
+
+.slideshowDots {
+  text-align: center;
+}
+
+.slideshowDot {
+  display: inline-block;
+  height: 12px;
+  width: 12px;
+  border-radius: 50%;
+
+  cursor: pointer;
+  margin: 15px 7px 0px;
+
+  background-color: #c4c4c4;
+}
+
+.slideshowDot.active {
+  @apply bg-primary;
+}

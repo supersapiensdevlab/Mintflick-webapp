@@ -25,7 +25,7 @@ function Channels() {
             <img
               className="h-full rounded-full"
               src={channel.img}
-              alt="Tailwind-CSS-Avatar-component"
+              alt="Channel image"
             />
 
             <p className="cursor-pointer text-base font-medium text-brand3">

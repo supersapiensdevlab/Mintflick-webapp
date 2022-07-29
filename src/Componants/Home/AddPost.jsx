@@ -16,20 +16,20 @@ function AddPost() {
       </div>
       <div className="btn-group">
         <button className="btn btn-primary btn-outline  text-brand gap-2 group">
-          <Camera className="group-hover:scale-110 group-hover:rotate-12 ease-in-out transition-transform delay-100"></Camera>
+          <Camera className="group-hover:motion-safe:animate-bounce"></Camera>
           Photo
         </button>
 
         <button className="btn btn-primary  btn-outline  text-brand gap-2 group">
-          <Video className="group-hover:scale-110 group-hover:rotate-12 ease-in-out transition-transform delay-100"></Video>
+          <Video className="group-hover:motion-safe:animate-bounce"></Video>
           Video
         </button>
         <button className="btn btn-primary  btn-outline  text-brand gap-2 group">
-          <Music className="group-hover:scale-110 group-hover:rotate-12 ease-in-out transition-transform delay-100"></Music>
+          <Music className="group-hover:motion-safe:animate-bounce"></Music>
           Music
         </button>
         <button className="btn btn-primary  btn-outline  text-brand gap-2 group">
-          <PlayCard className="group-hover:scale-110 group-hover:rotate-12 ease-in-out transition-transform delay-100"></PlayCard>
+          <PlayCard className="group-hover:motion-safe:animate-bounce "></PlayCard>
           NFT
         </button>
       </div>

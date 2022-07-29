@@ -57,7 +57,7 @@ function MobileHeader() {
           </ul>
         </div>
 
-        {State.database.dark ? (
+        {!State.database.dark ? (
           <Main_logo_dark></Main_logo_dark>
         ) : (
           <Main_logo></Main_logo>

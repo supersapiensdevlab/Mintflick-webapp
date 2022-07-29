@@ -3,7 +3,7 @@ import React, { createContext, useState } from "react";
 export const UserContext = createContext();
 
 function Store(props) {
-  const [store, setstore] = useState({ dark: true });
+  const [store, setstore] = useState({ dark: true, walletAddress: "" });
   const updateStore = (data) => {
     setstore({
       ...store,

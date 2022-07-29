@@ -2,6 +2,7 @@ import React from "react";
 import LiveChannels from "../Home/LiveChannels";
 import LiveBanners from "./LiveBanners";
 import LiveCategories from "./LiveCategories";
+import LiveChannelCategories from "./LiveChannelCategories";
 
 function Live() {
   return (
@@ -12,8 +13,9 @@ function Live() {
       <div className="w-full lg:w-3/4 lg:mr-12 h-full pt-24 space-y-6 overflow-y-auto">
         <LiveBanners></LiveBanners>
         <LiveCategories></LiveCategories>
-        <LiveCategories></LiveCategories>
-        <LiveCategories></LiveCategories>
+        <LiveChannelCategories></LiveChannelCategories>
+        <LiveChannelCategories></LiveChannelCategories>
+        <LiveChannelCategories></LiveChannelCategories>
       </div>
     </div>
   );
