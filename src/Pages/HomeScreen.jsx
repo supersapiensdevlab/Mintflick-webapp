@@ -3,7 +3,6 @@ import { Outlet } from "react-router-dom";
 import BottomNavigation from "../Componants/Footer/BottomNavigation";
 import Header from "../Componants/Header/Header";
 import MobileHeader from "../Componants/Header/MobileHeader";
-import TopNavigation from "../Componants/Header/TopNavigation";
 
 function HomeScreen() {
   return (

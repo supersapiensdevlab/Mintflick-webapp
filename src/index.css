@@ -117,6 +117,11 @@
 .text-brand9 {
   @apply text-slate-100 dark:text-slate-900;
 }
+.text-brand-gradient {
+  @apply bg-gradient-to-tr   from-[#A36CFC]  via-primary  to-brand
+  text-transparent
+   bg-clip-text;
+}
 .slideshow {
   margin: 0 auto;
   overflow: hidden;
