@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { AlertTriangle, X } from "tabler-icons-react";
 import { UserContext } from "../../Store";
 
 function CreateNewUser() {
@@ -9,6 +10,7 @@ function CreateNewUser() {
   const [email, setemail] = useState("");
   const [name, setname] = useState("");
   const [loader, setloader] = useState(false);
+  const [error, seterror] = useState(false);
 
   async function createNewUser(walletAddress) {
     setloader(true);
@@ -43,28 +45,48 @@ function CreateNewUser() {
         MintFlick will send important notifications to this email.
       </div>
 
-      <div className="w-full max-w-lg flex flex-col  space-y-4   pt-4">
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          name && email
+            ? createNewUser(State.database.walletAddress)
+            : seterror("Enter name and email!");
+        }}
+        className="w-full max-w-lg flex flex-col  space-y-4   pt-4"
+      >
+        {error ? (
+          <div className="flex justify-between items-center p-3 bg-rose-600 text-slate-100 rounded-lg font-mediumtext-sm">
+            <div className="flex items-center gap-4">
+              <AlertTriangle></AlertTriangle> {error}
+            </div>
+            <X
+              className="cursor-pointer"
+              onClick={() => seterror("")}
+              size={16}
+            ></X>
+          </div>
+        ) : (
+          <></>
+        )}
         <input
           value={name}
           onChange={(e) => setname(e.target.value)}
-          placeholder="Enter your name here."
+          placeholder="Name"
           className="input w-full"
         />
         <input
           value={email}
           onChange={(e) => setemail(e.target.value)}
-          placeholder="Enter your email here."
+          placeholder="Email"
           className="input w-full "
         />
         <button
-          onClick={() => {
-            createNewUser(State.database.walletAddress);
-          }}
-          className={`btn btn-brand w-full ${loader ? "loading" : ""}`}
+          type="submit"
+          className={`btn btn-brand w-full ${loader ? "loading disabled" : ""}`}
         >
           Create Account
         </button>
-      </div>
+      </form>
     </div>
   );
 }
