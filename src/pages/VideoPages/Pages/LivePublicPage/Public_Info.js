@@ -391,7 +391,7 @@ const PublicInfo = (props) => {
                               </div>
                             </div>
                             <div className="flex items-center   w-full px-4">
-                              {subscribeButtonText === 'Follow' ? (
+                              {userData.username != user.username ? (subscribeButtonText === 'Follow' ? (
                                 <button
                                   id="subscribeButton"
                                   className="flex items-center dark:bg-dbeats-light    border border-dbeats-light dark:hover:bg-dbeats-secondary-light p-1 2xl:text-lg lg:text-sm text-md rounded-sm 2xl:px-4 px-4 lg:px-2 mr-3 font-semibold text-white "
@@ -399,7 +399,8 @@ const PublicInfo = (props) => {
                                 >
                                   <span>{subscribeButtonText}</span>
                                 </button>
-                              ) : null}
+                              ) : null) : null}
+
                               {userData.superfan_data && userData.username != user.username && userData.superfan_to.find(o => o.username == user.username) == undefined ? (
 
                                 <button
