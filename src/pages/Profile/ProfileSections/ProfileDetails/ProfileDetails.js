@@ -810,8 +810,8 @@ const ProfileDetails = ({ setSharable_data, tabname, urlUsername, user, setShow,
                 </Route>
 
                 <Route path={`/profile/:username/videos`}>
-                  <div className="w-full hidden  mt-1">
-                    <div className="flex  hidden">
+                  <div className="w-full   mt-1">
+                    <div className="flex">
                       <button className="mr-2 text-white" onClick={() => scroll(-1700)}>
                         <svg
                           xmlns="http://www.w3.org/2000/svg"

@@ -313,9 +313,9 @@ const PublicInfo = (props) => {
           >
             <div className="col-span-1 md:col-span-2 pt-3 2xl:mt-16 xl:mt-10 lg:mt-10 mt-14 sticky  top-14   z-10 lg:z-auto   ">
               <div>
-                {userData ? (userData.thumbnail && !userData.livepeer_data.isActive && new Date(userData.streamSchedule) > new Date()  ? (<>
+                {userData ? (userData.thumbnail && !userData.livepeer_data.isActive && new Date(userData.streamSchedule) > new Date() ? (<>
                   <img className='max-h-120 self-center lg:px-8 w-screen lg:w-full lg:mt-3   mt-0.5'
-                  src={userData.thumbnail}
+                    src={userData.thumbnail}
                   />
                 </>) : (
                   <VideoPlayer
@@ -400,22 +400,23 @@ const PublicInfo = (props) => {
                                   <span>{subscribeButtonText}</span>
                                 </button>
                               ) : null}
+                              {userData.superfan_data && userData.username != user.username && userData.superfan_to.find(o => o.username == user.username) == undefined ? (
 
-                              <button
-                                onClick={user != null && handleShowSubscriptionModal}
-                                className={
-                                  userData.superfan_data
-                                    ? ' flex dark:bg-dbeats-dark-primary border border-dbeats-light dark:hover:bg-dbeats-light p-1 2xl:text-lg lg:text-sm text-md  rounded-sm 2xl:px-4 px-4 lg:px-2      mr-3 font-semibold text-white   '
-                                    : 'hidden'
-                                }
-                              >
-                                <span
-                                  className={`${userData.superfan_data ? '' : 'hidden'
-                                    } whitespace-nowrap flex`}
+                                <button
+                                  onClick={user != null && handleShowSubscriptionModal}
+                                  className={
+                                    userData.superfan_data
+                                      ? ' flex dark:bg-dbeats-dark-primary border border-dbeats-light dark:hover:bg-dbeats-light p-1 2xl:text-lg lg:text-sm text-md  rounded-sm 2xl:px-4 px-4 lg:px-2      mr-3 font-semibold text-white   '
+                                      : 'hidden'
+                                  }
                                 >
-                                  🥳 Become a Superfan
-                                </span>
-                              </button>
+                                  <span
+                                    className={`${userData.superfan_data ? '' : 'hidden'
+                                      } whitespace-nowrap flex`}
+                                  >
+                                    🥳 Become a Superfan
+                                  </span>
+                                </button>) : <></>}
                             </div>
                           </>
                         ) : (

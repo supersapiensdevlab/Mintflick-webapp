@@ -124,13 +124,13 @@ function SpinGame() {
         </div>
       </div>
       <Lottie
-        className="w-1/2 absolute bottom-0 sm:h-1/2 right-1/2"
+        className="w-1/2 absolute bottom-0 sm:h-1/2 right-1/2 -z-1"
         autoplay={true}
         loop={true}
         animationData={fireworks}
       />
       <Lottie
-        className="w-1/2 absolute bottom-0 sm:h-1/2 left-1/2"
+        className="w-1/2 absolute bottom-0 sm:h-1/2 left-1/2 -z-1"
         autoplay={true}
         loop={true}
         animationData={wheel}

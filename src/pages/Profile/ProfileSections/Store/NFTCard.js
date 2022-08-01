@@ -32,7 +32,7 @@ import { template } from 'lodash';
 import NFTAudioPlayer from './NFTAudioPlayer';
 import { id } from 'date-fns/locale';
 
-const NFTCard = ({ nft, buyNft, address,selectedFilter }) => {
+const NFTCard = ({ nft, buyNft, address, selectedFilter }) => {
   //console.log(nft);
   const user = useSelector((state) => state.User.user);
   const [commentsNumber, setCommentsNumber] = useState(0);
@@ -68,9 +68,8 @@ const NFTCard = ({ nft, buyNft, address,selectedFilter }) => {
 
   const [playButtonText, setPlayButtonText] = useState('Play');
 
-  let sharable_data = `${process.env.REACT_APP_CLIENT_URL}/profile/${
-    nft && nft.creator_data ? nft.creator_data.user.username : ''
-  }`;
+  let sharable_data = `${process.env.REACT_APP_CLIENT_URL}/profile/${nft && nft.creator_data ? nft.creator_data.user.username : ''
+    }`;
   useEffect(() => {
     async function getuser_by_wallet() {
       // // console.log(nft);
@@ -126,6 +125,8 @@ const NFTCard = ({ nft, buyNft, address,selectedFilter }) => {
 
     setListingPrice(nft.price);
   }, []);
+// if(cardDetails && user){console.log(cardDetails.user.superfan_to); console.log(cardDetails.user.superfan_to.find(o => o.username == user.username))}
+
   useEffect(() => {
     if (cardDetails && nft.external_url) {
       //console.log('creators details', cardDetails);
@@ -785,7 +786,7 @@ const NFTCard = ({ nft, buyNft, address,selectedFilter }) => {
             'auth-token': localStorage.getItem('authtoken'),
           },
           data: videoDetails,
-        }).then(function (response) {});
+        }).then(function (response) { });
       }, 5000);
       return () => clearTimeout(timer);
     }
@@ -793,7 +794,7 @@ const NFTCard = ({ nft, buyNft, address,selectedFilter }) => {
 
   return (
     <>
-      {type == 'video' && (selectedFilter == 'All' || selectedFilter =='Videos' ) ? (
+      {type == 'video' && (selectedFilter == 'All' || selectedFilter == 'Videos') ? (
         <>
           {contentData && address == cardDetails.user.wallet_id ? (
             <div
@@ -843,32 +844,33 @@ const NFTCard = ({ nft, buyNft, address,selectedFilter }) => {
                           className="fa-solid fa-ellipsis text-3xl pr-2 text-white cursor-pointer"
                         ></i>
                       </div>
-                      <button
-                        onClick={() => {
-                          if (user) handleShowSubscriptionModal();
-                          else loadWeb3Modal();
-                        }}
-                        className={
-                          cardDetails.user.superfan_data
-                            ? ' flex dark:bg-dbeats-dark-primary border border-dbeats-light dark:hover:bg-dbeats-light p-1   text-sm    rounded  2xl:px-4 px-4 lg:px-2      mr-1   text-white   '
-                            : 'hidden'
-                        }
-                      >
-                        <span
-                          className={`${
-                            cardDetails.user.superfan_data ? '' : 'hidden'
-                          } whitespace-nowrap sm:flex hidden`}
+             
+                      {cardDetails.user.superfan_data && cardDetails.user.username != user.username && cardDetails.user.superfan_to.find(o => o.username == user.username) == undefined ? (
+                        <button
+                          onClick={() => {
+                            if (user) handleShowSubscriptionModal();
+                            else loadWeb3Modal();
+                          }}
+                          className={
+                            cardDetails.user.superfan_data
+                              ? ' flex dark:bg-dbeats-dark-primary border border-dbeats-light dark:hover:bg-dbeats-light p-1   text-sm    rounded  2xl:px-4 px-4 lg:px-2      mr-1   text-white   '
+                              : 'hidden'
+                          }
                         >
-                          🥳 Become a Superfan
-                        </span>
-                        <span
-                          className={`${
-                            cardDetails.user.superfan_data ? '' : 'hidden'
-                          } whitespace-nowrap sm:hidden flex`}
-                        >
-                          Become a Superfan
-                        </span>
-                      </button>
+                          <><span
+                            className={`${cardDetails.user.superfan_data ? '' : 'hidden'
+                              } whitespace-nowrap sm:flex hidden`}
+                          >
+                            🥳 Become a Superfan
+                          </span>
+                            <span
+                              className={`${cardDetails.user.superfan_data ? '' : 'hidden'
+                                } whitespace-nowrap sm:hidden flex`}
+                            >
+                              Become a Superfan
+                            </span></>
+
+                        </button>) : null}
                     </div>
                   </div>
 
@@ -928,8 +930,8 @@ const NFTCard = ({ nft, buyNft, address,selectedFilter }) => {
                         nft.owner === nftmarketaddress
                           ? dbeatsDAOLogo
                           : ownerDetails && ownerDetails.user
-                          ? ownerDetails.user.profile_image
-                          : person
+                            ? ownerDetails.user.profile_image
+                            : person
                       }
                       alt=""
                       loading="lazy"
@@ -972,13 +974,12 @@ const NFTCard = ({ nft, buyNft, address,selectedFilter }) => {
                       ) : (
                         <div className="w-full self-center  ">
                           <Link
-                            to={`/profile/${
-                              ownerDetails !== undefined &&
+                            to={`/profile/${ownerDetails !== undefined &&
                               ownerDetails !== 'Try Again' &&
                               ownerDetails &&
                               ownerDetails.user &&
                               ownerDetails.user.username
-                            }/posts`}
+                              }/posts`}
                             className="2xl:text-sm lg:text-xs text-sm text-gray-500  mb-2"
                           >
                             <h4>
@@ -1166,32 +1167,32 @@ const NFTCard = ({ nft, buyNft, address,selectedFilter }) => {
                           className="fa-solid fa-ellipsis text-3xl pr-2 text-white cursor-pointer"
                         ></i>
                       </div>
-                      <button
-                        onClick={() => {
-                          if (user) handleShowSubscriptionModal();
-                          else loadWeb3Modal();
-                        }}
-                        className={
-                          cardDetails.user.superfan_data
-                            ? ' flex dark:bg-dbeats-dark-primary border border-dbeats-light dark:hover:bg-dbeats-light p-1   text-sm    rounded  2xl:px-4 px-4 lg:px-2      mr-1   text-white   '
-                            : 'hidden'
-                        }
-                      >
-                        <span
-                          className={`${
-                            cardDetails.user.superfan_data ? '' : 'hidden'
-                          } whitespace-nowrap sm:flex hidden`}
+                      {cardDetails.user.superfan_data && cardDetails.user.username != user.username && cardDetails.user.superfan_to.find(o => o.username == user.username) == undefined ? (
+                        <button
+                          onClick={() => {
+                            if (user) handleShowSubscriptionModal();
+                            else loadWeb3Modal();
+                          }}
+                          className={
+                            cardDetails.user.superfan_data
+                              ? ' flex dark:bg-dbeats-dark-primary border border-dbeats-light dark:hover:bg-dbeats-light p-1   text-sm    rounded  2xl:px-4 px-4 lg:px-2      mr-1   text-white   '
+                              : 'hidden'
+                          }
                         >
-                          🥳 Become a Superfan
-                        </span>
-                        <span
-                          className={`${
-                            cardDetails.user.superfan_data ? '' : 'hidden'
-                          } whitespace-nowrap sm:hidden flex`}
-                        >
-                          Become a Superfan
-                        </span>
-                      </button>
+                          <><span
+                            className={`${cardDetails.user.superfan_data ? '' : 'hidden'
+                              } whitespace-nowrap sm:flex hidden`}
+                          >
+                            🥳 Become a Superfan
+                          </span>
+                            <span
+                              className={`${cardDetails.user.superfan_data ? '' : 'hidden'
+                                } whitespace-nowrap sm:hidden flex`}
+                            >
+                              Become a Superfan
+                            </span></>
+
+                        </button>) : null}
                     </div>
                   </div>
 
@@ -1248,8 +1249,8 @@ const NFTCard = ({ nft, buyNft, address,selectedFilter }) => {
                         nft.owner === nftmarketaddress
                           ? dbeatsDAOLogo
                           : ownerDetails && ownerDetails.user
-                          ? ownerDetails.user.profile_image
-                          : person
+                            ? ownerDetails.user.profile_image
+                            : person
                       }
                       alt=""
                       loading="lazy"
@@ -1292,13 +1293,12 @@ const NFTCard = ({ nft, buyNft, address,selectedFilter }) => {
                       ) : (
                         <div className="w-full self-center  ">
                           <Link
-                            to={`/profile/${
-                              ownerDetails !== undefined &&
+                            to={`/profile/${ownerDetails !== undefined &&
                               ownerDetails !== 'Try Again' &&
                               ownerDetails &&
                               ownerDetails.user &&
                               ownerDetails.user.username
-                            }/posts`}
+                              }/posts`}
                             className="2xl:text-sm lg:text-xs text-sm text-gray-500  mb-2"
                           >
                             <h4>
@@ -1451,7 +1451,7 @@ const NFTCard = ({ nft, buyNft, address,selectedFilter }) => {
       ) : (
         <></>
       )}
-      {type == 'image' && (selectedFilter == 'All' || selectedFilter =='Posts' ) ? (
+      {type == 'image' && (selectedFilter == 'All' || selectedFilter == 'Posts') ? (
         <>
           {contentData && address == cardDetails.user.wallet_id ? (
             <div
@@ -1501,32 +1501,32 @@ const NFTCard = ({ nft, buyNft, address,selectedFilter }) => {
                           className="fa-solid fa-ellipsis text-3xl pr-2 text-white cursor-pointer"
                         ></i>
                       </div>
-                      <button
-                        onClick={() => {
-                          if (user) handleShowSubscriptionModal();
-                          else loadWeb3Modal();
-                        }}
-                        className={
-                          cardDetails.user.superfan_data
-                            ? ' flex dark:bg-dbeats-dark-primary border border-dbeats-light dark:hover:bg-dbeats-light p-1   text-sm    rounded  2xl:px-4 px-4 lg:px-2      mr-1   text-white   '
-                            : 'hidden'
-                        }
-                      >
-                        <span
-                          className={`${
-                            cardDetails.user.superfan_data ? '' : 'hidden'
-                          } whitespace-nowrap sm:flex hidden`}
+                      {cardDetails.user.superfan_data && cardDetails.user.username != user.username && cardDetails.user.superfan_to.find(o => o.username == user.username) == undefined ? (
+                        <button
+                          onClick={() => {
+                            if (user) handleShowSubscriptionModal();
+                            else loadWeb3Modal();
+                          }}
+                          className={
+                            cardDetails.user.superfan_data
+                              ? ' flex dark:bg-dbeats-dark-primary border border-dbeats-light dark:hover:bg-dbeats-light p-1   text-sm    rounded  2xl:px-4 px-4 lg:px-2      mr-1   text-white   '
+                              : 'hidden'
+                          }
                         >
-                          🥳 Become a Superfan
-                        </span>
-                        <span
-                          className={`${
-                            cardDetails.user.superfan_data ? '' : 'hidden'
-                          } whitespace-nowrap sm:hidden flex`}
-                        >
-                          Become a Superfan
-                        </span>
-                      </button>
+                          <><span
+                            className={`${cardDetails.user.superfan_data ? '' : 'hidden'
+                              } whitespace-nowrap sm:flex hidden`}
+                          >
+                            🥳 Become a Superfan
+                          </span>
+                            <span
+                              className={`${cardDetails.user.superfan_data ? '' : 'hidden'
+                                } whitespace-nowrap sm:hidden flex`}
+                            >
+                              Become a Superfan
+                            </span></>
+
+                        </button>) : null}
                     </div>
                   </div>
 
@@ -1566,8 +1566,8 @@ const NFTCard = ({ nft, buyNft, address,selectedFilter }) => {
                         nft.owner === nftmarketaddress
                           ? dbeatsDAOLogo
                           : ownerDetails && ownerDetails.user
-                          ? ownerDetails.user.profile_image
-                          : person
+                            ? ownerDetails.user.profile_image
+                            : person
                       }
                       alt=""
                       loading="lazy"
@@ -1610,13 +1610,12 @@ const NFTCard = ({ nft, buyNft, address,selectedFilter }) => {
                       ) : (
                         <div className="w-full self-center  ">
                           <Link
-                            to={`/profile/${
-                              ownerDetails !== undefined &&
+                            to={`/profile/${ownerDetails !== undefined &&
                               ownerDetails !== 'Try Again' &&
                               ownerDetails &&
                               ownerDetails.user &&
                               ownerDetails.user.username
-                            }/posts`}
+                              }/posts`}
                             className="2xl:text-sm lg:text-xs text-sm text-gray-500  mb-2"
                           >
                             <h4>
@@ -1804,32 +1803,32 @@ const NFTCard = ({ nft, buyNft, address,selectedFilter }) => {
                           className="fa-solid fa-ellipsis text-3xl pr-2 text-white cursor-pointer"
                         ></i>
                       </div>
-                      <button
-                        onClick={() => {
-                          if (user) handleShowSubscriptionModal();
-                          else loadWeb3Modal();
-                        }}
-                        className={
-                          cardDetails.user.superfan_data
-                            ? ' flex dark:bg-dbeats-dark-primary border border-dbeats-light dark:hover:bg-dbeats-light p-1   text-sm    rounded  2xl:px-4 px-4 lg:px-2      mr-1   text-white   '
-                            : 'hidden'
-                        }
-                      >
-                        <span
-                          className={`${
-                            cardDetails.user.superfan_data ? '' : 'hidden'
-                          } whitespace-nowrap sm:flex hidden`}
+                      {cardDetails.user.superfan_data && cardDetails.user.username != user.username && cardDetails.user.superfan_to.find(o => o.username == user.username) == undefined ? (
+                        <button
+                          onClick={() => {
+                            if (user) handleShowSubscriptionModal();
+                            else loadWeb3Modal();
+                          }}
+                          className={
+                            cardDetails.user.superfan_data
+                              ? ' flex dark:bg-dbeats-dark-primary border border-dbeats-light dark:hover:bg-dbeats-light p-1   text-sm    rounded  2xl:px-4 px-4 lg:px-2      mr-1   text-white   '
+                              : 'hidden'
+                          }
                         >
-                          🥳 Become a Superfan
-                        </span>
-                        <span
-                          className={`${
-                            cardDetails.user.superfan_data ? '' : 'hidden'
-                          } whitespace-nowrap sm:hidden flex`}
-                        >
-                          Become a Superfan
-                        </span>
-                      </button>
+                          <><span
+                            className={`${cardDetails.user.superfan_data ? '' : 'hidden'
+                              } whitespace-nowrap sm:flex hidden`}
+                          >
+                            🥳 Become a Superfan
+                          </span>
+                            <span
+                              className={`${cardDetails.user.superfan_data ? '' : 'hidden'
+                                } whitespace-nowrap sm:hidden flex`}
+                            >
+                              Become a Superfan
+                            </span></>
+
+                        </button>) : null}
                     </div>
                   </div>
 
@@ -1866,8 +1865,8 @@ const NFTCard = ({ nft, buyNft, address,selectedFilter }) => {
                         nft.owner === nftmarketaddress
                           ? dbeatsDAOLogo
                           : ownerDetails && ownerDetails.user
-                          ? ownerDetails.user.profile_image
-                          : person
+                            ? ownerDetails.user.profile_image
+                            : person
                       }
                       alt=""
                       loading="lazy"
@@ -1910,13 +1909,12 @@ const NFTCard = ({ nft, buyNft, address,selectedFilter }) => {
                       ) : (
                         <div className="w-full self-center  ">
                           <Link
-                            to={`/profile/${
-                              ownerDetails !== undefined &&
+                            to={`/profile/${ownerDetails !== undefined &&
                               ownerDetails !== 'Try Again' &&
                               ownerDetails &&
                               ownerDetails.user &&
                               ownerDetails.user.username
-                            }/posts`}
+                              }/posts`}
                             className="2xl:text-sm lg:text-xs text-sm text-gray-500  mb-2"
                           >
                             <h4>
@@ -2069,7 +2067,7 @@ const NFTCard = ({ nft, buyNft, address,selectedFilter }) => {
       ) : (
         <></>
       )}
-      {type == 'track' && (selectedFilter == 'All' || selectedFilter =='Music' ) ? (
+      {type == 'track' && (selectedFilter == 'All' || selectedFilter == 'Music') ? (
         <>
           {contentData && address == cardDetails.user.wallet_id ? (
             <div
@@ -2119,32 +2117,32 @@ const NFTCard = ({ nft, buyNft, address,selectedFilter }) => {
                           className="fa-solid fa-ellipsis text-3xl pr-2 text-white cursor-pointer"
                         ></i>
                       </div>
-                      <button
-                        onClick={() => {
-                          if (user) handleShowSubscriptionModal();
-                          else loadWeb3Modal();
-                        }}
-                        className={
-                          cardDetails.user.superfan_data
-                            ? ' flex dark:bg-dbeats-dark-primary border border-dbeats-light dark:hover:bg-dbeats-light p-1   text-sm    rounded  2xl:px-4 px-4 lg:px-2      mr-1   text-white   '
-                            : 'hidden'
-                        }
-                      >
-                        <span
-                          className={`${
-                            cardDetails.user.superfan_data ? '' : 'hidden'
-                          } whitespace-nowrap sm:flex hidden`}
+                      {cardDetails.user.superfan_data  && cardDetails.user.username != user.username && cardDetails.user.superfan_to.find(o => o.username == user.username) == undefined ? (
+                        <button
+                          onClick={() => {
+                            if (user) handleShowSubscriptionModal();
+                            else loadWeb3Modal();
+                          }}
+                          className={
+                            cardDetails.user.superfan_data
+                              ? ' flex dark:bg-dbeats-dark-primary border border-dbeats-light dark:hover:bg-dbeats-light p-1   text-sm    rounded  2xl:px-4 px-4 lg:px-2      mr-1   text-white   '
+                              : 'hidden'
+                          }
                         >
-                          🥳 Become a Superfan
-                        </span>
-                        <span
-                          className={`${
-                            cardDetails.user.superfan_data ? '' : 'hidden'
-                          } whitespace-nowrap sm:hidden flex`}
-                        >
-                          Become a Superfan
-                        </span>
-                      </button>
+                          <><span
+                            className={`${cardDetails.user.superfan_data ? '' : 'hidden'
+                              } whitespace-nowrap sm:flex hidden`}
+                          >
+                            🥳 Become a Superfan
+                          </span>
+                            <span
+                              className={`${cardDetails.user.superfan_data ? '' : 'hidden'
+                                } whitespace-nowrap sm:hidden flex`}
+                            >
+                              Become a Superfan
+                            </span></>
+
+                        </button>) : null}
                     </div>
                   </div>
 
@@ -2187,8 +2185,8 @@ const NFTCard = ({ nft, buyNft, address,selectedFilter }) => {
                         nft.owner === nftmarketaddress
                           ? dbeatsDAOLogo
                           : ownerDetails && ownerDetails.user
-                          ? ownerDetails.user.profile_image
-                          : person
+                            ? ownerDetails.user.profile_image
+                            : person
                       }
                       alt=""
                       loading="lazy"
@@ -2231,13 +2229,12 @@ const NFTCard = ({ nft, buyNft, address,selectedFilter }) => {
                       ) : (
                         <div className="w-full self-center  ">
                           <Link
-                            to={`/profile/${
-                              ownerDetails !== undefined &&
+                            to={`/profile/${ownerDetails !== undefined &&
                               ownerDetails !== 'Try Again' &&
                               ownerDetails &&
                               ownerDetails.user &&
                               ownerDetails.user.username
-                            }/posts`}
+                              }/posts`}
                             className="2xl:text-sm lg:text-xs text-sm text-gray-500  mb-2"
                           >
                             <h4>
@@ -2425,32 +2422,32 @@ const NFTCard = ({ nft, buyNft, address,selectedFilter }) => {
                           className="fa-solid fa-ellipsis text-3xl pr-2 text-white cursor-pointer"
                         ></i>
                       </div>
-                      <button
-                        onClick={() => {
-                          if (user) handleShowSubscriptionModal();
-                          else loadWeb3Modal();
-                        }}
-                        className={
-                          cardDetails.user.superfan_data
-                            ? ' flex dark:bg-dbeats-dark-primary border border-dbeats-light dark:hover:bg-dbeats-light p-1   text-sm    rounded  2xl:px-4 px-4 lg:px-2      mr-1   text-white   '
-                            : 'hidden'
-                        }
-                      >
-                        <span
-                          className={`${
-                            cardDetails.user.superfan_data ? '' : 'hidden'
-                          } whitespace-nowrap sm:flex hidden`}
+                      {cardDetails.user.superfan_data && cardDetails.user.username != user.username && cardDetails.user.superfan_to.find(o => o.username == user.username) == undefined ? (
+                        <button
+                          onClick={() => {
+                            if (user) handleShowSubscriptionModal();
+                            else loadWeb3Modal();
+                          }}
+                          className={
+                            cardDetails.user.superfan_data
+                              ? ' flex dark:bg-dbeats-dark-primary border border-dbeats-light dark:hover:bg-dbeats-light p-1   text-sm    rounded  2xl:px-4 px-4 lg:px-2      mr-1   text-white   '
+                              : 'hidden'
+                          }
                         >
-                          🥳 Become a Superfan
-                        </span>
-                        <span
-                          className={`${
-                            cardDetails.user.superfan_data ? '' : 'hidden'
-                          } whitespace-nowrap sm:hidden flex`}
-                        >
-                          Become a Superfan
-                        </span>
-                      </button>
+                          <><span
+                            className={`${cardDetails.user.superfan_data ? '' : 'hidden'
+                              } whitespace-nowrap sm:flex hidden`}
+                          >
+                            🥳 Become a Superfan
+                          </span>
+                            <span
+                              className={`${cardDetails.user.superfan_data ? '' : 'hidden'
+                                } whitespace-nowrap sm:hidden flex`}
+                            >
+                              Become a Superfan
+                            </span></>
+
+                        </button>) : null}
                     </div>
                   </div>
 
@@ -2499,8 +2496,8 @@ const NFTCard = ({ nft, buyNft, address,selectedFilter }) => {
                         nft.owner === nftmarketaddress
                           ? dbeatsDAOLogo
                           : ownerDetails && ownerDetails.user
-                          ? ownerDetails.user.profile_image
-                          : person
+                            ? ownerDetails.user.profile_image
+                            : person
                       }
                       alt=""
                       loading="lazy"
@@ -2543,13 +2540,12 @@ const NFTCard = ({ nft, buyNft, address,selectedFilter }) => {
                       ) : (
                         <div className="w-full self-center  ">
                           <Link
-                            to={`/profile/${
-                              ownerDetails !== undefined &&
+                            to={`/profile/${ownerDetails !== undefined &&
                               ownerDetails !== 'Try Again' &&
                               ownerDetails &&
                               ownerDetails.user &&
                               ownerDetails.user.username
-                            }/posts`}
+                              }/posts`}
                             className="2xl:text-sm lg:text-xs text-sm text-gray-500  mb-2"
                           >
                             <h4>
