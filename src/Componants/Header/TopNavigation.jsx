@@ -6,16 +6,20 @@ function TopNavigation() {
   const navigateTo = useNavigate();
   const [active, setActive] = useState(1);
   const data = [
-    { icon: <SmartHome size={28}> </SmartHome>, isActive: 1, link: "/" },
+    {
+      icon: <SmartHome size={28}> </SmartHome>,
+      isActive: 1,
+      link: "/homescreen",
+    },
     {
       icon: <AccessPoint size={28}></AccessPoint>,
       isActive: 2,
-      link: "/live",
+      link: "/homescreen/live",
     },
     {
       icon: <Confetti size={28}></Confetti>,
       isActive: 3,
-      link: "/marketPlace",
+      link: "/homescreen/marketPlace",
     },
   ];
   return (
