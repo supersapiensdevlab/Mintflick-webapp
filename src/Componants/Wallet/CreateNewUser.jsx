@@ -29,6 +29,7 @@ function CreateNewUser() {
           userData: response.config.data,
         });
         setloader(false);
+        seterror("");
         navigateTo("/homescreen");
       })
       .catch(function (error) {
@@ -82,7 +83,7 @@ function CreateNewUser() {
         />
         <button
           type="submit"
-          className={`btn btn-brand w-full ${loader ? "loading disabled" : ""}`}
+          className={`btn  w-full ${loader ? "loading" : "btn-brand"}`}
         >
           Create Account
         </button>
