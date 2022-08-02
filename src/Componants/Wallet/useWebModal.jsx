@@ -57,6 +57,12 @@ function useWebModal() {
               name: "Default Wallet",
               description: "Connect with the provider in your Browser",
             },
+            options: {
+              networkParams: {
+                chainId: "137", // default: 1
+                networkName: "Matic Mainnet",
+              },
+            },
             package: null,
           },
 
