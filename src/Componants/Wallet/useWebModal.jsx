@@ -12,7 +12,7 @@ function useWebModal() {
   const State = useContext(UserContext);
   const navigateTo = useNavigate();
 
-  async function isUserAvaliable(walletAddress) {
+  async function isUserAvaliable(walletAddress, provider) {
     await axios({
       method: "post",
       url: `${process.env.REACT_APP_API_BASE_URL}/user/getuser_by_wallet`,
@@ -22,13 +22,33 @@ function useWebModal() {
     })
       .then((response) => {
         console.log(response);
-        navigateTo("/homescreen");
+
+        State.updateDatabase({
+          userData: response,
+
+          walletAddress: walletAddress,
+          provider: provider,
+        });
+
+        navigateTo("/homescreen/home");
       })
       .catch(function (error) {
         console.log(error);
         navigateTo("/create_new_user");
       });
   }
+  const getCircularReplacer = () => {
+    const seen = new WeakSet();
+    return (key, value) => {
+      if (typeof value === "object" && value !== null) {
+        if (seen.has(value)) {
+          return;
+        }
+        seen.add(value);
+      }
+      return value;
+    };
+  };
 
   const newWalletProvider = {
     torus: {
@@ -109,14 +129,14 @@ function useWebModal() {
     const instance = await web3Modal.connect();
 
     const provider = new ethers.providers.Web3Provider(instance);
+    console.log(provider);
+
     const signer = provider.getSigner();
     const Address = await signer.getAddress();
     console.log(Address);
-    isUserAvaliable(Address);
-    State.updateDatabase({
-      walletAddress: Address,
-      provider: provider,
-    });
+    // console.log(provider);
+    isUserAvaliable(Address, provider);
+    localStorage.setItem("walletAddress", Address);
   };
 }
 

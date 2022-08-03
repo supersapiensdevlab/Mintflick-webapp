@@ -11,6 +11,7 @@ import { UserContext } from "../../Store";
 import Main_logo from "../../Assets/logos/Main_logo";
 import TopNavigation from "./TopNavigation";
 import Main_logo_dark from "../../Assets/logos/Main_logo_dark";
+import { NavLink } from "react-router-dom";
 
 function Header() {
   const State = useContext(UserContext);
@@ -60,8 +61,14 @@ function Header() {
             className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-slate-100 dark:bg-slate-800 text-brand1 text-base font-medium rounded-lg w-52"
           >
             <li>
-              <a className="  hover:dark:bg-slate-900">Profile</a>
+              <NavLink
+                to={"/homescreen/profile"}
+                className="  hover:dark:bg-slate-900"
+              >
+                Profile
+              </NavLink>
             </li>
+
             <li>
               <a className=" hover:dark:bg-slate-900">Settings</a>
             </li>
@@ -92,11 +99,17 @@ function Header() {
               </a>
             </li>
             <li>
-              <a className="hover:bg-rose-500 ">Logout</a>
+              <NavLink
+                onClick={() => localStorage.removeItem("walletAddress")}
+                to={"/"}
+                className="hover:bg-rose-500 "
+              >
+                Logout
+              </NavLink>
             </li>
             <li>
               <a className="truncate hover:dark:bg-slate-900 text-emerald-600">
-                {State.database.walletAddress && "Wallet connected"}
+                {localStorage.getItem("walletAddress") && "Wallet connected"}
               </a>
             </li>
           </ul>

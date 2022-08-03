@@ -15,7 +15,7 @@ function BottomNavigation() {
     {
       icon: <SmartHome size={28}> </SmartHome>,
       isActive: 1,
-      link: "/homescreen",
+      link: "/homescreen/home",
     },
     {
       icon: <AccessPoint size={28}></AccessPoint>,

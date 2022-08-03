@@ -52,7 +52,18 @@ function MobileHeader() {
               </a>
             </li>
             <li>
-              <a className="hover:bg-rose-500 ">Logout</a>
+              <a
+                onClick={() => localStorage.removeItem("provider")}
+                href="/"
+                className="hover:bg-rose-500 "
+              >
+                Logout
+              </a>
+            </li>
+            <li>
+              <a className="truncate hover:dark:bg-slate-900 text-emerald-600">
+                {localStorage.getItem("walletAddress") && "Wallet connected"}
+              </a>
             </li>
           </ul>
         </div>

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { AccessPoint, Confetti, SmartHome } from "tabler-icons-react";
 
 function TopNavigation() {
@@ -9,7 +9,7 @@ function TopNavigation() {
     {
       icon: <SmartHome size={28}> </SmartHome>,
       isActive: 1,
-      link: "/homescreen",
+      link: "/homescreen/home",
     },
     {
       icon: <AccessPoint size={28}></AccessPoint>,
@@ -25,19 +25,18 @@ function TopNavigation() {
   return (
     <div className="flex items-center justify-center h-fit p-1 rounded-lg space-x-10 ">
       {data.map((item) => (
-        <button
+        <NavLink
+          to={item.link}
           onClick={() => {
             setActive(item.isActive);
-            navigateTo(`${item.link}`);
+            // navigateTo(`${item.link}`);
           }}
-          className={`  ${
-            active === item.isActive
-              ? `btn   btn-brand`
-              : `btn  btn-ghost dark:text-gray-100`
-          }`}
+          className={({ isActive }) =>
+            isActive ? `btn   btn-brand` : `btn  btn-ghost dark:text-gray-100`
+          }
         >
           {item.icon}
-        </button>
+        </NavLink>
       ))}
     </div>
   );
