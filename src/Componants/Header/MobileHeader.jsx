@@ -3,6 +3,7 @@ import { MessageDots } from "tabler-icons-react";
 import { UserContext } from "../../Store";
 import Main_logo from "../../Assets/logos/Main_logo";
 import Main_logo_dark from "../../Assets/logos/Main_logo_dark";
+import { NavLink } from "react-router-dom";
 
 function MobileHeader() {
   const State = useContext(UserContext);
@@ -21,7 +22,12 @@ function MobileHeader() {
             className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-slate-100 dark:bg-slate-800 text-brand1 text-base font-medium rounded-lg w-52"
           >
             <li>
-              <a className="  hover:dark:bg-slate-900">Profile</a>
+              <NavLink
+                to={"/homescreen/profile"}
+                className="  hover:dark:bg-slate-900"
+              >
+                Profile
+              </NavLink>
             </li>
             <li>
               <a className=" hover:dark:bg-slate-900">Settings</a>
@@ -52,13 +58,13 @@ function MobileHeader() {
               </a>
             </li>
             <li>
-              <a
-                onClick={() => localStorage.removeItem("provider")}
-                href="/"
+              <NavLink
+                onClick={() => localStorage.removeItem("walletAddress")}
+                to={"/"}
                 className="hover:bg-rose-500 "
               >
                 Logout
-              </a>
+              </NavLink>
             </li>
             <li>
               <a className="truncate hover:dark:bg-slate-900 text-emerald-600">

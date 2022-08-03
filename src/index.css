@@ -123,8 +123,8 @@
    bg-clip-text;
 }
 .bg-texture {
-  background-image: radial-gradient(#130657 0.5px, #000024 0.5px);
-  background-size: 10px 10px;
+  background-image: radial-gradient(#130657 1px, #000024 1px);
+  background-size: 20px 20px;
 }
 .slideshow {
   margin: 0 auto;

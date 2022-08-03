@@ -14,6 +14,7 @@ function CreateNewUser() {
 
   async function createNewUser(walletAddress) {
     setloader(true);
+    console.log(walletAddress);
     await axios({
       method: "post",
       url: `${process.env.REACT_APP_API_BASE_URL}/user/getuser_by_wallet`,
@@ -30,7 +31,7 @@ function CreateNewUser() {
         });
         setloader(false);
         seterror("");
-        navigateTo("/homescreen");
+        navigateTo("/homescreen/home");
       })
       .catch(function (error) {
         console.log(error);
