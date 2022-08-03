@@ -10,7 +10,10 @@ function ConnectWalletComponant() {
   const wallets = [metamask, walletConnect, torus, sequence];
 
   return (
-    <div className="flex flex-col justify-start w-fit lg:w-1/2 space-y-6 p-6 lg:p-12">
+    <div
+      className="flex flex-col justify-start w-fit lg:w-1/2 space-y-6 p-6
+      lg:p-12 bg-texture bg-repeat"
+    >
       <p className="text-5xl font-bold text-brand-gradient">Connect Wallet</p>
       <p className="text-brand4 text-lg font-medium">
         <p className="text-xl font-semibold text-brand2">What is wallet?</p>

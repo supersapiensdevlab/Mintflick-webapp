@@ -122,6 +122,10 @@
   text-transparent
    bg-clip-text;
 }
+.bg-texture {
+  background-image: radial-gradient(#130657 0.5px, #000024 0.5px);
+  background-size: 10px 10px;
+}
 .slideshow {
   margin: 0 auto;
   overflow: hidden;
