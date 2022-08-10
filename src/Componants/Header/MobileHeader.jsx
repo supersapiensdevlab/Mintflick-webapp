@@ -23,7 +23,7 @@ function MobileHeader() {
           >
             <li>
               <NavLink
-                to={"/homescreen/profile"}
+                to={"/homescreen/profile/posts"}
                 className="  hover:dark:bg-slate-900"
               >
                 Profile
@@ -59,7 +59,10 @@ function MobileHeader() {
             </li>
             <li>
               <NavLink
-                onClick={() => localStorage.removeItem("walletAddress")}
+                onClick={() => {
+                  localStorage.removeItem("walletAddress");
+                  localStorage.removeItem("provider");
+                }}
                 to={"/"}
                 className="hover:bg-rose-500 "
               >

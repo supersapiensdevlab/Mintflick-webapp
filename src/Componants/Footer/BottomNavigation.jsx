@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import {
   AccessPoint,
   Bell,
@@ -41,19 +41,18 @@ function BottomNavigation() {
   return (
     <div className="flex items-center justify-evenly h-fit pt-2 pb-6  bg-white dark:bg-slate-900">
       {data.map((item) => (
-        <button
+        <NavLink
+          to={item.link}
           onClick={() => {
             setActive(item.isActive);
-            navigateTo(`${item.link}`);
+            // navigateTo(`${item.link}`);
           }}
-          className={`  ${
-            active === item.isActive
-              ? `btn btn-brand btn-brand `
-              : `btn  btn-ghost dark:text-gray-100`
-          }`}
+          className={({ isActive }) =>
+            isActive ? `btn   btn-brand` : `btn  btn-ghost dark:text-gray-100`
+          }
         >
           {item.icon}
-        </button>
+        </NavLink>
       ))}
     </div>
   );

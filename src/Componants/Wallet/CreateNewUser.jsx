@@ -35,6 +35,7 @@ function CreateNewUser() {
       })
       .catch(function (error) {
         console.log(error);
+        seterror(error.status);
       });
   }
   return (

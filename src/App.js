@@ -1,6 +1,6 @@
 import { useContext, useEffect } from "react";
 import "./App.css";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import { BrowserRouter } from "react-router-dom";
 
 import { UserContext } from "./Store";
@@ -12,24 +12,64 @@ import ConnectWallet from "./Pages/ConnectWallet";
 import ConnectWalletComponant from "./Componants/Wallet/ConnectWalletComponant";
 import CreateNewUser from "./Componants/Wallet/CreateNewUser";
 import axios from "axios";
-import Profile from "./Componants/Profile/Profile";
+import Profile from "./Pages/Profile";
+import ProfileMedia from "./Componants/Profile/ProfileMedia";
+import Posts from "./Componants/Profile/ProfileMedia/Posts";
+import Playlists from "./Componants/Profile/ProfileMedia/Playlists";
+import Music from "./Componants/Profile/ProfileMedia/Music";
+import Videos from "./Componants/Profile/ProfileMedia/Videos";
 
 function App() {
   const State = useContext(UserContext);
+  async function isUserAvaliable() {
+    await axios({
+      method: "post",
+      url: `${process.env.REACT_APP_API_BASE_URL}/user/getuser_by_wallet`,
+      headers: {
+        "content-type": "application/json",
+        "auth-token": localStorage.getItem("authtoken"),
+      },
+      data: {
+        walletId: localStorage.getItem("walletAddress"),
+      },
+    })
+      .then((response) => {
+        console.log(response);
 
+        State.updateDatabase({
+          userData: response,
+        });
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+  useEffect(() => {
+    isUserAvaliable();
+    console.log(State.database.userData);
+
+    console.log(localStorage.getItem("authtoken"));
+  }, []);
   return (
     <div className={State.database.dark ? `dark` : " "}>
       <BrowserRouter>
         <Routes>
-          <Route exact path="/" element={<ConnectWallet />}>
-            <Route exact path="" element={<ConnectWalletComponant />} />
-            <Route exact path="create_new_user" element={<CreateNewUser />} />
+          <Route path="/" element={<ConnectWallet />}>
+            <Route path="" element={<ConnectWalletComponant />} />
+            <Route path="create_new_user" element={<CreateNewUser />} />
           </Route>
-          <Route exact path="/homescreen" element={<HomeScreen />}>
-            <Route exact path="home" element={<Home />} />
-            <Route exact path="live" element={<Live />} />
-            <Route exact path="marketPlace" element={<Events></Events>} />
-            <Route exact path="profile" element={<Profile></Profile>} />
+          <Route path="/homescreen" element={<HomeScreen />}>
+            <Route path="home" element={<Home />} />
+            <Route path="live" element={<Live />} />
+            <Route path="marketPlace" element={<Events></Events>} />
+            <Route path="profile" element={<Profile></Profile>}>
+              <Route path="" element={<ProfileMedia></ProfileMedia>}>
+                <Route path="posts" element={<Posts></Posts>} />
+                <Route path="videos" element={<Videos></Videos>} />
+                <Route path="music" element={<Music></Music>} />
+                <Route path="playlists" element={<Playlists></Playlists>} />
+              </Route>
+            </Route>
           </Route>
         </Routes>
       </BrowserRouter>

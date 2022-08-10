@@ -38,7 +38,7 @@ function Header() {
         <TopNavigation></TopNavigation>
       </div>
       <div className="flex w-1/3 justify-end items-center space-x-4 h-full   ">
-        <div className="hidden lg:flex  btn btn-outline btn-primary gap-2 rounded-full ">
+        <div className="hidden lg:flex  btn btn-outline btn-primary gap-2 rounded-full">
           <AccessPoint size={28}></AccessPoint>
           GO LIVE
         </div>
@@ -62,7 +62,7 @@ function Header() {
           >
             <li>
               <NavLink
-                to={"/homescreen/profile"}
+                to={"/homescreen/profile/posts"}
                 className="  hover:dark:bg-slate-900"
               >
                 Profile
@@ -100,7 +100,10 @@ function Header() {
             </li>
             <li>
               <NavLink
-                onClick={() => localStorage.removeItem("walletAddress")}
+                onClick={() => {
+                  localStorage.removeItem("walletAddress");
+                  localStorage.removeItem("provider");
+                }}
                 to={"/"}
                 className="hover:bg-rose-500 "
               >

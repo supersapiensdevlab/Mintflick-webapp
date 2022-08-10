@@ -25,10 +25,8 @@ function useWebModal() {
 
         State.updateDatabase({
           userData: response,
-
-          walletAddress: walletAddress,
-          provider: provider,
         });
+        localStorage.setItem("authtoken", response.data.jwtToken);
 
         navigateTo("/homescreen/home");
       })
@@ -134,9 +132,13 @@ function useWebModal() {
     const signer = provider.getSigner();
     const Address = await signer.getAddress();
     console.log(Address);
-    // console.log(provider);
     isUserAvaliable(Address, provider);
     localStorage.setItem("walletAddress", Address);
+    localStorage.setItem(
+      "provider",
+      JSON.stringify(provider, getCircularReplacer())
+    );
+    navigateTo("/homescreen/home");
   };
 }
 

@@ -10,26 +10,9 @@ function HomeScreen() {
   const State = useContext(UserContext);
   const navigateTo = useNavigate();
 
-  async function isUserAvaliable(wallet) {
-    await axios({
-      method: "post",
-      url: `${process.env.REACT_APP_API_BASE_URL}/user/getuser_by_wallet`,
-      data: {
-        walletId: wallet,
-      },
-    })
-      .then((response) => {
-        console.log(response);
-        State.updateDatabase({
-          userData: response,
-        });
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  }
   useEffect(() => {
-    isUserAvaliable(localStorage.getItem("walletAddress"));
+    // console.log(localStorage.getItem("walletAddress"));
+    // console.log(JSON.parse(localStorage.getItem("provider")));
   }, []);
 
   return (

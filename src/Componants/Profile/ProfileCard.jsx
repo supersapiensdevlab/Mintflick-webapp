@@ -17,7 +17,7 @@ function ProfileCard() {
         alt="Girl in a jacket"
         className="w-20 h-20 -mt-10 object-cover rounded-full"
       />
-      <div className="flex flex-col items-center w-full h-fit space-y-2">
+      <div className="flex flex-col items-center w-full h-fit space-y-1 m-2">
         <p className="text-lg text-brand1 font-bold">
           {State.database.userData.data.user.name}
         </p>
@@ -27,22 +27,22 @@ function ProfileCard() {
             <Share size={12}></Share>share
           </p>
         </span>
-        <div className="w-full flex justify-around">
+        <div className="w-full flex p-2 justify-around">
           <span className="flex flex-col items-center gap-1 text-lg text-brand3 font-bold">
             {State.database.userData.data.user.follower_count.length}
-            <p className="flex items-center  text-base text-primary font-bold">
+            <p className="flex items-center  text-xs text-primary font-medium">
               Followers
             </p>
           </span>
           <span className="flex flex-col items-center gap-1 text-lg text-brand3 font-bold">
             {State.database.userData.data.user.followee_count.length}
-            <p className="flex items-center  text-base text-primary font-bold">
+            <p className="flex items-center  text-xs text-primary font-medium">
               Following
             </p>
           </span>
           <span className="flex flex-col items-center gap-1 text-lg text-brand3 font-bold">
             {State.database.userData.data.user.superfan_of.length}
-            <p className="flex items-center gap-1 text-base text-primary font-bold">
+            <p className="flex items-center gap-1 text-xs text-primary font-medium">
               SuperFans
             </p>
           </span>

@@ -87,8 +87,10 @@
   bg-brand hover:bg-brand  border-none hover:ring-1 hover:ring-primary dark:hover:ring-slate-100;
 }
 .btn-outline {
-  @apply hover:bg-gradient-to-tr   from-[#A36CFC]  via-primary  to-brand 
-  hover:text-white;
+  @apply hover:bg-gradient-to-tr   from-[#A36CFC]  via-primary  to-brand text-white;
+}
+.btn-primary {
+  @apply hover:text-white;
 }
 .text-brand1 {
   @apply text-slate-900 dark:text-slate-100;
@@ -125,6 +127,9 @@
 .bg-texture {
   background-image: radial-gradient(#130657 1px, #000024 1px);
   background-size: 20px 20px;
+}
+.bg-gradient {
+  @apply bg-gradient-to-tr   from-[#A36CFC]  via-primary  to-brand;
 }
 .slideshow {
   margin: 0 auto;

@@ -1,4 +1,7 @@
-import React from "react";
+import axios from "axios";
+import React, { useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import { UserContext } from "../../Store";
 import AddPost from "./AddPost";
 import Channels from "./Channels";
 import GameOfLuck from "./GameOfLuck";
