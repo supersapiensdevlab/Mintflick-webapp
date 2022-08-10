@@ -1,10 +1,12 @@
-import React, { useContext } from "react";
+import axios from "axios";
+import React, { useContext, useEffect, useState } from "react";
 import { Share } from "tabler-icons-react";
 import coverImage from "../../Assets/backgrounds/cover.png";
 import { UserContext } from "../../Store";
 
 function ProfileCard() {
   const State = useContext(UserContext);
+
   return (
     <div className="flex flex-col items-center  bg-slate-100 dark:bg-slate-800 w-full h-fit rounded-lg ">
       <img

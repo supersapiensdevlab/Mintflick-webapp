@@ -24,11 +24,8 @@ function App() {
   async function isUserAvaliable() {
     await axios({
       method: "post",
-      url: `${process.env.REACT_APP_API_BASE_URL}/user/getuser_by_wallet`,
-      headers: {
-        "content-type": "application/json",
-        "auth-token": localStorage.getItem("authtoken"),
-      },
+      url: `${process.env.REACT_APP_SERVER_URL}/user/getuser_by_wallet`,
+
       data: {
         walletId: localStorage.getItem("walletAddress"),
       },

@@ -15,7 +15,7 @@ function useWebModal() {
   async function isUserAvaliable(walletAddress, provider) {
     await axios({
       method: "post",
-      url: `${process.env.REACT_APP_API_BASE_URL}/user/getuser_by_wallet`,
+      url: `${process.env.REACT_APP_SERVER_URL}/user/getuser_by_wallet`,
       data: {
         walletId: walletAddress,
       },

@@ -8,10 +8,35 @@ import TextChannels from "../Componants/Profile/TextChannels";
 
 function Profile() {
   const State = useContext(UserContext);
+  const [loader, setloader] = useState(false);
+  async function isUserAvaliable() {
+    await axios({
+      method: "post",
+      url: `${process.env.REACT_APP_SERVER_URL}/user/getuser_by_wallet`,
 
-  useEffect(() => {}, []);
+      data: {
+        walletId: localStorage.getItem("walletAddress"),
+      },
+    })
+      .then((response) => {
+        console.log(response);
+        State.updateDatabase({
+          userData: response,
+        });
+        setloader(true);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
 
-  return (
+  useEffect(() => {
+    State.database.userData !== "" && isUserAvaliable();
+    console.log(State.database.userData);
+
+    console.log(localStorage.getItem("authtoken"));
+  }, []);
+  return loader ? (
     <div className=" flex flex-col lg:flex-row h-screen bg-slate-100 dark:bg-slate-800 lg:bg-white lg:dark:bg-slate-900">
       <div className="flex flex-col h-fit lg:h-full w-full lg:w-1/4 lg:ml-12 lg:mr-4 pt-16 lg:pt-24 space-y-6 overflow-y-auto">
         <ProfileCard></ProfileCard>
@@ -26,6 +51,8 @@ function Profile() {
         </div>
       </div>
     </div>
+  ) : (
+    <div className=" flex  lg:flex-row h-screen bg-slate-100 dark:bg-slate-800 lg:bg-white lg:dark:bg-slate-900"></div>
   );
 }
 
