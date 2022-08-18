@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import PhotoPost from "./PhotoPost";
+import Post from "./Post";
 
 function TimeLine() {
   const [posts, setPosts] = useState([]);
@@ -20,33 +20,36 @@ function TimeLine() {
   useEffect(() => {
     loadFeed();
   }, []);
-  console.log()
+  console.log();
 
   return (
     <div className="w-full max-w-2xl space-y-6">
       {posts.map((post) => (
         <>
-          {post.content_type === 'post' &&
-            <PhotoPost
-              key={post.content.id}
-              profilePic={post.profile_image}
-              profileName={post.name}
-              timestamp={post.timestamp}
-              text={post.content.announcement}
-              image={post.content.post_image}
-              price={post.price}
-              likes={post.content.likes}
-              comments={post.content.comments}
-              ownerId={post.ownerId}
-              tokenId={post.content.tokenId}
-            ></PhotoPost>}
-          {post.content_type === 'video' && <>
-            {/* Add component here of video */}
+          <Post
+            contentType={post.content_type}
+            key={post.content.id}
+            profilePic={post.profile_image}
+            profileName={post.name}
+            timestamp={post.timestamp}
+            text={post.content.announcement}
+            image={post.content.post_image}
+            price={post.price}
+            likes={post.content.likes}
+            comments={post.content.comments}
+            ownerId={post.ownerId}
+            tokenId={post.content.tokenId}
+            trackImage={post.content.trackImage}
+            trackName={post.content.trackName}
+            trackDisc={post.content.description}
+          ></Post>
+          {/* {post.content_type === 'video' && <>
+            Add component here of video
             Video
           </>}
           {post.content_type === 'track' && <>
-            {/* Add component here of track */}
-            Track</>}
+            Add component here of track
+            Track</>} */}
         </>
       ))}
     </div>

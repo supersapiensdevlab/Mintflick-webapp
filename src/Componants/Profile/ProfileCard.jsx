@@ -10,12 +10,20 @@ function ProfileCard() {
   return (
     <div className="flex flex-col items-center  bg-slate-100 dark:bg-slate-800 w-full h-fit rounded-lg ">
       <img
-        src={coverImage}
+        src={
+          State.database.userData.data.user.cover_image
+            ? State.database.userData.data.user.cover_image
+            : coverImage
+        }
         alt="Girl in a jacket"
         className="w-full aspect-{4/2} rounded-lg object-cover"
       />
       <img
-        src={coverImage}
+        src={
+          State.database.userData.data.user.profile_image
+            ? State.database.userData.data.user.profile_image
+            : coverImage
+        }
         alt="Girl in a jacket"
         className="w-20 h-20 -mt-10 object-cover rounded-full"
       />

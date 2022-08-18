@@ -22,12 +22,10 @@ function useWebModal() {
     })
       .then((response) => {
         console.log(response);
-
         State.updateDatabase({
           userData: response,
         });
         localStorage.setItem("authtoken", response.data.jwtToken);
-
         navigateTo("/homescreen/home");
       })
       .catch(function (error) {

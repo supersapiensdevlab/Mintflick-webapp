@@ -4,6 +4,7 @@ import { UserContext } from "../../Store";
 import Main_logo from "../../Assets/logos/Main_logo";
 import Main_logo_dark from "../../Assets/logos/Main_logo_dark";
 import { NavLink } from "react-router-dom";
+import coverImage from "../../Assets/backgrounds/cover.png";
 
 function MobileHeader() {
   const State = useContext(UserContext);
@@ -14,7 +15,13 @@ function MobileHeader() {
         <div className="dropdown  mt-2">
           <label tabindex="0" className="avatar">
             <div className="w-10 h-10 rounded-full">
-              <img src={State.database.userData.data?.user.profile_image} />
+              <img
+                src={
+                  State.database.userData.data.user.profile_image
+                    ? State.database.userData.data.user.profile_image
+                    : coverImage
+                }
+              />
             </div>
           </label>
           <ul

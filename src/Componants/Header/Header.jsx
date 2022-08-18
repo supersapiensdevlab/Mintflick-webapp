@@ -12,6 +12,7 @@ import Main_logo from "../../Assets/logos/Main_logo";
 import TopNavigation from "./TopNavigation";
 import Main_logo_dark from "../../Assets/logos/Main_logo_dark";
 import { NavLink } from "react-router-dom";
+import coverImage from "../../Assets/backgrounds/cover.png";
 
 function Header() {
   const State = useContext(UserContext);
@@ -53,7 +54,13 @@ function Header() {
         <div class="dropdown dropdown-end">
           <label tabindex="0" className=" avatar">
             <div className="w-10 rounded-full">
-              <img src={State.database.userData.data?.user.profile_image} />
+              <img
+                src={
+                  State.database.userData.data.user.profile_image
+                    ? State.database.userData.data.user.profile_image
+                    : coverImage
+                }
+              />
             </div>
           </label>
           <ul
