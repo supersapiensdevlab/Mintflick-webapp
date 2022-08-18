@@ -63,7 +63,7 @@ function Post(props) {
         </div>
       )}
       {props.contentType === "track" && (
-        <div className="flex w-full h-fit z-10 lg:bg-slate-200 lg:dark:bg-slate-700 rounded-l-lg rounded-r-lg overflow-hidden">
+        <div className="flex w-full h-fit z-10 bg-slate-200 dark:bg-slate-700 rounded-l-lg rounded-r-lg overflow-hidden">
           <img
             className="h-28 w-28 object-cover"
             src={props.trackImage}
@@ -84,19 +84,13 @@ function Post(props) {
                 type="range"
                 min="0"
                 max="100"
-                class="w-full h-2 bg-slate-100 dark:bg-slate-600 appearance-none rounded-full"
+                class="w-full h-2 bg-slate-300 dark:bg-slate-600 appearance-none rounded-full"
               />
 
-              <label class="btn btn-circle btn-sm btn-primary swap swap-rotate ">
+              <label class="btn btn-circle btn-sm btn-ghost swap swap-rotate ">
                 <input type="checkbox" />
-                <PlayerPlay
-                  size={14}
-                  class="swap-off fill-current"
-                ></PlayerPlay>
-                <PlayerPause
-                  size={14}
-                  class="swap-on fill-current"
-                ></PlayerPause>
+                <PlayerPlay class="swap-off "></PlayerPlay>
+                <PlayerPause class="swap-on "></PlayerPause>
               </label>
             </div>
           </div>
