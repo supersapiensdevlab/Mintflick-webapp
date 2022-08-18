@@ -10,8 +10,8 @@ import {
 import PolygonToken from "../../Assets/logos/PolygonToken";
 
 function PhotoPost(props) {
-  const [gettingNFTData,setGettingNFTData] = useState(true);
-  
+  const [gettingNFTData, setGettingNFTData] = useState(true);
+
   return (
     <div className="w-full h-fit lg:bg-slate-100 lg:dark:bg-slate-800 lg:rounded-xl p-4 lg:p-8 space-y-4 pb-4 border-b-2 lg:border-none  border-slate-200 dark:border-slate-900">
       <div className="flex justify-between items-center">
@@ -28,25 +28,33 @@ function PhotoPost(props) {
             <p className="font-normal text-xs text-brand4">{props.timestamp}</p>
           </div>
         </div>
-        <div className="btn btn-circle btn-ghost ">
-          <DotsVertical className=""></DotsVertical>
+        <div className=" ">
+          <div className="dropdown dropdown-end">
+            <label tabindex="0" className="btn btn-ghost btn-circle">
+            <DotsVertical className=""></DotsVertical>
+            </label>
+            <ul tabindex="0" className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
+              <li><a>Settings</a></li>
+              <li><a>Logout</a></li>
+            </ul>
+          </div>
         </div>
       </div>
       <p className="font-normal text-base text-brand2 w-full">{props.text}</p>
       <div className="relative w-full h-fit z-10">
         {props.image && <img className="w-full rounded-lg" src={props.image} alt="User Post" />}
       </div>
-        <div className={props.tokenId && !gettingNFTData ? "cursor-pointer flex items-center justify-start rounded-lg space-x-2 text-brand2":"hidden"}>
-          <p className="font-bold text-sm text-primary">Owner</p>
-          <At size={20}></At>
-          <p className=" font-semibold text-sm ">{props.ownerId}</p>
-          <div className=" flex flex-grow  h-fit  items-center justify-end rounded-full ">
-            <div className="flex h-fit w-fit items-center justify-end  btn-primary btn-outline rounded-full p-1">
-              <PolygonToken></PolygonToken>
-              <p className="text-sm  mx-1">{props.price}</p>
-            </div>
+      <div className={props.tokenId && !gettingNFTData ? "cursor-pointer flex items-center justify-start rounded-lg space-x-2 text-brand2" : "hidden"}>
+        <p className="font-bold text-sm text-primary">Owner</p>
+        <At size={20}></At>
+        <p className=" font-semibold text-sm ">{props.ownerId}</p>
+        <div className=" flex flex-grow  h-fit  items-center justify-end rounded-full ">
+          <div className="flex h-fit w-fit items-center justify-end  btn-primary btn-outline rounded-full p-1">
+            <PolygonToken></PolygonToken>
+            <p className="text-sm  mx-1">{props.price}</p>
           </div>
         </div>
+      </div>
       <div className="flex justify-between">
         <div className="flex items-center space-x-4">
           <div className="cursor-pointer flex items-center text-rose-700 space-x-2">
@@ -64,7 +72,7 @@ function PhotoPost(props) {
           </div>
         </div>
       </div>
-    </div>
+    </div >
   );
 }
 
