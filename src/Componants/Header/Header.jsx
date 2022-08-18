@@ -53,7 +53,7 @@ function Header() {
         <div class="dropdown dropdown-end">
           <label tabindex="0" className=" avatar">
             <div className="w-10 rounded-full">
-              <img src="https://placeimg.com/80/80/people" />
+              <img src={State.database.userData.data.user.profile_image} />
             </div>
           </label>
           <ul
