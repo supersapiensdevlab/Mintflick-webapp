@@ -14,7 +14,7 @@ function MobileHeader() {
         <div className="dropdown  mt-2">
           <label tabindex="0" className="avatar">
             <div className="w-10 h-10 rounded-full">
-              <img src={State.database.userData.data.user.profile_image} />
+              <img src={State.database.userData.data?.user.profile_image} />
             </div>
           </label>
           <ul
