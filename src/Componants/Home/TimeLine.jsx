@@ -11,7 +11,7 @@ function TimeLine() {
     })
       .then((response) => {
         console.log(response);
-        setPosts(response.data);
+        setPosts(response.data.reverse());
       })
       .catch(function (error) {
         console.log(error);
@@ -20,22 +20,34 @@ function TimeLine() {
   useEffect(() => {
     loadFeed();
   }, []);
+  console.log()
 
   return (
     <div className="w-full max-w-2xl space-y-6">
       {posts.map((post) => (
-        <PhotoPost
-          key={post.id}
-          profilePic={post.profile_image}
-          profileName={post.name}
-          timestamp={post.timestamp}
-          text={post.content.announcement}
-          image={post.content.post_image}
-          price={post.price}
-          likeCount={post.likeCount}
-          commentCount={post.commentCount}
-          ownerId={post.ownerId}
-        ></PhotoPost>
+        <>
+          {post.content_type === 'post' &&
+            <PhotoPost
+              key={post.content.id}
+              profilePic={post.profile_image}
+              profileName={post.name}
+              timestamp={post.timestamp}
+              text={post.content.announcement}
+              image={post.content.post_image}
+              price={post.price}
+              likes={post.content.likes}
+              comments={post.content.comments}
+              ownerId={post.ownerId}
+              tokenId={post.content.tokenId}
+            ></PhotoPost>}
+          {post.content_type === 'video' && <>
+            {/* Add component here of video */}
+            Video
+          </>}
+          {post.content_type === 'track' && <>
+            {/* Add component here of track */}
+            Track</>}
+        </>
       ))}
     </div>
   );
