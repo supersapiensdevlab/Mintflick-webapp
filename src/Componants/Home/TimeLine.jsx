@@ -33,7 +33,7 @@ function TimeLine() {
             key={i}
             myKey={i}
             profilePic={post.profile_image}
-            profileName={post.name}
+            profileName={post.username}
             timestamp={post.content.time}
             text={post.content.announcement}
             image={post.content.post_image}
