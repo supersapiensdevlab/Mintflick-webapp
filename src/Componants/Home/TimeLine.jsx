@@ -24,10 +24,9 @@ function TimeLine() {
     loadFeed();
   }, []);
 
-
   return (
     <div className="w-full max-w-2xl space-y-6">
-      {posts.map((post,i) => (
+      {posts.map((post, i) => (
         <>
           <Post
             contentType={post.content_type}
@@ -35,7 +34,7 @@ function TimeLine() {
             myKey={i}
             profilePic={post.profile_image}
             profileName={post.name}
-            timestamp={post.timestamp}
+            timestamp={post.content.time}
             text={post.content.announcement}
             image={post.content.post_image}
             price={post.price}
@@ -49,13 +48,13 @@ function TimeLine() {
             trackUrl={post.content.link}
             currentPlay={currentPlay}
             setCurrentPlay={setCurrentPlay}
-            profileUsername = {post.username}
-            trackId = {post.content.trackId}
-            trackPlays = {post.content.plays}
-            videoImage = {post.content.videoImage}
+            profileUsername={post.username}
+            trackId={post.content.trackId}
+            trackPlays={post.content.plays}
+            videoImage={post.content.videoImage}
             videoUrl={post.content.link}
-            videoId = {post.content.videoId}
-            videoViews = {post.content.views}
+            videoId={post.content.videoId}
+            videoViews={post.content.views}
           ></Post>
           {/* {post.content_type === 'video' && <>
             Add component here of video
