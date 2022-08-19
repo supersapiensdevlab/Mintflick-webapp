@@ -4,6 +4,9 @@ import Post from "./Post";
 
 function TimeLine() {
   const [posts, setPosts] = useState([]);
+  // for Playing only one at time
+  const [currentPlay, setCurrentPlay] = useState(null);
+
   async function loadFeed() {
     await axios({
       method: "get",
@@ -20,15 +23,16 @@ function TimeLine() {
   useEffect(() => {
     loadFeed();
   }, []);
-  console.log();
+
 
   return (
     <div className="w-full max-w-2xl space-y-6">
-      {posts.map((post) => (
+      {posts.map((post,i) => (
         <>
           <Post
             contentType={post.content_type}
-            key={post.content.id}
+            key={i}
+            myKey={i}
             profilePic={post.profile_image}
             profileName={post.name}
             timestamp={post.timestamp}
@@ -42,6 +46,12 @@ function TimeLine() {
             trackImage={post.content.trackImage}
             trackName={post.content.trackName}
             trackDisc={post.content.description}
+            trackUrl={post.content.link}
+            currentPlay={currentPlay}
+            setCurrentPlay={setCurrentPlay}
+            profileUsername = {post.username}
+            trackId = {post.content.trackId}
+            trackPlays = {post.content.plays}
           ></Post>
           {/* {post.content_type === 'video' && <>
             Add component here of video

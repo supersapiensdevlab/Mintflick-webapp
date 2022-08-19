@@ -56,7 +56,7 @@ function Header() {
             <div className="w-10 rounded-full">
               <img
                 src={
-                  State.database.userData.data.user.profile_image
+                  State.database.userData.data?.user.profile_image
                     ? State.database.userData.data.user.profile_image
                     : coverImage
                 }
