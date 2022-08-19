@@ -52,6 +52,10 @@ function TimeLine() {
             profileUsername = {post.username}
             trackId = {post.content.trackId}
             trackPlays = {post.content.plays}
+            videoImage = {post.content.videoImage}
+            videoUrl={post.content.link}
+            videoId = {post.content.videoId}
+            videoViews = {post.content.views}
           ></Post>
           {/* {post.content_type === 'video' && <>
             Add component here of video

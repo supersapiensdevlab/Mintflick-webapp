@@ -13,6 +13,8 @@ import PolygonToken from "../../Assets/logos/PolygonToken";
 import coverImage from "../../Assets/backgrounds/cover.png";
 import { UserContext } from "../../Store";
 import axios from "axios";
+import ReactPlayer from 'react-player';
+
 
 function Post(props) {
 
@@ -57,7 +59,6 @@ function Post(props) {
   }, [props.currentPlay]);
 
   const togglePlayPause = () => {
-    console.log('toggleing')
     const prevValue = isPlaying;
     setIsPlaying(!prevValue);
     if (!prevValue) {
@@ -74,7 +75,7 @@ function Post(props) {
     if (!sendPlays) {
       trackStarted();
     }
-    if(currentTime == duration){
+    if (currentTime == duration) {
       setIsPlaying(false)
     }
   }, [currentTime]);
@@ -138,6 +139,34 @@ function Post(props) {
 
   //// Track End
 
+  //// Only Track Specific States and Functions
+
+
+  const videoStarted = () => {
+    if (State.database.userData.data.user ? State.database.userData.data.user.username !== props.profileUsername : false) {
+      const timer = setTimeout(() => {
+        const videoDetails = {
+          videousername: `${props.profileUsername}`,
+          videoindex: `${props.videoId}`,
+          viewed_user: `${State.database.userData.data.user.username}`,
+        };
+
+        axios({
+          method: 'POST',
+          url: `${process.env.REACT_APP_SERVER_URL}/user/views`,
+          headers: {
+            'content-type': 'application/json',
+            'auth-token': JSON.stringify(State.database.userData.data.jwtToken),
+          },
+          data: videoDetails,
+        }).then(function (response) { });
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  };
+
+
+  //// Video End
 
 
   return (
@@ -235,7 +264,25 @@ function Post(props) {
       )}
       {props.contentType === "track" && <div className="text-gray-400">{props.trackPlays ? props.trackPlays.length : 0} plays</div>}
       {props.contentType === "video" && (
-        <div className=" w-full h-fit z-10">video</div>
+        <>
+        <div className=" w-full h-fit z-10">
+          <ReactPlayer
+            className="w-full h-full max-h-screen "
+            width="100%"
+            height="400px"
+            playing={true}
+            muted={true}
+            volume={0.5}
+            light={props.videoImage}
+            url={props.videoUrl}
+            controls={true}
+            onStart={() => {
+              videoStarted();
+            }}
+          />
+        </div>
+        <div className="text-gray-400">{props.videoViews ? props.videoViews.length : 0} views</div>
+        </>
       )}
       <div
         className={
