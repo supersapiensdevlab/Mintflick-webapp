@@ -514,7 +514,7 @@ function Post(props) {
               onClick={() => setshowComments(!showComments)}
               className="cursor-pointer"
             >
-              {props.comments ? props.comments.length : 0} Comments
+              {commentCount} Comments
             </span>
           </div>
         </>
@@ -544,7 +544,7 @@ function Post(props) {
               onClick={() => setshowComments(!showComments)}
               className="cursor-pointer"
             >
-              {props.comments ? props.comments.length : 0} Comments
+              {commentCount} Comments
             </span>
           </div>
         </>
