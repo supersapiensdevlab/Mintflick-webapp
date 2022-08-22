@@ -34,6 +34,7 @@ function TimeLine() {
             myKey={i}
             profilePic={post.profile_image}
             profileName={post.username}
+            profileuser_id = {post.user_id}
             timestamp={post.content.time}
             text={post.content.announcement}
             image={post.content.post_image}
@@ -55,6 +56,8 @@ function TimeLine() {
             videoUrl={post.content.link}
             videoId={post.content.videoId}
             videoViews={post.content.views}
+            postId = {post.content.postId}
+            content = {post.content}
           ></Post>
           {/* {post.content_type === 'video' && <>
             Add component here of video
