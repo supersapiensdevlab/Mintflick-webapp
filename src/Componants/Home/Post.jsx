@@ -16,7 +16,7 @@ import coverImage from "../../Assets/backgrounds/cover.png";
 import { UserContext } from "../../Store";
 import axios from "axios";
 import ReactPlayer from "react-player";
-import moment from 'moment';
+import moment from "moment";
 import AllComments from "./AllComments/AllComments";
 
 function Post(props) {
@@ -52,50 +52,49 @@ function Post(props) {
   // local comments
   const [myComments, setMyComments] = useState([]);
 
-
   //comments
   const [showComments, setshowComments] = useState(false);
 
-
   useEffect(() => {
     if (props.comments) {
-      setCommentCount(props.comments.length)
+      setCommentCount(props.comments.length);
     }
-
-  }, [props.comments])
+  }, [props.comments]);
   async function handleOnEnter() {
-    if (State.database.userData.data.user && text !== '') {
+    if (State.database.userData.data.user && text !== "") {
       let data = {
         user_data_id: props.profileuser_id,
         content: props.content,
         comment: text,
       };
       axios({
-        method: 'post',
+        method: "post",
         url: `${process.env.REACT_APP_SERVER_URL}/user/addcomment`,
         data: data,
         headers: {
-          'content-type': 'application/json',
-          'auth-token': JSON.stringify(localStorage.getItem('authtoken')),
+          "content-type": "application/json",
+          "auth-token": JSON.stringify(localStorage.getItem("authtoken")),
         },
-      }).then((res) => {
-        setText("");
-        setMyComments((myComments) => [
-          {
-            comment: text,
-            _id: res.data.id,
-            user_id: State.database.userData.data.user._id,
-            likes: [],
-            profile_image: State.database.userData.data.user.profile_image,
-            username: State.database.userData.data.user.username,
-            name: State.database.userData.data.user.name,
-          },
-          ...myComments,
-        ]);
-        setCommentCount((commentsNumber) => commentsNumber + 1);
-      }).catch((err) => {
-        console.log(err);
-      });
+      })
+        .then((res) => {
+          setText("");
+          setMyComments((myComments) => [
+            {
+              comment: text,
+              _id: res.data.id,
+              user_id: State.database.userData.data.user._id,
+              likes: [],
+              profile_image: State.database.userData.data.user.profile_image,
+              username: State.database.userData.data.user.username,
+              name: State.database.userData.data.user.name,
+            },
+            ...myComments,
+          ]);
+          setCommentCount((commentsNumber) => commentsNumber + 1);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   }
 
@@ -229,15 +228,13 @@ function Post(props) {
             "auth-token": JSON.stringify(State.database.userData.data.jwtToken),
           },
           data: videoDetails,
-        }).then(function (response) { });
+        }).then(function (response) {});
       }, 5000);
       return () => clearTimeout(timer);
     }
   };
 
   //// Video End
-
-
 
   // like section
   useEffect(() => {
@@ -251,7 +248,11 @@ function Post(props) {
       }
     }
 
-    if (props.likes && State.database.userData.data && props.likes.includes(State.database.userData.data.user.username)) {
+    if (
+      props.likes &&
+      State.database.userData.data &&
+      props.likes.includes(State.database.userData.data.user.username)
+    ) {
       if (props.trackId) {
         setTrackLiked(true);
       } else if (props.postId) {
@@ -268,9 +269,9 @@ function Post(props) {
         setVideoLiked(false);
       }
     }
-  }, [props.likes, State.database.userData.data])
+  }, [props.likes, State.database.userData.data]);
   const handleVideoLikes = () => {
-    let videotemp = videoLiked
+    let videotemp = videoLiked;
     setVideoLiked(!videoLiked);
     if (videotemp) {
       setVideoLikes((l) => l - 1);
@@ -284,11 +285,11 @@ function Post(props) {
       videoId: `${props.videoId}`,
     };
     axios({
-      method: 'POST',
+      method: "POST",
       url: `${process.env.REACT_APP_SERVER_URL}/user/videoreactions`,
       headers: {
-        'content-type': 'application/json',
-        'auth-token': JSON.stringify(localStorage.getItem('authtoken')),
+        "content-type": "application/json",
+        "auth-token": JSON.stringify(localStorage.getItem("authtoken")),
       },
       data: likeData,
     })
@@ -296,7 +297,7 @@ function Post(props) {
         if (response) {
           ////console.log(response);
         } else {
-          console.log('error');
+          console.log("error");
         }
       })
       .catch(function (error) {
@@ -305,7 +306,7 @@ function Post(props) {
   };
 
   const handleTrackLikes = () => {
-    let tracktemp = trackLiked
+    let tracktemp = trackLiked;
     setTrackLiked(!trackLiked);
     if (tracktemp) {
       setTrackLikes((l) => l - 1);
@@ -329,11 +330,11 @@ function Post(props) {
       trackId: `${props.trackId}`,
     };
     axios({
-      method: 'POST',
+      method: "POST",
       url: `${process.env.REACT_APP_SERVER_URL}/user/trackreactions`,
       headers: {
-        'content-type': 'application/json',
-        'auth-token': JSON.stringify(localStorage.getItem('authtoken')),
+        "content-type": "application/json",
+        "auth-token": JSON.stringify(localStorage.getItem("authtoken")),
       },
       data: likeData,
     })
@@ -341,7 +342,7 @@ function Post(props) {
         if (response) {
           ////console.log(response);
         } else {
-          console.log('error');
+          console.log("error");
         }
       })
       .catch(function (error) {
@@ -350,7 +351,7 @@ function Post(props) {
   };
 
   const handlePostLikes = () => {
-    let posttemp = postLiked
+    let posttemp = postLiked;
     setPostLiked(!postLiked);
     if (posttemp) {
       setPostLikes((l) => l - 1);
@@ -374,11 +375,11 @@ function Post(props) {
       postId: `${props.postId}`,
     };
     axios({
-      method: 'POST',
+      method: "POST",
       url: `${process.env.REACT_APP_SERVER_URL}/user/postreactions`,
       headers: {
-        'content-type': 'application/json',
-        'auth-token': JSON.stringify(localStorage.getItem('authtoken')),
+        "content-type": "application/json",
+        "auth-token": JSON.stringify(localStorage.getItem("authtoken")),
       },
       data: likeData,
     })
@@ -386,7 +387,7 @@ function Post(props) {
         if (response) {
           ////console.log(response);
         } else {
-          console.log('error');
+          console.log("error");
         }
       })
       .catch(function (error) {
@@ -407,7 +408,9 @@ function Post(props) {
             <p className="font-semibold text-base text-brand1">
               {props.profileName}
             </p>
-            <p className="font-normal text-xs text-brand4">{moment(props.timestamp * 1000).fromNow()}</p>
+            <p className="font-normal text-xs text-brand4">
+              {moment(props.timestamp * 1000).fromNow()}
+            </p>
           </div>
         </div>
         <div className=" ">
@@ -568,30 +571,39 @@ function Post(props) {
       </div>
       <div className="flex justify-between">
         <div className="flex items-center space-x-4">
-          {props.contentType === 'post' &&
+          {props.contentType === "post" && (
             <div className="cursor-pointer flex items-center text-rose-700 space-x-2">
-              <Heart color={`${postLiked ? 'red' : 'white'}`} onClick={handlePostLikes}></Heart>
+              <Heart
+                classNamer={`${postLiked ? "text-rose-700" : "text-brand1"}`}
+                onClick={handlePostLikes}
+              ></Heart>
               <p className="font-medium text-sm ">
-                {postLikes > 0 ? postLikes : ''}
+                {postLikes > 0 ? postLikes : ""}
               </p>
             </div>
-          }
-          {props.contentType === 'video' &&
+          )}
+          {props.contentType === "video" && (
             <div className="cursor-pointer flex items-center text-rose-700 space-x-2">
-              <Heart color={`${videoLiked ? 'red' : 'white'}`} onClick={handleVideoLikes}></Heart>
+              <Heart
+                className={`${videoLiked ? "text-rose-700" : "text-brand1"}`}
+                onClick={handleVideoLikes}
+              ></Heart>
               <p className="font-medium text-sm ">
-                {videoLikes > 0 ? videoLikes : ''}
+                {videoLikes > 0 ? videoLikes : ""}
               </p>
             </div>
-          }
-          {props.contentType === 'track' &&
+          )}
+          {props.contentType === "track" && (
             <div className="cursor-pointer flex items-center text-rose-700 space-x-2">
-              <Heart color={`${trackLiked ? 'red' : 'white'}`} onClick={handleTrackLikes}></Heart>
+              <Heart
+                className={`${trackLiked ? "text-rose-700" : "text-brand1"}`}
+                onClick={handleTrackLikes}
+              ></Heart>
               <p className="font-medium text-sm ">
-                {trackLikes > 0 ? trackLikes : ''}
+                {trackLikes > 0 ? trackLikes : ""}
               </p>
             </div>
-          }
+          )}
           <div
             onClick={() => setshowCommentInput(!showCommentInput)}
             className="cursor-pointer flex items-center space-x-2 text-brand1"
@@ -622,11 +634,15 @@ function Post(props) {
         </div>
       )}
 
-      {showComments && (props.comments || myComments.length > 0) ? <AllComments 
+      {showComments && (props.comments || myComments.length > 0) ? (
+        <AllComments
           myComments={myComments}
           user_id={props.profileuser_id}
           contentData={props.content}
-      />:<></>}
+        />
+      ) : (
+        <></>
+      )}
     </div>
   );
 }
