@@ -9,7 +9,6 @@ import { UserContext } from "../../Store";
 function ConnectWalletComponant() {
   const modal = useWebModal();
   const wallets = [metamask, walletConnect, torus, sequence];
-  const State = useContext(UserContext);
 
   return (
     <div

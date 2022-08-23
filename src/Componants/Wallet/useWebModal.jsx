@@ -69,51 +69,51 @@ function useWebModal() {
     const providerOptions = newWallet
       ? {
           /* See Provider Options Section */ injected: {
-            display: {
-              name: "Default Wallet",
-              description: "Connect with the provider in your Browser",
-            },
-            options: {
-              networkParams: {
-                chainId: "137", // default: 1
-                networkName: "Matic Mainnet",
-              },
-            },
-            package: null,
+          display: {
+            name: "Default Wallet",
+            description: "Connect with the provider in your Browser",
           },
+          options: {
+            networkParams: {
+              chainId: "137", // default: 1
+              networkName: "Matic Mainnet",
+            },
+          },
+          package: null,
+        },
 
-          walletconnect: {
-            package: WalletConnectProvider, // required
-            options: {
-              infuraId: "27e484dcd9e3efcfd25a83a78777cdf1", // required
-            },
+        walletconnect: {
+          package: WalletConnectProvider, // required
+          options: {
+            infuraId: "27e484dcd9e3efcfd25a83a78777cdf1", // required
           },
-          ...newWalletProvider,
-        }
+        },
+        ...newWalletProvider,
+      }
       : {
-          torus: {
-            package: Torus, // required
-            display: {
-              description: "Create your wallet with torus",
-            },
-            options: {
-              networkParams: {
-                chainId: "137", // default: 1
-                networkName: "Matic Mainnet",
-              },
+        torus: {
+          package: Torus, // required
+          display: {
+            description: "Create your wallet with torus",
+          },
+          options: {
+            networkParams: {
+              chainId: "137", // default: 1
+              networkName: "Matic Mainnet",
             },
           },
-          sequence: {
-            package: sequence, // required
-            display: {
-              description: "Create your wallet with sequence",
-            },
-            options: {
-              appName: "My App", // optional
-              defaultNetwork: "polygon", // optional
-            },
+        },
+        sequence: {
+          package: sequence, // required
+          display: {
+            description: "Create your wallet with sequence",
           },
-        };
+          options: {
+            appName: "My App", // optional
+            defaultNetwork: "polygon", // optional
+          },
+        },
+      };
 
     const web3Modal = new Web3Modal({
       disableInjectedProvider: !newWallet,
@@ -132,10 +132,15 @@ function useWebModal() {
     console.log(Address);
     isUserAvaliable(Address, provider);
     localStorage.setItem("walletAddress", Address);
+    State.updateDatabase({
+      provider: 'testing provider'
+    });
     localStorage.setItem(
       "provider",
-      JSON.stringify(provider, getCircularReplacer())
+      JSON.stringify(provider)
     );
+    console.log(provider);
+    console.log('Helllooooo Worlddddd')
     navigateTo("/homescreen/home");
   };
 }
