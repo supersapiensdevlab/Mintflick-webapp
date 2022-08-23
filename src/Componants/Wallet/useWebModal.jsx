@@ -27,10 +27,10 @@ function useWebModal() {
         });
         localStorage.setItem("authtoken", response.data.jwtToken);
         localStorage.setItem("walletAddress", walletAddress);
-        localStorage.setItem(
-          "provider",
-          JSON.stringify(provider, getCircularReplacer())
-        );
+        // localStorage.setItem(
+        //   "provider",
+        //   JSON.stringify(provider, getCircularReplacer()),
+        // );
         navigateTo("/homescreen/home");
       })
       .catch(function (error) {
@@ -134,6 +134,12 @@ function useWebModal() {
 
     const signer = provider.getSigner();
     const Address = await signer.getAddress();
+
+    console.log(provider);
+    State.updateDatabase({
+      provider: provider,
+      walletAddress: Address,
+    });
     console.log(Address);
     isUserAvaliable(Address, provider);
   };

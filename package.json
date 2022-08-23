@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@biconomy/mexa": "^3.0.2",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.3.0",
     "@testing-library/user-event": "^13.5.0",
@@ -14,6 +15,7 @@
     "ethers": "^5.6.9",
     "lottie-react": "^2.3.1",
     "moment": "^2.29.4",
+    "net": "^1.0.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-player": "^2.10.1",
@@ -21,6 +23,7 @@
     "react-scripts": "5.0.1",
     "tabler-icons-react": "^1.52.0",
     "web-vitals": "^2.1.4",
+    "web3": "^1.7.5",
     "web3.storage": "^3.3.2",
     "web3modal": "^1.9.8"
   },
@@ -51,10 +54,12 @@
   "devDependencies": {
     "assert": "^2.0.0",
     "autoprefixer": "^10.4.7",
+    "browserify-zlib": "^0.2.0",
     "buffer": "^6.0.3",
     "crypto-browserify": "^3.12.0",
     "https-browserify": "^1.0.0",
     "os-browserify": "^0.3.0",
+    "path-browserify": "^1.0.1",
     "postcss": "^8.4.14",
     "process": "^0.11.10",
     "react-app-rewired": "^2.2.1",
