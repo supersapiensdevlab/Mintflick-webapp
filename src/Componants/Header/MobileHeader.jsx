@@ -67,8 +67,7 @@ function MobileHeader() {
             <li>
               <NavLink
                 onClick={() => {
-                  localStorage.removeItem("walletAddress");
-                  localStorage.removeItem("provider");
+                  localStorage.clear();
                 }}
                 to={"/"}
                 className="hover:bg-rose-500 "

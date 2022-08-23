@@ -574,7 +574,7 @@ function Post(props) {
           {props.contentType === "post" && (
             <div className="cursor-pointer flex items-center text-rose-700 space-x-2">
               <Heart
-                classNamer={`${postLiked ? "text-rose-700" : "text-brand1"}`}
+                className={`${postLiked ? "text-rose-700" : "text-brand1"}`}
                 onClick={handlePostLikes}
               ></Heart>
               <p className="font-medium text-sm ">

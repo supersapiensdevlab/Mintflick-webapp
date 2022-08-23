@@ -4,6 +4,7 @@ import metamask from "../../Assets/logos/wallet/metamask.png";
 import walletConnect from "../../Assets/logos/wallet/walletConnect.png";
 import torus from "../../Assets/logos/wallet/torus.png";
 import sequence from "../../Assets/logos/wallet/sequence.svg";
+import { UserContext } from "../../Store";
 
 function ConnectWalletComponant() {
   const modal = useWebModal();
