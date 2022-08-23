@@ -2,6 +2,7 @@ import axios from 'axios';
 import React from 'react'
 import { useState } from 'react';
 import { Camera, File, X } from 'tabler-icons-react';
+import PolygonToken from '../../Assets/logos/PolygonToken';
 import { uploadFile } from '../../Helper/uploadHelper';
 
 function PhotoPostModal({ setphotoPostModalOpen }) {
@@ -91,7 +92,6 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
     return (
         <div className="modal-box p-0 bg-slate-100 dark:bg-slate-800 ">
             <div className="w-full h-fit p-2 bg-slate-300 dark:bg-slate-700">
-                <div className="w-12 h-1 bg-slate-100 mx-auto rounded-full"></div>
                 <div className="flex justify-between items-center p-2">
                     <h3 className="flex items-center gap-2 font-bold text-lg text-brand2">
                         <Camera />
@@ -154,7 +154,7 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
                                     required={true}
                                 />
                                 <span className="text-brand3 bg-slate-300 dark:bg-slate-600 ">
-                                    Matic
+                                    <PolygonToken></PolygonToken> &nbsp; Matic
                                 </span>
                             </label>
                         </div>}
