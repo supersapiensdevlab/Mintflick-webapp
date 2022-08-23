@@ -26,6 +26,11 @@ function useWebModal() {
           userData: response,
         });
         localStorage.setItem("authtoken", response.data.jwtToken);
+        localStorage.setItem("walletAddress", walletAddress);
+        localStorage.setItem(
+          "provider",
+          JSON.stringify(provider, getCircularReplacer())
+        );
         navigateTo("/homescreen/home");
       })
       .catch(function (error) {
@@ -131,12 +136,6 @@ function useWebModal() {
     const Address = await signer.getAddress();
     console.log(Address);
     isUserAvaliable(Address, provider);
-    localStorage.setItem("walletAddress", Address);
-    localStorage.setItem(
-      "provider",
-      JSON.stringify(provider, getCircularReplacer())
-    );
-    navigateTo("/homescreen/home");
   };
 }
 
