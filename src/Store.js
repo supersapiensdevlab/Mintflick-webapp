@@ -8,6 +8,7 @@ function Store(props) {
     walletAddress: "",
     provider: {},
     userData: {},
+    liveUsers: [],
   });
   const updateStore = (data) => {
     setstore({
