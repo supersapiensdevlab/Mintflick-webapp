@@ -62,7 +62,8 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
             type: "application/json",
           });
           const metaFile = [new File([blob], "meta.json")];
-          uploadFile(selectedPost.file)
+
+          uploadFile(metaFile)
             .then(async (cid) => {
               console.log("stored files with cid:", cid);
               createToken(
@@ -79,20 +80,6 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
             .catch((err) => {
               console.log(err);
             });
-          //storeWithProgress(metaFile);
-          //   .then(async (metaCid) => {
-          //     console.log(metaCid);
-          //     createToken(
-          //       "https://ipfs.io/ipfs/" + metaCid,
-          //       nftPrice,
-          //       window.web3,
-          //       setMinting,
-          //       setMintingProgress,
-          //     ).then(async (tokenId) => {
-          //       console.log("TOKEN ID Created : ", tokenId); // token created
-          //       formData.append("tokenId", tokenId);
-          //     });
-          //   });
         }
 
         axios
@@ -211,6 +198,10 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
               </div>
             )}
           </div>
+          <progress
+            class='progress progress-success w-56 hidden'
+            value='50'
+            max='100'></progress>
 
           {/* While minting NFT */}
           {/* <div className="flex flex-col text-center">
@@ -297,7 +288,11 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
                         </ProgressBar>
                     </div> */}
 
-          <button type={"submit"} className='btn btn-brand w-full'>
+          <button
+            type={"submit"}
+            className={`btn  w-full ${
+              uploadingPost ? "loading" : "btn-brand"
+            }`}>
             Post
           </button>
         </div>
