@@ -16,13 +16,15 @@ function Channels() {
         axios
           .get(`${process.env.REACT_APP_SERVER_URL}/user/${State.database.userData.data.user.pinned[i]}`)
           .then((value) => {
-            let noti_no = State.database.userData.data.user.notification.filter((nf) => nf.username === State.database.userData.data.user.username);
+            let noti_no = State.database.userData.data.user.notification.filter((nf) => nf.username === value.data.username);
 
-            setChannels((prev) => [...prev, { ...value.data, notification_numbers: noti_no.length }]);
+            if (value.data !== '')setChannels((prev) => [...prev, { ...value.data, notification_numbers: noti_no.length }]);
           });
       }
     }
   }, [State.database.userData]);
+
+
 
   const UnPinningUser = (pinnedUser) => {
     const UnPinningData = {

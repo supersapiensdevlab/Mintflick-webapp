@@ -16,11 +16,18 @@ function Store(props) {
       ...data,
     });
   };
+  const addLiveUsers = (data) => {
+    setstore((prev) => ({
+      ...prev,
+      liveUsers: [...prev.liveUsers, data],
+    }));
+  };
   return (
     <UserContext.Provider
       value={{
         database: store,
         updateDatabase: updateStore,
+        addLiveUsers: addLiveUsers
       }}
     >
       {props.data}

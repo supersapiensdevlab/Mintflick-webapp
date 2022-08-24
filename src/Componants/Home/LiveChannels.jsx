@@ -17,24 +17,12 @@ function LiveChannels() {
   ]);
   const State = useContext(UserContext);
 
-
-  useEffect(() => {
-    axios.get(`${process.env.REACT_APP_SERVER_URL}/get_activeusers`).then(async (repos) => {
-      for (let i = 0; i < repos.data.length; i++) {
-        await axios
-          .get(`${process.env.REACT_APP_SERVER_URL}/user/getuser_by_id/${repos.data[i].id}`)
-          .then((value) => {
-            if (value.data !== '') State.updateDatabase({ liveUsers: [...State.database.liveUsers, value.data] });
-          });
-      }
-    });
-  }, []);
   return (
     <div className="w-full h-fit space-y-4">
       <p className="font-extrabold text-lg text-brand5 mb-2">Live now</p>
       {State.database.liveUsers.length > 0 ? <>
         {State.database.liveUsers.map((channel) => (
-          <div className="flex  items-center space-x-2 h-8 ">
+          <div className="flex  items-center space-x-2 h-8 " key={channel.id}>
             <div className="h-full flex items-center flex-grow space-x-2">
               <img
                 className="h-full rounded-full border-2 border-rose-600"
