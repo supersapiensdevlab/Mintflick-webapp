@@ -30,3 +30,23 @@ export async function uploadFile(files) {
   // and return the root cid when the upload completes
   return client.put(file, { onRootCidReady });
 }
+export let storeWithProgress = async (files) => {
+  // show the root cid as soon as it's ready
+  const onRootCidReady = (cid) => {};
+  const file = [files[0]];
+  const totalSize = files[0].size;
+  let uploaded = 0;
+  const onStoredChunk = (size) => {
+    uploaded += size;
+    const pct = totalSize / uploaded;
+    // setUploading(10 - pct);
+    console.log(`Uploading... ${pct}% complete`);
+  };
+
+  // makeStorageClient returns an authorized Web3.Storage client instance
+  const client = makeStorageClient();
+
+  // client.put will invoke our callbacks during the upload
+  // and return the root cid when the upload completes
+  return client.put(files, { onRootCidReady, onStoredChunk });
+};
