@@ -6,6 +6,7 @@ import {
   ChevronDown,
   ChevronUp,
   File,
+  FileCheck,
   Video,
   X,
 } from "tabler-icons-react";
@@ -110,59 +111,36 @@ function VideoPostModal({ setVideoPostModalOpen }) {
             },
           })
           .then((res) => {
-            setUploadingVideo(false)
-            setVideoPostModalOpen(false);
-            setSelectedVideo(null);
-            setSelectedThumbnail(null);
-            setVideoData({
-              videoName: '',
-              videoImage: '',
-              videoFile: '',
-              category: '',
-              tags: [],
-              description: '',
-              allowAttribution: '',
-              commercialUse: '',
-              derivativeWorks: '',
-            })
+            clearState()
           })
           .catch((err) => {
             console.log(err);
-            setUploadingVideo(false)
-            setVideoPostModalOpen(false);
-            setSelectedVideo(null);
-            setSelectedThumbnail(null);
-            setVideoData({
-              videoName: '',
-              videoImage: '',
-              videoFile: '',
-              category: '',
-              tags: [],
-              description: '',
-              allowAttribution: '',
-              commercialUse: '',
-              derivativeWorks: '',
-            })
+            clearState()
           });
       }).catch((err) => {
         console.log(err);
-        setUploadingVideo(false)
-        setVideoPostModalOpen(false);
-        setSelectedVideo(null);
-        setSelectedThumbnail(null);
-        setVideoData({
-          videoName: '',
-          videoImage: '',
-          videoFile: '',
-          category: '',
-          tags: [],
-          description: '',
-          allowAttribution: '',
-          commercialUse: '',
-          derivativeWorks: '',
-        })
+        clearState()
       })
     }
+  }
+  const clearState = () =>{
+    setUploadingVideo(false)
+    setVideoPostModalOpen(false);
+    setSelectedVideo(null);
+    setSelectedThumbnail(null);
+    setVideoData({
+      videoName: '',
+      videoImage: '',
+      videoFile: '',
+      category: '',
+      tags: [],
+      description: '',
+      allowAttribution: '',
+      commercialUse: '',
+      derivativeWorks: '',
+    })
+    setIsNFT(false)
+    setNFTPrice(1)
   }
 
   return (
@@ -174,7 +152,7 @@ function VideoPostModal({ setVideoPostModalOpen }) {
             Upload Video
           </h3>
           <X
-            onClick={() => setVideoPostModalOpen(false)}
+            onClick={() => clearState()}
             className="text-brand2 cursor-pointer"
           ></X>
         </div>
@@ -197,13 +175,7 @@ function VideoPostModal({ setVideoPostModalOpen }) {
                   </div>
                 ) : null
               ) : (
-                <div className="w-full  rounded-lg overflow-clip">
-                  <img
-                    src={
-                      "https://www.slntechnologies.com/wp-content/uploads/2017/08/ef3-placeholder-image.jpg"
-                    }
-                  ></img>
-                </div>
+                <></>
               )}
               <label htmlFor="videothumbnail" className="flex cursor-pointer gap-1">
                 <input
@@ -215,7 +187,7 @@ function VideoPostModal({ setVideoPostModalOpen }) {
                   className="sr-only "
                   required={true}
                 />
-                <File />
+                {selectedThumbnail && selectedThumbnail.file ? <FileCheck className="text-emerald-700" /> : <File />}
                 {selectedThumbnail && selectedThumbnail.file ? selectedThumbnail.file.name.substring(0, 16) : 'Choose video thumbnail'}
               </label>
             </div>
@@ -239,13 +211,7 @@ function VideoPostModal({ setVideoPostModalOpen }) {
                   </div>
                 ) : null
               ) : (
-                <div className="rounded-lg overflow-clip">
-                  <img
-                    src={
-                      "https://www.slntechnologies.com/wp-content/uploads/2017/08/ef3-placeholder-image.jpg"
-                    }
-                  ></img>
-                </div>
+                <></>
               )}
               <label className="flex cursor-pointer gap-1" htmlFor="videofile">
                 <input
@@ -257,7 +223,7 @@ function VideoPostModal({ setVideoPostModalOpen }) {
                   className="sr-only "
                   required={true}
                 />
-                <File />
+                {selectedVideo && selectedVideo.file ? <FileCheck className="text-emerald-700" /> : <File />}
                 {selectedVideo && selectedVideo.file ? selectedVideo.file.name.substring(0, 16) : 'Choose video file'}
               </label>
             </div>
