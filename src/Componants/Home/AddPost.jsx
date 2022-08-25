@@ -9,7 +9,8 @@ import {
   X,
 } from "tabler-icons-react";
 import { UserContext } from "../../Store";
-import PhotoPostModal from "./PhotoPostModal";
+import PhotoPostModal from "./Modals/PhotoPostModal";
+import VideoPostModal from "./Modals/VideoPostModal";
 
 function AddPost() {
   //text post
@@ -19,12 +20,13 @@ function AddPost() {
   }
   const State = useContext(UserContext);
 
-
   //photo post
   const [photoPostModalOpen, setphotoPostModalOpen] = useState(false);
 
+  const [videoPostModalOpen, setvideoPostModalOpen] = useState(false);
+
   return (
-    <div className="hidden lg:flex flex-col items-center w-full max-w-2xl h-fit bg-slate-100 dark:bg-slate-800  rounded-xl py-8  space-y-4">
+    <div className=" flex flex-col items-center w-full max-w-2xl h-fit bg-slate-100 dark:bg-slate-800  rounded-xl py-8  space-y-4">
       <div className="flex items-center w-full px-8 space-x-4 rounded-3xl">
         <textarea
           onChange={(e) => setpostTextData(e.target.value)}
@@ -46,7 +48,7 @@ function AddPost() {
       <div className="btn-group">
         <button
           onClick={() => {
-            setphotoPostModalOpen(true)
+            setphotoPostModalOpen(true);
           }}
           className="btn btn-primary btn-outline  text-brand gap-2 group"
         >
@@ -54,7 +56,12 @@ function AddPost() {
           Photo
         </button>
 
-        <button className="btn btn-primary  btn-outline  text-brand gap-2 group">
+        <button
+          onClick={() => {
+            setvideoPostModalOpen(true);
+          }}
+          className="btn btn-primary  btn-outline  text-brand gap-2 group"
+        >
           <Video className="group-hover:motion-safe:animate-bounce"></Video>
           Video
         </button>
@@ -69,10 +76,18 @@ function AddPost() {
       </div>
       {/* photo post modal */}
       <div
-        className={`${photoPostModalOpen && "modal-open"
-          } modal modal-bottom sm:modal-middle`}
+        className={`${
+          photoPostModalOpen && "modal-open"
+        } modal modal-bottom sm:modal-middle`}
       >
         <PhotoPostModal setphotoPostModalOpen={setphotoPostModalOpen} />
+      </div>
+      <div
+        className={`${
+          videoPostModalOpen && "modal-open"
+        } modal  modal-bottom sm:modal-middle`}
+      >
+        <VideoPostModal setVideoPostModalOpen={setvideoPostModalOpen} />
       </div>
     </div>
   );

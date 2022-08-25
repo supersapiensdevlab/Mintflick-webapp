@@ -27,10 +27,10 @@ function useWebModal() {
         });
         localStorage.setItem("authtoken", response.data.jwtToken);
         localStorage.setItem("walletAddress", walletAddress);
-        // localStorage.setItem(
-        //   "provider",
-        //   JSON.stringify(provider, getCircularReplacer()),
-        // );
+        localStorage.setItem(
+          "provider",
+          JSON.stringify(provider, getCircularReplacer())
+        );
         navigateTo("/homescreen/home");
       })
       .catch(function (error) {
