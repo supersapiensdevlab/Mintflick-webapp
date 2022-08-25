@@ -56,23 +56,23 @@ function ShowComment({ comment, user_id, contentData }) {
             : "https://cdn-icons-png.flaticon.com/512/149/149071.png"
         }
         alt="profile pic"
-        className="h-8 w-8 object-cover rounded-full mt-1"
+        className="h-10 w-10 object-cover rounded-full "
       />
       <div className="flex flex-col">
-        <p className=" text-brand5 text-sm font-medium">
-          <span className="text-brand4 font-semibold mr-1">{comment.name}</span>
+        <p className=" text-brand4 text-base font-medium">
+          <span className="text-brand3 font-semibold mr-1">{comment.name}</span>
           {comment.comment}
         </p>
-        <div className="cursor-pointer flex  items-center text-brand5  text-xs">
+        <div className="group cursor-pointer flex  items-center text-brand4  text-sm gap-1">
           <Heart
             onClick={() => {
               handleCommentLike();
             }}
-            size={14}
+            size={16}
             className={`${
               isLiked
-                ? "text-red-600 group-hover:text-white"
-                : "text-brand1 group-hover:text-red-600"
+                ? "text-red-600 hover:text-white fill-rose-600"
+                : "text-brand1 hover:text-red-600"
             } `}
           ></Heart>
           {likeCount > 0 ? likeCount : "like"}
