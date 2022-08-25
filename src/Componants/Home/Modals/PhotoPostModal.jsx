@@ -1,10 +1,10 @@
 import axios from "axios";
 import React from "react";
 import { useState } from "react";
-import { Camera, File, X } from "tabler-icons-react";
-import PolygonToken from "../../Assets/logos/PolygonToken";
-import { uploadFile } from "../../Helper/uploadHelper";
-import { storeWithProgress, createToken } from "../../Helper/nftMinter";
+import { Camera, File, FileCheck, X } from "tabler-icons-react";
+import PolygonToken from "../../../Assets/logos/PolygonToken";
+import { uploadFile } from "../../../Helper/uploadHelper";
+import { storeWithProgress, createToken } from "../../../Helper/nftMinter";
 
 function PhotoPostModal({ setphotoPostModalOpen }) {
   const [uploadingPost, setUploadingPost] = useState(false);
@@ -71,7 +71,7 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
                 nftPrice,
                 window.ethereum,
                 setMinting,
-                setMintingProgress,
+                setMintingProgress
               ).then(async (tokenId) => {
                 console.log("TOKEN ID Created : ", tokenId); // token created
                 formData.append("tokenId", tokenId);
@@ -91,7 +91,7 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
                 "content-type": "multipart/form-data",
                 "auth-token": JSON.stringify(localStorage.getItem("authtoken")),
               },
-            },
+            }
           )
           .then((data) => {
             setUploadingPost(false);
@@ -115,83 +115,92 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
   };
 
   return (
-    <div className='modal-box p-0 bg-slate-100 dark:bg-slate-800 '>
-      <div className='w-full h-fit p-2 bg-slate-300 dark:bg-slate-700'>
-        <div className='flex justify-between items-center p-2'>
-          <h3 className='flex items-center gap-2 font-bold text-lg text-brand2'>
+    <div className="modal-box p-0 bg-slate-100 dark:bg-slate-800 ">
+      <div className="w-full h-fit p-2 bg-slate-300 dark:bg-slate-700">
+        <div className="flex justify-between items-center p-2">
+          <h3 className="flex items-center gap-2 font-bold text-lg text-brand2">
             <Camera />
-            Photo post
+            Upload Photo
           </h3>
           <X
             onClick={() => setphotoPostModalOpen(false)}
-            className='text-brand2 cursor-pointer'></X>
+            className="text-brand2 cursor-pointer"
+          ></X>
         </div>
       </div>
       <form onSubmit={handleSubmit}>
-        <div className='w-full p-4 space-y-3'>
+        <div className="w-full p-4 space-y-3">
           <label
-            htmlFor='post_announcement_image'
-            className=' cursor-pointer flex items-center gap-2  w-full p-2 border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4'>
-            <File />{" "}
+            htmlFor="post_announcement_image"
+            className=" cursor-pointer flex justify-between items-center gap-2  w-full p-2 border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4"
+          >
             {selectedPost ? (
               selectedPost.file ? (
-                `${selectedPost.file[0].name.substring(0, 20)}`
-              ) : null
+                <div className="flex items-center">
+                  <FileCheck className="text-emerald-700" />
+                  {selectedPost.file[0].name.substring(0, 16)}
+                </div>
+              ) : (
+                "No file choosen!"
+              )
             ) : (
-              <> Choose file *</>
+              <div className="flex items-center">
+                <File />
+                Choose file *
+              </div>
             )}
             <input
-              id='post_announcement_image'
-              type='file'
-              accept='image/*'
+              id="post_announcement_image"
+              type="file"
+              accept="image/*"
               onChange={handleImageChange}
-              className='sr-only'
+              className="sr-only"
               required={true}
               onClick={(event) => {
                 event.target.value = null;
                 setSelectedPost(null);
               }}
             />
-          </label>
-          {selectedPost ? (
-            selectedPost.file ? (
-              <div className='max-h-36 flex justify-center'>
-                <div>
-                  <img className='max-h-36' src={selectedPost.localurl}></img>
+            {selectedPost ? (
+              selectedPost.file ? (
+                <div className="flex-grow rounded-lg overflow-clip">
+                  <img src={selectedPost.localurl}></img>
                 </div>
-              </div>
-            ) : null
-          ) : (
-            <></>
-          )}
+              ) : null
+            ) : (
+              <></>
+            )}
+          </label>
+
           <textarea
-            className='textarea  w-full'
-            placeholder='Enter caption.'
+            className="textarea  w-full"
+            placeholder="Enter caption."
             onChange={(e) => setCaption(e.target.value)}
-            value={caption}></textarea>
-          <div className='w-fit flex space-x-2'>
-            <label className='flex items-center cursor-pointer gap-2'>
+            value={caption}
+          ></textarea>
+          <div className="w-fit flex space-x-2">
+            <label className="flex items-center cursor-pointer gap-2">
               <input
-                type='checkbox'
+                type="checkbox"
                 value={isNFT}
                 onChange={() => setIsNFT(!isNFT)}
-                className='checkbox checkbox-primary'
+                className="checkbox checkbox-primary"
               />
-              <span className='label-text text-brand3'>Mint as NFT</span>
+              <span className="label-text text-brand3">Mint as NFT</span>
             </label>
             {isNFT && (
-              <div className='form-control'>
-                <label className='input-group'>
+              <div className="form-control">
+                <label className="input-group">
                   <input
                     min={1}
-                    type='number'
-                    placeholder='1'
-                    className='input input-bordered input-sm w-24'
+                    type="number"
+                    placeholder="1"
+                    className="input input-bordered input-sm w-24"
                     value={nftPrice}
                     onChange={(e) => setNFTPrice(e.target.value)}
                     required={true}
                   />
-                  <span className='text-brand3 bg-slate-300 dark:bg-slate-600 '>
+                  <span className="text-brand3 bg-slate-300 dark:bg-slate-600 ">
                     <PolygonToken></PolygonToken> &nbsp; Matic
                   </span>
                 </label>
@@ -199,9 +208,10 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
             )}
           </div>
           <progress
-            class='progress progress-success w-56 hidden'
-            value='50'
-            max='100'></progress>
+            class="progress progress-success w-56 hidden"
+            value="50"
+            max="100"
+          ></progress>
 
           {/* While minting NFT */}
           {/* <div className="flex flex-col text-center">
@@ -290,9 +300,8 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
 
           <button
             type={"submit"}
-            className={`btn  w-full ${
-              uploadingPost ? "loading" : "btn-brand"
-            }`}>
+            className={`btn  w-full ${uploadingPost ? "loading" : "btn-brand"}`}
+          >
             Post
           </button>
         </div>

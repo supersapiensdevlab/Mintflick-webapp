@@ -29,7 +29,7 @@ function useWebModal() {
         localStorage.setItem("walletAddress", walletAddress);
         localStorage.setItem(
           "provider",
-          JSON.stringify(provider, getCircularReplacer()),
+          JSON.stringify(provider, getCircularReplacer())
         );
         navigateTo("/homescreen/home");
       })
