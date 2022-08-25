@@ -3,16 +3,14 @@ import React, { useContext } from "react";
 import { useState } from "react";
 import ReactPlayer from "react-player";
 import {
-  Camera,
   ChevronDown,
   ChevronUp,
   File,
-  FileCheck,
   Video,
   X,
 } from "tabler-icons-react";
 import PolygonToken from "../../../Assets/logos/PolygonToken";
-import { storeWithProgress, uploadFile } from "../../../Helper/uploadHelper";
+import { storeWithProgress } from "../../../Helper/uploadHelper";
 import { UserContext } from "../../../Store";
 
 function VideoPostModal({ setVideoPostModalOpen }) {
@@ -446,7 +444,7 @@ function VideoPostModal({ setVideoPostModalOpen }) {
             type={"submit"}
             className={`btn  w-full ${uploadingVideo ? "loading" : "btn-brand"}`}
           >
-            Post
+            Post Video
           </button>
         </div>
       </form>
