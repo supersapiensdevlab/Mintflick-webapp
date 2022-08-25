@@ -27,91 +27,93 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setUploadingPost(true);
-    uploadFile(selectedPost.file)
-      .then(async (cid) => {
-        let formData = new FormData();
-        formData.append("announcement", caption);
-        formData.append("postImage", selectedPost.file[0]);
-        formData.append("announcementHash", cid);
+    if (!uploadingPost) {
+      setUploadingPost(true);
+      uploadFile(selectedPost.file)
+        .then(async (cid) => {
+          let formData = new FormData();
+          formData.append("announcement", caption);
+          formData.append("postImage", selectedPost.file[0]);
+          formData.append("announcementHash", cid);
 
-        if (isNFT) {
-          var ts = Math.round(new Date().getTime() / 1000);
-          let metadata = {
-            image:
-              "https://ipfs.io/ipfs/" + cid + "/" + selectedPost.file[0].name,
-            external_url:
-              "https://ipfs.io/ipfs/" + cid + "/" + selectedPost.file[0].name,
-            description: `Post description`,
-            name: caption,
-            attributes: [
-              {
-                display_type: "date",
-                trait_type: "Created On",
-                value: ts,
-              },
-              {
-                trait_type: "Category",
-                value: "Category",
-              },
-            ],
-            animation_url:
-              "https://ipfs.io/ipfs/" + cid + "/" + selectedPost.file[0].name,
-          };
-          const blob = new Blob([JSON.stringify(metadata)], {
-            type: "application/json",
-          });
-          const metaFile = [new File([blob], "meta.json")];
+          if (isNFT) {
+            var ts = Math.round(new Date().getTime() / 1000);
+            let metadata = {
+              image:
+                "https://ipfs.io/ipfs/" + cid + "/" + selectedPost.file[0].name,
+              external_url:
+                "https://ipfs.io/ipfs/" + cid + "/" + selectedPost.file[0].name,
+              description: `Post description`,
+              name: caption,
+              attributes: [
+                {
+                  display_type: "date",
+                  trait_type: "Created On",
+                  value: ts,
+                },
+                {
+                  trait_type: "Category",
+                  value: "Category",
+                },
+              ],
+              animation_url:
+                "https://ipfs.io/ipfs/" + cid + "/" + selectedPost.file[0].name,
+            };
+            const blob = new Blob([JSON.stringify(metadata)], {
+              type: "application/json",
+            });
+            const metaFile = [new File([blob], "meta.json")];
 
-          uploadFile(metaFile)
-            .then(async (cid) => {
-              console.log("stored files with cid:", cid);
-              createToken(
-                "https://ipfs.io/ipfs/" + cid,
-                nftPrice,
-                window.ethereum,
-                setMinting,
-                setMintingProgress
-              ).then(async (tokenId) => {
-                console.log("TOKEN ID Created : ", tokenId); // token created
-                formData.append("tokenId", tokenId);
+            uploadFile(metaFile)
+              .then(async (cid) => {
+                console.log("stored files with cid:", cid);
+                createToken(
+                  "https://ipfs.io/ipfs/" + cid,
+                  nftPrice,
+                  window.ethereum,
+                  setMinting,
+                  setMintingProgress
+                ).then(async (tokenId) => {
+                  console.log("TOKEN ID Created : ", tokenId); // token created
+                  formData.append("tokenId", tokenId);
+                });
+              })
+              .catch((err) => {
+                console.log(err);
               });
+          }
+
+          axios
+            .post(
+              `${process.env.REACT_APP_SERVER_URL}/user/announcement`,
+              formData,
+              {
+                headers: {
+                  "content-type": "multipart/form-data",
+                  "auth-token": JSON.stringify(localStorage.getItem("authtoken")),
+                },
+              }
+            )
+            .then((data) => {
+              setUploadingPost(false);
+              setSelectedPost(null);
+              setCaption("");
+              setphotoPostModalOpen(false);
             })
             .catch((err) => {
               console.log(err);
+              setUploadingPost(false);
+              setSelectedPost(null);
+              setCaption("");
             });
-        }
-
-        axios
-          .post(
-            `${process.env.REACT_APP_SERVER_URL}/user/announcement`,
-            formData,
-            {
-              headers: {
-                "content-type": "multipart/form-data",
-                "auth-token": JSON.stringify(localStorage.getItem("authtoken")),
-              },
-            }
-          )
-          .then((data) => {
-            setUploadingPost(false);
-            setSelectedPost(null);
-            setCaption("");
-            setphotoPostModalOpen(false);
-          })
-          .catch((err) => {
-            console.log(err);
-            setUploadingPost(false);
-            setSelectedPost(null);
-            setCaption("");
-          });
-      })
-      .catch((err) => {
-        console.log(err);
-        setUploadingPost(false);
-        setSelectedPost(null);
-        setCaption("");
-      });
+        })
+        .catch((err) => {
+          console.log(err);
+          setUploadingPost(false);
+          setSelectedPost(null);
+          setCaption("");
+        });
+    }
   };
 
   return (

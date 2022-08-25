@@ -1,5 +1,7 @@
-import React from "react";
+import axios from "axios";
+import React, { useContext } from "react";
 import { useState } from "react";
+import ReactPlayer from "react-player";
 import {
   Camera,
   ChevronDown,
@@ -10,13 +12,160 @@ import {
   X,
 } from "tabler-icons-react";
 import PolygonToken from "../../../Assets/logos/PolygonToken";
+import { storeWithProgress, uploadFile } from "../../../Helper/uploadHelper";
+import { UserContext } from "../../../Store";
 
 function VideoPostModal({ setVideoPostModalOpen }) {
-  const [selectedPost, setSelectedPost] = useState(null);
+  const State = useContext(UserContext);
   const [advancedOptionsShow, setadvancedOptionsShow] = useState(false);
-  const [caption, setCaption] = useState("");
   const [isNFT, setIsNFT] = useState(false);
   const [nftPrice, setNFTPrice] = useState(1);
+  const category = [
+    'Autos & Vehicles',
+    ' Music',
+    'Pets & Animals',
+    'Sports',
+    'Travel & Events',
+    'Gaming',
+    'People & Blogs',
+    'Comedy',
+    'Entertainment',
+    'News & Politics',
+    ' Howto & Style',
+    'Education',
+    'Science & Technology',
+    'Nonprofits & Activism',
+  ];
+  const attribution = ['No Attribution', 'Allow Attribution'];
+  const commercialUse = ['Non Commercial', 'Commercial Use'];
+  const derivativeWorks = ['No-Selection', 'No Derivative Works', 'Share-Alike'];
+
+
+  const [uploadingVideo, setUploadingVideo] = useState(false);
+  const [selectedVideo, setSelectedVideo] = useState(null);
+  const [selectedThumbnail, setSelectedThumbnail] = useState(null);
+  const [videoData, setVideoData] = useState({
+    videoName: '',
+    videoImage: '',
+    videoFile: '',
+    category: '',
+    tags: [],
+    description: '',
+    allowAttribution: '',
+    commercialUse: '',
+    derivativeWorks: '',
+  })
+
+
+  const onVideoFileChange = (e) => {
+    if (e.target.name === 'videoFile') {
+      setSelectedVideo({
+        file: e.target.files[0],
+        localurl: URL.createObjectURL(e.target.files[0]),
+      })
+      let videoName = e.target.files[0].name.replace(/\.[^/.]+$/, '');
+      setVideoData({ ...videoData, videoName: videoName });
+    } else if (e.target.name === 'videoImage') {
+      setSelectedThumbnail({
+        file: e.target.files[0],
+        localurl: URL.createObjectURL(e.target.files[0]),
+      })
+      let videoImage = e.target.files[0].name.replace(/\.[^/.]+$/, '');
+      setVideoData({ ...videoData, videoImage: videoImage });
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!isNFT && !uploadingVideo) {
+      setUploadingVideo(true);
+      const files = [selectedThumbnail.file, selectedVideo.file];
+      storeWithProgress(files).then((cid) => {
+        let formData = new FormData(); // Currently empty
+        formData.append('userName', State.database.userData.data.user.username);
+        formData.append('userImage', State.database.userData.data.user.profile_image);
+
+        formData.append('videoName', videoData.videoName);
+
+        // tags.forEach((tag) => formData.append('tags', tag));
+
+        formData.append('description', videoData.description);
+
+        formData.append('category', videoData.category);
+        formData.append('ratings', '');
+        formData.append('allowAttribution', videoData.allowAttribution);
+        formData.append('commercialUse', videoData.commercialUse);
+        formData.append('derivativeWorks', videoData.commercialUse);
+
+        formData.append('videoFile', selectedVideo.file, selectedVideo.name);
+        formData.append('videoImage', selectedThumbnail.file, selectedThumbnail.name);
+        formData.append('videoHash', cid);
+
+        // formData.append('meta_url', cid); // meta_url is the IPFS hash of the meta.json file
+
+        // setFormData(formData);
+        axios
+          .post(`${process.env.REACT_APP_SERVER_URL}/upload_video`, formData, {
+            headers: {
+              'content-type': 'multipart/form-data',
+              'auth-token': JSON.stringify(localStorage.getItem('authtoken')),
+            },
+          })
+          .then((res) => {
+            setUploadingVideo(false)
+            setVideoPostModalOpen(false);
+            setSelectedVideo(null);
+            setSelectedThumbnail(null);
+            setVideoData({
+              videoName: '',
+              videoImage: '',
+              videoFile: '',
+              category: '',
+              tags: [],
+              description: '',
+              allowAttribution: '',
+              commercialUse: '',
+              derivativeWorks: '',
+            })
+          })
+          .catch((err) => {
+            console.log(err);
+            setUploadingVideo(false)
+            setVideoPostModalOpen(false);
+            setSelectedVideo(null);
+            setSelectedThumbnail(null);
+            setVideoData({
+              videoName: '',
+              videoImage: '',
+              videoFile: '',
+              category: '',
+              tags: [],
+              description: '',
+              allowAttribution: '',
+              commercialUse: '',
+              derivativeWorks: '',
+            })
+          });
+      }).catch((err) => {
+        console.log(err);
+        setUploadingVideo(false)
+        setVideoPostModalOpen(false);
+        setSelectedVideo(null);
+        setSelectedThumbnail(null);
+        setVideoData({
+          videoName: '',
+          videoImage: '',
+          videoFile: '',
+          category: '',
+          tags: [],
+          description: '',
+          allowAttribution: '',
+          commercialUse: '',
+          derivativeWorks: '',
+        })
+      })
+    }
+  }
 
   return (
     <div className="modal-box p-0 bg-slate-100 dark:bg-slate-800 ">
@@ -32,77 +181,111 @@ function VideoPostModal({ setVideoPostModalOpen }) {
           ></X>
         </div>
       </div>
-      <form onSubmit={""}>
+      <form onSubmit={handleSubmit}>
         <div className="w-full p-4 space-y-3">
           <div className="flex flex-col sm:flex-row gap-1">
-            <label
-              htmlFor=""
-              className=" cursor-pointer flex flex-col items-start gap-2  w-full p-2 border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4"
+            <div
+
+              className=" max-h-52 cursor-pointer flex flex-col items-start gap-2  w-full p-2 border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4"
             >
-              {/* {selectedPost ? (
-                selectedPost.file ? ( */}
-              <div className="w-full  rounded-lg overflow-clip">
-                <img
-                  src={
-                    "https://www.slntechnologies.com/wp-content/uploads/2017/08/ef3-placeholder-image.jpg"
-                  }
-                ></img>
-              </div>
-              {/* ) : null
+              {selectedThumbnail ? (
+                selectedThumbnail.file ? (
+                  <div className="w-full  rounded-lg overflow-clip my-auto ">
+                    <img
+                      src={
+                        selectedThumbnail.localurl
+                      }
+                    ></img>
+                  </div>
+                ) : null
               ) : (
-                <></>
-              )} */}
-              <div className="flex ">
+                <div className="w-full  rounded-lg overflow-clip">
+                  <img
+                    src={
+                      "https://www.slntechnologies.com/wp-content/uploads/2017/08/ef3-placeholder-image.jpg"
+                    }
+                  ></img>
+                </div>
+              )}
+              <label htmlFor="videothumbnail" className="flex cursor-pointer">
+                <input
+                  id="videothumbnail"
+                  type="file"
+                  name="videoImage"
+                  accept=".jpg,.png,.jpeg,.gif,.webp"
+                  onChange={onVideoFileChange}
+                  className="sr-only "
+                  required={true}
+                />
                 <File />
-                Choose video thumbnail
-              </div>
-            </label>
-            <label
-              htmlFor=""
-              className=" cursor-pointer flex flex-col items-start gap-2  w-full p-2 border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4"
+                {selectedThumbnail && selectedThumbnail.file ? selectedThumbnail.file.name.substring(0, 16) : 'Choose video thumbnail'}
+              </label>
+            </div>
+            <div
+
+              className=" max-h-52 cursor-pointer flex flex-col items-start gap-2  w-full p-2 border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4"
             >
-              {/* {selectedPost ? (
-                selectedPost.file ? ( */}
-              <div className="rounded-lg overflow-clip">
-                <img
-                  src={
-                    "https://www.slntechnologies.com/wp-content/uploads/2017/08/ef3-placeholder-image.jpg"
-                  }
-                ></img>
-              </div>
-              {/* ) : null
+              {selectedVideo ? (
+                selectedVideo.localurl ? (
+                  <div className="rounded-lg overflow-clip ">
+                    <ReactPlayer
+                      className='w-full'
+                      width='100%'
+                      height={'100%'}
+                      playing={true}
+                      muted={true}
+                      volume={0.5}
+                      url={selectedVideo.localurl}
+                      controls={true}
+                    />
+                  </div>
+                ) : null
               ) : (
-                <></>
-              )} */}
-              <div className="flex">
+                <div className="rounded-lg overflow-clip">
+                  <img
+                    src={
+                      "https://www.slntechnologies.com/wp-content/uploads/2017/08/ef3-placeholder-image.jpg"
+                    }
+                  ></img>
+                </div>
+              )}
+              <label className="flex cursor-pointer" htmlFor="videofile">
+                <input
+                  id="videofile"
+                  type="file"
+                  accept=".mp4, .mkv, .mov, .avi"
+                  name="videoFile"
+                  onChange={onVideoFileChange}
+                  className="sr-only "
+                  required={true}
+                />
                 <File />
-                Choose video file
-              </div>
-            </label>
+                {selectedVideo && selectedVideo.file ? selectedVideo.file.name.substring(0, 16) : 'Choose video file'}
+              </label>
+            </div>
           </div>
           <div className="flex gap-2">
             <input
               type="text"
               placeholder="Video title"
               className="input w-full "
+              value={videoData.videoName}
+              onChange={(e) => setVideoData({ ...videoData, videoName: e.target.value })}
+              required={true}
             />
-            <select className="select w-44">
+            <select className="select w-44" onChange={(e) => setVideoData({ ...videoData, category: e.target.value })}>
               <option disabled selected>
                 Pick Category
               </option>
-              <option>Homer</option>
-              <option>Marge</option>
-              <option>Bart</option>
-              <option>Lisa</option>
-              <option>Maggie</option>
+              {category.map((c) => <option>{c}</option>)}
             </select>
           </div>
 
           <textarea
             className="textarea  w-full"
             placeholder="Enter caption."
-            onChange={(e) => setCaption(e.target.value)}
-            value={caption}
+            onChange={(e) => setVideoData({ ...videoData, description: e.target.value })}
+            value={videoData.description}
           ></textarea>
           <span
             onClick={() => setadvancedOptionsShow(!advancedOptionsShow)}
@@ -110,9 +293,8 @@ function VideoPostModal({ setVideoPostModalOpen }) {
           >
             Advanced options
             <label
-              class={`swap ${
-                advancedOptionsShow && "swap-active"
-              } swap-rotate text-6xl`}
+              class={`swap ${advancedOptionsShow && "swap-active"
+                } swap-rotate text-6xl`}
             >
               <div class="swap-on">
                 <ChevronUp />
@@ -123,36 +305,24 @@ function VideoPostModal({ setVideoPostModalOpen }) {
             </label>
           </span>
           {advancedOptionsShow && (
-            <div className="flex gap-1 w-full flex-wrap">
-              <select className="select select-xs ">
+            <div className="flex gap-1 w-full ">
+              <select className="select select-xs " onChange={(e) => setVideoData({ ...videoData, allowAttribution: e.target.value })}>
                 <option disabled selected>
                   Allow Attribution?
                 </option>
-                <option>Homer</option>
-                <option>Marge</option>
-                <option>Bart</option>
-                <option>Lisa</option>
-                <option>Maggie</option>
+                {attribution.map((c) => <option>{c}</option>)}
               </select>
-              <select className="select select-xs ">
+              <select className="select select-xs " onChange={(e) => setVideoData({ ...videoData, commercialUse: e.target.value })}>
                 <option disabled selected>
                   Commercial Use?
                 </option>
-                <option>Homer</option>
-                <option>Marge</option>
-                <option>Bart</option>
-                <option>Lisa</option>
-                <option>Maggie</option>
+                {commercialUse.map((c) => <option>{c}</option>)}
               </select>
-              <select className="select select-xs ">
+              <select className="select select-xs " onChange={(e) => setVideoData({ ...videoData, derivativeWorks: e.target.value })}>
                 <option disabled selected>
                   Derivative Works?
                 </option>
-                <option>Homer</option>
-                <option>Marge</option>
-                <option>Bart</option>
-                <option>Lisa</option>
-                <option>Maggie</option>
+                {derivativeWorks.map((c) => <option>{c}</option>)}
               </select>
             </div>
           )}
@@ -272,7 +442,10 @@ function VideoPostModal({ setVideoPostModalOpen }) {
                         </ProgressBar>
                     </div> */}
 
-          <button type={"submit"} className="btn btn-brand w-full">
+          <button
+            type={"submit"}
+            className={`btn  w-full ${uploadingVideo ? "loading" : "btn-brand"}`}
+          >
             Post
           </button>
         </div>
