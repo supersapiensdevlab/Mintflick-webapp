@@ -74,7 +74,7 @@ function App() {
             <Route path='create_new_user' element={<CreateNewUser />} />
           </Route>
 
-          {/* <Route path='/test' element={<HomeScreen />}></Route> */}
+          <Route path='/test' element={<HomeScreen />}></Route>
           <Route path='/homescreen' element={<HomeScreen />}>
             <Route path='home' element={<Home />} />
             <Route path='live' element={<Live />} />
