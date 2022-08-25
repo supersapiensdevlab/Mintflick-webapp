@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useContext, useEffect, useState } from "react";
+import { UserContext } from "../../Store";
 
 function LiveChannels() {
   const [channels, setChannels] = useState([
@@ -13,24 +15,28 @@ function LiveChannels() {
       isPinned: false,
     },
   ]);
+  const State = useContext(UserContext);
+
   return (
     <div className="w-full h-fit space-y-4">
       <p className="font-extrabold text-lg text-brand5 mb-2">Live now</p>
-      {channels.map((channel) => (
-        <div className="flex  items-center space-x-2 h-8 ">
-          <div className="h-full flex items-center flex-grow space-x-2">
-            <img
-              className="h-full rounded-full border-2 border-rose-600"
-              src={channel.img}
-              alt="profileImage"
-            />
+      {State.database.liveUsers.length > 0 ? <>
+        {State.database.liveUsers.map((channel) => (
+          <div className="flex  items-center space-x-2 h-8 " key={channel.id}>
+            <div className="h-full flex items-center flex-grow space-x-2">
+              <img
+                className="h-full rounded-full border-2 border-rose-600"
+                src={channel.profile_image}
+                alt="profileImage"
+              />
 
-            <p className="cursor-pointer text-base font-medium text-brand3">
-              {channel.name}
-            </p>
+              <p className="cursor-pointer text-base font-medium text-brand3">
+                {channel.name}
+              </p>
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </> : <div className="text-brand5"> No streams are live now</div>}
     </div>
   );
 }

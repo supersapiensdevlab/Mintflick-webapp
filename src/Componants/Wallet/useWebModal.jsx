@@ -64,7 +64,7 @@ function useWebModal() {
     sequence: {
       package: sequence, // required
       options: {
-        appName: "My App", // optional
+        appName: "MintFlick", // optional
         defaultNetwork: "polygon", // optional
       },
     },
@@ -114,7 +114,7 @@ function useWebModal() {
               description: "Create your wallet with sequence",
             },
             options: {
-              appName: "My App", // optional
+              appName: "MintFlick", // optional
               defaultNetwork: "polygon", // optional
             },
           },
