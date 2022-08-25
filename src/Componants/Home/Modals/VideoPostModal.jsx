@@ -207,7 +207,7 @@ function VideoPostModal({ setVideoPostModalOpen }) {
                   ></img>
                 </div>
               )}
-              <label htmlFor="videothumbnail" className="flex cursor-pointer">
+              <label htmlFor="videothumbnail" className="flex cursor-pointer gap-1">
                 <input
                   id="videothumbnail"
                   type="file"
@@ -249,7 +249,7 @@ function VideoPostModal({ setVideoPostModalOpen }) {
                   ></img>
                 </div>
               )}
-              <label className="flex cursor-pointer" htmlFor="videofile">
+              <label className="flex cursor-pointer gap-1" htmlFor="videofile">
                 <input
                   id="videofile"
                   type="file"
