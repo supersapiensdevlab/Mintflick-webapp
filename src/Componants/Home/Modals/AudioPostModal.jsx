@@ -6,12 +6,14 @@ import {
   ChevronUp,
   File,
   FileCheck,
+  FileMusic,
+  Music,
   Video,
   X,
 } from "tabler-icons-react";
 import PolygonToken from "../../../Assets/logos/PolygonToken";
 
-function VideoPostModal({ setVideoPostModalOpen }) {
+function AudioPostModal({ setAudioPostModalOpen }) {
   const [selectedPost, setSelectedPost] = useState(null);
   const [advancedOptionsShow, setadvancedOptionsShow] = useState(false);
   const [caption, setCaption] = useState("");
@@ -23,11 +25,11 @@ function VideoPostModal({ setVideoPostModalOpen }) {
       <div className="w-full h-fit p-2 bg-slate-300 dark:bg-slate-700">
         <div className="flex justify-between items-center p-2">
           <h3 className="flex items-center gap-2 font-bold text-lg text-brand2">
-            <Video />
-            Upload Video
+            <Music />
+            Upload Audio
           </h3>
           <X
-            onClick={() => setVideoPostModalOpen(false)}
+            onClick={() => setAudioPostModalOpen(false)}
             className="text-brand2 cursor-pointer"
           ></X>
         </div>
@@ -54,7 +56,7 @@ function VideoPostModal({ setVideoPostModalOpen }) {
               )} */}
               <div className="flex gap-1">
                 <File />
-                Choose video thumbnail
+                Choose album image
               </div>
             </label>
             <label
@@ -75,20 +77,30 @@ function VideoPostModal({ setVideoPostModalOpen }) {
                 <></>
               )} */}
               <div className="flex gap-1">
-                <File />
-                Choose video file
+                <FileMusic />
+                Choose audio file
               </div>
             </label>
           </div>
-          <div className="flex gap-2">
-            <input
-              type="text"
-              placeholder="Video title"
-              className="input w-full "
-            />
-            <select className="select w-44">
+          <input
+            type="text"
+            placeholder="Track name"
+            className="input w-full "
+          />
+          <div className="flex space-x-2">
+            <select className="select flex-grow">
               <option disabled selected>
-                Pick Category
+                Genre
+              </option>
+              <option>Homer</option>
+              <option>Marge</option>
+              <option>Bart</option>
+              <option>Lisa</option>
+              <option>Maggie</option>
+            </select>
+            <select className="select flex-grow">
+              <option disabled selected>
+                Mood
               </option>
               <option>Homer</option>
               <option>Marge</option>
@@ -123,38 +135,52 @@ function VideoPostModal({ setVideoPostModalOpen }) {
             </label>
           </span>
           {advancedOptionsShow && (
-            <div className="flex gap-1 w-full flex-wrap">
-              <select className="select select-xs flex-grow ">
-                <option disabled selected>
-                  Allow Attribution?
-                </option>
-                <option>Homer</option>
-                <option>Marge</option>
-                <option>Bart</option>
-                <option>Lisa</option>
-                <option>Maggie</option>
-              </select>
-              <select className="select select-xs flex-grow ">
-                <option disabled selected>
-                  Commercial Use?
-                </option>
-                <option>Homer</option>
-                <option>Marge</option>
-                <option>Bart</option>
-                <option>Lisa</option>
-                <option>Maggie</option>
-              </select>
-              <select className="select select-xs flex-grow ">
-                <option disabled selected>
-                  Derivative Works?
-                </option>
-                <option>Homer</option>
-                <option>Marge</option>
-                <option>Bart</option>
-                <option>Lisa</option>
-                <option>Maggie</option>
-              </select>
-            </div>
+            <>
+              <div className="flex flex-col lg:flex-row gap-2">
+                <input
+                  type="text"
+                  placeholder="Track ISRC"
+                  className="input flex-grow "
+                />
+                <input
+                  type="text"
+                  placeholder="Track ISWC"
+                  className="input flex-grow "
+                />
+              </div>
+              <div className="flex gap-1 w-full flex-wrap">
+                <select className="select select-xs flex-grow">
+                  <option disabled selected>
+                    Allow Attribution?
+                  </option>
+                  <option>Homer</option>
+                  <option>Marge</option>
+                  <option>Bart</option>
+                  <option>Lisa</option>
+                  <option>Maggie</option>
+                </select>
+                <select className="select select-xs flex-grow">
+                  <option disabled selected>
+                    Commercial Use?
+                  </option>
+                  <option>Homer</option>
+                  <option>Marge</option>
+                  <option>Bart</option>
+                  <option>Lisa</option>
+                  <option>Maggie</option>
+                </select>
+                <select className="select select-xs flex-grow">
+                  <option disabled selected>
+                    Derivative Works?
+                  </option>
+                  <option>Homer</option>
+                  <option>Marge</option>
+                  <option>Bart</option>
+                  <option>Lisa</option>
+                  <option>Maggie</option>
+                </select>
+              </div>
+            </>
           )}
 
           <div className="w-fit flex space-x-2">
@@ -273,7 +299,7 @@ function VideoPostModal({ setVideoPostModalOpen }) {
                     </div> */}
 
           <button type={"submit"} className="btn btn-brand w-full">
-            Post video
+            Post audio
           </button>
         </div>
       </form>
@@ -281,4 +307,4 @@ function VideoPostModal({ setVideoPostModalOpen }) {
   );
 }
 
-export default VideoPostModal;
+export default AudioPostModal;

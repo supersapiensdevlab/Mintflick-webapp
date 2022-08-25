@@ -1,20 +1,11 @@
 import React from "react";
 import { useState } from "react";
-import {
-  Camera,
-  ChevronDown,
-  ChevronUp,
-  File,
-  FileCheck,
-  Video,
-  X,
-} from "tabler-icons-react";
+import { ChartBar, Send, X } from "tabler-icons-react";
 import PolygonToken from "../../../Assets/logos/PolygonToken";
 
-function VideoPostModal({ setVideoPostModalOpen }) {
-  const [selectedPost, setSelectedPost] = useState(null);
-  const [advancedOptionsShow, setadvancedOptionsShow] = useState(false);
-  const [caption, setCaption] = useState("");
+function PollModal({ setPollModalOpen }) {
+  const [options, setoptions] = useState([]);
+  const [option, setoption] = useState("");
   const [isNFT, setIsNFT] = useState(false);
   const [nftPrice, setNFTPrice] = useState(1);
 
@@ -23,139 +14,69 @@ function VideoPostModal({ setVideoPostModalOpen }) {
       <div className="w-full h-fit p-2 bg-slate-300 dark:bg-slate-700">
         <div className="flex justify-between items-center p-2">
           <h3 className="flex items-center gap-2 font-bold text-lg text-brand2">
-            <Video />
-            Upload Video
+            <ChartBar />
+            Take Poll
           </h3>
           <X
-            onClick={() => setVideoPostModalOpen(false)}
+            onClick={() => setPollModalOpen(false)}
             className="text-brand2 cursor-pointer"
           ></X>
         </div>
       </div>
-      <form onSubmit={""}>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+        }}
+      >
         <div className="w-full p-4 space-y-3">
-          <div className="flex flex-col sm:flex-row gap-1">
-            <label
-              htmlFor=""
-              className=" cursor-pointer flex flex-col items-start gap-2  w-full p-2 border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4"
-            >
-              {/* {selectedPost ? (
-                selectedPost.file ? ( */}
-              <div className="w-full  rounded-lg overflow-clip">
-                <img
-                  src={
-                    "https://www.slntechnologies.com/wp-content/uploads/2017/08/ef3-placeholder-image.jpg"
-                  }
-                ></img>
+          <input
+            type="text"
+            placeholder="Ask a question..."
+            className="input w-full "
+          />
+          <div className="w-full flex flex-col gap-1">
+            {options.map((option, i) => (
+              <div
+                key={i}
+                className="flex gap-2 p-1 border-2 rounded-md border-slate-200 dark:border-slate-700"
+              >
+                <span className=" text-brand2 ">{i + 1}.</span>
+                <span className="w-full text-brand2 ">{option}</span>
+                <button
+                  onClick={() => {
+                    setoptions(
+                      options.filter((item, index) => {
+                        return index !== i;
+                      })
+                    );
+                  }}
+                  className="btn  btn-error btn-xs text-slate-50"
+                >
+                  remove
+                </button>
               </div>
-              {/* ) : null
-              ) : (
-                <></>
-              )} */}
-              <div className="flex gap-1">
-                <File />
-                Choose video thumbnail
-              </div>
-            </label>
-            <label
-              htmlFor=""
-              className=" cursor-pointer flex flex-col items-start gap-2  w-full p-2 border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4"
-            >
-              {/* {selectedPost ? (
-                selectedPost.file ? ( */}
-              <div className="rounded-lg overflow-clip">
-                <img
-                  src={
-                    "https://www.slntechnologies.com/wp-content/uploads/2017/08/ef3-placeholder-image.jpg"
-                  }
-                ></img>
-              </div>
-              {/* ) : null
-              ) : (
-                <></>
-              )} */}
-              <div className="flex gap-1">
-                <File />
-                Choose video file
-              </div>
-            </label>
+            ))}
           </div>
+
           <div className="flex gap-2">
             <input
               type="text"
-              placeholder="Video title"
+              onChange={(e) => setoption(e.target.value)}
+              value={option}
+              placeholder="Add option"
               className="input w-full "
             />
-            <select className="select w-44">
-              <option disabled selected>
-                Pick Category
-              </option>
-              <option>Homer</option>
-              <option>Marge</option>
-              <option>Bart</option>
-              <option>Lisa</option>
-              <option>Maggie</option>
-            </select>
-          </div>
 
-          <textarea
-            className="textarea  w-full"
-            placeholder="Enter caption."
-            onChange={(e) => setCaption(e.target.value)}
-            value={caption}
-          ></textarea>
-          <span
-            onClick={() => setadvancedOptionsShow(!advancedOptionsShow)}
-            className="flex px-2 items-center gap-1 font-semibold text-brand3 cursor-pointer"
-          >
-            Advanced options
-            <label
-              class={`swap ${
-                advancedOptionsShow && "swap-active"
-              } swap-rotate text-6xl`}
+            <button
+              onClick={() => {
+                setoptions([...options, option]);
+                setoption("");
+              }}
+              className="btn  btn-primary btn-outline"
             >
-              <div class="swap-on">
-                <ChevronUp />
-              </div>
-              <div class="swap-off">
-                <ChevronDown />
-              </div>
-            </label>
-          </span>
-          {advancedOptionsShow && (
-            <div className="flex gap-1 w-full flex-wrap">
-              <select className="select select-xs flex-grow ">
-                <option disabled selected>
-                  Allow Attribution?
-                </option>
-                <option>Homer</option>
-                <option>Marge</option>
-                <option>Bart</option>
-                <option>Lisa</option>
-                <option>Maggie</option>
-              </select>
-              <select className="select select-xs flex-grow ">
-                <option disabled selected>
-                  Commercial Use?
-                </option>
-                <option>Homer</option>
-                <option>Marge</option>
-                <option>Bart</option>
-                <option>Lisa</option>
-                <option>Maggie</option>
-              </select>
-              <select className="select select-xs flex-grow ">
-                <option disabled selected>
-                  Derivative Works?
-                </option>
-                <option>Homer</option>
-                <option>Marge</option>
-                <option>Bart</option>
-                <option>Lisa</option>
-                <option>Maggie</option>
-              </select>
-            </div>
-          )}
+              Add
+            </button>
+          </div>
 
           <div className="w-fit flex space-x-2">
             <label className="flex items-center cursor-pointer gap-2">
@@ -272,8 +193,8 @@ function VideoPostModal({ setVideoPostModalOpen }) {
                         </ProgressBar>
                     </div> */}
 
-          <button type={"submit"} className="btn btn-brand w-full">
-            Post video
+          <button type={"submit"} className="btn btn-brand w-full gap-2">
+            Take poll
           </button>
         </div>
       </form>
@@ -281,4 +202,4 @@ function VideoPostModal({ setVideoPostModalOpen }) {
   );
 }
 
-export default VideoPostModal;
+export default PollModal;

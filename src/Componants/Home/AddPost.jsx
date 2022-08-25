@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
 import {
   Camera,
+  ChartBar,
   File,
   Music,
   PlayCard,
@@ -9,7 +10,9 @@ import {
   X,
 } from "tabler-icons-react";
 import { UserContext } from "../../Store";
+import AudioPostModal from "./Modals/AudioPostModal";
 import PhotoPostModal from "./Modals/PhotoPostModal";
+import PollModal from "./Modals/PollModal";
 import VideoPostModal from "./Modals/VideoPostModal";
 
 function AddPost() {
@@ -20,14 +23,18 @@ function AddPost() {
   }
   const State = useContext(UserContext);
 
-  //photo post
+  // post modals
   const [photoPostModalOpen, setphotoPostModalOpen] = useState(false);
 
   const [videoPostModalOpen, setvideoPostModalOpen] = useState(false);
 
+  const [audioPostModalOpen, setaudioPostModalOpen] = useState(false);
+
+  const [pollModalOpen, setpollModalOpen] = useState(false);
+
   return (
-    <div className=" flex flex-col items-center w-full max-w-2xl h-fit bg-slate-100 dark:bg-slate-800  rounded-xl py-8  space-y-4">
-      <div className="flex items-center w-full px-8 space-x-4 rounded-3xl">
+    <div className=" flex flex-col items-center w-full max-w-2xl h-fit bg-slate-100 dark:bg-slate-800  rounded-xl lg:py-8  space-y-4">
+      <div className="flex items-center w-full px-2 lg:px-8 space-x-4 rounded-3xl">
         <textarea
           onChange={(e) => setpostTextData(e.target.value)}
           value={postTextData}
@@ -45,12 +52,12 @@ function AddPost() {
           post
         </button>
       </div>
-      <div className="btn-group">
+      <div className="btn-group ">
         <button
           onClick={() => {
             setphotoPostModalOpen(true);
           }}
-          className="btn btn-primary btn-outline  text-brand gap-2 group"
+          className="btn btn-primary btn-outline btn-sm lg:btn-md  text-brand gap-2 group"
         >
           <Camera className="group-hover:motion-safe:animate-bounce"></Camera>
           Photo
@@ -60,18 +67,28 @@ function AddPost() {
           onClick={() => {
             setvideoPostModalOpen(true);
           }}
-          className="btn btn-primary  btn-outline  text-brand gap-2 group"
+          className="btn btn-primary  btn-outline btn-sm lg:btn-md  text-brand gap-2 group"
         >
           <Video className="group-hover:motion-safe:animate-bounce"></Video>
           Video
         </button>
-        <button className="btn btn-primary  btn-outline  text-brand gap-2 group">
+        <button
+          onClick={() => {
+            setaudioPostModalOpen(true);
+          }}
+          className="btn btn-primary  btn-outline btn-sm lg:btn-md  text-brand gap-2 group"
+        >
           <Music className="group-hover:motion-safe:animate-bounce"></Music>
           Music
         </button>
-        <button className="btn btn-primary  btn-outline  text-brand gap-2 group">
-          <PlayCard className="group-hover:motion-safe:animate-bounce "></PlayCard>
-          NFT
+        <button
+          onClick={() => {
+            setpollModalOpen(true);
+          }}
+          className="btn btn-primary  btn-outline btn-sm lg:btn-md  text-brand gap-2 group"
+        >
+          <ChartBar className="group-hover:motion-safe:animate-bounce "></ChartBar>
+          Poll
         </button>
       </div>
       {/* photo post modal */}
@@ -88,6 +105,20 @@ function AddPost() {
         } modal  modal-bottom sm:modal-middle`}
       >
         <VideoPostModal setVideoPostModalOpen={setvideoPostModalOpen} />
+      </div>
+      <div
+        className={`${
+          audioPostModalOpen && "modal-open"
+        } modal  modal-bottom sm:modal-middle`}
+      >
+        <AudioPostModal setAudioPostModalOpen={setaudioPostModalOpen} />
+      </div>
+      <div
+        className={`${
+          pollModalOpen && "modal-open"
+        } modal  modal-bottom sm:modal-middle`}
+      >
+        <PollModal setPollModalOpen={setpollModalOpen} />
       </div>
     </div>
   );

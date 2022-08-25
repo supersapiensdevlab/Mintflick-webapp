@@ -144,7 +144,7 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
                 "No file choosen!"
               )
             ) : (
-              <div className="flex items-center">
+              <div className="flex items-center gap-1">
                 <File />
                 Choose file *
               </div>
@@ -302,7 +302,7 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
             type={"submit"}
             className={`btn  w-full ${uploadingPost ? "loading" : "btn-brand"}`}
           >
-            Post
+            Post photo
           </button>
         </div>
       </form>
