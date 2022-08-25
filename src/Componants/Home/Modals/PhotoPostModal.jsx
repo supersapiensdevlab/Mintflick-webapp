@@ -58,16 +58,27 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
             animation_url:
               "https://ipfs.io/ipfs/" + cid + "/" + selectedPost.file[0].name,
           };
+
+          function convertBlobToFile(blob, fileName){
+            blob.lastModifiedDate = new Date();
+            blob.name = fileName;
+            return blob;
+          }
+
           const blob = new Blob([JSON.stringify(metadata)], {
             type: "application/json",
           });
-          const metaFile = [new File([blob], "meta.json")];
+          const metaFile = new File([blob], "meta.json");
+          
+          //we are giving a url for an image as second parameter below
+          var file = convertBlobToFile(blob, "meta.json");
+          console.log(file);
 
-          uploadFile(metaFile)
+          uploadFile(file)
             .then(async (cid) => {
               console.log("stored files with cid:", cid);
               createToken(
-                "https://ipfs.io/ipfs/" + cid,
+                "https://ipfs.io/ipfs/" + cid + 'meta.json',
                 nftPrice,
                 window.ethereum,
                 setMinting,

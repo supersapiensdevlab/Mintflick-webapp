@@ -44,32 +44,31 @@ export let createToken = async (
   setMintingProgress,
 ) => {
   var tokenId = null;
-  var biconomy = new Biconomy(window.ethereum, {
-    apiKey: `${process.env.REACT_APP_BICONOMY_API}`,
-    contractAddresses: nftmarketaddress,
+  var biconomy = new Biconomy(provider, {
+    apiKey: `${process.env.REACT_APP_BICONOMY_API}`
   });
   console.log(provider);
   console.log(biconomy);
 
   const web3 = new Web3(biconomy);
-  await biconomy.init();
+  // await biconomy.init();
 
-  biconomy.on("txMined", (data) => {
-    // Event emitter to monitor when a transaction is mined
-    console.log("transaction data", data);
-  });
-  biconomy.on("txHashGenerated", (data) => {
-    // Event emitter to monitor when a transaction hash is generated
-    console.log("transaction data", data);
-  });
-  biconomy.on("txHashChanged", (data) => {
-    // Event emitter to monitor when a transaction hash is changed in case of gas price bump
-    console.log("transaction data", data);
-  });
-  biconomy.on("error", (data) => {
-    // Event emitter to monitor when an error occurs
-    console.log("transaction data", data);
-  });
+  // biconomy.on("txMined", (data) => {
+  //   // Event emitter to monitor when a transaction is mined
+  //   console.log("transaction data", data);
+  // });
+  // biconomy.on("txHashGenerated", (data) => {
+  //   // Event emitter to monitor when a transaction hash is generated
+  //   console.log("transaction data", data);
+  // });
+  // biconomy.on("txHashChanged", (data) => {
+  //   // Event emitter to monitor when a transaction hash is changed in case of gas price bump
+  //   console.log("transaction data", data);
+  // });
+  // biconomy.on("error", (data) => {
+  //   // Event emitter to monitor when an error occurs
+  //   console.log("transaction data", data);
+  // });
 
   biconomy
     .onEvent(biconomy.READY, async () => {
@@ -87,7 +86,7 @@ export let createToken = async (
           await contract.methods
             .createMarketItem(
               tokenId,
-              ethers.utils.parseUnits(NFTPrice, "ether"),
+              ethers.utils.parseUnits(NFTPrice.toString(), "ether"),
             )
             .send({ from: provider.selectedAddress })
             .then(async (res) => {
