@@ -21,74 +21,69 @@ function AudioPostModal({ setAudioPostModalOpen }) {
   const [nftPrice, setNFTPrice] = useState(1);
 
   return (
-    <div className="modal-box p-0 bg-slate-100 dark:bg-slate-800 ">
-      <div className="w-full h-fit p-2 bg-slate-300 dark:bg-slate-700">
-        <div className="flex justify-between items-center p-2">
-          <h3 className="flex items-center gap-2 font-bold text-lg text-brand2">
+    <div className='modal-box p-0 bg-slate-100 dark:bg-slate-800 '>
+      <div className='w-full h-fit p-2 bg-slate-300 dark:bg-slate-700'>
+        <div className='flex justify-between items-center p-2'>
+          <h3 className='flex items-center gap-2 font-bold text-lg text-brand2'>
             <Music />
             Upload Audio
           </h3>
           <X
             onClick={() => setAudioPostModalOpen(false)}
-            className="text-brand2 cursor-pointer"
-          ></X>
+            className='text-brand2 cursor-pointer'></X>
         </div>
       </div>
       <form onSubmit={""}>
-        <div className="w-full p-4 space-y-3">
-          <div className="flex flex-col sm:flex-row gap-1">
+        <div className='w-full p-4 space-y-3'>
+          <div className='flex flex-col sm:flex-row gap-1'>
             <label
-              htmlFor=""
-              className=" cursor-pointer flex flex-col items-start gap-2  w-full p-2 border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4"
-            >
+              htmlFor=''
+              className=' cursor-pointer flex flex-col items-start gap-2  w-full p-2 border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4'>
               {/* {selectedPost ? (
                 selectedPost.file ? ( */}
-              <div className="w-full  rounded-lg overflow-clip">
+              <div className='w-full  rounded-lg overflow-clip'>
                 <img
                   src={
                     "https://www.slntechnologies.com/wp-content/uploads/2017/08/ef3-placeholder-image.jpg"
-                  }
-                ></img>
+                  }></img>
               </div>
               {/* ) : null
               ) : (
                 <></>
               )} */}
-              <div className="flex gap-1">
+              <div className='flex gap-1'>
                 <File />
                 Choose album image
               </div>
             </label>
             <label
-              htmlFor=""
-              className=" cursor-pointer flex flex-col items-start gap-2  w-full p-2 border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4"
-            >
+              htmlFor=''
+              className=' cursor-pointer flex flex-col items-start gap-2  w-full p-2 border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4'>
               {/* {selectedPost ? (
                 selectedPost.file ? ( */}
-              <div className="rounded-lg overflow-clip">
+              <div className='rounded-lg overflow-clip'>
                 <img
                   src={
                     "https://www.slntechnologies.com/wp-content/uploads/2017/08/ef3-placeholder-image.jpg"
-                  }
-                ></img>
+                  }></img>
               </div>
               {/* ) : null
               ) : (
                 <></>
               )} */}
-              <div className="flex gap-1">
+              <div className='flex gap-1'>
                 <FileMusic />
                 Choose audio file
               </div>
             </label>
           </div>
           <input
-            type="text"
-            placeholder="Track name"
-            className="input w-full "
+            type='text'
+            placeholder='Track name'
+            className='input w-full '
           />
-          <div className="flex space-x-2">
-            <select className="select flex-grow">
+          <div className='flex space-x-2'>
+            <select className='select flex-grow'>
               <option disabled selected>
                 Genre
               </option>
@@ -98,7 +93,7 @@ function AudioPostModal({ setAudioPostModalOpen }) {
               <option>Lisa</option>
               <option>Maggie</option>
             </select>
-            <select className="select flex-grow">
+            <select className='select flex-grow'>
               <option disabled selected>
                 Mood
               </option>
@@ -111,45 +106,42 @@ function AudioPostModal({ setAudioPostModalOpen }) {
           </div>
 
           <textarea
-            className="textarea  w-full"
-            placeholder="Enter caption."
+            className='textarea  w-full'
+            placeholder='Enter caption.'
             onChange={(e) => setCaption(e.target.value)}
-            value={caption}
-          ></textarea>
+            value={caption}></textarea>
           <span
             onClick={() => setadvancedOptionsShow(!advancedOptionsShow)}
-            className="flex px-2 items-center gap-1 font-semibold text-brand3 cursor-pointer"
-          >
+            className='flex px-2 items-center gap-1 font-semibold text-brand3 cursor-pointer'>
             Advanced options
             <label
               class={`swap ${
                 advancedOptionsShow && "swap-active"
-              } swap-rotate text-6xl`}
-            >
-              <div class="swap-on">
+              } swap-rotate text-6xl`}>
+              <div class='swap-on'>
                 <ChevronUp />
               </div>
-              <div class="swap-off">
+              <div class='swap-off'>
                 <ChevronDown />
               </div>
             </label>
           </span>
           {advancedOptionsShow && (
             <>
-              <div className="flex flex-col lg:flex-row gap-2">
+              <div className='flex flex-col lg:flex-row gap-2'>
                 <input
-                  type="text"
-                  placeholder="Track ISRC"
-                  className="input flex-grow "
+                  type='text'
+                  placeholder='Track ISRC'
+                  className='input flex-grow '
                 />
                 <input
-                  type="text"
-                  placeholder="Track ISWC"
-                  className="input flex-grow "
+                  type='text'
+                  placeholder='Track ISWC'
+                  className='input flex-grow '
                 />
               </div>
-              <div className="flex gap-1 w-full flex-wrap">
-                <select className="select select-xs flex-grow">
+              <div className='flex gap-1 w-full flex-wrap'>
+                <select className='select select-xs flex-grow'>
                   <option disabled selected>
                     Allow Attribution?
                   </option>
@@ -159,7 +151,7 @@ function AudioPostModal({ setAudioPostModalOpen }) {
                   <option>Lisa</option>
                   <option>Maggie</option>
                 </select>
-                <select className="select select-xs flex-grow">
+                <select className='select select-xs flex-grow'>
                   <option disabled selected>
                     Commercial Use?
                   </option>
@@ -169,7 +161,7 @@ function AudioPostModal({ setAudioPostModalOpen }) {
                   <option>Lisa</option>
                   <option>Maggie</option>
                 </select>
-                <select className="select select-xs flex-grow">
+                <select className='select select-xs flex-grow'>
                   <option disabled selected>
                     Derivative Works?
                   </option>
@@ -183,29 +175,29 @@ function AudioPostModal({ setAudioPostModalOpen }) {
             </>
           )}
 
-          <div className="w-fit flex space-x-2">
-            <label className="flex items-center cursor-pointer gap-2">
+          <div className='w-fit flex space-x-2'>
+            <label className='flex items-center cursor-pointer gap-2'>
               <input
-                type="checkbox"
+                type='checkbox'
                 value={isNFT}
                 onChange={() => setIsNFT(!isNFT)}
-                className="checkbox checkbox-primary"
+                className='checkbox checkbox-primary'
               />
-              <span className="label-text text-brand3">Mint as NFT</span>
+              <span className='label-text text-brand3'>Mint as NFT</span>
             </label>
             {isNFT && (
-              <div className="form-control">
-                <label className="input-group">
+              <div className='form-control'>
+                <label className='input-group'>
                   <input
                     min={1}
-                    type="number"
-                    placeholder="1"
-                    className="input input-bordered input-sm w-24"
+                    type='number'
+                    placeholder='1'
+                    className='input input-bordered input-sm w-24'
                     value={nftPrice}
                     onChange={(e) => setNFTPrice(e.target.value)}
                     required={true}
                   />
-                  <span className="text-brand3 bg-slate-300 dark:bg-slate-600 ">
+                  <span className='text-brand3 bg-slate-300 dark:bg-slate-600 '>
                     <PolygonToken></PolygonToken> &nbsp; Matic
                   </span>
                 </label>
@@ -298,7 +290,7 @@ function AudioPostModal({ setAudioPostModalOpen }) {
                         </ProgressBar>
                     </div> */}
 
-          <button type={"submit"} className="btn btn-brand w-full">
+          <button type={"submit"} className='btn btn-brand w-full'>
             Post audio
           </button>
         </div>
