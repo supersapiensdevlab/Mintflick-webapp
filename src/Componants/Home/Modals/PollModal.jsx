@@ -38,7 +38,7 @@ function PollModal({ setPollModalOpen }) {
             {options.map((option, i) => (
               <div
                 key={i}
-                className="flex gap-2 p-1 border-2 rounded-md border-slate-200 dark:border-slate-700"
+                className="flex gap-2 p-2 border-2 rounded-lg border-slate-200 dark:border-slate-700"
               >
                 <span className=" text-brand2 ">{i + 1}.</span>
                 <span className="w-full text-brand2 ">{option}</span>
