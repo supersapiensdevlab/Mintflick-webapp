@@ -12,10 +12,13 @@ import {
 } from "tabler-icons-react";
 import PolygonToken from "../../../Assets/logos/PolygonToken";
 import { storeWithProgress } from "../../../Helper/uploadHelper";
+import useUserActions from "../../../Hooks/useUserActions";
 import { UserContext } from "../../../Store";
 
 function VideoPostModal({ setVideoPostModalOpen }) {
   const State = useContext(UserContext);
+  const [loadFeed] = useUserActions();
+
   const [advancedOptionsShow, setadvancedOptionsShow] = useState(false);
   const [isNFT, setIsNFT] = useState(false);
   const [nftPrice, setNFTPrice] = useState(1);
@@ -123,7 +126,7 @@ function VideoPostModal({ setVideoPostModalOpen }) {
       })
     }
   }
-  const clearState = () =>{
+  const clearState = async() =>{
     setUploadingVideo(false)
     setVideoPostModalOpen(false);
     setSelectedVideo(null);
@@ -141,6 +144,7 @@ function VideoPostModal({ setVideoPostModalOpen }) {
     })
     setIsNFT(false)
     setNFTPrice(1)
+    await loadFeed();
   }
 
   return (

@@ -5,6 +5,7 @@ import { Camera, File, FileCheck, X } from "tabler-icons-react";
 import PolygonToken from "../../../Assets/logos/PolygonToken";
 import { uploadFile } from "../../../Helper/uploadHelper";
 import { storeWithProgress, createToken } from "../../../Helper/nftMinter";
+import useUserActions from "../../../Hooks/useUserActions";
 
 function PhotoPostModal({ setphotoPostModalOpen }) {
   const [uploadingPost, setUploadingPost] = useState(false);
@@ -12,6 +13,8 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
   const [caption, setCaption] = useState("");
   const [isNFT, setIsNFT] = useState(false);
   const [nftPrice, setNFTPrice] = useState(1);
+  const [loadFeed] = useUserActions();
+
 
   // Minting
   const [minting, setMinting] = useState(null);
@@ -102,11 +105,12 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
                 },
               }
             )
-            .then((data) => {
+            .then(async(data) => {
               setUploadingPost(false);
               setSelectedPost(null);
               setCaption("");
               setphotoPostModalOpen(false);
+              await loadFeed();
             })
             .catch((err) => {
               console.log(err);

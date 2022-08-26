@@ -22,7 +22,6 @@ import defaultProPic from "../../Assets/profile-pic.png";
 function Post(props) {
   // Common State and Functions
   const State = useContext(UserContext);
-  const [gettingNFTData, setGettingNFTData] = useState(true);
 
   const [videoLikes, setVideoLikes] = useState(0);
   const [videoLiked, setVideoLiked] = useState(null);
@@ -228,7 +227,7 @@ function Post(props) {
             "auth-token": JSON.stringify(State.database.userData.data.jwtToken),
           },
           data: videoDetails,
-        }).then(function (response) {});
+        }).then(function (response) { });
       }, 5000);
       return () => clearTimeout(timer);
     }
@@ -534,6 +533,9 @@ function Post(props) {
 
       {props.contentType === "video" && (
         <>
+          <div className="font-normal text-base text-brand2 w-full">{props.content.videoName}</div>
+          <div className="font-normal text-base text-brand5 w-full">{props.content.description}</div>
+
           <div className=" w-full h-fit z-10 rounded-lg overflow-clip">
             <ReactPlayer
               className="w-full h-full max-h-screen "
@@ -562,7 +564,7 @@ function Post(props) {
       )}
       <div
         className={
-          props.tokenId && !gettingNFTData
+          props.tokenId && !props.gettingNFTData
             ? "cursor-pointer flex items-center justify-start rounded-lg space-x-2 text-brand2"
             : "hidden"
         }
@@ -582,11 +584,10 @@ function Post(props) {
           {props.contentType === "post" && (
             <div className=" cursor-pointer flex items-center text-brand1  space-x-2">
               <Heart
-                className={`${
-                  postLiked
+                className={`${postLiked
                     ? "text-red-600 hover:text-white fill-rose-600"
                     : "text-brand1 hover:text-red-600"
-                }`}
+                  }`}
                 onClick={handlePostLikes}
               ></Heart>
               <p className="font-medium text-sm ">{postLikes}</p>
@@ -595,11 +596,10 @@ function Post(props) {
           {props.contentType === "video" && (
             <div className=" cursor-pointer flex items-center text-brand1  space-x-2">
               <Heart
-                className={`${
-                  videoLiked
+                className={`${videoLiked
                     ? "text-red-600 hover:text-white fill-rose-600"
                     : "text-brand1 hover:text-red-600"
-                }`}
+                  }`}
                 onClick={handleVideoLikes}
               ></Heart>
               <p className="font-medium text-sm ">
@@ -610,11 +610,10 @@ function Post(props) {
           {props.contentType === "track" && (
             <div className=" cursor-pointer flex items-center text-brand1  space-x-2">
               <Heart
-                className={`${
-                  trackLiked
+                className={`${trackLiked
                     ? "text-red-600 hover:text-white fill-rose-600"
                     : "text-brand1 hover:text-red-600"
-                }`}
+                  }`}
                 onClick={handleTrackLikes}
               ></Heart>
               <p className="font-medium text-sm ">

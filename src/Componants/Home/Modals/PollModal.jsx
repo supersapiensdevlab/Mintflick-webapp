@@ -1,14 +1,50 @@
+import axios from "axios";
 import React from "react";
 import { useState } from "react";
 import { ChartBar, Send, X } from "tabler-icons-react";
 import PolygonToken from "../../../Assets/logos/PolygonToken";
+import useUserActions from "../../../Hooks/useUserActions";
 
 function PollModal({ setPollModalOpen }) {
   const [options, setoptions] = useState([]);
   const [option, setoption] = useState("");
   const [isNFT, setIsNFT] = useState(false);
   const [nftPrice, setNFTPrice] = useState(1);
+  const [uploadingPoll, setUploadingPoll] = useState(false);
+  const [question, setQuestion] = useState('');
+  const [loadFeed] = useUserActions();
 
+
+  const clearState = async () => {
+    setUploadingPoll(false)
+    setPollModalOpen(false);
+    setoptions([])
+    setoption("");
+    setQuestion("");
+    setIsNFT(false)
+    setNFTPrice(1)
+    await loadFeed();
+  }
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setUploadingPoll(true)
+    if (options.length > 1 && !isNFT) {
+      axios
+        .post(`${process.env.REACT_APP_SERVER_URL}/user/addpoll`,{question,options}, {
+          headers: {
+            'content-type': 'multipart/form-data',
+            'auth-token': JSON.stringify(localStorage.getItem('authtoken')),
+          },
+        })
+        .then((res) => {
+          clearState()
+        })
+        .catch((err) => {
+          console.log(err);
+          clearState()
+        });
+    }
+  }
   return (
     <div className="modal-box p-0 bg-slate-100 dark:bg-slate-800 ">
       <div className="w-full h-fit p-2 bg-slate-300 dark:bg-slate-700">
@@ -24,15 +60,16 @@ function PollModal({ setPollModalOpen }) {
         </div>
       </div>
       <form
-        onSubmit={(e) => {
-          e.preventDefault();
-        }}
+        onSubmit={handleSubmit}
       >
         <div className="w-full p-4 space-y-3">
           <input
             type="text"
             placeholder="Ask a question..."
             className="input w-full "
+            value={question}
+            onChange={(e) => setQuestion(e.target.value)}
+            required
           />
           <div className="w-full flex flex-col gap-1">
             {options.map((option, i) => (
@@ -41,7 +78,7 @@ function PollModal({ setPollModalOpen }) {
                 className="flex gap-2 p-2 border-2 rounded-lg border-slate-200 dark:border-slate-700"
               >
                 <span className=" text-brand2 ">{i + 1}.</span>
-                <span className="w-full text-brand2 ">{option}</span>
+                <span className="w-full text-brand2 ">{option.option}</span>
                 <button
                   onClick={() => {
                     setoptions(
@@ -57,26 +94,30 @@ function PollModal({ setPollModalOpen }) {
               </div>
             ))}
           </div>
+          {options.length < 4 &&
+            <div className="flex gap-2">
+              <input
+                type="text"
+                onChange={(e) => setoption(e.target.value)}
+                value={option}
+                placeholder="Add option"
+                className="input w-full "
+              />
 
-          <div className="flex gap-2">
-            <input
-              type="text"
-              onChange={(e) => setoption(e.target.value)}
-              value={option}
-              placeholder="Add option"
-              className="input w-full "
-            />
-
-            <button
-              onClick={() => {
-                setoptions([...options, option]);
-                setoption("");
-              }}
-              className="btn  btn-primary btn-outline"
-            >
-              Add
-            </button>
-          </div>
+              <button
+                type={"button"}
+                onClick={() => {
+                  if (option != '') {
+                    setoptions([...options, { option, selectedBy: [] }]);
+                    setoption("");
+                  }
+                }}
+                className="btn  btn-primary btn-outline"
+              >
+                Add
+              </button>
+            </div>
+          }
 
           <div className="w-fit flex space-x-2">
             <label className="flex items-center cursor-pointer gap-2">
@@ -193,7 +234,10 @@ function PollModal({ setPollModalOpen }) {
                         </ProgressBar>
                     </div> */}
 
-          <button type={"submit"} className="btn btn-brand w-full gap-2">
+          <button
+            type={"submit"}
+            className={`btn  w-full ${uploadingPoll ? "loading" : "btn-brand"}`}
+          >
             Take poll
           </button>
         </div>

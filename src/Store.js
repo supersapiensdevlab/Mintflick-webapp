@@ -9,12 +9,13 @@ function Store(props) {
     provider: {},
     userData: {},
     liveUsers: [],
+    feedData: [],
   });
   const updateStore = (data) => {
-    setstore({
-      ...store,
+    setstore((prev) => ({
+      ...prev,
       ...data,
-    });
+    }));
   };
   const addLiveUsers = (data) => {
     setstore((prev) => ({
@@ -22,12 +23,19 @@ function Store(props) {
       liveUsers: [...prev.liveUsers, data],
     }));
   };
+  const addFeed = (data) => {
+    setstore((prev) => ({
+      ...prev,
+      feedData: data,
+    }));
+  };
   return (
     <UserContext.Provider
       value={{
         database: store,
         updateDatabase: updateStore,
-        addLiveUsers: addLiveUsers
+        addLiveUsers: addLiveUsers,
+        addFeed: addFeed
       }}
     >
       {props.data}
