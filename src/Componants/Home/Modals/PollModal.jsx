@@ -1,5 +1,5 @@
 import axios from "axios";
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { ChartBar, Send, X } from "tabler-icons-react";
 import PolygonToken from "../../../Assets/logos/PolygonToken";
@@ -29,15 +29,19 @@ function PollModal({ setPollModalOpen }) {
     e.preventDefault();
     setUploadingPoll(true)
     if (options.length > 1 && !isNFT) {
+      let data = {
+        question: question,
+        options: options
+      }
       axios
-        .post(`${process.env.REACT_APP_SERVER_URL}/user/addpoll`,{question,options}, {
+        .post(`${process.env.REACT_APP_SERVER_URL}/user/addpoll`, data, {
           headers: {
-            'content-type': 'multipart/form-data',
+            'content-type': 'application/json',
             'auth-token': JSON.stringify(localStorage.getItem('authtoken')),
           },
         })
-        .then((res) => {
-          clearState()
+        .then(async (res) => {
+          await clearState()
         })
         .catch((err) => {
           console.log(err);
@@ -45,6 +49,11 @@ function PollModal({ setPollModalOpen }) {
         });
     }
   }
+
+  useEffect(()=>{
+    console.log(JSON.stringify(options))
+  },[options])
+
   return (
     <div className="modal-box p-0 bg-slate-100 dark:bg-slate-800 ">
       <div className="w-full h-fit p-2 bg-slate-300 dark:bg-slate-700">
@@ -77,7 +86,6 @@ function PollModal({ setPollModalOpen }) {
                 key={i}
                 className="flex gap-2 p-2 border-2 rounded-lg border-slate-200 dark:border-slate-700"
               >
-                <span className=" text-brand2 ">{i + 1}.</span>
                 <span className="w-full text-brand2 ">{option.option}</span>
                 <button
                   onClick={() => {
@@ -112,7 +120,7 @@ function PollModal({ setPollModalOpen }) {
                     setoption("");
                   }
                 }}
-                className="btn  btn-primary btn-outline"
+                className={`btn  btn-primary btn-outline`}
               >
                 Add
               </button>

@@ -32,6 +32,9 @@ function Post(props) {
   const [postLikes, setPostLikes] = useState(0);
   const [postLiked, setPostLiked] = useState(null);
 
+  const [pollLikes, setPollLikes] = useState(0);
+  const [pollLiked, setPollLiked] = useState(null);
+
   //// Only Track Specific States and Functions
 
   // state
@@ -531,6 +534,22 @@ function Post(props) {
         </>
       )}
 
+      {props.contentType === "poll" && <div className="w-full">
+        <div className="font-normal text-base text-brand2 w-full">{props.content.question}</div>
+        {props.content.options.map((option, i) => {
+          return (
+            <div
+              key={i}
+              className="my-2 flex gap-2 p-2 border-2 rounded-lg border-slate-200 dark:border-slate-700"
+            >
+              <span className="w-full text-brand2 ">{option.option}</span>
+              <input type="radio" name="radio-2" class="radio radio-primary" />
+            </div>
+          )
+        })}
+      </div>
+      }
+
       {props.contentType === "video" && (
         <>
           <div className="font-normal text-base text-brand2 w-full">{props.content.videoName}</div>
@@ -585,8 +604,8 @@ function Post(props) {
             <div className=" cursor-pointer flex items-center text-brand1  space-x-2">
               <Heart
                 className={`${postLiked
-                    ? "text-red-600 hover:text-white fill-rose-600"
-                    : "text-brand1 hover:text-red-600"
+                  ? "text-red-600 hover:text-white fill-rose-600"
+                  : "text-brand1 hover:text-red-600"
                   }`}
                 onClick={handlePostLikes}
               ></Heart>
@@ -597,13 +616,13 @@ function Post(props) {
             <div className=" cursor-pointer flex items-center text-brand1  space-x-2">
               <Heart
                 className={`${videoLiked
-                    ? "text-red-600 hover:text-white fill-rose-600"
-                    : "text-brand1 hover:text-red-600"
+                  ? "text-red-600 hover:text-white fill-rose-600"
+                  : "text-brand1 hover:text-red-600"
                   }`}
                 onClick={handleVideoLikes}
               ></Heart>
               <p className="font-medium text-sm ">
-                {videoLikes > 0 ? videoLikes : ""}
+                {videoLikes}
               </p>
             </div>
           )}
@@ -611,16 +630,31 @@ function Post(props) {
             <div className=" cursor-pointer flex items-center text-brand1  space-x-2">
               <Heart
                 className={`${trackLiked
-                    ? "text-red-600 hover:text-white fill-rose-600"
-                    : "text-brand1 hover:text-red-600"
+                  ? "text-red-600 hover:text-white fill-rose-600"
+                  : "text-brand1 hover:text-red-600"
                   }`}
                 onClick={handleTrackLikes}
               ></Heart>
               <p className="font-medium text-sm ">
-                {trackLikes > 0 ? trackLikes : ""}
+                {trackLikes}
               </p>
             </div>
           )}
+          {props.contentType === "poll" && (
+            <div className=" cursor-pointer flex items-center text-brand1  space-x-2">
+              <Heart
+                className={`${pollLiked
+                  ? "text-red-600 hover:text-white fill-rose-600"
+                  : "text-brand1 hover:text-red-600"
+                  }`}
+             
+              ></Heart>
+              <p className="font-medium text-sm ">
+                {pollLikes}
+              </p>
+            </div>
+          )}
+
           <div
             onClick={() => {
               setshowCommentInput(!showCommentInput);
