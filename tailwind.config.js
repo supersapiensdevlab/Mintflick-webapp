@@ -42,6 +42,7 @@ module.exports = {
         "brand-200": "#8df3f1",
         "brand-300": "#76f0ee",
         brand: "#2ce8e5",
+        mintie: "#282052",
         "brand-500": "#25c5c3",
         "brand-600": "#20a9a7",
         "brand-700": "#0f5150",

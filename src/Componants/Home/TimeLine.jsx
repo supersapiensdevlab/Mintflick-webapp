@@ -125,6 +125,7 @@ function TimeLine() {
             videoViews={post.content.views}
             pollId={post.content.pollId}
             postId={post.content.postId}
+            votes={post.content.votes}
             content={post.content}
             gettingNFTData={gettingNFTData}></Post>
         </>

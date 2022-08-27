@@ -3,6 +3,7 @@ import { useState } from "react";
 import {
   ArrowNarrowRight,
   At,
+  CircleCheck,
   DotsVertical,
   Heart,
   MessageCircle,
@@ -19,9 +20,11 @@ import ReactPlayer from "react-player";
 import moment from "moment";
 import AllComments from "./AllComments/AllComments";
 import defaultProPic from "../../Assets/profile-pic.png";
+import useUserActions from "../../Hooks/useUserActions";
 function Post(props) {
   // Common State and Functions
   const State = useContext(UserContext);
+  const [loadFeed] = useUserActions();
 
   const [videoLikes, setVideoLikes] = useState(0);
   const [videoLiked, setVideoLiked] = useState(null);
@@ -34,6 +37,10 @@ function Post(props) {
 
   const [pollLikes, setPollLikes] = useState(0);
   const [pollLiked, setPollLiked] = useState(null);
+
+  const [pollChoice, setPollChoice] = useState(0);
+  const [pollVotes, setPollVotes] = useState(0);
+  const [pollVoted, setPollVoted] = useState(null);
 
   //// Only Track Specific States and Functions
 
@@ -247,11 +254,33 @@ function Post(props) {
         setVideoLikes(props.likes.length);
       } else if (props.pollId) {
         setPollLikes(props.likes.length);
+        setPollVotes(props.votes.length);
       } else {
         setTrackLikes(props.likes.length);
       }
     }
 
+    if (props.content.pollId) {
+      if (
+        props.content.votes &&
+        props.content.votes.length > 0 &&
+        props.content.votes.includes(State.database.userData.data.user.username)
+      ) {
+        setPollVoted(true);
+        for (let i = 0; i < props.content.options.length; i++) {
+          if (
+            props.content.options[i].selectedBy.includes(
+              State.database.userData.data.user.username,
+            )
+          ) {
+            setPollChoice(i);
+            break;
+          }
+        }
+      } else {
+        setPollVoted(false);
+      }
+    }
     if (
       props.likes &&
       State.database.userData.data &&
@@ -448,6 +477,53 @@ function Post(props) {
       });
   };
 
+  const handlePollVote = (choice) => {
+    console.log(pollVoted, choice);
+    if (!pollVoted) {
+      setPollVotes(pollVotes + 1);
+      console.log("pollVotes inc", pollVotes);
+    }
+    // if (trackLikes.includes(user.username)) {
+    //   let newArr = trackLikes.filter((item, index) => item != user.username);
+    //   setTrackLikes(newArr);
+    //   set
+    // } else {
+    //   let temp = trackLikes;
+    //   temp.push(user.username);
+    //   setTrackLikes(temp);
+    //   console.log(trackLikes, 'in else');
+    // }
+
+    const voteData = {
+      reactusername: `${State.database.userData.data.user.username}`,
+      pollusername: `${props.profileUsername}`,
+      pollId: `${props.pollId}`,
+      voted: `${choice}`,
+    };
+    axios({
+      method: "POST",
+      url: `${process.env.REACT_APP_SERVER_URL}/user/pollVote`,
+      headers: {
+        "content-type": "application/json",
+        "auth-token": JSON.stringify(localStorage.getItem("authtoken")),
+      },
+      data: voteData,
+    })
+      .then(async function (response) {
+        setPollVoted(true);
+        setPollChoice(choice);
+        if (response) {
+          ////console.log(response);
+          await loadFeed();
+        } else {
+          console.log("error");
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
   return (
     <div className='w-full h-fit lg:bg-slate-100 lg:dark:bg-slate-800 lg:rounded-xl p-4 lg:p-8 space-y-4 pb-4 border-b-2 lg:border-none  border-slate-200 dark:border-slate-900'>
       <div className='flex justify-between items-center'>
@@ -592,16 +668,50 @@ function Post(props) {
             return (
               <div
                 key={i}
-                className='my-2 flex gap-2 p-2 border-2 rounded-lg border-slate-200 dark:border-slate-700'>
-                <span className='w-full text-brand2 '>{option.option}</span>
-                <input
-                  type='radio'
-                  name='radio-2'
-                  class='radio radio-primary'
-                />
+                onClick={() => {
+                  if (
+                    !pollVoted &&
+                    !props.content.votes.includes(
+                      State.database.userData.data.user.username,
+                    )
+                  ) {
+                    handlePollVote(i);
+                  }
+                }}
+                className={`${
+                  option.selectedBy &&
+                  option.selectedBy.includes(
+                    State.database.userData.data.user.username,
+                  ) &&
+                  pollChoice === i
+                    ? "dark:bg-slate-900 btn-disabled  "
+                    : pollVoted && "btn-disabled"
+                } my-2 flex gap-2 p-2 px-4 border-2 rounded-lg border-slate-200 dark:border-slate-700 cursor-pointer hover:bg-slate-700 justify-between transition-all duration-300`}>
+                <span className='w-full text-white dark:text-brand2 '>
+                  {option.option}
+                </span>
+                <div className='  text-white dark:text-success opacity-50'>
+                  {option.selectedBy &&
+                  option.selectedBy.includes(
+                    State.database.userData.data.user.username,
+                  ) ? (
+                    <div className='flex'>
+                      voted&nbsp;
+                      <CircleCheck />
+                    </div>
+                  ) : null}
+                </div>
               </div>
             );
           })}
+          <div className='text-brand4 text-sm space-x-2'>
+            <span>{pollVotes}&nbsp; Votes</span>
+            {/* <span
+            onClick={() => setshowComments(!showComments)}
+            className='cursor-pointer'>
+            {commentCount} Comments
+          </span> */}
+          </div>
         </div>
       )}
 
