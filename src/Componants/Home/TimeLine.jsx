@@ -4,11 +4,10 @@ import { useContext } from "react";
 import useUserActions from "../../Hooks/useUserActions";
 import { UserContext } from "../../Store";
 import Post from "./Post";
-import Web3 from 'web3';
+import Web3 from "web3";
 import Market from "../../artifacts/contracts/Market.sol/NFTMarket.json";
 import { nftmarketaddress } from "../../functions/config";
-import { ethers } from 'ethers';
-
+import { ethers } from "ethers";
 
 function TimeLine() {
   // for Playing only one at time
@@ -19,7 +18,6 @@ function TimeLine() {
   // For NFT DATA
   const [nfts, setNfts] = useState([]);
   const [gettingNFTData, setGettingNFTData] = useState(true);
-
 
   useEffect(() => {
     loadFeed();
@@ -93,7 +91,6 @@ function TimeLine() {
   //   setGettingNFTData(false);
   // }
 
-
   return (
     <div className='w-full max-w-2xl space-y-6  '>
       {State.database.feedData.map((post, i) => (
@@ -126,10 +123,10 @@ function TimeLine() {
             videoUrl={post.content.link}
             videoId={post.content.videoId}
             videoViews={post.content.views}
+            pollId={post.content.pollId}
             postId={post.content.postId}
             content={post.content}
-            gettingNFTData={gettingNFTData}
-          ></Post>
+            gettingNFTData={gettingNFTData}></Post>
         </>
       ))}
     </div>
