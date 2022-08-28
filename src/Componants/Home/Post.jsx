@@ -686,7 +686,7 @@ function Post(props) {
                   pollChoice === i
                     ? "dark:bg-slate-900 btn-disabled  "
                     : pollVoted && "btn-disabled"
-                } my-2 flex gap-2 p-2 px-4 border-2 rounded-lg border-slate-200 dark:border-slate-700 cursor-pointer hover:bg-slate-700 justify-between transition-all duration-300`}>
+                } my-2 flex gap-2 p-2 px-4 border-2 rounded-lg border-slate-200 dark:border-slate-700 cursor-pointer hover:bg-slate-700 justify-between `}>
                 <span className='w-full text-white dark:text-brand2 '>
                   {option.option}
                 </span>
