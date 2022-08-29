@@ -17,7 +17,7 @@ function HomeScreen() {
   }, []);
 
   return (
-    <div className="relative flex h-screen w-screen  ">
+    <div className="relative flex flex-col h-screen w-screen  ">
       <Helmet>
         <meta charSet="utf-8" />
         <title>MintFlick - Feed</title>
@@ -28,7 +28,7 @@ function HomeScreen() {
       <div className=" w-full">
         <Outlet></Outlet>
       </div>
-      <div className="lg:hidden w-full absolute z-50 bottom-0">
+      <div className="lg:hidden w-full sticky z-50 bottom-0">
         <BottomNavigation></BottomNavigation>
       </div>
     </div>
