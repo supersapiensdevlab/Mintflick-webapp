@@ -264,7 +264,7 @@ function Post(props) {
       if (
         props.content.votes &&
         props.content.votes.length > 0 &&
-        props.content.votes.includes(State.database.userData.data.user.username)
+        props.content.votes.includes(State.database.userData.data?.user.username)
       ) {
         setPollVoted(true);
         for (let i = 0; i < props.content.options.length; i++) {
@@ -681,7 +681,7 @@ function Post(props) {
                 className={`${
                   option.selectedBy &&
                   option.selectedBy.includes(
-                    State.database.userData.data.user.username,
+                    State.database.userData.data?.user.username,
                   ) &&
                   pollChoice === i
                     ? "dark:bg-slate-900 btn-disabled  "
@@ -693,7 +693,7 @@ function Post(props) {
                 <div className='  text-white dark:text-success opacity-50'>
                   {option.selectedBy &&
                   option.selectedBy.includes(
-                    State.database.userData.data.user.username,
+                    State.database.userData.data?.user.username,
                   ) ? (
                     <div className='flex'>
                       voted&nbsp;
