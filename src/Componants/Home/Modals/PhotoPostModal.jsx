@@ -87,12 +87,36 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
               ).then(async (tokenId) => {
                 console.log("TOKEN ID Created : ", tokenId); // token created
                 formData.append("tokenId", tokenId);
+                axios
+            .post(
+              `${process.env.REACT_APP_SERVER_URL}/user/announcement`,
+              formData,
+              {
+                headers: {
+                  "content-type": "multipart/form-data",
+                  "auth-token": JSON.stringify(localStorage.getItem("authtoken")),
+                },
+              }
+            )
+            .then(async(data) => {
+              setUploadingPost(false);
+              setSelectedPost(null);
+              setCaption("");
+              setphotoPostModalOpen(false);
+              await loadFeed();
+            })
+            .catch((err) => {
+              console.log(err);
+              setUploadingPost(false);
+              setSelectedPost(null);
+              setCaption("");
+            });
               });
             })
             .catch((err) => {
               console.log(err);
             });
-        }
+        }else{
 
           axios
             .post(
@@ -118,6 +142,7 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
               setSelectedPost(null);
               setCaption("");
             });
+          }
         })
         .catch((err) => {
           console.log(err);

@@ -11,7 +11,8 @@ import {
   X,
 } from "tabler-icons-react";
 import PolygonToken from "../../../Assets/logos/PolygonToken";
-import { storeWithProgress } from "../../../Helper/uploadHelper";
+import { uploadFile } from "../../../Helper/uploadHelper";
+import { storeWithProgress, createToken } from "../../../Helper/nftMinter";
 import useUserActions from "../../../Hooks/useUserActions";
 import { UserContext } from "../../../Store";
 
@@ -19,133 +20,235 @@ function VideoPostModal({ setVideoPostModalOpen }) {
   const State = useContext(UserContext);
   const [loadFeed] = useUserActions();
 
+  const [minting, setMinting] = useState(null);
+  const [mintingProgress, setMintingProgress] = useState(0);
+
   const [advancedOptionsShow, setadvancedOptionsShow] = useState(false);
   const [isNFT, setIsNFT] = useState(false);
   const [nftPrice, setNFTPrice] = useState(1);
   const category = [
-    'Autos & Vehicles',
-    ' Music',
-    'Pets & Animals',
-    'Sports',
-    'Travel & Events',
-    'Gaming',
-    'People & Blogs',
-    'Comedy',
-    'Entertainment',
-    'News & Politics',
-    ' Howto & Style',
-    'Education',
-    'Science & Technology',
-    'Nonprofits & Activism',
+    "Autos & Vehicles",
+    " Music",
+    "Pets & Animals",
+    "Sports",
+    "Travel & Events",
+    "Gaming",
+    "People & Blogs",
+    "Comedy",
+    "Entertainment",
+    "News & Politics",
+    " Howto & Style",
+    "Education",
+    "Science & Technology",
+    "Nonprofits & Activism",
   ];
-  const attribution = ['No Attribution', 'Allow Attribution'];
-  const commercialUse = ['Non Commercial', 'Commercial Use'];
-  const derivativeWorks = ['No-Selection', 'No Derivative Works', 'Share-Alike'];
-
+  const attribution = ["No Attribution", "Allow Attribution"];
+  const commercialUse = ["Non Commercial", "Commercial Use"];
+  const derivativeWorks = [
+    "No-Selection",
+    "No Derivative Works",
+    "Share-Alike",
+  ];
 
   const [uploadingVideo, setUploadingVideo] = useState(false);
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [selectedThumbnail, setSelectedThumbnail] = useState(null);
   const [videoData, setVideoData] = useState({
-    videoName: '',
-    videoImage: '',
-    videoFile: '',
-    category: '',
+    videoName: "",
+    videoImage: "",
+    videoFile: "",
+    category: "",
     tags: [],
-    description: '',
-    allowAttribution: '',
-    commercialUse: '',
-    derivativeWorks: '',
-  })
-
+    description: "",
+    allowAttribution: "",
+    commercialUse: "",
+    derivativeWorks: "",
+  });
 
   const onVideoFileChange = (e) => {
-    if (e.target.name === 'videoFile') {
+    if (e.target.name === "videoFile") {
       setSelectedVideo({
         file: e.target.files[0],
         localurl: URL.createObjectURL(e.target.files[0]),
-      })
-      let videoName = e.target.files[0].name.replace(/\.[^/.]+$/, '');
+      });
+      let videoName = e.target.files[0].name.replace(/\.[^/.]+$/, "");
       setVideoData({ ...videoData, videoName: videoName });
-    } else if (e.target.name === 'videoImage') {
+    } else if (e.target.name === "videoImage") {
       setSelectedThumbnail({
         file: e.target.files[0],
         localurl: URL.createObjectURL(e.target.files[0]),
-      })
-      let videoImage = e.target.files[0].name.replace(/\.[^/.]+$/, '');
+      });
+      let videoImage = e.target.files[0].name.replace(/\.[^/.]+$/, "");
       setVideoData({ ...videoData, videoImage: videoImage });
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!isNFT && !uploadingVideo) {
+    if (!uploadingVideo) {
       setUploadingVideo(true);
       const files = [selectedThumbnail.file, selectedVideo.file];
-      storeWithProgress(files).then((cid) => {
-        let formData = new FormData(); // Currently empty
-        formData.append('userName', State.database.userData.data.user.username);
-        formData.append('userImage', State.database.userData.data.user.profile_image);
+      storeWithProgress(files)
+        .then((cid) => {
+          let formData = new FormData(); // Currently empty
+          formData.append(
+            "userName",
+            State.database.userData.data.user.username
+          );
+          formData.append(
+            "userImage",
+            State.database.userData.data.user.profile_image
+          );
 
-        formData.append('videoName', videoData.videoName);
+          formData.append("videoName", videoData.videoName);
 
-        // tags.forEach((tag) => formData.append('tags', tag));
+          // tags.forEach((tag) => formData.append('tags', tag));
 
-        formData.append('description', videoData.description);
+          formData.append("description", videoData.description);
 
-        formData.append('category', videoData.category);
-        formData.append('ratings', '');
-        formData.append('allowAttribution', videoData.allowAttribution);
-        formData.append('commercialUse', videoData.commercialUse);
-        formData.append('derivativeWorks', videoData.commercialUse);
+          formData.append("category", videoData.category);
+          formData.append("ratings", "");
+          formData.append("allowAttribution", videoData.allowAttribution);
+          formData.append("commercialUse", videoData.commercialUse);
+          formData.append("derivativeWorks", videoData.commercialUse);
 
-        formData.append('videoFile', selectedVideo.file, selectedVideo.name);
-        formData.append('videoImage', selectedThumbnail.file, selectedThumbnail.name);
-        formData.append('videoHash', cid);
+          formData.append("videoFile", selectedVideo.file, selectedVideo.name);
+          formData.append(
+            "videoImage",
+            selectedThumbnail.file,
+            selectedThumbnail.name
+          );
+          formData.append("videoHash", cid);
 
-        // formData.append('meta_url', cid); // meta_url is the IPFS hash of the meta.json file
+          if (isNFT) {
+            var ts = Math.round(new Date().getTime() / 1000);
+            let metadata = {
+              image:
+                "https://ipfs.io/ipfs/" +
+                cid +
+                "/" +
+                selectedThumbnail.file.name,
+              external_url:
+                "https://ipfs.io/ipfs/" + cid + "/" + selectedVideo.file.name,
+              description: videoData.description,
+              name: videoData.videoName,
+              attributes: [
+                {
+                  display_type: "date",
+                  trait_type: "Created On",
+                  value: ts,
+                },
+                {
+                  trait_type: "Category",
+                  value: "Category",
+                },
+              ],
+              animation_url:
+                "https://ipfs.io/ipfs/" + cid + "/" + selectedVideo.file.name,
+            };
 
-        // setFormData(formData);
-        axios
-          .post(`${process.env.REACT_APP_SERVER_URL}/upload_video`, formData, {
-            headers: {
-              'content-type': 'multipart/form-data',
-              'auth-token': JSON.stringify(localStorage.getItem('authtoken')),
-            },
-          })
-          .then((res) => {
-            clearState()
-          })
-          .catch((err) => {
-            console.log(err);
-            clearState()
-          });
-      }).catch((err) => {
-        console.log(err);
-        clearState()
-      })
+            function convertBlobToFile(blob, fileName) {
+              blob.lastModifiedDate = new Date();
+              blob.name = fileName;
+              return blob;
+            }
+
+            const blob = new Blob([JSON.stringify(metadata)], {
+              type: "application/json",
+            });
+            var file = convertBlobToFile(blob, "meta.json");
+            console.log(file);
+
+            uploadFile(file)
+              .then(async (cid) => {
+                console.log("stored files with cid:", cid);
+                await createToken(
+                  "https://ipfs.io/ipfs/" + cid + "meta.json",
+                  nftPrice,
+                  window.ethereum,
+                  setMinting,
+                  setMintingProgress
+                ).then(async (tokenId) => {
+                  console.log("TOKEN ID Created : ", tokenId); // token created
+                  formData.append("tokenId", tokenId);
+                  axios
+                    .post(
+                      `${process.env.REACT_APP_SERVER_URL}/upload_video`,
+                      formData,
+                      {
+                        headers: {
+                          "content-type": "multipart/form-data",
+                          "auth-token": JSON.stringify(
+                            localStorage.getItem("authtoken")
+                          ),
+                        },
+                      }
+                    )
+                    .then((res) => {
+                      clearState();
+                    })
+                    .catch((err) => {
+                      console.log(err);
+                      clearState();
+                    });
+                });
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          } else {
+            axios
+              .post(
+                `${process.env.REACT_APP_SERVER_URL}/upload_video`,
+                formData,
+                {
+                  headers: {
+                    "content-type": "multipart/form-data",
+                    "auth-token": JSON.stringify(
+                      localStorage.getItem("authtoken")
+                    ),
+                  },
+                }
+              )
+              .then((res) => {
+                clearState();
+              })
+              .catch((err) => {
+                console.log(err);
+                clearState();
+              });
+          }
+
+          // formData.append('meta_url', cid); // meta_url is the IPFS hash of the meta.json file
+
+          // setFormData(formData);
+        })
+        .catch((err) => {
+          console.log(err);
+          clearState();
+        });
     }
-  }
-  const clearState = async() =>{
-    setUploadingVideo(false)
+  };
+  const clearState = async () => {
+    setUploadingVideo(false);
     setVideoPostModalOpen(false);
     setSelectedVideo(null);
     setSelectedThumbnail(null);
     setVideoData({
-      videoName: '',
-      videoImage: '',
-      videoFile: '',
-      category: '',
+      videoName: "",
+      videoImage: "",
+      videoFile: "",
+      category: "",
       tags: [],
-      description: '',
-      allowAttribution: '',
-      commercialUse: '',
-      derivativeWorks: '',
-    })
-    setIsNFT(false)
-    setNFTPrice(1)
+      description: "",
+      allowAttribution: "",
+      commercialUse: "",
+      derivativeWorks: "",
+    });
+    setIsNFT(false);
+    setNFTPrice(1);
     await loadFeed();
-  }
+  };
 
   return (
     <div className="modal-box p-0 bg-slate-100 dark:bg-slate-800 ">
@@ -164,24 +267,20 @@ function VideoPostModal({ setVideoPostModalOpen }) {
       <form onSubmit={handleSubmit}>
         <div className="w-full p-4 space-y-3">
           <div className="flex flex-col sm:flex-row gap-1">
-            <div
-
-              className=" max-h-52 cursor-pointer flex flex-col items-start gap-2  w-full p-2 border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4"
-            >
+            <div className=" max-h-52 cursor-pointer flex flex-col items-start gap-2  w-full p-2 border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4">
               {selectedThumbnail ? (
                 selectedThumbnail.file ? (
                   <div className="w-full  rounded-lg overflow-clip my-auto ">
-                    <img
-                      src={
-                        selectedThumbnail.localurl
-                      }
-                    ></img>
+                    <img src={selectedThumbnail.localurl}></img>
                   </div>
                 ) : null
               ) : (
                 <></>
               )}
-              <label htmlFor="videothumbnail" className="flex cursor-pointer gap-1">
+              <label
+                htmlFor="videothumbnail"
+                className="flex cursor-pointer gap-1"
+              >
                 <input
                   id="videothumbnail"
                   type="file"
@@ -191,21 +290,24 @@ function VideoPostModal({ setVideoPostModalOpen }) {
                   className="sr-only "
                   required={true}
                 />
-                {selectedThumbnail && selectedThumbnail.file ? <FileCheck className="text-emerald-700" /> : <File />}
-                {selectedThumbnail && selectedThumbnail.file ? selectedThumbnail.file.name.substring(0, 16) : 'Choose video thumbnail'}
+                {selectedThumbnail && selectedThumbnail.file ? (
+                  <FileCheck className="text-emerald-700" />
+                ) : (
+                  <File />
+                )}
+                {selectedThumbnail && selectedThumbnail.file
+                  ? selectedThumbnail.file.name.substring(0, 16)
+                  : "Choose video thumbnail"}
               </label>
             </div>
-            <div
-
-              className=" max-h-52 cursor-pointer flex flex-col items-start gap-2  w-full p-2 border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4"
-            >
+            <div className=" max-h-52 cursor-pointer flex flex-col items-start gap-2  w-full p-2 border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4">
               {selectedVideo ? (
                 selectedVideo.localurl ? (
                   <div className="rounded-lg overflow-clip ">
                     <ReactPlayer
-                      className='w-full'
-                      width='100%'
-                      height={'100%'}
+                      className="w-full"
+                      width="100%"
+                      height={"100%"}
                       playing={true}
                       muted={true}
                       volume={0.5}
@@ -227,8 +329,14 @@ function VideoPostModal({ setVideoPostModalOpen }) {
                   className="sr-only "
                   required={true}
                 />
-                {selectedVideo && selectedVideo.file ? <FileCheck className="text-emerald-700" /> : <File />}
-                {selectedVideo && selectedVideo.file ? selectedVideo.file.name.substring(0, 16) : 'Choose video file'}
+                {selectedVideo && selectedVideo.file ? (
+                  <FileCheck className="text-emerald-700" />
+                ) : (
+                  <File />
+                )}
+                {selectedVideo && selectedVideo.file
+                  ? selectedVideo.file.name.substring(0, 16)
+                  : "Choose video file"}
               </label>
             </div>
           </div>
@@ -238,21 +346,32 @@ function VideoPostModal({ setVideoPostModalOpen }) {
               placeholder="Video title"
               className="input w-full "
               value={videoData.videoName}
-              onChange={(e) => setVideoData({ ...videoData, videoName: e.target.value })}
+              onChange={(e) =>
+                setVideoData({ ...videoData, videoName: e.target.value })
+              }
               required={true}
             />
-            <select className="select w-44" onChange={(e) => setVideoData({ ...videoData, category: e.target.value })}>
+            <select
+              className="select w-44"
+              onChange={(e) =>
+                setVideoData({ ...videoData, category: e.target.value })
+              }
+            >
               <option disabled selected>
                 Pick Category
               </option>
-              {category.map((c) => <option>{c}</option>)}
+              {category.map((c) => (
+                <option>{c}</option>
+              ))}
             </select>
           </div>
 
           <textarea
             className="textarea  w-full"
             placeholder="Enter caption."
-            onChange={(e) => setVideoData({ ...videoData, description: e.target.value })}
+            onChange={(e) =>
+              setVideoData({ ...videoData, description: e.target.value })
+            }
             value={videoData.description}
           ></textarea>
           <span
@@ -261,8 +380,9 @@ function VideoPostModal({ setVideoPostModalOpen }) {
           >
             Advanced options
             <label
-              class={`swap ${advancedOptionsShow && "swap-active"
-                } swap-rotate text-6xl`}
+              class={`swap ${
+                advancedOptionsShow && "swap-active"
+              } swap-rotate text-6xl`}
             >
               <div class="swap-on">
                 <ChevronUp />
@@ -274,23 +394,50 @@ function VideoPostModal({ setVideoPostModalOpen }) {
           </span>
           {advancedOptionsShow && (
             <div className="flex gap-1 w-full ">
-              <select className="select select-xs " onChange={(e) => setVideoData({ ...videoData, allowAttribution: e.target.value })}>
+              <select
+                className="select select-xs "
+                onChange={(e) =>
+                  setVideoData({
+                    ...videoData,
+                    allowAttribution: e.target.value,
+                  })
+                }
+              >
                 <option disabled selected>
                   Allow Attribution?
                 </option>
-                {attribution.map((c) => <option>{c}</option>)}
+                {attribution.map((c) => (
+                  <option>{c}</option>
+                ))}
               </select>
-              <select className="select select-xs " onChange={(e) => setVideoData({ ...videoData, commercialUse: e.target.value })}>
+              <select
+                className="select select-xs "
+                onChange={(e) =>
+                  setVideoData({ ...videoData, commercialUse: e.target.value })
+                }
+              >
                 <option disabled selected>
                   Commercial Use?
                 </option>
-                {commercialUse.map((c) => <option>{c}</option>)}
+                {commercialUse.map((c) => (
+                  <option>{c}</option>
+                ))}
               </select>
-              <select className="select select-xs " onChange={(e) => setVideoData({ ...videoData, derivativeWorks: e.target.value })}>
+              <select
+                className="select select-xs "
+                onChange={(e) =>
+                  setVideoData({
+                    ...videoData,
+                    derivativeWorks: e.target.value,
+                  })
+                }
+              >
                 <option disabled selected>
                   Derivative Works?
                 </option>
-                {derivativeWorks.map((c) => <option>{c}</option>)}
+                {derivativeWorks.map((c) => (
+                  <option>{c}</option>
+                ))}
               </select>
             </div>
           )}
@@ -412,7 +559,9 @@ function VideoPostModal({ setVideoPostModalOpen }) {
 
           <button
             type={"submit"}
-            className={`btn  w-full ${uploadingVideo ? "loading" : "btn-brand"}`}
+            className={`btn  w-full ${
+              uploadingVideo ? "loading" : "btn-brand"
+            }`}
           >
             Post Video
           </button>

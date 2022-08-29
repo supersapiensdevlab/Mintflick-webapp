@@ -1,7 +1,7 @@
 // Setup config/headers and token
 export const tokenConfig = () => {
   //Get token from local storage
-  const token = localStorage.getItem("authtoken");
+  const token = JSON.stringify(localStorage.getItem('authtoken'));
 
   // Headers
   const config = {
