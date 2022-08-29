@@ -64,6 +64,9 @@ function Post(props) {
   //comments
   const [showComments, setshowComments] = useState(false);
 
+
+  const videoRef = useRef();
+
   useEffect(() => {
     if (props.comments) {
       setCommentCount(props.comments.length);
@@ -125,6 +128,11 @@ function Post(props) {
     if (props.currentPlay != props.myKey) {
       audioPlayer.current?.pause();
       setIsPlaying(false);
+      if (videoRef.current) {
+        if (videoRef.current.getInternalPlayer()) {
+          videoRef.current?.getInternalPlayer().pause();
+        }
+      }
       cancelAnimationFrame(animationRef.current);
     }
   }, [props.currentPlay]);
@@ -217,6 +225,7 @@ function Post(props) {
   //// Only Track Specific States and Functions
 
   const videoStarted = () => {
+    props.setCurrentPlay(props.myKey);
     if (
       State.database.userData.data.user
         ? State.database.userData.data.user.username !== props.profileUsername
@@ -237,7 +246,7 @@ function Post(props) {
             "auth-token": JSON.stringify(State.database.userData.data.jwtToken),
           },
           data: videoDetails,
-        }).then(function (response) {});
+        }).then(function (response) { });
       }, 5000);
       return () => clearTimeout(timer);
     }
@@ -678,23 +687,22 @@ function Post(props) {
                     handlePollVote(i);
                   }
                 }}
-                className={`${
-                  option.selectedBy &&
+                className={`${option.selectedBy &&
                   option.selectedBy.includes(
                     State.database.userData.data?.user.username,
                   ) &&
                   pollChoice === i
-                    ? "dark:bg-slate-900 btn-disabled  "
-                    : pollVoted && "btn-disabled"
-                } my-2 flex gap-2 p-2 px-4 border-2 rounded-lg border-slate-200 dark:border-slate-700 cursor-pointer hover:bg-slate-700 justify-between `}>
+                  ? "dark:bg-slate-900 btn-disabled  "
+                  : pollVoted && "btn-disabled"
+                  } my-2 flex gap-2 p-2 px-4 border-2 rounded-lg border-slate-200 dark:border-slate-700 cursor-pointer hover:bg-slate-700 justify-between `}>
                 <span className='w-full text-white dark:text-brand2 '>
                   {option.option}
                 </span>
                 <div className='  text-white dark:text-success opacity-50'>
                   {option.selectedBy &&
-                  option.selectedBy.includes(
-                    State.database.userData.data?.user.username,
-                  ) ? (
+                    option.selectedBy.includes(
+                      State.database.userData.data?.user.username,
+                    ) ? (
                     <div className='flex'>
                       voted&nbsp;
                       <CircleCheck />
@@ -726,6 +734,7 @@ function Post(props) {
 
           <div className=' w-full h-fit z-10 rounded-lg overflow-clip'>
             <ReactPlayer
+              ref={videoRef}
               className='w-full h-full max-h-screen '
               width='100%'
               height='400px'
@@ -771,11 +780,10 @@ function Post(props) {
           {props.contentType === "post" && (
             <div className=' cursor-pointer flex items-center text-brand1  space-x-2'>
               <Heart
-                className={`${
-                  postLiked
-                    ? "text-red-600 hover:text-white fill-rose-600"
-                    : "text-brand1 hover:text-red-600"
-                }`}
+                className={`${postLiked
+                  ? "text-red-600 hover:text-white fill-rose-600"
+                  : "text-brand1 hover:text-red-600"
+                  }`}
                 onClick={handlePostLikes}></Heart>
               <p className='font-medium text-sm '>{postLikes}</p>
             </div>
@@ -783,11 +791,10 @@ function Post(props) {
           {props.contentType === "video" && (
             <div className=' cursor-pointer flex items-center text-brand1  space-x-2'>
               <Heart
-                className={`${
-                  videoLiked
-                    ? "text-red-600 hover:text-white fill-rose-600"
-                    : "text-brand1 hover:text-red-600"
-                }`}
+                className={`${videoLiked
+                  ? "text-red-600 hover:text-white fill-rose-600"
+                  : "text-brand1 hover:text-red-600"
+                  }`}
                 onClick={handleVideoLikes}></Heart>
               <p className='font-medium text-sm '>{videoLikes}</p>
             </div>
@@ -795,11 +802,10 @@ function Post(props) {
           {props.contentType === "track" && (
             <div className=' cursor-pointer flex items-center text-brand1  space-x-2'>
               <Heart
-                className={`${
-                  trackLiked
-                    ? "text-red-600 hover:text-white fill-rose-600"
-                    : "text-brand1 hover:text-red-600"
-                }`}
+                className={`${trackLiked
+                  ? "text-red-600 hover:text-white fill-rose-600"
+                  : "text-brand1 hover:text-red-600"
+                  }`}
                 onClick={handleTrackLikes}></Heart>
               <p className='font-medium text-sm '>{trackLikes}</p>
             </div>
@@ -807,11 +813,10 @@ function Post(props) {
           {props.contentType === "poll" && (
             <div className=' cursor-pointer flex items-center text-brand1  space-x-2'>
               <Heart
-                className={`${
-                  pollLiked
-                    ? "text-red-600 hover:text-white fill-rose-600"
-                    : "text-brand1 hover:text-red-600"
-                }`}
+                className={`${pollLiked
+                  ? "text-red-600 hover:text-white fill-rose-600"
+                  : "text-brand1 hover:text-red-600"
+                  }`}
                 onClick={handlePollLikes}></Heart>
               <p className='font-medium text-sm '>{pollLikes}</p>
             </div>
