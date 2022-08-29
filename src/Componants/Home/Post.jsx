@@ -704,7 +704,18 @@ function Post(props) {
                   } my-2 flex gap-2 p-2  border-2 rounded-lg border-slate-200 dark:border-slate-700 cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-700 justify-between `}
               >
                 <span className="w-full text-brand1 dark:text-brand2 ">
-                  {option.option}
+                  {option.option}{" "}
+                  {props.votes &&
+                  props.votes.includes(
+                    State.database.userData.data?.user.username
+                  ) ? (
+                    <span className="text-sm text-brand4">
+                      {Math.ceil(
+                        (option.selectedBy.length / props.votes.length) * 100
+                      )}
+                      %
+                    </span>
+                  ) : null}
                 </span>
                 <div className="text-success">
                   {option.selectedBy &&

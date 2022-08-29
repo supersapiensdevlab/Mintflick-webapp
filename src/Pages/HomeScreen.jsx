@@ -17,19 +17,18 @@ function HomeScreen() {
   }, []);
 
   return (
-    <div className='relative flex h-screen w-screen  '>
-      {" "}
+    <div className="relative flex h-screen w-screen  ">
       <Helmet>
-        <meta charSet='utf-8' />
+        <meta charSet="utf-8" />
         <title>MintFlick - Feed</title>
-        <link rel='canonical' href='https://mintflick.app' />
+        <link rel="canonical" href="https://mintflick.app" />
       </Helmet>
       <MobileHeader></MobileHeader>
-      <Header className=''></Header>
-      <div className=' w-full'>
+      <Header className=""></Header>
+      <div className=" w-full">
         <Outlet></Outlet>
       </div>
-      <div className='lg:hidden w-full fixed z-50 bottom-0'>
+      <div className="lg:hidden w-full absolute z-50 bottom-0">
         <BottomNavigation></BottomNavigation>
       </div>
     </div>
