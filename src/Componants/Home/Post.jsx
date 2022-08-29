@@ -64,6 +64,9 @@ function Post(props) {
   //comments
   const [showComments, setshowComments] = useState(false);
 
+
+  const videoRef = useRef();
+
   useEffect(() => {
     if (props.comments) {
       setCommentCount(props.comments.length);
@@ -125,6 +128,11 @@ function Post(props) {
     if (props.currentPlay != props.myKey) {
       audioPlayer.current?.pause();
       setIsPlaying(false);
+      if (videoRef.current) {
+        if (videoRef.current.getInternalPlayer()) {
+          videoRef.current?.getInternalPlayer().pause();
+        }
+      }
       cancelAnimationFrame(animationRef.current);
     }
   }, [props.currentPlay]);
@@ -217,6 +225,7 @@ function Post(props) {
   //// Only Track Specific States and Functions
 
   const videoStarted = () => {
+    props.setCurrentPlay(props.myKey);
     if (
       State.database.userData.data.user
         ? State.database.userData.data.user.username !== props.profileUsername
@@ -237,7 +246,7 @@ function Post(props) {
             "auth-token": JSON.stringify(State.database.userData.data.jwtToken),
           },
           data: videoDetails,
-        }).then(function (response) {});
+        }).then(function (response) { });
       }, 5000);
       return () => clearTimeout(timer);
     }
@@ -685,15 +694,14 @@ function Post(props) {
                     handlePollVote(i);
                   }
                 }}
-                className={`${
-                  option.selectedBy &&
+                className={`${option.selectedBy &&
                   option.selectedBy.includes(
                     State.database.userData.data?.user.username
                   ) &&
                   pollChoice === i
-                    ? " bg-slate-200 dark:bg-slate-700"
-                    : pollVoted && "  bg-slate-200 dark:bg-slate-700"
-                } my-2 flex gap-2 p-2  border-2 rounded-lg border-slate-200 dark:border-slate-700 cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-700 justify-between `}
+                  ? " bg-slate-200 dark:bg-slate-700"
+                  : pollVoted && "  bg-slate-200 dark:bg-slate-700"
+                  } my-2 flex gap-2 p-2  border-2 rounded-lg border-slate-200 dark:border-slate-700 cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-700 justify-between `}
               >
                 <span className="w-full text-brand1 dark:text-brand2 ">
                   {option.option}{" "}
@@ -711,9 +719,9 @@ function Post(props) {
                 </span>
                 <div className="text-success">
                   {option.selectedBy &&
-                  option.selectedBy.includes(
-                    State.database.userData.data?.user.username
-                  ) ? (
+                    option.selectedBy.includes(
+                      State.database.userData.data?.user.username
+                    ) ? (
                     <div className="flex">
                       voted&nbsp;
                       <CircleCheck />
@@ -745,9 +753,10 @@ function Post(props) {
 
           <div className=" w-full h-fit z-10 rounded-lg overflow-clip">
             <ReactPlayer
-              className="w-full h-full max-h-screen "
-              width="100%"
-              height="400px"
+              ref={videoRef}
+              className='w-full h-full max-h-screen '
+              width='100%'
+              height='400px'
               playing={true}
               muted={true}
               volume={0.5}
