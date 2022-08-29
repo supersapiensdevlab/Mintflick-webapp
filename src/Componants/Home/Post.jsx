@@ -197,7 +197,7 @@ function Post(props) {
   const changePlayerCurrentTime = () => {
     progressBar.current.style.setProperty(
       "--seek-before-width",
-      `${(progressBar.current.value / duration) * 100}%`,
+      `${(progressBar.current.value / duration) * 100}%`
     );
     setCurrentTime(progressBar.current.value);
   };
@@ -264,13 +264,15 @@ function Post(props) {
       if (
         props.content.votes &&
         props.content.votes.length > 0 &&
-        props.content.votes.includes(State.database.userData.data?.user.username)
+        props.content.votes.includes(
+          State.database.userData.data?.user.username
+        )
       ) {
         setPollVoted(true);
         for (let i = 0; i < props.content.options.length; i++) {
           if (
             props.content.options[i].selectedBy.includes(
-              State.database.userData.data.user.username,
+              State.database.userData.data.user.username
             )
           ) {
             setPollChoice(i);
@@ -525,19 +527,19 @@ function Post(props) {
   };
 
   return (
-    <div className='w-full h-fit lg:bg-slate-100 lg:dark:bg-slate-800 lg:rounded-xl p-4 lg:p-8 space-y-4 pb-4 border-b-2 lg:border-none  border-slate-200 dark:border-slate-900'>
-      <div className='flex justify-between items-center'>
-        <div className='flex items-center space-x-4'>
+    <div className="w-full h-fit lg:bg-slate-100 lg:dark:bg-slate-800 lg:rounded-xl p-4 lg:p-8 space-y-4 pb-4 border-b-2 lg:border-none  border-slate-200 dark:border-slate-900">
+      <div className="flex justify-between items-center">
+        <div className="flex items-center space-x-4">
           {props.profilePic ? (
             <img
-              className='h-12 w-12 rounded-full object-cover'
+              className="h-12 w-12 rounded-full object-cover"
               src={props.profilePic}
               alt={props.profileName}
             />
           ) : (
-            <div class='avatar placeholder'>
-              <div class='bg-neutral-focus text-neutral-content rounded-full w-12'>
-                <span class='text-3xl uppercase'>
+            <div class="avatar placeholder">
+              <div class="bg-neutral-focus text-neutral-content rounded-full w-12">
+                <span class="text-3xl uppercase">
                   {props.profileName.slice(0, 1)}
                 </span>
               </div>
@@ -545,24 +547,26 @@ function Post(props) {
           )}
 
           <div>
-            <p className='font-semibold text-base text-brand1'>
+            <p className="font-semibold text-base text-brand1">
               {props.profileName}
             </p>
-            <p className='font-normal text-xs text-brand4'>
+            <p className="font-normal text-xs text-brand4">
               {moment(props.timestamp * 1000).fromNow()}
             </p>
           </div>
         </div>
-        <div className=' '>
-          <div className='dropdown dropdown-end'>
+        <div className=" ">
+          <div className="dropdown dropdown-end">
             <label
-              tabindex='0'
-              className='btn btn-ghost btn-circle dark:hover:bg-slate-700'>
-              <DotsVertical className=''></DotsVertical>
+              tabindex="0"
+              className="btn btn-ghost btn-circle dark:hover:bg-slate-700"
+            >
+              <DotsVertical className=""></DotsVertical>
             </label>
             <ul
-              tabindex='0'
-              className='menu menu-compact dropdown-content p-1 shadow bg-slate-100 dark:bg-slate-600 text-brand1 rounded-lg w-52 hover:bg-red-400'>
+              tabindex="0"
+              className="menu menu-compact dropdown-content p-1 shadow bg-slate-100 dark:bg-slate-600 text-brand1 rounded-lg w-52 hover:bg-red-400"
+            >
               <li>
                 <a>Join Superfan</a>
               </li>
@@ -573,17 +577,17 @@ function Post(props) {
           </div>
         </div>
       </div>
-      <p className='font-normal text-base text-brand2 w-full'>{props.text}</p>
+      <p className="font-normal text-base text-brand2 w-full">{props.text}</p>
       {props.contentType === "post" && (
-        <div className=' w-full h-fit z-10 space-y-2'>
+        <div className=" w-full h-fit z-10 space-y-2">
           {props.image && (
             <img
-              className='w-full rounded-lg'
+              className="w-full rounded-lg"
               src={props.image}
-              alt='User Post'
+              alt="User Post"
             />
           )}
-          <div className='text-brand4 text-sm space-x-2'>
+          <div className="text-brand4 text-sm space-x-2">
             {/* <span
               onClick={() => setshowComments(!showComments)}
               className='cursor-pointer'>
@@ -595,60 +599,63 @@ function Post(props) {
       {props.contentType === "track" && (
         <>
           {" "}
-          <div className='flex w-full h-fit z-10 bg-slate-200 dark:bg-slate-700 rounded-l-lg rounded-r-lg overflow-hidden'>
+          <div className="flex w-full h-fit z-10 bg-slate-200 dark:bg-slate-700 rounded-l-lg rounded-r-lg overflow-hidden">
             <img
-              className='h-28 w-28 object-cover'
+              className="h-28 w-28 object-cover"
               src={props.trackImage}
-              alt='Track image'
+              alt="Track image"
             />
-            <div className='flex flex-col p-3 h-28 flex-grow '>
-              <div className='flex flex-col h-full'>
-                <span className='text-brand3 text-base font-semibold'>
+            <div className="flex flex-col p-3 h-28 flex-grow ">
+              <div className="flex flex-col h-full">
+                <span className="text-brand3 text-base font-semibold">
                   {props.trackName}
                 </span>
-                <span className='text-brand4 text-sm font-medium'>
+                <span className="text-brand4 text-sm font-medium">
                   {props.trackDisc}
                 </span>
               </div>
-              <div className='flex flex-grow w-full items-center gap-2'>
+              <div className="flex flex-grow w-full items-center gap-2">
                 <audio
                   ref={audioPlayer}
                   src={props.trackUrl}
-                  preload='metadata'></audio>
-                <span className='text-brand2 text-base font-medium'>
+                  preload="metadata"
+                ></audio>
+                <span className="text-brand2 text-base font-medium">
                   {calculateTime(currentTime)}
                 </span>
                 <input
-                  type='range'
-                  defaultValue='0'
-                  min='0'
-                  max='100'
-                  className='w-full  p-2 bg-slate-300 dark:bg-slate-600 appearance-none rounded-full range range-primary range-xs'
+                  type="range"
+                  defaultValue="0"
+                  min="0"
+                  max="100"
+                  className="w-full  p-2 bg-slate-300 dark:bg-slate-600 appearance-none rounded-full range range-primary range-xs"
                   ref={progressBar}
                   onChange={changeRange}
                 />
 
-                <span className='text-brand2 text-base font-medium'>
+                <span className="text-brand2 text-base font-medium">
                   {duration && !isNaN(duration) && calculateTime(duration)}
                 </span>
 
-                <label class='btn btn-circle btn-sm btn-ghost swap swap-rotate '>
-                  <input type='checkbox' checked={isPlaying} />
+                <label class="btn btn-circle btn-sm btn-ghost swap swap-rotate ">
+                  <input type="checkbox" checked={isPlaying} />
                   <PlayerPlay
-                    class='swap-off '
+                    class="swap-off "
                     onClick={() => {
                       togglePlayPause();
-                    }}></PlayerPlay>
+                    }}
+                  ></PlayerPlay>
                   <PlayerPause
-                    class='swap-on '
+                    class="swap-on "
                     onClick={() => {
                       togglePlayPause();
-                    }}></PlayerPause>
+                    }}
+                  ></PlayerPause>
                 </label>
               </div>
             </div>
           </div>{" "}
-          <div className='text-brand4 text-sm space-x-2'>
+          <div className="text-brand4 text-sm space-x-2">
             <span>{props.trackPlays ? props.trackPlays.length : 0} plays</span>
             {/* <span
               onClick={() => setshowComments(!showComments)}
@@ -660,8 +667,8 @@ function Post(props) {
       )}
 
       {props.contentType === "poll" && (
-        <div className='w-full'>
-          <div className='font-normal text-base text-brand2 w-full'>
+        <div className="w-full">
+          <div className="font-normal text-base text-brand2 w-full">
             {props.content.question}
           </div>
           {props.content.options.map((option, i) => {
@@ -672,7 +679,7 @@ function Post(props) {
                   if (
                     !pollVoted &&
                     !props.content.votes.includes(
-                      State.database.userData.data.user.username,
+                      State.database.userData.data.user.username
                     )
                   ) {
                     handlePollVote(i);
@@ -681,21 +688,22 @@ function Post(props) {
                 className={`${
                   option.selectedBy &&
                   option.selectedBy.includes(
-                    State.database.userData.data?.user.username,
+                    State.database.userData.data?.user.username
                   ) &&
                   pollChoice === i
-                    ? "dark:bg-slate-900 btn-disabled  "
-                    : pollVoted && "btn-disabled"
-                } my-2 flex gap-2 p-2 px-4 border-2 rounded-lg border-slate-200 dark:border-slate-700 cursor-pointer hover:bg-slate-700 justify-between `}>
-                <span className='w-full text-white dark:text-brand2 '>
+                    ? " bg-slate-200 dark:bg-slate-700"
+                    : pollVoted && "  bg-slate-200 dark:bg-slate-700"
+                } my-2 flex gap-2 p-2  border-2 rounded-lg border-slate-200 dark:border-slate-700 cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-700 justify-between `}
+              >
+                <span className="w-full text-brand1 dark:text-brand2 ">
                   {option.option}
                 </span>
-                <div className='  text-white dark:text-success opacity-50'>
+                <div className="text-success">
                   {option.selectedBy &&
                   option.selectedBy.includes(
-                    State.database.userData.data?.user.username,
+                    State.database.userData.data?.user.username
                   ) ? (
-                    <div className='flex'>
+                    <div className="flex">
                       voted&nbsp;
                       <CircleCheck />
                     </div>
@@ -704,7 +712,7 @@ function Post(props) {
               </div>
             );
           })}
-          <div className='text-brand4 text-sm space-x-2'>
+          <div className="text-brand4 text-sm space-x-2">
             <span>{pollVotes}&nbsp; Votes</span>
             {/* <span
             onClick={() => setshowComments(!showComments)}
@@ -717,18 +725,18 @@ function Post(props) {
 
       {props.contentType === "video" && (
         <>
-          <div className='font-normal text-base text-brand2 w-full'>
+          <div className="font-normal text-base text-brand2 w-full">
             {props.content.videoName}
           </div>
-          <div className='font-normal text-base text-brand5 w-full'>
+          <div className="font-normal text-base text-brand5 w-full">
             {props.content.description}
           </div>
 
-          <div className=' w-full h-fit z-10 rounded-lg overflow-clip'>
+          <div className=" w-full h-fit z-10 rounded-lg overflow-clip">
             <ReactPlayer
-              className='w-full h-full max-h-screen '
-              width='100%'
-              height='400px'
+              className="w-full h-full max-h-screen "
+              width="100%"
+              height="400px"
               playing={true}
               muted={true}
               volume={0.5}
@@ -740,7 +748,7 @@ function Post(props) {
               }}
             />
           </div>
-          <div className='text-brand4 text-sm space-x-2'>
+          <div className="text-brand4 text-sm space-x-2">
             <span>{props.videoViews ? props.videoViews.length : 0} views</span>
             {/* <span
               onClick={() => setshowComments(!showComments)}
@@ -755,65 +763,70 @@ function Post(props) {
           props.tokenId && !props.gettingNFTData
             ? "cursor-pointer flex items-center justify-start rounded-lg space-x-2 text-brand2"
             : "hidden"
-        }>
-        <p className='font-bold text-sm text-primary'>Owner</p>
+        }
+      >
+        <p className="font-bold text-sm text-primary">Owner</p>
         <At size={20}></At>
-        <p className=' font-semibold text-sm '>{props.ownerId}</p>
-        <div className=' flex flex-grow  h-fit  items-center justify-end rounded-full '>
-          <div className='flex h-fit w-fit items-center justify-end  btn-primary btn-outline rounded-full p-1'>
+        <p className=" font-semibold text-sm ">{props.ownerId}</p>
+        <div className=" flex flex-grow  h-fit  items-center justify-end rounded-full ">
+          <div className="flex h-fit w-fit items-center justify-end  btn-primary btn-outline rounded-full p-1">
             <PolygonToken></PolygonToken>
-            <p className='text-sm  mx-1'>{props.price}</p>
+            <p className="text-sm  mx-1">{props.price}</p>
           </div>
         </div>
       </div>
-      <div className='flex justify-between'>
-        <div className='flex items-center space-x-4'>
+      <div className="flex justify-between">
+        <div className="flex items-center space-x-4">
           {props.contentType === "post" && (
-            <div className=' cursor-pointer flex items-center text-brand1  space-x-2'>
+            <div className=" cursor-pointer flex items-center text-brand1  space-x-2">
               <Heart
                 className={`${
                   postLiked
                     ? "text-red-600 hover:text-white fill-rose-600"
                     : "text-brand1 hover:text-red-600"
                 }`}
-                onClick={handlePostLikes}></Heart>
-              <p className='font-medium text-sm '>{postLikes}</p>
+                onClick={handlePostLikes}
+              ></Heart>
+              <p className="font-medium text-sm ">{postLikes}</p>
             </div>
           )}
           {props.contentType === "video" && (
-            <div className=' cursor-pointer flex items-center text-brand1  space-x-2'>
+            <div className=" cursor-pointer flex items-center text-brand1  space-x-2">
               <Heart
                 className={`${
                   videoLiked
                     ? "text-red-600 hover:text-white fill-rose-600"
                     : "text-brand1 hover:text-red-600"
                 }`}
-                onClick={handleVideoLikes}></Heart>
-              <p className='font-medium text-sm '>{videoLikes}</p>
+                onClick={handleVideoLikes}
+              ></Heart>
+              <p className="font-medium text-sm ">{videoLikes}</p>
             </div>
           )}
           {props.contentType === "track" && (
-            <div className=' cursor-pointer flex items-center text-brand1  space-x-2'>
+            <div className=" cursor-pointer flex items-center text-brand1  space-x-2">
               <Heart
                 className={`${
                   trackLiked
                     ? "text-red-600 hover:text-white fill-rose-600"
                     : "text-brand1 hover:text-red-600"
                 }`}
-                onClick={handleTrackLikes}></Heart>
-              <p className='font-medium text-sm '>{trackLikes}</p>
+                onClick={handleTrackLikes}
+              ></Heart>
+              <p className="font-medium text-sm ">{trackLikes}</p>
             </div>
           )}
           {props.contentType === "poll" && (
-            <div className=' cursor-pointer flex items-center text-brand1  space-x-2'>
+            <div className=" cursor-pointer flex items-center text-brand1  space-x-2">
               <Heart
                 className={`${
                   pollLiked
                     ? "text-red-600 hover:text-white fill-rose-600"
                     : "text-brand1 hover:text-red-600"
                 }`}
-                onClick={handlePollLikes}></Heart>
-              <p className='font-medium text-sm '>{pollLikes}</p>
+                onClick={handlePollLikes}
+              ></Heart>
+              <p className="font-medium text-sm ">{pollLikes}</p>
             </div>
           )}
 
@@ -822,28 +835,30 @@ function Post(props) {
               setshowCommentInput(!showCommentInput);
               setshowComments(!showComments);
             }}
-            className='cursor-pointer flex items-center space-x-2 text-brand1'>
+            className="cursor-pointer flex items-center space-x-2 text-brand1"
+          >
             <MessageCircle></MessageCircle>
-            <p className='font-medium text-sm '>{commentCount}</p>
+            <p className="font-medium text-sm ">{commentCount}</p>
           </div>
-          <div className='cursor-pointer flex items-center space-x-2 text-brand1'>
+          <div className="cursor-pointer flex items-center space-x-2 text-brand1">
             <Share></Share>
           </div>
         </div>
       </div>
       {showCommentInput && (
-        <div className='flex gap-2'>
+        <div className="flex gap-2">
           <input
-            type='text'
+            type="text"
             onChange={(e) => setText(e.target.value)}
-            placeholder='Type here...'
-            className='input w-full '
+            placeholder="Type here..."
+            className="input w-full "
             value={text}
           />
 
           <button
             onClick={() => text && handleOnEnter()}
-            className='btn  btn-primary btn-outline'>
+            className="btn  btn-primary btn-outline"
+          >
             <ArrowNarrowRight />
           </button>
         </div>
