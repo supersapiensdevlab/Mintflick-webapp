@@ -22,16 +22,25 @@ function useWebModal() {
     })
       .then((response) => {
         console.log(response);
+
         State.updateDatabase({
           userData: response,
         });
+        console.log("user data saved in state");
         localStorage.setItem("authtoken", response.data.jwtToken);
+        console.log("auth token saved in storage");
         localStorage.setItem("walletAddress", walletAddress);
-        localStorage.setItem(
-          "provider",
-          JSON.stringify(provider, getCircularReplacer())
-        );
-        navigateTo("/homescreen/home");
+        console.log("wallet address saved in storage");
+        State.updateDatabase({
+          provider: provider,
+        });
+        console.log("provider saved in state");
+        // localStorage.setItem(
+        //   "v2provider",
+        //   JSON.stringify(provider, getCircularReplacer())
+        // );
+
+        response.status === 200 && navigateTo("/homescreen/home");
       })
       .catch(function (error) {
         console.log(error);
@@ -135,11 +144,6 @@ function useWebModal() {
     const signer = provider.getSigner();
     const Address = await signer.getAddress();
 
-    console.log(provider);
-    State.updateDatabase({
-      provider: provider,
-      walletAddress: Address,
-    });
     console.log(Address);
     isUserAvaliable(Address, provider);
   };
