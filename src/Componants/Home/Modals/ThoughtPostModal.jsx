@@ -10,11 +10,32 @@ function ThoughtPostModal({ setthoughtPostModalOpen }) {
   const [caption, setCaption] = useState("");
   const [isNFT, setIsNFT] = useState(false);
   const [nftPrice, setNFTPrice] = useState(1);
-  const [loadFeed] = useUserActions();
+  // const [loadFeed] = useUserActions();
 
   // Minting
-  const [minting, setMinting] = useState(null);
-  const [mintingProgress, setMintingProgress] = useState(0);
+  // const [minting, setMinting] = useState(null);
+  // const [mintingProgress, setMintingProgress] = useState(0);
+
+  //handle thought submit
+  const handleThoughtPost = () => {
+    console.log(caption);
+    const data = {
+      announcement: caption,
+    };
+    axios
+      .post(`${process.env.REACT_APP_SERVER_URL}/user/announcement`, data, {
+        headers: {
+          "content-type": "multipart/form-data",
+          "auth-token": JSON.stringify(localStorage.getItem("authtoken")),
+        },
+      })
+      .then(() => {
+        setthoughtPostModalOpen(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   return (
     <div className="modal-box p-0 bg-slate-100 dark:bg-slate-800 ">
@@ -75,6 +96,7 @@ function ThoughtPostModal({ setthoughtPostModalOpen }) {
 
           <button
             type={"submit"}
+            onClick={handleThoughtPost}
             className={`btn  w-full ${uploadingPost ? "loading" : "btn-brand"}`}
           >
             Post thought
