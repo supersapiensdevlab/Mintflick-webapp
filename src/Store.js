@@ -10,6 +10,9 @@ function Store(props) {
     userData: {},
     liveUsers: [],
     feedData: [],
+    //report post modal
+    reportPostUrl: "",
+    reportModalOpen: false,
   });
   const updateStore = (data) => {
     setstore((prev) => ({
@@ -35,7 +38,7 @@ function Store(props) {
         database: store,
         updateDatabase: updateStore,
         addLiveUsers: addLiveUsers,
-        addFeed: addFeed
+        addFeed: addFeed,
       }}
     >
       {props.data}

@@ -6,6 +6,7 @@ import AddPost from "./AddPost";
 import Channels from "./Channels";
 import GameOfLuck from "./GameOfLuck";
 import LiveChannels from "./LiveChannels";
+import ReportModal from "./Modals/ReportModal";
 import TimeLine from "./TimeLine";
 
 function Home() {
@@ -22,6 +23,7 @@ function Home() {
       <div className="hidden lg:flex flex-col items-end h-full w-1/4 pt-24 mr-12 ml-4">
         <GameOfLuck></GameOfLuck>
       </div>
+      <ReportModal />
     </div>
   );
 }

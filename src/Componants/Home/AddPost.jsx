@@ -1,5 +1,6 @@
 import React, { useContext, useState } from "react";
 import {
+  Bulb,
   Camera,
   ChartBar,
   File,
@@ -11,6 +12,7 @@ import {
   X,
 } from "tabler-icons-react";
 import { UserContext } from "../../Store";
+import ThoughtPostModal from "./Modals/ThoughtPostModal";
 import AudioPostModal from "./Modals/AudioPostModal";
 import PhotoPostModal from "./Modals/PhotoPostModal";
 import PollModal from "./Modals/PollModal";
@@ -25,6 +27,8 @@ function AddPost() {
   const State = useContext(UserContext);
 
   // post modals
+  const [thoughtPostModalOpen, setthoughtPostModalOpen] = useState(false);
+
   const [photoPostModalOpen, setphotoPostModalOpen] = useState(false);
 
   const [videoPostModalOpen, setvideoPostModalOpen] = useState(false);
@@ -38,18 +42,11 @@ function AddPost() {
       <div className="hidden lg:flex flex-col items-center w-full max-w-2xl h-fit bg-slate-100 dark:bg-slate-800  rounded-xl lg:py-8  space-y-4">
         <div className="flex items-center w-full px-2 lg:px-8 space-x-4 rounded-3xl">
           <textarea
-            onChange={(e) => setpostTextData(e.target.value)}
-            value={postTextData}
+            onClick={() => setthoughtPostModalOpen(true)}
             className="flex-grow textarea h-12 rounded-3xl w-full "
             placeholder="What's on your mind?"
           ></textarea>
-          <button
-            onClick={() => {
-              postText();
-              setpostTextData("");
-            }}
-            className="btn btn-primary btn-brand rounded-full gap-2 "
-          >
+          <button className="btn btn-primary btn-brand rounded-full gap-2 ">
             <Send size={20}></Send>
             post
           </button>
@@ -106,6 +103,17 @@ function AddPost() {
           <li>
             <a
               onClick={() => {
+                setthoughtPostModalOpen(true);
+              }}
+              className="dark:hover:bg-slate-800"
+            >
+              <Bulb />
+              Thought
+            </a>
+          </li>
+          <li>
+            <a
+              onClick={() => {
                 setphotoPostModalOpen(true);
               }}
               className="dark:hover:bg-slate-800"
@@ -150,7 +158,13 @@ function AddPost() {
         </ul>
       </div>
       {/*  post modal */}
-
+      <div
+        className={`${
+          thoughtPostModalOpen && "modal-open"
+        } modal modal-bottom sm:modal-middle`}
+      >
+        <ThoughtPostModal setthoughtPostModalOpen={setthoughtPostModalOpen} />
+      </div>
       <div
         className={`${
           photoPostModalOpen && "modal-open"

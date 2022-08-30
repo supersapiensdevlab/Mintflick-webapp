@@ -5,6 +5,8 @@ import {
   At,
   CircleCheck,
   DotsVertical,
+  Flag,
+  Flame,
   Heart,
   MessageCircle,
   PlayerPause,
@@ -573,13 +575,25 @@ function Post(props) {
             </label>
             <ul
               tabindex="0"
-              className="menu menu-compact dropdown-content p-1 shadow bg-slate-100 dark:bg-slate-600  text-brand1 rounded-lg w-52 "
+              className="menu menu-compact dropdown-content p-1 shadow-xl bg-slate-100 dark:bg-slate-600  text-brand1 font-semibold rounded-lg w-48 "
             >
               <li>
-                <a className="dark:hover:bg-slate-800">Join Superfan</a>
+                <a className="dark:hover:bg-slate-800">
+                  <Flame /> Join Superfan
+                </a>
               </li>
-              <li>
-                <a className="dark:hover:bg-slate-800">Report</a>
+              <li
+                onClick={() =>
+                  State.updateDatabase({
+                    reportModalOpen: true,
+                    reportPostUrl: "",
+                  })
+                }
+              >
+                <a className="hover:bg-rose-500">
+                  <Flag />
+                  Report
+                </a>
               </li>
             </ul>
           </div>
