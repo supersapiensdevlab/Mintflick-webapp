@@ -1,17 +1,16 @@
 import React, { useContext, useEffect, useRef } from "react";
 import { useState } from "react";
 import {
+  AlertOctagon,
   ArrowNarrowRight,
   At,
   CircleCheck,
+  Comet,
   DotsVertical,
-  Flag,
-  Flame,
   Heart,
   MessageCircle,
   PlayerPause,
   PlayerPlay,
-  Send,
   Share,
 } from "tabler-icons-react";
 import PolygonToken from "../../Assets/logos/PolygonToken";
@@ -575,11 +574,11 @@ function Post(props) {
             </label>
             <ul
               tabindex="0"
-              className="menu menu-compact dropdown-content p-1 shadow-xl bg-slate-100 dark:bg-slate-600  text-brand1 font-semibold rounded-lg w-48 "
+              className="menu menu-compact dropdown-content p-1 shadow-xl bg-slate-100 dark:bg-slate-600  text-brand3 font-semibold rounded-lg w-48 "
             >
               <li>
                 <a className="dark:hover:bg-slate-800">
-                  <Flame /> Join Superfan
+                  <Comet className="-rotate-90" /> Join Superfan
                 </a>
               </li>
               <li
@@ -591,7 +590,7 @@ function Post(props) {
                 }
               >
                 <a className="hover:bg-rose-500">
-                  <Flag />
+                  <AlertOctagon />
                   Report
                 </a>
               </li>

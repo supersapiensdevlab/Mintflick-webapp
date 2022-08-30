@@ -23,10 +23,47 @@ function ReportModal() {
             ></X>
           </div>
         </div>
-        <div className="p-2">
-          <h3 className="flex items-center gap-2 font-semibold text-base text-brand2">
+        <div className="p-4 space-y-3 w-full">
+          <h3 className=" font-semibold text-base text-brand2">
             Why are you reporting this post?
           </h3>
+          <div className="space-y-2 w-full">
+            <div
+              tabindex="0"
+              className="collapse collapse-arrow border-2 cursor-pointer dark:border-slate-600 text-brand3 rounded-lg"
+            >
+              <div className="collapse-title text-xl font-medium">option </div>
+              <div className="collapse-content flex flex-col space-y-1">
+                <span>inside option</span>
+                <span>inside option</span>
+                <span>inside option</span>
+                <span>inside option</span>
+              </div>
+            </div>
+            <div
+              tabindex="0"
+              className="collapse collapse-arrow border-2 cursor-pointer dark:border-slate-600 text-brand3 rounded-lg"
+            >
+              <div className="collapse-title text-xl font-medium">option </div>
+              <div className="collapse-content flex flex-col space-y-1">
+                <span>inside option</span>
+                <span>inside option</span>
+                <span>inside option</span>
+                <span>inside option</span>
+              </div>
+            </div>
+          </div>
+          <textarea
+            className="textarea w-full"
+            placeholder="Issue (optional)"
+          ></textarea>
+          <button
+            className={`btn  w-full 
+             btn-primary
+            }`}
+          >
+            submit report
+          </button>
         </div>
       </div>
     </div>
