@@ -30,7 +30,7 @@ function ReportModal() {
           <div className="space-y-2 w-full">
             <div
               tabindex="0"
-              className="collapse collapse-arrow border-2 cursor-pointer dark:border-slate-600 text-brand3 rounded-lg"
+              className="collapse collapse-arrow border-2 cursor-pointer  dark:border-slate-600 text-brand3 rounded-lg"
             >
               <div className="collapse-title text-xl font-medium">option </div>
               <div className="collapse-content flex flex-col space-y-1">

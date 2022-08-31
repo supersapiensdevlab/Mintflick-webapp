@@ -712,9 +712,15 @@ function Post(props) {
                     State.database.userData.data?.user.username
                   ) &&
                   pollChoice === i
-                    ? " bg-slate-200 dark:bg-slate-700"
-                    : pollVoted && "  bg-slate-200 dark:bg-slate-700"
+                    ? " bg-gradient-to-r from-slate-200 to-slate-200 dark:from-slate-700 dark:to-slate-700 bg-no-repeat"
+                    : pollVoted &&
+                      " bg-gradient-to-r from-slate-200 to-slate-200 dark:from-slate-700 dark:to-slate-700 bg-no-repeat "
                 } my-2 flex gap-2 p-2  border-2 rounded-lg border-slate-200 dark:border-slate-700 cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-700 justify-between `}
+                style={{
+                  backgroundSize: `${Math.ceil(
+                    (option.selectedBy.length / props.votes.length) * 100
+                  )}% 100%`,
+                }}
               >
                 <span className="w-full text-brand1 dark:text-brand2 ">
                   {option.option}{" "}
@@ -730,6 +736,9 @@ function Post(props) {
                     </span>
                   ) : null}
                 </span>
+                {/* <span
+                  className={`absolute left-0 h-full bg-slate-400 dark:bg-slate-900 w-4`}
+                ></span> */}
                 <div className="text-success">
                   {option.selectedBy &&
                   option.selectedBy.includes(
