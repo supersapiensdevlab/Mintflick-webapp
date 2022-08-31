@@ -882,7 +882,10 @@ function Post(props) {
             <MessageCircle></MessageCircle>
             <p className="font-medium text-sm ">{commentCount}</p>
           </div>
-          <div className="cursor-pointer flex items-center space-x-2 text-brand1">
+          <div
+            onClick={() => State.updateDatabase({ shareModalOpen: true })}
+            className="cursor-pointer flex items-center space-x-2 text-brand1"
+          >
             <Share></Share>
           </div>
         </div>

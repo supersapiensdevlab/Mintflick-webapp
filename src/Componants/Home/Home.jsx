@@ -7,6 +7,7 @@ import Channels from "./Channels";
 import GameOfLuck from "./GameOfLuck";
 import LiveChannels from "./LiveChannels";
 import ReportModal from "./Modals/ReportModal";
+import ShareModal from "./Modals/ShareModal";
 import TimeLine from "./TimeLine";
 
 function Home() {
@@ -24,6 +25,7 @@ function Home() {
         <GameOfLuck></GameOfLuck>
       </div>
       <ReportModal />
+      <ShareModal />
     </div>
   );
 }

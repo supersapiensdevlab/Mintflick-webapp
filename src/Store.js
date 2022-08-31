@@ -13,6 +13,9 @@ function Store(props) {
     //report post modal
     reportPostUrl: "",
     reportModalOpen: false,
+    //share post modal
+    sharePostUrl: "",
+    shareModalOpen: false,
   });
   const updateStore = (data) => {
     setstore((prev) => ({

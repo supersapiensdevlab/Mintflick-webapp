@@ -59,8 +59,7 @@ function ReportModal() {
           ></textarea>
           <button
             className={`btn  w-full 
-             btn-primary
-            }`}
+ btn-error text-white  }`}
           >
             submit report
           </button>
