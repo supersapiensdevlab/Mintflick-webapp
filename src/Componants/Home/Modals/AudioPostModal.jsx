@@ -534,97 +534,13 @@ function AudioPostModal({ setAudioPostModalOpen }) {
               </div>
             )}
           </div>
-
-          {/* While minting NFT */}
-          {/* <div className="flex flex-col text-center">
-                        <div
-                            className={`${minting === true ? 'block' : 'hidden'} mx-3 text-white my-5 `}
-                        >
-                            👻 Confirm NFT Mint on the next Popup
-                        </div>
-                        {minting === 'token created' ? (
-                            <div className={`  mx-3 text-white my-5 `}>
-                                ✅ NFT Token Created Successfully. Confirm Market Listing on the Popup
-                            </div>
-                        ) : null}
-
-                        <div
-                            className={`${mintingProgress === 66 ? 'block' : 'hidden'
-                                } text-center flex mx-3 my-5`}
-                        >
-                            <p className="no-underline  text-white">Wrapping Up Things &nbsp;</p>
-                            <p className="no-underline  text-white"> Please Wait...</p>
-                        </div>
-
-                        <div
-                            className={`${minting !== null &&
-                                minting !== true &&
-                                mintingProgress === 100 &&
-                                minting !== 'token created'
-                                ? 'block'
-                                : 'hidden'
-                                } text-center flex mx-3 my-5`}
-                        >
-                            <p className="no-underline  text-dbeats-light">🚀 NFT Minted &nbsp;</p>
-                            <a
-                                target={'_blank'}
-                                rel="noopener noreferrer "
-                                className="dark:text-dbeats-light cursor-pointer underline  "
-                                href={`https://polygonscan.com/tx/${minting}`}
-                            >
-                                Check on Polygonscan
-                            </a>
-                        </div>
-                        <ProgressBar
-                            className="w-full mx-auto"
-                            percent={mintingProgress}
-                            transitionDuration={1000}
-                            filledBackground="linear-gradient(to right,  #31c48D, #3f83f8)"
-                        >
-                            <Step transition="scale">
-                                {({ accomplished }) => (
-                                    <img
-                                        style={{ filter: `grayscale(${accomplished ? 0 : 80}%)` }}
-                                        className="w-6"
-                                        src={icon3}
-                                    />
-                                )}
-                            </Step>
-                            <Step transition="scale">
-                                {({ accomplished }) => (
-                                    <img
-                                        style={{ filter: `grayscale(${accomplished ? 0 : 80}%)` }}
-                                        className="w-8"
-                                        src={icon2}
-                                    />
-                                )}
-                            </Step>
-                            <Step transition="scale">
-                                {({ accomplished }) => (
-                                    <img
-                                        style={{ filter: `grayscale(${accomplished ? 0 : 80}%)` }}
-                                        className="w-6"
-                                        src={icon1}
-                                    />
-                                )}
-                            </Step>
-                            <Step transition="scale">
-                                {({ accomplished }) => (
-                                    <img
-                                        style={{ filter: `grayscale(${accomplished ? 0 : 80}%)` }}
-                                        width="30"
-                                        src={icon1}
-                                    />
-                                )}
-                            </Step>
-                        </ProgressBar>
-                    </div> */}
-
           <button
             type={"submit"}
             className={`btn  w-full ${
-              uploadingTrack ? "loading" : "btn-brand"
-            }`}
+              selectedTrack?.file && selectedThumbnail?.file
+                ? "btn-brand"
+                : "btn-disabled"
+            } ${uploadingTrack ? "loading" : ""}`}
           >
             Post audio
           </button>

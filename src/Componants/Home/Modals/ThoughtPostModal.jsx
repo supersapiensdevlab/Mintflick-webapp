@@ -10,7 +10,7 @@ function ThoughtPostModal({ setthoughtPostModalOpen }) {
   const [caption, setCaption] = useState("");
   const [isNFT, setIsNFT] = useState(false);
   const [nftPrice, setNFTPrice] = useState(1);
-  // const [loadFeed] = useUserActions();
+  const [loadFeed] = useUserActions();
 
   // Minting
   // const [minting, setMinting] = useState(null);
@@ -18,7 +18,6 @@ function ThoughtPostModal({ setthoughtPostModalOpen }) {
 
   //handle thought submit
   const handleThoughtPost = () => {
-    console.log(caption);
     const data = {
       announcement: caption,
     };
@@ -29,8 +28,9 @@ function ThoughtPostModal({ setthoughtPostModalOpen }) {
           "auth-token": JSON.stringify(localStorage.getItem("authtoken")),
         },
       })
-      .then(() => {
+      .then(async () => {
         setthoughtPostModalOpen(false);
+        await loadFeed();
       })
       .catch((err) => {
         console.log(err);
@@ -97,7 +97,9 @@ function ThoughtPostModal({ setthoughtPostModalOpen }) {
           <button
             type={"submit"}
             onClick={handleThoughtPost}
-            className={`btn  w-full ${uploadingPost ? "loading" : "btn-brand"}`}
+            className={`btn  w-full  ${
+              caption ? "btn-brand" : "btn-disabled"
+            }  ${uploadingPost ? "loading" : ""}`}
           >
             Post thought
           </button>
