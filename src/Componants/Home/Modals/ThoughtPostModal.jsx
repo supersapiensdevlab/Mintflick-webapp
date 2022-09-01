@@ -18,7 +18,6 @@ function ThoughtPostModal({ setthoughtPostModalOpen }) {
 
   //handle thought submit
   const handleThoughtPost = () => {
-    console.log(caption);
     const data = {
       announcement: caption,
     };
@@ -97,7 +96,9 @@ function ThoughtPostModal({ setthoughtPostModalOpen }) {
           <button
             type={"submit"}
             onClick={handleThoughtPost}
-            className={`btn  w-full ${uploadingPost ? "loading" : "btn-brand"}`}
+            className={`btn  w-full  ${
+              caption ? "btn-brand" : "btn-disabled"
+            }  ${uploadingPost ? "loading" : ""}`}
           >
             Post thought
           </button>
