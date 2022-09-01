@@ -97,7 +97,9 @@ function ThoughtPostModal({ setthoughtPostModalOpen }) {
           <button
             type={"submit"}
             onClick={handleThoughtPost}
-            className={`btn  w-full ${uploadingPost ? "loading" : "btn-brand"}`}
+            className={`btn  w-full ${uploadingPost && "loading"} ${
+              caption === "" ? "btn-disabled" : "btn-brand"
+            }`}
           >
             Post thought
           </button>

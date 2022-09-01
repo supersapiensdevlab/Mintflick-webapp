@@ -46,10 +46,10 @@ function AddPost() {
             className="flex-grow textarea h-12 rounded-3xl w-full "
             placeholder="What's on your mind?"
           ></textarea>
-          <button className="btn btn-primary btn-brand rounded-full gap-2 ">
+          {/* <button className="btn btn-primary btn-brand rounded-full gap-2 ">
             <Send size={20}></Send>
             post
-          </button>
+          </button> */}
         </div>
         <div className="btn-group ">
           <button
