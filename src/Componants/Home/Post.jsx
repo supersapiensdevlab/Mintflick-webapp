@@ -8,6 +8,7 @@ import {
   Comet,
   DotsVertical,
   Heart,
+  InfoCircle,
   MessageCircle,
   PlayerPause,
   PlayerPlay,
@@ -26,6 +27,7 @@ import useUserActions from "../../Hooks/useUserActions";
 import DeleteConfirmationModal from "./Modals/DeleteConfirmationModal";
 import JoinSuperfanModal from "./Modals/JoinSuperfanModal";
 
+import ReportModal from "./Modals/ReportModal";
 function Post(props) {
   // Common State and Functions
   const State = useContext(UserContext);
@@ -547,6 +549,48 @@ function Post(props) {
       });
   };
 
+  // Already reported
+  const [alreadyReported, setAlreadyReported] = useState(false);
+  const [reportModal, setReportModal] = useState(false);
+  const [reportData, setReportData] = useState({});
+  useEffect(() => {
+    if (State.database.userData.data) {
+      let reported = props.reports.filter((re) => {
+        if (re.reporter == State.database.userData.data.user.username) {
+          if (re.content_type == "video" && re.id == props.videoId) {
+            return true;
+          } else if (re.content_type == "track" && re.id == props.trackId) {
+            return true;
+          } else if (re.content_type == "post" && re.id == props.postId) {
+            return true;
+          } else if (re.content_type == "poll" && re.id == props.pollId) {
+            return true;
+          }
+        }
+        return false;
+      });
+      if (reported.length > 0) {
+        setAlreadyReported(reported[0].report);
+      }
+    }
+  }, [State.database.userData?.data?.user.reports, props.reports]);
+
+  const handleReportClick = () => {
+    setReportModal(true);
+    setReportData({
+      reporter: State.database.userData?.data?.user?.username,
+      reported: props.profileUsername,
+      id: props.videoId
+        ? props.videoId
+        : props.postId
+        ? props.postId
+        : props.trackId
+        ? props.trackId
+        : props.pollId,
+      content_type: props.contentType,
+    });
+  };
+
   return (
     <>
       <div className="w-full h-fit lg:bg-slate-100 lg:dark:bg-slate-800 lg:rounded-xl p-4 lg:p-8 space-y-4 pb-4 border-b-2 lg:border-none  border-slate-200 dark:border-slate-900">
@@ -601,30 +645,23 @@ function Post(props) {
                       <Comet className="-rotate-90" /> Join Superfan
                     </a>
                   </li>
-                  <li
-                    onClick={() =>
-                      State.updateDatabase({
-                        reportModalOpen: true,
-                        reportPostValue: {
-                          reporter:
-                            State.database.userData?.data?.user?.username,
-                          reported: props.profileUsername,
-                          id: props.videoId
-                            ? props.videoId
-                            : props.postId
-                            ? props.postId
-                            : props.trackId
-                            ? props.trackId
-                            : props.pollId,
-                        },
-                      })
-                    }
-                  >
-                    <a className="hover:bg-rose-500">
-                      <AlertOctagon />
-                      Report
-                    </a>
-                  </li>
+                  {alreadyReported ? (
+                    <li>
+                      <a>
+                        <p class="tooltip" data-tip={alreadyReported}>
+                          <InfoCircle size={20} strokeWidth={2} />
+                        </p>{" "}
+                        Already Reported{" "}
+                      </a>
+                    </li>
+                  ) : (
+                    <li onClick={handleReportClick}>
+                      <a className="hover:bg-rose-500">
+                        <AlertOctagon />
+                        Report
+                      </a>
+                    </li>
+                  )}
                 </ul>
               ) : (
                 <ul
@@ -764,14 +801,7 @@ function Post(props) {
                       ? " bg-gradient-to-r from-slate-200 to-slate-200 dark:from-slate-700 dark:to-slate-700 bg-no-repeat"
                       : pollVoted &&
                         " bg-gradient-to-r from-slate-200 to-slate-200 dark:from-slate-700 dark:to-slate-700 bg-no-repeat "
-                  }${
-                    pollVoted &&
-                    props.content.votes.includes(
-                      State.database.userData.data.user.username
-                    )
-                      ? ""
-                      : "hover:bg-slate-200 dark:hover:bg-slate-700 cursor-pointer"
-                  } my-2 flex gap-2 p-2  border-2 rounded-lg border-slate-200 dark:border-slate-700   justify-between `}
+                  } my-2 flex gap-2 p-2  border-2 rounded-lg border-slate-200 dark:border-slate-700 cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-700 justify-between `}
                   style={{
                     backgroundSize: `${Math.ceil(
                       (option.selectedBy.length / props.votes.length) * 100
@@ -836,6 +866,10 @@ function Post(props) {
                 light={props.videoImage}
                 url={props.videoUrl}
                 controls={true}
+                onPlay={() => {
+                  console.log("onplay called");
+                  props.setCurrentPlay(props.myKey);
+                }}
                 onStart={() => {
                   videoStarted();
                 }}
@@ -960,7 +994,9 @@ function Post(props) {
 
             <button
               onClick={() => text && handleOnEnter()}
-              className="btn  btn-primary btn-outline"
+              className={`btn   btn-outline ${
+                text !== "" ? "btn-primary" : "btn-disabled"
+              }`}
             >
               <ArrowNarrowRight />
             </button>
@@ -975,6 +1011,13 @@ function Post(props) {
           />
         ) : (
           <></>
+        )}
+        {reportModal && (
+          <ReportModal
+            setReportModal={setReportModal}
+            setAlreadyReported={setAlreadyReported}
+            reportData={reportData}
+          />
         )}
       </div>
       {/* Delete Confirmation modal */}

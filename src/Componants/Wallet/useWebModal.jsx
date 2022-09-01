@@ -143,7 +143,9 @@ function useWebModal() {
 
     const signer = provider.getSigner();
     const Address = await signer.getAddress();
-
+    State.updateDatabase({
+      walletAddress:Address
+    })
     console.log(Address);
     isUserAvaliable(Address, provider);
   };

@@ -4,7 +4,7 @@ import { Flag, X } from "tabler-icons-react";
 import { UserContext } from "../../../Store";
 import axios from "axios";
 
-function ReportModal() {
+function ReportModal({ setAlreadyReported, setReportModal, reportData }) {
   const State = useContext(UserContext);
 
   //report categories
@@ -36,30 +36,32 @@ function ReportModal() {
 
   //submit report
   const handleReportSubmit = () => {
-    const reportData = State.database.reportPostValue;
-    reportData.report = report;
-    axios({
-      method: "POST",
-      url: `${process.env.REACT_APP_SERVER_URL}/user/videoreports`,
-      headers: {
-        "content-type": "application/json",
-        "auth-token": JSON.stringify(localStorage.getItem("authtoken")),
-      },
-      data: reportData,
-    })
-      .then((response) => {
-        State.updateDatabase({ reportModalOpen: false });
+    if (report != "" && report != null) {
+      const data = reportData;
+      data.report = report;
+      axios({
+        method: "POST",
+        url: `${process.env.REACT_APP_SERVER_URL}/user/report`,
+        headers: {
+          "content-type": "application/json",
+          "auth-token": JSON.stringify(localStorage.getItem("authtoken")),
+        },
+        data: data,
       })
-      .catch(function (error) {
-        console.log(error);
-      });
+        .then((response) => {
+          setReportModal(false);
+          setAlreadyReported(report);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    }
   };
 
   return (
     <div
-      className={`${
-        State.database.reportModalOpen && "modal-open"
-      } modal  modal-bottom sm:modal-middle`}
+      className={`modal-open
+         modal  modal-bottom sm:modal-middle`}
     >
       <div className="modal-box p-0 bg-slate-100 dark:bg-slate-800 ">
         <div className="w-full h-fit p-2 bg-slate-300 dark:bg-slate-700">
@@ -69,7 +71,7 @@ function ReportModal() {
               Report
             </h3>
             <X
-              onClick={() => State.updateDatabase({ reportModalOpen: false })}
+              onClick={() => setReportModal(false)}
               className="text-brand2 cursor-pointer"
             ></X>
           </div>
@@ -119,7 +121,7 @@ function ReportModal() {
           <button
             onClick={handleReportSubmit}
             className={`btn  w-full 
- btn-error text-white  }`}
+  text-white  } ${(report !== null && report !== "") ? 'btn-error':'btn-disabled'}`}
           >
             submit report
           </button>

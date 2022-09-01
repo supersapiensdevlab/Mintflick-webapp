@@ -155,7 +155,8 @@ function PollModal({ setPollModalOpen }) {
           </div>
           <button
             type={"submit"}
-            className={`btn  w-full ${uploadingPoll ? "loading" : "btn-brand"}`}
+            role="button" aria-disabled="true"
+            className={`btn  w-full ${uploadingPoll ? "loading" : ""} ${(question == '' || options.length < 2 || option !== "") ? 'btn-disabled' : 'btn-brand'}`}
           >
             Take poll
           </button>
