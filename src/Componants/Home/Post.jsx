@@ -8,6 +8,7 @@ import {
   Comet,
   DotsVertical,
   Heart,
+  InfoCircle,
   MessageCircle,
   PlayerPause,
   PlayerPlay,
@@ -22,6 +23,7 @@ import moment from "moment";
 import AllComments from "./AllComments/AllComments";
 import defaultProPic from "../../Assets/profile-pic.png";
 import useUserActions from "../../Hooks/useUserActions";
+import ReportModal from "./Modals/ReportModal";
 function Post(props) {
   // Common State and Functions
   const State = useContext(UserContext);
@@ -249,7 +251,7 @@ function Post(props) {
             "auth-token": JSON.stringify(State.database.userData.data.jwtToken),
           },
           data: videoDetails,
-        }).then(function (response) {});
+        }).then(function (response) { });
       }, 5000);
       return () => clearTimeout(timer);
     }
@@ -538,6 +540,44 @@ function Post(props) {
       });
   };
 
+
+  // Already reported
+  const [alreadyReported, setAlreadyReported] = useState(false);
+  const [reportModal, setReportModal] = useState(false);
+  const [reportData, setReportData] = useState({});
+  useEffect(() => {
+    if (State.database.userData.data) {
+      let reported = props.reports.filter((re) => {
+        if (re.reporter == State.database.userData.data.user.username) {
+          if (re.content_type == 'video' && re.id == props.videoId) { return true }
+          else if (re.content_type == 'track' && re.id == props.trackId) { return true }
+          else if (re.content_type == 'post' && re.id == props.postId) { return true }
+          else if (re.content_type == 'poll' && re.id == props.pollId) { return true }
+        }
+        return false;
+      })
+      if (reported.length > 0) {
+        setAlreadyReported(reported[0].report);
+      }
+    }
+  }, [State.database.userData?.data?.user.reports, props.reports])
+
+  const handleReportClick = () => {
+    setReportModal(true);
+    setReportData({
+      reporter: State.database.userData?.data?.user?.username,
+      reported: props.profileUsername,
+      id: props.videoId
+        ? props.videoId
+        : props.postId
+          ? props.postId
+          : props.trackId
+            ? props.trackId
+            : props.pollId,
+      content_type: props.contentType
+    })
+  }
+
   return (
     <div className="w-full h-fit lg:bg-slate-100 lg:dark:bg-slate-800 lg:rounded-xl p-4 lg:p-8 space-y-4 pb-4 border-b-2 lg:border-none  border-slate-200 dark:border-slate-900">
       <div className="flex justify-between items-center">
@@ -584,29 +624,20 @@ function Post(props) {
                   <Comet className="-rotate-90" /> Join Superfan
                 </a>
               </li>
-              <li
-                onClick={() =>
-                  State.updateDatabase({
-                    reportModalOpen: true,
-                    reportPostValue: {
-                      reporter: State.database.userData?.data?.user?.username,
-                      reported: props.profileUsername,
-                      id: props.videoId
-                        ? props.videoId
-                        : props.postId
-                        ? props.postId
-                        : props.trackId
-                        ? props.trackId
-                        : props.pollId,
-                    },
-                  })
-                }
-              >
-                <a className="hover:bg-rose-500">
-                  <AlertOctagon />
-                  Report
-                </a>
-              </li>
+              {alreadyReported ? <li><a><p class="tooltip" data-tip={alreadyReported}><InfoCircle
+                size={20}
+                strokeWidth={2}
+              /></p> Already Reported </a></li> :
+                <li
+                  onClick={handleReportClick
+                  }
+                >
+                  <a className="hover:bg-rose-500">
+                    <AlertOctagon />
+                    Report
+                  </a>
+                </li>
+              }
             </ul>
           </div>
         </div>
@@ -719,16 +750,15 @@ function Post(props) {
                     handlePollVote(i);
                   }
                 }}
-                className={`${
-                  option.selectedBy &&
+                className={`${option.selectedBy &&
                   option.selectedBy.includes(
                     State.database.userData.data?.user.username
                   ) &&
                   pollChoice === i
-                    ? " bg-gradient-to-r from-slate-200 to-slate-200 dark:from-slate-700 dark:to-slate-700 bg-no-repeat"
-                    : pollVoted &&
-                      " bg-gradient-to-r from-slate-200 to-slate-200 dark:from-slate-700 dark:to-slate-700 bg-no-repeat "
-                } my-2 flex gap-2 p-2  border-2 rounded-lg border-slate-200 dark:border-slate-700 cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-700 justify-between `}
+                  ? " bg-gradient-to-r from-slate-200 to-slate-200 dark:from-slate-700 dark:to-slate-700 bg-no-repeat"
+                  : pollVoted &&
+                  " bg-gradient-to-r from-slate-200 to-slate-200 dark:from-slate-700 dark:to-slate-700 bg-no-repeat "
+                  } my-2 flex gap-2 p-2  border-2 rounded-lg border-slate-200 dark:border-slate-700 cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-700 justify-between `}
                 style={{
                   backgroundSize: `${Math.ceil(
                     (option.selectedBy.length / props.votes.length) * 100
@@ -738,9 +768,9 @@ function Post(props) {
                 <span className="w-full text-brand1 dark:text-brand2 ">
                   {option.option}{" "}
                   {props.votes &&
-                  props.votes.includes(
-                    State.database.userData.data?.user.username
-                  ) ? (
+                    props.votes.includes(
+                      State.database.userData.data?.user.username
+                    ) ? (
                     <span className="text-sm text-brand4">
                       {Math.ceil(
                         (option.selectedBy.length / props.votes.length) * 100
@@ -754,9 +784,9 @@ function Post(props) {
                 ></span> */}
                 <div className="text-success">
                   {option.selectedBy &&
-                  option.selectedBy.includes(
-                    State.database.userData.data?.user.username
-                  ) ? (
+                    option.selectedBy.includes(
+                      State.database.userData.data?.user.username
+                    ) ? (
                     <div className="flex">
                       voted&nbsp;
                       <CircleCheck />
@@ -798,6 +828,12 @@ function Post(props) {
               light={props.videoImage}
               url={props.videoUrl}
               controls={true}
+              onPlay={
+                () => {
+                  console.log('onplay called')
+                  props.setCurrentPlay(props.myKey);
+                }
+              }
               onStart={() => {
                 videoStarted();
               }}
@@ -835,11 +871,10 @@ function Post(props) {
           {props.contentType === "post" && (
             <div className=" cursor-pointer flex items-center text-brand1  space-x-2">
               <Heart
-                className={`${
-                  postLiked
-                    ? "text-red-600 hover:text-white fill-rose-600"
-                    : "text-brand1 hover:text-red-600"
-                }`}
+                className={`${postLiked
+                  ? "text-red-600 hover:text-white fill-rose-600"
+                  : "text-brand1 hover:text-red-600"
+                  }`}
                 onClick={handlePostLikes}
               ></Heart>
               <p className="font-medium text-sm ">{postLikes}</p>
@@ -848,11 +883,10 @@ function Post(props) {
           {props.contentType === "video" && (
             <div className=" cursor-pointer flex items-center text-brand1  space-x-2">
               <Heart
-                className={`${
-                  videoLiked
-                    ? "text-red-600 hover:text-white fill-rose-600"
-                    : "text-brand1 hover:text-red-600"
-                }`}
+                className={`${videoLiked
+                  ? "text-red-600 hover:text-white fill-rose-600"
+                  : "text-brand1 hover:text-red-600"
+                  }`}
                 onClick={handleVideoLikes}
               ></Heart>
               <p className="font-medium text-sm ">{videoLikes}</p>
@@ -861,11 +895,10 @@ function Post(props) {
           {props.contentType === "track" && (
             <div className=" cursor-pointer flex items-center text-brand1  space-x-2">
               <Heart
-                className={`${
-                  trackLiked
-                    ? "text-red-600 hover:text-white fill-rose-600"
-                    : "text-brand1 hover:text-red-600"
-                }`}
+                className={`${trackLiked
+                  ? "text-red-600 hover:text-white fill-rose-600"
+                  : "text-brand1 hover:text-red-600"
+                  }`}
                 onClick={handleTrackLikes}
               ></Heart>
               <p className="font-medium text-sm ">{trackLikes}</p>
@@ -874,11 +907,10 @@ function Post(props) {
           {props.contentType === "poll" && (
             <div className=" cursor-pointer flex items-center text-brand1  space-x-2">
               <Heart
-                className={`${
-                  pollLiked
-                    ? "text-red-600 hover:text-white fill-rose-600"
-                    : "text-brand1 hover:text-red-600"
-                }`}
+                className={`${pollLiked
+                  ? "text-red-600 hover:text-white fill-rose-600"
+                  : "text-brand1 hover:text-red-600"
+                  }`}
                 onClick={handlePollLikes}
               ></Heart>
               <p className="font-medium text-sm ">{pollLikes}</p>
@@ -920,7 +952,7 @@ function Post(props) {
 
           <button
             onClick={() => text && handleOnEnter()}
-            className="btn  btn-primary btn-outline"
+            className={`btn   btn-outline ${text !== "" ? 'btn-primary' : 'btn-disabled'}`}
           >
             <ArrowNarrowRight />
           </button>
@@ -936,6 +968,7 @@ function Post(props) {
       ) : (
         <></>
       )}
+      {reportModal && <ReportModal setReportModal={setReportModal} setAlreadyReported={setAlreadyReported} reportData={reportData} />}
     </div>
   );
 }
