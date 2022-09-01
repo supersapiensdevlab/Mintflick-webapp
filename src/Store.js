@@ -11,7 +11,7 @@ function Store(props) {
     liveUsers: [],
     feedData: [],
     //report post modal
-    reportPostUrl: "",
+    reportPostValue: {},
     reportModalOpen: false,
     //share post modal
     sharePostUrl: "",
