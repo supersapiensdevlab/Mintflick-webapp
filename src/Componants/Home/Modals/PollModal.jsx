@@ -50,9 +50,9 @@ function PollModal({ setPollModalOpen }) {
     }
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     console.log(JSON.stringify(options))
-  },[options])
+  }, [options])
 
   return (
     <div className="modal-box p-0 bg-slate-100 dark:bg-slate-800 ">
@@ -244,7 +244,8 @@ function PollModal({ setPollModalOpen }) {
 
           <button
             type={"submit"}
-            className={`btn  w-full ${uploadingPoll ? "loading" : "btn-brand"}`}
+            role="button" aria-disabled="true"
+            className={`btn  w-full ${uploadingPoll ? "loading" : "btn-brand"} ${(question == '' || options.length < 2 || option !== "") ? 'btn-disabled' : ''}`}
           >
             Take poll
           </button>
