@@ -1,9 +1,60 @@
 import React, { useContext } from "react";
+import { useState } from "react";
 import { Flag, X } from "tabler-icons-react";
 import { UserContext } from "../../../Store";
+import axios from "axios";
 
 function ReportModal() {
   const State = useContext(UserContext);
+
+  //report categories
+  const categories = [
+    {
+      value: "Nudity",
+      subcategory: [
+        "Nudity or pornography",
+        "Sexual exploitation",
+        "Sharing private images",
+      ],
+    },
+    {
+      value: "Violence",
+      subcategory: [
+        "Violence threat",
+        "Animal abuse",
+        "Death, severe injury, dangerous",
+      ],
+    },
+    {
+      value: "Unauthorised sales",
+      subcategory: ["Animals", "Firearms", "Fake health documents"],
+    },
+  ];
+
+  //reported value
+  const [report, setReport] = useState(null);
+
+  //submit report
+  const handleReportSubmit = () => {
+    const reportData = State.database.reportPostValue;
+    reportData.report = report;
+    axios({
+      method: "POST",
+      url: `${process.env.REACT_APP_SERVER_URL}/user/videoreports`,
+      headers: {
+        "content-type": "application/json",
+        "auth-token": JSON.stringify(localStorage.getItem("authtoken")),
+      },
+      data: reportData,
+    })
+      .then((response) => {
+        State.updateDatabase({ reportModalOpen: false });
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
   return (
     <div
       className={`${
@@ -28,36 +79,45 @@ function ReportModal() {
             Why are you reporting this post?
           </h3>
           <div className="space-y-2 w-full">
-            <div
-              tabindex="0"
-              className="collapse collapse-arrow border-2 cursor-pointer  dark:border-slate-600 text-brand3 rounded-lg"
-            >
-              <div className="collapse-title text-xl font-medium">option </div>
-              <div className="collapse-content flex flex-col space-y-1">
-                <span>inside option</span>
-                <span>inside option</span>
-                <span>inside option</span>
-                <span>inside option</span>
-              </div>
-            </div>
-            <div
-              tabindex="0"
-              className="collapse collapse-arrow border-2 cursor-pointer dark:border-slate-600 text-brand3 rounded-lg"
-            >
-              <div className="collapse-title text-xl font-medium">option </div>
-              <div className="collapse-content flex flex-col space-y-1">
-                <span>inside option</span>
-                <span>inside option</span>
-                <span>inside option</span>
-                <span>inside option</span>
-              </div>
-            </div>
+            {categories.map((value, key) => {
+              return (
+                <div
+                  key={key}
+                  tabindex="0"
+                  className="collapse collapse-arrow border-2 cursor-pointer  dark:border-slate-600 text-brand3 rounded-lg"
+                >
+                  <div className="collapse-title text-md font-medium ">
+                    {value.value}
+                  </div>
+                  <div className="collapse-content flex flex-col space-y-1">
+                    {value.subcategory.map((subcategory, i) => {
+                      return (
+                        <span
+                          key={i}
+                          className={
+                            subcategory == report
+                              ? "text-red-300"
+                              : "text-white"
+                          }
+                          onClick={() => {
+                            setReport(subcategory);
+                          }}
+                        >
+                          {subcategory}
+                        </span>
+                      );
+                    })}
+                  </div>
+                </div>
+              );
+            })}
           </div>
           <textarea
             className="textarea w-full"
             placeholder="Issue (optional)"
           ></textarea>
           <button
+            onClick={handleReportSubmit}
             className={`btn  w-full 
  btn-error text-white  }`}
           >

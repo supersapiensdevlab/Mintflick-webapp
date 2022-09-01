@@ -67,6 +67,9 @@ function Post(props) {
 
   const videoRef = useRef();
 
+  //sharable data
+  const sharable_data = `${process.env.REACT_APP_CLIENT_URL}/${props.profileUsername}`;
+
   useEffect(() => {
     if (props.comments) {
       setCommentCount(props.comments.length);
@@ -585,7 +588,17 @@ function Post(props) {
                 onClick={() =>
                   State.updateDatabase({
                     reportModalOpen: true,
-                    reportPostUrl: "",
+                    reportPostValue: {
+                      reporter: State.database.userData?.data?.user?.username,
+                      reported: props.profileUsername,
+                      id: props.videoId
+                        ? props.videoId
+                        : props.postId
+                        ? props.postId
+                        : props.trackId
+                        ? props.trackId
+                        : props.pollId,
+                    },
                   })
                 }
               >
@@ -883,7 +896,12 @@ function Post(props) {
             <p className="font-medium text-sm ">{commentCount}</p>
           </div>
           <div
-            onClick={() => State.updateDatabase({ shareModalOpen: true })}
+            onClick={() =>
+              State.updateDatabase({
+                shareModalOpen: true,
+                sharePostUrl: sharable_data,
+              })
+            }
             className="cursor-pointer flex items-center space-x-2 text-brand1"
           >
             <Share></Share>
