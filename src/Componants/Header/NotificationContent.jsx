@@ -13,53 +13,41 @@ const NotificationContent = ({ data }) => {
   }, []);
 
   return (
-    <div className="h-full max-h-80 overflow-hidden overflow-y-auto">
+    <div className="p-2 w-full hover:bg-slate-200 dark:hover:bg-slate-800 rounded-md">
       <a
-        href={data.link ? data.link : `/live/${data.username}`}
-        className="grid grid-cols-4 justify-center p-1 dark:bg-dbeats-dark-alt dark:hover:bg-dbeats-dark-secondary dark:text-white text-gray-500"
+        // href={data.link ? data.link : `/live/${data.username}`}
+        className="flex items-center gap-2 cursor-pointer "
       >
-        {data.post_image ? (
-          <div className="h-14 w-14 col-span-1 rounded-full bg-gray-700 flex justify-center">
-            <img
-              src={data.post_image}
-              alt="announcement_info"
-              className="h-full w-full rounded-full"
-            />
-          </div>
-        ) : null}
-        {!data.post_image && data.linkpreview_data ? (
-          <div className="h-20 col-span-1 rounded-full bg-gray-700 flex justify-center">
-            <img
-              src={data.linkpreview_data.image.url}
-              alt="announcement_info"
-              className="h-full w-auto "
-            />
-          </div>
-        ) : null}
-        {!data.post_image && !data.linkpreview_data && data.post_video ? (
-          <div className="h-20 col-span-1 rounded-full bg-gray-700 flex justify-center">
-            <img
-              src={CircleLogo}
-              alt="announcement_info"
-              className="h-full w-auto"
-            />
-          </div>
-        ) : null}
-        {data.announcement.includes("was") ? (
-          <div className="col-span-3 rounded-full ">
-            <p className=" line-clamp-3 text-sm font-semibold break-words">
+        <img
+          src={CircleLogo}
+          alt="announcement_info"
+          className="h-8 w-8 rounded-full"
+        />
+
+        <div>
+          {data.announcement.includes("was") ? (
+            <p className="text-brand2 text-sm font-semibold break-words">
               {data.announcement + ` ${userLiveTime} ago`}
             </p>
-          </div>
-        ) : (
-          <div className="col-span-3 rounded-full ">
-            <p className=" line-clamp-3 text-sm font-semibold break-words">
-              {data.announcement}
-            </p>
-            <p className="line-clamp-3 text-xs font-normal break-words">
-              {userLiveTime}
-            </p>
-          </div>
+          ) : (
+            <div className="">
+              <p className="text-brand2 text-sm font-medium break-words">
+                {data.announcement}
+              </p>
+              <p className="text-brand4 text-xs font-normal break-words">
+                {userLiveTime}
+              </p>
+            </div>
+          )}
+        </div>
+
+        {data.linkpreview_data && (
+          <img
+            src={data.linkpreview_data.image.url}
+            // src={CircleLogo}
+            alt="announcement_info"
+            className="h-12 w-12 ml-auto rounded-sm"
+          />
         )}
       </a>
     </div>

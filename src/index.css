@@ -86,6 +86,9 @@
   @apply dark:bg-slate-700;
   @apply dark:text-slate-300;
 }
+.btn-disabled {
+  @apply dark:bg-slate-700 text-slate-500;
+}
 .btn-brand {
   @apply bg-gradient-to-tr   from-[#A36CFC]  via-primary  to-brand
   text-white

@@ -31,7 +31,7 @@ const DeleteConfirmationModal = ({ setDeleteConfirmationModal, content }) => {
       <div className="w-full h-fit p-2 bg-slate-300 dark:bg-slate-700">
         <div className="flex justify-between items-center p-2">
           <h3 className="flex items-center gap-2 font-bold text-lg text-brand2">
-            <AlertTriangle />
+            <AlertTriangle className="text-error" />
             Are you share you want to delete ?
           </h3>
           <X
@@ -40,7 +40,10 @@ const DeleteConfirmationModal = ({ setDeleteConfirmationModal, content }) => {
           ></X>
         </div>
         <div className="bg-slate-700 my-4 w-full px-2">
-          <button onClick={handlePostDelete} className="btn btn-brand w-full">
+          <button
+            onClick={handlePostDelete}
+            className="btn btn-error text-white w-full"
+          >
             Confirm
           </button>
         </div>

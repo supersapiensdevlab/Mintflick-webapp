@@ -24,6 +24,7 @@ import AllComments from "./AllComments/AllComments";
 import defaultProPic from "../../Assets/profile-pic.png";
 import useUserActions from "../../Hooks/useUserActions";
 import DeleteConfirmationModal from "./Modals/DeleteConfirmationModal";
+import JoinSuperfanModal from "./Modals/JoinSuperfanModal";
 
 function Post(props) {
   // Common State and Functions
@@ -75,6 +76,8 @@ function Post(props) {
 
   //Delete Confirmation Modal
   const [deleteConfirmationModal, setDeleteConfirmationModal] = useState(false);
+  //Join superfan modal
+  const [joinsuperfanModalOpen, setJoinsuperfanModalOpen] = useState(false);
 
   useEffect(() => {
     if (props.comments) {
@@ -591,7 +594,10 @@ function Post(props) {
                   className="menu menu-compact dropdown-content p-1 shadow-xl bg-slate-100 dark:bg-slate-600  text-brand3 font-semibold rounded-lg w-48 "
                 >
                   <li>
-                    <a className="dark:hover:bg-slate-800">
+                    <a
+                      onClick={() => setJoinsuperfanModalOpen(true)}
+                      className="dark:hover:bg-slate-800"
+                    >
                       <Comet className="-rotate-90" /> Join Superfan
                     </a>
                   </li>
@@ -971,13 +977,25 @@ function Post(props) {
           <></>
         )}
       </div>
+      {/* Delete Confirmation modal */}
       <div
         className={`${
           deleteConfirmationModal && "modal-open"
-        } modal modal-bottom sm:modal-middle`}
+        } modal modal-middle`}
       >
         <DeleteConfirmationModal
           setDeleteConfirmationModal={setDeleteConfirmationModal}
+          content={props.content}
+        />
+      </div>
+      {/* Join Superfan modal */}
+      <div
+        className={`${
+          joinsuperfanModalOpen && "modal-open"
+        } modal modal-middle`}
+      >
+        <JoinSuperfanModal
+          setJoinSuperfanModal={setJoinsuperfanModalOpen}
           content={props.content}
         />
       </div>

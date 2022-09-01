@@ -257,7 +257,7 @@ function Header() {
             </button>
             {newNotification > 0 ? (
               <div
-                className="bg-red-500 rounded-full shadow  
+                className="bg-rose-600 rounded-full shadow  
                         h-4 w-4 text-xs self-center text-center font-semibold  
                         absolute top-1  right-2  
                          text-white"
@@ -266,30 +266,27 @@ function Header() {
               </div>
             ) : null}
           </label>
-          <ul
+          <div
             tabindex="0"
-            className="menu menu-compact dropdown-content mt-3  shadow bg-slate-100 dark:bg-slate-700 text-brand1 text-base font-medium rounded-lg w-96 max-h-96 overflow-y-scroll	overflow-x-hidden"
+            className="menu menu-compact dropdown-content mt-3  shadow-xl bg-slate-100 dark:bg-slate-700  rounded-lg w-80 overflow-y-scroll	"
           >
             {notification.length > 0 ? (
-              <>
+              <div className="w-full p-2">
                 {notification.map((value, i) => {
                   return (
-                    <div key={i}>
-                      <li className="w-full h-full self-center dark:bg-dbeats-dark-primary">
-                        <NotificationContent data={value} />
-                      </li>
+                    <div key={i} className="w-full ">
+                      {console.log(value)}
+                      <NotificationContent data={value} />
                     </div>
                   );
                 })}
-              </>
+              </div>
             ) : (
-              <div className="px-1   ">
-                <li className="w-full h-full self-center  nm-flat-dbeats-dark-primary-sm rounded">
-                  <EmptyNotification />
-                </li>
+              <div className="w-full ">
+                <EmptyNotification />
               </div>
             )}
-          </ul>
+          </div>
         </div>
 
         <button class="btn btn-circle btn-ghost ">

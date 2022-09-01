@@ -9,22 +9,32 @@ function Channels() {
   const State = useContext(UserContext);
 
   useEffect(() => {
-    console.log('called')
-    console.log(State.database.userData)
+    console.log("called");
+    console.log(State.database.userData);
     if (State.database.userData.data) {
-      for (var i = 0; i < State.database.userData.data.user.pinned.length; i++) {
+      for (
+        var i = 0;
+        i < State.database.userData.data.user.pinned.length;
+        i++
+      ) {
         axios
-          .get(`${process.env.REACT_APP_SERVER_URL}/user/${State.database.userData.data.user.pinned[i]}`)
+          .get(
+            `${process.env.REACT_APP_SERVER_URL}/user/${State.database.userData.data.user.pinned[i]}`
+          )
           .then((value) => {
-            let noti_no = State.database.userData.data.user.notification.filter((nf) => nf.username === value.data.username);
+            let noti_no = State.database.userData.data.user.notification.filter(
+              (nf) => nf.username === value.data.username
+            );
 
-            if (value.data !== '')setChannels((prev) => [...prev, { ...value.data, notification_numbers: noti_no.length }]);
+            if (value.data !== "")
+              setChannels((prev) => [
+                ...prev,
+                { ...value.data, notification_numbers: noti_no.length },
+              ]);
           });
       }
     }
   }, [State.database.userData]);
-
-
 
   const UnPinningUser = (pinnedUser) => {
     const UnPinningData = {
@@ -33,51 +43,59 @@ function Channels() {
     };
 
     axios({
-      method: 'POST',
+      method: "POST",
       url: `${process.env.REACT_APP_SERVER_URL}/user/unpin`,
       data: UnPinningData,
       headers: {
-        'content-type': 'application/json',
-        'auth-token': JSON.stringify(localStorage.getItem('authtoken')),
+        "content-type": "application/json",
+        "auth-token": JSON.stringify(localStorage.getItem("authtoken")),
       },
     })
       .then(() => {
-        setChannels(channels.filter((c)=> c.username !== pinnedUser))
+        setChannels(channels.filter((c) => c.username !== pinnedUser));
       })
       .catch(function (error) {
         console.log(error);
       });
   };
 
-
   return (
     <div className="w-full h-fit space-y-4 ">
       <p className=" font-extrabold text-lg text-brand5 mb-2">Channels</p>
-      {channels.length > 0 ? <>
-      {channels.map((channel, i) => (
-        <div className="flex  items-center space-x-2 h-8" key={i}>
-          <div className="h-full flex items-center flex-grow space-x-2">
-            <img
-              className="h-full rounded-full"
-              src={channel.profile_image}
-              alt="Channel image"
-            />
+      {channels.length > 0 ? (
+        <>
+          {channels.map((channel, i) => (
+            <div className="flex  items-center space-x-2 h-8" key={i}>
+              <div className="h-full flex items-center flex-grow space-x-2">
+                <img
+                  className="h-full rounded-full"
+                  src={channel.profile_image}
+                  alt="Channel image"
+                />
 
-            <p className="cursor-pointer text-base font-medium text-brand3">
-              {channel.name}
-            </p>
-          </div>
-          <button className="btn btn-circle btn-ghost" onClick={()=>{UnPinningUser(channel.username)}}>
-            {<PinnedOff />}
-          </button>
-          {channel.notification_numbers > 0 &&
-            <div className="flex items-center h-6 w-fit p-2 bg-rose-600 rounded-full">
-              <p className="text-white">{channel.notification_numbers}</p>
+                <p className="cursor-pointer text-base font-medium text-brand3">
+                  {channel.name}
+                </p>
+              </div>
+              <button
+                className="btn btn-circle btn-ghost"
+                onClick={() => {
+                  UnPinningUser(channel.username);
+                }}
+              >
+                {<PinnedOff />}
+              </button>
+              {channel.notification_numbers > 0 && (
+                <div className="flex items-center h-6 w-fit p-2 bg-rose-600 rounded-full">
+                  <p className="text-white">{channel.notification_numbers}</p>
+                </div>
+              )}
             </div>
-          }
-        </div>
-      ))}
-      </>:<div className="text-brand5"> No pinned users</div>}
+          ))}
+        </>
+      ) : (
+        <div className="text-brand6"> No pinned users</div>
+      )}
     </div>
   );
 }

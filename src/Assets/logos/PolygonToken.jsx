@@ -1,11 +1,11 @@
 import React from "react";
 
-function PolygonToken() {
+function PolygonToken(props) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="20"
-      height="20"
+      width={props.size ? props.size : 20}
+      height={props.size ? props.size : 20}
       fill="none"
       viewBox="0 0 1024 1024"
     >

@@ -1,13 +1,12 @@
 import React from "react";
+import { AlertTriangle } from "tabler-icons-react";
 
 const EmptyNotification = () => {
   return (
-    <div className="h-full">
-      <div
-        rel="noopener noreferrer"
-        className=" justify-center p-2 dark:bg-dbeats-dark-alt dark:hover:bg-dbeats-dark-secondary dark:text-white text-gray-500"
-      >
-        <p>No new Notifications</p>
+    <div className="h-fit w-fit">
+      <div className="flex gap-2 text-base text-rose-500 font-medium">
+        <AlertTriangle />
+        <span className="">No new Notifications</span>
       </div>
     </div>
   );
