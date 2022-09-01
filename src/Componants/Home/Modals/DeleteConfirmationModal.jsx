@@ -32,7 +32,7 @@ const DeleteConfirmationModal = ({ setDeleteConfirmationModal, content }) => {
         <div className="flex justify-between items-center p-2">
           <h3 className="flex items-center gap-2 font-bold text-lg text-brand2">
             <AlertTriangle className="text-error" />
-            Are you share you want to delete ?
+            Are you sure you want to delete ?
           </h3>
           <X
             onClick={() => setDeleteConfirmationModal(false)}

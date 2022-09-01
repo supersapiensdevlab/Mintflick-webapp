@@ -1035,7 +1035,7 @@ function Post(props) {
       <div
         className={`${
           joinsuperfanModalOpen && "modal-open"
-        } modal modal-middle`}
+        } modal modal-bottom sm:modal-middle`}
       >
         <JoinSuperfanModal
           setJoinSuperfanModal={setJoinsuperfanModalOpen}
