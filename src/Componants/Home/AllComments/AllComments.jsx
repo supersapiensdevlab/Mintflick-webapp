@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react'
+import { Rss } from 'tabler-icons-react';
 import { UserContext } from '../../../Store';
 import ShowComment from './ShowComment';
 
@@ -22,9 +23,9 @@ function AllComments({contentData, user_id, myComments }) {
                     );
                     let temp = {
                         ...contentData.comments[i],
-                        profile_image: res.data.profile_image,
-                        username: res.data.username,
-                        name: res.data.name,
+                        profile_image: res.data ? res.data.profile_image: 'https://cdn-icons-png.flaticon.com/512/149/149071.png',
+                        username: res.data? res.data.username : 'deleted user',
+                        name: res.data? res.data.name : 'deleted user',
                     };
                     setComments((c) => [...c, temp]);
                 }
