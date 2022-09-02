@@ -801,27 +801,33 @@ function Post(props) {
                       ? " bg-gradient-to-r from-slate-200 to-slate-200 dark:from-slate-700 dark:to-slate-700 bg-no-repeat"
                       : pollVoted &&
                         " bg-gradient-to-r from-slate-200 to-slate-200 dark:from-slate-700 dark:to-slate-700 bg-no-repeat "
-                  } my-2 flex gap-2 p-2  border-2 rounded-lg border-slate-200 dark:border-slate-700 cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-700 justify-between `}
+                  }${
+                    props.content.votes &&
+                    !props.content.votes.includes(
+                      State.database.userData.data.user.username
+                    ) &&
+                    "hover:bg-slate-200 dark:hover:bg-slate-700 cursor-pointer"
+                  } my-2 flex gap-2 p-2  border-2 rounded-lg border-slate-200 dark:border-slate-700  justify-between `}
                   style={{
                     backgroundSize: `${Math.ceil(
                       (option.selectedBy.length / props.votes.length) * 100
                     )}% 100%`,
                   }}
                 >
-                  <span className="w-full text-brand1 dark:text-brand2 ">
-                    {option.option}{" "}
+                  <h1 className="flex items-center w-full text-brand1 dark:text-brand2 gap-2">
+                    {option.option}
                     {props.votes &&
                     props.votes.includes(
                       State.database.userData.data?.user.username
                     ) ? (
-                      <span className="text-sm text-brand4">
+                      <h1 className=" text-sm text-brand4">
                         {Math.ceil(
                           (option.selectedBy.length / props.votes.length) * 100
                         )}
                         %
-                      </span>
+                      </h1>
                     ) : null}
-                  </span>
+                  </h1>
                   {/* <span
                   className={`absolute left-0 h-full bg-slate-400 dark:bg-slate-900 w-4`}
                 ></span> */}
