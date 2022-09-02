@@ -35,6 +35,7 @@ function App() {
 
         State.updateDatabase({
           userData: response,
+          walletAddress: response.data.user.wallet_id,
         });
       })
       .catch(function (error) {
@@ -42,7 +43,7 @@ function App() {
       });
   }
   useEffect(() => {
-    !State.database.userData && isUserAvaliable();
+    !State.database.userData.data && isUserAvaliable();
     console.log(State.database.userData);
 
     console.log(localStorage.getItem("authtoken"));

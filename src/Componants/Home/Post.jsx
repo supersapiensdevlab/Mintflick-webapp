@@ -786,7 +786,7 @@ function Post(props) {
                     if (
                       !pollVoted &&
                       !props.content.votes.includes(
-                        State.database.userData.data.user.username
+                        State.database.userData?.data?.user.username
                       )
                     ) {
                       handlePollVote(i);
@@ -795,7 +795,7 @@ function Post(props) {
                   className={`${
                     option.selectedBy &&
                     option.selectedBy.includes(
-                      State.database.userData.data?.user.username
+                      State.database.userData?.data?.user.username
                     ) &&
                     pollChoice === i
                       ? " bg-gradient-to-r from-slate-200 to-slate-200 dark:from-slate-700 dark:to-slate-700 bg-no-repeat"
@@ -804,7 +804,7 @@ function Post(props) {
                   }${
                     props.content.votes &&
                     !props.content.votes.includes(
-                      State.database.userData.data.user.username
+                      State.database.userData?.data?.user.username
                     ) &&
                     "hover:bg-slate-200 dark:hover:bg-slate-700 cursor-pointer"
                   } my-2 flex gap-2 p-2  border-2 rounded-lg border-slate-200 dark:border-slate-700  justify-between `}
