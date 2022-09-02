@@ -26,17 +26,22 @@ function CreateNewUser() {
     })
       .then((response) => {
         console.log(response);
-        State.updateDatabase({
-          userData: response,
-        });
-        console.log("user data saved in state");
-        localStorage.setItem("authtoken", response.data.jwtToken);
-        console.log("auth token saved in storage");
-        localStorage.setItem("walletAddress", walletAddress);
-        console.log("wallet address saved in storage");
-        setloader(false);
-        seterror("");
-        navigateTo("/homescreen/home");
+        if (response.data == 'Email') {
+          seterror('Email Already Exists')
+          setloader(false);
+        } else {
+          State.updateDatabase({
+            userData: response,
+          });
+          console.log("user data saved in state");
+          localStorage.setItem("authtoken", response.data.jwtToken);
+          console.log("auth token saved in storage");
+          localStorage.setItem("walletAddress", walletAddress);
+          console.log("wallet address saved in storage");
+          setloader(false);
+          seterror("");
+          navigateTo("/homescreen/home");
+        }
       })
       .catch(function (error) {
         console.log(error);
