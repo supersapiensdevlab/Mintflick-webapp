@@ -81,6 +81,10 @@ function Post(props) {
   //Join superfan modal
   const [joinsuperfanModalOpen, setJoinsuperfanModalOpen] = useState(false);
 
+  const [pollOptions, setPollOptions] = useState([]);
+
+  const [votesArr, setVotesArr] = useState(null);
+
   useEffect(() => {
     if (props.comments) {
       setCommentCount(props.comments.length);
@@ -123,6 +127,13 @@ function Post(props) {
         });
     }
   }
+
+  useEffect(() => {
+    if (props?.content?.options) {
+      setPollOptions(props.content.options);
+      console.log(pollOptions);
+    }
+  }, [props?.content?.options]);
 
   useEffect(() => {
     const seconds = Math.floor(audioPlayer?.current?.duration);
@@ -278,6 +289,7 @@ function Post(props) {
       } else if (props.pollId) {
         setPollLikes(props.likes.length);
         setPollVotes(props.votes.length);
+        setVotesArr(props.votes);
       } else {
         setTrackLikes(props.likes.length);
       }
@@ -331,7 +343,8 @@ function Post(props) {
         setPollLiked(false);
       }
     }
-  }, [props.likes, State.database.userData.data]);
+  }, [props.likes, State.database.userData.data, props.votes]);
+
   const handleVideoLikes = () => {
     let videotemp = videoLiked;
     setVideoLiked(!videoLiked);
@@ -506,6 +519,11 @@ function Post(props) {
     console.log(pollVoted, choice);
     if (!pollVoted) {
       setPollVotes(pollVotes + 1);
+      votesArr.push(State.database.userData.data?.user?.username);
+      pollOptions[choice].selectedBy.push(
+        State.database.userData.data?.user?.username
+      );
+
       console.log("pollVotes inc", pollVotes);
     }
     // if (trackLikes.includes(user.username)) {
@@ -778,14 +796,14 @@ function Post(props) {
             <div className="font-normal text-base text-brand2 w-full">
               {props.content.question}
             </div>
-            {props.content.options.map((option, i) => {
+            {pollOptions?.map((option, i) => {
               return (
                 <div
                   key={i}
                   onClick={() => {
                     if (
                       !pollVoted &&
-                      !props.content.votes.includes(
+                      !votesArr.includes(
                         State.database.userData?.data?.user.username
                       )
                     ) {
@@ -802,8 +820,8 @@ function Post(props) {
                       : pollVoted &&
                         " bg-gradient-to-r from-slate-200 to-slate-200 dark:from-slate-700 dark:to-slate-700 bg-no-repeat "
                   }${
-                    props.content.votes &&
-                    !props.content.votes.includes(
+                    votesArr &&
+                    !votesArr.includes(
                       State.database.userData?.data?.user.username
                     ) &&
                     "hover:bg-slate-200 dark:hover:bg-slate-700 cursor-pointer"
@@ -816,13 +834,13 @@ function Post(props) {
                 >
                   <h1 className="flex items-center w-full text-brand1 dark:text-brand2 gap-2">
                     {option.option}
-                    {props.votes &&
-                    props.votes.includes(
+                    {votesArr &&
+                    votesArr.includes(
                       State.database.userData.data?.user.username
                     ) ? (
                       <h1 className=" text-sm text-brand4">
                         {Math.ceil(
-                          (option.selectedBy.length / props.votes.length) * 100
+                          (option.selectedBy.length / votesArr.length) * 100
                         )}
                         %
                       </h1>
