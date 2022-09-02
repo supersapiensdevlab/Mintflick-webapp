@@ -26,7 +26,7 @@ function AllComments({contentData, user_id, myComments }) {
                         username: res.data.username,
                         name: res.data.name,
                     };
-                    setComments((comments) => [...comments, temp]);
+                    setComments((c) => [...c, temp]);
                 }
             }
         } else {
@@ -34,7 +34,7 @@ function AllComments({contentData, user_id, myComments }) {
         }
     }
     eff()
-    }, [contentData]);
+    }, []);
     const handleLoadComments = async () => {
         console.log(counter);
         console.log(totalComments);

@@ -104,7 +104,7 @@ function Post(props) {
       })
         .then((res) => {
           setText("");
-          setMyComments((myComments) => [
+          setMyComments((m) => [
             {
               comment: text,
               _id: res.data.id,
@@ -114,7 +114,7 @@ function Post(props) {
               username: State.database.userData.data.user.username,
               name: State.database.userData.data.user.name,
             },
-            ...myComments,
+            ...m,
           ]);
           setCommentCount((commentsNumber) => commentsNumber + 1);
         })
@@ -539,7 +539,7 @@ function Post(props) {
         setPollChoice(choice);
         if (response) {
           ////console.log(response);
-          await loadFeed();
+          // await loadFeed();
         } else {
           console.log("error");
         }
