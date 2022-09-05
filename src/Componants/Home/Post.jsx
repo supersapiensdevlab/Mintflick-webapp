@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef } from "react";
+import React, { useContext, useEffect, useRef, useMemo } from "react";
 import { useState } from "react";
 import {
   AlertOctagon,
@@ -27,6 +27,7 @@ import defaultProPic from "../../Assets/profile-pic.png";
 import useUserActions from "../../Hooks/useUserActions";
 import DeleteConfirmationModal from "./Modals/DeleteConfirmationModal";
 import JoinSuperfanModal from "./Modals/JoinSuperfanModal";
+import useIsInViewport from "../../Hooks/useIsInViewport";
 
 import ReportModal from "./Modals/ReportModal";
 function Post(props) {
@@ -73,6 +74,7 @@ function Post(props) {
   const [showComments, setshowComments] = useState(false);
 
   const videoRef = useRef();
+  const ref1 = useRef();
 
   //sharable data
   const sharable_data = `${process.env.REACT_APP_CLIENT_URL}/${props.profileUsername}`;
@@ -564,6 +566,18 @@ function Post(props) {
       });
   };
 
+  const isInViewport = useIsInViewport(ref1);
+
+  useEffect(() => {
+    if (!isInViewport) {
+      if (videoRef.current) {
+        if (videoRef.current.getInternalPlayer()) {
+          videoRef.current?.getInternalPlayer().pause();
+        }
+      }
+    }
+  }, [isInViewport]);
+
   // Already reported
   const [alreadyReported, setAlreadyReported] = useState(false);
   const [reportModal, setReportModal] = useState(false);
@@ -878,7 +892,10 @@ function Post(props) {
               {props.content.description}
             </div>
 
-            <div className=" w-full h-fit z-10 rounded-lg overflow-clip">
+            <div
+              className=" w-full h-fit z-10 rounded-lg overflow-clip"
+              ref={ref1}
+            >
               <ReactPlayer
                 ref={videoRef}
                 className="w-full h-full max-h-screen "
