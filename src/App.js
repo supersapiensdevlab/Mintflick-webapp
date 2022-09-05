@@ -42,7 +42,7 @@ function App() {
       });
   }
   useEffect(() => {
-    !State.database.userData && isUserAvaliable();
+    State.database.userData === {} && isUserAvaliable();
     console.log(State.database.userData);
 
     console.log(localStorage.getItem("authtoken"));

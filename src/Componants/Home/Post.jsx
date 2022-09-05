@@ -802,12 +802,13 @@ function Post(props) {
                       : pollVoted &&
                         " bg-gradient-to-r from-slate-200 to-slate-200 dark:from-slate-700 dark:to-slate-700 bg-no-repeat "
                   }${
-                    props.content.votes &&
-                    !props.content.votes.includes(
+                    pollVoted &&
+                    props.content.votes.includes(
                       State.database.userData.data.user.username
-                    ) &&
-                    "hover:bg-slate-200 dark:hover:bg-slate-700 cursor-pointer"
-                  } my-2 flex gap-2 p-2  border-2 rounded-lg border-slate-200 dark:border-slate-700  justify-between `}
+                    )
+                      ? ""
+                      : "hover:bg-slate-200 dark:hover:bg-slate-700 cursor-pointer"
+                  } my-2 flex gap-2 p-2  border-2 rounded-lg border-slate-200 dark:border-slate-700   justify-between `}
                   style={{
                     backgroundSize: `${Math.ceil(
                       (option.selectedBy.length / props.votes.length) * 100
