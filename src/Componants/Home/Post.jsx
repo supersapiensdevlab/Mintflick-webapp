@@ -13,6 +13,7 @@ import {
   PlayerPause,
   PlayerPlay,
   Share,
+  ShoppingCart,
   Trash,
 } from "tabler-icons-react";
 import PolygonToken from "../../Assets/logos/PolygonToken";
@@ -137,7 +138,6 @@ function Post(props) {
   useEffect(() => {
     if (props?.content?.options) {
       setPollOptions(props.content.options);
-      console.log(pollOptions);
     }
   }, [props?.content?.options]);
 
@@ -522,15 +522,12 @@ function Post(props) {
   };
 
   const handlePollVote = (choice) => {
-    console.log(pollVoted, choice);
     if (!pollVoted) {
       setPollVotes(pollVotes + 1);
       votesArr.push(State.database.userData.data?.user?.username);
       pollOptions[choice].selectedBy.push(
         State.database.userData.data?.user?.username
       );
-
-      console.log("pollVotes inc", pollVotes);
     }
     // if (trackLikes.includes(user.username)) {
     //   let newArr = trackLikes.filter((item, index) => item != user.username);
@@ -661,14 +658,16 @@ function Post(props) {
                   tabindex="0"
                   className="menu menu-compact dropdown-content p-1 shadow-xl bg-slate-100 dark:bg-slate-600  text-brand3 font-semibold rounded-lg w-48 "
                 >
-                  <li>
-                    <a
-                      onClick={() => setJoinsuperfanModalOpen(true)}
-                      className="dark:hover:bg-slate-800"
-                    >
-                      <Comet className="-rotate-90" /> Join Superfan
-                    </a>
-                  </li>
+                  {props?.superfan_data ? (
+                    <li>
+                      <a
+                        onClick={() => setJoinsuperfanModalOpen(true)}
+                        className="dark:hover:bg-slate-800"
+                      >
+                        <Comet className="-rotate-90" /> Join Superfan
+                      </a>
+                    </li>
+                  ) : null}
                   {alreadyReported ? (
                     <li>
                       <a>
@@ -896,7 +895,6 @@ function Post(props) {
                 url={props.videoUrl}
                 controls={true}
                 onPlay={() => {
-                  console.log("onplay called");
                   props.setCurrentPlay(props.myKey);
                 }}
                 onStart={() => {
@@ -918,19 +916,27 @@ function Post(props) {
         )}
         <div
           className={
-            props.tokenId && !props.gettingNFTData
-              ? "cursor-pointer flex items-center justify-start rounded-lg space-x-2 text-brand2"
-              : "hidden"
+            // props.tokenId && !props.gettingNFTData
+            // ?
+            "w-full flex items-center justify-between rounded-lg space-x-1 text-brand2"
+            // : "hidden"
           }
         >
-          <p className="font-bold text-sm text-primary">Owner</p>
-          <At size={20}></At>
-          <p className=" font-semibold text-sm ">{props.ownerId}</p>
-          <div className=" flex flex-grow  h-fit  items-center justify-end rounded-full ">
-            <div className="flex h-fit w-fit items-center justify-end  btn-primary btn-outline rounded-full p-1">
-              <PolygonToken></PolygonToken>
-              <p className="text-sm  mx-1">{props.price}</p>
-            </div>
+          <div className="flex items-center gap-1">
+            <p className="font-medium text-sm ">Owned by</p>
+            <At size={16}></At>
+            <p className="cursor-pointer font-semibold text-sm text-primary">
+              {/* {props.ownerId} */}OwnerId
+            </p>
+          </div>
+          <div
+            onClick={() => State.updateDatabase({ buyNFTModalOpen: true })}
+            className="cursor-pointer items-center  btn btn-xs btn-primary btn-outline gap-1 ml-auto rounded-md"
+          >
+            {/* <PolygonToken></PolygonToken> */}
+            {/* <p className="text-sm  mx-1">{props.price}</p> */}
+            <ShoppingCart size={20} />
+            Buy this NFT
           </div>
         </div>
         <div className="flex justify-between">
@@ -1009,13 +1015,12 @@ function Post(props) {
         </div>
         {showCommentInput && (
           <div className="flex gap-2 items-center">
-            <input
-              type="text"
+            <textarea
               onChange={(e) => setText(e.target.value)}
               placeholder="Type here..."
-              className="input w-full "
+              className="input w-full pt-2"
               value={text}
-            />
+            ></textarea>
             <div className="dropdown dropdown-top dropdown-end">
               <label tabindex={0} className="btn m-1">😃</label>
               <ul tabindex={0} className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
@@ -1024,8 +1029,9 @@ function Post(props) {
             </div>
             <button
               onClick={() => text && handleOnEnter()}
-              className={`btn   btn-outline ${text !== "" ? "btn-primary" : "btn-disabled"
-                }`}
+              className={`btn    ${
+                text !== "" ? "btn-primary btn-outline" : "btn-disabled"
+              }`}
             >
               <ArrowNarrowRight />
             </button>
@@ -1067,6 +1073,7 @@ function Post(props) {
         <JoinSuperfanModal
           setJoinSuperfanModal={setJoinsuperfanModalOpen}
           content={props.content}
+          superfan_data={props.superfan_data}
         />
       </div>
     </>
