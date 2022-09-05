@@ -26,6 +26,8 @@ import defaultProPic from "../../Assets/profile-pic.png";
 import useUserActions from "../../Hooks/useUserActions";
 import DeleteConfirmationModal from "./Modals/DeleteConfirmationModal";
 import JoinSuperfanModal from "./Modals/JoinSuperfanModal";
+import Picker from 'emoji-picker-react';
+
 
 import ReportModal from "./Modals/ReportModal";
 function Post(props) {
@@ -90,6 +92,10 @@ function Post(props) {
       setCommentCount(props.comments.length);
     }
   }, [props.comments]);
+
+  const onEmojiClick = (event, emojiObject) => {
+    setText(text + emojiObject.emoji);
+  };
   async function handleOnEnter() {
     if (State.database.userData.data.user && text !== "") {
       let data = {
@@ -271,7 +277,7 @@ function Post(props) {
             "auth-token": JSON.stringify(State.database.userData.data.jwtToken),
           },
           data: videoDetails,
-        }).then(function (response) {});
+        }).then(function (response) { });
       }, 5000);
       return () => clearTimeout(timer);
     }
@@ -601,10 +607,10 @@ function Post(props) {
       id: props.videoId
         ? props.videoId
         : props.postId
-        ? props.postId
-        : props.trackId
-        ? props.trackId
-        : props.pollId,
+          ? props.postId
+          : props.trackId
+            ? props.trackId
+            : props.pollId,
       content_type: props.contentType,
     });
   };
@@ -810,23 +816,21 @@ function Post(props) {
                       handlePollVote(i);
                     }
                   }}
-                  className={`${
-                    option.selectedBy &&
+                  className={`${option.selectedBy &&
                     option.selectedBy.includes(
                       State.database.userData?.data?.user.username
                     ) &&
                     pollChoice === i
-                      ? " bg-gradient-to-r from-slate-200 to-slate-200 dark:from-slate-700 dark:to-slate-700 bg-no-repeat"
-                      : pollVoted &&
-                        " bg-gradient-to-r from-slate-200 to-slate-200 dark:from-slate-700 dark:to-slate-700 bg-no-repeat "
-                  }${
-                    pollVoted &&
-                    props.content.votes.includes(
-                      State.database.userData.data.user.username
-                    )
+                    ? " bg-gradient-to-r from-slate-200 to-slate-200 dark:from-slate-700 dark:to-slate-700 bg-no-repeat"
+                    : pollVoted &&
+                    " bg-gradient-to-r from-slate-200 to-slate-200 dark:from-slate-700 dark:to-slate-700 bg-no-repeat "
+                    }${pollVoted &&
+                      props.content.votes.includes(
+                        State.database.userData.data.user.username
+                      )
                       ? ""
                       : "hover:bg-slate-200 dark:hover:bg-slate-700 cursor-pointer"
-                  } my-2 flex gap-2 p-2  border-2 rounded-lg border-slate-200 dark:border-slate-700   justify-between `}
+                    } my-2 flex gap-2 p-2  border-2 rounded-lg border-slate-200 dark:border-slate-700   justify-between `}
                   style={{
                     backgroundSize: `${Math.ceil(
                       (option.selectedBy.length / props.votes.length) * 100
@@ -836,9 +840,9 @@ function Post(props) {
                   <h1 className="flex items-center w-full text-brand1 dark:text-brand2 gap-2">
                     {option.option}
                     {votesArr &&
-                    votesArr.includes(
-                      State.database.userData.data?.user.username
-                    ) ? (
+                      votesArr.includes(
+                        State.database.userData.data?.user.username
+                      ) ? (
                       <h1 className=" text-sm text-brand4">
                         {Math.ceil(
                           (option.selectedBy.length / votesArr.length) * 100
@@ -852,9 +856,9 @@ function Post(props) {
                 ></span> */}
                   <div className="text-success">
                     {option.selectedBy &&
-                    option.selectedBy.includes(
-                      State.database.userData.data?.user.username
-                    ) ? (
+                      option.selectedBy.includes(
+                        State.database.userData.data?.user.username
+                      ) ? (
                       <div className="flex">
                         voted&nbsp;
                         <CircleCheck />
@@ -934,11 +938,10 @@ function Post(props) {
             {props.contentType === "post" && (
               <div className=" cursor-pointer flex items-center text-brand1  space-x-2">
                 <Heart
-                  className={`${
-                    postLiked
-                      ? "text-red-600 hover:text-white fill-rose-600"
-                      : "text-brand1 hover:text-red-600"
-                  }`}
+                  className={`${postLiked
+                    ? "text-red-600 hover:text-white fill-rose-600"
+                    : "text-brand1 hover:text-red-600"
+                    }`}
                   onClick={handlePostLikes}
                 ></Heart>
                 <p className="font-medium text-sm ">{postLikes}</p>
@@ -947,11 +950,10 @@ function Post(props) {
             {props.contentType === "video" && (
               <div className=" cursor-pointer flex items-center text-brand1  space-x-2">
                 <Heart
-                  className={`${
-                    videoLiked
-                      ? "text-red-600 hover:text-white fill-rose-600"
-                      : "text-brand1 hover:text-red-600"
-                  }`}
+                  className={`${videoLiked
+                    ? "text-red-600 hover:text-white fill-rose-600"
+                    : "text-brand1 hover:text-red-600"
+                    }`}
                   onClick={handleVideoLikes}
                 ></Heart>
                 <p className="font-medium text-sm ">{videoLikes}</p>
@@ -960,11 +962,10 @@ function Post(props) {
             {props.contentType === "track" && (
               <div className=" cursor-pointer flex items-center text-brand1  space-x-2">
                 <Heart
-                  className={`${
-                    trackLiked
-                      ? "text-red-600 hover:text-white fill-rose-600"
-                      : "text-brand1 hover:text-red-600"
-                  }`}
+                  className={`${trackLiked
+                    ? "text-red-600 hover:text-white fill-rose-600"
+                    : "text-brand1 hover:text-red-600"
+                    }`}
                   onClick={handleTrackLikes}
                 ></Heart>
                 <p className="font-medium text-sm ">{trackLikes}</p>
@@ -973,11 +974,10 @@ function Post(props) {
             {props.contentType === "poll" && (
               <div className=" cursor-pointer flex items-center text-brand1  space-x-2">
                 <Heart
-                  className={`${
-                    pollLiked
-                      ? "text-red-600 hover:text-white fill-rose-600"
-                      : "text-brand1 hover:text-red-600"
-                  }`}
+                  className={`${pollLiked
+                    ? "text-red-600 hover:text-white fill-rose-600"
+                    : "text-brand1 hover:text-red-600"
+                    }`}
                   onClick={handlePollLikes}
                 ></Heart>
                 <p className="font-medium text-sm ">{pollLikes}</p>
@@ -1008,7 +1008,7 @@ function Post(props) {
           </div>
         </div>
         {showCommentInput && (
-          <div className="flex gap-2">
+          <div className="flex gap-2 items-center">
             <input
               type="text"
               onChange={(e) => setText(e.target.value)}
@@ -1016,12 +1016,16 @@ function Post(props) {
               className="input w-full "
               value={text}
             />
-
+            <div className="dropdown dropdown-top dropdown-end">
+              <label tabindex={0} className="btn m-1">😃</label>
+              <ul tabindex={0} className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
+                <Picker onEmojiClick={onEmojiClick} />
+              </ul>
+            </div>
             <button
               onClick={() => text && handleOnEnter()}
-              className={`btn   btn-outline ${
-                text !== "" ? "btn-primary" : "btn-disabled"
-              }`}
+              className={`btn   btn-outline ${text !== "" ? "btn-primary" : "btn-disabled"
+                }`}
             >
               <ArrowNarrowRight />
             </button>
@@ -1047,9 +1051,8 @@ function Post(props) {
       </div>
       {/* Delete Confirmation modal */}
       <div
-        className={`${
-          deleteConfirmationModal && "modal-open"
-        } modal modal-middle`}
+        className={`${deleteConfirmationModal && "modal-open"
+          } modal modal-middle`}
       >
         <DeleteConfirmationModal
           setDeleteConfirmationModal={setDeleteConfirmationModal}
@@ -1058,9 +1061,8 @@ function Post(props) {
       </div>
       {/* Join Superfan modal */}
       <div
-        className={`${
-          joinsuperfanModalOpen && "modal-open"
-        } modal modal-bottom sm:modal-middle`}
+        className={`${joinsuperfanModalOpen && "modal-open"
+          } modal modal-bottom sm:modal-middle`}
       >
         <JoinSuperfanModal
           setJoinSuperfanModal={setJoinsuperfanModalOpen}

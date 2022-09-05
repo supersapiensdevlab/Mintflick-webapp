@@ -17,7 +17,7 @@ function Home() {
         <Channels></Channels>
         <LiveChannels></LiveChannels>
       </div>
-      <div className="w-full lg:w-2/4 flex flex-col items-center  h-full  pt-24  space-y-6 overflow-y-auto">
+      <div id="scrollableDiv" className="w-full lg:w-2/4 flex flex-col items-center  h-full  pt-24  space-y-6 overflow-y-auto">
         <AddPost></AddPost>
         <TimeLine className="z-10"></TimeLine>
       </div>
