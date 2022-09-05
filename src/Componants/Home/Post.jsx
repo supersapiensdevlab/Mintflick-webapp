@@ -1044,7 +1044,7 @@ function Post(props) {
               value={text}
             ></textarea>
             <div className="dropdown dropdown-top dropdown-end">
-              <label tabindex={0} className="btn m-1">
+              <label tabindex={0} className="btn m-1 btn-primary btn-outline">
                 😃
               </label>
               <ul
