@@ -20,20 +20,18 @@ function Home() {
   const [showButton, setShowButton] = useState(false);
 
   const scrollToTop = () => {
-    buttonRef.current.scrollIntoView({
+    timelineRef.current.scrollIntoView({
       behavior: "smooth",
     });
   };
 
-  // useEffect(() => {
-  //   if (timelineRef.current.scrollTop > 300) {
-  //     setShowButton(true);
-  //   } else {
-  //     setShowButton(false);
-  //   }
-  // }, [timelineRef.current.scrollTop]);
-
-  // console.log(timelineRef.current.scrollTop);
+  const handleScroll = () => {
+    if (buttonRef.current) {
+      const scrollPosition = buttonRef.current.scrollTop;
+      if (scrollPosition && scrollPosition > 500) setShowButton(true);
+      if (scrollPosition < 500) setShowButton(false);
+    }
+  };
 
   return (
     <div className=" flex h-screen bg-slate-100 dark:bg-slate-800 lg:bg-white lg:dark:bg-slate-900">
@@ -41,18 +39,21 @@ function Home() {
         <Channels></Channels>
         <LiveChannels></LiveChannels>
       </div>
-      <div id="scrollableDiv" className="w-full lg:w-2/4 flex flex-col items-center  h-full  pt-24  space-y-6 overflow-y-auto">
-        <div ref={buttonRef} className="-mt-6"></div>
+      <div
+        id="scrollableDiv"
+        className="w-full lg:w-2/4 flex flex-col items-center  h-full  pt-24  space-y-6 overflow-y-auto"
+        ref={buttonRef}
+        onScroll={handleScroll}
+      >
+        <div ref={timelineRef} className="-mt-6"></div>
         <AddPost></AddPost>
-        {/* <div ref={timelineRef}> */}
         <TimeLine className="z-10"></TimeLine>
-        {/* </div> */}
       </div>
       <div className="hidden lg:flex flex-col items-end h-full w-1/4 pt-24 mr-12 ml-4">
         <GameOfLuck></GameOfLuck>
       </div>
       <ShareModal />
-      {true && (
+      {showButton && (
         <button
           onClick={scrollToTop}
           className="fixed bottom-5 right-12 dark:text-white animate-bounce"

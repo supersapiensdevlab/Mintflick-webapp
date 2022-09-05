@@ -48,7 +48,10 @@ function ShowComment({ comment, user_id, contentData }) {
     }
   };
   return (
-    <div className="w-full flex items-start space-x-1">
+    <div
+      className="w-full flex items-start space-x-1"
+      style={{ whiteSpace: "pre-line" }}
+    >
       <img
         src={
           comment.profile_image
