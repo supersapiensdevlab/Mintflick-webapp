@@ -16,6 +16,8 @@ function Store(props) {
     //share post modal
     sharePostUrl: "",
     shareModalOpen: false,
+    //buy nft modal
+    buyNFTModalOpen: false,
   });
   const updateStore = (data) => {
     setstore((prev) => ({

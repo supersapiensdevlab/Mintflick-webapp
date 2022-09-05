@@ -13,6 +13,7 @@ import {
   PlayerPause,
   PlayerPlay,
   Share,
+  ShoppingCart,
   Trash,
 } from "tabler-icons-react";
 import PolygonToken from "../../Assets/logos/PolygonToken";
@@ -911,19 +912,27 @@ function Post(props) {
         )}
         <div
           className={
-            props.tokenId && !props.gettingNFTData
-              ? "cursor-pointer flex items-center justify-start rounded-lg space-x-2 text-brand2"
-              : "hidden"
+            // props.tokenId && !props.gettingNFTData
+            // ?
+            "w-full flex items-center justify-between rounded-lg space-x-1 text-brand2"
+            // : "hidden"
           }
         >
-          <p className="font-bold text-sm text-primary">Owner</p>
-          <At size={20}></At>
-          <p className=" font-semibold text-sm ">{props.ownerId}</p>
-          <div className=" flex flex-grow  h-fit  items-center justify-end rounded-full ">
-            <div className="flex h-fit w-fit items-center justify-end  btn-primary btn-outline rounded-full p-1">
-              <PolygonToken></PolygonToken>
-              <p className="text-sm  mx-1">{props.price}</p>
-            </div>
+          <div className="flex items-center gap-1">
+            <p className="font-medium text-sm ">Owned by</p>
+            <At size={16}></At>
+            <p className="cursor-pointer font-semibold text-sm text-primary">
+              {/* {props.ownerId} */}OwnerId
+            </p>
+          </div>
+          <div
+            onClick={() => State.updateDatabase({ buyNFTModalOpen: true })}
+            className="cursor-pointer items-center  btn btn-xs btn-primary btn-outline gap-1 ml-auto rounded-md"
+          >
+            {/* <PolygonToken></PolygonToken> */}
+            {/* <p className="text-sm  mx-1">{props.price}</p> */}
+            <ShoppingCart size={20} />
+            Buy this NFT
           </div>
         </div>
         <div className="flex justify-between">
@@ -1015,8 +1024,8 @@ function Post(props) {
 
             <button
               onClick={() => text && handleOnEnter()}
-              className={`btn   btn-outline ${
-                text !== "" ? "btn-primary" : "btn-disabled"
+              className={`btn    ${
+                text !== "" ? "btn-primary btn-outline" : "btn-disabled"
               }`}
             >
               <ArrowNarrowRight />

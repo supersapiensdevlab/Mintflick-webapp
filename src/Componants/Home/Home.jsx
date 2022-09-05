@@ -6,6 +6,7 @@ import AddPost from "./AddPost";
 import Channels from "./Channels";
 import GameOfLuck from "./GameOfLuck";
 import LiveChannels from "./LiveChannels";
+import BuyNFTModal from "./Modals/BuyNFTModal";
 import ReportModal from "./Modals/ReportModal";
 import ShareModal from "./Modals/ShareModal";
 import TimeLine from "./TimeLine";
@@ -59,6 +60,7 @@ function Home() {
           <ArrowUpCircle size={36} />
         </button>
       )}
+      <BuyNFTModal />
     </div>
   );
 }
