@@ -50,18 +50,37 @@ function BuyNFTModal() {
               {/* <div className="h-[2px] rounded-full bg-slate-200 dark:bg-slate-600"></div> */}
             </div>
             <div className="flex flex-col p-4 items-end justify-center text-brand1">
-              <p className="flex items-center gap-2 cursor-pointer font-semibold text-3xl text-primary dark:text-brand">
+              <p className="flex items-center gap-2 cursor-pointer font-semibold text-3xl text-brand-gradient">
                 <PolygonToken size={16}></PolygonToken> 12
               </p>
               <span className="text-sm font-normal text-brand4">($1234)</span>
             </div>
           </div>
-          <input
+          <div
+            tabindex="0"
+            className="collapse collapse-arrow border-2 cursor-pointer  dark:border-slate-600 text-brand3 rounded-lg"
+          >
+            <div className="collapse-title text-lg font-semibold ">Offers</div>
+            <div className="collapse-content">
+              <p>Offers list will come here </p>
+            </div>
+          </div>
+          <div className="w-full flex ">
+            <div className="p-1 w-1/2">
+              <button className="btn btn-brand w-full ">BUY NOW</button>
+            </div>
+            <div className="p-1 w-1/2">
+              <button className="btn btn-primary btn-outline w-full">
+                Make AN offer
+              </button>
+            </div>
+          </div>
+          {/* <input
             type="date"
             id="birthday"
             name="birthday"
             className="input"
-          ></input>
+          ></input> */}
         </div>
       </div>
     </div>
