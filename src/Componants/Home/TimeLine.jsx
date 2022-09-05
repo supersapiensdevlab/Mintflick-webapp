@@ -128,6 +128,7 @@ function TimeLine() {
             votes={post.content.votes}
             content={post.content}
             reports={post.reports}
+            superfan_data={post.superfan_data}
             gettingNFTData={gettingNFTData}
           ></Post>
         </>
