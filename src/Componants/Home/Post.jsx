@@ -27,6 +27,7 @@ import defaultProPic from "../../Assets/profile-pic.png";
 import useUserActions from "../../Hooks/useUserActions";
 import DeleteConfirmationModal from "./Modals/DeleteConfirmationModal";
 import JoinSuperfanModal from "./Modals/JoinSuperfanModal";
+import Picker from "emoji-picker-react";
 import useIsInViewport from "../../Hooks/useIsInViewport";
 
 import ReportModal from "./Modals/ReportModal";
@@ -93,6 +94,10 @@ function Post(props) {
       setCommentCount(props.comments.length);
     }
   }, [props.comments]);
+
+  const onEmojiClick = (event, emojiObject) => {
+    setText(text + emojiObject.emoji);
+  };
   async function handleOnEnter() {
     if (State.database.userData.data.user && text !== "") {
       let data = {
@@ -1031,14 +1036,24 @@ function Post(props) {
           </div>
         </div>
         {showCommentInput && (
-          <div className="flex gap-2">
+          <div className="flex gap-2 items-center">
             <textarea
               onChange={(e) => setText(e.target.value)}
               placeholder="Type here..."
               className="input w-full pt-2"
               value={text}
             ></textarea>
-
+            <div className="dropdown dropdown-top dropdown-end">
+              <label tabindex={0} className="btn m-1">
+                😃
+              </label>
+              <ul
+                tabindex={0}
+                className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52"
+              >
+                <Picker onEmojiClick={onEmojiClick} />
+              </ul>
+            </div>
             <button
               onClick={() => text && handleOnEnter()}
               className={`btn    ${
