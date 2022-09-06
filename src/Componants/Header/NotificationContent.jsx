@@ -25,7 +25,7 @@ const NotificationContent = ({ data }) => {
         />
 
         <div>
-          {data.announcement.includes("was") ? (
+          {data.announcement?.includes("was") ? (
             <p className="text-brand2 text-sm font-semibold break-words">
               {data.announcement + ` ${userLiveTime} ago`}
             </p>

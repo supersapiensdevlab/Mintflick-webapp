@@ -90,6 +90,7 @@ function ShowComment({ comment, user_id, contentData, setCommentCount, replyTo, 
       user_data_id: user_id,
       content: contentData,
       comment: comment,
+      replyTo:replyTo
     };
     const res = await axios({
       method: "post",

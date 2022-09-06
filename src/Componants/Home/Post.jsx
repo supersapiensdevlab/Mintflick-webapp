@@ -91,7 +91,14 @@ function Post(props) {
 
   useEffect(() => {
     if (props.comments) {
-      setCommentCount(props.comments.length);
+      let count = 0 ;
+      props.comments.forEach((c)=>{
+        count++;
+        if(c.reply){
+          c.reply.forEach((r)=>count++)
+        }
+      })
+      setCommentCount(count);
     }
   }, [props.comments]);
 
@@ -624,6 +631,9 @@ function Post(props) {
       content_type: props.contentType,
     });
   };
+
+  // For reply comment count 
+
 
   return (
     <>
