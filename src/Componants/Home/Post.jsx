@@ -29,6 +29,8 @@ import DeleteConfirmationModal from "./Modals/DeleteConfirmationModal";
 import JoinSuperfanModal from "./Modals/JoinSuperfanModal";
 import Picker from "emoji-picker-react";
 import useIsInViewport from "../../Hooks/useIsInViewport";
+import { MentionsInput, Mention } from "react-mentions";
+import defaultStyle from "./defaultStyle";
 
 import ReportModal from "./Modals/ReportModal";
 function Post(props) {
@@ -59,6 +61,11 @@ function Post(props) {
   const [duration, setDuration] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
   const [sendPlays, setSendPlays] = useState(false);
+
+  const renderData = [];
+  State.database.userData?.data?.user?.followee_count.forEach((value, i) => {
+    renderData.push({ id: i, display: value });
+  });
 
   // references
   const audioPlayer = useRef(); // reference our audio component
@@ -1047,12 +1054,29 @@ function Post(props) {
         </div>
         {showCommentInput && (
           <div className="flex gap-2 items-center">
-            <textarea
+            {/* <textarea
               onChange={(e) => setText(e.target.value)}
               placeholder="Type here..."
               className="input w-full pt-2"
               value={text}
-            ></textarea>
+            ></textarea> */}
+            <MentionsInput
+              value={text}
+              onChange={(e) => {
+                setText(e.target.value);
+              }}
+              className="input w-full"
+              style={defaultStyle}
+              placeholder={"Type here..."}
+              a11ySuggestionsListLabel={"Suggested mentions"}
+            >
+              <Mention
+                trigger="@"
+                data={renderData}
+                markup="@__display__"
+                appendSpaceOnAdd
+              />
+            </MentionsInput>
             <div className="dropdown dropdown-top dropdown-end">
               <label tabindex={0} className="btn m-1 btn-primary btn-outline">
                 😃
