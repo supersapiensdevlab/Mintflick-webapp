@@ -27,7 +27,7 @@ function VideoPostModal({ setVideoPostModalOpen }) {
 
   const renderData = [];
   State.database.userData?.data?.user?.followee_count.forEach((value, i) => {
-    renderData.push({ id: i, display: value });
+    renderData.push({ id: value, display: value });
   });
 
   const [advancedOptionsShow, setadvancedOptionsShow] = useState(false);
@@ -56,6 +56,8 @@ function VideoPostModal({ setVideoPostModalOpen }) {
     "No Derivative Works",
     "Share-Alike",
   ];
+
+  const [tagged, setTagged] = useState([]);
 
   const [uploadingVideo, setUploadingVideo] = useState(false);
   const [selectedVideo, setSelectedVideo] = useState(null);
@@ -90,9 +92,20 @@ function VideoPostModal({ setVideoPostModalOpen }) {
     }
   };
 
+  const handleAdd = (e) => {
+    tagged.push(e);
+    console.log(tagged);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!uploadingVideo) {
+      let filter = [];
+      tagged.forEach((value) => {
+        if (videoData.description.includes(value)) {
+          filter.push(value);
+        }
+      });
       setUploadingVideo(true);
       const files = [selectedThumbnail.file, selectedVideo.file];
       storeWithProgress(files)
@@ -118,7 +131,7 @@ function VideoPostModal({ setVideoPostModalOpen }) {
           formData.append("allowAttribution", videoData.allowAttribution);
           formData.append("commercialUse", videoData.commercialUse);
           formData.append("derivativeWorks", videoData.commercialUse);
-
+          formData.append("tagged", filter);
           formData.append("videoFile", selectedVideo.file, selectedVideo.name);
           formData.append(
             "videoImage",
@@ -193,10 +206,12 @@ function VideoPostModal({ setVideoPostModalOpen }) {
                     )
                     .then((res) => {
                       clearState();
+                      setTagged([]);
                     })
                     .catch((err) => {
                       console.log(err);
                       clearState();
+                      setTagged([]);
                     });
                 });
               })
@@ -219,10 +234,12 @@ function VideoPostModal({ setVideoPostModalOpen }) {
               )
               .then((res) => {
                 clearState();
+                setTagged([]);
               })
               .catch((err) => {
                 console.log(err);
                 clearState();
+                setTagged([]);
               });
           }
 
@@ -233,6 +250,7 @@ function VideoPostModal({ setVideoPostModalOpen }) {
         .catch((err) => {
           console.log(err);
           clearState();
+          setTagged([]);
         });
     }
   };
@@ -266,7 +284,10 @@ function VideoPostModal({ setVideoPostModalOpen }) {
             Upload Video
           </h3>
           <X
-            onClick={() => clearState()}
+            onClick={() => {
+              clearState();
+              setTagged([]);
+            }}
             className="text-brand2 cursor-pointer"
           ></X>
         </div>
@@ -396,6 +417,7 @@ function VideoPostModal({ setVideoPostModalOpen }) {
               data={renderData}
               markup="@__display__"
               appendSpaceOnAdd
+              onAdd={handleAdd}
             />
           </MentionsInput>
           <span

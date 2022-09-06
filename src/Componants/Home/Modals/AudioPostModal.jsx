@@ -73,8 +73,10 @@ function AudioPostModal({ setAudioPostModalOpen }) {
 
   const renderData = [];
   State.database.userData?.data?.user?.followee_count.forEach((value, i) => {
-    renderData.push({ id: i, display: value });
+    renderData.push({ id: value, display: value });
   });
+
+  const [tagged, setTagged] = useState([]);
 
   const [track, setTrack] = useState({
     trackName: "",
@@ -143,9 +145,20 @@ function AudioPostModal({ setAudioPostModalOpen }) {
     await loadFeed();
   };
 
+  const handleAdd = (e) => {
+    tagged.push(e);
+    console.log(tagged);
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!uploadingTrack) {
+      let filter = [];
+      tagged.forEach((value) => {
+        if (track.description.includes(value)) {
+          filter.push(value);
+        }
+      });
       setUploadingTrack(true);
       const files = [selectedThumbnail.file, selectedTrack.file];
       storeWithProgress(files)
@@ -171,6 +184,7 @@ function AudioPostModal({ setAudioPostModalOpen }) {
           formData.append("allowAttribution", track.allowAttribution);
           formData.append("commercialUse", track.commercialUse);
           formData.append("derivativeWorks", track.derivativeWorks);
+          formData.append("tagged", filter);
           formData.append(
             "trackFile",
             selectedTrack.file,
@@ -248,10 +262,12 @@ function AudioPostModal({ setAudioPostModalOpen }) {
                     )
                     .then((res) => {
                       clearState();
+                      setTagged([]);
                     })
                     .catch((err) => {
                       console.log(err);
                       clearState();
+                      setTagged([]);
                     });
                 });
               })
@@ -274,10 +290,12 @@ function AudioPostModal({ setAudioPostModalOpen }) {
               )
               .then((res) => {
                 clearState();
+                setTagged([]);
               })
               .catch((err) => {
                 console.log(err);
                 clearState();
+                setTagged([]);
               });
           }
 
@@ -299,6 +317,7 @@ function AudioPostModal({ setAudioPostModalOpen }) {
         .catch((err) => {
           console.log(err);
           clearState();
+          setTagged([]);
         });
     }
   };
@@ -312,7 +331,10 @@ function AudioPostModal({ setAudioPostModalOpen }) {
             Upload Audio
           </h3>
           <X
-            onClick={() => setAudioPostModalOpen(false)}
+            onClick={() => {
+              setAudioPostModalOpen(false);
+              setTagged([]);
+            }}
             className="text-brand2 cursor-pointer"
           ></X>
         </div>
@@ -448,6 +470,7 @@ function AudioPostModal({ setAudioPostModalOpen }) {
               data={renderData}
               markup="@__display__"
               appendSpaceOnAdd
+              onAdd={handleAdd}
             />
           </MentionsInput>
           <span
