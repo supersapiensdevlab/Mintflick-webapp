@@ -15,6 +15,8 @@ import { uploadFile } from "../../../Helper/uploadHelper";
 import { storeWithProgress, createToken } from "../../../Helper/nftMinter";
 import useUserActions from "../../../Hooks/useUserActions";
 import { UserContext } from "../../../Store";
+import { MentionsInput, Mention } from "react-mentions";
+import defaultStyle from "../defaultStyle";
 
 function VideoPostModal({ setVideoPostModalOpen }) {
   const State = useContext(UserContext);
@@ -22,6 +24,11 @@ function VideoPostModal({ setVideoPostModalOpen }) {
 
   const [minting, setMinting] = useState(null);
   const [mintingProgress, setMintingProgress] = useState(0);
+
+  const renderData = [];
+  State.database.userData?.data?.user?.followee_count.forEach((value, i) => {
+    renderData.push({ id: i, display: value });
+  });
 
   const [advancedOptionsShow, setadvancedOptionsShow] = useState(false);
   const [isNFT, setIsNFT] = useState(false);
@@ -366,14 +373,31 @@ function VideoPostModal({ setVideoPostModalOpen }) {
             </select>
           </div>
 
-          <textarea
+          {/* <textarea
             className="textarea  w-full"
             placeholder="Enter caption."
             onChange={(e) =>
               setVideoData({ ...videoData, description: e.target.value })
             }
             value={videoData.description}
-          ></textarea>
+          ></textarea> */}
+          <MentionsInput
+            value={videoData.description}
+            onChange={(e) =>
+              setVideoData({ ...videoData, description: e.target.value })
+            }
+            style={defaultStyle}
+            className="textarea w-full h-24  pt-2 focus:outline-0"
+            placeholder={"Enter caption."}
+            a11ySuggestionsListLabel={"Suggested mentions"}
+          >
+            <Mention
+              trigger="@"
+              data={renderData}
+              markup="@__display__"
+              appendSpaceOnAdd
+            />
+          </MentionsInput>
           <span
             onClick={() => setadvancedOptionsShow(!advancedOptionsShow)}
             className="flex px-2 items-center gap-1 font-semibold text-brand3 cursor-pointer"

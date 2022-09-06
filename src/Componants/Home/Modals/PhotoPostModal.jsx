@@ -1,13 +1,17 @@
 import axios from "axios";
 import React from "react";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { Camera, File, FileCheck, X } from "tabler-icons-react";
 import PolygonToken from "../../../Assets/logos/PolygonToken";
 import { uploadFile } from "../../../Helper/uploadHelper";
 import { storeWithProgress, createToken } from "../../../Helper/nftMinter";
 import useUserActions from "../../../Hooks/useUserActions";
+import { MentionsInput, Mention } from "react-mentions";
+import defaultStyle from "../defaultStyle";
+import { UserContext } from "../../../Store";
 
 function PhotoPostModal({ setphotoPostModalOpen }) {
+  const State = useContext(UserContext);
   const [uploadingPost, setUploadingPost] = useState(false);
   const [selectedPost, setSelectedPost] = useState(null);
   const [caption, setCaption] = useState("");
@@ -19,6 +23,11 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
   const [minting, setMinting] = useState(null);
   const [mintingProgress, setMintingProgress] = useState(0);
 
+  const renderData = [];
+  State.database.userData?.data?.user?.followee_count.forEach((value, i) => {
+    renderData.push({ id: value, display: value });
+  });
+
   const handleImageChange = (event) => {
     // Update the state
     setSelectedPost({
@@ -27,9 +36,22 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
     });
   };
 
+  const handleAdd = (e) => {
+    tagged.push(e);
+    console.log(tagged);
+  };
+
+  const [tagged, setTagged] = useState([]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!uploadingPost) {
+      let filter = [];
+      tagged.forEach((value) => {
+        if (caption.includes(value)) {
+          filter.push(value);
+        }
+      });
       setUploadingPost(true);
       uploadFile(selectedPost.file)
         .then(async (cid) => {
@@ -37,7 +59,8 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
           formData.append("announcement", caption);
           formData.append("postImage", selectedPost.file[0]);
           formData.append("announcementHash", cid);
-
+          formData.append("tagged", filter);
+          console.log(filter);
           if (isNFT) {
             var ts = Math.round(new Date().getTime() / 1000);
             let metadata = {
@@ -103,6 +126,7 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
                       setUploadingPost(false);
                       setSelectedPost(null);
                       setCaption("");
+                      setTagged([]);
                       setphotoPostModalOpen(false);
                       await loadFeed();
                     })
@@ -111,6 +135,7 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
                       setUploadingPost(false);
                       setSelectedPost(null);
                       setCaption("");
+                      setTagged([]);
                     });
                 });
               })
@@ -135,6 +160,7 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
                 setUploadingPost(false);
                 setSelectedPost(null);
                 setCaption("");
+                setTagged([]);
                 setphotoPostModalOpen(false);
                 await loadFeed();
               })
@@ -143,6 +169,7 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
                 setUploadingPost(false);
                 setSelectedPost(null);
                 setCaption("");
+                setTagged([]);
               });
           }
         })
@@ -213,12 +240,29 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
             )}
           </label>
 
-          <textarea
+          {/* <textarea
             className="textarea  w-full"
             placeholder="Enter caption."
             onChange={(e) => setCaption(e.target.value)}
             value={caption}
-          ></textarea>
+          ></textarea> */}
+          <MentionsInput
+            multiline
+            value={caption}
+            onChange={(e) => setCaption(e.target.value)}
+            style={defaultStyle}
+            className="textarea w-full h-24  pt-2 focus:outline-0"
+            placeholder={"Enter caption."}
+            a11ySuggestionsListLabel={"Suggested mentions"}
+          >
+            <Mention
+              trigger="@"
+              data={renderData}
+              markup="@__display__"
+              appendSpaceOnAdd
+              onAdd={handleAdd}
+            />
+          </MentionsInput>
           <div className="w-fit flex space-x-2">
             <label className="flex items-center cursor-pointer gap-2">
               <input
