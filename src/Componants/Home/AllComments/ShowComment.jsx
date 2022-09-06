@@ -91,7 +91,7 @@ function ShowComment({ comment, user_id, contentData, setCommentCount, replyTo, 
       user_data_id: user_id,
       content: contentData,
       comment: comment,
-      replyTo:replyTo
+      replyTo: replyTo
     };
     const res = await axios({
       method: "post",
@@ -150,19 +150,20 @@ function ShowComment({ comment, user_id, contentData, setCommentCount, replyTo, 
         </div>
 
         {/* For replies of comments */}
-        {myReplyComments && myReplyComments.length > 0 ? (
-          myReplyComments.map((c, index) => (
-            <ShowComment key={index} comment={c} user_id={user_id} contentData={contentData} setCommentCount={setCommentCount} replyTo={comment._id} />
-          ))
-        ) : (
-          <></>
-        )}
+
         {comment.reply && comment.reply.length > 0 ? (
           comment.reply.map((c, index) => (
             <ShowComment key={index} comment={c} user_id={user_id} contentData={contentData} setCommentCount={setCommentCount} replyTo={comment._id} />
           ))
         ) : (
           // <div className="text-white">No comments</div>
+          <></>
+        )}
+        {myReplyComments && myReplyComments.length > 0 ? (
+          myReplyComments.map((c, index) => (
+            <ShowComment key={index} comment={c} user_id={user_id} contentData={contentData} setCommentCount={setCommentCount} replyTo={comment._id} />
+          ))
+        ) : (
           <></>
         )}
 
