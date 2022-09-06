@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef } from "react";
+import React, { useContext, useEffect, useRef, useMemo } from "react";
 import { useState } from "react";
 import {
   AlertOctagon,
@@ -27,6 +27,8 @@ import defaultProPic from "../../Assets/profile-pic.png";
 import useUserActions from "../../Hooks/useUserActions";
 import DeleteConfirmationModal from "./Modals/DeleteConfirmationModal";
 import JoinSuperfanModal from "./Modals/JoinSuperfanModal";
+import Picker from "emoji-picker-react";
+import useIsInViewport from "../../Hooks/useIsInViewport";
 
 import ReportModal from "./Modals/ReportModal";
 function Post(props) {
@@ -73,6 +75,7 @@ function Post(props) {
   const [showComments, setshowComments] = useState(false);
 
   const videoRef = useRef();
+  const ref1 = useRef();
 
   //sharable data
   const sharable_data = `${process.env.REACT_APP_CLIENT_URL}/${props.profileUsername}`;
@@ -91,6 +94,10 @@ function Post(props) {
       setCommentCount(props.comments.length);
     }
   }, [props.comments]);
+
+  const onEmojiClick = (event, emojiObject) => {
+    setText(text + emojiObject.emoji);
+  };
   async function handleOnEnter() {
     if (State.database.userData.data.user && text !== "") {
       let data = {
@@ -564,6 +571,18 @@ function Post(props) {
       });
   };
 
+  const isInViewport = useIsInViewport(ref1);
+
+  useEffect(() => {
+    if (!isInViewport) {
+      if (videoRef.current) {
+        if (videoRef.current.getInternalPlayer()) {
+          videoRef.current?.getInternalPlayer().pause();
+        }
+      }
+    }
+  }, [isInViewport]);
+
   // Already reported
   const [alreadyReported, setAlreadyReported] = useState(false);
   const [reportModal, setReportModal] = useState(false);
@@ -878,7 +897,10 @@ function Post(props) {
               {props.content.description}
             </div>
 
-            <div className=" w-full h-fit z-10 rounded-lg overflow-clip">
+            <div
+              className=" w-full h-fit z-10 rounded-lg overflow-clip"
+              ref={ref1}
+            >
               <ReactPlayer
                 ref={videoRef}
                 className="w-full h-full max-h-screen "
@@ -1014,14 +1036,24 @@ function Post(props) {
           </div>
         </div>
         {showCommentInput && (
-          <div className="flex gap-2">
+          <div className="flex gap-2 items-center">
             <textarea
               onChange={(e) => setText(e.target.value)}
               placeholder="Type here..."
               className="input w-full pt-2"
               value={text}
             ></textarea>
-
+            <div className="dropdown dropdown-top dropdown-end">
+              <label tabindex={0} className="btn m-1 btn-primary btn-outline">
+                😃
+              </label>
+              <ul
+                tabindex={0}
+                className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52"
+              >
+                <Picker onEmojiClick={onEmojiClick} />
+              </ul>
+            </div>
             <button
               onClick={() => text && handleOnEnter()}
               className={`btn    ${

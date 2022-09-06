@@ -11,7 +11,7 @@ export default  function useUserActions() {
       url: `${process.env.REACT_APP_SERVER_URL}/feed`,
     })
       .then((response) => {
-        let data = response.data.reverse();
+        let data = response.data;
         State.addFeed(data);
       })
       .catch(function (error) {
