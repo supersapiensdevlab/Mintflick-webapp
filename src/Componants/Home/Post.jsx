@@ -1070,6 +1070,7 @@ function Post(props) {
             myComments={myComments}
             user_id={props.profileuser_id}
             contentData={props.content}
+            setCommentCount={setCommentCount}
           />
         ) : (
           <></>
