@@ -63,6 +63,7 @@ function ShowComment({ comment, user_id, contentData, setCommentCount, replyTo, 
             },
           ]);
           setReplyText("");
+          setIsReply(false);
           setCommentCount((commentsNumber) => commentsNumber + 1);
         })
         .catch((err) => {
