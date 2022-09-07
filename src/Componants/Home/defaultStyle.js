@@ -43,6 +43,7 @@ export default {
   },
 
   suggestions: {
+    borderRadius: "0.6rem",
     list: {
       backgroundColor: "rgb(51, 65, 85)",
       color: "white",
@@ -50,10 +51,11 @@ export default {
       width: "18rem",
       maxHeight: "16rem",
       overflowY: "scroll",
+      borderRadius: "0.5rem",
+      border: "1px solid rgb(30, 41, 59)",
     },
     item: {
       padding: "5px 15px",
-      borderBottom: "1px solid #fff",
       "&focused": {
         backgroundColor: "rgb(30, 41, 59)",
       },

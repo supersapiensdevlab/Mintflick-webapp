@@ -31,6 +31,8 @@ import Picker from "emoji-picker-react";
 import useIsInViewport from "../../Hooks/useIsInViewport";
 import { MentionsInput, Mention } from "react-mentions";
 import defaultStyle from "./defaultStyle";
+import placeholderImage from "../../Assets/profile-pic.png";
+import trackPlaceholder from "../../Assets/track-placeholder.jpg";
 
 import ReportModal from "./Modals/ReportModal";
 function Post(props) {
@@ -98,13 +100,13 @@ function Post(props) {
 
   useEffect(() => {
     if (props.comments) {
-      let count = 0 ;
-      props.comments.forEach((c)=>{
+      let count = 0;
+      props.comments.forEach((c) => {
         count++;
-        if(c.reply){
-          c.reply.forEach((r)=>count++)
+        if (c.reply) {
+          c.reply.forEach((r) => count++);
         }
-      })
+      });
       setCommentCount(count);
     }
   }, [props.comments]);
@@ -639,8 +641,7 @@ function Post(props) {
     });
   };
 
-  // For reply comment count 
-
+  // For reply comment count
 
   return (
     <>
@@ -650,7 +651,7 @@ function Post(props) {
             {props.profilePic ? (
               <img
                 className="h-12 w-12 rounded-full object-cover"
-                src={props.profilePic}
+                src={props.profilePic ? props.profilePic : placeholderImage}
                 alt={props.profileName}
               />
             ) : (
@@ -760,7 +761,7 @@ function Post(props) {
             <div className="flex w-full h-fit z-10 bg-slate-200 dark:bg-slate-700 rounded-l-lg rounded-r-lg overflow-hidden">
               <img
                 className="h-28 w-28 object-cover"
-                src={props.trackImage}
+                src={props.trackImage ? props.trackImage : trackPlaceholder}
                 alt="Track image"
               />
               <div className="flex flex-col p-3 h-28 flex-grow ">
