@@ -33,7 +33,7 @@ function ConnectWalletComponant() {
           }}
           className="btn btn-brand sm:w-1/2"
         >
-          Connect existing wallet
+          Connect wallet
         </button>
         <button
           onClick={() => {

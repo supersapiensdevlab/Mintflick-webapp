@@ -181,6 +181,13 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
         });
     }
   };
+  const clearData = () => {
+    setUploadingPost(false);
+    setSelectedPost(null);
+    setCaption("");
+    setTagged([]);
+    setphotoPostModalOpen(false);
+  }
 
   return (
     <div className="modal-box p-0 bg-slate-100 dark:bg-slate-800 ">
@@ -191,7 +198,7 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
             Upload Photo
           </h3>
           <X
-            onClick={() => setphotoPostModalOpen(false)}
+            onClick={() => clearData()}
             className="text-brand2 cursor-pointer"
           ></X>
         </div>
@@ -299,9 +306,8 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
           ></progress>
           <button
             type={"submit"}
-            className={`btn  ${
-              !selectedPost?.file[0] ? "btn-disabled" : "btn-brand"
-            } w-full ${uploadingPost ? "loading " : ""}`}
+            className={`btn  ${!selectedPost?.file[0] ? "btn-disabled" : "btn-brand"
+              } w-full ${uploadingPost ? "loading " : ""}`}
           >
             Post photo
           </button>

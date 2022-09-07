@@ -295,7 +295,8 @@ function VideoPostModal({ setVideoPostModalOpen }) {
       <form onSubmit={handleSubmit}>
         <div className="w-full p-4 space-y-3">
           <div className="flex flex-col sm:flex-row gap-1">
-            <div className=" max-h-52 cursor-pointer flex flex-col items-start gap-2  w-full p-2 border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4">
+            <label
+              htmlFor="videothumbnail" className="  max-h-52 cursor-pointer flex flex-col items-start gap-2  w-full p-2 border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4">
               {selectedThumbnail ? (
                 selectedThumbnail.file ? (
                   <div className="w-full  rounded-lg overflow-clip my-auto ">
@@ -305,7 +306,7 @@ function VideoPostModal({ setVideoPostModalOpen }) {
               ) : (
                 <></>
               )}
-              <label
+              <div
                 htmlFor="videothumbnail"
                 className="flex cursor-pointer gap-1"
               >
@@ -326,8 +327,8 @@ function VideoPostModal({ setVideoPostModalOpen }) {
                 {selectedThumbnail && selectedThumbnail.file
                   ? selectedThumbnail.file.name.substring(0, 16)
                   : "Choose video thumbnail"}
-              </label>
-            </div>
+              </div>
+            </label>
             <div className=" max-h-52 cursor-pointer flex flex-col items-start gap-2  w-full p-2 border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4">
               {selectedVideo ? (
                 selectedVideo.localurl ? (
@@ -426,9 +427,8 @@ function VideoPostModal({ setVideoPostModalOpen }) {
           >
             Advanced options
             <label
-              class={`swap ${
-                advancedOptionsShow && "swap-active"
-              } swap-rotate text-6xl`}
+              class={`swap ${advancedOptionsShow && "swap-active"
+                } swap-rotate text-6xl`}
             >
               <div class="swap-on">
                 <ChevronUp />
@@ -519,11 +519,10 @@ function VideoPostModal({ setVideoPostModalOpen }) {
           </div>
           <button
             type={"submit"}
-            className={`btn  w-full  ${
-              selectedVideo?.file && selectedThumbnail?.file
+            className={`btn  w-full  ${selectedVideo?.file && selectedThumbnail?.file
                 ? "btn-brand"
                 : "btn-disabled"
-            } ${uploadingVideo ? "loading" : "btn-ghost"}`}
+              } ${uploadingVideo ? "loading" : "btn-ghost"}`}
           >
             Post Video
           </button>

@@ -61,6 +61,11 @@ function ThoughtPostModal({ setthoughtPostModalOpen }) {
         console.log(err);
       });
   };
+  const clearData = () => {
+    setthoughtPostModalOpen(false);
+    setCaption("");
+    setTagged([]);
+  }
 
   return (
     <div className="modal-box p-0 bg-slate-100 dark:bg-slate-800 ">
@@ -72,9 +77,7 @@ function ThoughtPostModal({ setthoughtPostModalOpen }) {
           </h3>
           <X
             onClick={() => {
-              setthoughtPostModalOpen(false);
-              setTagged([]);
-              setCaption("");
+              clearData()
             }}
             className="text-brand2 cursor-pointer"
           ></X>
@@ -143,9 +146,8 @@ function ThoughtPostModal({ setthoughtPostModalOpen }) {
           <button
             type={"submit"}
             onClick={handleThoughtPost}
-            className={`btn  w-full  ${
-              caption ? "btn-brand" : "btn-disabled"
-            }  ${uploadingPost ? "loading" : ""}`}
+            className={`btn  w-full  ${caption ? "btn-brand" : "btn-disabled"
+              }  ${uploadingPost ? "loading" : ""}`}
           >
             Post thought
           </button>

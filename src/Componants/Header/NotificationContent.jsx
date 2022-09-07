@@ -8,7 +8,8 @@ const NotificationContent = ({ data }) => {
   const [userLiveTime, setUserLiveTime] = useState(null);
 
   useEffect(() => {
-    const timestamp = new Date(data.timestamp); // This would be the timestamp you want to format
+    console.log(data)
+    const timestamp = new Date((data.time*1000)); // This would be the timestamp you want to format
     setUserLiveTime(moment(timestamp).fromNow());
   }, []);
 
