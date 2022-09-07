@@ -117,6 +117,7 @@ function AudioPostModal({ setAudioPostModalOpen }) {
   };
 
   const clearState = async () => {
+    setTagged([]);
     setUploadingTrack(false);
     setAudioPostModalOpen(false);
     setSelectedTrack(null);
@@ -332,8 +333,7 @@ function AudioPostModal({ setAudioPostModalOpen }) {
           </h3>
           <X
             onClick={() => {
-              setAudioPostModalOpen(false);
-              setTagged([]);
+              clearState()
             }}
             className="text-brand2 cursor-pointer"
           ></X>
@@ -342,7 +342,8 @@ function AudioPostModal({ setAudioPostModalOpen }) {
       <form onSubmit={handleSubmit}>
         <div className="w-full p-4 space-y-3">
           <div className="flex flex-col sm:flex-row gap-1">
-            <div className=" cursor-pointer flex flex-col items-start gap-2  w-full p-2 border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4">
+            <label
+              htmlFor="trackthumbnail" className="  cursor-pointer flex flex-col items-start gap-2  w-full p-2 border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4">
               {selectedThumbnail ? (
                 selectedThumbnail.file ? (
                   <div className="w-full  rounded-lg overflow-clip">
@@ -352,8 +353,8 @@ function AudioPostModal({ setAudioPostModalOpen }) {
               ) : (
                 <></>
               )}
-              <label
-                htmlFor="trackthumbnail"
+              <div
+
                 className="flex gap-1 cursor-pointer"
               >
                 <input
@@ -373,8 +374,8 @@ function AudioPostModal({ setAudioPostModalOpen }) {
                 {selectedThumbnail && selectedThumbnail.file
                   ? selectedThumbnail.file.name.substring(0, 16)
                   : "Choose album image"}
-              </label>
-            </div>
+              </div>
+            </label>
             <div
               htmlFor=""
               className=" cursor-pointer flex flex-col items-start gap-2  w-full p-2 border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4"
@@ -479,9 +480,8 @@ function AudioPostModal({ setAudioPostModalOpen }) {
           >
             Advanced options
             <label
-              class={`swap ${
-                advancedOptionsShow && "swap-active"
-              } swap-rotate text-6xl`}
+              class={`swap ${advancedOptionsShow && "swap-active"
+                } swap-rotate text-6xl`}
             >
               <div class="swap-on">
                 <ChevronUp />
@@ -584,11 +584,10 @@ function AudioPostModal({ setAudioPostModalOpen }) {
           </div>
           <button
             type={"submit"}
-            className={`btn  w-full ${
-              selectedTrack?.file && selectedThumbnail?.file
+            className={`btn  w-full ${selectedTrack?.file && selectedThumbnail?.file
                 ? "btn-brand"
                 : "btn-disabled"
-            } ${uploadingTrack ? "loading" : ""}`}
+              } ${uploadingTrack ? "loading" : ""}`}
           >
             Post audio
           </button>

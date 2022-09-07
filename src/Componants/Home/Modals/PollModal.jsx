@@ -62,7 +62,7 @@ function PollModal({ setPollModalOpen }) {
             Take Poll
           </h3>
           <X
-            onClick={() => setPollModalOpen(false)}
+            onClick={() => clearState()}
             className="text-brand2 cursor-pointer"
           ></X>
         </div>
