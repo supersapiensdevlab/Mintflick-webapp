@@ -3,6 +3,7 @@ import React, { useContext, useState } from "react";
 import { useEffect } from "react";
 import { Pinned, PinnedOff } from "tabler-icons-react";
 import { UserContext } from "../../Store";
+import placeholderImage from "../../Assets/profile-pic.png";
 
 function Channels() {
   const [channels, setChannels] = useState([]);
@@ -69,7 +70,11 @@ function Channels() {
               <div className="h-full flex items-center flex-grow space-x-2">
                 <img
                   className="h-full rounded-full"
-                  src={channel.profile_image}
+                  src={
+                    !channel.profile_image
+                      ? placeholderImage
+                      : channel.profile_image
+                  }
                   alt="Channel image"
                 />
 
