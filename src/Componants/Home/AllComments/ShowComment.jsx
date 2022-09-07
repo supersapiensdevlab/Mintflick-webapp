@@ -142,16 +142,16 @@ function ShowComment({
         className="h-10 w-10 object-cover rounded-full "
       /> */}
       <Image
-        className="h-10 w-10 object-cover rounded-full "
-        width={50}
-        height={50}
         src={
-          replyTo
+          replyTo && profile
             ? profile
             : comment.profile_image
             ? comment.profile_image
             : "https://cdn-icons-png.flaticon.com/512/149/149071.png"
         }
+        className="h-10 w-10 object-cover rounded-full "
+        width={50}
+        height={50}
         alt="profile pic"
         placeholderColor={placeholderImage}
       />
