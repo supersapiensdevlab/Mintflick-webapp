@@ -33,6 +33,7 @@ import { MentionsInput, Mention } from "react-mentions";
 import defaultStyle from "./defaultStyle";
 import placeholderImage from "../../Assets/profile-pic.png";
 import trackPlaceholder from "../../Assets/track-placeholder.jpg";
+import { Image } from "react-img-placeholder";
 
 import ReportModal from "./Modals/ReportModal";
 function Post(props) {
@@ -649,10 +650,18 @@ function Post(props) {
         <div className="flex justify-between items-center">
           <div className="flex items-center space-x-4">
             {props.profilePic ? (
-              <img
+              // <img
+              //   className="h-12 w-12 rounded-full object-cover"
+              //   src={props.profilePic ? props.profilePic : placeholderImage}
+              //   alt={props.profileName}
+              // />
+              <Image
                 className="h-12 w-12 rounded-full object-cover"
+                width={50}
+                height={50}
                 src={props.profilePic ? props.profilePic : placeholderImage}
                 alt={props.profileName}
+                placeholderColor={placeholderImage}
               />
             ) : (
               <div class="avatar placeholder">
