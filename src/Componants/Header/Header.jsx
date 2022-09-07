@@ -1,12 +1,5 @@
 import React, { useContext, useState, useRef, useEffect } from "react";
-import {
-  AccessPoint,
-  Bell,
-  MessageDots,
-  MoonStars,
-  Search,
-  Sun,
-} from "tabler-icons-react";
+import { AccessPoint, Bell, MessageDots, Search } from "tabler-icons-react";
 import { UserContext } from "../../Store";
 import axios from "axios";
 import Main_logo from "../../Assets/logos/Main_logo";
@@ -240,7 +233,12 @@ function Header() {
         <TopNavigation></TopNavigation>
       </div>
       <div className="flex w-1/3 justify-end items-center space-x-4 h-full   ">
-        <div className="hidden lg:flex  btn btn-outline btn-primary gap-2 rounded-full">
+        <div
+          onClick={() => {
+            State.toast("info", "hi");
+          }}
+          className="hidden lg:flex  btn btn-outline btn-primary gap-2 rounded-full"
+        >
           <AccessPoint size={28}></AccessPoint>
           GO LIVE
         </div>

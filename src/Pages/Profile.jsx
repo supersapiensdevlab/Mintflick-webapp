@@ -32,6 +32,7 @@ function Profile() {
   }
 
   useEffect(() => {
+    console.log(State.database.userData);
     State.database.userData !== "" && isUserAvaliable();
     console.log(State.database.userData);
 

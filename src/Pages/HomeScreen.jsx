@@ -6,6 +6,7 @@ import Header from "../Componants/Header/Header";
 import MobileHeader from "../Componants/Header/MobileHeader";
 import { UserContext } from "../Store";
 import { Helmet } from "react-helmet";
+import ToastContainer from "../Componants/Toast/ToastContainer";
 
 function HomeScreen() {
   const State = useContext(UserContext);
@@ -28,9 +29,10 @@ function HomeScreen() {
       <div className=" w-full">
         <Outlet></Outlet>
       </div>
-      <div className="lg:hidden w-full sticky z-50 bottom-0">
+      <div className="lg:hidden w-full sticky z-40 bottom-0">
         <BottomNavigation></BottomNavigation>
       </div>
+      <ToastContainer />
     </div>
   );
 }

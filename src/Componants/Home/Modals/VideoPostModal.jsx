@@ -185,6 +185,11 @@ function VideoPostModal({ setVideoPostModalOpen }) {
                       }
                     )
                     .then((res) => {
+                      State.toast(
+                        "success",
+                        "Your video uplaoded successfully!"
+                      );
+
                       clearState();
                     })
                     .catch((err) => {
@@ -194,6 +199,10 @@ function VideoPostModal({ setVideoPostModalOpen }) {
                 });
               })
               .catch((err) => {
+                State.toast(
+                  "error",
+                  "Oops!somthing went wrong uplaoding video!"
+                );
                 console.log(err);
               });
           } else {
@@ -211,9 +220,15 @@ function VideoPostModal({ setVideoPostModalOpen }) {
                 }
               )
               .then((res) => {
+                State.toast("success", "Your poll uplaoded successfully!");
+
                 clearState();
               })
               .catch((err) => {
+                State.toast(
+                  "error",
+                  "Oops!somthing went wrong uplaoding video!"
+                );
                 console.log(err);
                 clearState();
               });
@@ -224,6 +239,8 @@ function VideoPostModal({ setVideoPostModalOpen }) {
           // setFormData(formData);
         })
         .catch((err) => {
+          State.toast("error", "Oops!somthing went wrong uplaoding video!");
+
           console.log(err);
           clearState();
         });

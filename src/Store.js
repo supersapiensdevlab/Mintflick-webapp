@@ -18,30 +18,41 @@ function Store(props) {
     shareModalOpen: false,
     //buy nft modal
     buyNFTModalOpen: false,
+    //Toast messages
+    toasts: [],
   });
   const updateStore = (data) => {
-    setstore((prev) => ({
-      ...prev,
+    setstore({
+      ...store,
       ...data,
-    }));
+    });
+  };
+
+  const toast = (type, msg) => {
+    updateStore({ toasts: [...store.toasts, { type: type, msg: msg }] });
+  };
+  const deleteToast = () => {
+    updateStore({ ...store.toasts.shift() });
   };
   const addLiveUsers = (data) => {
-    setstore((prev) => ({
-      ...prev,
-      liveUsers: [...prev.liveUsers, data],
-    }));
+    setstore({
+      ...store,
+      liveUsers: [...store.liveUsers, data],
+    });
   };
   const addFeed = (data) => {
-    setstore((prev) => ({
-      ...prev,
+    setstore({
+      ...store,
       feedData: data,
-    }));
+    });
   };
   return (
     <UserContext.Provider
       value={{
         database: store,
         updateDatabase: updateStore,
+        toast: toast,
+        deleteToast: deleteToast,
         addLiveUsers: addLiveUsers,
         addFeed: addFeed,
       }}

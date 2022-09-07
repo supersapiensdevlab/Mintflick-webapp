@@ -1,11 +1,14 @@
 import axios from "axios";
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { useState } from "react";
 import { ChartBar, Send, X } from "tabler-icons-react";
 import PolygonToken from "../../../Assets/logos/PolygonToken";
 import useUserActions from "../../../Hooks/useUserActions";
+import { UserContext } from "../../../Store";
 
 function PollModal({ setPollModalOpen }) {
+  const State = useContext(UserContext);
+
   const [options, setoptions] = useState([]);
   const [option, setoption] = useState("");
   const [isNFT, setIsNFT] = useState(false);
@@ -40,9 +43,11 @@ function PollModal({ setPollModalOpen }) {
           },
         })
         .then(async (res) => {
+          State.toast("success", "Your poll uplaoded successfully!");
           await clearState();
         })
         .catch((err) => {
+          State.toast("error", "Oops!somthing went wrong uplaoding poll!");
           console.log(err);
           clearState();
         });
@@ -155,8 +160,13 @@ function PollModal({ setPollModalOpen }) {
           </div>
           <button
             type={"submit"}
-            role="button" aria-disabled="true"
-            className={`btn  w-full ${uploadingPoll ? "loading" : ""} ${(question == '' || options.length < 2 || option !== "") ? 'btn-disabled' : 'btn-brand'}`}
+            role="button"
+            aria-disabled="true"
+            className={`btn  w-full ${uploadingPoll ? "loading" : ""} ${
+              question == "" || options.length < 2 || option !== ""
+                ? "btn-disabled"
+                : "btn-brand"
+            }`}
           >
             Take poll
           </button>

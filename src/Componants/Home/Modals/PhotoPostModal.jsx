@@ -1,13 +1,16 @@
 import axios from "axios";
-import React from "react";
+import React, { useContext } from "react";
 import { useState } from "react";
 import { Camera, File, FileCheck, X } from "tabler-icons-react";
 import PolygonToken from "../../../Assets/logos/PolygonToken";
 import { uploadFile } from "../../../Helper/uploadHelper";
 import { storeWithProgress, createToken } from "../../../Helper/nftMinter";
 import useUserActions from "../../../Hooks/useUserActions";
+import { UserContext } from "../../../Store";
 
 function PhotoPostModal({ setphotoPostModalOpen }) {
+  const State = useContext(UserContext);
+
   const [uploadingPost, setUploadingPost] = useState(false);
   const [selectedPost, setSelectedPost] = useState(null);
   const [caption, setCaption] = useState("");
@@ -136,9 +139,14 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
                 setSelectedPost(null);
                 setCaption("");
                 setphotoPostModalOpen(false);
+                State.toast("success", "Your photo uplaoded successfully!");
                 await loadFeed();
               })
               .catch((err) => {
+                State.toast(
+                  "error",
+                  "Oops!somthing went wrong uplaoding photo!"
+                );
                 console.log(err);
                 setUploadingPost(false);
                 setSelectedPost(null);
@@ -147,6 +155,7 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
           }
         })
         .catch((err) => {
+          State.toast("error", "Oops!somthing went wrong uplaoding photo!");
           console.log(err);
           setUploadingPost(false);
           setSelectedPost(null);

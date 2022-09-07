@@ -240,15 +240,27 @@ function AudioPostModal({ setAudioPostModalOpen }) {
                       }
                     )
                     .then((res) => {
+                      State.toast(
+                        "success",
+                        "Your music uplaoded successfully!"
+                      );
                       clearState();
                     })
                     .catch((err) => {
+                      State.toast(
+                        "error",
+                        "Something went wrong while uploading music!"
+                      );
                       console.log(err);
                       clearState();
                     });
                 });
               })
               .catch((err) => {
+                State.toast(
+                  "error",
+                  "Something went wrong while uploading music!"
+                );
                 console.log(err);
               });
           } else {
@@ -266,9 +278,15 @@ function AudioPostModal({ setAudioPostModalOpen }) {
                 }
               )
               .then((res) => {
+                State.toast("success", "Your music uplaoded successfully!");
+
                 clearState();
               })
               .catch((err) => {
+                State.toast(
+                  "error",
+                  "Something went wrong while uploading music!"
+                );
                 console.log(err);
                 clearState();
               });
@@ -290,6 +308,7 @@ function AudioPostModal({ setAudioPostModalOpen }) {
           //   });
         })
         .catch((err) => {
+          State.toast("error", "Something went wrong while uploading music!");
           console.log(err);
           clearState();
         });
