@@ -661,7 +661,7 @@ function Post(props) {
                 height={50}
                 src={props.profilePic ? props.profilePic : placeholderImage}
                 alt={props.profileName}
-                placeholderColor={placeholderImage}
+                placeholderSrc={placeholderImage}
               />
             ) : (
               <div class="avatar placeholder">

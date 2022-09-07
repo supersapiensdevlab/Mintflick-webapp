@@ -153,7 +153,7 @@ function ShowComment({
         width={50}
         height={50}
         alt="profile pic"
-        placeholderColor={placeholderImage}
+        placeholderSrc={placeholderImage}
       />
       <div className="flex flex-col flex-grow">
         <p className=" text-brand4 text-base font-medium">
