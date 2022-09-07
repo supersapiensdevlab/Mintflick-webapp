@@ -9,6 +9,8 @@ import { NavLink } from "react-router-dom";
 import coverImage from "../../Assets/backgrounds/cover.png";
 import NotificationContent from "./NotificationContent";
 import EmptyNotification from "./EmptyNotification";
+import { Image } from "react-img-placeholder";
+import placeholderImage from "../../Assets/profile-pic.png";
 
 function Header() {
   const State = useContext(UserContext);
@@ -294,12 +296,23 @@ function Header() {
         <div class="dropdown dropdown-end">
           <label tabindex="0" className=" avatar">
             <div className="w-10 rounded-full">
-              <img
+              {/* <img
                 src={
                   State.database.userData.data?.user.profile_image
                     ? State.database.userData.data.user.profile_image
                     : coverImage
                 }
+              /> */}
+              <Image
+                width={50}
+                height={50}
+                src={
+                  State.database.userData.data?.user.profile_image
+                    ? State.database.userData.data.user.profile_image
+                    : coverImage
+                }
+                alt="profileImage"
+                placeholderSrc={placeholderImage}
               />
             </div>
           </label>

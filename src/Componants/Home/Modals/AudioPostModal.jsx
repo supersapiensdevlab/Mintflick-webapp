@@ -17,6 +17,8 @@ import { uploadFile } from "../../../Helper/uploadHelper";
 import { storeWithProgress, createToken } from "../../../Helper/nftMinter";
 import useUserActions from "../../../Hooks/useUserActions";
 import { UserContext } from "../../../Store";
+import { MentionsInput, Mention } from "react-mentions";
+import defaultStyle from "../defaultStyle";
 
 function AudioPostModal({ setAudioPostModalOpen }) {
   const State = useContext(UserContext);
@@ -69,6 +71,13 @@ function AudioPostModal({ setAudioPostModalOpen }) {
   const [minting, setMinting] = useState(null);
   const [mintingProgress, setMintingProgress] = useState(0);
 
+  const renderData = [];
+  State.database.userData?.data?.user?.followee_count.forEach((value, i) => {
+    renderData.push({ id: value, display: value });
+  });
+
+  const [tagged, setTagged] = useState([]);
+
   const [track, setTrack] = useState({
     trackName: "",
     trackImage: "",
@@ -108,6 +117,7 @@ function AudioPostModal({ setAudioPostModalOpen }) {
   };
 
   const clearState = async () => {
+    setTagged([]);
     setUploadingTrack(false);
     setAudioPostModalOpen(false);
     setSelectedTrack(null);
@@ -136,9 +146,20 @@ function AudioPostModal({ setAudioPostModalOpen }) {
     await loadFeed();
   };
 
+  const handleAdd = (e) => {
+    tagged.push(e);
+    console.log(tagged);
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!uploadingTrack) {
+      let filter = [];
+      tagged.forEach((value) => {
+        if (track.description.includes(value)) {
+          filter.push(value);
+        }
+      });
       setUploadingTrack(true);
       const files = [selectedThumbnail.file, selectedTrack.file];
       storeWithProgress(files)
@@ -164,6 +185,7 @@ function AudioPostModal({ setAudioPostModalOpen }) {
           formData.append("allowAttribution", track.allowAttribution);
           formData.append("commercialUse", track.commercialUse);
           formData.append("derivativeWorks", track.derivativeWorks);
+          formData.append("tagged", filter);
           formData.append(
             "trackFile",
             selectedTrack.file,
@@ -245,6 +267,7 @@ function AudioPostModal({ setAudioPostModalOpen }) {
                         "Your music uplaoded successfully!"
                       );
                       clearState();
+                      setTagged([]);
                     })
                     .catch((err) => {
                       State.toast(
@@ -253,6 +276,7 @@ function AudioPostModal({ setAudioPostModalOpen }) {
                       );
                       console.log(err);
                       clearState();
+                      setTagged([]);
                     });
                 });
               })
@@ -281,6 +305,7 @@ function AudioPostModal({ setAudioPostModalOpen }) {
                 State.toast("success", "Your music uplaoded successfully!");
 
                 clearState();
+                setTagged([]);
               })
               .catch((err) => {
                 State.toast(
@@ -289,6 +314,7 @@ function AudioPostModal({ setAudioPostModalOpen }) {
                 );
                 console.log(err);
                 clearState();
+                setTagged([]);
               });
           }
 
@@ -311,6 +337,7 @@ function AudioPostModal({ setAudioPostModalOpen }) {
           State.toast("error", "Something went wrong while uploading music!");
           console.log(err);
           clearState();
+          setTagged([]);
         });
     }
   };
@@ -324,7 +351,9 @@ function AudioPostModal({ setAudioPostModalOpen }) {
             Upload Audio
           </h3>
           <X
-            onClick={() => setAudioPostModalOpen(false)}
+            onClick={() => {
+              clearState()
+            }}
             className="text-brand2 cursor-pointer"
           ></X>
         </div>
@@ -332,7 +361,8 @@ function AudioPostModal({ setAudioPostModalOpen }) {
       <form onSubmit={handleSubmit}>
         <div className="w-full p-4 space-y-3">
           <div className="flex flex-col sm:flex-row gap-1">
-            <div className=" cursor-pointer flex flex-col items-start gap-2  w-full p-2 border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4">
+            <label
+              htmlFor="trackthumbnail" className="  cursor-pointer flex flex-col items-start gap-2  w-full p-2 border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4">
               {selectedThumbnail ? (
                 selectedThumbnail.file ? (
                   <div className="w-full  rounded-lg overflow-clip">
@@ -342,8 +372,8 @@ function AudioPostModal({ setAudioPostModalOpen }) {
               ) : (
                 <></>
               )}
-              <label
-                htmlFor="trackthumbnail"
+              <div
+
                 className="flex gap-1 cursor-pointer"
               >
                 <input
@@ -363,8 +393,8 @@ function AudioPostModal({ setAudioPostModalOpen }) {
                 {selectedThumbnail && selectedThumbnail.file
                   ? selectedThumbnail.file.name.substring(0, 16)
                   : "Choose album image"}
-              </label>
-            </div>
+              </div>
+            </label>
             <div
               htmlFor=""
               className=" cursor-pointer flex flex-col items-start gap-2  w-full p-2 border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4"
@@ -436,23 +466,41 @@ function AudioPostModal({ setAudioPostModalOpen }) {
             </select>
           </div>
 
-          <textarea
+          {/* <textarea
             className="textarea  w-full"
             placeholder="Enter caption."
             onChange={(e) =>
               setTrack({ ...track, description: e.target.value })
             }
             value={track.description}
-          ></textarea>
+          ></textarea> */}
+          <MentionsInput
+            multiline
+            value={track.description}
+            onChange={(e) =>
+              setTrack({ ...track, description: e.target.value })
+            }
+            style={defaultStyle}
+            className="textarea w-full h-24  pt-2 focus:outline-0"
+            placeholder={"Enter caption."}
+            a11ySuggestionsListLabel={"Suggested mentions"}
+          >
+            <Mention
+              trigger="@"
+              data={renderData}
+              markup="@__display__"
+              appendSpaceOnAdd
+              onAdd={handleAdd}
+            />
+          </MentionsInput>
           <span
             onClick={() => setadvancedOptionsShow(!advancedOptionsShow)}
             className="flex px-2 items-center gap-1 font-semibold text-brand3 cursor-pointer"
           >
             Advanced options
             <label
-              class={`swap ${
-                advancedOptionsShow && "swap-active"
-              } swap-rotate text-6xl`}
+              class={`swap ${advancedOptionsShow && "swap-active"
+                } swap-rotate text-6xl`}
             >
               <div class="swap-on">
                 <ChevronUp />
@@ -555,11 +603,10 @@ function AudioPostModal({ setAudioPostModalOpen }) {
           </div>
           <button
             type={"submit"}
-            className={`btn  w-full ${
-              selectedTrack?.file && selectedThumbnail?.file
+            className={`btn  w-full ${selectedTrack?.file && selectedThumbnail?.file
                 ? "btn-brand"
                 : "btn-disabled"
-            } ${uploadingTrack ? "loading" : ""}`}
+              } ${uploadingTrack ? "loading" : ""}`}
           >
             Post audio
           </button>

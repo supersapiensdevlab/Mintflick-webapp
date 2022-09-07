@@ -4,37 +4,41 @@ import { Rss } from 'tabler-icons-react';
 import { UserContext } from '../../../Store';
 import ShowComment from './ShowComment';
 
-function AllComments({contentData, user_id, myComments }) {
+function AllComments({ contentData, user_id, myComments, setCommentCount }) {
     const State = useContext(UserContext);
     const [comments, setComments] = useState([]);
     const [totalComments, setTotalComments] = useState(0);
     const [counter, setCounter] = useState(0);
 
     useEffect(() => {
-        async function eff(){
-        if (contentData.comments) {
-            setTotalComments(contentData.comments.length);
-            for (var i = 0; i < 2; i++) {
-                if (contentData.comments[i]) {
-                    let x = counter + 1;
-                    setCounter((counter) => counter + 1);
-                    const res = await axios.get(
-                        `${process.env.REACT_APP_SERVER_URL}/user/shortData/${contentData.comments[i].user_id}`,
-                    );
-                    let temp = {
-                        ...contentData.comments[i],
-                        profile_image: res.data ? res.data.profile_image: 'https://cdn-icons-png.flaticon.com/512/149/149071.png',
-                        username: res.data? res.data.username : 'deleted user',
-                        name: res.data? res.data.name : 'deleted user',
-                    };
-                    setComments((c) => [...c, temp]);
+        async function eff() {
+            if (contentData.comments) {
+                setTotalComments(contentData.comments.length);
+                for (var i = 0; i < 2; i++) {
+                    if (contentData.comments[i]) {
+                        let x = counter + 1;
+                        setCounter((counter) => counter + 1);
+                        try {
+                            const res = await axios.get(
+                                `${process.env.REACT_APP_SERVER_URL}/user/shortData/${contentData.comments[i].user_id}`,
+                            );
+                            let temp = {
+                                ...contentData.comments[i],
+                                profile_image: res.data ? res.data.profile_image : 'https://cdn-icons-png.flaticon.com/512/149/149071.png',
+                                username: res.data ? res.data.username : 'deleted user',
+                                name: res.data ? res.data.name : 'deleted user',
+                            };
+                            setComments((c) => [...c, temp]);
+                        }catch(e){
+                            console.log(e)
+                        }
                 }
+                }
+            } else {
+                setComments(null);
             }
-        } else {
-            setComments(null);
         }
-    }
-    eff()
+        eff()
     }, []);
     const handleLoadComments = async () => {
         console.log(counter);
@@ -78,14 +82,14 @@ function AllComments({contentData, user_id, myComments }) {
         <div className=" justify-between w-full space-y-2">
             {myComments && myComments.length > 0 ? (
                 myComments.map((comment, index) => (
-                    <ShowComment key={index} comment={comment} user_id={user_id} contentData={contentData} />
+                    <ShowComment original={true} id={comment._id} key={index} comment={comment} user_id={user_id} contentData={contentData} setCommentCount={setCommentCount} />
                 ))
             ) : (
                 <></>
             )}
             {comments && comments.length > 0 ? (
                 comments.map((comment, index) => (
-                    <ShowComment key={index} comment={comment} user_id={user_id} contentData={contentData} />
+                    <ShowComment original={true} id={comment._id} key={index} comment={comment} user_id={user_id} contentData={contentData} setCommentCount={setCommentCount} />
                 ))
             ) : (
                 // <div className="text-white">No comments</div>

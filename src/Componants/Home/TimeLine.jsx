@@ -8,8 +8,7 @@ import Web3 from "web3";
 import Market from "../../artifacts/contracts/Market.sol/NFTMarket.json";
 import { nftmarketaddress } from "../../functions/config";
 import { ethers } from "ethers";
-import InfiniteScroll from 'react-infinite-scroll-component';
-
+import InfiniteScroll from "react-infinite-scroll-component";
 
 function TimeLine() {
   // for Playing only one at time
@@ -97,7 +96,7 @@ function TimeLine() {
   const [hasMore, setHasMore] = useState(true);
   const loadMoreData = async (skip) => {
     if (State.database.feedData.length > 0) {
-      console.log('loading more ', skip)
+      console.log("loading more ", skip);
       await axios({
         method: "get",
         url: `${process.env.REACT_APP_SERVER_URL}/feed`,
@@ -105,7 +104,7 @@ function TimeLine() {
       })
         .then((response) => {
           let data = response.data;
-          console.log(data)
+          console.log(data);
           State.addFeed([...State.database.feedData, ...data]);
           if (data.length <= 0) {
             setHasMore(false);
@@ -115,22 +114,21 @@ function TimeLine() {
           console.log(error);
         });
     }
-  }
+  };
 
   return (
-
     <InfiniteScroll
-      className="w-full max-w-2xl space-y-6"
+      className="w-full max-w-2xl space-y-6 mb-4"
       dataLength={State.database.feedData.length} //This is important field to render the next data
       next={() => loadMoreData(State.database.feedData.length)}
       hasMore={hasMore}
-      loader={<h4 className="text-brand1">Loading...</h4>}
+      loader={<button className="btn btn-ghost loading"></button>}
       endMessage={
-        <p style={{ textAlign: 'center' }}>
+        <p style={{ textAlign: "center" }}>
           <b className="text-brand1">Yay! You have seen it all</b>
         </p>
       }
-      scrollableTarget={'scrollableDiv'}
+      scrollableTarget={"scrollableDiv"}
     >
       {State.database.feedData.map((post, i) => (
         <>

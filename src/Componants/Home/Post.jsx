@@ -29,6 +29,11 @@ import DeleteConfirmationModal from "./Modals/DeleteConfirmationModal";
 import JoinSuperfanModal from "./Modals/JoinSuperfanModal";
 import Picker from "emoji-picker-react";
 import useIsInViewport from "../../Hooks/useIsInViewport";
+import { MentionsInput, Mention } from "react-mentions";
+import defaultStyle from "./defaultStyle";
+import placeholderImage from "../../Assets/profile-pic.png";
+import trackPlaceholder from "../../Assets/track-placeholder.jpg";
+import { Image } from "react-img-placeholder";
 
 import ReportModal from "./Modals/ReportModal";
 function Post(props) {
@@ -59,6 +64,11 @@ function Post(props) {
   const [duration, setDuration] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
   const [sendPlays, setSendPlays] = useState(false);
+
+  const renderData = [];
+  State.database.userData?.data?.user?.followee_count.forEach((value, i) => {
+    renderData.push({ id: i, display: value });
+  });
 
   // references
   const audioPlayer = useRef(); // reference our audio component
@@ -91,7 +101,14 @@ function Post(props) {
 
   useEffect(() => {
     if (props.comments) {
-      setCommentCount(props.comments.length);
+      let count = 0;
+      props.comments.forEach((c) => {
+        count++;
+        if (c.reply) {
+          c.reply.forEach((r) => count++);
+        }
+      });
+      setCommentCount(count);
     }
   }, [props.comments]);
 
@@ -625,16 +642,26 @@ function Post(props) {
     });
   };
 
+  // For reply comment count
+
   return (
     <>
       <div className="w-full h-fit lg:bg-slate-100 lg:dark:bg-slate-800 lg:rounded-xl p-4 lg:p-8 space-y-4 pb-4 border-b-2 lg:border-none  border-slate-200 dark:border-slate-900">
         <div className="flex justify-between items-center">
           <div className="flex items-center space-x-4">
             {props.profilePic ? (
-              <img
+              // <img
+              //   className="h-12 w-12 rounded-full object-cover"
+              //   src={props.profilePic ? props.profilePic : placeholderImage}
+              //   alt={props.profileName}
+              // />
+              <Image
                 className="h-12 w-12 rounded-full object-cover"
-                src={props.profilePic}
+                width={50}
+                height={50}
+                src={props.profilePic ? props.profilePic : placeholderImage}
                 alt={props.profileName}
+                placeholderSrc={placeholderImage}
               />
             ) : (
               <div class="avatar placeholder">
@@ -743,7 +770,7 @@ function Post(props) {
             <div className="flex w-full h-fit z-10 bg-slate-200 dark:bg-slate-700 rounded-l-lg rounded-r-lg overflow-hidden">
               <img
                 className="h-28 w-28 object-cover"
-                src={props.trackImage}
+                src={props.trackImage ? props.trackImage : trackPlaceholder}
                 alt="Track image"
               />
               <div className="flex flex-col p-3 h-28 flex-grow ">
@@ -1037,12 +1064,29 @@ function Post(props) {
         </div>
         {showCommentInput && (
           <div className="flex gap-2 items-center">
-            <textarea
+            {/* <textarea
               onChange={(e) => setText(e.target.value)}
               placeholder="Type here..."
               className="input w-full pt-2"
               value={text}
-            ></textarea>
+            ></textarea> */}
+            <MentionsInput
+              value={text}
+              onChange={(e) => {
+                setText(e.target.value);
+              }}
+              className="input w-full"
+              style={defaultStyle}
+              placeholder={"Type here..."}
+              a11ySuggestionsListLabel={"Suggested mentions"}
+            >
+              <Mention
+                trigger="@"
+                data={renderData}
+                markup="@__display__"
+                appendSpaceOnAdd
+              />
+            </MentionsInput>
             <div className="dropdown dropdown-top dropdown-end">
               <label tabindex={0} className="btn m-1 btn-primary btn-outline">
                 😃
@@ -1070,6 +1114,7 @@ function Post(props) {
             myComments={myComments}
             user_id={props.profileuser_id}
             contentData={props.content}
+            setCommentCount={setCommentCount}
           />
         ) : (
           <></>

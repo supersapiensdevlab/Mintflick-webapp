@@ -15,6 +15,8 @@ import { uploadFile } from "../../../Helper/uploadHelper";
 import { storeWithProgress, createToken } from "../../../Helper/nftMinter";
 import useUserActions from "../../../Hooks/useUserActions";
 import { UserContext } from "../../../Store";
+import { MentionsInput, Mention } from "react-mentions";
+import defaultStyle from "../defaultStyle";
 
 function VideoPostModal({ setVideoPostModalOpen }) {
   const State = useContext(UserContext);
@@ -22,6 +24,11 @@ function VideoPostModal({ setVideoPostModalOpen }) {
 
   const [minting, setMinting] = useState(null);
   const [mintingProgress, setMintingProgress] = useState(0);
+
+  const renderData = [];
+  State.database.userData?.data?.user?.followee_count.forEach((value, i) => {
+    renderData.push({ id: value, display: value });
+  });
 
   const [advancedOptionsShow, setadvancedOptionsShow] = useState(false);
   const [isNFT, setIsNFT] = useState(false);
@@ -49,6 +56,8 @@ function VideoPostModal({ setVideoPostModalOpen }) {
     "No Derivative Works",
     "Share-Alike",
   ];
+
+  const [tagged, setTagged] = useState([]);
 
   const [uploadingVideo, setUploadingVideo] = useState(false);
   const [selectedVideo, setSelectedVideo] = useState(null);
@@ -83,9 +92,20 @@ function VideoPostModal({ setVideoPostModalOpen }) {
     }
   };
 
+  const handleAdd = (e) => {
+    tagged.push(e);
+    console.log(tagged);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!uploadingVideo) {
+      let filter = [];
+      tagged.forEach((value) => {
+        if (videoData.description.includes(value)) {
+          filter.push(value);
+        }
+      });
       setUploadingVideo(true);
       const files = [selectedThumbnail.file, selectedVideo.file];
       storeWithProgress(files)
@@ -111,7 +131,7 @@ function VideoPostModal({ setVideoPostModalOpen }) {
           formData.append("allowAttribution", videoData.allowAttribution);
           formData.append("commercialUse", videoData.commercialUse);
           formData.append("derivativeWorks", videoData.commercialUse);
-
+          formData.append("tagged", filter);
           formData.append("videoFile", selectedVideo.file, selectedVideo.name);
           formData.append(
             "videoImage",
@@ -191,10 +211,12 @@ function VideoPostModal({ setVideoPostModalOpen }) {
                       );
 
                       clearState();
+                      setTagged([]);
                     })
                     .catch((err) => {
                       console.log(err);
                       clearState();
+                      setTagged([]);
                     });
                 });
               })
@@ -223,6 +245,7 @@ function VideoPostModal({ setVideoPostModalOpen }) {
                 State.toast("success", "Your poll uplaoded successfully!");
 
                 clearState();
+                setTagged([]);
               })
               .catch((err) => {
                 State.toast(
@@ -231,6 +254,7 @@ function VideoPostModal({ setVideoPostModalOpen }) {
                 );
                 console.log(err);
                 clearState();
+                setTagged([]);
               });
           }
 
@@ -243,6 +267,7 @@ function VideoPostModal({ setVideoPostModalOpen }) {
 
           console.log(err);
           clearState();
+          setTagged([]);
         });
     }
   };
@@ -276,7 +301,10 @@ function VideoPostModal({ setVideoPostModalOpen }) {
             Upload Video
           </h3>
           <X
-            onClick={() => clearState()}
+            onClick={() => {
+              clearState();
+              setTagged([]);
+            }}
             className="text-brand2 cursor-pointer"
           ></X>
         </div>
@@ -284,7 +312,8 @@ function VideoPostModal({ setVideoPostModalOpen }) {
       <form onSubmit={handleSubmit}>
         <div className="w-full p-4 space-y-3">
           <div className="flex flex-col sm:flex-row gap-1">
-            <div className=" max-h-52 cursor-pointer flex flex-col items-start gap-2  w-full p-2 border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4">
+            <label
+              htmlFor="videothumbnail" className="  max-h-52 cursor-pointer flex flex-col items-start gap-2  w-full p-2 border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4">
               {selectedThumbnail ? (
                 selectedThumbnail.file ? (
                   <div className="w-full  rounded-lg overflow-clip my-auto ">
@@ -294,7 +323,7 @@ function VideoPostModal({ setVideoPostModalOpen }) {
               ) : (
                 <></>
               )}
-              <label
+              <div
                 htmlFor="videothumbnail"
                 className="flex cursor-pointer gap-1"
               >
@@ -315,8 +344,8 @@ function VideoPostModal({ setVideoPostModalOpen }) {
                 {selectedThumbnail && selectedThumbnail.file
                   ? selectedThumbnail.file.name.substring(0, 16)
                   : "Choose video thumbnail"}
-              </label>
-            </div>
+              </div>
+            </label>
             <div className=" max-h-52 cursor-pointer flex flex-col items-start gap-2  w-full p-2 border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4">
               {selectedVideo ? (
                 selectedVideo.localurl ? (
@@ -383,23 +412,40 @@ function VideoPostModal({ setVideoPostModalOpen }) {
             </select>
           </div>
 
-          <textarea
+          {/* <textarea
             className="textarea  w-full"
             placeholder="Enter caption."
             onChange={(e) =>
               setVideoData({ ...videoData, description: e.target.value })
             }
             value={videoData.description}
-          ></textarea>
+          ></textarea> */}
+          <MentionsInput
+            value={videoData.description}
+            onChange={(e) =>
+              setVideoData({ ...videoData, description: e.target.value })
+            }
+            style={defaultStyle}
+            className="textarea w-full h-24  pt-2 focus:outline-0"
+            placeholder={"Enter caption."}
+            a11ySuggestionsListLabel={"Suggested mentions"}
+          >
+            <Mention
+              trigger="@"
+              data={renderData}
+              markup="@__display__"
+              appendSpaceOnAdd
+              onAdd={handleAdd}
+            />
+          </MentionsInput>
           <span
             onClick={() => setadvancedOptionsShow(!advancedOptionsShow)}
             className="flex px-2 items-center gap-1 font-semibold text-brand3 cursor-pointer"
           >
             Advanced options
             <label
-              class={`swap ${
-                advancedOptionsShow && "swap-active"
-              } swap-rotate text-6xl`}
+              class={`swap ${advancedOptionsShow && "swap-active"
+                } swap-rotate text-6xl`}
             >
               <div class="swap-on">
                 <ChevronUp />
@@ -490,11 +536,10 @@ function VideoPostModal({ setVideoPostModalOpen }) {
           </div>
           <button
             type={"submit"}
-            className={`btn  w-full  ${
-              selectedVideo?.file && selectedThumbnail?.file
+            className={`btn  w-full  ${selectedVideo?.file && selectedThumbnail?.file
                 ? "btn-brand"
                 : "btn-disabled"
-            } ${uploadingVideo ? "loading" : "btn-ghost"}`}
+              } ${uploadingVideo ? "loading" : "btn-ghost"}`}
           >
             Post Video
           </button>

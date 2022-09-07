@@ -1,6 +1,8 @@
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../Store";
+import { Image } from "react-img-placeholder";
+import placeholderImage from "../../Assets/profile-pic.png";
 
 function LiveChannels() {
   const [channels, setChannels] = useState([
@@ -25,12 +27,19 @@ function LiveChannels() {
           {State.database.liveUsers.map((channel) => (
             <div className="flex  items-center space-x-2 h-8 " key={channel.id}>
               <div className="h-full flex items-center flex-grow space-x-2">
-                <img
+                {/* <img
                   className="h-full rounded-full border-2 border-rose-600"
                   src={channel.profile_image}
                   alt="profileImage"
+                /> */}
+                <Image
+                  width={33}
+                  height={33}
+                  className="h-full rounded-full border-2 border-rose-600"
+                  src={channel.profile_image}
+                  alt="profileImage"
+                  placeholderSrc={placeholderImage}
                 />
-
                 <p className="cursor-pointer text-base font-medium text-brand3">
                   {channel.name}
                 </p>

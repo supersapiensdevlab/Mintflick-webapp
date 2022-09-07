@@ -1,41 +1,71 @@
 import axios from "axios";
 import React from "react";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { Bulb, X } from "tabler-icons-react";
 import PolygonToken from "../../../Assets/logos/PolygonToken";
 import useUserActions from "../../../Hooks/useUserActions";
+import { MentionsInput, Mention } from "react-mentions";
+import defaultStyle from "../defaultStyle";
+import { UserContext } from "../../../Store";
 
 function ThoughtPostModal({ setthoughtPostModalOpen }) {
+  const State = useContext(UserContext);
   const [uploadingPost, setUploadingPost] = useState(false);
   const [caption, setCaption] = useState("");
   const [isNFT, setIsNFT] = useState(false);
   const [nftPrice, setNFTPrice] = useState(1);
   const [loadFeed] = useUserActions();
+  const [tagged, setTagged] = useState([]);
 
   // Minting
   // const [minting, setMinting] = useState(null);
   // const [mintingProgress, setMintingProgress] = useState(0);
 
+  const renderData = [];
+  State.database.userData?.data?.user?.followee_count.forEach((value, i) => {
+    renderData.push({ id: value, display: value });
+  });
+
+  const handleAdd = (e) => {
+    tagged.push(e);
+    console.log(tagged);
+  };
+
   //handle thought submit
   const handleThoughtPost = () => {
+    let filter = [];
+    tagged.forEach((value) => {
+      if (caption.includes(value)) {
+        filter.push(value);
+      }
+    });
+    console.log(filter);
     const data = {
       announcement: caption,
+      tagged: filter,
     };
     axios
       .post(`${process.env.REACT_APP_SERVER_URL}/user/announcement`, data, {
         headers: {
-          "content-type": "multipart/form-data",
+          "content-type": "application/json",
           "auth-token": JSON.stringify(localStorage.getItem("authtoken")),
         },
       })
       .then(async () => {
         setthoughtPostModalOpen(false);
+        setCaption("");
+        setTagged([]);
         await loadFeed();
       })
       .catch((err) => {
         console.log(err);
       });
   };
+  const clearData = () => {
+    setthoughtPostModalOpen(false);
+    setCaption("");
+    setTagged([]);
+  }
 
   return (
     <div className="modal-box p-0 bg-slate-100 dark:bg-slate-800 ">
@@ -46,19 +76,38 @@ function ThoughtPostModal({ setthoughtPostModalOpen }) {
             Post a Thought
           </h3>
           <X
-            onClick={() => setthoughtPostModalOpen(false)}
+            onClick={() => {
+              clearData()
+            }}
             className="text-brand2 cursor-pointer"
           ></X>
         </div>
       </div>
       <form onSubmit={(e) => e.preventDefault()}>
         <div className="w-full p-4 space-y-3">
-          <textarea
+          {/* <textarea
             className="textarea  w-full"
             placeholder="Whats on your mind!"
             onChange={(e) => setCaption(e.target.value)}
             value={caption}
-          ></textarea>
+          ></textarea> */}
+          <MentionsInput
+            multiline
+            value={caption}
+            onChange={(e) => setCaption(e.target.value)}
+            style={defaultStyle}
+            className="textarea w-full h-24  pt-2 focus:outline-0"
+            placeholder={"Whats on your mind!"}
+            a11ySuggestionsListLabel={"Suggested mentions"}
+          >
+            <Mention
+              trigger="@"
+              data={renderData}
+              markup="@__display__"
+              appendSpaceOnAdd
+              onAdd={handleAdd}
+            />
+          </MentionsInput>
           <div className="w-fit flex space-x-2">
             <label className="flex items-center cursor-pointer gap-2">
               <input
@@ -97,9 +146,8 @@ function ThoughtPostModal({ setthoughtPostModalOpen }) {
           <button
             type={"submit"}
             onClick={handleThoughtPost}
-            className={`btn  w-full  ${
-              caption ? "btn-brand" : "btn-disabled"
-            }  ${uploadingPost ? "loading" : ""}`}
+            className={`btn  w-full  ${caption ? "btn-brand" : "btn-disabled"
+              }  ${uploadingPost ? "loading" : ""}`}
           >
             Post thought
           </button>
