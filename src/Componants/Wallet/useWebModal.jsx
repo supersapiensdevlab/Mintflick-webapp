@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { ethers } from "ethers";
 import Web3Modal from "web3modal";
 import WalletConnectProvider from "@walletconnect/web3-provider";
@@ -7,6 +7,15 @@ import { sequence } from "0xsequence";
 import { UserContext } from "../../Store";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { Web3Auth } from "@web3auth/web3auth";
+import Main_logo from "../../Assets/logos/Main_logo";
+import RPC from "./solanaRPC";
+
+import {
+  WALLET_ADAPTERS,
+  CHAIN_NAMESPACES,
+  SafeEventEmitterProvider,
+} from "@web3auth/base";
 
 function useWebModal() {
   const State = useContext(UserContext);
@@ -61,15 +70,22 @@ function useWebModal() {
   };
 
   const newWalletProvider = {
-    torus: {
-      package: Torus, // required
+    web3auth: {
+      package: Web3Auth, // required
       options: {
-        networkParams: {
-          chainId: "137", // default: 1
-          networkName: "Matic Mainnet",
-        },
+        dark: true,
+        infuraId: "52628805bda848a2bcbb48a778ac7583", // required
       },
     },
+    // torus: {
+    //   package: Torus, // required
+    //   options: {
+    //     networkParams: {
+    //       chainId: "137", // default: 1
+    //       networkName: "Matic Mainnet",
+    //     },
+    //   },
+    // },
     sequence: {
       package: sequence, // required
       options: {
@@ -79,7 +95,7 @@ function useWebModal() {
     },
   };
 
-  return async function loadWebModal(newWallet) {
+  return async function loadWebModal(newWallet, chainName) {
     const providerOptions = newWallet
       ? {
           /* See Provider Options Section */ injected: {
@@ -105,18 +121,18 @@ function useWebModal() {
           ...newWalletProvider,
         }
       : {
-          torus: {
-            package: Torus, // required
-            display: {
-              description: "Create your wallet with torus",
-            },
-            options: {
-              networkParams: {
-                chainId: "137", // default: 1
-                networkName: "Matic Mainnet",
-              },
-            },
-          },
+          // torus: {
+          //   package: Torus, // required
+          //   display: {
+          //     description: "Create your wallet with torus",
+          //   },
+          //   options: {
+          //     networkParams: {
+          //       chainId: "137", // default: 1
+          //       networkName: "Matic Mainnet",
+          //     },
+          //   },
+          // },
           sequence: {
             package: sequence, // required
             display: {
@@ -136,16 +152,17 @@ function useWebModal() {
       providerOptions, // required
       theme: "dark",
     });
-    const instance = await web3Modal.connect();
 
+    const instance = await web3Modal.connect();
     const provider = new ethers.providers.Web3Provider(instance);
     console.log(provider);
 
     const signer = provider.getSigner();
     const Address = await signer.getAddress();
     State.updateDatabase({
-      walletAddress:Address
-    })
+      walletAddress: Address,
+    });
+
     console.log(Address);
     isUserAvaliable(Address, provider);
   };

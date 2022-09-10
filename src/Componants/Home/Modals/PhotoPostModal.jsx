@@ -9,6 +9,14 @@ import useUserActions from "../../../Hooks/useUserActions";
 import { MentionsInput, Mention } from "react-mentions";
 import defaultStyle from "../defaultStyle";
 import { UserContext } from "../../../Store";
+import { SolanaWallet } from "@web3auth/solana-provider";
+
+import { PhantomWalletAdapter } from "@solana/wallet-adapter-phantom";
+import {
+  clusterUrl,
+  confirmTransactionFromFrontend,
+} from "../Utility/utilityFunc";
+import { clusterApiUrl, Connection, PublicKey } from "@solana/web3.js";
 
 function PhotoPostModal({ setphotoPostModalOpen }) {
   const State = useContext(UserContext);
@@ -94,88 +102,67 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
             const blob = new Blob([JSON.stringify(metadata)], {
               type: "application/json",
             });
-            var file = convertBlobToFile(blob, "meta.json");
-            console.log(file);
+            // var file = convertBlobToFile(blob, "meta.json");
+            // console.log(file);
 
-            uploadFile(file)
-              .then(async (cid) => {
-                console.log("stored files with cid:", cid);
-                createToken(
-                  "https://ipfs.io/ipfs/" + cid + "meta.json",
-                  nftPrice,
-                  window.ethereum,
-                  setMinting,
-                  setMintingProgress
-                ).then(async (tokenId) => {
-                  console.log("TOKEN ID Created : ", tokenId); // token created
-                  formData.append("tokenId", tokenId);
-                  axios
-                    .post(
-                      `${process.env.REACT_APP_SERVER_URL}/user/announcement`,
-                      formData,
-                      {
-                        headers: {
-                          "content-type": "multipart/form-data",
-                          "auth-token": JSON.stringify(
-                            localStorage.getItem("authtoken")
-                          ),
-                        },
-                      }
-                    )
-                    .then(async (data) => {
-                      setUploadingPost(false);
-                      setSelectedPost(null);
-                      setCaption("");
-                      setTagged([]);
-                      setphotoPostModalOpen(false);
-                      await loadFeed();
-                    })
-                    .catch((err) => {
-                      console.log(err);
-                      setUploadingPost(false);
-                      setSelectedPost(null);
-                      setCaption("");
-                      setTagged([]);
-                    });
+            uploadFile(selectedPost.file[0]).then(async (cid) => {
+              console.log("stored files with cid:", cid);
+              console.log(State.database);
+              let nftSolanaData = {
+                network: "devnet",
+                wallet: "4uHdbP7FkB4BSx6QAL15wgaphNn33jtpRq9ohMoMC8U2",
+                name: caption,
+                symbol: "FLICK",
+                attributes: JSON.stringify([
+                  { trait_type: "Power", value: "100" },
+                ]),
+                description: caption,
+                external_url:
+                  "https://ipfs.io/ipfs/" +
+                  cid +
+                  "/" +
+                  selectedPost.file[0].name,
+                max_supply: 1,
+                royalty: 5,
+                file: selectedPost.file[0],
+              };
+
+              console.log(nftSolanaData);
+              axios
+                .post(
+                  `https://api.shyft.to/sol/v1/nft/create_detach`,
+                  nftSolanaData,
+                  {
+                    headers: {
+                      "x-api-key": "-3iYNcRok7Gm4EMl",
+                      "content-type": "multipart/form-data",
+                    },
+                  }
+                )
+                .then(async (data) => {
+                  // setUploadingPost(false);
+                  // setSelectedPost(null);
+                  // setCaption("");
+                  // setTagged([]);
+                  // setphotoPostModalOpen(false);
+                  // await loadFeed();
+                  console.log("MintID", data.data.result.mint);
+                  await signTransaction(
+                    "devnet",
+                    data.data.result.encoded_transaction,
+                    uploadToServer(formData, data.data.result.mint)
+                  );
+                })
+                .catch((err) => {
+                  console.log(err);
+                  setUploadingPost(false);
+                  setSelectedPost(null);
+                  setCaption("");
+                  setTagged([]);
                 });
-              })
-              .catch((err) => {
-                console.log(err);
-              });
+            });
           } else {
-            axios
-              .post(
-                `${process.env.REACT_APP_SERVER_URL}/user/announcement`,
-                formData,
-                {
-                  headers: {
-                    "content-type": "multipart/form-data",
-                    "auth-token": JSON.stringify(
-                      localStorage.getItem("authtoken")
-                    ),
-                  },
-                }
-              )
-              .then(async (data) => {
-                setUploadingPost(false);
-                setSelectedPost(null);
-                setCaption("");
-                setTagged([]);
-                setphotoPostModalOpen(false);
-                State.toast("success", "Your photo uplaoded successfully!");
-                await loadFeed();
-              })
-              .catch((err) => {
-                State.toast(
-                  "error",
-                  "Oops!somthing went wrong uplaoding photo!"
-                );
-                console.log(err);
-                setUploadingPost(false);
-                setSelectedPost(null);
-                setCaption("");
-                setTagged([]);
-              });
+            uploadToServer(formData, null);
           }
         })
         .catch((err) => {
@@ -187,6 +174,30 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
         });
     }
   };
+
+  const uploadToServer = (formData, mintId) => {
+    formData.append("tokenId", mintId);
+    axios
+      .post(`${process.env.REACT_APP_SERVER_URL}/user/announcement`, formData, {
+        headers: {
+          "content-type": "multipart/form-data",
+          "auth-token": JSON.stringify(localStorage.getItem("authtoken")),
+        },
+      })
+      .then(async (res) => {
+        State.toast("success", "Your Photo uploded successfully!");
+        await loadFeed();
+        clearData();
+      })
+      .catch((err) => {
+        State.toast("error", "Oops!somthing went wrong uplaoding photo!");
+        console.log(err);
+        setUploadingPost(false);
+        setSelectedPost(null);
+        setCaption("");
+      });
+  };
+
   const clearData = () => {
     setUploadingPost(false);
     setSelectedPost(null);
@@ -194,6 +205,35 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
     setTagged([]);
     setphotoPostModalOpen(false);
   };
+
+  function Log() {
+    console.log("NFT Minted");
+  }
+
+  async function signTransaction(network, transaction, callback) {
+    //const phantom = new PhantomWalletAdapter();
+    //await phantom.connect();
+    const solanaWallet = new SolanaWallet(State.database.provider); // web3auth.provider
+
+    const rpcUrl = clusterUrl(network);
+    console.log(rpcUrl);
+    const connection = new Connection(rpcUrl, "confirmed");
+    //console.log(connection.rpcEndpoint);
+    const ret = await confirmTransactionFromFrontend(
+      connection,
+      transaction,
+      solanaWallet
+    );
+    // const checks = await connection.confirmTransaction({signature:ret},'finalised');
+
+    // console.log(checks);
+    // await connection.confirmTransaction({
+    //     blockhash: transaction.blockhash,
+    //     signature: ret,
+    //   });
+    connection.onSignature(ret, callback, "finalized");
+    return ret;
+  }
 
   return (
     <div className="modal-box p-0 bg-slate-100 dark:bg-slate-800 ">

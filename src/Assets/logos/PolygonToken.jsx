@@ -7,6 +7,7 @@ function PolygonToken(props) {
       width={props.size ? props.size : 20}
       height={props.size ? props.size : 20}
       fill="none"
+      className={props.className}
       viewBox="0 0 1024 1024"
     >
       <circle cx="512" cy="512" r="512" fill="#8247E5" />
