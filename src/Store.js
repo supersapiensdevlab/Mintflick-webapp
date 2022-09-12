@@ -32,7 +32,7 @@ function Store(props) {
     updateStore({ toasts: [...store.toasts, { type: type, msg: msg }] });
   };
   const deleteToast = () => {
-    updateStore({ ...store.toasts.shift() });
+    updateStore({ toasts: [] });
   };
   const addLiveUsers = (data) => {
     setstore({

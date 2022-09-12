@@ -3,8 +3,8 @@ import React, { useState } from "react";
 import { useContext } from "react";
 import { UserContext } from "../Store";
 
-export default  function useUserActions() {
-    const State = useContext(UserContext);
+export default function useUserActions() {
+  const State = useContext(UserContext);
   async function loadFeed() {
     await axios({
       method: "get",
@@ -12,11 +12,13 @@ export default  function useUserActions() {
     })
       .then((response) => {
         let data = response.data;
-        State.addFeed(data);
+        State.updateDatabase({
+          feedData: [...State.database.feedData, ...data],
+        });
       })
       .catch(function (error) {
         console.log(error);
       });
   }
-  return [loadFeed]
+  return [loadFeed];
 }

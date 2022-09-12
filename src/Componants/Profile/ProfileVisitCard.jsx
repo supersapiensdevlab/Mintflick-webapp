@@ -2,7 +2,7 @@ import React from "react";
 import { Share } from "tabler-icons-react";
 import coverImage from "../../Assets/backgrounds/cover.png";
 
-function ProfileCard() {
+function ProfileVisitCard() {
   return (
     <div className="flex flex-col items-center  bg-slate-100 dark:bg-slate-800 w-full h-fit rounded-lg ">
       <img
@@ -26,19 +26,19 @@ function ProfileCard() {
         <div className="w-full flex justify-around">
           <span className="flex flex-col items-center gap-1 text-lg text-brand3 font-bold">
             12
-            <p className="flex items-center  text-base text-primary font-bold">
+            <p className="flex items-center  text-xs text-primary font-medium">
               Followers
             </p>
           </span>
           <span className="flex flex-col items-center gap-1 text-lg text-brand3 font-bold">
             12
-            <p className="flex items-center  text-base text-primary font-bold">
+            <p className="flex items-center  text-xs text-primary font-medium">
               Following
             </p>
           </span>
           <span className="flex flex-col items-center gap-1 text-lg text-brand3 font-bold">
             3
-            <p className="flex items-center gap-1 text-base text-primary font-bold">
+            <p className="flex items-center gap-1 text-xs text-primary font-medium">
               SuperFans
             </p>
           </span>
@@ -54,4 +54,4 @@ function ProfileCard() {
   );
 }
 
-export default ProfileCard;
+export default ProfileVisitCard;

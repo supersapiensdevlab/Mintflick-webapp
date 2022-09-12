@@ -49,23 +49,6 @@ function App() {
     console.log(localStorage.getItem("authtoken"));
   }, []);
 
-  // For Live Users
-  useEffect(() => {
-    axios
-      .get(`${process.env.REACT_APP_SERVER_URL}/get_activeusers`)
-      .then(async (repos) => {
-        for (let i = 0; i < repos.data.length; i++) {
-          await axios
-            .get(
-              `${process.env.REACT_APP_SERVER_URL}/user/getuser_by_id/${repos.data[i].id}`
-            )
-            .then((value) => {
-              if (value.data !== "") State.addLiveUsers(value.data);
-            });
-        }
-      });
-  }, []);
-
   return (
     <div className={State.database.dark ? `dark` : " "}>
       <BrowserRouter>

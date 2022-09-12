@@ -11,7 +11,6 @@ function Channels() {
   const State = useContext(UserContext);
 
   useEffect(() => {
-    console.log("called");
     console.log(State.database.userData);
     if (State.database.userData.data) {
       for (

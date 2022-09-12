@@ -26,8 +26,8 @@ function CreateNewUser() {
     })
       .then((response) => {
         console.log(response);
-        if (response.data == 'Email') {
-          seterror('Email Already Exists')
+        if (response.data == "Email") {
+          seterror("Email Already Exists");
           setloader(false);
         } else {
           State.updateDatabase({
@@ -70,7 +70,7 @@ function CreateNewUser() {
         }}
         className="w-full max-w-lg flex flex-col  space-y-4   pt-4"
       >
-        {error ? (
+        {error && (
           <div className="flex justify-between items-center p-3 bg-rose-600 text-slate-100 rounded-lg font-mediumtext-sm">
             <div className="flex items-center gap-4">
               <AlertTriangle></AlertTriangle> {error}
@@ -81,8 +81,6 @@ function CreateNewUser() {
               size={16}
             ></X>
           </div>
-        ) : (
-          <></>
         )}
         <input
           value={name}
