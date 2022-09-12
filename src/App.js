@@ -64,7 +64,7 @@ function App() {
             <Route path="live" element={<Live />} />
             <Route path="marketPlace" element={<Events></Events>} />
             <Route path="profile" element={<Profile></Profile>}>
-              <Route path="" element={<ProfileMedia></ProfileMedia>}>
+              <Route path=":userName" element={<ProfileMedia></ProfileMedia>}>
                 <Route path="posts" element={<Posts></Posts>} />
                 <Route path="videos" element={<Videos></Videos>} />
                 <Route path="music" element={<Music></Music>} />

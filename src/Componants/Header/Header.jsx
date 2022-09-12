@@ -38,6 +38,32 @@ function Header() {
 
   const [notification, setNotification] = useState([]);
 
+  async function getUserData() {
+    await axios({
+      method: "post",
+      url: `${process.env.REACT_APP_SERVER_URL}/user/getuser_by_wallet`,
+
+      data: {
+        walletId: localStorage.getItem("walletAddress"),
+      },
+    })
+      .then((response) => {
+        console.log(response);
+
+        State.updateDatabase({
+          userData: response,
+          walletAddress: response.data.user.wallet_id,
+        });
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
+  useEffect(() => {
+    !State.database.userData.data && getUserData();
+  }, []);
+
   useEffect(() => {
     if (
       State.database.userData.data?.user &&
@@ -322,7 +348,11 @@ function Header() {
           >
             <li>
               <NavLink
-                to={"/homescreen/profile/posts"}
+                to={`/homescreen/profile/${
+                  State.database.userData.data
+                    ? State.database.userData.data.user.username
+                    : ""
+                }/posts`}
                 className="  hover:dark:bg-slate-900"
               >
                 Profile

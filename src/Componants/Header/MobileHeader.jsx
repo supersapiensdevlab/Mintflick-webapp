@@ -1,13 +1,40 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { MessageDots } from "tabler-icons-react";
 import { UserContext } from "../../Store";
 import Main_logo from "../../Assets/logos/Main_logo";
 import Main_logo_dark from "../../Assets/logos/Main_logo_dark";
 import { NavLink } from "react-router-dom";
 import coverImage from "../../Assets/backgrounds/cover.png";
+import axios from "axios";
 
 function MobileHeader() {
   const State = useContext(UserContext);
+
+  async function getUserData() {
+    await axios({
+      method: "post",
+      url: `${process.env.REACT_APP_SERVER_URL}/user/getuser_by_wallet`,
+
+      data: {
+        walletId: localStorage.getItem("walletAddress"),
+      },
+    })
+      .then((response) => {
+        console.log(response);
+
+        State.updateDatabase({
+          userData: response,
+          walletAddress: response.data.user.wallet_id,
+        });
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
+  useEffect(() => {
+    !State.database.userData.data && getUserData();
+  }, []);
 
   return (
     <div className="lg:hidden fixed z-50  top-0 flex px-4 lg:px-12 justify-between items-center h-16 bg-white dark:bg-slate-900 w-full shadow-mintflick	">
@@ -30,7 +57,10 @@ function MobileHeader() {
           >
             <li>
               <NavLink
-                to={"/homescreen/profile/posts"}
+                to={`/homescreen/profile/${
+                  State.database.userData.data &&
+                  State.database.userData.data.user.username
+                }/posts`}
                 className="  hover:dark:bg-slate-900"
               >
                 Profile
