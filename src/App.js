@@ -49,13 +49,33 @@ function App() {
     console.log(localStorage.getItem("authtoken"));
   }, []);
 
+<<<<<<< HEAD
+  // For Live Users
+  useEffect(() => {
+    axios
+      .get(`${process.env.REACT_APP_SERVER_URL}/get_activeusers`)
+      .then(async (repos) => {
+        for (let i = 0; i < repos.data.length; i++) {
+          await axios
+            .get(
+              `${process.env.REACT_APP_SERVER_URL}/user/getuser_by_id/${repos.data[i].id}`,
+            )
+            .then((value) => {
+              if (value.data !== "") State.addLiveUsers(value.data);
+            });
+        }
+      });
+  }, []);
+
+=======
+>>>>>>> d4dd8490cd72e2cd4491136335a479b63e43e9cc
   return (
     <div className={State.database.dark ? `dark` : " "}>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<ConnectWallet />}>
-            <Route path="" element={<ConnectWalletComponant />} />
-            <Route path="create_new_user" element={<CreateNewUser />} />
+          <Route path='/' element={<ConnectWallet />}>
+            <Route path='' element={<ConnectWalletComponant />} />
+            <Route path='create_new_user' element={<CreateNewUser />} />
           </Route>
 
           <Route path="/test" element={<HomeScreen />}></Route>

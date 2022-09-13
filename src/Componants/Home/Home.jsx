@@ -48,32 +48,30 @@ function Home() {
   };
 
   return (
-    <div className=" flex h-screen bg-slate-100 dark:bg-slate-800 lg:bg-white lg:dark:bg-slate-900">
-      <div className="hidden lg:flex flex-col h-full w-1/4 ml-12 mr-4 pt-24 space-y-6 overflow-y-auto">
+    <div className=' flex h-screen bg-slate-100 dark:bg-slate-800 lg:bg-white lg:dark:bg-slate-900'>
+      <div className='hidden lg:flex flex-col h-full w-1/4 ml-12 mr-4 pt-24 space-y-6 overflow-y-auto'>
         <Channels></Channels>
         <LiveChannels></LiveChannels>
       </div>
       <div
-        id="scrollableDiv"
-        className="w-full lg:w-2/4 flex flex-col items-center  h-full  pt-24 overflow-y-auto"
+        id='scrollableDiv'
+        className='w-full lg:w-2/4 flex flex-col items-center  h-full  pt-24 overflow-y-auto'
         ref={buttonRef}
-        onScroll={handleScroll}
-      >
-        <div ref={timelineRef} className="-mt-6"></div>
-        <div className="my-3"></div>
+        onScroll={handleScroll}>
+        <div ref={timelineRef} className='-mt-6'></div>
+        <div className='my-3'></div>
         <AddPost></AddPost>
-        <div className="my-3"></div>
-        <TimeLine className="z-10"></TimeLine>
+        <div className='my-3'></div>
+        <TimeLine className='z-10'></TimeLine>
       </div>
-      <div className="hidden lg:flex flex-col items-end h-full w-1/4 pt-24 mr-12 ml-4">
+      <div className='hidden lg:flex flex-col items-end h-full w-1/4 pt-24 mr-12 ml-4'>
         <GameOfLuck></GameOfLuck>
       </div>
       <ShareModal />
       {showButton && (
         <button
           onClick={scrollToTop}
-          className="fixed bottom-5 right-12 dark:text-white animate-bounce"
-        >
+          className='fixed bottom-5 right-12 dark:text-white animate-bounce'>
           <ArrowUpCircle size={36} />
         </button>
       )}
