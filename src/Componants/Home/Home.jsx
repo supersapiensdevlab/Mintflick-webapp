@@ -18,18 +18,32 @@ function Home() {
   const timelineRef = useRef();
 
   const [showButton, setShowButton] = useState(false);
+  const [prevScrollPostion, setPrevScrollPosition] = useState(0);
+  const [scrollTopCalled, setScrollTopCalled] = useState(false);
 
   const scrollToTop = () => {
     timelineRef.current.scrollIntoView({
       behavior: "smooth",
     });
+    setPrevScrollPosition(0);
+    setScrollTopCalled(true);
   };
 
   const handleScroll = () => {
     if (buttonRef.current) {
       const scrollPosition = buttonRef.current.scrollTop;
-      if (scrollPosition && scrollPosition > 500) setShowButton(true);
-      if (scrollPosition < 500) setShowButton(false);
+      if (prevScrollPostion <= scrollPosition) {
+        setPrevScrollPosition(scrollPosition);
+        setShowButton(false);
+      } else if (prevScrollPostion > scrollPosition) {
+        setPrevScrollPosition(scrollPosition);
+        if (scrollPosition > 80 && !scrollTopCalled) {
+          setShowButton(true);
+        } else {
+          setShowButton(false);
+          setScrollTopCalled(false);
+        }
+      }
     }
   };
 
@@ -41,15 +55,13 @@ function Home() {
       </div>
       <div
         id='scrollableDiv'
-        className='w-full lg:w-2/4 flex flex-col items-center  h-full  pt-24    overflow-y-auto'
+        className='w-full lg:w-2/4 flex flex-col items-center  h-full  pt-24 overflow-y-auto'
         ref={buttonRef}
         onScroll={handleScroll}>
         <div ref={timelineRef} className='-mt-6'></div>
-
         <div className='my-3'></div>
         <AddPost></AddPost>
         <div className='my-3'></div>
-
         <TimeLine className='z-10'></TimeLine>
       </div>
       <div className='hidden lg:flex flex-col items-end h-full w-1/4 pt-24 mr-12 ml-4'>

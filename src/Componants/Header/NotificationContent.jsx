@@ -8,8 +8,7 @@ const NotificationContent = ({ data }) => {
   const [userLiveTime, setUserLiveTime] = useState(null);
 
   useEffect(() => {
-    console.log(data)
-    const timestamp = new Date((data.time*1000)); // This would be the timestamp you want to format
+    const timestamp = new Date(data.time * 1000); // This would be the timestamp you want to format
     setUserLiveTime(moment(timestamp).fromNow());
   }, []);
 
@@ -42,12 +41,12 @@ const NotificationContent = ({ data }) => {
           )}
         </div>
 
-        {data.linkpreview_data && (
+        {data.post_image && (
           <img
-            src={data.linkpreview_data.image.url}
+            src={data.post_image}
             // src={CircleLogo}
             alt="announcement_info"
-            className="h-12 w-12 ml-auto rounded-sm"
+            className="h-12 w-12 ml-auto rounded-sm object-cover"
           />
         )}
       </a>

@@ -10,10 +10,11 @@ function Channels() {
   const [channels, setChannels] = useState([]);
   const State = useContext(UserContext);
 
+  const [called,setCalled] = useState(false);
   useEffect(() => {
-    console.log("called");
     console.log(State.database.userData);
-    if (State.database.userData.data) {
+    if (State.database.userData.data && !called) {
+      setCalled(true)
       for (
         var i = 0;
         i < State.database.userData.data.user.pinned.length;

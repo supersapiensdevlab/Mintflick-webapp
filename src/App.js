@@ -49,6 +49,7 @@ function App() {
     console.log(localStorage.getItem("authtoken"));
   }, []);
 
+<<<<<<< HEAD
   // For Live Users
   useEffect(() => {
     axios
@@ -66,6 +67,8 @@ function App() {
       });
   }, []);
 
+=======
+>>>>>>> d4dd8490cd72e2cd4491136335a479b63e43e9cc
   return (
     <div className={State.database.dark ? `dark` : " "}>
       <BrowserRouter>
@@ -75,17 +78,17 @@ function App() {
             <Route path='create_new_user' element={<CreateNewUser />} />
           </Route>
 
-          <Route path='/test' element={<HomeScreen />}></Route>
-          <Route path='/homescreen' element={<HomeScreen />}>
-            <Route path='home' element={<Home />} />
-            <Route path='live' element={<Live />} />
-            <Route path='marketPlace' element={<Events></Events>} />
-            <Route path='profile' element={<Profile></Profile>}>
-              <Route path='' element={<ProfileMedia></ProfileMedia>}>
-                <Route path='posts' element={<Posts></Posts>} />
-                <Route path='videos' element={<Videos></Videos>} />
-                <Route path='music' element={<Music></Music>} />
-                <Route path='playlists' element={<Playlists></Playlists>} />
+          <Route path="/test" element={<HomeScreen />}></Route>
+          <Route path="/homescreen" element={<HomeScreen />}>
+            <Route path="home" element={<Home />} />
+            <Route path="live" element={<Live />} />
+            <Route path="marketPlace" element={<Events></Events>} />
+            <Route path="profile" element={<Profile></Profile>}>
+              <Route path=":userName" element={<ProfileMedia></ProfileMedia>}>
+                <Route path="posts" element={<Posts></Posts>} />
+                <Route path="videos" element={<Videos></Videos>} />
+                <Route path="music" element={<Music></Music>} />
+                <Route path="playlists" element={<Playlists></Playlists>} />
               </Route>
             </Route>
           </Route>
