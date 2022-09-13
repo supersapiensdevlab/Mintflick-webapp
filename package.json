@@ -15,6 +15,7 @@
     "@walletconnect/web3-provider": "^1.7.8",
     "@web3auth/base": "^2.1.2",
     "@web3auth/openlogin-adapter": "^2.1.1",
+    "@web3auth/torus-evm-adapter": "^2.1.2",
     "@web3auth/web3auth": "^2.0.2",
     "axios": "^0.27.2",
     "daisyui": "^2.19.0",

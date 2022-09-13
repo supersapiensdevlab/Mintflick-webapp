@@ -11,6 +11,7 @@ import { Web3Auth } from "@web3auth/web3auth";
 import RPC from "./solanaRPC";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { TorusWalletAdapter } from "@web3auth/torus-evm-adapter";
 
 import { WALLET_ADAPTERS } from "@web3auth/base";
 import { CHAIN_NAMESPACES, SafeEventEmitterProvider } from "@web3auth/base";
@@ -31,6 +32,29 @@ function ConnectWalletComponant() {
   useEffect(() => {
     const init = async () => {
       try {
+        const torusWalletAdapter = new TorusWalletAdapter({
+          adapterSettings: {
+            buttonPosition: "bottom-left",
+          },
+          loginSettings: {
+            verifier: "google",
+          },
+          initParams: {
+            buildEnv: "testing",
+          },
+          chainConfig: {
+            chainNamespace: CHAIN_NAMESPACES.EIP155,
+            chainId: "0x3",
+            rpcTarget:
+              "https://ropsten.infura.io/v3/776218ac4734478c90191dde8cae483c",
+            displayName: "ropsten",
+            blockExplorer: "https://ropsten.etherscan.io/",
+            ticker: "ETH",
+            tickerName: "Ethereum",
+          },
+          clientId: clientId,
+        });
+
         const web3auth = new Web3Auth({
           clientId,
           chainConfig: {
@@ -55,6 +79,8 @@ function ConnectWalletComponant() {
               "https://ipfs.io/ipfs/bafybeihshcxswtnebaobbgjdvqgam6ynr676gcmbq3ambsg4aznytv3dwi/Mintflick%20icon-12%20%281%29.png", // Your App Logo Here
           },
         });
+        web3auth.configureAdapter(torusWalletAdapter);
+
         setWeb3auth(web3auth);
         await web3auth.initModal({
           modalConfig: {
