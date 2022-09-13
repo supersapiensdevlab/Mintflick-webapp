@@ -7,6 +7,7 @@ import useUserActions from "../../../Hooks/useUserActions";
 import { MentionsInput, Mention } from "react-mentions";
 import defaultStyle from "../defaultStyle";
 import { UserContext } from "../../../Store";
+import SolanaToken from "../../../Assets/logos/SolanaToken";
 
 function ThoughtPostModal({ setthoughtPostModalOpen }) {
   const State = useContext(UserContext);
@@ -65,26 +66,25 @@ function ThoughtPostModal({ setthoughtPostModalOpen }) {
     setthoughtPostModalOpen(false);
     setCaption("");
     setTagged([]);
-  }
+  };
 
   return (
-    <div className="modal-box p-0 bg-slate-100 dark:bg-slate-800 ">
-      <div className="w-full h-fit p-2 bg-slate-300 dark:bg-slate-700">
-        <div className="flex justify-between items-center p-2">
-          <h3 className="flex items-center gap-2 font-bold text-lg text-brand2">
+    <div className='modal-box p-0 bg-slate-100 dark:bg-slate-800 '>
+      <div className='w-full h-fit p-2 bg-slate-300 dark:bg-slate-700'>
+        <div className='flex justify-between items-center p-2'>
+          <h3 className='flex items-center gap-2 font-bold text-lg text-brand2'>
             <Bulb />
             Post a Thought
           </h3>
           <X
             onClick={() => {
-              clearData()
+              clearData();
             }}
-            className="text-brand2 cursor-pointer"
-          ></X>
+            className='text-brand2 cursor-pointer'></X>
         </div>
       </div>
       <form onSubmit={(e) => e.preventDefault()}>
-        <div className="w-full p-4 space-y-3">
+        <div className='w-full p-4 space-y-3'>
           {/* <textarea
             className="textarea  w-full"
             placeholder="Whats on your mind!"
@@ -96,59 +96,65 @@ function ThoughtPostModal({ setthoughtPostModalOpen }) {
             value={caption}
             onChange={(e) => setCaption(e.target.value)}
             style={defaultStyle}
-            className="textarea w-full h-24  pt-2 focus:outline-0"
+            className='textarea w-full h-24  pt-2 focus:outline-0'
             placeholder={"Whats on your mind!"}
-            a11ySuggestionsListLabel={"Suggested mentions"}
-          >
+            a11ySuggestionsListLabel={"Suggested mentions"}>
             <Mention
-              trigger="@"
+              trigger='@'
               data={renderData}
-              markup="@__display__"
+              markup='@__display__'
               appendSpaceOnAdd
               onAdd={handleAdd}
             />
           </MentionsInput>
-          <div className="w-fit flex space-x-2">
-            <label className="flex items-center cursor-pointer gap-2">
+          <div className='w-fit flex space-x-2'>
+            <label className='flex items-center cursor-pointer gap-2'>
               <input
-                type="checkbox"
+                type='checkbox'
                 value={isNFT}
                 onChange={() => setIsNFT(!isNFT)}
-                className="checkbox checkbox-primary"
+                className='checkbox checkbox-primary'
               />
-              <span className="label-text text-brand3">Mint as NFT</span>
+              <span className='label-text text-brand3'>Mint as NFT</span>
             </label>
             {isNFT && (
-              <div className="form-control">
-                <label className="input-group">
+              <div className='form-control'>
+                <label className='input-group'>
                   <input
                     min={1}
-                    type="number"
-                    placeholder="1"
-                    className="input input-bordered input-sm w-24"
+                    type='number'
+                    placeholder='1'
+                    className='input input-bordered input-sm w-24'
                     value={nftPrice}
                     onChange={(e) => setNFTPrice(e.target.value)}
                     required={true}
                   />
-                  <span className="text-brand3 bg-slate-300 dark:bg-slate-600 ">
-                    <PolygonToken></PolygonToken> &nbsp; Matic
+                  <span className='text-brand3 bg-slate-300 dark:bg-slate-600 '>
+                    {State.database.chainId === 0 ? (
+                      <>
+                        <SolanaToken></SolanaToken>&nbsp; SOL
+                      </>
+                    ) : (
+                      <>
+                        <PolygonToken></PolygonToken> &nbsp; Matic
+                      </>
+                    )}
                   </span>
                 </label>
               </div>
             )}
           </div>
           <progress
-            class="progress progress-success w-56 hidden"
-            value="50"
-            max="100"
-          ></progress>
+            class='progress progress-success w-56 hidden'
+            value='50'
+            max='100'></progress>
 
           <button
             type={"submit"}
             onClick={handleThoughtPost}
-            className={`btn  w-full  ${caption ? "btn-brand" : "btn-disabled"
-              }  ${uploadingPost ? "loading" : ""}`}
-          >
+            className={`btn  w-full  ${
+              caption ? "btn-brand" : "btn-disabled"
+            }  ${uploadingPost ? "loading" : ""}`}>
             Post thought
           </button>
         </div>

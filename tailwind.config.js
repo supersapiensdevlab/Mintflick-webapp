@@ -52,5 +52,5 @@ module.exports = {
       },
     },
   },
-  plugins: [require("daisyui")],
+  plugins: [require("daisyui"), "react-optimized-image/plugin"],
 };

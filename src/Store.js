@@ -21,6 +21,8 @@ function Store(props) {
     buyNFTModalData: {},
     //Toast messages
     toasts: [],
+    //chain id
+    chainId: 0,
   });
   const updateStore = (data) => {
     setstore((prev) => ({
@@ -56,8 +58,7 @@ function Store(props) {
         deleteToast: deleteToast,
         addLiveUsers: addLiveUsers,
         addFeed: addFeed,
-      }}
-    >
+      }}>
       {props.data}
     </UserContext.Provider>
   );
