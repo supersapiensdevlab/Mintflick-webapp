@@ -2,7 +2,7 @@ import React from "react";
 import { Share } from "tabler-icons-react";
 import coverImage from "../../Assets/backgrounds/cover.png";
 
-function ProfileVisitCard() {
+function ProfileVisitCard(props) {
   return (
     <div className="flex flex-col items-center  bg-slate-100 dark:bg-slate-800 w-full h-fit rounded-lg ">
       <img
