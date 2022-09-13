@@ -36,7 +36,9 @@ import trackPlaceholder from "../../Assets/track-placeholder.jpg";
 import { Image } from "react-img-placeholder";
 
 import ReportModal from "./Modals/ReportModal";
+import { useNavigate } from "react-router-dom";
 function Post(props) {
+  const nav = useNavigate();
   // Common State and Functions
   const State = useContext(UserContext);
   const [loadFeed] = useUserActions();
@@ -657,7 +659,10 @@ function Post(props) {
     <>
       <div className="w-full h-fit lg:bg-slate-100 lg:dark:bg-slate-800 lg:rounded-xl p-4 lg:p-8 space-y-4 pb-4 border-b-2 lg:border-none  border-slate-200 dark:border-slate-900">
         <div className="flex justify-between items-center">
-          <div className="flex items-center space-x-4">
+          <div
+            onClick={() => nav(`../profile/${props.profileName}/posts`)}
+            className="flex items-center space-x-4 cursor-pointer"
+          >
             {props.profilePic ? (
               // <img
               //   className="h-12 w-12 rounded-full object-cover"
