@@ -105,7 +105,9 @@ function TimeLine() {
         .then((response) => {
           let data = response.data;
           console.log(data);
-          State.addFeed([...State.database.feedData, ...data]);
+          State.updateDatabase({
+            feedData: [...State.database.feedData, ...data],
+          });
           if (data.length <= 0) {
             setHasMore(false);
           }

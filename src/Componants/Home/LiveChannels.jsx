@@ -5,20 +5,25 @@ import { Image } from "react-img-placeholder";
 import placeholderImage from "../../Assets/profile-pic.png";
 
 function LiveChannels() {
-  const [channels, setChannels] = useState([
-    {
-      img: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%3Fid%3DOIP.gvS0FzhUJfjlwuq3aheoRgHaHa%26pid%3DApi&f=1",
-      name: "channel1",
-      isPinned: true,
-    },
-    {
-      img: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.pyTO7CtEDsKb8QgOmjOexgHaHa%26pid%3DApi&f=1",
-      name: "channel2",
-      isPinned: false,
-    },
-  ]);
   const State = useContext(UserContext);
 
+  // For Live Users
+  useEffect(() => {
+    axios
+      .get(`${process.env.REACT_APP_SERVER_URL}/get_activeusers`)
+      .then(async (repos) => {
+        for (let i = 0; i < repos.data.length; i++) {
+          await axios
+            .get(
+              `${process.env.REACT_APP_SERVER_URL}/user/getuser_by_id/${repos.data[i].id}`
+            )
+            .then((value) => {
+              if (value.data !== "")
+                State.updateDatabase({ liveUsers: value.data });
+            });
+        }
+      });
+  }, []);
   return (
     <div className="w-full h-fit space-y-4">
       <p className="font-extrabold text-lg text-brand5 mb-2">Live now</p>

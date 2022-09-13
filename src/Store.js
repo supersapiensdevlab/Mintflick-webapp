@@ -22,29 +22,29 @@ function Store(props) {
     toasts: [],
   });
   const updateStore = (data) => {
-    setstore({
-      ...store,
+    setstore((prev) => ({
+      ...prev,
       ...data,
-    });
+    }));
   };
 
   const toast = (type, msg) => {
     updateStore({ toasts: [...store.toasts, { type: type, msg: msg }] });
   };
   const deleteToast = () => {
-    updateStore({ ...store.toasts.shift() });
+    updateStore({ toasts: [] });
   };
   const addLiveUsers = (data) => {
-    setstore({
-      ...store,
-      liveUsers: [...store.liveUsers, data],
-    });
+    setstore((prev) => ({
+      ...prev,
+      liveUsers: [...prev.liveUsers, data],
+    }));
   };
   const addFeed = (data) => {
-    setstore({
-      ...store,
+    setstore((prev) => ({
+      ...prev,
       feedData: data,
-    });
+    }));
   };
   return (
     <UserContext.Provider
