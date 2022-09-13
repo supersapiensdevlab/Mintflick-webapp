@@ -44,21 +44,24 @@ function BuyNFTModal() {
         </div>
         {step === 1 && (
           <div className="p-4 space-y-2">
-            <div className="w-full sm:h-32 flex flex-col sm:flex-row bg-white dark:bg-slate-700 rounded-lg overflow-clip">
+            <div className="w-full  flex flex-col sm:flex-row bg-white dark:bg-slate-700 rounded-lg overflow-clip">
               <img
-                src="https://lh3.googleusercontent.com/yCbypC0JI61YbUFf_5ULkHJonhKZpLt63wY4ZAP5DZLYuMfcwr28zdq5TDSyhtl0Ifg2mNrtrJ3tbBOW_XKEWNctFdx1LEaLTaDExg=w600"
+                src={State.database?.buyNFTModalData?.nftImage}
                 alt="NFT image"
-                className="h-fit sm:h-full"
+                className="h-full w-28  bg-red-100"
               />
               <div className="p-3 flex-grow space-y-1 ">
                 <div className="text-lg text-brand1 font-bold">
-                  Diamond Pass
+                  {State.database?.buyNFTModalData?.nftName}
+                </div>
+                <div className="text-sm text-brand3 font-medium">
+                  {State.database?.buyNFTModalData?.nftDescription}
                 </div>
                 <div className="flex items-center gap-1 text-brand3">
                   <p className="font-medium text-sm ">Owned by</p>
                   <At size={16}></At>
                   <p className="cursor-pointer font-semibold text-sm text-primary">
-                    Maverick
+                    {State.database?.buyNFTModalData?.ownedBy}
                   </p>
                 </div>
                 <span className="flex items-center gap-1 text-sm font-medium text-brand4">

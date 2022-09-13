@@ -159,6 +159,7 @@ function TimeLine() {
             trackId={post.content.trackId}
             trackPlays={post.content.plays}
             videoImage={post.content.videoImage}
+            videoName={post.content.videoName}
             videoUrl={post.content.link}
             videoId={post.content.videoId}
             videoViews={post.content.views}

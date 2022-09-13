@@ -294,7 +294,7 @@ function Header() {
           </label>
           <div
             tabindex="0"
-            className="menu menu-compact dropdown-content mt-3 shadow-xl bg-slate-100 dark:bg-slate-700  rounded-lg w-80 overflow-y-scroll	max-h-80"
+            className="menu menu-compact dropdown-content mt-3 shadow-xl bg-slate-100 dark:bg-slate-700  rounded-lg w-80 overflow-y-scroll	max-h-96"
           >
             {notification.length > 0 ? (
               <div className="w-full p-2">

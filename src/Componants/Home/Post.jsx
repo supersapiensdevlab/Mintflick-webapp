@@ -382,6 +382,15 @@ function Post(props) {
       reactusername: `${State.database.userData.data.user.username}`,
       videousername: `${props.profileUsername}`,
       videoId: `${props.videoId}`,
+      image: `${
+        props.image
+          ? props.image
+          : props.trackImage
+          ? props.trackImage
+          : props.videoImage
+          ? props.videoImage
+          : null
+      }`,
     };
     axios({
       method: "POST",
@@ -971,11 +980,35 @@ function Post(props) {
             <p className="font-medium text-sm ">Owned by</p>
             <At size={16}></At>
             <p className="cursor-pointer font-semibold text-sm text-primary">
-              {/* {props.ownerId} */}OwnerId
+              {/* {props.ownerId} */}
+              {props.profileUsername}
             </p>
           </div>
           <div
-            onClick={() => State.updateDatabase({ buyNFTModalOpen: true })}
+            onClick={() =>
+              State.updateDatabase({
+                buyNFTModalData: {
+                  ownedBy: props.profileUsername,
+                  nftName: props.trackName
+                    ? props.trackName
+                    : props.videoName
+                    ? props.videoName
+                    : props.text
+                    ? props.text
+                    : null,
+                  nftImage: props.trackImage
+                    ? props.trackImage
+                    : props.videoImage
+                    ? props.videoImage
+                    : props.image
+                    ? props.image
+                    : "https://lh3.googleusercontent.com/yCbypC0JI61YbUFf_5ULkHJonhKZpLt63wY4ZAP5DZLYuMfcwr28zdq5TDSyhtl0Ifg2mNrtrJ3tbBOW_XKEWNctFdx1LEaLTaDExg=w600",
+                  nftDescription: props.content.description,
+                },
+
+                buyNFTModalOpen: true,
+              })
+            }
             className="cursor-pointer items-center  btn btn-xs btn-primary btn-outline gap-1 ml-auto rounded-md"
           >
             {/* <PolygonToken></PolygonToken> */}

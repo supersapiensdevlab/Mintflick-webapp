@@ -18,6 +18,7 @@ function Store(props) {
     shareModalOpen: false,
     //buy nft modal
     buyNFTModalOpen: false,
+    buyNFTModalData: {},
     //Toast messages
     toasts: [],
   });
