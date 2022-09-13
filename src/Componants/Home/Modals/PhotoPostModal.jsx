@@ -9,6 +9,9 @@ import useUserActions from "../../../Hooks/useUserActions";
 import { MentionsInput, Mention } from "react-mentions";
 import defaultStyle from "../defaultStyle";
 import { UserContext } from "../../../Store";
+// import { createPandoraExpressSDK } from "pandora-express";
+// import { ethers } from "ethers";
+// import Web3 from "web3";
 
 function PhotoPostModal({ setphotoPostModalOpen }) {
   const State = useContext(UserContext);
@@ -18,6 +21,9 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
   const [isNFT, setIsNFT] = useState(false);
   const [nftPrice, setNFTPrice] = useState(1);
   const [loadFeed] = useUserActions();
+
+  //Instance of pandora
+  // const ExpressSDK = createPandoraExpressSDK();
 
   // Minting
   const [minting, setMinting] = useState(null);
@@ -42,6 +48,29 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
   };
 
   const [tagged, setTagged] = useState([]);
+
+  // console.log(window?.ethereum);
+  // console.log(State.database?.provider);
+
+  // const mintNft = async (itemUri, price) => {
+  //   const web3 = new Web3(State.database.provider.provider);
+  //   //get current account address
+  //   const accounts = await web3.eth.getAccounts();
+  //   console.log("web3", web3);
+  //   console.log(accounts[0]);
+  //   //Get ChainID of current account
+  //   const chainId = await web3.eth.net.getId();
+  //   //Mint NFT using SDK erc721 nft mint
+  //   await ExpressSDK.erc1155.nft.mint(
+  //     web3,
+  //     chainId,
+  //     // "0x3f1437E3ce1143464734C26C2EA7519F3a393Aa0",
+  //     accounts[0],
+  //     price,
+  //     itemUri,
+  //     [[accounts[0], 10]]
+  //   );
+  // };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -138,6 +167,20 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
                       setTagged([]);
                     });
                 });
+                // const res = await ExpressSDK.erc721.nft.mint(
+                //   window.ethereum, // Web3 instance configured with metamask provider
+                //   "137", // Network id of blockchain
+                //   "0x4635Ce6b550c4112496a81F12FC296505184CdAB", // Address of Minter
+                //   ethers.utils.parseUnits(nftPrice.toString(), "ether"), //Amount of token
+                //   "https://ipfs.io/ipfs/" + cid + "meta.json" // TokenURI String
+                //   // Nested array of royalties
+                // );
+                // console.log(res);
+                // const res = await mintNft(
+                //   "https://ipfs.io/ipfs/" + cid + "meta.json",
+                //   nftPrice
+                // );
+                // console.log(res);
               })
               .catch((err) => {
                 console.log(err);
