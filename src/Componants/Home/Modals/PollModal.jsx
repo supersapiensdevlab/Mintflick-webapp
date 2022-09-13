@@ -3,6 +3,7 @@ import React, { useContext, useEffect } from "react";
 import { useState } from "react";
 import { ChartBar, Send, X } from "tabler-icons-react";
 import PolygonToken from "../../../Assets/logos/PolygonToken";
+import SolanaToken from "../../../Assets/logos/SolanaToken";
 import useUserActions from "../../../Hooks/useUserActions";
 import { UserContext } from "../../../Store";
 
@@ -59,59 +60,56 @@ function PollModal({ setPollModalOpen }) {
   }, [options]);
 
   return (
-    <div className="modal-box p-0 bg-slate-100 dark:bg-slate-800 ">
-      <div className="w-full h-fit p-2 bg-slate-300 dark:bg-slate-700">
-        <div className="flex justify-between items-center p-2">
-          <h3 className="flex items-center gap-2 font-bold text-lg text-brand2">
+    <div className='modal-box p-0 bg-slate-100 dark:bg-slate-800 '>
+      <div className='w-full h-fit p-2 bg-slate-300 dark:bg-slate-700'>
+        <div className='flex justify-between items-center p-2'>
+          <h3 className='flex items-center gap-2 font-bold text-lg text-brand2'>
             <ChartBar />
             Take Poll
           </h3>
           <X
             onClick={() => clearState()}
-            className="text-brand2 cursor-pointer"
-          ></X>
+            className='text-brand2 cursor-pointer'></X>
         </div>
       </div>
       <form onSubmit={handleSubmit}>
-        <div className="w-full p-4 space-y-3">
+        <div className='w-full p-4 space-y-3'>
           <input
-            type="text"
-            placeholder="Ask a question..."
-            className="input w-full "
+            type='text'
+            placeholder='Ask a question...'
+            className='input w-full '
             value={question}
             onChange={(e) => setQuestion(e.target.value)}
             required
           />
-          <div className="w-full flex flex-col gap-1">
+          <div className='w-full flex flex-col gap-1'>
             {options.map((option, i) => (
               <div
                 key={i}
-                className="flex gap-2 p-2 border-2 rounded-lg border-slate-200 dark:border-slate-700"
-              >
-                <span className="w-full text-brand2 ">{option.option}</span>
+                className='flex gap-2 p-2 border-2 rounded-lg border-slate-200 dark:border-slate-700'>
+                <span className='w-full text-brand2 '>{option.option}</span>
                 <button
                   onClick={() => {
                     setoptions(
                       options.filter((item, index) => {
                         return index !== i;
-                      })
+                      }),
                     );
                   }}
-                  className="btn  btn-error btn-xs text-slate-50"
-                >
+                  className='btn  btn-error btn-xs text-slate-50'>
                   remove
                 </button>
               </div>
             ))}
           </div>
           {options.length < 4 && (
-            <div className="flex gap-2">
+            <div className='flex gap-2'>
               <input
-                type="text"
+                type='text'
                 onChange={(e) => setoption(e.target.value)}
                 value={option}
-                placeholder="Add option"
-                className="input w-full "
+                placeholder='Add option'
+                className='input w-full '
               />
 
               <button
@@ -122,37 +120,44 @@ function PollModal({ setPollModalOpen }) {
                     setoption("");
                   }
                 }}
-                className={`btn  btn-primary btn-outline`}
-              >
+                className={`btn  btn-primary btn-outline`}>
                 Add
               </button>
             </div>
           )}
 
-          <div className="w-fit flex space-x-2">
-            <label className="flex items-center cursor-pointer gap-2">
+          <div className='w-fit flex space-x-2'>
+            <label className='flex items-center cursor-pointer gap-2'>
               <input
-                type="checkbox"
+                type='checkbox'
                 value={isNFT}
                 onChange={() => setIsNFT(!isNFT)}
-                className="checkbox checkbox-primary"
+                className='checkbox checkbox-primary'
               />
-              <span className="label-text text-brand3">Mint as NFT</span>
+              <span className='label-text text-brand3'>Mint as NFT</span>
             </label>
             {isNFT && (
-              <div className="form-control">
-                <label className="input-group">
+              <div className='form-control'>
+                <label className='input-group'>
                   <input
                     min={1}
-                    type="number"
-                    placeholder="1"
-                    className="input input-bordered input-sm w-24"
+                    type='number'
+                    placeholder='1'
+                    className='input input-bordered input-sm w-24'
                     value={nftPrice}
                     onChange={(e) => setNFTPrice(e.target.value)}
                     required={true}
                   />
-                  <span className="text-brand3 bg-slate-300 dark:bg-slate-600 ">
-                    <PolygonToken></PolygonToken> &nbsp; Matic
+                  <span className='text-brand3 bg-slate-300 dark:bg-slate-600 '>
+                    {State.database.chainId === 0 ? (
+                      <>
+                        <SolanaToken></SolanaToken>&nbsp; SOL
+                      </>
+                    ) : (
+                      <>
+                        <PolygonToken></PolygonToken> &nbsp; Matic
+                      </>
+                    )}
                   </span>
                 </label>
               </div>
@@ -160,14 +165,13 @@ function PollModal({ setPollModalOpen }) {
           </div>
           <button
             type={"submit"}
-            role="button"
-            aria-disabled="true"
+            role='button'
+            aria-disabled='true'
             className={`btn  w-full ${uploadingPoll ? "loading" : ""} ${
               question == "" || options.length < 2 || option !== ""
                 ? "btn-disabled"
                 : "btn-brand"
-            }`}
-          >
+            }`}>
             Take poll
           </button>
         </div>

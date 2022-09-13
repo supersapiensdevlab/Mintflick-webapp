@@ -17,6 +17,7 @@ import {
   confirmTransactionFromFrontend,
 } from "../Utility/utilityFunc";
 import { clusterApiUrl, Connection, PublicKey } from "@solana/web3.js";
+import SolanaToken from "../../../Assets/logos/SolanaToken";
 
 function PhotoPostModal({ setphotoPostModalOpen }) {
   const State = useContext(UserContext);
@@ -137,7 +138,7 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
                       "x-api-key": "-3iYNcRok7Gm4EMl",
                       "content-type": "multipart/form-data",
                     },
-                  }
+                  },
                 )
                 .then(async (data) => {
                   // setUploadingPost(false);
@@ -150,7 +151,7 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
                   await signTransaction(
                     "devnet",
                     data.data.result.encoded_transaction,
-                    uploadToServer(formData, data.data.result.mint)
+                    uploadToServer(formData, data.data.result.mint),
                   );
                 })
                 .catch((err) => {
@@ -222,7 +223,7 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
     const ret = await confirmTransactionFromFrontend(
       connection,
       transaction,
-      solanaWallet
+      solanaWallet,
     );
     // const checks = await connection.confirmTransaction({signature:ret},'finalised');
 
@@ -236,46 +237,44 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
   }
 
   return (
-    <div className="modal-box p-0 bg-slate-100 dark:bg-slate-800 ">
-      <div className="w-full h-fit p-2 bg-slate-300 dark:bg-slate-700">
-        <div className="flex justify-between items-center p-2">
-          <h3 className="flex items-center gap-2 font-bold text-lg text-brand2">
+    <div className='modal-box p-0 bg-slate-100 dark:bg-slate-800 '>
+      <div className='w-full h-fit p-2 bg-slate-300 dark:bg-slate-700'>
+        <div className='flex justify-between items-center p-2'>
+          <h3 className='flex items-center gap-2 font-bold text-lg text-brand2'>
             <Camera />
             Upload Photo
           </h3>
           <X
             onClick={() => clearData()}
-            className="text-brand2 cursor-pointer"
-          ></X>
+            className='text-brand2 cursor-pointer'></X>
         </div>
       </div>
       <form onSubmit={handleSubmit}>
-        <div className="w-full p-4 space-y-3">
+        <div className='w-full p-4 space-y-3'>
           <label
-            htmlFor="post_announcement_image"
-            className=" cursor-pointer flex justify-between items-center gap-2  w-full p-2 border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4"
-          >
+            htmlFor='post_announcement_image'
+            className=' cursor-pointer flex justify-between items-center gap-2  w-full p-2 border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4'>
             {selectedPost ? (
               selectedPost.file ? (
-                <div className="flex items-center">
-                  <FileCheck className="text-emerald-700" />
+                <div className='flex items-center'>
+                  <FileCheck className='text-emerald-700' />
                   {selectedPost.file[0].name.substring(0, 16)}
                 </div>
               ) : (
                 "No file choosen!"
               )
             ) : (
-              <div className="flex items-center gap-1">
+              <div className='flex items-center gap-1'>
                 <File />
                 Choose file *
               </div>
             )}
             <input
-              id="post_announcement_image"
-              type="file"
-              accept="image/*"
+              id='post_announcement_image'
+              type='file'
+              accept='image/*'
               onChange={handleImageChange}
-              className="sr-only"
+              className='sr-only'
               required={true}
               onClick={(event) => {
                 event.target.value = null;
@@ -284,7 +283,7 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
             />
             {selectedPost ? (
               selectedPost.file ? (
-                <div className="flex-grow rounded-lg overflow-clip">
+                <div className='flex-grow rounded-lg overflow-clip'>
                   <img src={selectedPost.localurl}></img>
                 </div>
               ) : null
@@ -304,58 +303,63 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
             value={caption}
             onChange={(e) => setCaption(e.target.value)}
             style={defaultStyle}
-            className="textarea w-full h-24  pt-2 focus:outline-0"
+            className='textarea w-full h-24  pt-2 focus:outline-0'
             placeholder={"Enter caption."}
-            a11ySuggestionsListLabel={"Suggested mentions"}
-          >
+            a11ySuggestionsListLabel={"Suggested mentions"}>
             <Mention
-              trigger="@"
+              trigger='@'
               data={renderData}
-              markup="@__display__"
+              markup='@__display__'
               appendSpaceOnAdd
               onAdd={handleAdd}
             />
           </MentionsInput>
-          <div className="w-fit flex space-x-2">
-            <label className="flex items-center cursor-pointer gap-2">
+          <div className='w-fit flex space-x-2'>
+            <label className='flex items-center cursor-pointer gap-2'>
               <input
-                type="checkbox"
+                type='checkbox'
                 value={isNFT}
                 onChange={() => setIsNFT(!isNFT)}
-                className="checkbox checkbox-primary"
+                className='checkbox checkbox-primary'
               />
-              <span className="label-text text-brand3">Mint as NFT</span>
+              <span className='label-text text-brand3'>Mint as NFT</span>
             </label>
             {isNFT && (
-              <div className="form-control">
-                <label className="input-group">
+              <div className='form-control'>
+                <label className='input-group'>
                   <input
                     min={1}
-                    type="number"
-                    placeholder="1"
-                    className="input input-bordered input-sm w-24"
+                    type='number'
+                    placeholder='1'
+                    className='input input-bordered input-sm w-24'
                     value={nftPrice}
                     onChange={(e) => setNFTPrice(e.target.value)}
                     required={true}
                   />
-                  <span className="text-brand3 bg-slate-300 dark:bg-slate-600 ">
-                    <PolygonToken></PolygonToken> &nbsp; Matic
+                  <span className='text-brand3 bg-slate-300 dark:bg-slate-600 '>
+                    {State.database.chainId === 0 ? (
+                      <>
+                        <SolanaToken></SolanaToken>&nbsp; SOL
+                      </>
+                    ) : (
+                      <>
+                        <PolygonToken></PolygonToken> &nbsp; Matic
+                      </>
+                    )}
                   </span>
                 </label>
               </div>
             )}
           </div>
           <progress
-            class="progress progress-success w-56 hidden"
-            value="50"
-            max="100"
-          ></progress>
+            class='progress progress-success w-56 hidden'
+            value='50'
+            max='100'></progress>
           <button
             type={"submit"}
             className={`btn  ${
               !selectedPost?.file[0] ? "btn-disabled" : "btn-brand"
-            } w-full ${uploadingPost ? "loading " : ""}`}
-          >
+            } w-full ${uploadingPost ? "loading " : ""}`}>
             Post photo
           </button>
         </div>

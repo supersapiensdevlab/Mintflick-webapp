@@ -1,17 +1,20 @@
 import polyfill from "./polyfills";
 import React from "react";
-import ReactDOM from "react-dom/client";
+import ReactDOM, { hydrateRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import Store from "./Store";
-import { hydrate, render } from "react-dom";
+import { createRoot } from "react-dom/client";
 
 const rootElement = document.getElementById("root");
-if (rootElement.hasChildNodes()) {
-  hydrate(<Store data={<App />}></Store>, rootElement);
-} else {
-  render(<Store data={<App />}></Store>, rootElement);
+const root = createRoot(rootElement); // createRoot(container!) if you use TypeScript
+
+// const rootElement = document.getElementById("root");
+if (rootElement) {
+  //   hydrateRoot(<Store data={<App />}></Store>, root);
+  // } else {
+  root.render(<Store data={<App />}></Store>);
 }
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
