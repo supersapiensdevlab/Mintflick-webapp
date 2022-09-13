@@ -49,7 +49,6 @@ function App() {
     console.log(localStorage.getItem("authtoken"));
   }, []);
 
-<<<<<<< HEAD
   // For Live Users
   useEffect(() => {
     axios
@@ -67,8 +66,6 @@ function App() {
       });
   }, []);
 
-=======
->>>>>>> d4dd8490cd72e2cd4491136335a479b63e43e9cc
   return (
     <div className={State.database.dark ? `dark` : " "}>
       <BrowserRouter>
