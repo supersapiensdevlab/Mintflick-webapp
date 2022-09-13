@@ -9,7 +9,6 @@ import useUserActions from "../../../Hooks/useUserActions";
 import { MentionsInput, Mention } from "react-mentions";
 import defaultStyle from "../defaultStyle";
 import { UserContext } from "../../../Store";
-<<<<<<< HEAD
 import { SolanaWallet } from "@web3auth/solana-provider";
 
 import { PhantomWalletAdapter } from "@solana/wallet-adapter-phantom";
@@ -19,11 +18,6 @@ import {
 } from "../Utility/utilityFunc";
 import { clusterApiUrl, Connection, PublicKey } from "@solana/web3.js";
 import SolanaToken from "../../../Assets/logos/SolanaToken";
-=======
-// import { createPandoraExpressSDK } from "pandora-express";
-// import { ethers } from "ethers";
-// import Web3 from "web3";
->>>>>>> d4dd8490cd72e2cd4491136335a479b63e43e9cc
 
 function PhotoPostModal({ setphotoPostModalOpen }) {
   const State = useContext(UserContext);
@@ -138,7 +132,6 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
             // var file = convertBlobToFile(blob, "meta.json");
             // console.log(file);
 
-<<<<<<< HEAD
             uploadFile(selectedPost.file[0]).then(async (cid) => {
               console.log("stored files with cid:", cid);
               console.log(State.database);
@@ -171,78 +164,6 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
                       "x-api-key": "-3iYNcRok7Gm4EMl",
                       "content-type": "multipart/form-data",
                     },
-=======
-            uploadFile(file)
-              .then(async (cid) => {
-                console.log("stored files with cid:", cid);
-                createToken(
-                  "https://ipfs.io/ipfs/" + cid + "meta.json",
-                  nftPrice,
-                  window.ethereum,
-                  setMinting,
-                  setMintingProgress
-                ).then(async (tokenId) => {
-                  console.log("TOKEN ID Created : ", tokenId); // token created
-                  formData.append("tokenId", tokenId);
-                  axios
-                    .post(
-                      `${process.env.REACT_APP_SERVER_URL}/user/announcement`,
-                      formData,
-                      {
-                        headers: {
-                          "content-type": "multipart/form-data",
-                          "auth-token": JSON.stringify(
-                            localStorage.getItem("authtoken")
-                          ),
-                        },
-                      }
-                    )
-                    .then(async (data) => {
-                      setUploadingPost(false);
-                      setSelectedPost(null);
-                      setCaption("");
-                      setTagged([]);
-                      setphotoPostModalOpen(false);
-                      await loadFeed();
-                    })
-                    .catch((err) => {
-                      console.log(err);
-                      setUploadingPost(false);
-                      setSelectedPost(null);
-                      setCaption("");
-                      setTagged([]);
-                    });
-                });
-                // const res = await ExpressSDK.erc721.nft.mint(
-                //   window.ethereum, // Web3 instance configured with metamask provider
-                //   "137", // Network id of blockchain
-                //   "0x4635Ce6b550c4112496a81F12FC296505184CdAB", // Address of Minter
-                //   ethers.utils.parseUnits(nftPrice.toString(), "ether"), //Amount of token
-                //   "https://ipfs.io/ipfs/" + cid + "meta.json" // TokenURI String
-                //   // Nested array of royalties
-                // );
-                // console.log(res);
-                // const res = await mintNft(
-                //   "https://ipfs.io/ipfs/" + cid + "meta.json",
-                //   nftPrice
-                // );
-                // console.log(res);
-              })
-              .catch((err) => {
-                console.log(err);
-              });
-          } else {
-            axios
-              .post(
-                `${process.env.REACT_APP_SERVER_URL}/user/announcement`,
-                formData,
-                {
-                  headers: {
-                    "content-type": "multipart/form-data",
-                    "auth-token": JSON.stringify(
-                      localStorage.getItem("authtoken")
-                    ),
->>>>>>> d4dd8490cd72e2cd4491136335a479b63e43e9cc
                   },
                 )
                 .then(async (data) => {
