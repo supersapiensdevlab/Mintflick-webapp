@@ -137,7 +137,7 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
               console.log(State.database);
               let nftSolanaData = {
                 network: "devnet",
-                wallet: "4uHdbP7FkB4BSx6QAL15wgaphNn33jtpRq9ohMoMC8U2",
+                wallet: State.database.walletAddress,
                 name: caption,
                 symbol: "FLICK",
                 attributes: JSON.stringify([
