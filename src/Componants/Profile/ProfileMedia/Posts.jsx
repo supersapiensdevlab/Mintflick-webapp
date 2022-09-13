@@ -12,7 +12,7 @@ function Posts() {
         ? State.database.userProfileData.data.posts
         : []
     );
-  }, []);
+  });
 
   return (
     <div className="grid grid-cols-3 lg:grid-cols-4 pt-2 gap-1 ">

@@ -10,7 +10,7 @@ function Videos() {
         ? State.database.userProfileData.data.videos
         : []
     );
-  }, []);
+  });
   return (
     <div className="grid grid-cols-3 lg:grid-cols-4 pt-2 gap-1 ">
       {data.reverse().map((video) => (
