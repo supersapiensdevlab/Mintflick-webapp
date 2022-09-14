@@ -18,7 +18,7 @@ import Posts from "./Componants/Profile/ProfileMedia/Posts";
 import Playlists from "./Componants/Profile/ProfileMedia/Playlists";
 import Music from "./Componants/Profile/ProfileMedia/Music";
 import Videos from "./Componants/Profile/ProfileMedia/Videos";
-
+import Web3Connect from "./Componants/Wallet/Web3Connect";
 function App() {
   const State = useContext(UserContext);
   async function isUserAvaliable() {

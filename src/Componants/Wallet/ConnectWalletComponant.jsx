@@ -17,6 +17,8 @@ import { WALLET_ADAPTERS } from "@web3auth/base";
 import { CHAIN_NAMESPACES, SafeEventEmitterProvider } from "@web3auth/base";
 import Main_logo from "../../Assets/logos/Main_logo";
 import Web3 from "web3";
+import { loadOptions } from "@babel/core";
+import { constants } from "buffer";
 
 function ConnectWalletComponant() {
   const modal = useWebModal();
@@ -29,9 +31,33 @@ function ConnectWalletComponant() {
   const State = useContext(UserContext);
   const navigateTo = useNavigate();
 
-  useEffect(() => {
-    const init = async () => {
-      try {
+  const init = async () => {
+    try {
+      const web3auth = new Web3Auth({
+        clientId,
+        chainConfig: {
+          chainNamespace:
+            selectedChain === 0
+              ? CHAIN_NAMESPACES.SOLANA
+              : CHAIN_NAMESPACES.EIP155,
+          chainId: selectedChain === 0 ? "0x1" : "0x89",
+          rpcTarget:
+            selectedChain === 0
+              ? process.env.REACT_APP_SOLANA_RPC
+              : "https://rpc.ankr.com/polygon", // This is the public RPC we have added, please pass on your own endpoint while creating an app
+          displayName: "Polygon Mainnet",
+          blockExplorer: "https://polygonscan.com",
+          ticker: "MATIC",
+          tickerName: "Matic",
+        },
+        uiConfig: {
+          theme: "dark",
+          loginMethodsOrder: ["facebook", "google"],
+          appLogo:
+            "https://ipfs.io/ipfs/bafybeihshcxswtnebaobbgjdvqgam6ynr676gcmbq3ambsg4aznytv3dwi/Mintflick%20icon-12%20%281%29.png", // Your App Logo Here
+        },
+      });
+      if (selectedChain !== 0) {
         const torusWalletAdapter = new TorusWalletAdapter({
           adapterSettings: {
             buttonPosition: "bottom-left",
@@ -54,111 +80,90 @@ function ConnectWalletComponant() {
           },
           clientId: clientId,
         });
-
-        const web3auth = new Web3Auth({
-          clientId,
-          chainConfig: {
-            chainNamespace:
-              selectedChain === 0
-                ? CHAIN_NAMESPACES.SOLANA
-                : CHAIN_NAMESPACES.EIP155,
-            chainId: selectedChain === 0 ? "0x1" : "0x89",
-            rpcTarget:
-              selectedChain === 0
-                ? process.env.REACT_APP_SOLANA_RPC
-                : "https://rpc.ankr.com/polygon", // This is the public RPC we have added, please pass on your own endpoint while creating an app
-            displayName: "Polygon Mainnet",
-            blockExplorer: "https://polygonscan.com",
-            ticker: "MATIC",
-            tickerName: "Matic",
-          },
-          uiConfig: {
-            theme: "dark",
-            loginMethodsOrder: ["facebook", "google"],
-            appLogo:
-              "https://ipfs.io/ipfs/bafybeihshcxswtnebaobbgjdvqgam6ynr676gcmbq3ambsg4aznytv3dwi/Mintflick%20icon-12%20%281%29.png", // Your App Logo Here
-          },
-        });
         web3auth.configureAdapter(torusWalletAdapter);
+      }
 
-        setWeb3auth(web3auth);
-        await web3auth.initModal({
-          modalConfig: {
-            [WALLET_ADAPTERS.OPENLOGIN]: {
-              label: "openlogin",
-              loginMethods: {
-                reddit: {
-                  showOnModal: false,
-                  name: "reddit",
-                },
+      setWeb3auth(web3auth);
+      await web3auth.initModal({
+        modalConfig: {
+          [WALLET_ADAPTERS.OPENLOGIN]: {
+            label: "openlogin",
+            loginMethods: {
+              reddit: {
+                showOnModal: false,
+                name: "reddit",
               },
             },
           },
-        });
+        },
+      });
 
-        if (web3auth.provider) {
-          setProvider(web3auth.provider);
-        }
-      } catch (error) {
-        console.error(error);
+      if (web3auth.provider) {
+        setProvider(web3auth.provider);
       }
-    };
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
     init();
+
+    loadOptions();
   }, [selectedChain]);
 
   useEffect(() => {
-    if (provider) {
-      provider.on("accountsChanged", (accounts) => {
-        console.log("accountsChanged", accounts);
-      });
-      provider.on("chainChanged", (chainId) => {
-        console.log("chainChanged", chainId);
-      });
-      provider.on("disconnect", (error) => {
-        console.log("disconnect", error);
-      });
-      console.log(provider);
-
-      getAccounts();
-    }
+    getAccounts();
+    console.log(provider);
   }, [provider]);
   async function isUserAvaliable(walletAddress, provider) {
-    await axios({
-      method: "post",
-      url: `${process.env.REACT_APP_SERVER_URL}/user/getuser_by_wallet`,
-      data: {
-        walletId: walletAddress,
-      },
-    })
-      .then((response) => {
-        console.log(response);
-
-        State.updateDatabase({
-          userData: response,
-        });
-        console.log("user data saved in state");
-        localStorage.setItem("authtoken", response.data.jwtToken);
-        console.log("auth token saved in storage");
-        localStorage.setItem("walletAddress", walletAddress);
-        console.log("wallet address saved in storage");
-        State.updateDatabase({
-          provider: provider,
-        });
-        console.log("provider saved in state");
-        // localStorage.setItem(
-        //   "v2provider",
-        //   JSON.stringify(provider, getCircularReplacer())
-        // );
-
-        response.status === 200 && navigateTo("/homescreen/home");
+    if (
+      provider ||
+      !provider === null ||
+      !provider === undefined ||
+      !provider === "undefined"
+    ) {
+      await axios({
+        method: "post",
+        url: `${process.env.REACT_APP_SERVER_URL}/user/getuser_by_wallet`,
+        data: {
+          walletId: walletAddress,
+        },
       })
-      .catch(function (error) {
-        console.log(error);
-        navigateTo("/create_new_user");
-      });
+        .then((response) => {
+          console.log(response);
+
+          console.log("user data saved in state");
+          localStorage.setItem("authtoken", response.data.jwtToken);
+          console.log("auth token saved in storage");
+          localStorage.setItem("walletAddress", walletAddress);
+          console.log("wallet address saved in storage");
+          State.updateDatabase({
+            provider: provider,
+            userData: response,
+          });
+          console.log("provider saved in state");
+          console.log(web3auth.provider);
+          // localStorage.setItem(
+          //   "v2provider",
+          //   JSON.stringify(provider, getCircularReplacer())
+          // );
+
+          response.status === 200 && navigateTo("/homescreen/home");
+        })
+        .catch(function (error) {
+          console.log(error);
+          navigateTo("/create_new_user");
+        });
+    }
   }
   const getAccounts = async () => {
-    if (!provider) {
+    if (
+      !provider ||
+      provider === null ||
+      provider === undefined ||
+      provider === "undefined"
+    ) {
       console.log("provider not initialized yet");
       return;
     }
@@ -196,7 +201,11 @@ function ConnectWalletComponant() {
         <button
           onClick={async () => {
             const web3authProvider = await web3auth.connect();
-            setProvider((prev) => web3authProvider);
+            setProvider(web3authProvider);
+            State.updateDatabase({
+              provider: web3authProvider,
+            });
+            console.log(provider);
           }}
           className='btn btn-brand sm:w-1/2'>
           Connect wallet
@@ -207,8 +216,10 @@ function ConnectWalletComponant() {
         <button
           onClick={async () => {
             const web3authProvider = await web3auth.connect();
-
-            setProvider((prev) => web3authProvider);
+            setProvider(web3authProvider);
+            State.updateDatabase({
+              provider: web3authProvider,
+            });
           }}
           className='btn btn-outline btn-primary sm:w-1/2'>
           Create new wallet
@@ -232,6 +243,9 @@ function ConnectWalletComponant() {
             }}
           />
           <PolygonToken className={selectedChain === 0 ? "saturate-0" : null} />
+          {/* {switching ? (
+            <button class='btn btn-ghost btn-square loading'></button>
+          ) : null} */}
         </label>
       </div>
       <div className='w-full md:w-fit border p-4 space-y-2 rounded-lg border-slate-800'>

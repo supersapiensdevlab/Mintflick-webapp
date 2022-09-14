@@ -161,7 +161,7 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
                   nftSolanaData,
                   {
                     headers: {
-                      "x-api-key": "-3iYNcRok7Gm4EMl",
+                      "x-api-key": "6ENAkcg4YJcHhlYf",
                       "content-type": "multipart/form-data",
                     },
                   },
@@ -182,12 +182,13 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
                 })
                 .catch((err) => {
                   console.log(err);
-                  setUploadingPost(false);
-                  setSelectedPost(null);
-                  setCaption("");
-                  setTagged([]);
+                  clearData();
                 });
             });
+            // } else {
+            //   alert("Please add your market address");
+            //   clearData();
+            // }
           } else {
             uploadToServer(formData, null);
           }
