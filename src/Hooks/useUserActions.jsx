@@ -13,7 +13,7 @@ export default function useUserActions() {
       .then((response) => {
         let data = response.data;
         State.updateDatabase({
-          feedData: [...State.database.feedData, ...data],
+          feedData: data,
         });
       })
       .catch(function (error) {

@@ -87,8 +87,8 @@ function PhotoPostModal({ setMarketPlaceModalOpen }) {
         formdata.append("wallet", State.database.walletAddress);
         formdata.append("name", tokenName);
         formdata.append("symbol", tokenSymbol);
-        formdata.append("description", tokenSymbol);
-        formdata.append("decimals", tokenSymbol);
+        // formdata.append("description", tokenSymbol);
+        // formdata.append("decimals", tokenSymbol);
 
         formdata.append(
           "file",
@@ -109,7 +109,7 @@ function PhotoPostModal({ setMarketPlaceModalOpen }) {
             setTokenAddress(data.data.result.mint);
             await signTransaction(
               "devnet",
-              data.data.result.enoded_transaction,
+              data.data.result.encoded_transaction,
               createMarketplace,
             );
           })
@@ -128,24 +128,28 @@ function PhotoPostModal({ setMarketPlaceModalOpen }) {
     let formdata = new FormData();
     formdata.append("network", "devnet");
     formdata.append("creator_wallet", State.database.walletAddress);
-    formdata.append("transaction_fee", 5); //MintFlick Treasury Wallet Address
-    formdata.append("currency_address", tokenAddress);
-    formdata.append("fee_recipient", process.env.REACT_APP_TREASURY_WALLET);
-    console.log(formdata);
+    // formdata.append("transaction_fee", 5); //MintFlick Treasury Wallet Address
+    // formdata.append("currency_address", tokenAddress);
+    // formdata.append("fee_recipient", process.env.REACT_APP_TREASURY_WALLET);
+
+    let raw = JSON.stringify({
+      network: "devnet",
+      transaction_fee: 10,
+      currency_address: tokenAddress,
+      fee_payer: process.env.REACT_APP_TREASURY_WALLET,
+      fee_recipient: process.env.REACT_APP_TREASURY_WALLET,
+      creator_wallet: State.database.walletAddress,
+    });
+
+    console.log(raw);
     axios
-      .post(`https://api.shyft.to/sol/v1/marketplace/create`, formdata, {
+      .post(`https://api.shyft.to/sol/v1/marketplace/create`, raw, {
         headers: {
           "x-api-key": "6ENAkcg4YJcHhlYf",
           "content-type": "application/json",
         },
       })
       .then(async (data) => {
-        // setcreatingMarketplace(false);
-        // setSelectedToken(null);
-        // settokenName("");
-        // setTokenSymbol([]);
-        // setphotoPostModalOpen(false);
-        // await loadFeed();
         console.log("Result:", data.data);
         await signTransaction(
           "devnet",
