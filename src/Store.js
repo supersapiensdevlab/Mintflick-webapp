@@ -40,7 +40,7 @@ function Store(props) {
   const addLiveUsers = (data) => {
     setstore((prev) => ({
       ...prev,
-      liveUsers: [...prev.liveUsers, data],
+      liveUsers: [...store.liveUsers, data],
     }));
   };
   const addFeed = (data) => {

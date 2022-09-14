@@ -41,7 +41,7 @@ function LiveChannels() {
                   width={33}
                   height={33}
                   className="h-full rounded-full border-2 border-rose-600"
-                  src={channel.profile_image}
+                  src={channel.profile_image ? channel.profile_image : placeholderImage}
                   alt="profileImage"
                   placeholderSrc={placeholderImage}
                 />
