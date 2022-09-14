@@ -38,10 +38,9 @@ function Store(props) {
     updateStore({ toasts: [] });
   };
   const addLiveUsers = (data) => {
-    setstore((prev) => ({
-      ...prev,
+    updateStore({
       liveUsers: [...store.liveUsers, data],
-    }));
+    });
   };
   const addFeed = (data) => {
     setstore((prev) => ({
