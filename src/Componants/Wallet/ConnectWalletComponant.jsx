@@ -29,81 +29,81 @@ function ConnectWalletComponant() {
   const State = useContext(UserContext);
   const navigateTo = useNavigate();
 
-  useEffect(() => {
-    const init = async () => {
-      try {
-        const torusWalletAdapter = new TorusWalletAdapter({
-          adapterSettings: {
-            buttonPosition: "bottom-left",
-          },
-          loginSettings: {
-            verifier: "google",
-          },
-          initParams: {
-            buildEnv: "testing",
-          },
-          chainConfig: {
-            chainNamespace: CHAIN_NAMESPACES.EIP155,
-            chainId: "0x3",
-            rpcTarget:
-              "https://ropsten.infura.io/v3/776218ac4734478c90191dde8cae483c",
-            displayName: "ropsten",
-            blockExplorer: "https://ropsten.etherscan.io/",
-            ticker: "ETH",
-            tickerName: "Ethereum",
-          },
-          clientId: clientId,
-        });
+  const initWeb3Auth = async () => {
+    try {
+      const torusWalletAdapter = new TorusWalletAdapter({
+        adapterSettings: {
+          buttonPosition: "bottom-left",
+        },
+        loginSettings: {
+          verifier: "google",
+        },
+        initParams: {
+          buildEnv: "testing",
+        },
+        chainConfig: {
+          chainNamespace: CHAIN_NAMESPACES.EIP155,
+          chainId: "0x3",
+          rpcTarget:
+            "https://ropsten.infura.io/v3/776218ac4734478c90191dde8cae483c",
+          displayName: "ropsten",
+          blockExplorer: "https://ropsten.etherscan.io/",
+          ticker: "ETH",
+          tickerName: "Ethereum",
+        },
+        clientId: clientId,
+      });
 
-        const web3auth = new Web3Auth({
-          clientId,
-          chainConfig: {
-            chainNamespace:
-              selectedChain === 0
-                ? CHAIN_NAMESPACES.SOLANA
-                : CHAIN_NAMESPACES.EIP155,
-            chainId: selectedChain === 0 ? "0x1" : "0x89",
-            rpcTarget:
-              selectedChain === 0
-                ? process.env.REACT_APP_SOLANA_RPC
-                : "https://rpc.ankr.com/polygon", // This is the public RPC we have added, please pass on your own endpoint while creating an app
-            displayName: "Polygon Mainnet",
-            blockExplorer: "https://polygonscan.com",
-            ticker: "MATIC",
-            tickerName: "Matic",
-          },
-          uiConfig: {
-            theme: "dark",
-            loginMethodsOrder: ["facebook", "google"],
-            appLogo:
-              "https://ipfs.io/ipfs/bafybeihshcxswtnebaobbgjdvqgam6ynr676gcmbq3ambsg4aznytv3dwi/Mintflick%20icon-12%20%281%29.png", // Your App Logo Here
-          },
-        });
-        web3auth.configureAdapter(torusWalletAdapter);
+      const web3auth = new Web3Auth({
+        clientId,
+        chainConfig: {
+          chainNamespace:
+            selectedChain === 0
+              ? CHAIN_NAMESPACES.SOLANA
+              : CHAIN_NAMESPACES.EIP155,
+          chainId: selectedChain === 0 ? "0x1" : "0x89",
+          rpcTarget:
+            selectedChain === 0
+              ? process.env.REACT_APP_SOLANA_RPC
+              : "https://rpc.ankr.com/polygon", // This is the public RPC we have added, please pass on your own endpoint while creating an app
+          displayName: "Polygon Mainnet",
+          blockExplorer: "https://polygonscan.com",
+          ticker: "MATIC",
+          tickerName: "Matic",
+        },
+        uiConfig: {
+          theme: "dark",
+          loginMethodsOrder: ["facebook", "google"],
+          appLogo:
+            "https://ipfs.io/ipfs/bafybeihshcxswtnebaobbgjdvqgam6ynr676gcmbq3ambsg4aznytv3dwi/Mintflick%20icon-12%20%281%29.png", // Your App Logo Here
+        },
+      });
+      web3auth.configureAdapter(torusWalletAdapter);
 
-        setWeb3auth(web3auth);
-        await web3auth.initModal({
-          modalConfig: {
-            [WALLET_ADAPTERS.OPENLOGIN]: {
-              label: "openlogin",
-              loginMethods: {
-                reddit: {
-                  showOnModal: false,
-                  name: "reddit",
-                },
+      setWeb3auth(web3auth);
+      await web3auth.initModal({
+        modalConfig: {
+          [WALLET_ADAPTERS.OPENLOGIN]: {
+            label: "openlogin",
+            loginMethods: {
+              reddit: {
+                showOnModal: false,
+                name: "reddit",
               },
             },
           },
-        });
+        },
+      });
 
-        if (web3auth.provider) {
-          setProvider(web3auth.provider);
-        }
-      } catch (error) {
-        console.error(error);
+      if (web3auth.provider) {
+        setProvider(web3auth.provider);
       }
-    };
-    init();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  useEffect(() => {
+    initWeb3Auth();
   }, [selectedChain]);
 
   useEffect(() => {
@@ -179,26 +179,28 @@ function ConnectWalletComponant() {
   };
   return (
     <div
-      className='flex flex-col justify-start w-fit lg:w-1/2 space-y-6 p-6
-      lg:p-12 bg-texture bg-repeat'>
-      <p className='text-5xl font-bold text-brand-gradient'>Connect Wallet</p>
-      <p className='text-brand4 text-lg font-medium'>
-        <p className='text-xl font-semibold text-brand2'>What is wallet?</p>
+      className="flex flex-col justify-start w-fit lg:w-1/2 space-y-6 p-6
+      lg:p-12 bg-texture bg-repeat"
+    >
+      <p className="text-5xl font-bold text-brand-gradient">Connect Wallet</p>
+      <p className="text-brand4 text-lg font-medium">
+        <p className="text-xl font-semibold text-brand2">What is wallet?</p>
         Crypto wallets store your private keys, keeping your crypto safe and
         accessible. They also allow you to send, receive, and spend
         cryptocurrencies like Bitcoin and Ethereum.
       </p>
-      <p className='text-brand4 text-lg font-medium'>
+      <p className="text-brand4 text-lg font-medium">
         Connect your crypto wallet to mint your NFT's in Mintflick.If you do not
         have a wallet then just create one.
       </p>
-      <div className='w-full flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4 pt-10'>
+      <div className="w-full flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4 pt-10">
         <button
           onClick={async () => {
             const web3authProvider = await web3auth.connect();
             setProvider((prev) => web3authProvider);
           }}
-          className='btn btn-brand sm:w-1/2'>
+          className="btn btn-brand sm:w-1/2"
+        >
           Connect wallet
         </button>
         {/* <button onClick={getUserInfo} className="card">
@@ -210,19 +212,20 @@ function ConnectWalletComponant() {
 
             setProvider((prev) => web3authProvider);
           }}
-          className='btn btn-outline btn-primary sm:w-1/2'>
+          className="btn btn-outline btn-primary sm:w-1/2"
+        >
           Create new wallet
         </button>
       </div>
-      <div className='form-control w-fit  '>
-        <label className='label cursor-pointer gap-4'>
-          <span className='label-text text-white'>Switch Chains</span>
+      <div className="form-control w-fit  ">
+        <label className="label cursor-pointer gap-4">
+          <span className="label-text text-white">Switch Chains</span>
           <SolanaToken
             className={State.database.chainId === 1 ? "saturate-0" : null}
           />
           <input
-            type='checkbox'
-            className='toggle bg-brand'
+            type="checkbox"
+            className="toggle bg-brand"
             onChange={() => {
               let _selectedChain = selectedChain === 0 ? 1 : 0;
               setSelectedChain(_selectedChain);
@@ -234,15 +237,15 @@ function ConnectWalletComponant() {
           <PolygonToken className={selectedChain === 0 ? "saturate-0" : null} />
         </label>
       </div>
-      <div className='w-full md:w-fit border p-4 space-y-2 rounded-lg border-slate-800'>
-        <p className='text-lg font-medium text-brand4'>Supported Wallets</p>
-        <div className='w-full flex flex-wrap justify-between md:space-x-2'>
+      <div className="w-full md:w-fit border p-4 space-y-2 rounded-lg border-slate-800">
+        <p className="text-lg font-medium text-brand4">Supported Wallets</p>
+        <div className="w-full flex flex-wrap justify-between md:space-x-2">
           {wallets.map((wallet, i) => (
             <img
               key={i}
-              className='h-16 w-16 bg-slate-800 rounded-full p-2'
+              className="h-16 w-16 bg-slate-800 rounded-full p-2"
               src={wallet}
-              alt='wallet'
+              alt="wallet"
             />
           ))}
         </div>
