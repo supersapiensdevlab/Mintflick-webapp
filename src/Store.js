@@ -18,8 +18,11 @@ function Store(props) {
     shareModalOpen: false,
     //buy nft modal
     buyNFTModalOpen: false,
+    buyNFTModalData: {},
     //Toast messages
     toasts: [],
+    //chain id
+    chainId: 0,
   });
   const updateStore = (data) => {
     setstore((prev) => ({
@@ -35,10 +38,9 @@ function Store(props) {
     updateStore({ toasts: [] });
   };
   const addLiveUsers = (data) => {
-    setstore((prev) => ({
-      ...prev,
-      liveUsers: [...prev.liveUsers, data],
-    }));
+    updateStore({
+      liveUsers: [...store.liveUsers, data],
+    });
   };
   const addFeed = (data) => {
     setstore((prev) => ({
@@ -55,8 +57,7 @@ function Store(props) {
         deleteToast: deleteToast,
         addLiveUsers: addLiveUsers,
         addFeed: addFeed,
-      }}
-    >
+      }}>
       {props.data}
     </UserContext.Provider>
   );

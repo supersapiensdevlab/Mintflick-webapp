@@ -261,15 +261,13 @@ function Header() {
         <TopNavigation></TopNavigation>
       </div>
       <div className="flex w-1/3 justify-end items-center space-x-4 h-full   ">
-        <div
-          onClick={() => {
-            State.toast("info", "hi");
-          }}
+        <NavLink
+          to={'/homescreen/golive'}
           className="hidden lg:flex  btn btn-outline btn-primary gap-2 rounded-full"
         >
           <AccessPoint size={28}></AccessPoint>
           GO LIVE
-        </div>
+        </NavLink>
         {/* <button class="btn btn-circle btn-ghost">
           <Bell size={28}></Bell>
         </button> */}
@@ -294,7 +292,7 @@ function Header() {
           </label>
           <div
             tabindex="0"
-            className="menu menu-compact dropdown-content mt-3 shadow-xl bg-slate-100 dark:bg-slate-700  rounded-lg w-80 overflow-y-scroll	max-h-80"
+            className="menu menu-compact dropdown-content mt-3 shadow-xl bg-slate-100 dark:bg-slate-700  rounded-lg w-80 overflow-y-scroll	max-h-96"
           >
             {notification.length > 0 ? (
               <div className="w-full p-2">

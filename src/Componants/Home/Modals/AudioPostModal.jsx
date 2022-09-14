@@ -19,6 +19,7 @@ import useUserActions from "../../../Hooks/useUserActions";
 import { UserContext } from "../../../Store";
 import { MentionsInput, Mention } from "react-mentions";
 import defaultStyle from "../defaultStyle";
+import SolanaToken from "../../../Assets/logos/SolanaToken";
 
 function AudioPostModal({ setAudioPostModalOpen }) {
   const State = useContext(UserContext);
@@ -167,11 +168,11 @@ function AudioPostModal({ setAudioPostModalOpen }) {
           let formData = new FormData(); // Currently empty
           formData.append(
             "userName",
-            State.database.userData.data.user.username
+            State.database.userData.data.user.username,
           );
           formData.append(
             "userImage",
-            State.database.userData.data.user.profile_image
+            State.database.userData.data.user.profile_image,
           );
           formData.append("trackName", track.trackName);
           formData.append("genre", track.genre);
@@ -189,12 +190,12 @@ function AudioPostModal({ setAudioPostModalOpen }) {
           formData.append(
             "trackFile",
             selectedTrack.file,
-            selectedTrack.file.name
+            selectedTrack.file.name,
           );
           formData.append(
             "trackImage",
             selectedThumbnail.file,
-            selectedThumbnail.file.name
+            selectedThumbnail.file.name,
           );
           formData.append("trackHash", cid);
           if (isNFT) {
@@ -244,7 +245,7 @@ function AudioPostModal({ setAudioPostModalOpen }) {
                   nftPrice,
                   window.ethereum,
                   setMinting,
-                  setMintingProgress
+                  setMintingProgress,
                 ).then(async (tokenId) => {
                   console.log("TOKEN ID Created : ", tokenId); // token created
                   formData.append("tokenId", tokenId);
@@ -256,15 +257,15 @@ function AudioPostModal({ setAudioPostModalOpen }) {
                         headers: {
                           "content-type": "multipart/form-data",
                           "auth-token": JSON.stringify(
-                            localStorage.getItem("authtoken")
+                            localStorage.getItem("authtoken"),
                           ),
                         },
-                      }
+                      },
                     )
                     .then((res) => {
                       State.toast(
                         "success",
-                        "Your music uplaoded successfully!"
+                        "Your music uplaoded successfully!",
                       );
                       clearState();
                       setTagged([]);
@@ -272,7 +273,7 @@ function AudioPostModal({ setAudioPostModalOpen }) {
                     .catch((err) => {
                       State.toast(
                         "error",
-                        "Something went wrong while uploading music!"
+                        "Something went wrong while uploading music!",
                       );
                       console.log(err);
                       clearState();
@@ -283,7 +284,7 @@ function AudioPostModal({ setAudioPostModalOpen }) {
               .catch((err) => {
                 State.toast(
                   "error",
-                  "Something went wrong while uploading music!"
+                  "Something went wrong while uploading music!",
                 );
                 console.log(err);
               });
@@ -296,10 +297,10 @@ function AudioPostModal({ setAudioPostModalOpen }) {
                   headers: {
                     "content-type": "multipart/form-data",
                     "auth-token": JSON.stringify(
-                      localStorage.getItem("authtoken")
+                      localStorage.getItem("authtoken"),
                     ),
                   },
-                }
+                },
               )
               .then((res) => {
                 State.toast("success", "Your music uplaoded successfully!");
@@ -310,7 +311,7 @@ function AudioPostModal({ setAudioPostModalOpen }) {
               .catch((err) => {
                 State.toast(
                   "error",
-                  "Something went wrong while uploading music!"
+                  "Something went wrong while uploading music!",
                 );
                 console.log(err);
                 clearState();
@@ -343,50 +344,47 @@ function AudioPostModal({ setAudioPostModalOpen }) {
   };
 
   return (
-    <div className="modal-box p-0 bg-slate-100 dark:bg-slate-800 ">
-      <div className="w-full h-fit p-2 bg-slate-300 dark:bg-slate-700">
-        <div className="flex justify-between items-center p-2">
-          <h3 className="flex items-center gap-2 font-bold text-lg text-brand2">
+    <div className='modal-box p-0 bg-slate-100 dark:bg-slate-800 '>
+      <div className='w-full h-fit p-2 bg-slate-300 dark:bg-slate-700'>
+        <div className='flex justify-between items-center p-2'>
+          <h3 className='flex items-center gap-2 font-bold text-lg text-brand2'>
             <Music />
             Upload Audio
           </h3>
           <X
             onClick={() => {
-              clearState()
+              clearState();
             }}
-            className="text-brand2 cursor-pointer"
-          ></X>
+            className='text-brand2 cursor-pointer'></X>
         </div>
       </div>
       <form onSubmit={handleSubmit}>
-        <div className="w-full p-4 space-y-3">
-          <div className="flex flex-col sm:flex-row gap-1">
+        <div className='w-full p-4 space-y-3'>
+          <div className='flex flex-col sm:flex-row gap-1'>
             <label
-              htmlFor="trackthumbnail" className="  cursor-pointer flex flex-col items-start gap-2  w-full p-2 border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4">
+              htmlFor='trackthumbnail'
+              className='  cursor-pointer flex flex-col items-start gap-2  w-full p-2 border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4'>
               {selectedThumbnail ? (
                 selectedThumbnail.file ? (
-                  <div className="w-full  rounded-lg overflow-clip">
+                  <div className='w-full  rounded-lg overflow-clip'>
                     <img src={selectedThumbnail.localurl}></img>
                   </div>
                 ) : null
               ) : (
                 <></>
               )}
-              <div
-
-                className="flex gap-1 cursor-pointer"
-              >
+              <div className='flex gap-1 cursor-pointer'>
                 <input
-                  id="trackthumbnail"
-                  type="file"
-                  name="trackImage"
-                  accept=".jpg,.png,.jpeg,.gif,.webp"
+                  id='trackthumbnail'
+                  type='file'
+                  name='trackImage'
+                  accept='.jpg,.png,.jpeg,.gif,.webp'
                   onChange={onTrackFileChange}
-                  className="sr-only "
+                  className='sr-only '
                   required={true}
                 />
                 {selectedThumbnail && selectedThumbnail.file ? (
-                  <FileCheck className="text-emerald-700" />
+                  <FileCheck className='text-emerald-700' />
                 ) : (
                   <File />
                 )}
@@ -396,9 +394,8 @@ function AudioPostModal({ setAudioPostModalOpen }) {
               </div>
             </label>
             <div
-              htmlFor=""
-              className=" cursor-pointer flex flex-col items-start gap-2  w-full p-2 border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4"
-            >
+              htmlFor=''
+              className=' cursor-pointer flex flex-col items-start gap-2  w-full p-2 border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4'>
               {selectedTrack ? (
                 selectedTrack.file ? (
                   // <div className='rounded-lg overflow-clip'>
@@ -412,18 +409,18 @@ function AudioPostModal({ setAudioPostModalOpen }) {
               ) : (
                 <></>
               )}
-              <label htmlFor="trackfile" className="flex gap-1 cursor-pointer">
+              <label htmlFor='trackfile' className='flex gap-1 cursor-pointer'>
                 <input
                   required
-                  id="trackfile"
-                  type="file"
-                  accept=".mp3"
-                  name="trackFile"
+                  id='trackfile'
+                  type='file'
+                  accept='.mp3'
+                  name='trackFile'
                   onChange={onTrackFileChange}
-                  className="sr-only "
+                  className='sr-only '
                 />
                 {selectedTrack && selectedTrack.file ? (
-                  <FileCheck className="text-emerald-700" />
+                  <FileCheck className='text-emerald-700' />
                 ) : (
                   <FileMusic />
                 )}
@@ -434,18 +431,17 @@ function AudioPostModal({ setAudioPostModalOpen }) {
             </div>
           </div>
           <input
-            type="text"
-            placeholder="Track name"
-            className="input w-full "
+            type='text'
+            placeholder='Track name'
+            className='input w-full '
             value={track.trackName}
             onChange={(e) => setTrack({ ...track, trackName: e.target.value })}
             required
           />
-          <div className="flex space-x-2">
+          <div className='flex space-x-2'>
             <select
-              className="select flex-grow"
-              onChange={(e) => setTrack({ ...track, genre: e.target.value })}
-            >
+              className='select flex-grow'
+              onChange={(e) => setTrack({ ...track, genre: e.target.value })}>
               <option disabled selected>
                 Genre
               </option>
@@ -454,9 +450,8 @@ function AudioPostModal({ setAudioPostModalOpen }) {
               ))}
             </select>
             <select
-              className="select flex-grow"
-              onChange={(e) => setTrack({ ...track, mood: e.target.value })}
-            >
+              className='select flex-grow'
+              onChange={(e) => setTrack({ ...track, mood: e.target.value })}>
               <option disabled selected>
                 Mood
               </option>
@@ -481,60 +476,57 @@ function AudioPostModal({ setAudioPostModalOpen }) {
               setTrack({ ...track, description: e.target.value })
             }
             style={defaultStyle}
-            className="textarea w-full h-24  pt-2 focus:outline-0"
+            className='textarea w-full h-24  pt-2 focus:outline-0'
             placeholder={"Enter caption."}
-            a11ySuggestionsListLabel={"Suggested mentions"}
-          >
+            a11ySuggestionsListLabel={"Suggested mentions"}>
             <Mention
-              trigger="@"
+              trigger='@'
               data={renderData}
-              markup="@__display__"
+              markup='@__display__'
               appendSpaceOnAdd
               onAdd={handleAdd}
             />
           </MentionsInput>
           <span
             onClick={() => setadvancedOptionsShow(!advancedOptionsShow)}
-            className="flex px-2 items-center gap-1 font-semibold text-brand3 cursor-pointer"
-          >
+            className='flex px-2 items-center gap-1 font-semibold text-brand3 cursor-pointer'>
             Advanced options
             <label
-              class={`swap ${advancedOptionsShow && "swap-active"
-                } swap-rotate text-6xl`}
-            >
-              <div class="swap-on">
+              class={`swap ${
+                advancedOptionsShow && "swap-active"
+              } swap-rotate text-6xl`}>
+              <div class='swap-on'>
                 <ChevronUp />
               </div>
-              <div class="swap-off">
+              <div class='swap-off'>
                 <ChevronDown />
               </div>
             </label>
           </span>
           {advancedOptionsShow && (
             <>
-              <div className="flex flex-col lg:flex-row gap-2">
+              <div className='flex flex-col lg:flex-row gap-2'>
                 <input
-                  type="text"
-                  placeholder="Track ISRC"
-                  className="input flex-grow "
+                  type='text'
+                  placeholder='Track ISRC'
+                  className='input flex-grow '
                   value={track.isrc}
                   onChange={(e) => setTrack({ ...track, isrc: e.target.value })}
                 />
                 <input
-                  type="text"
-                  placeholder="Track ISWC"
-                  className="input flex-grow "
+                  type='text'
+                  placeholder='Track ISWC'
+                  className='input flex-grow '
                   value={track.iswc}
                   onChange={(e) => setTrack({ ...track, iswc: e.target.value })}
                 />
               </div>
-              <div className="flex gap-1 w-full flex-wrap">
+              <div className='flex gap-1 w-full flex-wrap'>
                 <select
-                  className="select select-xs flex-grow"
+                  className='select select-xs flex-grow'
                   onChange={(e) =>
                     setTrack({ ...track, allowAttribution: e.target.value })
-                  }
-                >
+                  }>
                   <option disabled selected>
                     Allow Attribution?
                   </option>
@@ -543,11 +535,10 @@ function AudioPostModal({ setAudioPostModalOpen }) {
                   ))}
                 </select>
                 <select
-                  className="select select-xs flex-grow"
+                  className='select select-xs flex-grow'
                   onChange={(e) =>
                     setTrack({ ...track, commercialUse: e.target.value })
-                  }
-                >
+                  }>
                   <option disabled selected>
                     Commercial Use?
                   </option>
@@ -556,11 +547,10 @@ function AudioPostModal({ setAudioPostModalOpen }) {
                   ))}
                 </select>
                 <select
-                  className="select select-xs flex-grow"
+                  className='select select-xs flex-grow'
                   onChange={(e) =>
                     setTrack({ ...track, derivativeWorks: e.target.value })
-                  }
-                >
+                  }>
                   <option disabled selected>
                     Derivative Works?
                   </option>
@@ -572,30 +562,38 @@ function AudioPostModal({ setAudioPostModalOpen }) {
             </>
           )}
 
-          <div className="w-fit flex space-x-2">
-            <label className="flex items-center cursor-pointer gap-2">
+          <div className='w-fit flex space-x-2'>
+            <label className='flex items-center cursor-pointer gap-2'>
               <input
-                type="checkbox"
+                type='checkbox'
                 value={isNFT}
                 onChange={() => setIsNFT(!isNFT)}
-                className="checkbox checkbox-primary"
+                className='checkbox checkbox-primary'
               />
-              <span className="label-text text-brand3">Mint as NFT</span>
+              <span className='label-text text-brand3'>Mint as NFT</span>
             </label>
             {isNFT && (
-              <div className="form-control">
-                <label className="input-group">
+              <div className='form-control'>
+                <label className='input-group'>
                   <input
                     min={1}
-                    type="number"
-                    placeholder="1"
-                    className="input input-bordered input-sm w-24"
+                    type='number'
+                    placeholder='1'
+                    className='input input-bordered input-sm w-24'
                     value={nftPrice}
                     onChange={(e) => setNFTPrice(e.target.value)}
                     required={true}
                   />
-                  <span className="text-brand3 bg-slate-300 dark:bg-slate-600 ">
-                    <PolygonToken></PolygonToken> &nbsp; Matic
+                  <span className='text-brand3 bg-slate-300 dark:bg-slate-600 '>
+                    {State.database.chainId === 0 ? (
+                      <>
+                        <SolanaToken></SolanaToken>&nbsp; SOL
+                      </>
+                    ) : (
+                      <>
+                        <PolygonToken></PolygonToken> &nbsp; Matic
+                      </>
+                    )}
                   </span>
                 </label>
               </div>
@@ -603,11 +601,11 @@ function AudioPostModal({ setAudioPostModalOpen }) {
           </div>
           <button
             type={"submit"}
-            className={`btn  w-full ${selectedTrack?.file && selectedThumbnail?.file
+            className={`btn  w-full ${
+              selectedTrack?.file && selectedThumbnail?.file
                 ? "btn-brand"
                 : "btn-disabled"
-              } ${uploadingTrack ? "loading" : ""}`}
-          >
+            } ${uploadingTrack ? "loading" : ""}`}>
             Post audio
           </button>
         </div>

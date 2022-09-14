@@ -18,6 +18,7 @@ import Posts from "./Componants/Profile/ProfileMedia/Posts";
 import Playlists from "./Componants/Profile/ProfileMedia/Playlists";
 import Music from "./Componants/Profile/ProfileMedia/Music";
 import Videos from "./Componants/Profile/ProfileMedia/Videos";
+import GoLive from "./Componants/GoLive/GoLive";
 
 function App() {
   const State = useContext(UserContext);
@@ -49,26 +50,44 @@ function App() {
     console.log(localStorage.getItem("authtoken"));
   }, []);
 
+  // For Live Users
+  useEffect(() => {
+    axios
+      .get(`${process.env.REACT_APP_SERVER_URL}/get_activeusers`)
+      .then(async (repos) => {
+        for (let i = 0; i < repos.data.length; i++) {
+          await axios
+            .get(
+              `${process.env.REACT_APP_SERVER_URL}/user/getuser_by_id/${repos.data[i].id}`,
+            )
+            .then((value) => {
+              if (value.data !== "") State.addLiveUsers(value.data);
+            });
+        }
+      });
+  }, []);
+
   return (
     <div className={State.database.dark ? `dark` : " "}>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<ConnectWallet />}>
-            <Route path="" element={<ConnectWalletComponant />} />
-            <Route path="create_new_user" element={<CreateNewUser />} />
+          <Route path='/' element={<ConnectWallet />}>
+            <Route path='' element={<ConnectWalletComponant />} />
+            <Route path='create_new_user' element={<CreateNewUser />} />
           </Route>
 
-          <Route path="/test" element={<HomeScreen />}></Route>
-          <Route path="/homescreen" element={<HomeScreen />}>
-            <Route path="home" element={<Home />} />
-            <Route path="live" element={<Live />} />
-            <Route path="marketPlace" element={<Events></Events>} />
-            <Route path="profile" element={<Profile></Profile>}>
-              <Route path=":userName" element={<ProfileMedia></ProfileMedia>}>
-                <Route path="posts" element={<Posts></Posts>} />
-                <Route path="videos" element={<Videos></Videos>} />
-                <Route path="music" element={<Music></Music>} />
-                <Route path="playlists" element={<Playlists></Playlists>} />
+          <Route path='/test' element={<HomeScreen />}></Route>
+          <Route path='/homescreen' element={<HomeScreen />}>
+            <Route path='home' element={<Home />} />
+            <Route path='live' element={<Live />} />
+            <Route path='golive' element={<GoLive />} />
+            <Route path='marketPlace' element={<Events></Events>} />
+            <Route path='profile' element={<Profile></Profile>}>
+              <Route path=':userName' element={<ProfileMedia></ProfileMedia>}>
+                <Route path='posts' element={<Posts></Posts>} />
+                <Route path='videos' element={<Videos></Videos>} />
+                <Route path='music' element={<Music></Music>} />
+                <Route path='playlists' element={<Playlists></Playlists>} />
               </Route>
             </Route>
           </Route>
