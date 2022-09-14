@@ -18,6 +18,7 @@ import Posts from "./Componants/Profile/ProfileMedia/Posts";
 import Playlists from "./Componants/Profile/ProfileMedia/Playlists";
 import Music from "./Componants/Profile/ProfileMedia/Music";
 import Videos from "./Componants/Profile/ProfileMedia/Videos";
+import GoLive from "./Componants/GoLive/GoLive";
 import Web3Connect from "./Componants/Wallet/Web3Connect";
 function App() {
   const State = useContext(UserContext);
@@ -79,6 +80,7 @@ function App() {
           <Route path='/homescreen' element={<HomeScreen />}>
             <Route path='home' element={<Home />} />
             <Route path='live' element={<Live />} />
+            <Route path='golive' element={<GoLive />} />
             <Route path='marketPlace' element={<Events></Events>} />
             <Route path='profile' element={<Profile></Profile>}>
               <Route path=':userName' element={<ProfileMedia></ProfileMedia>}>
