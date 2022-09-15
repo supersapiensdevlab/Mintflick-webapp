@@ -12,16 +12,21 @@ function LiveChannels() {
     axios
       .get(`${process.env.REACT_APP_SERVER_URL}/get_activeusers`)
       .then(async (repos) => {
+        let tempdata = [];
         for (let i = 0; i < repos.data.length; i++) {
           await axios
             .get(
               `${process.env.REACT_APP_SERVER_URL}/user/getuser_by_id/${repos.data[i].id}`
             )
             .then((value) => {
-              if (value.data !== "")
-                State.updateDatabase({ liveUsers: value.data });
+              if (value.data !== "") {
+                console.log('setting live users')
+                tempdata.push(value.data)
+              
+              }
             });
         }
+        State.addLiveUsers(tempdata);
       });
   }, []);
   return (
