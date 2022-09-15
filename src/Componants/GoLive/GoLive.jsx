@@ -4,6 +4,9 @@ import { io } from 'socket.io-client';
 import axios from 'axios';
 import { makeStorageClient } from '../../Helper/uploadHelper';
 import ReactPlayer from 'react-player';
+import { X } from 'tabler-icons-react';
+import moment from 'moment';
+import useUserActions from '../../Hooks/useUserActions';
 
 function GoLive() {
 
@@ -11,6 +14,7 @@ function GoLive() {
     const [playbackUrl, setPlaybackUrl] = useState('');
     const [StreamKey, setKey] = useState('');
     const [loader, setLoader] = useState(true);
+    const [loadFeed, loadUser] = useUserActions();
 
     //Modal
     const [modalShow, setModalShow] = useState(false);
@@ -127,63 +131,68 @@ function GoLive() {
     };
 
     useEffect(() => {
-        if (user.database.userData.data.user && user.database.userData.data.user.multistream_platform) {
-            ////console.log("hello",user.database.userData.data.user.multistream_platform)
-            let new_array = [];
-            for (let i = 0; i < user.database.userData.data.user.multistream_platform.length; i++) {
-                new_array.push(user.database.userData.data.user.multistream_platform[i]);
+        if (user.database.userData.data) {
+            if (user.database.userData.data.user && user.database.userData.data.user.multistream_platform) {
+                ////console.log("hello",user.database.userData.data.user.multistream_platform)
+                let new_array = [];
+                for (let i = 0; i < user.database.userData.data.user.multistream_platform.length; i++) {
+                    new_array.push(user.database.userData.data.user.multistream_platform[i]);
+                }
+                setMultiStreamConnected(new_array);
+                //setPatchStream(new_array)
+            } else {
+                setMultiStreamConnected([]);
             }
-            setMultiStreamConnected(new_array);
-            //setPatchStream(new_array)
-        } else {
-            setMultiStreamConnected([]);
+            setPlaybackUrl(`https://cdn.livepeer.com/hls/${user.database.userData.data.user.livepeer_data.playbackId}/index.m3u8`);
+            //setName(user.database.userData.data.user.livepeer_data.name);
+            setUserStreams(user.database.userData.data.user.livepeer_data);
         }
-        setPlaybackUrl(`https://cdn.livepeer.com/hls/${user.database.userData.data.user.livepeer_data.playbackId}/index.m3u8`);
-        //setName(user.database.userData.data.user.livepeer_data.name);
-        setUserStreams(user.database.userData.data.user.livepeer_data);
         // eslint-disable-next-line
-    }, []);
+    }, [user.database.userData.data?.user]);
 
     useEffect(() => {
-        const socket = io(`${process.env.REACT_APP_VIEWS_URL}`, {
-            transports: ['websocket', 'polling'],
-            upgrade: false,
-            secure: true,
-            withCredentials: true,
-            extraHeaders: {
-                'my-custom-header': 'abcd',
-            },
-        });
-        socket.on('connection');
-        socket.emit('joinlivestream', user.database.userData.data.user.username);
-        socket.on('count', (details) => {
-            if (details.room === user.database.userData.data.user.username) {
+        if (user.database.userData.data) {
+            const socket = io(`${process.env.REACT_APP_VIEWS_URL}`, {
+                transports: ['websocket', 'polling'],
+                upgrade: false,
+                secure: true,
+                withCredentials: true,
+                extraHeaders: {
+                    'my-custom-header': 'abcd',
+                },
+            });
+            socket.on('connection');
+            socket.emit('joinlivestream', user.database.userData.data.user.username);
+            socket.on('count', (details) => {
+                if (details.room === user.database.userData.data.user.username) {
+                    setLivestreamViews(details.roomSize);
+                }
+            });
+            socket.on('livecount', (details) => {
                 setLivestreamViews(details.roomSize);
-            }
-        });
-        socket.on('livecount', (details) => {
-            setLivestreamViews(details.roomSize);
-            // console.log('emitted');
-            // console.log('inc', livestreamViews);
-            setViewColor('green-500');
-            setViewAnimate('animate-pulse');
-            setTimeout(() => {
-                setViewColor('white');
-                setViewAnimate('animate-none');
-            }, 3000);
-        });
-        socket.on('removecount', (roomSize) => {
-            setLivestreamViews(roomSize);
-            // console.log('removecount emitted');
-            // console.log('dec', livestreamViews);
-            setViewColor('red-500');
-            setViewAnimate('animate-pulse');
-            setTimeout(() => {
-                setViewColor('white');
-                setViewAnimate('animate-none');
-            }, 3000);
-        });
-    }, []);
+                // console.log('emitted');
+                // console.log('inc', livestreamViews);
+                setViewColor('green-500');
+                setViewAnimate('animate-pulse');
+                setTimeout(() => {
+                    setViewColor('white');
+                    setViewAnimate('animate-none');
+                }, 3000);
+            });
+            socket.on('removecount', (roomSize) => {
+                setLivestreamViews(roomSize);
+                // console.log('removecount emitted');
+                // console.log('dec', livestreamViews);
+                setViewColor('red-500');
+                setViewAnimate('animate-pulse');
+                setTimeout(() => {
+                    setViewColor('white');
+                    setViewAnimate('animate-none');
+                }, 3000);
+
+            });
+        }
+    }, [user.database.userData.data?.user]);
 
     //set Stream Key
     const handleChange = (e) => {
@@ -445,11 +454,11 @@ function GoLive() {
                     };
                     const res = await axios({
                         method: 'POST',
-                        url: `${process.env.REACT_APP_SERVER_URL}/user.database.userData.data.user/uploadThumbnail`,
+                        url: `${process.env.REACT_APP_SERVER_URL}/user/uploadThumbnail`,
                         data: data,
                         headers: {
                             'content-type': 'application/json',
-                            'auth-token': localStorage.getItem('authtoken'),
+                            'auth-token': JSON.stringify(localStorage.getItem('authtoken')),
                         },
                     });
                 })
@@ -483,20 +492,18 @@ function GoLive() {
     // }
 
     // console.log(user.database.userData.data.user);
-    useEffect(() => {
-        if (!user.database.userData.data.user) {
-            window.location.href = '/';
-        }
-    }, []);
+
 
     useEffect(() => {
         console.log(streamDetails);
     }, [streamDetails]);
     useEffect(() => {
-        if (user.database.userData.data.user.streamDetails) {
-            setStreamDetails(user.database.userData.data.user.streamDetails);
+        if (user.database.userData.data) {
+            if (user.database.userData.data.user.streamDetails) {
+                setStreamDetails(user.database.userData.data.user.streamDetails);
+            }
         }
-    }, [user.database.userData.data.user]);
+    }, [user.database.userData.data?.user]);
     // on Stream Details Submit
     const handleStreamDetails = async (e) => {
         e.preventDefault();
@@ -504,7 +511,7 @@ function GoLive() {
             try {
                 await axios
                     .post(
-                        `${process.env.REACT_APP_SERVER_URL}/user.database.userData.data.user/streamDetails`,
+                        `${process.env.REACT_APP_SERVER_URL}/user/streamDetails`,
                         streamDetails,
                         {
                             headers: {
@@ -514,7 +521,7 @@ function GoLive() {
                         },
                     )
                     .then((data) => {
-
+                        loadUser();
                     });
             } catch (err) {
                 console.log(err);
@@ -543,14 +550,14 @@ function GoLive() {
 
                     axios({
                         method: 'POST',
-                        url: `${process.env.REACT_APP_SERVER_URL}/user.database.userData.data.user/uploadStreamLink`,
+                        url: `${process.env.REACT_APP_SERVER_URL}/user/uploadStreamLink`,
                         data: data,
                         headers: {
                             'content-type': 'application/json',
-                            'auth-token': localStorage.getItem('authtoken'),
+                            'auth-token': JSON.stringify(localStorage.getItem('authtoken')),
                         },
                     }).then((res) => {
-
+                        loadUser();
                     });
                 })
                 .catch((err) => {
@@ -566,14 +573,16 @@ function GoLive() {
     const deleteStreamLink = (link) => {
         axios({
             method: 'POST',
-            url: `${process.env.REACT_APP_SERVER_URL}/user.database.userData.data.user/deleteStreamLink`,
+            url: `${process.env.REACT_APP_SERVER_URL}/user/deleteStreamLink`,
             data: link,
             headers: {
                 'content-type': 'application/json',
-                'auth-token': localStorage.getItem('authtoken'),
+                'auth-token': JSON.stringify(localStorage.getItem('authtoken')),
             },
         }).then((res) => {
-
+            loadUser();
+        }).catch((err) => {
+            console.log(err)
         });
     };
 
@@ -581,509 +590,557 @@ function GoLive() {
         e.preventDefault();
         axios({
             method: 'POST',
-            url: `${process.env.REACT_APP_SERVER_URL}/user.database.userData.data.user/streamSchedule`,
+            url: `${process.env.REACT_APP_SERVER_URL}/user/streamSchedule`,
             data: { streamSchedule },
             headers: {
                 'content-type': 'application/json',
-                'auth-token': localStorage.getItem('authtoken'),
+                'auth-token': JSON.stringify(localStorage.getItem('authtoken')),
             },
         })
             .then((res) => {
                 setScheduleStreamModal(false);
+                loadUser();
             })
             .catch((err) => {
                 console.log(err);
             });
     };
     return (
-        <div className=' bg-slate-100 dark:bg-slate-800 lg:bg-white lg:dark:bg-slate-900'>
-            <div>
-                <div className="flex">
-                    <div className="flex-1 pt-3 mt-10">
-                        <div className="">
+        user.database.userData.data ?
+            <div className=' bg-slate-100 dark:bg-slate-800 lg:bg-white lg:dark:bg-slate-900'>
+                <div>
+                    <div className="flex">
+                        <div className="flex-1 pt-3 mt-10">
+                            <div className="">
 
-                            <ReactPlayer controls={true} width={'100%'} height={'max-content'} url={playbackUrl} creatorData={user.database.userData.data.user} footer={false} />
-
-                            {user.database.userData.data.user.livepeer_data
-                                ? user.database.userData.data.user.livepeer_data.isActive && (
-                                    <div className="dark:text-dbeats-white mt-3 ml-2">
-                                        <p className="text-md">To create NFT start Recording</p>
-                                        <div className="flex justify-between items-center w-full pt-2 text-white">
-                                            <div className="flex w-1/2">
-                                                <button
-                                                    className={`text-center rounded-md w-60 
-                    ${recording ? 'bg-green-300' : 'bg-green-600'} mx-2 py-2`}
-                                                    disabled={recording}
-                                                    onClick={startRecording}
-                                                >
-                                                    Start Recording
-                                                </button>
-                                                {recording ? (
+                                <ReactPlayer controls={true} width={'100%'} height={'max-content'} url={playbackUrl} creatorData={user.database.userData.data.user} footer={false} />
+                                <div className='mt-4'>
+                                    {user.database.userData.data.user && new Date(user.database.userData.data.user.streamSchedule) > new Date() && !user.database.userData.data.user.livepeer_data.isActive ?
+                                        <span className="border px-5 py-3 mt-2 rounded  mr-1 md:text-lg ml-2 text-sm tracking-wider text-slate-200">
+                                            <i className="fa-solid text-red-500 fa-circle text-sm mr-2"></i>Stream Starting on {moment(user.database.userData.data.user.streamSchedule, "YYYY-MM-DDThh:mm").format('MMMM Do YYYY, h:mm a')}
+                                        </span> : null}
+                                </div>
+                                {user.database.userData.data.user.livepeer_data
+                                    ? user.database.userData.data.user.livepeer_data.isActive && (
+                                        <div className="dark:text-dbeats-white mt-3 ml-2">
+                                            <p className="text-md">To create NFT start Recording</p>
+                                            <div className="flex justify-between items-center w-full pt-2 text-white">
+                                                <div className="flex w-1/2">
                                                     <button
                                                         className={`text-center rounded-md w-60 
-                    ${!recording ? 'bg-red-300' : 'bg-red-600'} mx-2 py-2`}
-                                                        disabled={!recording}
-                                                        onClick={stopRecording}
+                    ${recording ? 'bg-green-300' : 'bg-green-600'} mx-2 py-2`}
+                                                        disabled={recording}
+                                                        onClick={startRecording}
                                                     >
-                                                        Stop Recording
+                                                        Start Recording
                                                     </button>
-                                                ) : (
-                                                    <></>
-                                                )}
+                                                    {recording ? (
+                                                        <button
+                                                            className={`text-center rounded-md w-60 
+                    ${!recording ? 'bg-red-300' : 'bg-red-600'} mx-2 py-2`}
+                                                            disabled={!recording}
+                                                            onClick={stopRecording}
+                                                        >
+                                                            Stop Recording
+                                                        </button>
+                                                    ) : (
+                                                        <></>
+                                                    )}
+                                                </div>
+                                                <p className={`text-white text-lg text-center pr-2 flex flex-col`}>
+                                                    <span className={` text-${viewColor}  ${viewAnimate} font-bold`}>
+                                                        {livestreamViews}
+                                                    </span>
+                                                    viewers
+                                                </p>
                                             </div>
-                                            <p className={`text-white text-lg text-center pr-2 flex flex-col`}>
-                                                <span className={` text-${viewColor}  ${viewAnimate} font-bold`}>
-                                                    {livestreamViews}
-                                                </span>
-                                                viewers
-                                            </p>
+                                        </div>
+                                    )
+                                    : null}
+                            </div>
+                        </div>
+
+                        <div className="text-sm  mt-16">
+                            <div className="bg-slate-100 dark:bg-slate-700 dark:text-slate-100 max-w-md border border-dbeats-light border-opacity-40    p-5 rounded text-base shadow mt-4 ">
+                                <div className="flex justify-between">
+                                    <div className="pb-2">
+                                        <span className="font-semibold tracking-widest">Name</span>
+                                        <p className="opacity-50">{user.database.userData.data.user.name}</p>
+                                    </div>
+                                    <div className="pb-2">
+                                        <span className="font-semibold tracking-widest">Username</span>
+                                        <p className="opacity-50">{user.database.userData.data.user.username}</p>
+                                    </div>
+                                </div>
+
+                                <div className="pb-2">
+                                    <span className="font-semibold tracking-widest">RTMP URL</span>
+                                    <div className="flex">
+                                        <p className="opacity-50">rtmp://rtmp.livepeer.com/live</p>
+                                        <i
+                                            onClick={() => {
+                                                navigator.clipboard.writeText('rtmp://rtmp.livepeer.com/live');
+                                                setCopied('rtmp://rtmp.livepeer.com/live');
+                                            }}
+                                            className="fas fa-solid fa-copy mx-4 hover:text-dbeats-light cursor-pointer pt-1"
+                                        ></i>
+                                        {copied == 'rtmp://rtmp.livepeer.com/live' ? (
+                                            <span className="text-dbeats-light">copied</span>
+                                        ) : null}
+                                    </div>
+                                </div>
+                                <hr width="95%" className="mt-2 mb-2  border-dbeats-white" />
+
+                                <div className="pb-2">
+                                    <span className="font-semibold tracking-widest ">Streamer Key</span>
+                                    <div className="flex">
+                                        <p className="opacity-50">{userStreams.streamKey}</p>
+                                        <i
+                                            onClick={() => {
+                                                navigator.clipboard.writeText(userStreams.streamKey);
+                                                setCopied(userStreams.streamKey);
+                                            }}
+                                            className="fas fa-solid fa-copy mx-4 hover:text-dbeats-light cursor-pointer pt-1 "
+                                        ></i>
+                                        {copied == userStreams.streamKey ? (
+                                            <span className="text-dbeats-light">copied</span>
+                                        ) : null}
+                                    </div>
+                                </div>
+                                <div className="pb-2  break-words hidden">
+                                    <span className="font-semibold tracking-widest ">Playback URL</span>
+                                    <p className="opacity-50">{playbackUrl}</p>
+                                </div>
+                                <div className="pb-2  break-words">
+                                    <span className="font-semibold tracking-widest">Live URL</span>
+                                    <p>
+                                        <a
+                                            className="opacity-50"
+                                            href={`https://beta.mintflick.app/live/${user.database.userData.data.user.username}`}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                        >
+                                            {`${process.env.REACT_APP_CLIENT_URL}/live/${user.database.userData.data.user.username}`}
+                                        </a>
+                                        <i
+                                            onClick={() => {
+                                                navigator.clipboard.writeText(
+                                                    `${process.env.REACT_APP_CLIENT_URL}/live/${user.database.userData.data.user.username}`,
+                                                );
+                                                setCopied(`${process.env.REACT_APP_CLIENT_URL}/live/${user.database.userData.data.user.username}`);
+                                            }}
+                                            className="fas fa-solid fa-copy mx-4 hover:text-dbeats-light cursor-pointer pt-1 "
+                                        ></i>
+                                        {copied == `${process.env.REACT_APP_CLIENT_URL}/live/${user.database.userData.data.user.username}` ? (
+                                            <span className="text-dbeats-light">copied</span>
+                                        ) : null}
+                                    </p>
+                                </div>
+                                <hr width="95%" className="mt-2 mb-2  border-dbeats-white" />
+                                <div className="mb-4">
+                                    <h1 className="text-bold">Thumbnail </h1>
+                                    {selectedFile ? (
+                                        <img src={selectedFile.localurl} className="my-2 rounded max-h-72 w-full"></img>
+                                    ) : user.database.userData.data.user.thumbnail ? (
+                                        <img src={user.database.userData.data.user.thumbnail} className="my-2 rounded max-h-72 w-full"></img>
+                                    ) : null}
+                                    <form className="flex items-center" onSubmit={uploadThumbnail}>
+                                        <input
+                                            name="image"
+                                            type="file"
+                                            accept=".jpg,.png,.jpeg,.gif,.webp"
+                                            required={true}
+                                            onChange={onFileChange}
+                                        />
+                                        <div className="p-1 nm-flat-dbeats-dark-primary-sm rounded-3xl hover:nm-inset-dbeats-dark-primary">
+                                            <button
+                                                disabled={uploadingFile}
+                                                type="submit"
+                                                className={`${uploadingFile || !selectedFile
+                                                    ? 'dark:bg-dbeats-dark-primary hidden'
+                                                    : 'bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:nm-inset-dbeats-light-xs'
+                                                    }  px-4 py-2  rounded-3xl group flex items-center justify-center  `}
+                                            >
+                                                <p>Upload</p>
+                                            </button>
+                                        </div>
+                                        <div
+                                            className="animate-spin rounded-full h-7 w-7 ml-3 border-t-2 border-b-2 bg-gradient-to-r from-green-400 to-blue-500 "
+                                            hidden={!uploadingFile}
+                                        ></div>
+                                    </form>
+                                </div>
+                                {/* Stream Title */}
+                                <div>
+                                    <form onSubmit={handleStreamDetails}>
+                                        <div>
+                                            <label className="font-semibold text-sm">Stream Title: </label>
+                                            <input
+                                                required={true}
+                                                value={streamDetails.name}
+                                                onChange={(e) => setStreamDetails({ ...streamDetails, name: e.target.value })}
+                                                className="w-full bg-transparent border border-gray-300"
+                                                type="text"
+                                            />
+                                        </div>
+                                        <div className="mt-2">
+                                            <label className="font-semibold text-sm">Stream Description: </label>
+                                            <textarea
+                                                required={true}
+                                                value={streamDetails.description}
+                                                onChange={(e) =>
+                                                    setStreamDetails({ ...streamDetails, description: e.target.value })
+                                                }
+                                                rows={2}
+                                                className="w-full bg-transparent border border-gray-300"
+                                                type="text"
+                                            />
+                                        </div>
+                                        <div className="flex mt-1 justify-end">
+                                            <input
+                                                className="bg-dbeats-alt ml-1 text-dbeats-light border-dbeats-light px-3 py-2  rounded-md cursor-pointer"
+                                                type="submit"
+                                                value="Save"
+                                            />
+
+                                            <button
+                                                onClick={cancelStreamDetails}
+                                                className="bg-dbeats-alt ml-1 text-gray-400 border-gray-400 px-3 py-2  rounded-md"
+                                            >
+                                                Cancel
+                                            </button>
+                                        </div>
+                                    </form>
+                                    <hr />
+                                </div>
+
+                                {/* Stream Schedule */}
+                                <div className="mt-2">
+                                    <button
+                                        onClick={() => setScheduleStreamModal(true)}
+                                        className=" text-base px-3 py-2 cursor-pointer rounded border border-dbeats-light text-dbeats-light hover:text-white hover:bg-dbeats-light"
+                                    >
+                                        Schedule The Stream
+                                    </button>
+                                </div>
+
+                                {/* Stream Links */}
+                                <div className="mt-2">
+                                    <div className="text-white text-base font-semibold mb-2">Banners (Max 4)</div>
+                                    {user.database.userData.data.user.streamLinks.length < 4 && (
+                                        <div className="mt-3">
+                                            <form onSubmit={uploadLink}>
+                                                <div>Create new banner </div>
+                                                <div className="flex">
+                                                    <div className="border-2 border-white border-dashed p-3 mt-1">
+                                                        <div className="text-center">
+                                                            <i className="fa-solid text-3xl fa-file-image"></i>
+                                                        </div>
+                                                        <label
+                                                            htmlFor="file"
+                                                            className="whitespace-nowrap text-sm text-center rounded py-1 px-2 text-dbeats-light bg-dbeats-alt cursor-pointer"
+                                                        >
+                                                            {selectedLinkFile ? (
+                                                                selectedLinkFile.file ? (
+                                                                    `${selectedLinkFile.file[0].name.substring(0, 10)}`
+                                                                ) : null
+                                                            ) : (
+                                                                <>
+                                                                    Choose Image <span className="text-red-600 text-xl">*</span>
+                                                                </>
+                                                            )}
+                                                            <input
+                                                                accept=".jpg,.png,.jpeg,.gif,.webp"
+                                                                required={true}
+                                                                onChange={onLinkFileChange}
+                                                                type="file"
+                                                                id="file"
+                                                                className="sr-only"
+                                                            />
+                                                        </label>
+
+                                                        <div className="text-center text-sm text-gray-500">PNG, JPG, GIF</div>
+                                                    </div>
+                                                    <div className="flex-1 mt-1">
+                                                        <input
+                                                            required={true}
+                                                            value={streamLink.url}
+                                                            onChange={(e) => setStreamLink({ ...streamLink, url: e.target.value })}
+                                                            placeholder="URL"
+                                                            className="w-full bg-transparent text-sm ml-2 border border-gray-300 py-2"
+                                                            type={'url'}
+                                                        />
+                                                        <div className="flex mt-1 justify-end  items-center">
+                                                            <input
+                                                                disabled={uploadingLink}
+                                                                type={'submit'}
+                                                                value="Add Banner"
+                                                                className="mt-1 cursor-pointer bg-dbeats-alt   text-dbeats-light border-dbeats-light px-2 py-1  rounded-md"
+                                                            />
+                                                            <div
+                                                                className="animate-spin rounded-full h-5 w-5 ml-3 border-t-2 border-b-2 bg-gradient-to-r from-green-400 to-blue-500 "
+                                                                hidden={!uploadingLink}
+                                                            ></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    )}
+                                    <div className="mt-3">
+                                        <div className="text-white text-base font-semibold mb-2">Banners</div>
+                                        <div className="flex flex-wrap mx-6">
+                                            {user.database.userData.data.user.streamLinks
+                                                ? user.database.userData.data.user.streamLinks.map((link, index) => {
+                                                    return (
+                                                        <div
+                                                            key={index}
+                                                            className="border border-dbeats-light rounded-md w-32 mx-6 pb-2 pt-1 my-1"
+                                                        >
+                                                            <div className="text-dbeats-light text-right">
+                                                                <X
+                                                                    onClick={() => deleteStreamLink(link)}
+                                                                    className="ml-auto pr-1 cursor-pointer"
+                                                                ></X>
+                                                            </div>
+                                                            <img src={link.image} className="w-full pt-2" />
+                                                            <div className="text-center p-1 pt-3">
+                                                                <div className="break-words">{link.url}</div>
+                                                                {/* <button><i className="text-md fa-solid mx-2 fa-trash"></i></button> */}
+                                                            </div>
+                                                        </div>
+                                                    );
+                                                })
+                                                : null}
                                         </div>
                                     </div>
-                                )
-                                : null}
-                        </div>
-                    </div>
-
-                    <div className="text-sm  mt-16">
-                        <div className="bg-slate-100 dark:bg-slate-700 dark:text-slate-100 w-80 border border-dbeats-light border-opacity-40  2xl:w-full  p-5 rounded text-sm sm:lg:text-xl shadow mt-6  lg:ml-0 ">
-                            <div className="grid grid-cols-2">
-                                <div className="pb-2">
-                                    <span className="font-semibold tracking-widest">Name</span>
-                                    <p className="opacity-50">{user.database.userData.data.user.name}</p>
                                 </div>
-                                <div className="pb-2">
-                                    <span className="font-semibold tracking-widest">Username</span>
-                                    <p className="opacity-50">{user.database.userData.data.user.username}</p>
-                                </div>
-                            </div>
-
-                            <div className="pb-2">
-                                <span className="font-semibold tracking-widest">RTMP URL</span>
-                                <div className="flex">
-                                    <p className="opacity-50">rtmp://rtmp.livepeer.com/live</p>
-                                    <i
-                                        onClick={() => {
-                                            navigator.clipboard.writeText('rtmp://rtmp.livepeer.com/live');
-                                            setCopied('rtmp://rtmp.livepeer.com/live');
-                                        }}
-                                        className="fas fa-solid fa-copy mx-4 hover:text-dbeats-light cursor-pointer pt-1"
-                                    ></i>
-                                    {copied == 'rtmp://rtmp.livepeer.com/live' ? (
-                                        <span className="text-dbeats-light">copied</span>
-                                    ) : null}
-                                </div>
-                            </div>
-                            <hr width="95%" className="mt-2 mb-2  border-dbeats-white" />
-
-                            <div className="pb-2">
-                                <span className="font-semibold tracking-widest ">Streamer Key</span>
-                                <div className="flex">
-                                    <p className="opacity-50">{userStreams.streamKey}</p>
-                                    <i
-                                        onClick={() => {
-                                            navigator.clipboard.writeText(userStreams.streamKey);
-                                            setCopied(userStreams.streamKey);
-                                        }}
-                                        className="fas fa-solid fa-copy mx-4 hover:text-dbeats-light cursor-pointer pt-1 "
-                                    ></i>
-                                    {copied == userStreams.streamKey ? (
-                                        <span className="text-dbeats-light">copied</span>
-                                    ) : null}
-                                </div>
-                            </div>
-                            <div className="pb-2  break-words hidden">
-                                <span className="font-semibold tracking-widest ">Playback URL</span>
-                                <p className="opacity-50">{playbackUrl}</p>
-                            </div>
-                            <div className="pb-2  break-words">
-                                <span className="font-semibold tracking-widest">Live URL</span>
-                                <p>
-                                    <a
-                                        className="opacity-50"
-                                        href={`https://beta.mintflick.app/live/${user.database.userData.data.user.username}`}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                    >
-                                        {`${process.env.REACT_APP_CLIENT_URL}/live/${user.database.userData.data.user.username}`}
-                                    </a>
-                                    <i
-                                        onClick={() => {
-                                            navigator.clipboard.writeText(
-                                                `${process.env.REACT_APP_CLIENT_URL}/live/${user.database.userData.data.user.username}`,
-                                            );
-                                            setCopied(`${process.env.REACT_APP_CLIENT_URL}/live/${user.database.userData.data.user.username}`);
-                                        }}
-                                        className="fas fa-solid fa-copy mx-4 hover:text-dbeats-light cursor-pointer pt-1 "
-                                    ></i>
-                                    {copied == `${process.env.REACT_APP_CLIENT_URL}/live/${user.database.userData.data.user.username}` ? (
-                                        <span className="text-dbeats-light">copied</span>
-                                    ) : null}
-                                </p>
-                            </div>
-                            <hr width="95%" className="mt-2 mb-2  border-dbeats-white" />
-                            <div className="mb-4">
-                                <h1 className="text-bold">Thumbnail </h1>
-                                {selectedFile ? (
-                                    <img src={selectedFile.localurl} className="my-2 rounded max-h-72"></img>
-                                ) : user.database.userData.data.user.thumbnail ? (
-                                    <img src={user.database.userData.data.user.thumbnail} className="my-2 rounded max-h-110"></img>
-                                ) : null}
-                                <form className="flex items-center" onSubmit={uploadThumbnail}>
-                                    <input
-                                        name="image"
-                                        type="file"
-                                        accept=".jpg,.png,.jpeg,.gif,.webp"
-                                        required={true}
-                                        onChange={onFileChange}
-                                    />
-                                    <div className="p-1 nm-flat-dbeats-dark-primary-sm rounded-3xl hover:nm-inset-dbeats-dark-primary">
-                                        <button
-                                            disabled={uploadingFile}
-                                            type="submit"
-                                            className={`${uploadingFile || !selectedFile
-                                                ? 'dark:bg-dbeats-dark-primary hidden'
-                                                : 'bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:nm-inset-dbeats-light-xs'
-                                                }  px-4 py-2  rounded-3xl group flex items-center justify-center  `}
-                                        >
-                                            <p>Upload</p>
-                                        </button>
-                                    </div>
-                                    <div
-                                        className="animate-spin rounded-full h-7 w-7 ml-3 border-t-2 border-b-2 bg-gradient-to-r from-green-400 to-blue-500 "
-                                        hidden={!uploadingFile}
-                                    ></div>
-                                </form>
-                            </div>
-                            {/* Stream Title */}
-                            <div>
-                                <form onSubmit={handleStreamDetails}>
-                                    <div>
-                                        <label className="font-semibold text-sm">Stream Title: </label>
-                                        <input
-                                            required={true}
-                                            value={streamDetails.name}
-                                            onChange={(e) => setStreamDetails({ ...streamDetails, name: e.target.value })}
-                                            className="w-full bg-transparent"
-                                            type="text"
-                                        />
-                                    </div>
-                                    <div className="mt-2">
-                                        <label className="font-semibold text-sm">Stream Description: </label>
-                                        <textarea
-                                            required={true}
-                                            value={streamDetails.description}
-                                            onChange={(e) =>
-                                                setStreamDetails({ ...streamDetails, description: e.target.value })
-                                            }
-                                            rows={2}
-                                            className="w-full bg-transparent"
-                                            type="text"
-                                        />
-                                    </div>
-                                    <div className="flex mt-1 justify-end">
-                                        <input
-                                            className="bg-dbeats-alt ml-1 text-dbeats-light border-dbeats-light px-3 py-2  rounded-md cursor-pointer"
-                                            type="submit"
-                                            value="Save"
-                                        />
-
-                                        <button
-                                            onClick={cancelStreamDetails}
-                                            className="bg-dbeats-alt ml-1 text-gray-400 border-gray-400 px-3 py-2  rounded-md"
-                                        >
-                                            Cancel
-                                        </button>
-                                    </div>
-                                </form>
-                                <hr />
-                            </div>
-
-                            {/* Stream Schedule */}
-                            <div className="mt-2">
-                                <button
-                                    onClick={() => setScheduleStreamModal(true)}
-                                    className=" text-base px-3 py-2 cursor-pointer rounded border border-dbeats-light text-dbeats-light hover:text-white hover:bg-dbeats-light"
-                                >
-                                    Schedule The Stream
-                                </button>
-                            </div>
-
-                            {/* Stream Links */}
-                            <div className="mt-2">
-                                <div className="text-white text-base font-semibold mb-2">Banners (Max 4)</div>
-                                {user.database.userData.data.user.streamLinks.length < 4 && (
-                                    <div className="mt-3">
-                                        <form onSubmit={uploadLink}>
-                                            <div>Create new banner </div>
-                                            <div className="flex">
-                                                <div className="border-2 border-white border-dashed p-3 mt-1">
-                                                    <div className="text-center">
-                                                        <i className="fa-solid text-3xl fa-file-image"></i>
-                                                    </div>
-                                                    <label
-                                                        htmlFor="file"
-                                                        className="whitespace-nowrap text-sm text-center rounded py-1 px-2 text-dbeats-light bg-dbeats-alt cursor-pointer"
-                                                    >
-                                                        {selectedLinkFile ? (
-                                                            selectedLinkFile.file ? (
-                                                                `${selectedLinkFile.file[0].name.substring(0, 10)}`
-                                                            ) : null
-                                                        ) : (
-                                                            <>
-                                                                Choose Image <span className="text-red-600 text-xl">*</span>
-                                                            </>
-                                                        )}
-                                                        <input
-                                                            accept=".jpg,.png,.jpeg,.gif,.webp"
-                                                            required={true}
-                                                            onChange={onLinkFileChange}
-                                                            type="file"
-                                                            id="file"
-                                                            className="sr-only"
-                                                        />
-                                                    </label>
-
-                                                    <div className="text-center text-sm text-gray-500">PNG, JPG, GIF</div>
-                                                </div>
-                                                <div className="flex-1 mt-1">
-                                                    <input
-                                                        required={true}
-                                                        value={streamLink.url}
-                                                        onChange={(e) => setStreamLink({ ...streamLink, url: e.target.value })}
-                                                        placeholder="URL"
-                                                        className="w-full bg-transparent text-sm ml-2"
-                                                        type={'url'}
-                                                    />
-                                                    <div className="flex mt-1 justify-end  items-center">
-                                                        <input
-                                                            disabled={uploadingLink}
-                                                            type={'submit'}
-                                                            value="Add Banner"
-                                                            className="mt-1 cursor-pointer bg-dbeats-alt   text-dbeats-light border-dbeats-light px-2 py-1  rounded-md"
-                                                        />
-                                                        <div
-                                                            className="animate-spin rounded-full h-5 w-5 ml-3 border-t-2 border-b-2 bg-gradient-to-r from-green-400 to-blue-500 "
-                                                            hidden={!uploadingLink}
-                                                        ></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-                                )}
-                                <div className="mt-3">
-                                    <div className="text-white text-base font-semibold mb-2">Banners</div>
-                                    <div className="flex flex-wrap mx-6">
-                                        {user.database.userData.data.user.streamLinks
-                                            ? user.database.userData.data.user.streamLinks.map((link, index) => {
+                                <div className="hidden">
+                                    <div className="flex flex-col">
+                                        <p className="text-center mb-1">Currently Connected :</p>
+                                        <div className="flex flex-wrap justify-center">
+                                            {multiStreamConnected.map((value, index) => {
+                                                ////console.log(value);
                                                 return (
-                                                    <div
-                                                        key={index}
-                                                        className="border border-dbeats-light rounded-md w-32 mx-6 pb-2 pt-1 my-1"
-                                                    >
-                                                        <div className="text-dbeats-light text-right">
-                                                            <i
-                                                                onClick={() => deleteStreamLink(link)}
-                                                                className="fa-solid fa-xmark text-xl pr-1 cursor-pointer"
-                                                            ></i>
-                                                        </div>
-                                                        <img src={link.image} className="w-full pt-2" />
-                                                        <div className="text-center p-1 pt-3">
-                                                            <div className="break-words">{link.url}</div>
-                                                            {/* <button><i className="text-md fa-solid mx-2 fa-trash"></i></button> */}
-                                                        </div>
+                                                    <div key={index} className="m-1">
+                                                        <img
+                                                            src={value.platform.logo}
+                                                            alt="logo"
+                                                            className="h-6 lg:h-10 w-auto"
+                                                        />
                                                     </div>
                                                 );
-                                            })
-                                            : null}
+                                            })}
+                                        </div>
+                                        <div className="nm-flat-dbeats-dark-primary-sm p-1 rounded-3xl hover:nm-inset-dbeats-dark-secondary-xs w-max mx-auto">
+                                            <button
+                                                variant="primary"
+                                                className="bg-dbeats-dark-secondary text-center content-center justify-center align-middle hover:nm-inset-dbeats-light flex text-white rounded-3xl font-bold px-2 py-3 tracking-widest w-max"
+                                                type="button"
+                                                onClick={
+                                                    multiStreamConnected.length < 3
+                                                        ? () => setShowDestinationModal(true)
+                                                        : () => setShowPriceModal(true)
+                                                }
+                                            >
+                                                Add MultiStream Platforms
+                                                <i className="fas fa-solid fa-video mx-2 cursor-pointer pt-1"></i>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div className="hidden">
-                                <div className="flex flex-col">
-                                    <p className="text-center mb-1">Currently Connected :</p>
-                                    <div className="flex flex-wrap justify-center">
-                                        {multiStreamConnected.map((value, index) => {
-                                            ////console.log(value);
-                                            return (
-                                                <div key={index} className="m-1">
-                                                    <img
-                                                        src={value.platform.logo}
-                                                        alt="logo"
-                                                        className="h-6 lg:h-10 w-auto"
-                                                    />
-                                                </div>
-                                            );
-                                        })}
-                                    </div>
-                                    <div className="nm-flat-dbeats-dark-primary-sm p-1 rounded-3xl hover:nm-inset-dbeats-dark-secondary-xs w-max mx-auto">
+                                <>
+                                    <hr width="95%" className="mt-2 mb-4" />
+                                    <p className="text-md">To create NFT start Recording</p>
+                                    <div className="flex justify-between items-center w-full pt-2 text-white">
                                         <button
-                                            variant="primary"
-                                            className="bg-dbeats-dark-secondary text-center content-center justify-center align-middle hover:nm-inset-dbeats-light flex text-white rounded-3xl font-bold px-2 py-3 tracking-widest w-max"
-                                            type="button"
-                                            onClick={
-                                                multiStreamConnected.length < 3
-                                                    ? () => setShowDestinationModal(true)
-                                                    : () => setShowPriceModal(true)
-                                            }
+                                            className={`text-center rounded-md w-full 
+                    ${recording ? 'bg-green-300' : 'bg-green-600'} mx-2 py-2`}
+                                            disabled={recording}
+                                            onClick={startRecording}
                                         >
-                                            Add MultiStream Platforms
-                                            <i className="fas fa-solid fa-video mx-2 cursor-pointer pt-1"></i>
+                                            Start Recording
+                                        </button>
+                                        <button
+                                            className={`text-center rounded-md w-full 
+                    ${!recording ? 'bg-red-300' : 'bg-red-600'} mx-2 py-2`}
+                                            disabled={!recording}
+                                            onClick={stopRecording}
+                                        >
+                                            Stop Recording
                                         </button>
                                     </div>
+                                </>
+                            </div>
+                        </div>
+
+                    </div>
+                    {newRecord === 1 ? (
+                        <div className="flex justify-between m-6 py-6 px-10 bg-dbeats-dark-secondary">
+                            <div className="w-full flex justify-center">
+                                <video
+                                    src={recordUrl}
+                                    width="90%"
+                                    height="90%"
+                                    controls
+                                    autoPlay={true}
+                                    muted={false}
+                                />
+                            </div>
+
+                            <div className="w-full">
+                                <div className="space-y-6 text-gray-500 dark:text-gray-100">
+                                    <div className="grid grid-cols-1 gap-6 sm:grid-cols-1">
+                                        <div className="col-span-1 sm:col-span-1">
+                                            <label
+                                                htmlFor="videoName"
+                                                className="block 2xl:text-sm text-sm lg:text-xs font-medium dark:text-gray-100 text-gray-700"
+                                            >
+                                                Video Title
+                                            </label>
+                                            <div className="mt-1 flex rounded-md shadow-sm">
+                                                <input
+                                                    type="text"
+                                                    name="videoName"
+                                                    id="videoName"
+                                                    value={recordvideo.videoName}
+                                                    onChange={handleVideoInputs}
+                                                    className="focus:ring-dbeats-dark-primary border dark:border-dbeats-alt border-gray-300 dark:bg-dbeats-dark-primary ring-dbeats-dark-secondary  ring-0   flex-1 block w-full rounded-md sm:text-sm  "
+                                                    placeholder=""
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="grid grid-cols-8 gap-6 sm:grid-cols-8">
+                                        <div className="lg:col-span-4 col-span-8  sm:col-span-4">
+                                            <label
+                                                htmlFor="company-website"
+                                                className="block 2xl:text-sm text-sm lg:text-xs font-medium dark:text-gray-100 text-gray-700"
+                                            >
+                                                Category
+                                            </label>
+                                            <div className="flex rounded-md shadow-sm">
+
+                                            </div>
+                                        </div>
+                                        <div className="lg:col-span-4 col-span-8  sm:col-span-4">
+                                            <label
+                                                htmlFor="videoName"
+                                                className="block mr-2 2xl:text-sm text-sm lg:text-xs font-medium dark:text-gray-100 text-gray-700"
+                                            >
+                                                Pricing
+                                            </label>
+                                            <div className="mt-1 flex rounded-md shadow-sm">
+                                                <input
+                                                    type="text"
+                                                    name="price"
+                                                    id="price"
+                                                    value={recordvideo.price}
+                                                    onChange={handleVideoInputs}
+                                                    className="focus:ring-dbeats-dark-primary border dark:border-dbeats-alt border-gray-300 dark:bg-dbeats-dark-primary ring-dbeats-dark-secondary  ring-0   flex-1 block w-full rounded-md sm:text-sm  "
+                                                    placeholder=""
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="">
+                                        <label
+                                            htmlFor="description"
+                                            className="block 2xl:text-sm text-sm lg:text-xs font-medium dark:text-gray-100 text-gray-700"
+                                        >
+                                            Description
+                                        </label>
+                                        <div className="mt-1">
+                                            <textarea
+                                                id="videoDescription"
+                                                name="description"
+                                                rows={3}
+                                                value={recordvideo.description}
+                                                onChange={handleVideoInputs}
+                                                className="dark:placeholder-gray-600 focus:ring-dbeats-dark-primary border dark:border-dbeats-alt border-gray-300 dark:bg-dbeats-dark-primary ring-dbeats-dark-secondary  ring-0   flex-1 block w-full rounded-md sm:text-sm  "
+                                                placeholder="Any Behind the scenes you'll like your Audience to know!"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div className="float-right pt-20 flex items-center">
+                                        <div
+                                            hidden={hideButton}
+                                            onClick={() => {
+                                                // mintNFT();
+                                                // setHideButton(true);
+                                            }}
+                                            className="w-max font-bold cursor-pointer px-12 nowrap py-2 rounded-md text-md text-white bg-dbeats-light"
+                                        >
+                                            Mint NFT
+                                        </div>
+
+                                        {recordvideo.cid == null ? (
+                                            <div hidden={!hideButton} className=" mx-5 flex items-center w-64">
+                                                <input
+                                                    type="range"
+                                                    defaultValue={uploading}
+                                                    min="0"
+                                                    max="100"
+                                                    hidden={!hideButton}
+                                                    className="appearance-none cursor-pointer w-full h-3 bg-green-400 
+                font-white rounded-full slider-thumb  backdrop-blur-md"
+                                                />
+                                                <p className="mx-2 text-base font-medium text-white" hidden={!hideButton}>
+                                                    {Math.round(uploading)}%
+                                                </p>
+                                            </div>
+                                        ) : null}
+                                    </div>
                                 </div>
                             </div>
-                            <>
-                                <hr width="95%" className="mt-2 mb-4" />
-                                <p className="text-md">To create NFT start Recording</p>
-                                <div className="flex justify-between items-center w-full pt-2 text-white">
-                                    <button
-                                        className={`text-center rounded-md w-full 
-                    ${recording ? 'bg-green-300' : 'bg-green-600'} mx-2 py-2`}
-                                        disabled={recording}
-                                        onClick={startRecording}
-                                    >
-                                        Start Recording
-                                    </button>
-                                    <button
-                                        className={`text-center rounded-md w-full 
-                    ${!recording ? 'bg-red-300' : 'bg-red-600'} mx-2 py-2`}
-                                        disabled={!recording}
-                                        onClick={stopRecording}
-                                    >
-                                        Stop Recording
-                                    </button>
-                                </div>
-                            </>
                         </div>
+                    ) : null}
+                </div>
+
+                {/* Schedule Stream Modal */}
+                <div
+                    className={`${scheduleStreamModal && "modal-open"
+                        } modal  modal-bottom sm:modal-middle`}
+                >
+                    <div className='modal-box p-0 bg-slate-100 dark:bg-slate-800 '>
+                        <div className='w-full h-fit p-2 bg-slate-300 dark:bg-slate-700'>
+                            <div className='flex justify-between items-center p-2'>
+                                <h3 className='flex items-center gap-2 font-bold text-lg text-brand2'>
+                                    Schedule The Stream
+                                </h3>
+                                <X
+                                    onClick={() => setScheduleStreamModal(false)}
+                                    className='text-brand2 cursor-pointer'></X>
+                            </div>
+                        </div>
+                        <div className="mx-10 mb-5">
+                            <form onSubmit={handleStreamSchedule}>
+                                <label className="text-sm text-white">Select Date & Time</label>
+                                <input
+                                    value={streamSchedule}
+                                    onChange={(e) => setStreamSchedule(e.target.value)}
+                                    className="w-full"
+                                    type={'datetime-local'}
+                                    min={moment().format('YYYY-MM-DDThh:mm')}
+                                    required={true}
+                                />
+                                <div className="flex justify-end">
+                                    <input
+                                        className="mt-5  bg-transparent text-base px-3 py-2 cursor-pointer rounded border text-slate-200"
+                                        value={'Schedule'}
+                                        type={'submit'}
+                                    />
+                                </div>
+                            </form>
+                        </div>
+
                     </div>
 
                 </div>
-                {newRecord === 1 ? (
-                    <div className="flex justify-between m-6 py-6 px-10 bg-dbeats-dark-secondary">
-                        <div className="w-full flex justify-center">
-                            <video
-                                src={recordUrl}
-                                width="90%"
-                                height="90%"
-                                controls
-                                autoPlay={true}
-                                muted={false}
-                            />
-                        </div>
-
-                        <div className="w-full">
-                            <div className="space-y-6 text-gray-500 dark:text-gray-100">
-                                <div className="grid grid-cols-1 gap-6 sm:grid-cols-1">
-                                    <div className="col-span-1 sm:col-span-1">
-                                        <label
-                                            htmlFor="videoName"
-                                            className="block 2xl:text-sm text-sm lg:text-xs font-medium dark:text-gray-100 text-gray-700"
-                                        >
-                                            Video Title
-                                        </label>
-                                        <div className="mt-1 flex rounded-md shadow-sm">
-                                            <input
-                                                type="text"
-                                                name="videoName"
-                                                id="videoName"
-                                                value={recordvideo.videoName}
-                                                onChange={handleVideoInputs}
-                                                className="focus:ring-dbeats-dark-primary border dark:border-dbeats-alt border-gray-300 dark:bg-dbeats-dark-primary ring-dbeats-dark-secondary  ring-0   flex-1 block w-full rounded-md sm:text-sm  "
-                                                placeholder=""
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="grid grid-cols-8 gap-6 sm:grid-cols-8">
-                                    <div className="lg:col-span-4 col-span-8  sm:col-span-4">
-                                        <label
-                                            htmlFor="company-website"
-                                            className="block 2xl:text-sm text-sm lg:text-xs font-medium dark:text-gray-100 text-gray-700"
-                                        >
-                                            Category
-                                        </label>
-                                        <div className="flex rounded-md shadow-sm">
-
-                                        </div>
-                                    </div>
-                                    <div className="lg:col-span-4 col-span-8  sm:col-span-4">
-                                        <label
-                                            htmlFor="videoName"
-                                            className="block mr-2 2xl:text-sm text-sm lg:text-xs font-medium dark:text-gray-100 text-gray-700"
-                                        >
-                                            Pricing
-                                        </label>
-                                        <div className="mt-1 flex rounded-md shadow-sm">
-                                            <input
-                                                type="text"
-                                                name="price"
-                                                id="price"
-                                                value={recordvideo.price}
-                                                onChange={handleVideoInputs}
-                                                className="focus:ring-dbeats-dark-primary border dark:border-dbeats-alt border-gray-300 dark:bg-dbeats-dark-primary ring-dbeats-dark-secondary  ring-0   flex-1 block w-full rounded-md sm:text-sm  "
-                                                placeholder=""
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="">
-                                    <label
-                                        htmlFor="description"
-                                        className="block 2xl:text-sm text-sm lg:text-xs font-medium dark:text-gray-100 text-gray-700"
-                                    >
-                                        Description
-                                    </label>
-                                    <div className="mt-1">
-                                        <textarea
-                                            id="videoDescription"
-                                            name="description"
-                                            rows={3}
-                                            value={recordvideo.description}
-                                            onChange={handleVideoInputs}
-                                            className="dark:placeholder-gray-600 focus:ring-dbeats-dark-primary border dark:border-dbeats-alt border-gray-300 dark:bg-dbeats-dark-primary ring-dbeats-dark-secondary  ring-0   flex-1 block w-full rounded-md sm:text-sm  "
-                                            placeholder="Any Behind the scenes you'll like your Audience to know!"
-                                        />
-                                    </div>
-                                </div>
-
-                                <div className="float-right pt-20 flex items-center">
-                                    <div
-                                        hidden={hideButton}
-                                        onClick={() => {
-                                            // mintNFT();
-                                            // setHideButton(true);
-                                        }}
-                                        className="w-max font-bold cursor-pointer px-12 nowrap py-2 rounded-md text-md text-white bg-dbeats-light"
-                                    >
-                                        Mint NFT
-                                    </div>
-
-                                    {recordvideo.cid == null ? (
-                                        <div hidden={!hideButton} className=" mx-5 flex items-center w-64">
-                                            <input
-                                                type="range"
-                                                defaultValue={uploading}
-                                                min="0"
-                                                max="100"
-                                                hidden={!hideButton}
-                                                className="appearance-none cursor-pointer w-full h-3 bg-green-400 
-                font-white rounded-full slider-thumb  backdrop-blur-md"
-                                            />
-                                            <p className="mx-2 text-base font-medium text-white" hidden={!hideButton}>
-                                                {Math.round(uploading)}%
-                                            </p>
-                                        </div>
-                                    ) : null}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                ) : null}
-            </div>
-        </div>
+            </div> : <></>
     )
 }
 
