@@ -10,7 +10,7 @@ function SingleScheduled({ live }) {
 
   return (
     <div className="relative w-64 space-y-2">
-      <div className="absolute flex justify-evenly top-4 left-2 w-fit bg-rose-600 rounded-full px-2 text-slate-100 text-sm font-semibold">
+      <div className={`absolute flex justify-evenly top-4 left-2 w-fit  rounded-full px-2 text-slate-100 text-sm font-semibold  ${days<1?(hours<1?'bg-rose-600':(hours<12&&'bg-orange-600')):'bg-green-600' }`}>
         Starting in {days > 0 && `${days}Days`} {hours}Hrs {minutes}mins
       </div>
       <img
