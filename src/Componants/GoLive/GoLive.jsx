@@ -4,10 +4,11 @@ import { io } from "socket.io-client";
 import axios from "axios";
 import { makeStorageClient } from "../../Helper/uploadHelper";
 import ReactPlayer from "react-player";
-import { X } from "tabler-icons-react";
+import { CalendarTime, X } from "tabler-icons-react";
 import moment from "moment";
 import useUserActions from "../../Hooks/useUserActions";
 import CopyToClipboard from "../CopyButton/CopyToClipboard";
+import { motion, useDragControls } from "framer-motion";
 
 function GoLive() {
   const user = useContext(UserContext);
@@ -15,6 +16,9 @@ function GoLive() {
   const [StreamKey, setKey] = useState("");
   const [loader, setLoader] = useState(true);
   const [loadFeed, loadUser] = useUserActions();
+
+  //framer motion
+  const controls = useDragControls();
 
   //Modal
   const [modalShow, setModalShow] = useState(false);
@@ -632,7 +636,7 @@ function GoLive() {
   return user.database.userData.data ? (
     <div className=" bg-white dark:bg-slate-900 pt-20 ">
       <div className="flex p-4 gap-2">
-        <div className="w-96 bg-slate-100 dark:bg-slate-800  rounded-xl p-4 space-y-2">
+        <div className="w-96 bg-slate-100 dark:bg-slate-800  rounded-xl p-2 space-y-2">
           <div className="flex gap-2">
             <div className="w-1/2 p-2 flex gap-2 border-2 border-slate-200 dark:border-slate-700  rounded-md text-brand3">
               <span className="font-semibold text-base">Name</span>
@@ -671,163 +675,21 @@ function GoLive() {
           <div className="p-2 flex flex-col gap-1 border-2 border-slate-200 dark:border-slate-700  rounded-md text-brand3">
             <span className="font-semibold text-base">Live URL</span>
             <p className="text-base flex gap-1 text-brand4">
-              <span className="w-5/6 truncate">
-                <a
-                  className="opacity-50"
-                  href={`https://beta.mintflick.app/live/${user.database.userData.data.user.username}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {`${process.env.REACT_APP_CLIENT_URL}/live/${user.database.userData.data.user.username}`}
-                </a>
-              </span>
+              <a
+                className="w-5/6 truncate"
+                href={`https://beta.mintflick.app/live/${user.database.userData.data.user.username}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {`${process.env.REACT_APP_CLIENT_URL}/live/${user.database.userData.data.user.username}`}
+              </a>
               <CopyToClipboard text={playbackUrl} />
             </p>
           </div>
-          <div className="p-2 flex flex-col gap-1 border-2 border-slate-200 dark:border-slate-700  rounded-md text-brand3">
-            <span className="font-semibold text-base">Thumbnail</span>
-            {selectedFile ? (
-              <img
-                src={selectedFile.localurl}
-                className="aspect-video object-cover w-full rounded-md"
-              ></img>
-            ) : user.database.userData.data.user.thumbnail ? (
-              <img
-                src={user.database.userData.data.user.thumbnail}
-                className="aspect-video object-cover w-full rounded-md"
-              ></img>
-            ) : null}
-            <progress
-              hidden={!uploadingFile}
-              className="progress progress-success w-full dark:bg-slate-400"
-            ></progress>
-            <form
-              className="flex flex-col items-center gap-1"
-              onSubmit={uploadThumbnail}
-            >
-              <input
-                className=" input input-sm w-full "
-                name="Thumbnail image"
-                type="file"
-                accept=".jpg,.png,.jpeg,.gif,.webp"
-                required={true}
-                onChange={onFileChange}
-              />
-              <button
-                disabled={uploadingFile}
-                type="submit"
-                className={`btn btn-sm btn-success w-full ${
-                  uploadingFile || !selectedFile ? " btn-disabled" : ""
-                }`}
-              >
-                <p>Upload</p>
-              </button>
-            </form>
-          </div>
 
-          <div className="mb-4">
-            <h1 className="text-bold">Thumbnail </h1>
-            {selectedFile ? (
-              <img
-                src={selectedFile.localurl}
-                className="my-2 rounded max-h-72 w-full"
-              ></img>
-            ) : user.database.userData.data.user.thumbnail ? (
-              <img
-                src={user.database.userData.data.user.thumbnail}
-                className="my-2 rounded max-h-72 w-full"
-              ></img>
-            ) : null}
-            <form className="flex items-center" onSubmit={uploadThumbnail}>
-              <input
-                name="image"
-                type="file"
-                accept=".jpg,.png,.jpeg,.gif,.webp"
-                required={true}
-                onChange={onFileChange}
-              />
-              <div className="p-1 nm-flat-dbeats-dark-primary-sm rounded-3xl hover:nm-inset-dbeats-dark-primary">
-                <button
-                  disabled={uploadingFile}
-                  type="submit"
-                  className={`${
-                    uploadingFile || !selectedFile
-                      ? "dark:bg-dbeats-dark-primary hidden"
-                      : "bg-gradient-to-br from-dbeats-dark-secondary to-dbeats-dark-primary hover:nm-inset-dbeats-light-xs"
-                  }  px-4 py-2  rounded-3xl group flex items-center justify-center  `}
-                >
-                  <p>Upload</p>
-                </button>
-              </div>
-              <div
-                className="animate-spin rounded-full h-7 w-7 ml-3 border-t-2 border-b-2 bg-gradient-to-r from-green-400 to-blue-500 "
-                hidden={!uploadingFile}
-              ></div>
-            </form>
-          </div>
           {/* Stream Title */}
-          <div>
-            <form onSubmit={handleStreamDetails}>
-              <div>
-                <label className="font-semibold text-sm">Stream Title: </label>
-                <input
-                  required={true}
-                  value={streamDetails.name}
-                  onChange={(e) =>
-                    setStreamDetails({
-                      ...streamDetails,
-                      name: e.target.value,
-                    })
-                  }
-                  className="w-full bg-transparent border border-gray-300"
-                  type="text"
-                />
-              </div>
-              <div className="mt-2">
-                <label className="font-semibold text-sm">
-                  Stream Description:{" "}
-                </label>
-                <textarea
-                  required={true}
-                  value={streamDetails.description}
-                  onChange={(e) =>
-                    setStreamDetails({
-                      ...streamDetails,
-                      description: e.target.value,
-                    })
-                  }
-                  rows={2}
-                  className="w-full bg-transparent border border-gray-300"
-                  type="text"
-                />
-              </div>
-              <div className="flex mt-1 justify-end">
-                <input
-                  className="bg-dbeats-alt ml-1 text-dbeats-light border-dbeats-light px-3 py-2  rounded-md cursor-pointer"
-                  type="submit"
-                  value="Save"
-                />
-
-                <button
-                  onClick={cancelStreamDetails}
-                  className="bg-dbeats-alt ml-1 text-gray-400 border-gray-400 px-3 py-2  rounded-md"
-                >
-                  Cancel
-                </button>
-              </div>
-            </form>
-            <hr />
-          </div>
 
           {/* Stream Schedule */}
-          <div className="mt-2">
-            <button
-              onClick={() => setScheduleStreamModal(true)}
-              className=" text-base px-3 py-2 cursor-pointer rounded border border-dbeats-light text-dbeats-light hover:text-white hover:bg-dbeats-light"
-            >
-              Schedule The Stream
-            </button>
-          </div>
 
           {/* Stream Links */}
           <div className="mt-2">
@@ -968,8 +830,91 @@ function GoLive() {
               </div>
             </div>
           </div>
-          <>
-            <hr width="95%" className="mt-2 mb-4" />
+        </div>
+
+        <div className="flex-1 space-y-2">
+          <div className="rounded-xl overflow-hidden">
+            <ReactPlayer
+              controls={true}
+              width={"100%"}
+              height={"max-content"}
+              url={playbackUrl}
+              creatorData={user.database.userData.data.user}
+              footer={false}
+            />
+          </div>
+
+          <button
+            onClick={() => setScheduleStreamModal(true)}
+            className="btn btn-outline btn-primary rounded-full gap-1"
+          >
+            <CalendarTime />
+            Schedule The Stream
+          </button>
+
+          <div className="mt-4">
+            {user.database.userData.data.user &&
+            new Date(user.database.userData.data.user.streamSchedule) >
+              new Date() &&
+            !user.database.userData.data.user.livepeer_data.isActive ? (
+              <span className="border px-5 py-3 mt-2 rounded  mr-1 md:text-lg ml-2 text-sm tracking-wider text-slate-200">
+                <i className="fa-solid text-red-500 fa-circle text-sm mr-2"></i>
+                Stream Starting on{" "}
+                {moment(
+                  user.database.userData.data.user.streamSchedule,
+                  "YYYY-MM-DDThh:mm"
+                ).format("MMMM Do YYYY, h:mm a")}
+              </span>
+            ) : null}
+          </div>
+          {user.database.userData.data.user.livepeer_data
+            ? user.database.userData.data.user.livepeer_data.isActive && (
+                <div className="dark:text-dbeats-white mt-3 ml-2">
+                  <p className="text-md">To create NFT start Recording</p>
+                  <div className="flex justify-between items-center w-full pt-2 text-white">
+                    <div className="flex w-1/2">
+                      <button
+                        className={`text-center rounded-md w-60 
+                    ${recording ? "bg-green-300" : "bg-green-600"} mx-2 py-2`}
+                        disabled={recording}
+                        onClick={startRecording}
+                      >
+                        Start Recording
+                      </button>
+                      {recording ? (
+                        <button
+                          className={`text-center rounded-md w-60 
+                    ${!recording ? "bg-red-300" : "bg-red-600"} mx-2 py-2`}
+                          disabled={!recording}
+                          onClick={stopRecording}
+                        >
+                          Stop Recording
+                        </button>
+                      ) : (
+                        <></>
+                      )}
+                    </div>
+                    <p
+                      className={`text-white text-lg text-center pr-2 flex flex-col`}
+                    >
+                      <span
+                        className={` text-${viewColor}  ${viewAnimate} font-bold`}
+                      >
+                        {livestreamViews}
+                      </span>
+                      viewers
+                    </p>
+                  </div>
+                </div>
+              )
+            : null}
+        </div>
+        <div className="w-64 flex flex-col gap-2">
+          <motion.div
+            drag="y"
+            dragControls={controls}
+            className="cursor-move p-2 flex flex-col gap-1 text-brand3 h-fit bg-slate-100 dark:bg-slate-800  rounded-xl "
+          >
             <p className="text-md">To create NFT start Recording</p>
             <div className="flex justify-between items-center w-full pt-2 text-white">
               <button
@@ -989,77 +934,96 @@ function GoLive() {
                 Stop Recording
               </button>
             </div>
-          </>
-        </div>
-
-        <div className="flex-1">
-          <div>
-            <div className="rounded-xl overflow-hidden">
-              <ReactPlayer
-                controls={true}
-                width={"100%"}
-                height={"max-content"}
-                url={playbackUrl}
-                creatorData={user.database.userData.data.user}
-                footer={false}
+          </motion.div>
+          <div className="p-2 flex flex-col gap-1 text-brand3 h-fit bg-slate-100 dark:bg-slate-800  rounded-xl ">
+            <form onSubmit={handleStreamDetails}>
+              <div>
+                <label className=" text-sm text-brand3">Stream Title </label>
+                <input
+                  className="input w-full"
+                  required={true}
+                  value={streamDetails.name}
+                  onChange={(e) =>
+                    setStreamDetails({
+                      ...streamDetails,
+                      name: e.target.value,
+                    })
+                  }
+                  type="text"
+                />
+              </div>
+              <div className="mt-2">
+                <label className=" text-sm text-brand3">
+                  Stream Description
+                </label>
+                <textarea
+                  required={true}
+                  value={streamDetails.description}
+                  onChange={(e) =>
+                    setStreamDetails({
+                      ...streamDetails,
+                      description: e.target.value,
+                    })
+                  }
+                  rows={2}
+                  className="w-full textarea"
+                  type="text"
+                />
+              </div>
+              <div className="flex gap-2 justify-end">
+                <button
+                  onClick={cancelStreamDetails}
+                  className="btn btn-sm btn-ghost"
+                >
+                  reset
+                </button>
+                <input
+                  className="btn btn-sm btn-success"
+                  type="submit"
+                  value="update"
+                />
+              </div>
+            </form>
+          </div>
+          <div className="p-2 flex flex-col gap-1 text-brand3 h-fit bg-slate-100 dark:bg-slate-800  rounded-xl ">
+            <span className="font-semibold text-base">Thumbnail</span>
+            {selectedFile ? (
+              <img
+                src={selectedFile.localurl}
+                className="aspect-video object-cover w-full rounded-md"
+              ></img>
+            ) : user.database.userData.data.user.thumbnail ? (
+              <img
+                src={user.database.userData.data.user.thumbnail}
+                className="aspect-video object-cover w-full rounded-md"
+              ></img>
+            ) : null}
+            <progress
+              hidden={!uploadingFile}
+              className="progress progress-success w-full dark:bg-slate-400"
+            ></progress>
+            <form
+              className="flex flex-col items-center gap-1"
+              onSubmit={uploadThumbnail}
+            >
+              <input
+                className="p-0 input h-fit w-full "
+                name="Thumbnail image"
+                type="file"
+                accept=".jpg,.png,.jpeg,.gif,.webp"
+                required={true}
+                onChange={onFileChange}
               />
-            </div>
-            <div className="mt-4">
-              {user.database.userData.data.user &&
-              new Date(user.database.userData.data.user.streamSchedule) >
-                new Date() &&
-              !user.database.userData.data.user.livepeer_data.isActive ? (
-                <span className="border px-5 py-3 mt-2 rounded  mr-1 md:text-lg ml-2 text-sm tracking-wider text-slate-200">
-                  <i className="fa-solid text-red-500 fa-circle text-sm mr-2"></i>
-                  Stream Starting on{" "}
-                  {moment(
-                    user.database.userData.data.user.streamSchedule,
-                    "YYYY-MM-DDThh:mm"
-                  ).format("MMMM Do YYYY, h:mm a")}
-                </span>
-              ) : null}
-            </div>
-            {user.database.userData.data.user.livepeer_data
-              ? user.database.userData.data.user.livepeer_data.isActive && (
-                  <div className="dark:text-dbeats-white mt-3 ml-2">
-                    <p className="text-md">To create NFT start Recording</p>
-                    <div className="flex justify-between items-center w-full pt-2 text-white">
-                      <div className="flex w-1/2">
-                        <button
-                          className={`text-center rounded-md w-60 
-                    ${recording ? "bg-green-300" : "bg-green-600"} mx-2 py-2`}
-                          disabled={recording}
-                          onClick={startRecording}
-                        >
-                          Start Recording
-                        </button>
-                        {recording ? (
-                          <button
-                            className={`text-center rounded-md w-60 
-                    ${!recording ? "bg-red-300" : "bg-red-600"} mx-2 py-2`}
-                            disabled={!recording}
-                            onClick={stopRecording}
-                          >
-                            Stop Recording
-                          </button>
-                        ) : (
-                          <></>
-                        )}
-                      </div>
-                      <p
-                        className={`text-white text-lg text-center pr-2 flex flex-col`}
-                      >
-                        <span
-                          className={` text-${viewColor}  ${viewAnimate} font-bold`}
-                        >
-                          {livestreamViews}
-                        </span>
-                        viewers
-                      </p>
-                    </div>
-                  </div>
-                )
-              : null}
+              <button
+                disabled={uploadingFile}
+                type="submit"
+                className={`btn btn-sm btn-success w-full ${
+                  uploadingFile || !selectedFile ? " btn-disabled" : ""
+                }`}
+              >
+                <p>Upload</p>
+              </button>
+            </form>
           </div>
         </div>
       </div>
