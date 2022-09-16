@@ -8,18 +8,15 @@ import placeholderImage from "../../Assets/profile-pic.png";
 function SingleScheduled({ live }) {
   const [days, hours, minutes, seconds] = useCountdown(live.streamSchedule * 1);
 
-
   return (
     <div className="relative w-64 space-y-2">
       <div className={`absolute flex justify-evenly top-4 left-2 w-fit  rounded-full px-2 text-slate-100 text-sm font-semibold  ${days<1?(hours<1?'bg-rose-600':(hours<12&&'bg-orange-600')):'bg-green-600' }`}>
         Starting in {days > 0 && `${days}Days`} {hours}Hrs {minutes}mins
       </div>
-      <div
-        className=" h-36 w-full bg-cover rounded-lg"
-        style={{
-          backgroundImage: `url(${live.thumbnail}  )`,
-        }}
-      ></div>
+      <img
+        className=" aspect-video w-full object-cover rounded-lg"
+        src={live.thumbnail}
+      />
       <div className="flex w-full space-x-2 ">
         <Image
           width={40}

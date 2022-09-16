@@ -1,10 +1,13 @@
 import { data } from "autoprefixer";
 import React, { useContext, useEffect, useState } from "react";
+import { Photo } from "tabler-icons-react";
 import { UserContext } from "../../../Store";
+import ProfileFeedModal from "../../Home/Modals/ProfileFeedModal";
 
 function Posts() {
   const State = useContext(UserContext);
   const [data, setdata] = useState([]);
+  const [feedModal, setfeedModal] = useState(false);
 
   useEffect(() => {
     setdata(
@@ -26,9 +29,17 @@ function Posts() {
                 : "https://picsum.photos/seed/picsum/200/300"
             }
             alt="post"
+            onClick={() => setfeedModal(true)}
           />
         </div>
       ))}
+      {/* <ProfileFeedModal
+        feedModal={feedModal}
+        setfeedModal={setfeedModal}
+        icon={<Photo />}
+        data={data.reverse()}
+        owner="sahil"
+      /> */}
     </div>
   );
 }

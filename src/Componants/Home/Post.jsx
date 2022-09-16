@@ -862,7 +862,7 @@ function Post(props) {
                       handlePollVote(i);
                     }
                   }}
-                  className={`${
+                  className={`transition-all ease-in duration-700 ${
                     option.selectedBy &&
                     option.selectedBy.includes(
                       State.database.userData?.data?.user.username,
