@@ -3,6 +3,7 @@ import LiveChannels from "../Home/LiveChannels";
 import LiveBanners from "./LiveBanners";
 import LiveCategories from "./LiveCategories";
 import LiveChannelCategories from "./LiveChannelCategories";
+import ScheduledStream from "./ScheduledStream";
 
 function Live() {
 
@@ -15,6 +16,7 @@ function Live() {
         <LiveBanners></LiveBanners>
         <LiveCategories></LiveCategories>
         <LiveChannelCategories section_name="Live Now" event_status="Live"></LiveChannelCategories>
+        <ScheduledStream section_name="Scheduled Streams"></ScheduledStream>
       </div>
     </div>
   );
