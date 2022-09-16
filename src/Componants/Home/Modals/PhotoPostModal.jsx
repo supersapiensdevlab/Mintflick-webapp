@@ -27,7 +27,7 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
   const [isNFT, setIsNFT] = useState(false);
   const [nftPrice, setNFTPrice] = useState(1);
   const [loadFeed] = useUserActions();
-
+  const [tokenAddress, setTokenAddress] = useState("");
   //Instance of pandora
   // const ExpressSDK = createPandoraExpressSDK();
 
@@ -161,7 +161,7 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
                   nftSolanaData,
                   {
                     headers: {
-                      "x-api-key": "-3iYNcRok7Gm4EMl",
+                      "x-api-key": "6ENAkcg4YJcHhlYf",
                       "content-type": "multipart/form-data",
                     },
                   }
@@ -174,20 +174,22 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
                   // setphotoPostModalOpen(false);
                   // await loadFeed();
                   console.log("MintID", data.data.result.mint);
+                  setTokenAddress(data.data.result.mint);
                   await signTransaction(
                     "devnet",
                     data.data.result.encoded_transaction,
-                    uploadToServer(formData, data.data.result.mint)
+                    listNFTForSale(data.data.result.mint, nftPrice, formData)
                   );
                 })
                 .catch((err) => {
                   console.log(err);
-                  setUploadingPost(false);
-                  setSelectedPost(null);
-                  setCaption("");
-                  setTagged([]);
+                  clearData();
                 });
             });
+            // } else {
+            //   alert("Please add your market address");
+            //   clearData();
+            // }
           } else {
             uploadToServer(formData, null);
           }
@@ -200,6 +202,42 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
           setCaption("");
         });
     }
+  };
+
+  const listNFTForSale = async (mintId, price, formData) => {
+    var raw = JSON.stringify({
+      network: "devnet",
+      marketplace_address: process.env.REACT_APP_SOLANA_MARKETPLACE_ADDRESS,
+      nft_address: mintId,
+      price: parseInt(price),
+      seller_wallet: State.database.walletAddress,
+    });
+
+    axios
+      .post(`https://api.shyft.to/sol/v1/marketplace/list`, raw, {
+        headers: {
+          "x-api-key": "6ENAkcg4YJcHhlYf",
+          "content-type": "application/json",
+        },
+      })
+      .then(async (data) => {
+        // setUploadingPost(false);
+        // setSelectedPost(null);
+        // setCaption("");
+        // setTagged([]);
+        // setphotoPostModalOpen(false);
+        // await loadFeed();
+        console.log("MintID", data.data.result.mint);
+        await signTransaction(
+          "devnet",
+          data.data.result.encoded_transaction,
+          uploadToServer(formData, data.data.result.mint)
+        );
+      })
+      .catch((err) => {
+        console.log(err);
+        clearData();
+      });
   };
 
   const uploadToServer = (formData, mintId) => {
@@ -219,9 +257,7 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
       .catch((err) => {
         State.toast("error", "Oops!somthing went wrong uplaoding photo!");
         console.log(err);
-        setUploadingPost(false);
-        setSelectedPost(null);
-        setCaption("");
+        clearData();
       });
   };
 

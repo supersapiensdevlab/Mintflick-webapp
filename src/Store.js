@@ -6,7 +6,7 @@ function Store(props) {
   const [store, setstore] = useState({
     dark: true,
     walletAddress: "",
-    provider: {},
+    provider: null,
     userData: {},
     liveUsers: [],
     feedData: [],
@@ -39,14 +39,13 @@ function Store(props) {
   };
   const addLiveUsers = (data) => {
     updateStore({
-      liveUsers: [...store.liveUsers, data],
+      liveUsers: [...data],
     });
   };
   const addFeed = (data) => {
-    setstore((prev) => ({
-      ...prev,
+    updateStore({
       feedData: data,
-    }));
+    });
   };
   return (
     <UserContext.Provider

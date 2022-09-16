@@ -13,7 +13,7 @@ const endpoint = {
     "mainnet-beta": "http://api.mainnet-beta.solana.com/",
   },
   https: {
-    devnet: process.env.REACT_APP_SOL_DEVNET ?? "https://api.devnet.solana.com",
+    devnet: process.env.REACT_APP_SOLANA_RPC ?? "https://api.devnet.solana.com",
     testnet: "https://api.testnet.solana.com",
     "mainnet-beta":
       process.env.REACT_APP_SOL_MAINNET_BETA ??
@@ -39,15 +39,15 @@ export function clusterUrl(network) {
 export async function confirmTransactionFromFrontend(
   connection,
   encodedTransaction,
-  wallet
+  wallet,
 ) {
   console.log(encodedTransaction);
   const recoveredTransaction = Transaction.from(
-    Buffer.from(encodedTransaction, "base64")
+    Buffer.from(encodedTransaction, "base64"),
   );
   const signedTx = await wallet.signTransaction(recoveredTransaction);
   const confirmTransaction = await connection.sendRawTransaction(
-    signedTx.serialize()
+    signedTx.serialize(),
   );
   return confirmTransaction;
 }

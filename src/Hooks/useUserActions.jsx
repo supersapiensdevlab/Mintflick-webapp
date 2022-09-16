@@ -13,12 +13,33 @@ export default function useUserActions() {
       .then((response) => {
         let data = response.data;
         State.updateDatabase({
-          feedData: [...State.database.feedData, ...data],
+          feedData: data,
         });
       })
       .catch(function (error) {
         console.log(error);
       });
   }
-  return [loadFeed];
+  async function loadUser() {
+    await axios({
+      method: "post",
+      url: `${process.env.REACT_APP_SERVER_URL}/user/getuser_by_wallet`,
+
+      data: {
+        walletId: localStorage.getItem("walletAddress"),
+      },
+    })
+      .then((response) => {
+        console.log(response);
+
+        State.updateDatabase({
+          userData: response,
+          walletAddress: response.data.user.wallet_id,
+        });
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+  return [loadFeed,loadUser];
 }

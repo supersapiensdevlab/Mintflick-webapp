@@ -17,6 +17,8 @@ import { WALLET_ADAPTERS } from "@web3auth/base";
 import { CHAIN_NAMESPACES, SafeEventEmitterProvider } from "@web3auth/base";
 import Main_logo from "../../Assets/logos/Main_logo";
 import Web3 from "web3";
+import { loadOptions } from "@babel/core";
+import { constants } from "buffer";
 
 function ConnectWalletComponant() {
   const modal = useWebModal();
@@ -29,31 +31,8 @@ function ConnectWalletComponant() {
   const State = useContext(UserContext);
   const navigateTo = useNavigate();
 
-  const initWeb3Auth = async () => {
+  const init = async () => {
     try {
-      const torusWalletAdapter = new TorusWalletAdapter({
-        adapterSettings: {
-          buttonPosition: "bottom-left",
-        },
-        loginSettings: {
-          verifier: "google",
-        },
-        initParams: {
-          buildEnv: "testing",
-        },
-        chainConfig: {
-          chainNamespace: CHAIN_NAMESPACES.EIP155,
-          chainId: "0x3",
-          rpcTarget:
-            "https://ropsten.infura.io/v3/776218ac4734478c90191dde8cae483c",
-          displayName: "ropsten",
-          blockExplorer: "https://ropsten.etherscan.io/",
-          ticker: "ETH",
-          tickerName: "Ethereum",
-        },
-        clientId: clientId,
-      });
-
       const web3auth = new Web3Auth({
         clientId,
         chainConfig: {
@@ -78,7 +57,31 @@ function ConnectWalletComponant() {
             "https://ipfs.io/ipfs/bafybeihshcxswtnebaobbgjdvqgam6ynr676gcmbq3ambsg4aznytv3dwi/Mintflick%20icon-12%20%281%29.png", // Your App Logo Here
         },
       });
-      web3auth.configureAdapter(torusWalletAdapter);
+      if (selectedChain !== 0) {
+        const torusWalletAdapter = new TorusWalletAdapter({
+          adapterSettings: {
+            buttonPosition: "bottom-left",
+          },
+          loginSettings: {
+            verifier: "google",
+          },
+          initParams: {
+            buildEnv: "testing",
+          },
+          chainConfig: {
+            chainNamespace: CHAIN_NAMESPACES.EIP155,
+            chainId: "0x3",
+            rpcTarget:
+              "https://ropsten.infura.io/v3/776218ac4734478c90191dde8cae483c",
+            displayName: "ropsten",
+            blockExplorer: "https://ropsten.etherscan.io/",
+            ticker: "ETH",
+            tickerName: "Ethereum",
+          },
+          clientId: clientId,
+        });
+        web3auth.configureAdapter(torusWalletAdapter);
+      }
 
       setWeb3auth(web3auth);
       await web3auth.initModal({
@@ -102,63 +105,65 @@ function ConnectWalletComponant() {
       console.error(error);
     }
   };
+
   useEffect(() => {
-    initWeb3Auth();
+    init();
+
+    loadOptions();
   }, [selectedChain]);
 
   useEffect(() => {
-    if (provider) {
-      provider.on("accountsChanged", (accounts) => {
-        console.log("accountsChanged", accounts);
-      });
-      provider.on("chainChanged", (chainId) => {
-        console.log("chainChanged", chainId);
-      });
-      provider.on("disconnect", (error) => {
-        console.log("disconnect", error);
-      });
-      console.log(provider);
-
-      getAccounts();
-    }
+    getAccounts();
+    console.log(provider);
   }, [provider]);
   async function isUserAvaliable(walletAddress, provider) {
-    await axios({
-      method: "post",
-      url: `${process.env.REACT_APP_SERVER_URL}/user/getuser_by_wallet`,
-      data: {
-        walletId: walletAddress,
-      },
-    })
-      .then((response) => {
-        console.log(response);
-
-        State.updateDatabase({
-          userData: response,
-        });
-        console.log("user data saved in state");
-        localStorage.setItem("authtoken", response.data.jwtToken);
-        console.log("auth token saved in storage");
-        localStorage.setItem("walletAddress", walletAddress);
-        console.log("wallet address saved in storage");
-        State.updateDatabase({
-          provider: provider,
-        });
-        console.log("provider saved in state");
-        // localStorage.setItem(
-        //   "v2provider",
-        //   JSON.stringify(provider, getCircularReplacer())
-        // );
-
-        response.status === 200 && navigateTo("/homescreen/home");
+    if (
+      provider ||
+      !provider === null ||
+      !provider === undefined ||
+      !provider === "undefined"
+    ) {
+      await axios({
+        method: "post",
+        url: `${process.env.REACT_APP_SERVER_URL}/user/getuser_by_wallet`,
+        data: {
+          walletId: walletAddress,
+        },
       })
-      .catch(function (error) {
-        console.log(error);
-        navigateTo("/create_new_user");
-      });
+        .then((response) => {
+          console.log(response);
+
+          console.log("user data saved in state");
+          localStorage.setItem("authtoken", response.data.jwtToken);
+          console.log("auth token saved in storage");
+          localStorage.setItem("walletAddress", walletAddress);
+          console.log("wallet address saved in storage");
+          State.updateDatabase({
+            provider: provider,
+            userData: response,
+          });
+          console.log("provider saved in state");
+          console.log(web3auth.provider);
+          // localStorage.setItem(
+          //   "v2provider",
+          //   JSON.stringify(provider, getCircularReplacer())
+          // );
+
+          response.status === 200 && navigateTo("/homescreen/home");
+        })
+        .catch(function (error) {
+          console.log(error);
+          navigateTo("/create_new_user");
+        });
+    }
   }
   const getAccounts = async () => {
-    if (!provider) {
+    if (
+      !provider ||
+      provider === null ||
+      provider === undefined ||
+      provider === "undefined"
+    ) {
       console.log("provider not initialized yet");
       return;
     }
@@ -197,7 +202,11 @@ function ConnectWalletComponant() {
         <button
           onClick={async () => {
             const web3authProvider = await web3auth.connect();
-            setProvider((prev) => web3authProvider);
+            setProvider(web3authProvider);
+            State.updateDatabase({
+              provider: web3authProvider,
+            });
+            console.log(provider);
           }}
           className="btn btn-brand sm:w-1/2"
         >
@@ -209,8 +218,10 @@ function ConnectWalletComponant() {
         <button
           onClick={async () => {
             const web3authProvider = await web3auth.connect();
-
-            setProvider((prev) => web3authProvider);
+            setProvider(web3authProvider);
+            State.updateDatabase({
+              provider: web3authProvider,
+            });
           }}
           className="btn btn-outline btn-primary sm:w-1/2"
         >
@@ -235,6 +246,9 @@ function ConnectWalletComponant() {
             }}
           />
           <PolygonToken className={selectedChain === 0 ? "saturate-0" : null} />
+          {/* {switching ? (
+            <button class='btn btn-ghost btn-square loading'></button>
+          ) : null} */}
         </label>
       </div>
       <div className="w-full md:w-fit border p-4 space-y-2 rounded-lg border-slate-800">
