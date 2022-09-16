@@ -7,9 +7,7 @@ import placeholderImage from "../../Assets/profile-pic.png";
 
 function SingleScheduled({ live }) {
   const [days, hours, minutes, seconds] = useCountdown(live.streamSchedule * 1);
-  useEffect(() => {
-    console.log(days, hours, minutes, seconds);
-  }, [days, hours, minutes, seconds]);
+
 
   return (
     <div className="relative w-64 space-y-2">
