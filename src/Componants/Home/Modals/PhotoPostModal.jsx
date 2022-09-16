@@ -18,6 +18,9 @@ import {
 } from "../Utility/utilityFunc";
 import { clusterApiUrl, Connection, PublicKey } from "@solana/web3.js";
 import SolanaToken from "../../../Assets/logos/SolanaToken";
+import { createPandoraExpressSDK } from "pandora-express";
+import Web3 from "web3";
+import { useEffect } from "react";
 
 function PhotoPostModal({ setphotoPostModalOpen }) {
   const State = useContext(UserContext);
@@ -28,8 +31,9 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
   const [nftPrice, setNFTPrice] = useState(1);
   const [loadFeed] = useUserActions();
   const [tokenAddress, setTokenAddress] = useState("");
+  const [showListingOption, setShowListingOption] = useState(false);
   //Instance of pandora
-  // const ExpressSDK = createPandoraExpressSDK();
+  const ExpressSDK = createPandoraExpressSDK();
 
   // Minting
   const [minting, setMinting] = useState(null);
@@ -58,25 +62,102 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
   // console.log(window?.ethereum);
   // console.log(State.database?.provider);
 
-  // const mintNft = async (itemUri, price) => {
-  //   const web3 = new Web3(State.database.provider.provider);
-  //   //get current account address
-  //   const accounts = await web3.eth.getAccounts();
-  //   console.log("web3", web3);
-  //   console.log(accounts[0]);
-  //   //Get ChainID of current account
-  //   const chainId = await web3.eth.net.getId();
-  //   //Mint NFT using SDK erc721 nft mint
-  //   await ExpressSDK.erc1155.nft.mint(
-  //     web3,
-  //     chainId,
-  //     // "0x3f1437E3ce1143464734C26C2EA7519F3a393Aa0",
-  //     accounts[0],
-  //     price,
-  //     itemUri,
-  //     [[accounts[0], 10]]
-  //   );
-  // };
+  const mintOnSolana = (formData) => {
+    uploadFile(selectedPost.file[0]).then(async (cid) => {
+      console.log("stored files with cid:", cid);
+      console.log(State.database);
+      let nftSolanaData = {
+        network: "devnet",
+        wallet: State.database.walletAddress,
+        name: caption,
+        symbol: "FLICK",
+        attributes: JSON.stringify([{ trait_type: "Power", value: "100" }]),
+        description: caption,
+        external_url:
+          "https://ipfs.io/ipfs/" + cid + "/" + selectedPost.file[0].name,
+        max_supply: 1,
+        royalty: 5,
+        file: selectedPost.file[0],
+      };
+
+      console.log(nftSolanaData);
+      axios
+        .post(`https://api.shyft.to/sol/v1/nft/create_detach`, nftSolanaData, {
+          headers: {
+            "x-api-key": "6ENAkcg4YJcHhlYf",
+            "content-type": "multipart/form-data",
+          },
+        })
+        .then(async (data) => {
+          console.log("MintID", data.data.result.mint);
+          setTokenAddress(data.data.result.mint);
+          await signTransaction(
+            "devnet",
+            data.data.result.encoded_transaction,
+            listNFTForSale(data.data.result.mint, nftPrice, formData)
+          );
+        })
+        .catch((err) => {
+          console.log(err);
+          clearData();
+        });
+    });
+  };
+
+  const mintOnPolygon = (formData, file) => {
+    uploadFile(file)
+      .then(async (cid) => {
+        const web3 = new Web3(State.database.provider);
+        let itemUri = "https://ipfs.io/ipfs/" + cid + "/meta.json";
+        console.log("web3", web3);
+        //Get ChainID of current account
+        const chainId = await web3.eth.net.getId();
+        //Mint NFT using SDK erc721 nft mint
+        await ExpressSDK.erc1155.nft
+          .mint(
+            web3, // web3 instance of provider
+            chainId, // network id of blockchain
+            State.database?.walletAddress, // wallet address of minter
+            1, // amount of token to create
+            itemUri, // tokenuri string
+            [[State.database?.walletAddress, 10]] // royalties
+          )
+          .then(async (data) => {
+            console.log(data);
+            const tokenId = data.events.TransferSingle.returnValues.id;
+            console.log(tokenId);
+            // await ExpressSDK.erc1155.order
+            //   .sellNFT(
+            //     web3, // Web3 instance configured with metamask provider
+            //     chainId, // Network id of blockchain
+            //     tokenId, // Token Id of NFT
+            //     nftPrice, // Selling Price of NFT
+            //     State.database?.walletAddress, // Address of current owner
+            //     1 // Amount of token to sell
+            //   )
+            //   .then((data) => {
+            //     console.log(data);
+            //   })
+            //   .catch((err) => {
+            //     console.log(err);
+            //   });
+            setShowListingOption(true);
+            setUploadingPost(false);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      })
+      .catch((err) => {
+        console.log(err);
+        clearData();
+      });
+  };
+
+  const handleNFTListing = (e) => {
+    e.preventDefault();
+    console.log("listed");
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -129,63 +210,68 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
             const blob = new Blob([JSON.stringify(metadata)], {
               type: "application/json",
             });
-            // var file = convertBlobToFile(blob, "meta.json");
-            // console.log(file);
+            var file = convertBlobToFile(blob, "meta.json");
+            console.log(file);
 
-            uploadFile(selectedPost.file[0]).then(async (cid) => {
-              console.log("stored files with cid:", cid);
-              console.log(State.database);
-              let nftSolanaData = {
-                network: "devnet",
-                wallet: State.database.walletAddress,
-                name: caption,
-                symbol: "FLICK",
-                attributes: JSON.stringify([
-                  { trait_type: "Power", value: "100" },
-                ]),
-                description: caption,
-                external_url:
-                  "https://ipfs.io/ipfs/" +
-                  cid +
-                  "/" +
-                  selectedPost.file[0].name,
-                max_supply: 1,
-                royalty: 5,
-                file: selectedPost.file[0],
-              };
+            //  uploadFile(selectedPost.file[0]).then(async (cid) => {
+            //     console.log("stored files with cid:", cid);
+            //     console.log(State.database);
+            //     let nftSolanaData = {
+            //       network: "devnet",
+            //       wallet: State.database.walletAddress,
+            //       name: caption,
+            //       symbol: "FLICK",
+            //       attributes: JSON.stringify([
+            //         { trait_type: "Power", value: "100" },
+            //       ]),
+            //       description: caption,
+            //       external_url:
+            //         "https://ipfs.io/ipfs/" +
+            //         cid +
+            //         "/" +
+            //         selectedPost.file[0].name,
+            //       max_supply: 1,
+            //       royalty: 5,
+            //       file: selectedPost.file[0],
+            //     };
 
-              console.log(nftSolanaData);
-              axios
-                .post(
-                  `https://api.shyft.to/sol/v1/nft/create_detach`,
-                  nftSolanaData,
-                  {
-                    headers: {
-                      "x-api-key": "6ENAkcg4YJcHhlYf",
-                      "content-type": "multipart/form-data",
-                    },
-                  }
-                )
-                .then(async (data) => {
-                  // setUploadingPost(false);
-                  // setSelectedPost(null);
-                  // setCaption("");
-                  // setTagged([]);
-                  // setphotoPostModalOpen(false);
-                  // await loadFeed();
-                  console.log("MintID", data.data.result.mint);
-                  setTokenAddress(data.data.result.mint);
-                  await signTransaction(
-                    "devnet",
-                    data.data.result.encoded_transaction,
-                    listNFTForSale(data.data.result.mint, nftPrice, formData)
-                  );
-                })
-                .catch((err) => {
-                  console.log(err);
-                  clearData();
-                });
-            });
+            //     console.log(nftSolanaData);
+            //     axios
+            //       .post(
+            //         `https://api.shyft.to/sol/v1/nft/create_detach`,
+            //         nftSolanaData,
+            //         {
+            //           headers: {
+            //             "x-api-key": "6ENAkcg4YJcHhlYf",
+            //             "content-type": "multipart/form-data",
+            //           },
+            //         },
+            //       )
+            //       .then(async (data) => {
+            //         // setUploadingPost(false);
+            //         // setSelectedPost(null);
+            //         // setCaption("");
+            //         // setTagged([]);
+            //         // setphotoPostModalOpen(false);
+            //         // await loadFeed();
+            //         console.log("MintID", data.data.result.mint);
+            //         setTokenAddress(data.data.result.mint);
+            //         await signTransaction(
+            //           "devnet",
+            //           data.data.result.encoded_transaction,
+            //           listNFTForSale(data.data.result.mint, nftPrice, formData),
+            //         );
+            //       })
+            //       .catch((err) => {
+            //         console.log(err);
+            //         clearData();
+            //       });
+            //   });
+            if (State.database.chainId == 1) {
+              mintOnPolygon(formData, file);
+            } else if (State.database.chainId == 2) {
+              mintOnSolana(formData, file);
+            }
             // } else {
             //   alert("Please add your market address");
             //   clearData();
@@ -267,6 +353,8 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
     setCaption("");
     setTagged([]);
     setphotoPostModalOpen(false);
+    setShowListingOption(false);
+    setIsNFT(false);
   };
 
   function Log() {
@@ -312,7 +400,7 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
           ></X>
         </div>
       </div>
-      <form onSubmit={handleSubmit}>
+      <form>
         <div className="w-full p-4 space-y-3">
           <label
             htmlFor="post_announcement_image"
@@ -367,7 +455,7 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
             value={caption}
             onChange={(e) => setCaption(e.target.value)}
             style={defaultStyle}
-            className="textarea w-full h-24  pt-2  "
+            className="textarea w-full h-24  pt-2 focus:outline-0"
             placeholder={"Enter caption."}
             a11ySuggestionsListLabel={"Suggested mentions"}
           >
@@ -379,17 +467,30 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
               onAdd={handleAdd}
             />
           </MentionsInput>
+          {showListingOption ? (
+            <div className="w-fit flex space-x-2 text-green-500">
+              NFT Minted Successfully
+            </div>
+          ) : (
+            <></>
+          )}
           <div className="w-fit flex space-x-2">
-            <label className="flex items-center cursor-pointer gap-2">
-              <input
-                type="checkbox"
-                value={isNFT}
-                onChange={() => setIsNFT(!isNFT)}
-                className="checkbox checkbox-primary"
-              />
-              <span className="label-text text-brand3">Mint as NFT</span>
-            </label>
-            {isNFT && (
+            {showListingOption ? (
+              <div className="flex items-center">
+                <span className="label-text text-brand3">List NFT</span>
+              </div>
+            ) : (
+              <label className="flex items-center cursor-pointer gap-2">
+                <input
+                  type="checkbox"
+                  value={isNFT}
+                  onChange={() => setIsNFT(!isNFT)}
+                  className="checkbox checkbox-primary"
+                />
+                <span className="label-text text-brand3">Mint as NFT</span>
+              </label>
+            )}
+            {showListingOption && (
               <div className="form-control">
                 <label className="input-group">
                   <input
@@ -421,14 +522,37 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
             value="50"
             max="100"
           ></progress>
-          <button
-            type={"submit"}
-            className={`btn  ${
-              !selectedPost?.file[0] ? "btn-disabled" : "btn-brand"
-            } w-full ${uploadingPost ? "loading " : ""}`}
-          >
-            Post photo
-          </button>
+          {showListingOption ? (
+            <div className="w-full flex justify-around space-x-1">
+              <button
+                onClick={handleNFTListing}
+                className={`btn  ${
+                  !selectedPost?.file[0] ? "btn-disabled" : "btn-brand"
+                } w-1/2 ${uploadingPost ? "loading " : ""}`}
+              >
+                List NFT
+              </button>
+              <button
+                onClick={() => {
+                  clearData();
+                }}
+                className={`btn  ${
+                  !selectedPost?.file[0] ? "btn-disabled" : "btn-brand"
+                } w-1/2 ${uploadingPost ? "loading " : ""}`}
+              >
+                Close
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={handleSubmit}
+              className={`btn  ${
+                !selectedPost?.file[0] ? "btn-disabled" : "btn-brand"
+              } w-full ${uploadingPost ? "loading " : ""}`}
+            >
+              Post photo
+            </button>
+          )}
         </div>
       </form>
     </div>

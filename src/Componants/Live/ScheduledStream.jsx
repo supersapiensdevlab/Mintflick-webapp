@@ -1,35 +1,24 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useContext } from "react";
 import { UserContext } from "../../Store";
 import placeholderImage from "../../Assets/profile-pic.png";
 import { Image } from "react-img-placeholder";
+import { useEffect } from "react";
 import axios from "axios";
+import moment from "moment";
 
-function LiveChannelCategories(props) {
-  const State = useContext(UserContext);
+function ScheduledStream(props) {
+  const [scheduledStream, setScheduledStream] = useState([]);
 
-  // For Live Users
   useEffect(() => {
-    if (State.database.liveUsers.length <= 0) {
-      axios
-        .get(`${process.env.REACT_APP_SERVER_URL}/get_activeusers`)
-        .then(async (repos) => {
-          let tempdata = [];
-          for (let i = 0; i < repos.data.length; i++) {
-            await axios
-              .get(
-                `${process.env.REACT_APP_SERVER_URL}/user/getuser_by_id/${repos.data[i].id}`
-              )
-              .then((value) => {
-                if (value.data !== "") {
-                  console.log("setting live users");
-                  tempdata.push(value.data);
-                }
-              });
-          }
-          State.addLiveUsers(tempdata);
-        });
-    }
+    axios
+      .get(`${process.env.REACT_APP_SERVER_URL}/scheduled_stream`)
+      .then(async (res) => {
+        setScheduledStream(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, []);
 
   return (
@@ -37,19 +26,18 @@ function LiveChannelCategories(props) {
       <p className="font-bold text-base text-brand5 ">{props.section_name}</p>
       <div className=" w-full overflow-x-auto">
         <div className="flex space-x-4 w-fit">
-          {State.database.liveUsers.length > 0 ? (
+          {scheduledStream.length > 0 ? (
             <>
-              {State.database.liveUsers.map((live) => (
+              {scheduledStream.map((live) => (
                 <div className="relative w-64 space-y-2">
                   <div className="absolute top-4 left-2 w-fit bg-rose-600 rounded-full px-2 text-slate-100 text-sm font-semibold">
-                    {props.event_status}
+                    Scheduled{" "}
+                    {moment(new Date(live.streamSchedule * 1)).fromNow()}
                   </div>
-                  <div
-                    className=" h-36 w-full bg-cover rounded-lg"
-                    style={{
-                      backgroundImage: `url(${live.thumbnail}  )`,
-                    }}
-                  ></div>
+                  <img
+                    className=" aspect-video w-full object-cover rounded-lg"
+                    src={live.thumbnail}
+                  />
                   <div className="flex w-full space-x-2 ">
                     <Image
                       width={40}
@@ -78,7 +66,7 @@ function LiveChannelCategories(props) {
               ))}
             </>
           ) : (
-            <div className="text-brand5">No Live Streams </div>
+            <div className="text-brand5">No Scheduled Streams </div>
           )}
         </div>
       </div>
@@ -86,4 +74,4 @@ function LiveChannelCategories(props) {
   );
 }
 
-export default LiveChannelCategories;
+export default ScheduledStream;

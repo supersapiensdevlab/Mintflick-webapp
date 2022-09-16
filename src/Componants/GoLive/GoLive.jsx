@@ -611,10 +611,11 @@ function GoLive() {
 
   const handleStreamSchedule = (e) => {
     e.preventDefault();
+    let s = new Date(streamSchedule).getTime();
     axios({
       method: "POST",
       url: `${process.env.REACT_APP_SERVER_URL}/user/streamSchedule`,
-      data: { streamSchedule },
+      data: { streamSchedule: s },
       headers: {
         "content-type": "application/json",
         "auth-token": JSON.stringify(localStorage.getItem("authtoken")),
@@ -688,12 +689,12 @@ function GoLive() {
             {selectedFile ? (
               <img
                 src={selectedFile.localurl}
-                className="aspect-video w-full rounded-md"
+                className="aspect-video object-cover w-full rounded-md"
               ></img>
             ) : user.database.userData.data.user.thumbnail ? (
               <img
                 src={user.database.userData.data.user.thumbnail}
-                className="aspect-video w-full rounded-md"
+                className="aspect-video object-cover w-full rounded-md"
               ></img>
             ) : null}
             <progress
@@ -705,7 +706,7 @@ function GoLive() {
               onSubmit={uploadThumbnail}
             >
               <input
-                className=" input input-sm text-sm p-0 w-full"
+                className=" input input-sm w-full "
                 name="Thumbnail image"
                 type="file"
                 accept=".jpg,.png,.jpeg,.gif,.webp"
