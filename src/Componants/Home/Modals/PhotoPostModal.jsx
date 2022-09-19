@@ -32,12 +32,16 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
   const [loadFeed] = useUserActions();
   const [tokenAddress, setTokenAddress] = useState("");
   const [showListingOption, setShowListingOption] = useState(false);
+  const [tokenId, setTokenId] = useState(null);
+  const [solanaMintId, setSolanaMintId] = useState(null);
   //Instance of pandora
   const ExpressSDK = createPandoraExpressSDK();
 
   // Minting
   const [minting, setMinting] = useState(null);
   const [mintingProgress, setMintingProgress] = useState(0);
+
+  const web3 = new Web3(State.database.provider);
 
   const renderData = [];
   State.database.userData?.data?.user?.followee_count.forEach((value, i) => {
@@ -61,6 +65,12 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
 
   // console.log(window?.ethereum);
   // console.log(State.database?.provider);
+
+  const nftMinted = (mintId) => {
+    setSolanaMintId(mintId);
+    setShowListingOption(true);
+    setUploadingPost(false);
+  };
 
   const mintOnSolana = (formData) => {
     uploadFile(selectedPost.file[0]).then(async (cid) => {
@@ -94,8 +104,9 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
           await signTransaction(
             "devnet",
             data.data.result.encoded_transaction,
-            listNFTForSale(data.data.result.mint, nftPrice, formData)
+            nftMinted(data.data.result.mint)
           );
+          uploadToServer(formData, data.data.result.mint);
         })
         .catch((err) => {
           console.log(err);
@@ -107,7 +118,6 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
   const mintOnPolygon = (formData, file) => {
     uploadFile(file)
       .then(async (cid) => {
-        const web3 = new Web3(State.database.provider);
         let itemUri = "https://ipfs.io/ipfs/" + cid + "/meta.json";
         console.log("web3", web3);
         //Get ChainID of current account
@@ -126,21 +136,7 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
             console.log(data);
             const tokenId = data.events.TransferSingle.returnValues.id;
             console.log(tokenId);
-            // await ExpressSDK.erc1155.order
-            //   .sellNFT(
-            //     web3, // Web3 instance configured with metamask provider
-            //     chainId, // Network id of blockchain
-            //     tokenId, // Token Id of NFT
-            //     nftPrice, // Selling Price of NFT
-            //     State.database?.walletAddress, // Address of current owner
-            //     1 // Amount of token to sell
-            //   )
-            //   .then((data) => {
-            //     console.log(data);
-            //   })
-            //   .catch((err) => {
-            //     console.log(err);
-            //   });
+            setTokenId(tokenId);
             setShowListingOption(true);
             setUploadingPost(false);
           })
@@ -154,9 +150,24 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
       });
   };
 
-  const handleNFTListing = (e) => {
+  const handleNFTListing = async (e) => {
     e.preventDefault();
-    console.log("listed");
+    const chainId = await web3.eth.net.getId();
+    await ExpressSDK.erc1155.order
+      .sellNFT(
+        web3, // Web3 instance configured with metamask provider
+        chainId, // Network id of blockchain
+        tokenId, // Token Id of NFT
+        nftPrice, // Selling Price of NFT
+        State.database?.walletAddress, // Address of current owner
+        1 // Amount of token to sell
+      )
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const handleSubmit = (e) => {
@@ -269,13 +280,9 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
             //   });
             if (State.database.chainId == 1) {
               mintOnPolygon(formData, file);
-            } else if (State.database.chainId == 2) {
+            } else if (State.database.chainId == 0) {
               mintOnSolana(formData, file);
             }
-            // } else {
-            //   alert("Please add your market address");
-            //   clearData();
-            // }
           } else {
             uploadToServer(formData, null);
           }
@@ -290,15 +297,17 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
     }
   };
 
-  const listNFTForSale = async (mintId, price, formData) => {
+  const listNFTForSale = async (e) => {
+    e.preventDefault();
     var raw = JSON.stringify({
       network: "devnet",
       marketplace_address: process.env.REACT_APP_SOLANA_MARKETPLACE_ADDRESS,
-      nft_address: mintId,
-      price: parseInt(price),
+      nft_address: solanaMintId,
+      price: parseInt(nftPrice),
       seller_wallet: State.database.walletAddress,
     });
 
+    console.log(raw);
     axios
       .post(`https://api.shyft.to/sol/v1/marketplace/list`, raw, {
         headers: {
@@ -307,18 +316,8 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
         },
       })
       .then(async (data) => {
-        // setUploadingPost(false);
-        // setSelectedPost(null);
-        // setCaption("");
-        // setTagged([]);
-        // setphotoPostModalOpen(false);
-        // await loadFeed();
-        console.log("MintID", data.data.result.mint);
-        await signTransaction(
-          "devnet",
-          data.data.result.encoded_transaction,
-          uploadToServer(formData, data.data.result.mint)
-        );
+        console.log(data.data);
+        await signTransaction("devnet", data.data.result.encoded_transaction);
       })
       .catch((err) => {
         console.log(err);
@@ -338,7 +337,6 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
       .then(async (res) => {
         State.toast("success", "Your Photo uploded successfully!");
         await loadFeed();
-        clearData();
       })
       .catch((err) => {
         State.toast("error", "Oops!somthing went wrong uplaoding photo!");
@@ -354,8 +352,9 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
     setTagged([]);
     setphotoPostModalOpen(false);
     setShowListingOption(false);
-    setIsNFT(false);
   };
+
+  console.log(isNFT);
 
   function Log() {
     console.log("NFT Minted");
@@ -525,7 +524,11 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
           {showListingOption ? (
             <div className="w-full flex justify-around space-x-1">
               <button
-                onClick={handleNFTListing}
+                onClick={
+                  State.database?.chainId == 1
+                    ? handleNFTListing
+                    : listNFTForSale
+                }
                 className={`btn  ${
                   !selectedPost?.file[0] ? "btn-disabled" : "btn-brand"
                 } w-1/2 ${uploadingPost ? "loading " : ""}`}

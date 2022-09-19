@@ -121,6 +121,7 @@ function GoLive() {
   const [streamDetails, setStreamDetails] = useState({
     name: "",
     description: "",
+    category:"other"
   });
   const [streamLink, setStreamLink] = useState({
     image: "",
@@ -515,9 +516,7 @@ function GoLive() {
 
   // console.log(user.database.userData.data.user);
 
-  useEffect(() => {
-    console.log(streamDetails);
-  }, [streamDetails]);
+
   useEffect(() => {
     if (user.database.userData.data) {
       if (user.database.userData.data.user.streamDetails) {
@@ -528,7 +527,7 @@ function GoLive() {
   // on Stream Details Submit
   const handleStreamDetails = async (e) => {
     e.preventDefault();
-    if (streamDetails.name != "" && streamDetails.description != "") {
+    if (streamDetails.name != "" && streamDetails.description != "" && streamDetails.category != "") {
       try {
         await axios
           .post(
@@ -970,7 +969,27 @@ function GoLive() {
                   type="text"
                 />
               </div>
-              <div className="flex gap-2 justify-end">
+              <div className="mt-2">
+                <label className=" text-sm text-brand3">Stream Category</label>
+                <select
+                  className="select block w-full"
+                  onChange={(e) =>
+                    setStreamDetails({
+                      ...streamDetails,
+                      category: e.target.value,
+                    })
+                  }
+                  value={streamDetails.category}
+                >
+                  <option disabled selected>
+                    Categories
+                  </option>
+                  {category.map((c) => (
+                    <option>{c}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="mt-2 flex gap-2 justify-end">
                 <button
                   onClick={cancelStreamDetails}
                   className="btn btn-sm btn-ghost"
