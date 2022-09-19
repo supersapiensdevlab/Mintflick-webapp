@@ -11,10 +11,41 @@ import {
 import PolygonToken from "../../../Assets/logos/PolygonToken";
 import { UserContext } from "../../../Store";
 import axios from "axios";
+import { SolanaWallet } from "@web3auth/solana-provider";
+import {
+  clusterUrl,
+  confirmTransactionFromFrontend,
+} from "../Utility/utilityFunc";
+import { clusterApiUrl, Connection, PublicKey } from "@solana/web3.js";
 
 function BuyNFTModal() {
   const State = useContext(UserContext);
   const [step, setStep] = useState(1);
+
+  async function signTransaction(network, transaction, callback) {
+    //const phantom = new PhantomWalletAdapter();
+    //await phantom.connect();
+    const solanaWallet = new SolanaWallet(State.database.provider); // web3auth.provider
+
+    const rpcUrl = clusterUrl(network);
+    console.log(rpcUrl);
+    const connection = new Connection(rpcUrl, "confirmed");
+    //console.log(connection.rpcEndpoint);
+    const ret = await confirmTransactionFromFrontend(
+      connection,
+      transaction,
+      solanaWallet
+    );
+    // const checks = await connection.confirmTransaction({signature:ret},'finalised');
+
+    // console.log(checks);
+    // await connection.confirmTransaction({
+    //     blockhash: transaction.blockhash,
+    //     signature: ret,
+    //   });
+    connection.onSignature(ret, callback, "finalized");
+    return ret;
+  }
 
   const buyNft = () => {
     let buyNftData = {
@@ -34,6 +65,13 @@ function BuyNFTModal() {
       })
       .then(async (data) => {
         console.log(data);
+        await signTransaction(
+          "devnet",
+          data.data.result.encoded_transaction,
+          () => {
+            State.toast("success", "NFT bought successfully");
+          }
+        );
       })
       .catch((err) => {
         console.log(err);
