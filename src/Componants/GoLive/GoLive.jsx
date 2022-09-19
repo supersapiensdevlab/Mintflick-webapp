@@ -4,12 +4,13 @@ import { io } from "socket.io-client";
 import axios from "axios";
 import { makeStorageClient } from "../../Helper/uploadHelper";
 import ReactPlayer from "react-player";
-import { CalendarTime, X } from "tabler-icons-react";
+import { CalendarTime, PlayerPlay, PlayerRecord, X } from "tabler-icons-react";
 import moment from "moment";
 import useUserActions from "../../Hooks/useUserActions";
 import CopyToClipboard from "../CopyButton/CopyToClipboard";
 import { motion, useDragControls } from "framer-motion";
 import useWindowDimensions from "../../Hooks/useWindowDimentions";
+import Loading from "../Loading/Loading";
 
 function GoLive() {
   const user = useContext(UserContext);
@@ -22,12 +23,26 @@ function GoLive() {
   //framer motion
   const controls = useDragControls();
 
+  const slangText = [
+    "NFTs are more than just a jpeg",
+    "Never share your private keys",
+    "Web3 is Web2 on steroids...",
+    "Blochain is the future",
+    "NFTs are the future",
+    "Buy the Dip",
+    "WAGMI",
+    "Decentralised doesn't mean Safe. Be cautious",
+    "Create. Mint. Vibe",
+    "Own your shit",
+  ];
+
   //Modal
   const [modalShow, setModalShow] = useState(false);
   const [showStreamModal, setShowStreamModal] = useState(false);
   const [showDestinationModal, setShowDestinationModal] = useState(false);
   const [showPriceModal, setShowPriceModal] = useState(false);
   const [scheduleStreamModal, setScheduleStreamModal] = useState(false);
+  const [mintClipModal, setmintClipModal] = useState(false);
 
   //MultiStreams
   const [userStreams, setUserStreams] = useState([]);
@@ -121,7 +136,7 @@ function GoLive() {
   const [streamDetails, setStreamDetails] = useState({
     name: "",
     description: "",
-    category:"other"
+    category: "other",
   });
   const [streamLink, setStreamLink] = useState({
     image: "",
@@ -354,6 +369,7 @@ function GoLive() {
     setNewRecord(1);
     recorder.stop();
     stream.getVideoTracks()[0].stop();
+    setmintClipModal(true);
   };
 
   //video functions
@@ -516,7 +532,6 @@ function GoLive() {
 
   // console.log(user.database.userData.data.user);
 
-
   useEffect(() => {
     if (user.database.userData.data) {
       if (user.database.userData.data.user.streamDetails) {
@@ -527,7 +542,11 @@ function GoLive() {
   // on Stream Details Submit
   const handleStreamDetails = async (e) => {
     e.preventDefault();
-    if (streamDetails.name != "" && streamDetails.description != "" && streamDetails.category != "") {
+    if (
+      streamDetails.name != "" &&
+      streamDetails.description != "" &&
+      streamDetails.category != ""
+    ) {
       try {
         await axios
           .post(
@@ -636,100 +655,7 @@ function GoLive() {
   };
   return user.database.userData.data ? (
     <div className=" bg-white dark:bg-slate-900 pt-20 ">
-      <div className="flex p-4 gap-2">
-        <div className="w-96 h-fit bg-slate-100 dark:bg-slate-800  rounded-xl p-2 space-y-2">
-          <div className="flex gap-2">
-            <div className="w-1/2 p-2 flex gap-2 border-2 border-slate-200 dark:border-slate-700  rounded-md text-brand3">
-              <span className="font-semibold text-base">Name</span>
-              <p className="text-base text-brand4">
-                {user.database.userData.data.user.name}
-              </p>
-            </div>
-            <div className="w-1/2 p-2 flex gap-2 border-2 border-slate-200 dark:border-slate-700  rounded-md text-brand3">
-              <span className="font-semibold text-base">Username</span>
-              <p className="text-base text-brand4">
-                {user.database.userData.data.user.username}
-              </p>
-            </div>
-          </div>
-          <div className="p-2 flex flex-col gap-1 border-2 border-slate-200 dark:border-slate-700  rounded-md text-brand3">
-            <span className="font-semibold text-base">RTMP URL</span>
-            <p className="text-base flex gap-1 text-brand4">
-              rtmp://rtmp.livepeer.com/live
-              <CopyToClipboard text="rtmp://rtmp.livepeer.com/live" />
-            </p>
-          </div>
-          <div className="p-2 flex flex-col gap-1 border-2 border-slate-200 dark:border-slate-700  rounded-md text-brand3">
-            <span className="font-semibold text-base">Streamer Key</span>
-            <p className="text-base flex gap-1 text-brand4">
-              {userStreams.streamKey}
-              <CopyToClipboard text={userStreams.streamKey} />
-            </p>
-          </div>
-          <div className="p-2 flex flex-col gap-1 border-2 border-slate-200 dark:border-slate-700  rounded-md text-brand3">
-            <span className="font-semibold text-base">Playback URL</span>
-            <p className="text-base flex gap-1 text-brand4">
-              <span className="w-5/6 truncate">{playbackUrl}</span>
-              <CopyToClipboard text={playbackUrl} />
-            </p>
-          </div>
-          <div className="p-2 flex flex-col gap-1 border-2 border-slate-200 dark:border-slate-700  rounded-md text-brand3">
-            <span className="font-semibold text-base">Live URL</span>
-            <p className="text-base flex gap-1 text-brand4">
-              <a
-                className="w-5/6 truncate"
-                href={`https://beta.mintflick.app/live/${user.database.userData.data.user.username}`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {`${process.env.REACT_APP_CLIENT_URL}/live/${user.database.userData.data.user.username}`}
-              </a>
-              <CopyToClipboard text={playbackUrl} />
-            </p>
-          </div>
-
-          {/* Stream Title */}
-
-          {/* Stream Schedule */}
-
-          {/* Stream Links */}
-
-          <div className="hidden">
-            <div className="flex flex-col">
-              <p className="text-center mb-1">Currently Connected :</p>
-              <div className="flex flex-wrap justify-center">
-                {multiStreamConnected.map((value, index) => {
-                  ////console.log(value);
-                  return (
-                    <div key={index} className="m-1">
-                      <img
-                        src={value.platform.logo}
-                        alt="logo"
-                        className="h-6 lg:h-10 w-auto"
-                      />
-                    </div>
-                  );
-                })}
-              </div>
-              <div className="nm-flat-dbeats-dark-primary-sm p-1 rounded-3xl hover:nm-inset-dbeats-dark-secondary-xs w-max mx-auto">
-                <button
-                  variant="primary"
-                  className="bg-dbeats-dark-secondary text-center content-center justify-center align-middle hover:nm-inset-dbeats-light flex text-white rounded-3xl font-bold px-2 py-3 tracking-widest w-max"
-                  type="button"
-                  onClick={
-                    multiStreamConnected.length < 3
-                      ? () => setShowDestinationModal(true)
-                      : () => setShowPriceModal(true)
-                  }
-                >
-                  Add MultiStream Platforms
-                  <i className="fas fa-solid fa-video mx-2 cursor-pointer pt-1"></i>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
+      <div className="flex flex-col lg:flex-row p-4 gap-2">
         <div className="flex-1 space-y-2">
           <div className="rounded-xl overflow-hidden">
             <ReactPlayer
@@ -741,7 +667,7 @@ function GoLive() {
               footer={false}
             />
           </div>
-          <div className="w-full flex justify-start gap-2">
+          <div className="w-full flex flex-wrap justify-start gap-2">
             <button
               onClick={() => setScheduleStreamModal(true)}
               className="btn btn-outline btn-primary rounded-full gap-1"
@@ -756,16 +682,20 @@ function GoLive() {
               </p>
               {!recording ? (
                 <button
-                  className="btn  btn-success rounded-full"
+                  className="flex items-center text-success p-2 px-4 border-2 border-success rounded-full gap-2"
                   onClick={startRecording}
                 >
-                  Start Recording
+                  <PlayerPlay /> Start Recording
                 </button>
               ) : (
                 <button
-                  className="btn  btn-error rounded-full"
+                  className="flex items-center text-error p-2 px-4 border-2 border-error rounded-full gap-2"
                   onClick={stopRecording}
                 >
+                  <span className="relative flex h-4 w-4">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span>
+                    <span className="absolute inline-flex rounded-full h-4 w-4 bg-red-600"></span>
+                  </span>
                   Stop Recording
                 </button>
               )}
@@ -786,154 +716,178 @@ function GoLive() {
               </span>
             ) : null}
           </div>
-          <div className="mt-2">
-            <div className="text-white text-base font-semibold mb-2">
-              Banners (Max 4)
-            </div>
-            {user.database.userData.data.user.streamLinks.length < 4 && (
-              <div className="mt-3">
-                <form onSubmit={uploadLink}>
-                  <div>Create new banner </div>
-                  <div className="flex">
-                    <div className="border-2 border-white border-dashed p-3 mt-1">
-                      <div className="text-center">
-                        <i className="fa-solid text-3xl fa-file-image"></i>
-                      </div>
-                      <label
-                        htmlFor="file"
-                        className="whitespace-nowrap text-sm text-center rounded py-1 px-2 text-dbeats-light bg-dbeats-alt cursor-pointer"
-                      >
-                        {selectedLinkFile ? (
-                          selectedLinkFile.file ? (
-                            `${selectedLinkFile.file[0].name.substring(0, 10)}`
-                          ) : null
-                        ) : (
-                          <>
-                            Choose Image{" "}
-                            <span className="text-red-600 text-xl">*</span>
-                          </>
-                        )}
-                        <input
-                          accept=".jpg,.png,.jpeg,.gif,.webp"
-                          required={true}
-                          onChange={onLinkFileChange}
-                          type="file"
-                          id="file"
-                          className="sr-only"
+          <div className="w-full flex flex-col gap-2">
+            <div className="p-2 flex flex-col gap-1 text-brand3 h-fit bg-slate-100 dark:bg-slate-800  rounded-xl ">
+              <div className="text-brand2 text-base font-semibold">
+                Add banners to live stream (Max 4)
+              </div>
+              <div className="w-full flex flex-wrap">
+                {user.database.userData.data.user.streamLinks &&
+                  user.database.userData.data.user.streamLinks.map(
+                    (link, index) => (
+                      <div key={index} className="relative w-1/2 p-2">
+                        <img
+                          className="rounded-md w-full aspect-video object-cover"
+                          src={link.image}
+                          alt="banner"
                         />
-                      </label>
-
-                      <div className="text-center text-sm text-gray-500">
-                        PNG, JPG, GIF
+                        <X
+                          onClick={() => deleteStreamLink(link)}
+                          className="absolute top-3 right-3 btn btn-circle btn-xs "
+                        ></X>
                       </div>
-                    </div>
-                    <div className="flex-1 mt-1">
-                      <input
-                        required={true}
-                        value={streamLink.url}
-                        onChange={(e) =>
-                          setStreamLink({
-                            ...streamLink,
-                            url: e.target.value,
-                          })
-                        }
-                        placeholder="URL"
-                        className="w-full bg-transparent text-sm ml-2 border border-gray-300 py-2"
-                        type={"url"}
-                      />
-                      <div className="flex mt-1 justify-end  items-center">
-                        <input
-                          disabled={uploadingLink}
-                          type={"submit"}
-                          value="Add Banner"
-                          className="mt-1 cursor-pointer bg-dbeats-alt   text-dbeats-light border-dbeats-light px-2 py-1  rounded-md"
-                        />
-                        <div
-                          className="animate-spin rounded-full h-5 w-5 ml-3 border-t-2 border-b-2 bg-gradient-to-r from-green-400 to-blue-500 "
-                          hidden={!uploadingLink}
-                        ></div>
-                      </div>
-                    </div>
+                    )
+                  )}
+              </div>
+              {user.database.userData.data.user.streamLinks.length < 4 && (
+                <form onSubmit={uploadLink} className="space-y-1">
+                  <progress
+                    hidden={!uploadingLink}
+                    className="progress progress-success w-full dark:bg-slate-400"
+                  ></progress>
+                  <label
+                    htmlFor="file"
+                    className=" cursor-pointer flex justify-start items-center gap-2  w-full p-2 border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4"
+                  >
+                    {selectedLinkFile ? (
+                      selectedLinkFile.file ? (
+                        `${selectedLinkFile.file[0].name.substring(0, 10)}`
+                      ) : null
+                    ) : (
+                      <>
+                        Choose Image( PNG, JPG, GIF)
+                        <span className="text-red-600 text-xl">*</span>
+                      </>
+                    )}
+                    <input
+                      accept=".jpg,.png,.jpeg,.gif,.webp"
+                      required={true}
+                      onChange={onLinkFileChange}
+                      type="file"
+                      id="file"
+                      className="sr-only"
+                    />
+                  </label>
+                  <div className="w-full flex gap-2">
+                    <input
+                      required={true}
+                      value={streamLink.url}
+                      onChange={(e) =>
+                        setStreamLink({
+                          ...streamLink,
+                          url: e.target.value,
+                        })
+                      }
+                      placeholder="URL"
+                      className="input flex-grow"
+                      type={"url"}
+                    />
+                    <input
+                      disabled={uploadingLink}
+                      type={"submit"}
+                      value="Add Banner"
+                      className="btn btn-success"
+                    />
                   </div>
                 </form>
+              )}
+            </div>
+          </div>
+        </div>
+
+        <div className="w-full lg:w-96 flex flex-col gap-2">
+          <div className="w-full h-fit bg-slate-100 dark:bg-slate-800  rounded-xl p-2 space-y-2">
+            <div className="flex gap-2">
+              <div className="w-1/2 p-2 flex gap-2 border-2 border-slate-200 dark:border-slate-700  rounded-md text-brand3">
+                <span className="font-semibold text-base">Name</span>
+                <p className="text-base text-brand4">
+                  {user.database.userData.data.user.name}
+                </p>
               </div>
-            )}
-            <div className="mt-3">
-              <div className="text-white text-base font-semibold mb-2">
-                Banners
+              <div className="w-1/2 p-2 flex gap-2 border-2 border-slate-200 dark:border-slate-700  rounded-md text-brand3">
+                <span className="font-semibold text-base">Username</span>
+                <p className="text-base text-brand4">
+                  {user.database.userData.data.user.username}
+                </p>
               </div>
-              <div className="flex flex-wrap mx-6">
-                {user.database.userData.data.user.streamLinks
-                  ? user.database.userData.data.user.streamLinks.map(
-                      (link, index) => {
-                        return (
-                          <div
-                            key={index}
-                            className="border border-dbeats-light rounded-md w-32 mx-6 pb-2 pt-1 my-1"
-                          >
-                            <div className="text-dbeats-light text-right">
-                              <X
-                                onClick={() => deleteStreamLink(link)}
-                                className="ml-auto pr-1 cursor-pointer"
-                              ></X>
-                            </div>
-                            <img src={link.image} className="w-full pt-2" />
-                            <div className="text-center p-1 pt-3">
-                              <div className="break-words">{link.url}</div>
-                              {/* <button><i className="text-md fa-solid mx-2 fa-trash"></i></button> */}
-                            </div>
-                          </div>
-                        );
-                      }
-                    )
-                  : null}
+            </div>
+            <div className="p-2 flex flex-col gap-1 border-2 border-slate-200 dark:border-slate-700  rounded-md text-brand3">
+              <span className="font-semibold text-base">RTMP URL</span>
+              <p className="text-base flex gap-1 text-brand4">
+                rtmp://rtmp.livepeer.com/live
+                <CopyToClipboard text="rtmp://rtmp.livepeer.com/live" />
+              </p>
+            </div>
+            <div className="p-2 flex flex-col gap-1 border-2 border-slate-200 dark:border-slate-700  rounded-md text-brand3">
+              <span className="font-semibold text-base">Streamer Key</span>
+              <p className="text-base flex gap-1 text-brand4">
+                {userStreams.streamKey}
+                <CopyToClipboard text={userStreams.streamKey} />
+              </p>
+            </div>
+            <div className="p-2 flex flex-col gap-1 border-2 border-slate-200 dark:border-slate-700  rounded-md text-brand3">
+              <span className="font-semibold text-base">Playback URL</span>
+              <p className="text-base flex gap-1 text-brand4">
+                <span className="w-5/6 truncate">{playbackUrl}</span>
+                <CopyToClipboard text={playbackUrl} />
+              </p>
+            </div>
+            <div className="p-2 flex flex-col gap-1 border-2 border-slate-200 dark:border-slate-700  rounded-md text-brand3">
+              <span className="font-semibold text-base">Live URL</span>
+              <p className="text-base flex gap-1 text-brand4">
+                <a
+                  className="w-5/6 truncate"
+                  href={`https://beta.mintflick.app/live/${user.database.userData.data.user.username}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {`${process.env.REACT_APP_CLIENT_URL}/live/${user.database.userData.data.user.username}`}
+                </a>
+                <CopyToClipboard text={playbackUrl} />
+              </p>
+            </div>
+
+            {/* Stream Title */}
+
+            {/* Stream Schedule */}
+
+            {/* Stream Links */}
+
+            <div className="hidden">
+              <div className="flex flex-col">
+                <p className="text-center mb-1">Currently Connected :</p>
+                <div className="flex flex-wrap justify-center">
+                  {multiStreamConnected.map((value, index) => {
+                    ////console.log(value);
+                    return (
+                      <div key={index} className="m-1">
+                        <img
+                          src={value.platform.logo}
+                          alt="logo"
+                          className="h-6 lg:h-10 w-auto"
+                        />
+                      </div>
+                    );
+                  })}
+                </div>
+                <div className="nm-flat-dbeats-dark-primary-sm p-1 rounded-3xl hover:nm-inset-dbeats-dark-secondary-xs w-max mx-auto">
+                  <button
+                    variant="primary"
+                    className="bg-dbeats-dark-secondary text-center content-center justify-center align-middle hover:nm-inset-dbeats-light flex text-white rounded-3xl font-bold px-2 py-3 tracking-widest w-max"
+                    type="button"
+                    onClick={
+                      multiStreamConnected.length < 3
+                        ? () => setShowDestinationModal(true)
+                        : () => setShowPriceModal(true)
+                    }
+                  >
+                    Add MultiStream Platforms
+                    <i className="fas fa-solid fa-video mx-2 cursor-pointer pt-1"></i>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
-          {user.database.userData.data.user.livepeer_data
-            ? user.database.userData.data.user.livepeer_data.isActive && (
-                <div className="dark:text-dbeats-white mt-3 ml-2">
-                  <p className="text-md">To create NFT start Recording</p>
-                  <div className="flex justify-between items-center w-full pt-2 text-white">
-                    <div className="flex w-1/2">
-                      <button
-                        className={`text-center rounded-md w-60 
-                    ${recording ? "bg-green-300" : "bg-green-600"} mx-2 py-2`}
-                        disabled={recording}
-                        onClick={startRecording}
-                      >
-                        Start Recording
-                      </button>
-                      {recording ? (
-                        <button
-                          className={`text-center rounded-md w-60 
-                    ${!recording ? "bg-red-300" : "bg-red-600"} mx-2 py-2`}
-                          disabled={!recording}
-                          onClick={stopRecording}
-                        >
-                          Stop Recording
-                        </button>
-                      ) : (
-                        <></>
-                      )}
-                    </div>
-                    <p
-                      className={`text-white text-lg text-center pr-2 flex flex-col`}
-                    >
-                      <span
-                        className={` text-${viewColor}  ${viewAnimate} font-bold`}
-                      >
-                        {livestreamViews}
-                      </span>
-                      viewers
-                    </p>
-                  </div>
-                </div>
-              )
-            : null}
-        </div>
-
-        <div className="w-64 flex flex-col gap-2">
           <div className="p-2 flex flex-col gap-1 text-brand3 h-fit bg-slate-100 dark:bg-slate-800  rounded-xl ">
             <form onSubmit={handleStreamDetails}>
               <div>
@@ -1046,7 +1000,8 @@ function GoLive() {
           </div>
         </div>
       </div>
-      {newRecord === 1 ? (
+
+      {/* {newRecord === 1 ? (
         <div className="flex justify-between m-6 py-6 px-10 bg-dbeats-dark-secondary">
           <div className="w-full flex justify-center">
             <video
@@ -1172,8 +1127,91 @@ function GoLive() {
             </div>
           </div>
         </div>
-      ) : null}
-
+      ) : null} */}
+      {/* minting clip */}
+      <div
+        className={`${
+          mintClipModal && "modal-open"
+        } modal  modal-bottom sm:modal-middle`}
+      >
+        <div className="modal-box p-0 bg-slate-100 dark:bg-slate-800 ">
+          <div className="w-full h-fit p-2 bg-slate-300 dark:bg-slate-700">
+            <div className="flex justify-between items-center p-2">
+              <h3 className="flex items-center gap-2 font-bold text-lg text-brand2">
+                Mint video
+              </h3>
+              <X
+                onClick={() => setmintClipModal(false)}
+                className="text-brand2 cursor-pointer"
+              ></X>
+            </div>
+          </div>
+          <div className="p-4 space-y-2">
+            <video
+              src={recordUrl}
+              width="100%"
+              height="100%"
+              controls
+              autoPlay={true}
+              muted={false}
+              className="rounded-md"
+            />
+            <progress
+              hidden={!hideButton}
+              value={uploading}
+              max="100"
+              className="progress progress-success w-full dark:bg-slate-400"
+            ></progress>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                name="videoName"
+                id="videoName"
+                value={recordvideo.videoName}
+                onChange={handleVideoInputs}
+                className="input w-full "
+                placeholder="Enter video title..."
+              />
+              <input
+                type="text"
+                name="price"
+                id="price"
+                value={recordvideo.price}
+                onChange={handleVideoInputs}
+                className="input w-full"
+                placeholder="Enter price..."
+              />
+            </div>
+            <select className="select  w-full" onChange={(e) => {}}>
+              <option disabled selected>
+                Categories
+              </option>
+              {category.map((c) => (
+                <option>{c}</option>
+              ))}
+            </select>
+            <textarea
+              id="videoDescription"
+              name="description"
+              rows={3}
+              value={recordvideo.description}
+              onChange={handleVideoInputs}
+              className="textarea w-full"
+              placeholder="Any Behind the scenes you'll like your Audience to know!"
+            />
+            <div
+              disabled={hideButton}
+              onClick={() => {
+                // mintNFT();
+                // setHideButton(true);
+              }}
+              className="btn btn-brand w-full"
+            >
+              Mint NFT
+            </div>
+          </div>
+        </div>
+      </div>
       {/* Schedule Stream Modal */}
       <div
         className={`${
@@ -1192,31 +1230,30 @@ function GoLive() {
               ></X>
             </div>
           </div>
-          <div className="mx-10 mb-5">
-            <form onSubmit={handleStreamSchedule}>
-              <label className="text-sm text-white">Select Date & Time</label>
-              <input
-                value={streamSchedule}
-                onChange={(e) => setStreamSchedule(e.target.value)}
-                className="w-full"
-                type={"datetime-local"}
-                min={moment().format("YYYY-MM-DDThh:mm")}
-                required={true}
-              />
-              <div className="flex justify-end">
-                <input
-                  className="mt-5  bg-transparent text-base px-3 py-2 cursor-pointer rounded border text-slate-200"
-                  value={"Schedule"}
-                  type={"submit"}
-                />
-              </div>
-            </form>
-          </div>
+          <form onSubmit={handleStreamSchedule} className="space-y-2 m-4">
+            <label className="text-sm  text-brand2">Select Date & Time</label>
+            <input
+              value={streamSchedule}
+              onChange={(e) => setStreamSchedule(e.target.value)}
+              className="w-full input"
+              type={"datetime-local"}
+              min={moment().format("YYYY-MM-DDThh:mm")}
+              required={true}
+            />
+
+            <input
+              className="btn btn-brand w-full"
+              value={"Schedule the stream"}
+              type={"submit"}
+            />
+          </form>
         </div>
       </div>
     </div>
   ) : (
-    <></>
+    <div className="h-screen w-screen bg-slate-100 dark:bg-slate-800 ">
+      <Loading msg={slangText} />
+    </div>
   );
 }
 
