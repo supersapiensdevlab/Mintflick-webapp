@@ -16,8 +16,7 @@ function BuyNFTModal() {
   const State = useContext(UserContext);
   const [step, setStep] = useState(1);
 
-  const buyNft = (e) => {
-    e.preventDefault();
+  const buyNft = () => {
     let buyNftData = {
       network: "devnet",
       marketplace_address: `${process.env.REACT_APP_SOLANA_MARKETPLACE_ADDRESS}`,
@@ -123,7 +122,7 @@ function BuyNFTModal() {
               <div className="p-1 w-1/2">
                 <button
                   onClick={() => {
-                    setStep("buyNow");
+                    // setStep("buyNow");
                     buyNft();
                   }}
                   className="btn btn-brand w-full "
