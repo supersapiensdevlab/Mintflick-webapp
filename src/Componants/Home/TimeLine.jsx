@@ -118,6 +118,26 @@ function TimeLine() {
     }
   };
 
+  useEffect(() => {
+    var myHeaders = new Headers();
+    myHeaders.append("x-api-key", "6ENAkcg4YJcHhlYf");
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+    fetch(
+      `https://api.shyft.to/sol/v1/marketplace/active_listings?network=devnet&marketplace_address=${process.env.REACT_APP_SOLANA_MARKETPLACE_ADDRESS}&list_state=69pkD5zvA5fWudm6TsY5bzRyKYuLipvuUSUpsUJyi12Z`,
+      requestOptions
+    )
+      .then((response) => response.json())
+      .then((result) => {
+        setNfts(result.result);
+      })
+      .catch((error) => console.log("error", error));
+  }, []);
+
   return (
     <InfiniteScroll
       className="w-full max-w-2xl space-y-6 mb-4"
@@ -170,6 +190,8 @@ function TimeLine() {
             reports={post.reports}
             superfan_data={post.superfan_data}
             gettingNFTData={gettingNFTData}
+            nfts={nfts}
+            walletId={post.wallet_id}
           ></Post>
         </>
       ))}

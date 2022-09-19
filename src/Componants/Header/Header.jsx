@@ -194,6 +194,25 @@ function Header() {
     }
   };
 
+  const showListedNFTs = () => {
+    console.log("in");
+    var myHeaders = new Headers();
+    myHeaders.append("x-api-key", "6ENAkcg4YJcHhlYf");
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+    fetch(
+      `https://api.shyft.to/sol/v1/marketplace/active_listings?network=devnet&marketplace_address=${process.env.REACT_APP_SOLANA_MARKETPLACE_ADDRESS}&list_state=69pkD5zvA5fWudm6TsY5bzRyKYuLipvuUSUpsUJyi12Z`,
+      requestOptions
+    )
+      .then((response) => response.text())
+      .then((result) => console.log(result))
+      .catch((error) => console.log("error", error));
+  };
+
   return (
     <div className="hidden lg:flex fixed z-50  top-0  px-4 lg:px-12 justify-between items-center h-20 bg-white dark:bg-slate-900 w-full shadow-mintflick	">
       <div className="flex items-center space-x-4 h-full w-1/3 -ml-2">
@@ -262,7 +281,7 @@ function Header() {
       </div>
       <div className="flex w-1/3 justify-end items-center space-x-4 h-full   ">
         <NavLink
-          to={'/homescreen/golive'}
+          to={"/homescreen/golive"}
           className="hidden lg:flex  btn btn-outline btn-primary gap-2 rounded-full"
         >
           <AccessPoint size={28}></AccessPoint>
@@ -313,7 +332,7 @@ function Header() {
           </div>
         </div>
 
-        <button class="btn btn-circle btn-ghost ">
+        <button class="btn btn-circle btn-ghost " onClick={showListedNFTs}>
           <MessageDots size={28}></MessageDots>
         </button>
 
