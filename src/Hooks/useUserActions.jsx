@@ -22,11 +22,10 @@ export default function useUserActions() {
   }
   async function loadUser() {
     await axios({
-      method: "post",
-      url: `${process.env.REACT_APP_SERVER_URL}/user/getuser_by_wallet`,
-
-      data: {
-        walletId: localStorage.getItem("walletAddress"),
+      method: "get",
+      url: `${process.env.REACT_APP_SERVER_URL}/user/getLoggedInUser`,
+      headers: {
+        "auth-token": JSON.stringify(localStorage.getItem("authtoken")),
       },
     })
       .then((response) => {
@@ -41,5 +40,5 @@ export default function useUserActions() {
         console.log(error);
       });
   }
-  return [loadFeed,loadUser];
+  return [loadFeed, loadUser];
 }
