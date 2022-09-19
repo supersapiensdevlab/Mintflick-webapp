@@ -9,6 +9,7 @@ import moment from "moment";
 import useUserActions from "../../Hooks/useUserActions";
 import CopyToClipboard from "../CopyButton/CopyToClipboard";
 import { motion, useDragControls } from "framer-motion";
+import useWindowDimensions from "../../Hooks/useWindowDimentions";
 
 function GoLive() {
   const user = useContext(UserContext);
@@ -17,6 +18,7 @@ function GoLive() {
   const [loader, setLoader] = useState(true);
   const [loadFeed, loadUser] = useUserActions();
 
+  const { height, width } = useWindowDimensions();
   //framer motion
   const controls = useDragControls();
 
@@ -636,7 +638,7 @@ function GoLive() {
   return user.database.userData.data ? (
     <div className=" bg-white dark:bg-slate-900 pt-20 ">
       <div className="flex p-4 gap-2">
-        <div className="w-96 bg-slate-100 dark:bg-slate-800  rounded-xl p-2 space-y-2">
+        <div className="w-96 h-fit bg-slate-100 dark:bg-slate-800  rounded-xl p-2 space-y-2">
           <div className="flex gap-2">
             <div className="w-1/2 p-2 flex gap-2 border-2 border-slate-200 dark:border-slate-700  rounded-md text-brand3">
               <span className="font-semibold text-base">Name</span>
@@ -692,6 +694,99 @@ function GoLive() {
           {/* Stream Schedule */}
 
           {/* Stream Links */}
+
+          <div className="hidden">
+            <div className="flex flex-col">
+              <p className="text-center mb-1">Currently Connected :</p>
+              <div className="flex flex-wrap justify-center">
+                {multiStreamConnected.map((value, index) => {
+                  ////console.log(value);
+                  return (
+                    <div key={index} className="m-1">
+                      <img
+                        src={value.platform.logo}
+                        alt="logo"
+                        className="h-6 lg:h-10 w-auto"
+                      />
+                    </div>
+                  );
+                })}
+              </div>
+              <div className="nm-flat-dbeats-dark-primary-sm p-1 rounded-3xl hover:nm-inset-dbeats-dark-secondary-xs w-max mx-auto">
+                <button
+                  variant="primary"
+                  className="bg-dbeats-dark-secondary text-center content-center justify-center align-middle hover:nm-inset-dbeats-light flex text-white rounded-3xl font-bold px-2 py-3 tracking-widest w-max"
+                  type="button"
+                  onClick={
+                    multiStreamConnected.length < 3
+                      ? () => setShowDestinationModal(true)
+                      : () => setShowPriceModal(true)
+                  }
+                >
+                  Add MultiStream Platforms
+                  <i className="fas fa-solid fa-video mx-2 cursor-pointer pt-1"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex-1 space-y-2">
+          <div className="rounded-xl overflow-hidden">
+            <ReactPlayer
+              controls={true}
+              width={"100%"}
+              height={"max-content"}
+              url={playbackUrl}
+              creatorData={user.database.userData.data.user}
+              footer={false}
+            />
+          </div>
+          <div className="w-full flex justify-start gap-2">
+            <button
+              onClick={() => setScheduleStreamModal(true)}
+              className="btn btn-outline btn-primary rounded-full gap-1"
+            >
+              <CalendarTime />
+              Schedule The Stream
+            </button>
+
+            <div className=" flex items-center  w-fit bg-slate-100 dark:bg-slate-800  rounded-full ">
+              <p className="text-sm font-semibold text-brand2 mx-4">
+                To create NFT
+              </p>
+              {!recording ? (
+                <button
+                  className="btn  btn-success rounded-full"
+                  onClick={startRecording}
+                >
+                  Start Recording
+                </button>
+              ) : (
+                <button
+                  className="btn  btn-error rounded-full"
+                  onClick={stopRecording}
+                >
+                  Stop Recording
+                </button>
+              )}
+            </div>
+          </div>
+          <div className="mt-4">
+            {user.database.userData.data.user &&
+            new Date(user.database.userData.data.user.streamSchedule) >
+              new Date() &&
+            !user.database.userData.data.user.livepeer_data.isActive ? (
+              <span className="border px-5 py-3 mt-2 rounded  mr-1 md:text-lg ml-2 text-sm tracking-wider text-slate-200">
+                <i className="fa-solid text-red-500 fa-circle text-sm mr-2"></i>
+                Stream Starting on{" "}
+                {moment(
+                  user.database.userData.data.user.streamSchedule,
+                  "YYYY-MM-DDThh:mm"
+                ).format("MMMM Do YYYY, h:mm a")}
+              </span>
+            ) : null}
+          </div>
           <div className="mt-2">
             <div className="text-white text-base font-semibold mb-2">
               Banners (Max 4)
@@ -796,77 +891,6 @@ function GoLive() {
               </div>
             </div>
           </div>
-          <div className="hidden">
-            <div className="flex flex-col">
-              <p className="text-center mb-1">Currently Connected :</p>
-              <div className="flex flex-wrap justify-center">
-                {multiStreamConnected.map((value, index) => {
-                  ////console.log(value);
-                  return (
-                    <div key={index} className="m-1">
-                      <img
-                        src={value.platform.logo}
-                        alt="logo"
-                        className="h-6 lg:h-10 w-auto"
-                      />
-                    </div>
-                  );
-                })}
-              </div>
-              <div className="nm-flat-dbeats-dark-primary-sm p-1 rounded-3xl hover:nm-inset-dbeats-dark-secondary-xs w-max mx-auto">
-                <button
-                  variant="primary"
-                  className="bg-dbeats-dark-secondary text-center content-center justify-center align-middle hover:nm-inset-dbeats-light flex text-white rounded-3xl font-bold px-2 py-3 tracking-widest w-max"
-                  type="button"
-                  onClick={
-                    multiStreamConnected.length < 3
-                      ? () => setShowDestinationModal(true)
-                      : () => setShowPriceModal(true)
-                  }
-                >
-                  Add MultiStream Platforms
-                  <i className="fas fa-solid fa-video mx-2 cursor-pointer pt-1"></i>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="flex-1 space-y-2">
-          <div className="rounded-xl overflow-hidden">
-            <ReactPlayer
-              controls={true}
-              width={"100%"}
-              height={"max-content"}
-              url={playbackUrl}
-              creatorData={user.database.userData.data.user}
-              footer={false}
-            />
-          </div>
-
-          <button
-            onClick={() => setScheduleStreamModal(true)}
-            className="btn btn-outline btn-primary rounded-full gap-1"
-          >
-            <CalendarTime />
-            Schedule The Stream
-          </button>
-
-          <div className="mt-4">
-            {user.database.userData.data.user &&
-            new Date(user.database.userData.data.user.streamSchedule) >
-              new Date() &&
-            !user.database.userData.data.user.livepeer_data.isActive ? (
-              <span className="border px-5 py-3 mt-2 rounded  mr-1 md:text-lg ml-2 text-sm tracking-wider text-slate-200">
-                <i className="fa-solid text-red-500 fa-circle text-sm mr-2"></i>
-                Stream Starting on{" "}
-                {moment(
-                  user.database.userData.data.user.streamSchedule,
-                  "YYYY-MM-DDThh:mm"
-                ).format("MMMM Do YYYY, h:mm a")}
-              </span>
-            ) : null}
-          </div>
           {user.database.userData.data.user.livepeer_data
             ? user.database.userData.data.user.livepeer_data.isActive && (
                 <div className="dark:text-dbeats-white mt-3 ml-2">
@@ -909,32 +933,8 @@ function GoLive() {
               )
             : null}
         </div>
+
         <div className="w-64 flex flex-col gap-2">
-          <motion.div
-            drag="y"
-            dragControls={controls}
-            className="cursor-move p-2 flex flex-col gap-1 text-brand3 h-fit bg-slate-100 dark:bg-slate-800  rounded-xl "
-          >
-            <p className="text-md">To create NFT start Recording</p>
-            <div className="flex justify-between items-center w-full pt-2 text-white">
-              <button
-                className={`text-center rounded-md w-full 
-                    ${recording ? "bg-green-300" : "bg-green-600"} mx-2 py-2`}
-                disabled={recording}
-                onClick={startRecording}
-              >
-                Start Recording
-              </button>
-              <button
-                className={`text-center rounded-md w-full 
-                    ${!recording ? "bg-red-300" : "bg-red-600"} mx-2 py-2`}
-                disabled={!recording}
-                onClick={stopRecording}
-              >
-                Stop Recording
-              </button>
-            </div>
-          </motion.div>
           <div className="p-2 flex flex-col gap-1 text-brand3 h-fit bg-slate-100 dark:bg-slate-800  rounded-xl ">
             <form onSubmit={handleStreamDetails}>
               <div>
