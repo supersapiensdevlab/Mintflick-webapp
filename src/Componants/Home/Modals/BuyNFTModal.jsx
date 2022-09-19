@@ -10,10 +10,36 @@ import {
 } from "tabler-icons-react";
 import PolygonToken from "../../../Assets/logos/PolygonToken";
 import { UserContext } from "../../../Store";
+import axios from "axios";
 
 function BuyNFTModal() {
   const State = useContext(UserContext);
   const [step, setStep] = useState(1);
+
+  const buyNft = (e) => {
+    e.preventDefault();
+    let buyNftData = {
+      network: "devnet",
+      marketplace_address: `${process.env.REACT_APP_SOLANA_MARKETPLACE_ADDRESS}`,
+      nft_address: State.database?.buyNFTModalData?.tokenId,
+      price: State.database?.buyNFTModalData?.nftPrice,
+      seller_address: State.database?.buyNFTModalData?.sellerAddress,
+      buyer_wallet: State.database.walletAddress,
+    };
+    axios
+      .post(`https://api.shyft.to/sol/v1/marketplace/buy`, buyNftData, {
+        headers: {
+          "x-api-key": "6ENAkcg4YJcHhlYf",
+          "content-type": "application/json",
+        },
+      })
+      .then(async (data) => {
+        console.log(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   return (
     <div
       className={`${
@@ -76,7 +102,8 @@ function BuyNFTModal() {
               </div>
               <div className="flex flex-col p-4 sm:items-end justify-center text-brand1">
                 <p className="flex items-center gap-2 cursor-pointer font-semibold text-3xl text-brand-gradient">
-                  <PolygonToken size={16}></PolygonToken> 12
+                  <PolygonToken size={16}></PolygonToken>{" "}
+                  {State.database?.buyNFTModalData?.nftPrice}
                 </p>
                 <span className="text-sm font-normal text-brand4">($1234)</span>
               </div>
@@ -95,7 +122,10 @@ function BuyNFTModal() {
             <div className="w-full flex ">
               <div className="p-1 w-1/2">
                 <button
-                  onClick={() => setStep("buyNow")}
+                  onClick={() => {
+                    setStep("buyNow");
+                    buyNft();
+                  }}
                   className="btn btn-brand w-full "
                 >
                   BUY NOW
@@ -132,7 +162,7 @@ function BuyNFTModal() {
                 </div>
                 <div className="flex gap-1 items-center justify-center text-brand1">
                   <p className="flex items-center gap-2 cursor-pointer font-semibold text-3xl text-brand-gradient">
-                    <PolygonToken size={16}></PolygonToken> 12
+                    <PolygonToken size={16}></PolygonToken> {}
                   </p>
                   <span className="text-sm font-normal text-brand4">
                     ($1234)
