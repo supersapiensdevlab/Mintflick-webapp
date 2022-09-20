@@ -500,6 +500,7 @@ function GoLive() {
               "auth-token": JSON.stringify(localStorage.getItem("authtoken")),
             },
           });
+          user.toast("success", "Thumbnail Uploaded Successfully!");
         })
         .catch((err) => {
           setUploadingFile(false);
@@ -560,9 +561,14 @@ function GoLive() {
             }
           )
           .then((data) => {
+            user.toast("success", "Stream Details Updated Successfully!");
             loadUser();
           });
       } catch (err) {
+        user.toast(
+          "error",
+          "Oops!somthing went wrong stream details updating!"
+        );
         console.log(err);
       }
     }
@@ -615,8 +621,8 @@ function GoLive() {
   }
 
   // Delete a stream link
-  const deleteStreamLink = (link) => {
-    axios({
+  const deleteStreamLink = async (link) => {
+    await axios({
       method: "POST",
       url: `${process.env.REACT_APP_SERVER_URL}/user/deleteStreamLink`,
       data: link,
@@ -625,8 +631,9 @@ function GoLive() {
         "auth-token": JSON.stringify(localStorage.getItem("authtoken")),
       },
     })
-      .then((res) => {
-        loadUser();
+      .then(async (res) => {
+        console.log("loading user");
+        await loadUser();
       })
       .catch((err) => {
         console.log(err);
@@ -667,7 +674,7 @@ function GoLive() {
               footer={false}
             />
           </div>
-          <div className="w-full flex flex-wrap justify-start gap-2">
+          <div className="w-full flex items-center flex-wrap justify-start gap-2">
             <button
               onClick={() => setScheduleStreamModal(true)}
               className="btn btn-outline btn-primary rounded-full gap-1"
@@ -700,22 +707,26 @@ function GoLive() {
                 </button>
               )}
             </div>
+            <div className="">
+              {user.database.userData.data.user &&
+              user.database.userData.data.user.streamSchedule > Date.now() &&
+              !user.database.userData.data.user.livepeer_data.isActive ? (
+                <span className="border px-5 py-3 mt-2 rounded  mr-1 md:text-lg ml-2 text-sm tracking-wider text-slate-200">
+                  <i className="fa-solid text-red-500 fa-circle text-sm mr-2"></i>
+                  Stream Starting on{" "}
+                  {moment(
+                    user.database.userData.data.user.streamSchedule * 1
+                  ).format("MMMM Do YYYY, h:mm a")}
+                </span>
+              ) : (
+                <span className="border px-5 py-3 mt-2 rounded  mr-1 md:text-lg ml-2 text-sm tracking-wider text-slate-200">
+                  <i className="fa-solid text-red-500 fa-circle text-sm mr-2"></i>
+                  Live
+                </span>
+              )}
+            </div>
           </div>
-          <div className="mt-4">
-            {user.database.userData.data.user &&
-            new Date(user.database.userData.data.user.streamSchedule) >
-              new Date() &&
-            !user.database.userData.data.user.livepeer_data.isActive ? (
-              <span className="border px-5 py-3 mt-2 rounded  mr-1 md:text-lg ml-2 text-sm tracking-wider text-slate-200">
-                <i className="fa-solid text-red-500 fa-circle text-sm mr-2"></i>
-                Stream Starting on{" "}
-                {moment(
-                  user.database.userData.data.user.streamSchedule,
-                  "YYYY-MM-DDThh:mm"
-                ).format("MMMM Do YYYY, h:mm a")}
-              </span>
-            ) : null}
-          </div>
+
           <div className="w-full flex flex-col gap-2">
             <div className="p-2 flex flex-col gap-1 text-brand3 h-fit bg-slate-100 dark:bg-slate-800  rounded-xl ">
               <div className="text-brand2 text-base font-semibold">
