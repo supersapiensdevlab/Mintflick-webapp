@@ -27,11 +27,12 @@ function Toast(props) {
       }
       ${props.type === "info" && "bg-info text-info-content text-white'"} ${
         props.type === "error" && "bg-error text-error-content text-white'"
-      }`}>
+      }`}
+    >
       {props.type === "success" && <CircleCheck />}
       {props.type === "error" && <AlertTriangle />}
       {props.type === "info" && <InfoCircle />}
-      <p className='text-lg font-semibold text-white'>{props.msg}</p>
+      <p className="text-md font-semibold ">{props.msg}</p>
     </div>
   );
 }

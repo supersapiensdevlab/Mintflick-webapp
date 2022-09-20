@@ -680,7 +680,7 @@ function GoLive() {
               className="btn btn-outline btn-primary rounded-full gap-1"
             >
               <CalendarTime />
-              Schedule The Stream
+              Schedule upcoming Stream
             </button>
 
             <div className=" flex items-center  w-fit bg-slate-100 dark:bg-slate-800  rounded-full ">
@@ -790,7 +790,7 @@ function GoLive() {
                       className="sr-only"
                     />
                   </label>
-                  <div className="w-full flex gap-2">
+                  <div className="w-full flex flex-col sm:flex-row gap-2">
                     <input
                       required={true}
                       value={streamLink.url}
@@ -1244,7 +1244,7 @@ function GoLive() {
           <div className="w-full h-fit p-2 bg-slate-300 dark:bg-slate-700">
             <div className="flex justify-between items-center p-2">
               <h3 className="flex items-center gap-2 font-bold text-lg text-brand2">
-                Schedule The Stream
+                Schedule upcoming Stream
               </h3>
               <X
                 onClick={() => setScheduleStreamModal(false)}
@@ -1265,7 +1265,7 @@ function GoLive() {
 
             <input
               className="btn btn-brand w-full"
-              value={"Schedule the stream"}
+              value={"Schedule stream"}
               type={"submit"}
             />
           </form>
