@@ -11,9 +11,12 @@ import NotificationContent from "./NotificationContent";
 import EmptyNotification from "./EmptyNotification";
 import { Image } from "react-img-placeholder";
 import placeholderImage from "../../Assets/profile-pic.png";
+import useWeb3Auth from "../../Hooks/useWeb3Auth";
 
 function Header() {
   const State = useContext(UserContext);
+
+  const [login, logout] = useWeb3Auth();
 
   //get all users
   const [alluser, setAllUser] = useState([]);
@@ -408,7 +411,7 @@ function Header() {
             <li>
               <NavLink
                 onClick={() => {
-                  localStorage.clear();
+                  logout();
                 }}
                 to={"/"}
                 className="hover:bg-rose-500 "
