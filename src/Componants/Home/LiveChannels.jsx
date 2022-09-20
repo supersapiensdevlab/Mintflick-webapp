@@ -3,9 +3,12 @@ import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../Store";
 import { Image } from "react-img-placeholder";
 import placeholderImage from "../../Assets/profile-pic.png";
+import { useNavigate } from "react-router-dom";
 
 function LiveChannels() {
   const State = useContext(UserContext);
+
+  const navigateTo = useNavigate();
 
   // For Live Users
   useEffect(() => {
@@ -20,9 +23,8 @@ function LiveChannels() {
             )
             .then((value) => {
               if (value.data !== "") {
-                console.log('setting live users')
-                tempdata.push(value.data)
-              
+                console.log("setting live users");
+                tempdata.push(value.data);
               }
             });
         }
@@ -35,25 +37,34 @@ function LiveChannels() {
       {State.database.liveUsers.length > 0 ? (
         <>
           {State.database.liveUsers.map((channel) => (
-            <div className="flex  items-center space-x-2 h-8 " key={channel.id}>
-              <div className="h-full flex items-center flex-grow space-x-2">
-                {/* <img
+            <div
+              onClick={() => navigateTo(`../liveuser/${channel.name}`)}
+              className="group flex cursor-pointer items-center gap-2  rounded-full hover:bg-slate-200 dark:hover:bg-slate-700"
+              key={channel.id}
+            >
+              {/* <img
                   className="h-full rounded-full border-2 border-rose-600"
                   src={channel.profile_image}
                   alt="profileImage"
                 /> */}
-                <Image
-                  width={33}
-                  height={33}
-                  className="h-full rounded-full border-2 border-rose-600"
-                  src={channel.profile_image ? channel.profile_image : placeholderImage}
-                  alt="profileImage"
-                  placeholderSrc={placeholderImage}
-                />
-                <p className="cursor-pointer text-base font-medium text-brand3">
-                  {channel.name}
-                </p>
-              </div>
+              <Image
+                width={33}
+                height={33}
+                className="h-full rounded-full border-2 border-rose-600"
+                src={
+                  channel.profile_image
+                    ? channel.profile_image
+                    : placeholderImage
+                }
+                alt="profileImage"
+                placeholderSrc={placeholderImage}
+              />
+              <p className="cursor-pointer text-base font-medium text-brand3">
+                {channel.name}
+              </p>
+              <p className="hidden group-hover:block cursor-pointer text-base  text-success ml-auto mr-2">
+                Watch stream
+              </p>
             </div>
           ))}
         </>

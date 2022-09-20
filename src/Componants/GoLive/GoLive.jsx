@@ -707,24 +707,35 @@ function GoLive() {
                 </button>
               )}
             </div>
-            <div className="">
-              {user.database.userData.data.user &&
-              user.database.userData.data.user.streamSchedule > Date.now() &&
-              !user.database.userData.data.user.livepeer_data.isActive ? (
-                <span className="border px-5 py-3 mt-2 rounded  mr-1 md:text-lg ml-2 text-sm tracking-wider text-slate-200">
-                  <i className="fa-solid text-red-500 fa-circle text-sm mr-2"></i>
+
+            {user.database.userData.data.user &&
+            user.database.userData.data.user.streamSchedule > Date.now() &&
+            !user.database.userData.data.user.livepeer_data.isActive ? (
+              <span className="flex items-center  w-fit bg-slate-100 dark:bg-slate-800  rounded-full p-3">
+                <span className="relative flex h-3 w-3">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-teal-500 opacity-75"></span>
+                  <span className="absolute inline-flex rounded-full h-full w-full bg-teal-600"></span>
+                </span>
+                <p className="text-sm font-semibold text-brand2 mx-2">
                   Stream Starting on{" "}
-                  {moment(
-                    user.database.userData.data.user.streamSchedule * 1
-                  ).format("MMMM Do YYYY, h:mm a")}
+                  <span className="text-teal-600">
+                    {moment(
+                      user.database.userData.data.user.streamSchedule * 1
+                    ).format("MMMM Do YYYY, h:mm a")}
+                  </span>
+                </p>
+              </span>
+            ) : (
+              <span className="flex items-center  w-fit bg-slate-100 dark:bg-slate-800  rounded-full p-3">
+                <span className="relative flex h-3 w-3">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span>
+                  <span className="absolute inline-flex rounded-full h-full w-full bg-red-600"></span>
                 </span>
-              ) : (
-                <span className="border px-5 py-3 mt-2 rounded  mr-1 md:text-lg ml-2 text-sm tracking-wider text-slate-200">
-                  <i className="fa-solid text-red-500 fa-circle text-sm mr-2"></i>
-                  Live
-                </span>
-              )}
-            </div>
+                <p className="text-sm font-semibold text-brand2 mx-2">
+                  Live now
+                </p>
+              </span>
+            )}
           </div>
 
           <div className="w-full flex flex-col gap-2">
@@ -1218,7 +1229,7 @@ function GoLive() {
               }}
               className="btn btn-brand w-full"
             >
-              Mint NFT
+              Mint as NFT
             </div>
           </div>
         </div>

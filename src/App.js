@@ -20,6 +20,7 @@ import Music from "./Componants/Profile/ProfileMedia/Music";
 import Videos from "./Componants/Profile/ProfileMedia/Videos";
 import GoLive from "./Componants/GoLive/GoLive";
 import Web3Connect from "./Componants/Wallet/Web3Connect";
+import UserLivestream from "./Componants/Live/UserLivestream";
 function App() {
   const State = useContext(UserContext);
   async function isUserAvaliable() {
@@ -81,6 +82,7 @@ function App() {
             <Route path="home" element={<Home />} />
             <Route path="live" element={<Live />} />
             <Route path="golive" element={<GoLive />} />
+            <Route path="liveuser/:username" element={<UserLivestream />} />
             <Route path="marketPlace" element={<Events></Events>} />
             <Route path="profile" element={<Profile></Profile>}>
               <Route path=":userName" element={<ProfileMedia></ProfileMedia>}>

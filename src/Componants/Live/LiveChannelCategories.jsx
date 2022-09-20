@@ -4,9 +4,11 @@ import { UserContext } from "../../Store";
 import placeholderImage from "../../Assets/profile-pic.png";
 import { Image } from "react-img-placeholder";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function LiveChannelCategories(props) {
   const State = useContext(UserContext);
+  const navigateTo = useNavigate();
 
   // For Live Users
   useEffect(() => {
@@ -40,7 +42,10 @@ function LiveChannelCategories(props) {
           {State.database.liveUsers.length > 0 ? (
             <>
               {State.database.liveUsers.map((live) => (
-                <div className="relative w-64 space-y-2">
+                <div
+                  onClick={() => navigateTo(`../liveuser/${live.username}`)}
+                  className="relative w-64 space-y-2 cursor-pointer"
+                >
                   <div className="absolute top-4 left-2 w-fit bg-rose-600 rounded-full px-2 text-slate-100 text-sm font-semibold">
                     {props.event_status}
                   </div>
