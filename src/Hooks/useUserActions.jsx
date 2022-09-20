@@ -30,10 +30,15 @@ export default function useUserActions() {
     })
       .then((response) => {
         console.log(response);
+        let temp = {
+          data:{
+            user:response.data
+          }
+        }
 
         State.updateDatabase({
-          userData: response,
-          walletAddress: response.data.user.wallet_id,
+          userData: temp,
+          walletAddress: temp.data.user.wallet_id,
         });
       })
       .catch(function (error) {
