@@ -102,12 +102,12 @@ export default function useWeb3Auth() {
     loadOptions();
   }, [State.database.chainId]);
 
-  async function isUserAvaliable(walletAddress, provider) {
+  async function isUserAvaliable(walletAddress) {
     if (
-      provider ||
-      !provider === null ||
-      !provider === undefined ||
-      !provider === "undefined"
+      web3auth.provider ||
+      !web3auth.provider === null ||
+      !web3auth.provider === undefined ||
+      !web3auth.provider === "undefined"
     ) {
       await axios({
         method: "post",
@@ -125,7 +125,7 @@ export default function useWeb3Auth() {
           localStorage.setItem("walletAddress", walletAddress);
           console.log("wallet address saved in storage");
           State.updateDatabase({
-            provider: provider,
+            provider: web3auth.provider,
             userData: response,
           });
           console.log("provider saved in state");
@@ -150,12 +150,12 @@ export default function useWeb3Auth() {
   }
   const getAccounts = async () => {
     if (
-      !provider ||
-      provider === null ||
-      provider === undefined ||
-      provider === "undefined" ||
-      provider === "null" ||
-      provider.length === 0
+      !web3auth.provider ||
+      web3auth.provider === null ||
+      web3auth.provider === undefined ||
+      web3auth.provider === "undefined" ||
+      web3auth.provider === "null" ||
+      web3auth.provider.length === 0
     ) {
       console.log("provider not initialized yet");
       return;
@@ -171,15 +171,15 @@ export default function useWeb3Auth() {
         State.updateDatabase({
           walletAddress: address,
         });
-        isUserAvaliable(address, provider);
+        isUserAvaliable(address, web3auth.provider);
       } else if (State.database.chainId === 0) {
-        const rpc = new RPC(provider);
+        const rpc = new RPC(web3auth.provider);
         let address = (await rpc.getAccounts())[0];
         State.updateDatabase({
           walletAddress: address,
         });
         console.log(address, State.database.chainId);
-        isUserAvaliable(address, provider);
+        isUserAvaliable(address, web3auth.provider);
       }
     }
   };
