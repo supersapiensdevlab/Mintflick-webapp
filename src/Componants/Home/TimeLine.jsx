@@ -128,7 +128,7 @@ function TimeLine() {
       redirect: "follow",
     };
     fetch(
-      `https://api.shyft.to/sol/v1/marketplace/active_listings?network=devnet&marketplace_address=${process.env.REACT_APP_SOLANA_MARKETPLACE_ADDRESS}&list_state=69pkD5zvA5fWudm6TsY5bzRyKYuLipvuUSUpsUJyi12Z`,
+      `https://api.shyft.to/sol/v1/marketplace/active_listings?network=devnet&marketplace_address=${process.env.REACT_APP_SOLANA_MARKETPLACE_ADDRESS}`,
       requestOptions
     )
       .then((response) => response.json())

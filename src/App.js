@@ -21,6 +21,7 @@ import Videos from "./Componants/Profile/ProfileMedia/Videos";
 import GoLive from "./Componants/GoLive/GoLive";
 import Web3Connect from "./Componants/Wallet/Web3Connect";
 import UserLivestream from "./Componants/Live/UserLivestream";
+import ShareModal from "./Componants/Home/Modals/ShareModal";
 function App() {
   const State = useContext(UserContext);
   async function isUserAvaliable() {
@@ -93,6 +94,8 @@ function App() {
             </Route>
           </Route>
         </Routes>
+        <ShareModal />
+
       </BrowserRouter>
     </div>
   );
