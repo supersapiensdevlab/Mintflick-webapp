@@ -4,13 +4,27 @@ import { useEffect } from "react";
 import { Image } from "react-img-placeholder";
 import { useCountdown } from "../../Hooks/useCountdown";
 import placeholderImage from "../../Assets/profile-pic.png";
+import { useNavigate } from "react-router-dom";
 
 function SingleScheduled({ live }) {
+  const navigateTo = useNavigate();
+
   const [days, hours, minutes, seconds] = useCountdown(live.streamSchedule * 1);
 
   return (
-    <div className="relative w-64 space-y-2">
-      <div className={`absolute flex justify-evenly top-4 left-2 w-fit  rounded-full px-2 text-slate-100 text-sm font-semibold  ${days<1?(hours<1?'bg-rose-600':(hours<24&&'bg-orange-600')):'bg-green-600' }`}>
+    <div
+      onClick={() => navigateTo(`../liveuser/${live.username}`)}
+      className="relative w-64 space-y-2 cursor-pointer"
+    >
+      <div
+        className={`absolute flex justify-evenly top-4 left-2 w-fit  rounded-full px-2 text-slate-100 text-sm font-semibold  ${
+          days < 1
+            ? hours < 1
+              ? "bg-rose-600"
+              : hours < 24 && "bg-orange-600"
+            : "bg-green-600"
+        }`}
+      >
         Starting in {days > 0 && `${days}Days`} {hours}Hrs {minutes}mins
       </div>
       <img

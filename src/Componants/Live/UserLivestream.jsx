@@ -279,7 +279,7 @@ function UserLivestream() {
                 <div className="lg:flex justify-between space-y-2 w-full">
                   <div className="flex justify-start items-start gap-2">
                     <Link
-                      className="w-14 aspect-square"
+                      className="w-20 aspect-square"
                       to={`../profile/${streamUser.username}/posts`}
                     >
                       <img
