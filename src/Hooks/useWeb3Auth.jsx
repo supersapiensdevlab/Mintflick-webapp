@@ -142,9 +142,8 @@ export default function useWeb3Auth() {
         })
         .catch(function (error) {
           console.log(error);
-          // if (localStorage.getItem("walletAddress") !== null) {
-          //   navigateTo("/create_new_user");
-          // }
+
+          navigateTo("/create_new_user");
         });
     }
   }
