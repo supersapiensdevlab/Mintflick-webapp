@@ -4,6 +4,8 @@ import { Share } from "tabler-icons-react";
 import coverImage from "../../Assets/backgrounds/cover.png";
 import { UserContext } from "../../Store";
 import MarketplaceModal from "../Home/Modals/MarketplaceModal";
+import SetupMarketplaceModal from "../Home/Modals/SetupMarketplaceModal";
+
 function ProfileCard(props) {
   const State = useContext(UserContext);
   const [marketPlaceModalOpen, setMarketPlaceModalOpen] = useState(false);
@@ -103,7 +105,10 @@ function ProfileCard(props) {
         className={`${
           marketPlaceModalOpen && "modal-open"
         } modal modal-bottom sm:modal-middle`}>
-        <MarketplaceModal setMarketPlaceModalOpen={setMarketPlaceModalOpen} />
+        {/* <MarketplaceModal setMarketPlaceModalOpen={setMarketPlaceModalOpen} /> */}
+        <SetupMarketplaceModal
+          setMarketPlaceModalOpen={setMarketPlaceModalOpen}
+        />
       </div>
     </div>
   );
