@@ -68,7 +68,6 @@ function Home() {
       <div className="hidden lg:flex flex-col items-end h-full w-1/4 pt-24 mr-12 ml-4">
         <GameOfLuck></GameOfLuck>
       </div>
-      <ShareModal />
       {showButton && (
         <div className="absolute bottom-20 lg:bottom-5 w-screen flex justify-center lg:justify-end p-1">
           <button onClick={scrollToTop} className="  btn btn-xs glass gap-1">
