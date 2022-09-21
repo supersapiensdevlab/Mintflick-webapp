@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import useWebModal from "./../Componants/Wallet/useWebModal";
+// import useWebModal from "./../Componants/Wallet/useWebModal";
 import { Web3Auth } from "@web3auth/web3auth";
 import RPC from "./../Componants/Wallet/solanaRPC";
 import axios from "axios";
@@ -12,7 +12,7 @@ import { loadOptions } from "@babel/core";
 import { UserContext } from "../Store";
 
 export default function useWeb3Auth() {
-  const modal = useWebModal();
+  // const modal = useWebModal();
   const clientId =
     "BDHO2TAO1JeWQqhvAdqA40Fzjixs_sEf-yXhp-QAK3MfnUclbzYHRsE_BvG9F5cmDopDkGV3LJ1n-nR7Ohtn_wc";
   const [web3auth, setWeb3auth] = useState(null);
@@ -102,12 +102,6 @@ export default function useWeb3Auth() {
     loadOptions();
   }, [State.database.chainId]);
 
-  useEffect(() => {
-    getAccounts();
-    console.log(provider);
-    console.log("get called");
-  }, [provider]);
-
   async function isUserAvaliable(walletAddress, provider) {
     if (
       provider ||
@@ -136,16 +130,21 @@ export default function useWeb3Auth() {
           });
           console.log("provider saved in state");
           console.log(web3auth.provider);
-          // localStorage.setItem(
-          //   "v2provider",
-          //   JSON.stringify(provider, getCircularReplacer())
-          // );
 
-          response.status === 200 && navigateTo("/homescreen/home");
+          if (
+            localStorage.getItem("walletAddress") !== null &&
+            localStorage.getItem("walletAddress") !== "undefined" &&
+            localStorage.getItem("walletAddress") !== "null" &&
+            localStorage.getItem("walletAddress").length > 0
+          ) {
+            response.status === 200 && navigateTo("/homescreen/home");
+          }
         })
         .catch(function (error) {
           console.log(error);
-          navigateTo("/create_new_user");
+          // if (localStorage.getItem("walletAddress") !== null) {
+          //   navigateTo("/create_new_user");
+          // }
         });
     }
   }
@@ -154,25 +153,35 @@ export default function useWeb3Auth() {
       !provider ||
       provider === null ||
       provider === undefined ||
-      provider === "undefined"
+      provider === "undefined" ||
+      provider === "null" ||
+      provider.length === 0
     ) {
       console.log("provider not initialized yet");
       return;
     }
-    const rpc = new RPC(provider);
-    let address = (await rpc.getAccounts())[0];
 
-    if (State.database.chainId === 1) {
-      const web3 = new Web3(provider); // web3auth.provider
-      // Get user's Ethereum public address
-      address = (await web3.eth.getAccounts())[0];
-      console.log("Polygon:", address);
+    if (web3auth.provider) {
+      setProvider(web3auth.provider);
+      if (State.database.chainId === 1) {
+        const web3 = new Web3(web3auth.provider); // web3auth.provider
+        // Get user's Ethereum public address
+        let address = (await web3.eth.getAccounts())[0];
+        console.log("Polygon:", address);
+        State.updateDatabase({
+          walletAddress: address,
+        });
+        isUserAvaliable(address, provider);
+      } else if (State.database.chainId === 0) {
+        const rpc = new RPC(provider);
+        let address = (await rpc.getAccounts())[0];
+        State.updateDatabase({
+          walletAddress: address,
+        });
+        console.log(address, State.database.chainId);
+        isUserAvaliable(address, provider);
+      }
     }
-    State.updateDatabase({
-      walletAddress: address,
-    });
-    console.log(address, State.database.chainId);
-    isUserAvaliable(address, provider);
   };
 
   const login = async () => {
@@ -186,6 +195,7 @@ export default function useWeb3Auth() {
     State.updateDatabase({
       provider: web3authProvider,
     });
+    getAccounts();
   };
 
   const logout = async () => {
