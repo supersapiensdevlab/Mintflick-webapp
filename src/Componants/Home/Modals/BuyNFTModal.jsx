@@ -17,6 +17,7 @@ import {
   confirmTransactionFromFrontend,
 } from "../Utility/utilityFunc";
 import { clusterApiUrl, Connection, PublicKey } from "@solana/web3.js";
+import SolanaToken from "../../../Assets/logos/SolanaToken";
 
 function BuyNFTModal() {
   const State = useContext(UserContext);
@@ -127,22 +128,39 @@ function BuyNFTModal() {
                       State.database?.buyNFTModalData?.ownedBy?.slice(-5)}
                   </p>
                 </div>
-                <span className='flex items-center gap-1 text-sm font-medium text-brand4'>
+                <span className='flex items-center gap-1 text-sm font-medium text-brand4 hidden'>
                   <Eye size={16} />
                   12M
                 </span>
                 <span className='flex items-center gap-1 text-sm font-medium text-brand4'>
-                  Creater fees{" "}
+                  Creator fees{" "}
                   <InfoCircle className='cursor-pointer' size={16} />
                 </span>
                 {/* <div className="h-[2px] rounded-full bg-slate-200 dark:bg-slate-600"></div> */}
               </div>
               <div className='flex flex-col p-4 sm:items-end justify-center text-brand1'>
                 <p className='flex items-center gap-2 cursor-pointer font-semibold text-3xl text-brand-gradient'>
-                  <PolygonToken size={16}></PolygonToken>{" "}
+                  {State.database.chainId === 1 ? (
+                    <PolygonToken size={16}></PolygonToken>
+                  ) : State.database.chainId === 0 ? (
+                    <SolanaToken size={16}></SolanaToken>
+                  ) : null}
                   {State.database?.buyNFTModalData?.nftPrice}
                 </p>
-                <span className='text-sm font-normal text-brand4'>($1234)</span>
+                <span className='text-sm font-normal text-brand4'>
+                  $
+                  {Math.round(
+                    State.database.chainId === 0
+                      ? State.database?.price?.solanaPrice *
+                          100 *
+                          State.database?.buyNFTModalData?.nftPrice
+                      : State.database.chainId === 1
+                      ? State.database?.price?.maticPrice *
+                        100 *
+                        State.database?.buyNFTModalData?.nftPrice
+                      : 0,
+                  ) / 100}
+                </span>
               </div>
             </div>
             <div
@@ -152,7 +170,7 @@ function BuyNFTModal() {
                 Offers
               </div>
               <div className='collapse-content'>
-                <p>Offers list will come here </p>
+                <p>No Offers</p>
               </div>
             </div>
             <div className='w-full flex '>

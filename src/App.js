@@ -68,6 +68,14 @@ function App() {
       });
   }, []);
 
+  //update Price
+  useEffect(() => {
+    axios
+      .get(`${process.env.REACT_APP_SERVER_URL}/price_updates`)
+      .then((repos) => {
+        State.updateDatabase({ price: repos.data });
+      });
+  }, []);
   return (
     <div className={State.database.dark ? `dark` : " "}>
       <BrowserRouter>
@@ -95,7 +103,6 @@ function App() {
           </Route>
         </Routes>
         <ShareModal />
-
       </BrowserRouter>
     </div>
   );

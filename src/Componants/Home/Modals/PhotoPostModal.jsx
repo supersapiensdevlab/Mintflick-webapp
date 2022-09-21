@@ -278,9 +278,9 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
             //         clearData();
             //       });
             //   });
-            if (State.database.chainId == 1) {
+            if (State.database.chainId === 1) {
               mintOnPolygon(formData, file);
-            } else if (State.database.chainId == 0) {
+            } else if (State.database.chainId === 0) {
               mintOnSolana(formData, file);
             }
           } else {
