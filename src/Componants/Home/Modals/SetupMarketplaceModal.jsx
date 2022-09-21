@@ -149,7 +149,7 @@ function SetupMarketplaceModal({ setMarketPlaceModalOpen }) {
         <div className='flex justify-between items-center p-2'>
           <h3 className='flex items-center gap-2 font-bold text-lg text-brand2'>
             <Camera />
-            Upload Photo
+            Create new Marketplace
           </h3>
           <X
             onClick={() => clearData()}
@@ -157,59 +157,93 @@ function SetupMarketplaceModal({ setMarketPlaceModalOpen }) {
         </div>
       </div>
       <form onSubmit={handleSubmit}>
-        <div className='w-full p-4 space-y-3'>
-          <select
-            className='select block w-full'
-            onChange={(e) => setNetwork(e.target.value)}
-            value={network}>
-            <option disabled selected>
-              Network
-            </option>
-            {networkArray.map((c) => (
-              <option>{c}</option>
-            ))}
-          </select>
+        <div className='w-full p-4   grid  gap-4'>
+          <div className='form-control w-full  '>
+            <label className='label  '>
+              <span className='label-text text-slate-400'>Network</span>
+            </label>
+            <select
+              className='select block w-full'
+              onChange={(e) => setNetwork(e.target.value)}
+              value={network}>
+              <option disabled selected>
+                Network
+              </option>
+              {networkArray.map((c) => (
+                <option>{c}</option>
+              ))}
+            </select>
+          </div>
 
-          <input
-            type='text'
-            className='textarea  w-full'
-            placeholder='Creator Address'
-            readOnly={true}
-            //onChange={(e) => setCreatorAddress(e.target.value)}
-            value={State.database.walletAddress}
-          />
+          <div className='form-control w-full hidden '>
+            <label className='label  '>
+              <span className='label-text text-slate-400'>Creator Address</span>
+            </label>
+            <input
+              type='text'
+              className='textarea  w-full'
+              placeholder='Creator Address'
+              readOnly={true}
+              //onChange={(e) => setCreatorAddress(e.target.value)}
+              value={State.database.walletAddress}
+            />
+          </div>
 
-          <input
-            type='text'
-            className='textarea  w-full'
-            placeholder='Token Address'
-            onChange={(e) => setTokenAddress(e.target.value)}
-            value={tokenAddress}
-          />
+          <div className='form-control w-full  '>
+            <label className='label  '>
+              <span className='label-text text-slate-400'>Market Currency</span>
+            </label>
+            <input
+              type='text'
+              className='textarea  w-full'
+              placeholder='Token Address'
+              onChange={(e) => setTokenAddress(e.target.value)}
+              value={tokenAddress}
+            />
+          </div>
 
-          <input
-            type='text'
-            className='textarea  w-full'
-            placeholder='Fee Payer Address'
-            onChange={(e) => setFeePayer(e.target.value)}
-            value={feePayer}
-          />
+          <div className='form-control w-full hidden '>
+            <label className='label  '>
+              <span className='label-text text-slate-400'>Fee Payer</span>
+            </label>
+            <input
+              type='text'
+              className='textarea  w-full'
+              placeholder='Fee Payer Address'
+              onChange={(e) => setFeePayer(e.target.value)}
+              value={feePayer}
+            />
+          </div>
 
-          <input
-            type='text'
-            className='textarea  w-full'
-            placeholder='Fee Recipient Address'
-            onChange={(e) => setFeeRecipient(e.target.value)}
-            value={feeRecipient}
-          />
+          <div className='form-control w-full  hidden'>
+            <label className='label  '>
+              <span className='label-text text-slate-400'>
+                Fee Recipient Address
+              </span>
+            </label>
+            <input
+              type='text'
+              className='textarea  w-full'
+              placeholder='Fee Recipient Address'
+              onChange={(e) => setFeeRecipient(e.target.value)}
+              value={feeRecipient}
+            />
+          </div>
 
-          <input
-            type='text'
-            className='textarea  w-full'
-            placeholder='Tx Fees (in lamports)'
-            onChange={(e) => setTxFees(e.target.value)}
-            value={txFees}
-          />
+          <div className='form-control w-full  '>
+            <label className='label  '>
+              <span className='label-text text-slate-400'>
+                Tx Fees (in lamports)
+              </span>
+            </label>
+            <input
+              type='text'
+              className='textarea  w-full'
+              placeholder='Tx Fees (in lamports)'
+              onChange={(e) => setTxFees(e.target.value)}
+              value={txFees}
+            />
+          </div>
 
           <div className='w-fit flex space-x-2'></div>
           <progress
