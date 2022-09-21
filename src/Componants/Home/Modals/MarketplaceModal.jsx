@@ -99,7 +99,7 @@ function PhotoPostModal({ setMarketPlaceModalOpen }) {
         axios
           .post(`https://api.shyft.to/sol/v1/token/create_detach`, formdata, {
             headers: {
-              "x-api-key": "6ENAkcg4YJcHhlYf",
+              "x-api-key": `${process.env.REACT_APP_SHYFT_API_KEY}`,
               "content-type": "multipart/form-data",
             },
           })
@@ -145,7 +145,7 @@ function PhotoPostModal({ setMarketPlaceModalOpen }) {
     axios
       .post(`https://api.shyft.to/sol/v1/marketplace/create`, raw, {
         headers: {
-          "x-api-key": "6ENAkcg4YJcHhlYf",
+          "x-api-key": `${process.env.REACT_APP_SHYFT_API_KEY}`,
           "content-type": "application/json",
         },
       })

@@ -80,7 +80,7 @@ function SetupMarketplaceModal({ setMarketPlaceModalOpen }) {
         axios
           .post(`https://api.shyft.to/sol/v1/marketplace/create`, raw, {
             headers: {
-              "x-api-key": "6ENAkcg4YJcHhlYf",
+              "x-api-key": `${process.env.REACT_APP_SHYFT_API_KEY}`,
               "content-type": "application/json",
             },
           })
