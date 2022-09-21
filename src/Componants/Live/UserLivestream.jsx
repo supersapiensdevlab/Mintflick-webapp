@@ -37,7 +37,7 @@ function UserLivestream() {
 
   // eslint-disable-next-line no-unused-vars
 
-  const trackFollowers = () => {
+  const trackFollowers = async () => {
     const followData = {
       following: `${streamUser.username}`,
       follower: `${State.database.userData.data.user.username}`,
@@ -45,7 +45,7 @@ function UserLivestream() {
 
     if (subscribeButtonText === "Follow") {
       setSubscribeButtonText("Unfollow");
-      axios({
+      await axios({
         method: "POST",
         url: `${process.env.REACT_APP_SERVER_URL}/user/follow`,
         headers: {
@@ -66,7 +66,7 @@ function UserLivestream() {
         });
     } else {
       setSubscribeButtonText("Follow");
-      axios({
+      await axios({
         method: "POST",
         url: `${process.env.REACT_APP_SERVER_URL}/user/unfollow`,
         headers: {
@@ -112,9 +112,8 @@ function UserLivestream() {
     get_User();
 
     if (
-      State.database.userData.data
-        ? State.database.userData.data.user.username === username
-        : false
+      State.database.userData.data &&
+      State.database.userData.data.user.username === username
     ) {
       setPrivate(true);
     } else {
@@ -178,6 +177,17 @@ function UserLivestream() {
     //     setLivestreamViews(data.num);
     //   });
   }, []);
+
+  useEffect(() => {
+    if (State.database.userData.data && streamUser) {
+      const already = streamUser.follower_count.find(
+        (f) => f == State.database.userData.data.user.username
+      );
+      if (already) {
+        setSubscribeButtonText("Unfollow");
+      }
+    }
+  }, [State.database.userData?.data?.user, streamUser]);
 
   return (
     <div className="w-full min-h-full pt-24  bg-white dark:bg-slate-900 ">
@@ -288,7 +298,18 @@ function UserLivestream() {
                                     >
                                       <span>{subscribeButtonText}</span>
                                     </button>
-                                  ) : null
+                                  ) : (
+                                    <button
+                                      id="subscribeButton"
+                                      className="flex items-center dark:bg-dbeats-light    border border-dbeats-light dark:hover:bg-dbeats-secondary-light p-1 2xl:text-lg lg:text-sm text-md rounded-sm 2xl:px-4 px-4 lg:px-2 mr-3 font-semibold text-white "
+                                      onClick={
+                                        State.database.userData.data.user !=
+                                          null && trackFollowers
+                                      }
+                                    >
+                                      <span>{subscribeButtonText}</span>
+                                    </button>
+                                  )
                                 ) : null}
 
                                 {streamUser.superfan_data &&
@@ -300,7 +321,9 @@ function UserLivestream() {
                                     State.database.userData.data.user.username
                                 ) == undefined ? (
                                   <button
-                                  onClick={()=> setJoinsuperfanModalOpen(true)}
+                                    onClick={() =>
+                                      setJoinsuperfanModalOpen(true)
+                                    }
                                     className={
                                       streamUser.superfan_data
                                         ? " flex dark:bg-dbeats-dark-primary border border-dbeats-light dark:hover:bg-dbeats-light p-1 2xl:text-lg lg:text-sm text-md  rounded-sm 2xl:px-4 px-4 lg:px-2      mr-3 font-semibold text-white   "
