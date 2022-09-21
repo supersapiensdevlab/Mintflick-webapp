@@ -32,16 +32,12 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
   const [loadFeed] = useUserActions();
   const [tokenAddress, setTokenAddress] = useState("");
   const [showListingOption, setShowListingOption] = useState(false);
-  const [tokenId, setTokenId] = useState(null);
-  const [solanaMintId, setSolanaMintId] = useState(null);
   //Instance of pandora
   const ExpressSDK = createPandoraExpressSDK();
 
   // Minting
   const [minting, setMinting] = useState(null);
   const [mintingProgress, setMintingProgress] = useState(0);
-
-  const web3 = new Web3(State.database.provider);
 
   const renderData = [];
   State.database.userData?.data?.user?.followee_count.forEach((value, i) => {
@@ -65,12 +61,6 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
 
   // console.log(window?.ethereum);
   // console.log(State.database?.provider);
-
-  const nftMinted = (mintId) => {
-    setSolanaMintId(mintId);
-    setShowListingOption(true);
-    setUploadingPost(false);
-  };
 
   const mintOnSolana = (formData) => {
     uploadFile(selectedPost.file[0]).then(async (cid) => {
@@ -104,9 +94,8 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
           await signTransaction(
             "devnet",
             data.data.result.encoded_transaction,
-            nftMinted(data.data.result.mint)
+            listNFTForSale(data.data.result.mint, nftPrice, formData),
           );
-          uploadToServer(formData, data.data.result.mint);
         })
         .catch((err) => {
           console.log(err);
@@ -118,6 +107,7 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
   const mintOnPolygon = (formData, file) => {
     uploadFile(file)
       .then(async (cid) => {
+        const web3 = new Web3(State.database.provider);
         let itemUri = "https://ipfs.io/ipfs/" + cid + "/meta.json";
         console.log("web3", web3);
         //Get ChainID of current account
@@ -130,13 +120,27 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
             State.database?.walletAddress, // wallet address of minter
             1, // amount of token to create
             itemUri, // tokenuri string
-            [[State.database?.walletAddress, 10]] // royalties
+            [[State.database?.walletAddress, 10]], // royalties
           )
           .then(async (data) => {
             console.log(data);
             const tokenId = data.events.TransferSingle.returnValues.id;
             console.log(tokenId);
-            setTokenId(tokenId);
+            // await ExpressSDK.erc1155.order
+            //   .sellNFT(
+            //     web3, // Web3 instance configured with metamask provider
+            //     chainId, // Network id of blockchain
+            //     tokenId, // Token Id of NFT
+            //     nftPrice, // Selling Price of NFT
+            //     State.database?.walletAddress, // Address of current owner
+            //     1 // Amount of token to sell
+            //   )
+            //   .then((data) => {
+            //     console.log(data);
+            //   })
+            //   .catch((err) => {
+            //     console.log(err);
+            //   });
             setShowListingOption(true);
             setUploadingPost(false);
           })
@@ -150,24 +154,9 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
       });
   };
 
-  const handleNFTListing = async (e) => {
+  const handleNFTListing = (e) => {
     e.preventDefault();
-    const chainId = await web3.eth.net.getId();
-    await ExpressSDK.erc1155.order
-      .sellNFT(
-        web3, // Web3 instance configured with metamask provider
-        chainId, // Network id of blockchain
-        tokenId, // Token Id of NFT
-        nftPrice, // Selling Price of NFT
-        State.database?.walletAddress, // Address of current owner
-        1 // Amount of token to sell
-      )
-      .then((data) => {
-        console.log(data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    console.log("listed");
   };
 
   const handleSubmit = (e) => {
@@ -280,9 +269,13 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
             //   });
             if (State.database.chainId == 1) {
               mintOnPolygon(formData, file);
-            } else if (State.database.chainId == 0) {
+            } else if (State.database.chainId == 2) {
               mintOnSolana(formData, file);
             }
+            // } else {
+            //   alert("Please add your market address");
+            //   clearData();
+            // }
           } else {
             uploadToServer(formData, null);
           }
@@ -297,17 +290,15 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
     }
   };
 
-  const listNFTForSale = async (e) => {
-    e.preventDefault();
+  const listNFTForSale = async (mintId, price, formData) => {
     var raw = JSON.stringify({
       network: "devnet",
       marketplace_address: process.env.REACT_APP_SOLANA_MARKETPLACE_ADDRESS,
-      nft_address: solanaMintId,
-      price: parseInt(nftPrice),
+      nft_address: mintId,
+      price: parseInt(price),
       seller_wallet: State.database.walletAddress,
     });
 
-    console.log(raw);
     axios
       .post(`https://api.shyft.to/sol/v1/marketplace/list`, raw, {
         headers: {
@@ -316,8 +307,18 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
         },
       })
       .then(async (data) => {
-        console.log(data.data);
-        await signTransaction("devnet", data.data.result.encoded_transaction);
+        // setUploadingPost(false);
+        // setSelectedPost(null);
+        // setCaption("");
+        // setTagged([]);
+        // setphotoPostModalOpen(false);
+        // await loadFeed();
+        console.log("MintID", data.data.result.mint);
+        await signTransaction(
+          "devnet",
+          data.data.result.encoded_transaction,
+          uploadToServer(formData, data.data.result.mint),
+        );
       })
       .catch((err) => {
         console.log(err);
@@ -337,6 +338,7 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
       .then(async (res) => {
         State.toast("success", "Your Photo uploded successfully!");
         await loadFeed();
+        clearData();
       })
       .catch((err) => {
         State.toast("error", "Oops!somthing went wrong uplaoding photo!");
@@ -352,9 +354,8 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
     setTagged([]);
     setphotoPostModalOpen(false);
     setShowListingOption(false);
+    setIsNFT(false);
   };
-
-  console.log(isNFT);
 
   function Log() {
     console.log("NFT Minted");
@@ -372,7 +373,7 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
     const ret = await confirmTransactionFromFrontend(
       connection,
       transaction,
-      solanaWallet
+      solanaWallet,
     );
     // const checks = await connection.confirmTransaction({signature:ret},'finalised');
 
@@ -386,46 +387,44 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
   }
 
   return (
-    <div className="modal-box p-0 bg-slate-100 dark:bg-slate-800 ">
-      <div className="w-full h-fit p-2 bg-slate-300 dark:bg-slate-700">
-        <div className="flex justify-between items-center p-2">
-          <h3 className="flex items-center gap-2 font-bold text-lg text-brand2">
+    <div className='modal-box p-0 bg-slate-100 dark:bg-slate-800 '>
+      <div className='w-full h-fit p-2 bg-slate-300 dark:bg-slate-700'>
+        <div className='flex justify-between items-center p-2'>
+          <h3 className='flex items-center gap-2 font-bold text-lg text-brand2'>
             <Camera />
             Upload Photo
           </h3>
           <X
             onClick={() => clearData()}
-            className="text-brand2 cursor-pointer"
-          ></X>
+            className='text-brand2 cursor-pointer'></X>
         </div>
       </div>
       <form>
-        <div className="w-full p-4 space-y-3">
+        <div className='w-full p-4 space-y-3'>
           <label
-            htmlFor="post_announcement_image"
-            className=" cursor-pointer flex justify-between items-center gap-2  w-full p-2 border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4"
-          >
+            htmlFor='post_announcement_image'
+            className=' cursor-pointer flex justify-between items-center gap-2  w-full p-2 border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4'>
             {selectedPost ? (
               selectedPost.file ? (
-                <div className="flex items-center">
-                  <FileCheck className="text-emerald-700" />
+                <div className='flex items-center'>
+                  <FileCheck className='text-emerald-700' />
                   {selectedPost.file[0].name.substring(0, 16)}
                 </div>
               ) : (
                 "No file choosen!"
               )
             ) : (
-              <div className="flex items-center gap-1">
+              <div className='flex items-center gap-1'>
                 <File />
                 Choose file *
               </div>
             )}
             <input
-              id="post_announcement_image"
-              type="file"
-              accept="image/*"
+              id='post_announcement_image'
+              type='file'
+              accept='image/*'
               onChange={handleImageChange}
-              className="sr-only"
+              className='sr-only'
               required={true}
               onClick={(event) => {
                 event.target.value = null;
@@ -434,7 +433,7 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
             />
             {selectedPost ? (
               selectedPost.file ? (
-                <div className="flex-grow rounded-lg overflow-clip">
+                <div className='flex-grow rounded-lg overflow-clip'>
                   <img src={selectedPost.localurl}></img>
                 </div>
               ) : null
@@ -454,54 +453,53 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
             value={caption}
             onChange={(e) => setCaption(e.target.value)}
             style={defaultStyle}
-            className="textarea w-full h-24  pt-2 focus:outline-0"
+            className='textarea w-full h-24  pt-2 focus:outline-0'
             placeholder={"Enter caption."}
-            a11ySuggestionsListLabel={"Suggested mentions"}
-          >
+            a11ySuggestionsListLabel={"Suggested mentions"}>
             <Mention
-              trigger="@"
+              trigger='@'
               data={renderData}
-              markup="@__display__"
+              markup='@__display__'
               appendSpaceOnAdd
               onAdd={handleAdd}
             />
           </MentionsInput>
           {showListingOption ? (
-            <div className="w-fit flex space-x-2 text-green-500">
+            <div className='w-fit flex space-x-2 text-green-500'>
               NFT Minted Successfully
             </div>
           ) : (
             <></>
           )}
-          <div className="w-fit flex space-x-2">
+          <div className='w-fit flex space-x-2'>
             {showListingOption ? (
-              <div className="flex items-center">
-                <span className="label-text text-brand3">List NFT</span>
+              <div className='flex items-center'>
+                <span className='label-text text-brand3'>List NFT</span>
               </div>
             ) : (
-              <label className="flex items-center cursor-pointer gap-2">
+              <label className='flex items-center cursor-pointer gap-2'>
                 <input
-                  type="checkbox"
+                  type='checkbox'
                   value={isNFT}
                   onChange={() => setIsNFT(!isNFT)}
-                  className="checkbox checkbox-primary"
+                  className='checkbox checkbox-primary'
                 />
-                <span className="label-text text-brand3">Mint as NFT</span>
+                <span className='label-text text-brand3'>Mint as NFT</span>
               </label>
             )}
             {showListingOption && (
-              <div className="form-control">
-                <label className="input-group">
+              <div className='form-control'>
+                <label className='input-group'>
                   <input
                     min={1}
-                    type="number"
-                    placeholder="1"
-                    className="input input-bordered input-sm w-24"
+                    type='number'
+                    placeholder='1'
+                    className='input input-bordered input-sm w-24'
                     value={nftPrice}
                     onChange={(e) => setNFTPrice(e.target.value)}
                     required={true}
                   />
-                  <span className="text-brand3 bg-slate-300 dark:bg-slate-600 ">
+                  <span className='text-brand3 bg-slate-300 dark:bg-slate-600 '>
                     {State.database.chainId === 0 ? (
                       <>
                         <SolanaToken></SolanaToken>&nbsp; SOL
@@ -517,22 +515,16 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
             )}
           </div>
           <progress
-            class="progress progress-success w-56 hidden"
-            value="50"
-            max="100"
-          ></progress>
+            class='progress progress-success w-56 hidden'
+            value='50'
+            max='100'></progress>
           {showListingOption ? (
-            <div className="w-full flex justify-around space-x-1">
+            <div className='w-full flex justify-around space-x-1'>
               <button
-                onClick={
-                  State.database?.chainId == 1
-                    ? handleNFTListing
-                    : listNFTForSale
-                }
+                onClick={handleNFTListing}
                 className={`btn  ${
                   !selectedPost?.file[0] ? "btn-disabled" : "btn-brand"
-                } w-1/2 ${uploadingPost ? "loading " : ""}`}
-              >
+                } w-1/2 ${uploadingPost ? "loading " : ""}`}>
                 List NFT
               </button>
               <button
@@ -541,8 +533,7 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
                 }}
                 className={`btn  ${
                   !selectedPost?.file[0] ? "btn-disabled" : "btn-brand"
-                } w-1/2 ${uploadingPost ? "loading " : ""}`}
-              >
+                } w-1/2 ${uploadingPost ? "loading " : ""}`}>
                 Close
               </button>
             </div>
@@ -551,8 +542,7 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
               onClick={handleSubmit}
               className={`btn  ${
                 !selectedPost?.file[0] ? "btn-disabled" : "btn-brand"
-              } w-full ${uploadingPost ? "loading " : ""}`}
-            >
+              } w-full ${uploadingPost ? "loading " : ""}`}>
               Post photo
             </button>
           )}

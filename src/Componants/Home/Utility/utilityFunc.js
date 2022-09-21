@@ -45,6 +45,7 @@ export async function confirmTransactionFromFrontend(
   const recoveredTransaction = Transaction.from(
     Buffer.from(encodedTransaction, "base64"),
   );
+  console.log(wallet);
   const signedTx = await wallet.signTransaction(recoveredTransaction);
   const confirmTransaction = await connection.sendRawTransaction(
     signedTx.serialize(),
