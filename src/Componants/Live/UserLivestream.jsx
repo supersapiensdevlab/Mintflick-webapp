@@ -279,7 +279,7 @@ function UserLivestream() {
                 <div className="lg:flex justify-between space-y-2 w-full">
                   <div className="flex justify-start items-start gap-2">
                     <Link
-                      className="w-14 h-14"
+                      className="w-14 aspect-square"
                       to={`../profile/${streamUser.username}/posts`}
                     >
                       <img
@@ -292,7 +292,7 @@ function UserLivestream() {
                         className="h-full w-full rounded-full object-cover"
                       />
                     </Link>
-                    <div className="w-full mt-1">
+                    <div className="w-full ">
                       <Link
                         to={`../profile/${streamUser.username}/posts`}
                         className="w-fit text-base text-brand1 font-semibold tracking-wider hover:underline"
