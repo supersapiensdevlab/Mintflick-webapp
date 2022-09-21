@@ -9,6 +9,8 @@ import { io } from "socket.io-client";
 import { UserContext } from "../../Store";
 import placeholderImage from "../../Assets/profile-pic.png";
 import JoinSuperfanModal from "../Home/Modals/JoinSuperfanModal";
+import Loading from "../Loading/Loading";
+import { Eye, Share } from "tabler-icons-react";
 
 function UserLivestream() {
   const { username } = useParams();
@@ -36,6 +38,19 @@ function UserLivestream() {
   const [readMore, setReadMore] = useState(false);
 
   // eslint-disable-next-line no-unused-vars
+
+  const slangText = [
+    "NFTs are more than just a jpeg",
+    "Never share your private keys",
+    "Web3 is Web2 on steroids...",
+    "Blochain is the future",
+    "NFTs are the future",
+    "Buy the Dip",
+    "WAGMI",
+    "Decentralised doesn't mean Safe. Be cautious",
+    "Create. Mint. Vibe",
+    "Own your shit",
+  ];
 
   const trackFollowers = async () => {
     const followData = {
@@ -189,170 +204,164 @@ function UserLivestream() {
     }
   }, [State.database.userData?.data?.user, streamUser]);
 
-  return (
-    <div className="w-full min-h-full pt-24  bg-white dark:bg-slate-900 ">
-      <>
-        {streamUser && State.database.userData.data ? (
-          <div className="">
-            <div className={`flex   pb-50  lg:ml-12  relative  h-full `}>
-              <div className="flex-1 w-full">
-                <div>
-                  {streamUser ? (
-                    streamUser.thumbnail &&
-                    !streamUser.livepeer_data.isActive &&
-                    new Date(streamUser.streamSchedule * 1) > new Date() ? (
-                      <>
-                        <img
-                          className="max-h-120 self-center lg:px-8 w-screen lg:w-full lg:mt-3   mt-0.5"
-                          src={streamUser.thumbnail}
-                        />
-                      </>
-                    ) : (
-                      <ReactPlayer
-                        controls={true}
-                        width={"100%"}
-                        height={"max-content"}
-                        url={`https://cdn.livepeer.com/hls/${streamUser.livepeer_data.playbackId}/index.m3u8`}
-                        footer={false}
-                      />
-                    )
-                  ) : null}
+  return streamUser && State.database.userData.data ? (
+    <div className="w-full min-h-screen h-fit pt-20 bg-white dark:bg-slate-900">
+      <div className={`flex flex-col lg:flex-row relative h-full p-4`}>
+        <div className="flex-1 space-y-2">
+          {streamUser ? (
+            streamUser.thumbnail &&
+            !streamUser.livepeer_data.isActive &&
+            new Date(streamUser.streamSchedule * 1) > new Date() ? (
+              <img
+                className="w-full aspect-video rounded-sm lg:rounded-xl object-cover"
+                src={streamUser.thumbnail}
+              />
+            ) : (
+              <div className="rounded-sm lg:rounded-xl overflow-hidden">
+                <ReactPlayer
+                  controls={true}
+                  width={"100%"}
+                  height={"max-content"}
+                  url={`https://cdn.livepeer.com/hls/${streamUser.livepeer_data.playbackId}/index.m3u8`}
+                  footer={false}
+                />
+              </div>
+            )
+          ) : null}
+
+          <div className="space-y-2  w-full">
+            <div className="w-full flex flex-col md:flex-row gap-2 ">
+              {streamUser &&
+              new Date(streamUser.streamSchedule * 1) > new Date() &&
+              !streamUser.livepeer_data.isActive ? (
+                <span className="flex items-center h-8 w-fit bg-slate-100 dark:bg-slate-800  rounded-full px-3">
+                  <span className="relative flex h-3 w-3">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-teal-500 opacity-75"></span>
+                    <span className="absolute inline-flex rounded-full h-full w-full bg-teal-600"></span>
+                  </span>
+                  <p className="text-sm font-semibold text-brand2 ml-2">
+                    Stream Starting on{" "}
+                    <span className="text-teal-600">
+                      {moment(streamUser.streamSchedule * 1).format(
+                        "MMMM Do YYYY, h:mm a"
+                      )}
+                    </span>
+                  </p>
+                </span>
+              ) : null}
+              <div className="md:ml-auto flex w-full md:w-fit justify-between gap-2">
+                <span className="flex items-center gap-1 h-8 w-fit bg-slate-100 dark:bg-slate-800  rounded-full px-3">
+                  <span className="text-teal-600">
+                    <Eye size={16} />
+                  </span>
+                  <p className="text-sm font-semibold text-brand2">
+                    {livestreamViews}
+                  </p>
+                </span>
+
+                <div
+                  onClick={() =>
+                    State.updateDatabase({
+                      shareModalOpen: true,
+                      sharePostUrl: `https://v2.mintflick.app/homescreen/liveuser/${streamUser.username}`,
+                    })
+                  }
+                  className="btn btn-outline btn-primary btn-sm rounded-full gap-2"
+                >
+                  <Share size={16} />
+                  SHARE
                 </div>
+              </div>
+            </div>
 
-                <div className="2xl:ml-7 sm:p-2 p-3  bg-dbeats-dark-alt shadow   md:px-6">
-                  <div className=" flex sm:py-2 py-2">
-                    <div className="  w-full">
-                      <>
-                        {streamUser &&
-                        new Date(streamUser.streamSchedule * 1) > new Date() &&
-                        !streamUser.livepeer_data.isActive ? (
-                          <span className="text-dbeats-light border px-5 py-3 border-dbeats-light rounded  mr-1 md:text-lg ml-5 text-sm tracking-wider">
-                            <i className="fa-solid text-red-500 fa-circle text-sm mr-2"></i>
-                            Stream Starting on{" "}
-                            {moment(streamUser.streamSchedule * 1).format(
-                              "MMMM Do YYYY, h:mm a"
-                            )}
-                          </span>
-                        ) : null}
-                      </>
-                      <>
-                        <h1 className="text-white mt-3 mr-1 md:text-2xl ml-5 text-sm tracking-wider">
-                          {streamUser && streamUser.streamDetails
-                            ? streamUser.streamDetails.name
-                            : null}
-                        </h1>
-                      </>
-                      {!privateUser ? (
-                        <div>
-                          {State.database.userData.data && streamUser ? (
-                            <>
-                              {" "}
-                              <div className="flex    text-black text-sm font-medium   py-2  px-4  ">
-                                <Link
-                                  to={`/profile/${streamUser.username}/posts`}
-                                  className="mr-4"
-                                >
-                                  <img
-                                    src={
-                                      streamUser.profile_image
-                                        ? streamUser.profile_image
-                                        : placeholderImage
-                                    }
-                                    alt=""
-                                    className="  md:w-16 md:h-14 h-8 w-10    rounded-full    self-start"
-                                  />
-                                </Link>
-                                <div className="w-full  flex  justify-between   md:mt-2 ">
-                                  <div>
-                                    <div className="w-full self-center  ">
-                                      <Link
-                                        to={`/profile/${streamUser.username}/posts`}
-                                        className="2xl:text-sm lg:text-xs text-xs text-gray-500  mb-2"
-                                      >
-                                        <div className="flex align-middle">
-                                          <h3 className="text-white mr-1 md:text-lg text-sm tracking-wider">
-                                            {streamUser.name}
-                                          </h3>
-                                        </div>
+            {!privateUser ? (
+              State.database.userData.data && streamUser ? (
+                <div className="lg:flex justify-between space-y-2 w-full">
+                  <div className="flex justify-start items-start gap-2">
+                    <Link
+                      className="w-14 h-14"
+                      to={`../profile/${streamUser.username}/posts`}
+                    >
+                      <img
+                        src={
+                          streamUser.profile_image
+                            ? streamUser.profile_image
+                            : placeholderImage
+                        }
+                        alt="profile picture"
+                        className="h-full w-full rounded-full object-cover"
+                      />
+                    </Link>
+                    <div className="w-full mt-1">
+                      <Link
+                        to={`../profile/${streamUser.username}/posts`}
+                        className="w-fit text-base text-brand1 font-semibold tracking-wider hover:underline"
+                      >
+                        {streamUser.name}
+                      </Link>
+                      <h1 className="text-lg text-brand2 font-semibold tracking-wider">
+                        {streamUser && streamUser.streamDetails
+                          ? streamUser.streamDetails.name
+                          : null}
+                      </h1>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    {streamUser.username !=
+                    State.database.userData.data.user.username ? (
+                      subscribeButtonText === "Follow" ? (
+                        <button
+                          id="subscribeButton"
+                          className="btn btn-brand btn-sm"
+                          onClick={
+                            State.database.userData.data.user != null &&
+                            trackFollowers
+                          }
+                        >
+                          <span>{subscribeButtonText}</span>
+                        </button>
+                      ) : (
+                        <button
+                          id="subscribeButton"
+                          className="btn btn-primary btn-outline btn-sm"
+                          onClick={
+                            State.database.userData.data.user != null &&
+                            trackFollowers
+                          }
+                        >
+                          <span>{subscribeButtonText}</span>
+                        </button>
+                      )
+                    ) : null}
 
-                                        <p className="text-white text-opacity-40 self-center items-center content-center">
-                                          &middot;&nbsp;{streamUser.username}
-                                        </p>
-                                      </Link>
-                                      {""}
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                              <div className="flex items-center   w-full px-4">
-                                {streamUser.username !=
-                                State.database.userData.data.user.username ? (
-                                  subscribeButtonText === "Follow" ? (
-                                    <button
-                                      id="subscribeButton"
-                                      className="flex items-center dark:bg-dbeats-light    border border-dbeats-light dark:hover:bg-dbeats-secondary-light p-1 2xl:text-lg lg:text-sm text-md rounded-sm 2xl:px-4 px-4 lg:px-2 mr-3 font-semibold text-white "
-                                      onClick={
-                                        State.database.userData.data.user !=
-                                          null && trackFollowers
-                                      }
-                                    >
-                                      <span>{subscribeButtonText}</span>
-                                    </button>
-                                  ) : (
-                                    <button
-                                      id="subscribeButton"
-                                      className="flex items-center dark:bg-dbeats-light    border border-dbeats-light dark:hover:bg-dbeats-secondary-light p-1 2xl:text-lg lg:text-sm text-md rounded-sm 2xl:px-4 px-4 lg:px-2 mr-3 font-semibold text-white "
-                                      onClick={
-                                        State.database.userData.data.user !=
-                                          null && trackFollowers
-                                      }
-                                    >
-                                      <span>{subscribeButtonText}</span>
-                                    </button>
-                                  )
-                                ) : null}
-
-                                {streamUser.superfan_data &&
-                                streamUser.username !=
-                                  State.database.userData.data.user.username &&
-                                streamUser.superfan_to.find(
-                                  (o) =>
-                                    o.username ==
-                                    State.database.userData.data.user.username
-                                ) == undefined ? (
-                                  <button
-                                    onClick={() =>
-                                      setJoinsuperfanModalOpen(true)
-                                    }
-                                    className={
-                                      streamUser.superfan_data
-                                        ? " flex dark:bg-dbeats-dark-primary border border-dbeats-light dark:hover:bg-dbeats-light p-1 2xl:text-lg lg:text-sm text-md  rounded-sm 2xl:px-4 px-4 lg:px-2      mr-3 font-semibold text-white   "
-                                        : "hidden"
-                                    }
-                                  >
-                                    <span
-                                      className={`${
-                                        streamUser.superfan_data ? "" : "hidden"
-                                      } whitespace-nowrap flex`}
-                                    >
-                                      🥳 Become a Superfan
-                                    </span>
-                                  </button>
-                                ) : (
-                                  <></>
-                                )}
-                              </div>
-                            </>
-                          ) : (
-                            <a className="bg-dbeats-light flex w-max  p-1 2xl:text-lg lg:text-sm text-md  rounded-sm 2xl:px-4 px-4 lg:px-2 mr-3 font-semibold text-white ">
-                              <span className="whitespace-nowrap flex">
-                                Login to Follow & Become a SuperFan
-                              </span>
-                            </a>
-                          )}
-                        </div>
-                      ) : null}
-                      {/* <div className="mt-2">
+                    {streamUser.superfan_data &&
+                      streamUser.username !=
+                        State.database.userData.data.user.username &&
+                      streamUser.superfan_to.find(
+                        (o) =>
+                          o.username ==
+                          State.database.userData.data.user.username
+                      ) == undefined && (
+                        <button
+                          onClick={() => setJoinsuperfanModalOpen(true)}
+                          className={
+                            streamUser.superfan_data
+                              ? "btn btn-brand btn-sm"
+                              : "hidden"
+                          }
+                        >
+                          🥳 Become a Superfan
+                        </button>
+                      )}
+                  </div>
+                </div>
+              ) : (
+                <a className="btn btn-brand btn-outline">
+                  Login to Follow & Become a SuperFan
+                </a>
+              )
+            ) : null}
+            {/* <div className="mt-2">
                       <>
                         <p>
                           <span className="text-white mr-1 font-bold md:text-lg md:ml-20 text-sm tracking-wider">
@@ -366,132 +375,87 @@ function UserLivestream() {
                         </p>
                       </>
                     </div> */}
-                      {streamUser && streamUser.streamDetails && !readMore ? (
-                        <div className="mt-2 ml-1 text-lg text-white p-2">
-                          <p>
-                            {streamUser.streamDetails.description.length >
-                            100 ? (
-                              <>
-                                {streamUser.streamDetails.description.substring(
-                                  0,
-                                  100
-                                )}{" "}
-                                <span
-                                  className="text-dbeats-light cursor-pointer"
-                                  onClick={() => setReadMore(true)}
-                                >
-                                  ...Read More
-                                </span>
-                              </>
-                            ) : (
-                              streamUser.streamDetails.description
-                            )}
-                          </p>
-                        </div>
-                      ) : null}
 
-                      {streamUser && streamUser.streamDetails && readMore ? (
-                        <div className="mt-2 ml-1 text-lg text-white p-2">
-                          <p>
-                            {streamUser.streamDetails.description.length >
-                            100 ? (
-                              <>
-                                {streamUser.streamDetails.description}{" "}
-                                <span
-                                  className="text-dbeats-light cursor-pointer"
-                                  onClick={() => setReadMore(false)}
-                                >
-                                  {" "}
-                                  Show Less
-                                </span>
-                              </>
-                            ) : (
-                              streamUser.streamDetails.description
-                            )}
-                          </p>
-                        </div>
-                      ) : null}
-                    </div>
-                    <div className="2xl:text-2xl lg:text-md text-xs 2xl:py-4 lg:py-2 py-2 flex justify-around dark:text-dbeats-white   ">
-                      <p
-                        className={`text-white md:text-lg text-xs text-center pr-2 flex flex-col`}
-                      >
+            {streamUser && streamUser.streamDetails && (
+              <div className="p-4 text-lg text-brand3 h-fit bg-slate-100 dark:bg-slate-800  rounded-xl ">
+                <p>
+                  {streamUser.streamDetails.description.length > 100 ? (
+                    <>
+                      {readMore
+                        ? streamUser.streamDetails.description
+                        : streamUser.streamDetails.description.substring(
+                            0,
+                            100
+                          )}
+                      {!readMore ? (
                         <span
-                          className={`text-${viewColor}  ${viewAnimate} font-bold`}
+                          className="text-sm font-semibold text-blue-700 cursor-pointer"
+                          onClick={() => setReadMore(true)}
                         >
-                          {livestreamViews}
+                          ...Read More
                         </span>
-                        viewers
-                      </p>
-                      <div
-                        onClick={() =>
-                          State.updateDatabase({
-                            shareModalOpen: true,
-                            sharePostUrl: `https://v2.mintflick.app/homescreen/liveuser/${streamUser.username}`,
-                          })
-                        }
-                        className="  text-center lg:mx-3 mx-1 text-slate-200"
-                      >
-                        <button className="border-0 bg-transparent">
-                          <i className="fas fa-share-alt  mx-2"></i>
-                        </button>
-                        <br />
-                        <p className="2xl:text-base  text-xs lg:text-sm">
+                      ) : (
+                        <span
+                          className="text-sm font-semibold text-blue-700 cursor-pointer"
+                          onClick={() => setReadMore(false)}
+                        >
                           {" "}
-                          SHARE
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-2 gap-4 grid-flow-row mt-4  ">
-                    {streamUser.streamLinks ? (
-                      streamUser.streamLinks.map((link, index) => {
-                        return (
-                          <div
-                            key={index}
-                            className="h-full w-full p-2 rounded"
-                          >
-                            <a
-                              href={link.url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              <img
-                                className="  h-full w-full rounded"
-                                src={link.image}
-                              />
-                            </a>
-                          </div>
-                        );
-                      })
-                    ) : (
-                      <></>
-                    )}
-                  </div>
-                </div>
+                          Show Less
+                        </span>
+                      )}
+                    </>
+                  ) : (
+                    streamUser.streamDetails.description
+                  )}
+                </p>
               </div>
-              <div className="  w-1/4   ">
-                {/* {userData.username && (
+            )}
+          </div>
+
+          <div className="grid grid-cols-2 gap-4 grid-flow-row   ">
+            {streamUser.streamLinks ? (
+              streamUser.streamLinks.map((link, index) => {
+                return (
+                  <div key={index} className="h-full w-full">
+                    <a
+                      href={link.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <img
+                        className="aspect-video object-cover w-full rounded-md"
+                        src={link.image}
+                      />
+                    </a>
+                  </div>
+                );
+              })
+            ) : (
+              <></>
+            )}
+          </div>
+        </div>
+        <div className="w-full lg:w-96">
+          {/* {userData.username && (
                   <LiveChat userp={userData} privateUser={user}></LiveChat>
                 )} */}
-              </div>
-            </div>
-            <div
-              className={`${
-                joinsuperfanModalOpen && "modal-open"
-              } modal modal-bottom sm:modal-middle`}
-            >
-              <JoinSuperfanModal
-                setJoinSuperfanModal={setJoinsuperfanModalOpen}
-                content={{}}
-                superfan_data={streamUser.superfan_data}
-              />
-            </div>
-          </div>
-        ) : (
-          <></>
-        )}
-      </>
+        </div>
+      </div>
+      <div
+        className={`${
+          joinsuperfanModalOpen && "modal-open"
+        } modal modal-bottom sm:modal-middle`}
+      >
+        <JoinSuperfanModal
+          setJoinSuperfanModal={setJoinsuperfanModalOpen}
+          content={{}}
+          superfan_data={streamUser.superfan_data}
+        />
+      </div>
+    </div>
+  ) : (
+    <div className="h-screen w-screen bg-slate-100 dark:bg-slate-800 ">
+      <Loading msg={slangText} />
     </div>
   );
 }

@@ -664,7 +664,7 @@ function GoLive() {
     <div className=" bg-white dark:bg-slate-900 pt-20 ">
       <div className="flex flex-col lg:flex-row p-4 gap-2">
         <div className="flex-1 space-y-2">
-          <div className="rounded-xl overflow-hidden">
+          <div className="rounded-sm lg:rounded-xl overflow-hidden">
             <ReactPlayer
               controls={true}
               width={"100%"}
