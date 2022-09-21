@@ -354,8 +354,6 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
     setShowListingOption(false);
   };
 
-  console.log(isNFT);
-
   function Log() {
     console.log("NFT Minted");
   }
