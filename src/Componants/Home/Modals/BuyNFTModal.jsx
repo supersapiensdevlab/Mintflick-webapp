@@ -81,6 +81,8 @@ function BuyNFTModal() {
       })
       .catch((err) => {
         console.log(err);
+        State.toast("error", "Error while buying NFT");
+        setBuying(false);
       });
   };
   return (
