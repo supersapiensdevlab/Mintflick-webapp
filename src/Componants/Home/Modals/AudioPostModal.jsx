@@ -20,10 +20,26 @@ import { UserContext } from "../../../Store";
 import { MentionsInput, Mention } from "react-mentions";
 import defaultStyle from "../defaultStyle";
 import SolanaToken from "../../../Assets/logos/SolanaToken";
+import Web3 from "web3";
+import { SolanaWallet } from "@web3auth/solana-provider";
+import {
+  clusterUrl,
+  confirmTransactionFromFrontend,
+} from "../Utility/utilityFunc";
+import { clusterApiUrl, Connection, PublicKey } from "@solana/web3.js";
 
 function AudioPostModal({ setAudioPostModalOpen }) {
   const State = useContext(UserContext);
   const [loadFeed] = useUserActions();
+
+  const web3 = new Web3(State.database.provider);
+
+  const [showListingOption, setShowListingOption] = useState(false);
+  const [tokenId, setTokenId] = useState(null);
+  const [solanaMintId, setSolanaMintId] = useState(null);
+  const [mintSuccess, setMintSuccess] = useState("");
+  const [tokenAddress, setTokenAddress] = useState("");
+
   const genre = [
     "EDM",
     "Rock",
@@ -144,12 +160,176 @@ function AudioPostModal({ setAudioPostModalOpen }) {
     });
     setIsNFT(false);
     setNFTPrice(1);
+    setMintSuccess("");
+    setShowListingOption(false);
     await loadFeed();
   };
 
   const handleAdd = (e) => {
     tagged.push(e);
     console.log(tagged);
+  };
+
+  const mintOnPolygon = (formData, file) => {
+    // uploadFile(file)
+    //   .then(async (cid) => {
+    //     console.log("stored files with cid:", cid);
+    //     await createToken(
+    //       "https://ipfs.io/ipfs/" + cid + "meta.json",
+    //       nftPrice,
+    //       window.ethereum,
+    //       setMinting,
+    //       setMintingProgress
+    //     ).then(async (tokenId) => {
+    //       console.log("TOKEN ID Created : ", tokenId); // token created
+    //       formData.append("tokenId", tokenId);
+    //       axios
+    //         .post(
+    //           `${process.env.REACT_APP_SERVER_URL}/upload_video`,
+    //           formData,
+    //           {
+    //             headers: {
+    //               "content-type": "multipart/form-data",
+    //               "auth-token": JSON.stringify(
+    //                 localStorage.getItem("authtoken")
+    //               ),
+    //             },
+    //           }
+    //         )
+    //         .then((res) => {
+    //           State.toast("success", "Your video uplaoded successfully!");
+    //           clearState();
+    //           setTagged([]);
+    //         })
+    //         .catch((err) => {
+    //           console.log(err);
+    //           clearState();
+    //           setTagged([]);
+    //         });
+    //     });
+    //   })
+    //   .catch((err) => {
+    //     State.toast("error", "Oops!somthing went wrong uplaoding video!");
+    //     console.log(err);
+    //   });
+  };
+
+  const mintOnSolana = (formData, file) => {
+    uploadFile(selectedTrack.file).then(async (cid) => {
+      console.log("stored files with cid:", cid);
+      console.log(State.database);
+      let nftSolanaData = {
+        network: "devnet",
+        wallet: State.database.walletAddress,
+        name: selectedTrack.file.name,
+        symbol: "FLICK",
+        attributes: JSON.stringify([{ trait_type: "Power", value: "100" }]),
+        description: track.description,
+        external_url:
+          "https://ipfs.io/ipfs/" + cid + "/" + selectedTrack.file.name,
+        max_supply: 1,
+        royalty: 5,
+        file: selectedTrack.file,
+      };
+
+      console.log(nftSolanaData);
+      axios
+        .post(`https://api.shyft.to/sol/v1/nft/create_detach`, nftSolanaData, {
+          headers: {
+            "x-api-key": `${process.env.REACT_APP_SHYFT_API_KEY}`,
+            "content-type": "multipart/form-data",
+          },
+        })
+        .then(async (data) => {
+          console.log("MintID", data.data.result.mint);
+          setTokenAddress(data.data.result.mint);
+          await signTransaction("devnet", data.data.result.encoded_transaction);
+          nftMinted(formData, data.data.result.mint);
+        })
+        .catch((err) => {
+          console.log(err);
+          clearState();
+        });
+    });
+  };
+
+  const listNFTForSale = async (e) => {
+    e.preventDefault();
+    var raw = JSON.stringify({
+      network: "devnet",
+      marketplace_address: process.env.REACT_APP_SOLANA_MARKETPLACE_ADDRESS,
+      nft_address: solanaMintId,
+      price: parseInt(nftPrice),
+      seller_wallet: State.database.walletAddress,
+    });
+
+    console.log(raw);
+    axios
+      .post(`https://api.shyft.to/sol/v1/marketplace/list`, raw, {
+        headers: {
+          "x-api-key": `${process.env.REACT_APP_SHYFT_API_KEY}`,
+          "content-type": "application/json",
+        },
+      })
+      .then(async (data) => {
+        console.log(data.data);
+        await signTransaction("devnet", data.data.result.encoded_transaction);
+        setMintSuccess("NFT Listed Successfully");
+      })
+      .catch((err) => {
+        console.log(err);
+        clearState();
+      });
+  };
+
+  async function signTransaction(network, transaction, callback) {
+    //const phantom = new PhantomWalletAdapter();
+    //await phantom.connect();
+    const solanaWallet = new SolanaWallet(State.database.provider); // web3auth.provider
+
+    const rpcUrl = clusterUrl(network);
+    console.log(rpcUrl);
+    const connection = new Connection(rpcUrl, "confirmed");
+    //console.log(connection.rpcEndpoint);
+    const ret = await confirmTransactionFromFrontend(
+      connection,
+      transaction,
+      solanaWallet
+    );
+    // const checks = await connection.confirmTransaction({signature:ret},'finalised');
+
+    // console.log(checks);
+    // await connection.confirmTransaction({
+    //     blockhash: transaction.blockhash,
+    //     signature: ret,
+    //   });
+    connection.onSignature(ret, callback, "finalized");
+    return ret;
+  }
+
+  const nftMinted = (formData, mintId) => {
+    setSolanaMintId(mintId);
+    setShowListingOption(true);
+    setUploadingTrack(false);
+    setMintSuccess("NFT Minted Successfully");
+    formData.append("tokenId", mintId);
+    axios
+      .post(`${process.env.REACT_APP_SERVER_URL}/upload_music`, formData, {
+        headers: {
+          "content-type": "multipart/form-data",
+          "auth-token": JSON.stringify(localStorage.getItem("authtoken")),
+        },
+      })
+      .then(async (res) => {
+        State.toast("success", "Your Video uplaoded successfully!");
+        await loadFeed();
+      })
+      .catch((err) => {
+        State.toast("error", "Oops!somthing went wrong uplaoding video!");
+        console.log(err);
+        clearState();
+        setTagged([]);
+      });
   };
 
   const handleSubmit = (e) => {
@@ -168,11 +348,11 @@ function AudioPostModal({ setAudioPostModalOpen }) {
           let formData = new FormData(); // Currently empty
           formData.append(
             "userName",
-            State.database.userData.data.user.username,
+            State.database.userData.data.user.username
           );
           formData.append(
             "userImage",
-            State.database.userData.data.user.profile_image,
+            State.database.userData.data.user.profile_image
           );
           formData.append("trackName", track.trackName);
           formData.append("genre", track.genre);
@@ -190,12 +370,12 @@ function AudioPostModal({ setAudioPostModalOpen }) {
           formData.append(
             "trackFile",
             selectedTrack.file,
-            selectedTrack.file.name,
+            selectedTrack.file.name
           );
           formData.append(
             "trackImage",
             selectedThumbnail.file,
-            selectedThumbnail.file.name,
+            selectedThumbnail.file.name
           );
           formData.append("trackHash", cid);
           if (isNFT) {
@@ -237,57 +417,62 @@ function AudioPostModal({ setAudioPostModalOpen }) {
             var file = convertBlobToFile(blob, "meta.json");
             console.log(file);
 
-            uploadFile(file)
-              .then(async (cid) => {
-                console.log("stored files with cid:", cid);
-                await createToken(
-                  "https://ipfs.io/ipfs/" + cid + "meta.json",
-                  nftPrice,
-                  window.ethereum,
-                  setMinting,
-                  setMintingProgress,
-                ).then(async (tokenId) => {
-                  console.log("TOKEN ID Created : ", tokenId); // token created
-                  formData.append("tokenId", tokenId);
-                  axios
-                    .post(
-                      `${process.env.REACT_APP_SERVER_URL}/upload_music`,
-                      formData,
-                      {
-                        headers: {
-                          "content-type": "multipart/form-data",
-                          "auth-token": JSON.stringify(
-                            localStorage.getItem("authtoken"),
-                          ),
-                        },
-                      },
-                    )
-                    .then((res) => {
-                      State.toast(
-                        "success",
-                        "Your music uplaoded successfully!",
-                      );
-                      clearState();
-                      setTagged([]);
-                    })
-                    .catch((err) => {
-                      State.toast(
-                        "error",
-                        "Something went wrong while uploading music!",
-                      );
-                      console.log(err);
-                      clearState();
-                      setTagged([]);
-                    });
-                });
-              })
-              .catch((err) => {
-                State.toast(
-                  "error",
-                  "Something went wrong while uploading music!",
-                );
-                console.log(err);
-              });
+            // uploadFile(file)
+            //   .then(async (cid) => {
+            //     console.log("stored files with cid:", cid);
+            //     await createToken(
+            //       "https://ipfs.io/ipfs/" + cid + "meta.json",
+            //       nftPrice,
+            //       window.ethereum,
+            //       setMinting,
+            //       setMintingProgress,
+            //     ).then(async (tokenId) => {
+            //       console.log("TOKEN ID Created : ", tokenId); // token created
+            //       formData.append("tokenId", tokenId);
+            //       axios
+            //         .post(
+            //           `${process.env.REACT_APP_SERVER_URL}/upload_music`,
+            //           formData,
+            //           {
+            //             headers: {
+            //               "content-type": "multipart/form-data",
+            //               "auth-token": JSON.stringify(
+            //                 localStorage.getItem("authtoken"),
+            //               ),
+            //             },
+            //           },
+            //         )
+            //         .then((res) => {
+            //           State.toast(
+            //             "success",
+            //             "Your music uplaoded successfully!",
+            //           );
+            //           clearState();
+            //           setTagged([]);
+            //         })
+            //         .catch((err) => {
+            //           State.toast(
+            //             "error",
+            //             "Something went wrong while uploading music!",
+            //           );
+            //           console.log(err);
+            //           clearState();
+            //           setTagged([]);
+            //         });
+            //     });
+            //   })
+            //   .catch((err) => {
+            //     State.toast(
+            //       "error",
+            //       "Something went wrong while uploading music!",
+            //     );
+            //     console.log(err);
+            //   });
+            if (State.database.chainId === 1) {
+              mintOnPolygon(formData, file);
+            } else if (State.database.chainId === 0) {
+              mintOnSolana(formData, file);
+            }
           } else {
             axios
               .post(
@@ -297,10 +482,10 @@ function AudioPostModal({ setAudioPostModalOpen }) {
                   headers: {
                     "content-type": "multipart/form-data",
                     "auth-token": JSON.stringify(
-                      localStorage.getItem("authtoken"),
+                      localStorage.getItem("authtoken")
                     ),
                   },
-                },
+                }
               )
               .then((res) => {
                 State.toast("success", "Your music uplaoded successfully!");
@@ -311,7 +496,7 @@ function AudioPostModal({ setAudioPostModalOpen }) {
               .catch((err) => {
                 State.toast(
                   "error",
-                  "Something went wrong while uploading music!",
+                  "Something went wrong while uploading music!"
                 );
                 console.log(err);
                 clearState();
@@ -344,10 +529,10 @@ function AudioPostModal({ setAudioPostModalOpen }) {
   };
 
   return (
-    <div className='modal-box p-0 bg-slate-100 dark:bg-slate-800 '>
-      <div className='w-full h-fit p-2 bg-slate-300 dark:bg-slate-700'>
-        <div className='flex justify-between items-center p-2'>
-          <h3 className='flex items-center gap-2 font-bold text-lg text-brand2'>
+    <div className="modal-box p-0 bg-slate-100 dark:bg-slate-800 ">
+      <div className="w-full h-fit p-2 bg-slate-300 dark:bg-slate-700">
+        <div className="flex justify-between items-center p-2">
+          <h3 className="flex items-center gap-2 font-bold text-lg text-brand2">
             <Music />
             Upload Audio
           </h3>
@@ -355,36 +540,38 @@ function AudioPostModal({ setAudioPostModalOpen }) {
             onClick={() => {
               clearState();
             }}
-            className='text-brand2 cursor-pointer'></X>
+            className="text-brand2 cursor-pointer"
+          ></X>
         </div>
       </div>
       <form onSubmit={handleSubmit}>
-        <div className='w-full p-4 space-y-3'>
-          <div className='flex flex-col sm:flex-row gap-1'>
+        <div className="w-full p-4 space-y-3">
+          <div className="flex flex-col sm:flex-row gap-1">
             <label
-              htmlFor='trackthumbnail'
-              className='  cursor-pointer flex flex-col items-start gap-2  w-full p-2 border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4'>
+              htmlFor="trackthumbnail"
+              className="  cursor-pointer flex flex-col items-start gap-2  w-full p-2 border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4"
+            >
               {selectedThumbnail ? (
                 selectedThumbnail.file ? (
-                  <div className='w-full  rounded-lg overflow-clip'>
+                  <div className="w-full  rounded-lg overflow-clip">
                     <img src={selectedThumbnail.localurl}></img>
                   </div>
                 ) : null
               ) : (
                 <></>
               )}
-              <div className='flex gap-1 cursor-pointer'>
+              <div className="flex gap-1 cursor-pointer">
                 <input
-                  id='trackthumbnail'
-                  type='file'
-                  name='trackImage'
-                  accept='.jpg,.png,.jpeg,.gif,.webp'
+                  id="trackthumbnail"
+                  type="file"
+                  name="trackImage"
+                  accept=".jpg,.png,.jpeg,.gif,.webp"
                   onChange={onTrackFileChange}
-                  className='sr-only '
+                  className="sr-only "
                   required={true}
                 />
                 {selectedThumbnail && selectedThumbnail.file ? (
-                  <FileCheck className='text-emerald-700' />
+                  <FileCheck className="text-emerald-700" />
                 ) : (
                   <File />
                 )}
@@ -394,8 +581,9 @@ function AudioPostModal({ setAudioPostModalOpen }) {
               </div>
             </label>
             <div
-              htmlFor=''
-              className=' cursor-pointer flex flex-col items-start gap-2  w-full p-2 border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4'>
+              htmlFor=""
+              className=" cursor-pointer flex flex-col items-start gap-2  w-full p-2 border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4"
+            >
               {selectedTrack ? (
                 selectedTrack.file ? (
                   // <div className='rounded-lg overflow-clip'>
@@ -409,18 +597,18 @@ function AudioPostModal({ setAudioPostModalOpen }) {
               ) : (
                 <></>
               )}
-              <label htmlFor='trackfile' className='flex gap-1 cursor-pointer'>
+              <label htmlFor="trackfile" className="flex gap-1 cursor-pointer">
                 <input
                   required
-                  id='trackfile'
-                  type='file'
-                  accept='.mp3'
-                  name='trackFile'
+                  id="trackfile"
+                  type="file"
+                  accept=".mp3"
+                  name="trackFile"
                   onChange={onTrackFileChange}
-                  className='sr-only '
+                  className="sr-only "
                 />
                 {selectedTrack && selectedTrack.file ? (
-                  <FileCheck className='text-emerald-700' />
+                  <FileCheck className="text-emerald-700" />
                 ) : (
                   <FileMusic />
                 )}
@@ -431,17 +619,18 @@ function AudioPostModal({ setAudioPostModalOpen }) {
             </div>
           </div>
           <input
-            type='text'
-            placeholder='Track name'
-            className='input w-full '
+            type="text"
+            placeholder="Track name"
+            className="input w-full "
             value={track.trackName}
             onChange={(e) => setTrack({ ...track, trackName: e.target.value })}
             required
           />
-          <div className='flex space-x-2'>
+          <div className="flex space-x-2">
             <select
-              className='select flex-grow'
-              onChange={(e) => setTrack({ ...track, genre: e.target.value })}>
+              className="select flex-grow"
+              onChange={(e) => setTrack({ ...track, genre: e.target.value })}
+            >
               <option disabled selected>
                 Genre
               </option>
@@ -450,8 +639,9 @@ function AudioPostModal({ setAudioPostModalOpen }) {
               ))}
             </select>
             <select
-              className='select flex-grow'
-              onChange={(e) => setTrack({ ...track, mood: e.target.value })}>
+              className="select flex-grow"
+              onChange={(e) => setTrack({ ...track, mood: e.target.value })}
+            >
               <option disabled selected>
                 Mood
               </option>
@@ -476,57 +666,61 @@ function AudioPostModal({ setAudioPostModalOpen }) {
               setTrack({ ...track, description: e.target.value })
             }
             style={defaultStyle}
-            className='textarea w-full h-24  pt-2 focus:outline-0'
+            className="textarea w-full h-24  pt-2 focus:outline-0"
             placeholder={"Enter caption."}
-            a11ySuggestionsListLabel={"Suggested mentions"}>
+            a11ySuggestionsListLabel={"Suggested mentions"}
+          >
             <Mention
-              trigger='@'
+              trigger="@"
               data={renderData}
-              markup='@__display__'
+              markup="@__display__"
               appendSpaceOnAdd
               onAdd={handleAdd}
             />
           </MentionsInput>
           <span
             onClick={() => setadvancedOptionsShow(!advancedOptionsShow)}
-            className='flex px-2 items-center gap-1 font-semibold text-brand3 cursor-pointer'>
+            className="flex px-2 items-center gap-1 font-semibold text-brand3 cursor-pointer"
+          >
             Advanced options
             <label
               class={`swap ${
                 advancedOptionsShow && "swap-active"
-              } swap-rotate text-6xl`}>
-              <div class='swap-on'>
+              } swap-rotate text-6xl`}
+            >
+              <div class="swap-on">
                 <ChevronUp />
               </div>
-              <div class='swap-off'>
+              <div class="swap-off">
                 <ChevronDown />
               </div>
             </label>
           </span>
           {advancedOptionsShow && (
             <>
-              <div className='flex flex-col lg:flex-row gap-2'>
+              <div className="flex flex-col lg:flex-row gap-2">
                 <input
-                  type='text'
-                  placeholder='Track ISRC'
-                  className='input flex-grow '
+                  type="text"
+                  placeholder="Track ISRC"
+                  className="input flex-grow "
                   value={track.isrc}
                   onChange={(e) => setTrack({ ...track, isrc: e.target.value })}
                 />
                 <input
-                  type='text'
-                  placeholder='Track ISWC'
-                  className='input flex-grow '
+                  type="text"
+                  placeholder="Track ISWC"
+                  className="input flex-grow "
                   value={track.iswc}
                   onChange={(e) => setTrack({ ...track, iswc: e.target.value })}
                 />
               </div>
-              <div className='flex gap-1 w-full flex-wrap'>
+              <div className="flex gap-1 w-full flex-wrap">
                 <select
-                  className='select select-xs flex-grow'
+                  className="select select-xs flex-grow"
                   onChange={(e) =>
                     setTrack({ ...track, allowAttribution: e.target.value })
-                  }>
+                  }
+                >
                   <option disabled selected>
                     Allow Attribution?
                   </option>
@@ -535,10 +729,11 @@ function AudioPostModal({ setAudioPostModalOpen }) {
                   ))}
                 </select>
                 <select
-                  className='select select-xs flex-grow'
+                  className="select select-xs flex-grow"
                   onChange={(e) =>
                     setTrack({ ...track, commercialUse: e.target.value })
-                  }>
+                  }
+                >
                   <option disabled selected>
                     Commercial Use?
                   </option>
@@ -547,10 +742,11 @@ function AudioPostModal({ setAudioPostModalOpen }) {
                   ))}
                 </select>
                 <select
-                  className='select select-xs flex-grow'
+                  className="select select-xs flex-grow"
                   onChange={(e) =>
                     setTrack({ ...track, derivativeWorks: e.target.value })
-                  }>
+                  }
+                >
                   <option disabled selected>
                     Derivative Works?
                   </option>
@@ -561,45 +757,59 @@ function AudioPostModal({ setAudioPostModalOpen }) {
               </div>
             </>
           )}
-
-          <div className='w-fit flex space-x-2'>
-            <label className='flex items-center cursor-pointer gap-2'>
-              <input
-                type='checkbox'
-                value={isNFT}
-                onChange={() => setIsNFT(!isNFT)}
-                className='checkbox checkbox-primary'
-              />
-              <span className='label-text text-brand3'>Mint as NFT</span>
-            </label>
-            {isNFT && (
-              <div className='form-control'>
-                <label className='input-group'>
+          {showListingOption ? (
+            <div className="w-fit flex space-x-2 text-green-500">
+              {mintSuccess}
+            </div>
+          ) : (
+            <></>
+          )}
+          {mintSuccess == "" || mintSuccess == "NFT Minted Successfully" ? (
+            <div className="w-fit flex space-x-2">
+              {showListingOption ? (
+                <div className="flex items-center">
+                  <span className="label-text text-brand3">List NFT</span>
+                </div>
+              ) : (
+                <label className="flex items-center cursor-pointer gap-2">
                   <input
-                    min={1}
-                    type='number'
-                    placeholder='1'
-                    className='input input-bordered input-sm w-24'
-                    value={nftPrice}
-                    onChange={(e) => setNFTPrice(e.target.value)}
-                    required={true}
+                    type="checkbox"
+                    value={isNFT}
+                    onChange={() => setIsNFT(!isNFT)}
+                    className="checkbox checkbox-primary"
                   />
-                  <span className='text-brand3 bg-slate-300 dark:bg-slate-600 '>
-                    {State.database.chainId === 0 ? (
-                      <>
-                        <SolanaToken></SolanaToken>&nbsp; SOL
-                      </>
-                    ) : (
-                      <>
-                        <PolygonToken></PolygonToken> &nbsp; Matic
-                      </>
-                    )}
-                  </span>
+                  <span className="label-text text-brand3">Mint as NFT</span>
                 </label>
-              </div>
-            )}
-          </div>
-          <button
+              )}
+              {isNFT && showListingOption && (
+                <div className="form-control">
+                  <label className="input-group">
+                    <input
+                      min={1}
+                      type="number"
+                      placeholder="1"
+                      className="input input-bordered input-sm w-24"
+                      value={nftPrice}
+                      onChange={(e) => setNFTPrice(e.target.value)}
+                      required={true}
+                    />
+                    <span className="text-brand3 bg-slate-300 dark:bg-slate-600 ">
+                      {State.database.chainId === 0 ? (
+                        <>
+                          <SolanaToken></SolanaToken>&nbsp; SOL
+                        </>
+                      ) : (
+                        <>
+                          <PolygonToken></PolygonToken> &nbsp; Matic
+                        </>
+                      )}
+                    </span>
+                  </label>
+                </div>
+              )}
+            </div>
+          ) : null}
+          {/* <button
             type={"submit"}
             className={`btn  w-full ${
               selectedTrack?.file && selectedThumbnail?.file
@@ -607,7 +817,63 @@ function AudioPostModal({ setAudioPostModalOpen }) {
                 : "btn-disabled"
             } ${uploadingTrack ? "loading" : ""}`}>
             Post audio
-          </button>
+          </button> */}
+          {showListingOption && mintSuccess == "NFT Minted Successfully" ? (
+            <div className="w-full flex justify-around space-x-1">
+              <button
+                onClick={State.database?.chainId == 1 ? null : listNFTForSale}
+                className={`btn  ${
+                  !selectedTrack?.file && selectedThumbnail?.file
+                    ? "btn-disabled"
+                    : "btn-brand"
+                } w-1/2 ${uploadingTrack ? "loading " : ""}`}
+              >
+                List NFT
+              </button>
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  clearState();
+                }}
+                className={`btn  ${
+                  !selectedTrack?.file && selectedThumbnail?.file
+                    ? "btn-disabled"
+                    : "btn-brand"
+                } w-1/2 ${uploadingTrack ? "loading " : ""}`}
+              >
+                Close
+              </button>
+            </div>
+          ) : (
+            <>
+              {!mintSuccess == "" ? (
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    clearState();
+                  }}
+                  className={`btn  ${
+                    !selectedTrack?.file && selectedThumbnail?.file
+                      ? "btn-disabled"
+                      : "btn-brand"
+                  } w-full ${uploadingTrack ? "loading " : ""}`}
+                >
+                  Close
+                </button>
+              ) : (
+                <button
+                  type={"submit"}
+                  className={`btn  w-full ${
+                    selectedTrack?.file && selectedThumbnail?.file
+                      ? "btn-brand"
+                      : "btn-disabled"
+                  } ${uploadingTrack ? "loading" : ""}`}
+                >
+                  Post audio
+                </button>
+              )}
+            </>
+          )}
         </div>
       </form>
     </div>
