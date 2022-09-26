@@ -207,9 +207,9 @@ function UserLivestream() {
       console.log("socket went wrong ", error);
     });
 
-    socket.on("count",(c)=>{
+    socket.on("count", (c) => {
       setLivestreamViews(c);
-    })
+    });
 
     return () => {
       socket.disconnect();
@@ -265,7 +265,7 @@ function UserLivestream() {
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-teal-500 opacity-75"></span>
                     <span className="absolute inline-flex rounded-full h-full w-full bg-teal-600"></span>
                   </span>
-                  <p className="text-sm font-semibold text-brand2 ml-2">
+                  <p className="text-xs sm:text-sm font-semibold text-brand2 ml-2">
                     Stream Starting on{" "}
                     <span className="text-teal-600">
                       {moment(streamUser.streamSchedule * 1).format(
@@ -280,7 +280,7 @@ function UserLivestream() {
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span>
                     <span className="absolute inline-flex rounded-full h-full w-full bg-red-600"></span>
                   </span>
-                  <p className="text-sm font-semibold text-brand2 mx-2">
+                  <p className="text-xs sm:text-sm font-semibold text-brand2 mx-2">
                     Live now
                   </p>
                 </span>
@@ -290,7 +290,7 @@ function UserLivestream() {
                   <span className="text-teal-600">
                     <Eye size={16} />
                   </span>
-                  <p className="text-sm font-semibold text-brand2">
+                  <p className="text-xs sm:text-sm font-semibold text-brand2">
                     {livestreamViews}
                   </p>
                 </span>
