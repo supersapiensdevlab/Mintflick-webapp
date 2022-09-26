@@ -39,6 +39,10 @@ const DeleteConfirmationModal = ({ setDeleteConfirmationModal, content }) => {
             className="text-brand2 cursor-pointer"
           ></X>
         </div>
+        <p className="text-white text-sm p-2">
+          Note: Post will be deleted only from MintFlick & will still be
+          available on IPFS and Blockchain Explorer
+        </p>
         <div className="bg-slate-700 my-4 w-full px-2">
           <button
             onClick={handlePostDelete}

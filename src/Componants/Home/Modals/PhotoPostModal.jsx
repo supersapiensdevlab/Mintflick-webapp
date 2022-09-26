@@ -57,8 +57,6 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
     });
   };
 
-  console.log(isNFT);
-
   const handleAdd = (e) => {
     tagged.push(e);
     console.log(tagged);
@@ -111,6 +109,7 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
         })
         .catch((err) => {
           console.log(err);
+          State.toast("error", "Error minting NFT. Please try again!");
           clearData();
         });
     });
@@ -300,6 +299,7 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
 
   const listNFTForSale = async (e) => {
     e.preventDefault();
+    setUploadingPost(true);
     var raw = JSON.stringify({
       network: "devnet",
       marketplace_address: process.env.REACT_APP_SOLANA_MARKETPLACE_ADDRESS,
@@ -320,10 +320,11 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
         console.log(data.data);
         await signTransaction("devnet", data.data.result.encoded_transaction);
         setMintSuccess("NFT Listed Successfully");
+        setUploadingPost(false);
       })
       .catch((err) => {
         console.log(err);
-        clearData();
+        State.toast("error", "Error listing NFT. Please try again!");
       });
   };
 
@@ -545,7 +546,7 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
                 }}
                 className={`btn  ${
                   !selectedPost?.file[0] ? "btn-disabled" : "btn-brand"
-                } w-1/2 ${uploadingPost ? "loading " : ""}`}
+                } w-1/2`}
               >
                 Close
               </button>
@@ -560,7 +561,7 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
                   }}
                   className={`btn  ${
                     !selectedPost?.file[0] ? "btn-disabled" : "btn-brand"
-                  } w-full ${uploadingPost ? "loading " : ""}`}
+                  } w-full `}
                 >
                   Close
                 </button>

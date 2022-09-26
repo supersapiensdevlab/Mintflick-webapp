@@ -12,6 +12,10 @@ import JoinSuperfanModal from "../Home/Modals/JoinSuperfanModal";
 import Loading from "../Loading/Loading";
 import { Eye, Share } from "tabler-icons-react";
 
+const socket = io("https://mintflickviews.herokuapp.com", {
+  autoConnect: false,
+});
+
 function UserLivestream() {
   const { username } = useParams();
   const [streamUser, setStreamUser] = useState(null);
@@ -144,53 +148,75 @@ function UserLivestream() {
   }, []);
 
   //https://dbeats-live-view-heroku.herokuapp.com/
+  // useEffect(() => {
+  //   const socket = io(`wss://localhost:4000`, {
+  //     transports: ["websocket"],
+
+  //   });
+  //   socket.on("connection");
+  //   socket.emit("joinlivestream", username);
+  //   socket.on("count", (details) => {
+  //     if (details.room === username) {
+  //       setLivestreamViews(details.roomSize);
+  //     }
+  //   });
+  //   socket.on("livecount", (details) => {
+  //     setLivestreamViews(details.roomSize);
+  //     // console.log('emitted');
+  //     // console.log('inc', livestreamViews);
+  //     setViewColor("green-500");
+  //     setViewAnimate("animate-pulse");
+  //     setTimeout(() => {
+  //       setViewColor("white");
+  //       setViewAnimate("animate-none");
+  //     }, 3000);
+  //   });
+  //   socket.on("removecount", (roomSize) => {
+  //     setLivestreamViews(roomSize);
+  //     // console.log('removecount emitted');
+  //     // console.log('dec', livestreamViews);
+  //     setViewColor("red-500");
+  //     setViewAnimate("animate-pulse");
+  //     setTimeout(() => {
+  //       setViewColor("white");
+  //       setViewAnimate("animate-none");
+  //     }, 3000);
+  //   });
+  //   // socket
+  //   //   .off('count', (data) => {
+  //   //     console.log(data);
+  //   //   })
+  //   //   .on('count', (data) => {
+  //   //     console.log(data.num);
+  //   //     setLivestreamViews(data.num);
+  //   //   });
+  // }, []);
+
   useEffect(() => {
-    const socket = io(`${process.env.REACT_APP_VIEWS_URL}`, {
-      transports: ["websocket", "polling"],
-      upgrade: false,
-      secure: true,
-      withCredentials: true,
-      extraHeaders: {
-        "my-custom-header": "abcd",
-      },
+    socket.connect();
+    socket.on("connect", () => {
+      console.log("connected to socket");
+      socket.emit("joinlivestream", username);
     });
-    socket.on("connection");
-    socket.emit("joinlivestream", username);
-    socket.on("count", (details) => {
-      if (details.room === username) {
-        setLivestreamViews(details.roomSize);
-      }
+
+    socket.on("disconnect", () => {
+      console.log("disconnected socket");
     });
-    socket.on("livecount", (details) => {
-      setLivestreamViews(details.roomSize);
-      // console.log('emitted');
-      // console.log('inc', livestreamViews);
-      setViewColor("green-500");
-      setViewAnimate("animate-pulse");
-      setTimeout(() => {
-        setViewColor("white");
-        setViewAnimate("animate-none");
-      }, 3000);
+
+    socket.io.on("error", (error) => {
+      console.log("socket went wrong ", error);
     });
-    socket.on("removecount", (roomSize) => {
-      setLivestreamViews(roomSize);
-      // console.log('removecount emitted');
-      // console.log('dec', livestreamViews);
-      setViewColor("red-500");
-      setViewAnimate("animate-pulse");
-      setTimeout(() => {
-        setViewColor("white");
-        setViewAnimate("animate-none");
-      }, 3000);
-    });
-    // socket
-    //   .off('count', (data) => {
-    //     console.log(data);
-    //   })
-    //   .on('count', (data) => {
-    //     console.log(data.num);
-    //     setLivestreamViews(data.num);
-    //   });
+
+    socket.on("count",(c)=>{
+      setLivestreamViews(c);
+    })
+
+    return () => {
+      socket.disconnect();
+      socket.off("count");
+      socket.off("connect");
+      socket.off("disconnect");
+    };
   }, []);
 
   useEffect(() => {
