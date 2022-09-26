@@ -1,15 +1,21 @@
 import React, { useContext, useEffect, useState } from "react";
-import metamask from "../../Assets/logos/wallet/twitter.svg";
-import walletConnect from "../../Assets/logos/wallet/discord.svg";
-import torus from "../../Assets/logos/wallet/telegram.svg";
-import sequence from "../../Assets/logos/wallet/instagram.svg";
+import twitter from "../../Assets/logos/wallet/twitter.svg";
+import discord from "../../Assets/logos/wallet/discord.svg";
+import telegram from "../../Assets/logos/wallet/telegram.svg";
+import instagram from "../../Assets/logos/wallet/instagram.svg";
 import { UserContext } from "../../Store";
 import PolygonToken from "../../Assets/logos/PolygonToken";
 import SolanaToken from "../../Assets/logos/SolanaToken";
 import useWeb3Auth from "../../Hooks/useWeb3Auth";
 
 function ConnectWalletComponant() {
-  const wallets = [metamask, walletConnect, torus, sequence];
+  const wallets = [twitter, discord, instagram];
+  const links = [
+    "https://twitter.com/mintflickApp",
+    "https://discord.com/invite/xZavZyAbx4",
+    "https://www.instagram.com/mintflick.app/",
+  ];
+
   const State = useContext(UserContext);
 
   const [login, logout] = useWeb3Auth();
@@ -48,7 +54,10 @@ function ConnectWalletComponant() {
           Create new wallet
         </button>
       </div>
-      <div className='form-control w-fit  '>
+      <div className='flex text-white align-middle text-center gap-x-2'>
+        Supports <SolanaToken size={24}></SolanaToken>
+      </div>
+      <div className='form-control w-fit  hidden'>
         <label className='label cursor-pointer gap-4'>
           <span className='label-text text-white'>Switch Chains</span>
           <SolanaToken
@@ -56,7 +65,7 @@ function ConnectWalletComponant() {
           />
           <input
             type='checkbox'
-            className='toggle bg-brand'
+            className='toggle bg-brand '
             checked={State.database.chainId === 0 ? false : true}
             onChange={() => {
               let _selectedChain = State.database.chainId === 0 ? 1 : 0;
@@ -74,15 +83,19 @@ function ConnectWalletComponant() {
         </label>
       </div>
       <div className='w-full md:w-fit border p-4 space-y-2 rounded-lg border-slate-800'>
-        <p className='text-lg font-medium text-brand4'>Join the community on</p>
+        <p className='text-lg font-medium text-brand4'>
+          Join the MintFlick community
+        </p>
         <div className='w-full flex flex-wrap justify-between md:space-x-2'>
           {wallets.map((wallet, i) => (
-            <img
-              key={i}
-              className='h-16 w-16 bg-slate-800 rounded-full p-2 text-white'
-              src={wallet}
-              alt='wallet'
-            />
+            <a href={links[i]} target='_blank' rel='noreferrer'>
+              <img
+                key={i}
+                className='h-16 w-16 bg-slate-800 rounded-full p-3 text-white'
+                src={wallet}
+                alt='wallet'
+              />
+            </a>
           ))}
         </div>
       </div>
