@@ -207,7 +207,7 @@ function UserLivestream() {
   return streamUser && State.database.userData.data ? (
     <div className="w-full min-h-screen h-fit pt-20 bg-white dark:bg-slate-900">
       <div className={`flex flex-col lg:flex-row relative h-full p-4`}>
-        <div className="flex-1 space-y-2">
+        <div className="w-full lg:w-3/4 space-y-2">
           {streamUser ? (
             streamUser.thumbnail &&
             !streamUser.livepeer_data.isActive &&
@@ -248,7 +248,17 @@ function UserLivestream() {
                     </span>
                   </p>
                 </span>
-              ) : null}
+              ) : (
+                <span className="flex items-center  w-fit bg-slate-100 dark:bg-slate-800  rounded-full p-3">
+                  <span className="relative flex h-3 w-3">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span>
+                    <span className="absolute inline-flex rounded-full h-full w-full bg-red-600"></span>
+                  </span>
+                  <p className="text-sm font-semibold text-brand2 mx-2">
+                    Live now
+                  </p>
+                </span>
+              )}
               <div className="md:ml-auto flex w-full md:w-fit justify-between gap-2">
                 <span className="flex items-center gap-1 h-8 w-fit bg-slate-100 dark:bg-slate-800  rounded-full px-3">
                   <span className="text-teal-600">
@@ -377,37 +387,39 @@ function UserLivestream() {
                     </div> */}
 
             {streamUser && streamUser.streamDetails && (
-              <div className="p-4 text-lg text-brand3 h-fit bg-slate-100 dark:bg-slate-800  rounded-xl ">
-                <p>
-                  {streamUser.streamDetails.description.length > 100 ? (
-                    <>
+              <div className="p-4 text-lg text-brand3 w-full  h-fit bg-slate-100 dark:bg-slate-800  rounded-xl ">
+                {streamUser.streamDetails.description.length > 100 ? (
+                  <div className="w-full">
+                    <div className="whitespace-pre-line truncate">
                       {readMore
                         ? streamUser.streamDetails.description
                         : streamUser.streamDetails.description.substring(
                             0,
                             100
                           )}
-                      {!readMore ? (
-                        <span
-                          className="text-sm font-semibold text-blue-700 cursor-pointer"
-                          onClick={() => setReadMore(true)}
-                        >
-                          ...Read More
-                        </span>
-                      ) : (
-                        <span
-                          className="text-sm font-semibold text-blue-700 cursor-pointer"
-                          onClick={() => setReadMore(false)}
-                        >
-                          {" "}
-                          Show Less
-                        </span>
-                      )}
-                    </>
-                  ) : (
-                    streamUser.streamDetails.description
-                  )}
-                </p>
+                    </div>
+                    {readMore ? (
+                      <span
+                        className="text-sm font-semibold text-blue-700 cursor-pointer"
+                        onClick={() => setReadMore(false)}
+                      >
+                        {" "}
+                        Show Less
+                      </span>
+                    ) : (
+                      <span
+                        className="text-sm font-semibold text-blue-700 cursor-pointer"
+                        onClick={() => setReadMore(true)}
+                      >
+                        ...Read More
+                      </span>
+                    )}
+                  </div>
+                ) : (
+                  <p className="whitespace-normal max-w-full">
+                    {streamUser.streamDetails.description}
+                  </p>
+                )}
               </div>
             )}
           </div>
@@ -435,7 +447,7 @@ function UserLivestream() {
             )}
           </div>
         </div>
-        <div className="w-full lg:w-96">
+        <div className="w-full lg:w-1/4">
           {/* {userData.username && (
                   <LiveChat userp={userData} privateUser={user}></LiveChat>
                 )} */}
