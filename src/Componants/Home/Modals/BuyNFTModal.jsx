@@ -18,12 +18,15 @@ import {
 } from "../Utility/utilityFunc";
 import { clusterApiUrl, Connection, PublicKey } from "@solana/web3.js";
 import SolanaToken from "../../../Assets/logos/SolanaToken";
+import useUserActions from "../../../Hooks/useUserActions";
 
 function BuyNFTModal() {
   const State = useContext(UserContext);
   const [step, setStep] = useState(1);
 
   const [buying, setBuying] = useState(false);
+
+  const [loadFeed] = useUserActions();
 
   async function signTransaction(network, transaction, callback) {
     //const phantom = new PhantomWalletAdapter();
@@ -72,10 +75,11 @@ function BuyNFTModal() {
         await signTransaction(
           "devnet",
           data.data.result.encoded_transaction,
-          () => {
+          async () => {
             State.toast("success", "NFT bought successfully");
             State.updateDatabase({ buyNFTModalOpen: false });
             setBuying(false);
+            await loadFeed();
           }
         );
       })
@@ -142,8 +146,19 @@ function BuyNFTModal() {
                   12M
                 </span>
                 <span className="flex items-center gap-1 text-sm font-medium text-brand4">
-                  Creator fees{" "}
-                  <InfoCircle className="cursor-pointer" size={16} />
+                  Platform fees{" "}
+                  <div className="tooltip" data-tip="1% of NFT price">
+                    <InfoCircle className="cursor-pointer" size={16} />
+                  </div>
+                </span>
+                <span className="flex items-center gap-1 text-sm font-medium text-brand4">
+                  Creator royalties{" "}
+                  <div
+                    className="tooltip"
+                    data-tip="5% on every secondary sale"
+                  >
+                    <InfoCircle className="cursor-pointer" size={16} />
+                  </div>
                 </span>
                 {/* <div className="h-[2px] rounded-full bg-slate-200 dark:bg-slate-600"></div> */}
               </div>
@@ -184,7 +199,7 @@ function BuyNFTModal() {
               </div>
             </div>
             <div className="w-full flex ">
-              <div className="p-1 w-1/2">
+              <div className="p-1 w-full">
                 <button
                   onClick={() => {
                     // setStep("buyNow");
@@ -195,14 +210,14 @@ function BuyNFTModal() {
                   BUY NOW
                 </button>
               </div>
-              <div className="p-1 w-1/2">
+              {/* <div className="p-1 w-1/2">
                 <button
                   onClick={() => setStep("makeOffer")}
                   className="btn btn-primary btn-outline w-full"
                 >
                   Make AN offer
                 </button>
-              </div>
+              </div> */}
             </div>
             {/* <input
             type="date"

@@ -248,13 +248,14 @@ function AudioPostModal({ setAudioPostModalOpen }) {
         })
         .catch((err) => {
           console.log(err);
-          clearState();
+          State.toast("error", "Error minting NFT. Please try again!");
         });
     });
   };
 
   const listNFTForSale = async (e) => {
     e.preventDefault();
+    setUploadingTrack(true);
     var raw = JSON.stringify({
       network: "devnet",
       marketplace_address: process.env.REACT_APP_SOLANA_MARKETPLACE_ADDRESS,
@@ -275,10 +276,11 @@ function AudioPostModal({ setAudioPostModalOpen }) {
         console.log(data.data);
         await signTransaction("devnet", data.data.result.encoded_transaction);
         setMintSuccess("NFT Listed Successfully");
+        setUploadingTrack(false);
       })
       .catch((err) => {
         console.log(err);
-        clearState();
+        State.toast("error", "Error listing NFT. Please try again!");
       });
   };
 
@@ -839,7 +841,7 @@ function AudioPostModal({ setAudioPostModalOpen }) {
                   !selectedTrack?.file && selectedThumbnail?.file
                     ? "btn-disabled"
                     : "btn-brand"
-                } w-1/2 ${uploadingTrack ? "loading " : ""}`}
+                } w-1/2 `}
               >
                 Close
               </button>
@@ -856,7 +858,7 @@ function AudioPostModal({ setAudioPostModalOpen }) {
                     !selectedTrack?.file && selectedThumbnail?.file
                       ? "btn-disabled"
                       : "btn-brand"
-                  } w-full ${uploadingTrack ? "loading " : ""}`}
+                  } w-full`}
                 >
                   Close
                 </button>
