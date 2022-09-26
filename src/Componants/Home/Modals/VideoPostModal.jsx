@@ -191,13 +191,14 @@ function VideoPostModal({ setVideoPostModalOpen }) {
         })
         .catch((err) => {
           console.log(err);
-          clearState();
+          State.toast("error", "Error minting NFT. Please try again!");
         });
     });
   };
 
   const listNFTForSale = async (e) => {
     e.preventDefault();
+    setUploadingVideo(true);
     var raw = JSON.stringify({
       network: "devnet",
       marketplace_address: process.env.REACT_APP_SOLANA_MARKETPLACE_ADDRESS,
@@ -218,10 +219,11 @@ function VideoPostModal({ setVideoPostModalOpen }) {
         console.log(data.data);
         await signTransaction("devnet", data.data.result.encoded_transaction);
         setMintSuccess("NFT Listed Successfully");
+        setUploadingVideo(false);
       })
       .catch((err) => {
         console.log(err);
-        clearState();
+        State.toast("error", "Error listing NFT. Please try again!");
       });
   };
 
@@ -270,8 +272,6 @@ function VideoPostModal({ setVideoPostModalOpen }) {
       .catch((err) => {
         State.toast("error", "Oops!somthing went wrong uplaoding video!");
         console.log(err);
-        clearState();
-        setTagged([]);
       });
   };
 
@@ -727,7 +727,7 @@ function VideoPostModal({ setVideoPostModalOpen }) {
                   !selectedVideo?.file && selectedThumbnail?.file
                     ? "btn-disabled"
                     : "btn-brand"
-                } w-1/2 ${uploadingVideo ? "loading " : ""}`}
+                } w-1/2`}
               >
                 Close
               </button>
@@ -744,7 +744,7 @@ function VideoPostModal({ setVideoPostModalOpen }) {
                     !selectedVideo?.file && selectedThumbnail?.file
                       ? "btn-disabled"
                       : "btn-brand"
-                  } w-full ${uploadingVideo ? "loading " : ""}`}
+                  } w-full`}
                 >
                   Close
                 </button>
