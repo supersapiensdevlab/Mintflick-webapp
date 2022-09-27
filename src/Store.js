@@ -10,6 +10,7 @@ function Store(props) {
     userData: {},
     liveUsers: [],
     feedData: [],
+    nftData: [],
     //report post modal
     reportPostValue: {},
     reportModalOpen: false,
@@ -47,6 +48,12 @@ function Store(props) {
       feedData: data,
     });
   };
+
+  const addNFT = (data) => {
+    updateStore({
+      nftData: data,
+    });
+  };
   return (
     <UserContext.Provider
       value={{
@@ -56,7 +63,9 @@ function Store(props) {
         deleteToast: deleteToast,
         addLiveUsers: addLiveUsers,
         addFeed: addFeed,
-      }}>
+        addNFT: addNFT,
+      }}
+    >
       {props.data}
     </UserContext.Provider>
   );

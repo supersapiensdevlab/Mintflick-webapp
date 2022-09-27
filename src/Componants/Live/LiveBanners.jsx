@@ -1,7 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
+import banner1 from "../../Assets/Gaming Posters/Banner4.png";
+import banner2 from "../../Assets/Gaming Posters/Banner5.jpg";
+import banner3 from "../../Assets/Gaming Posters/Banner3.jpg";
+import banner4 from "../../Assets/Gaming Posters/Banner6.jfif";
+import banner5 from "../../Assets/Gaming Posters/Banner7.jpg";
+import banner6 from "../../Assets/Gaming Posters/Banner8.jpg";
 
 function LiveBanners() {
   const colors = ["#0088FE", "#00C49F", "#FFBB28"];
+  const banners = [banner1, banner2, banner3, banner4, banner5, banner6];
   const delay = 2500;
 
   const [index, setIndex] = useState(0);
@@ -35,12 +42,13 @@ function LiveBanners() {
           className="slideshowSlider"
           style={{ transform: `translate3d(${-index * 102}%, 0, 0)` }}
         >
-          {colors.map((backgroundColor, index) => (
-            <div
-              className="slide"
-              key={index}
-              style={{ backgroundColor }}
-            ></div>
+          {banners.map((backgroundColor, index) => (
+            <div className="slide" key={index}>
+              <img
+                src={backgroundColor}
+                className="w-full h-full object-cover"
+              ></img>
+            </div>
           ))}
         </div>
 

@@ -21,6 +21,7 @@ import SolanaToken from "../../../Assets/logos/SolanaToken";
 import { createPandoraExpressSDK } from "pandora-express";
 import Web3 from "web3";
 import { useEffect } from "react";
+import useLoadNfts from "../../../Hooks/useLoadNfts";
 
 function PhotoPostModal({ setphotoPostModalOpen }) {
   const State = useContext(UserContext);
@@ -35,6 +36,7 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
   const [tokenId, setTokenId] = useState(null);
   const [solanaMintId, setSolanaMintId] = useState(null);
   const [mintSuccess, setMintSuccess] = useState("");
+  const [loadNfts] = useLoadNfts();
   //Instance of pandora
   const ExpressSDK = createPandoraExpressSDK();
 
@@ -104,8 +106,13 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
         .then(async (data) => {
           console.log("MintID", data.data.result.mint);
           setTokenAddress(data.data.result.mint);
-          await signTransaction("devnet", data.data.result.encoded_transaction);
-          nftMinted(formData, data.data.result.mint);
+          await signTransaction(
+            "devnet",
+            data.data.result.encoded_transaction,
+            () => {
+              nftMinted(formData, data.data.result.mint);
+            }
+          );
         })
         .catch((err) => {
           console.log(err);
@@ -318,9 +325,15 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
       })
       .then(async (data) => {
         console.log(data.data);
-        await signTransaction("devnet", data.data.result.encoded_transaction);
-        setMintSuccess("NFT Listed Successfully");
-        setUploadingPost(false);
+        await signTransaction(
+          "devnet",
+          data.data.result.encoded_transaction,
+          async () => {
+            setMintSuccess("NFT Listed Successfully");
+            setUploadingPost(false);
+            await loadNfts();
+          }
+        );
       })
       .catch((err) => {
         console.log(err);
