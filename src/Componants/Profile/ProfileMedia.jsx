@@ -7,7 +7,7 @@ import Post from "../Home/Post";
 
 function ProfileMedia(props) {
   //for user timeline
-  const [userTimeline, setUserTimeline] = useState({});
+  const [userTimeline, setUserTimeline] = useState([]);
 
   // for Playing only one at time
   const [currentPlay, setCurrentPlay] = useState(null);
@@ -41,7 +41,11 @@ function ProfileMedia(props) {
   return (
     <div className="w-full max-w-2xl  space-y-6 mb-4">
       {!loader ? (
-        !userTimeline === [] ? (
+        !userTimeline.length > 0 ? (
+          <div className="w-fit mx-auto text-lg font-semibold text-brand4">
+            {props.userName} has no flicks to share!
+          </div>
+        ) : (
           userTimeline.map((post, i) => (
             <>
               <Post
@@ -85,10 +89,6 @@ function ProfileMedia(props) {
               ></Post>
             </>
           ))
-        ) : (
-          <div className="w-fit mx-auto text-lg font-semibold text-brand4">
-            {props.userName} has no flicks to share!
-          </div>
         )
       ) : (
         <Loading />
