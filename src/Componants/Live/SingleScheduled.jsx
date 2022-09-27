@@ -5,6 +5,7 @@ import { Image } from "react-img-placeholder";
 import { useCountdown } from "../../Hooks/useCountdown";
 import placeholderImage from "../../Assets/profile-pic.png";
 import { useNavigate } from "react-router-dom";
+import placeholder from "../../Assets/Gaming Posters/liveplaceholder.jpg";
 
 function SingleScheduled({ live }) {
   const navigateTo = useNavigate();
@@ -29,7 +30,7 @@ function SingleScheduled({ live }) {
       </div>
       <img
         className=" aspect-video w-full object-cover rounded-lg"
-        src={live.thumbnail}
+        src={live.thumbnail ? live.thumbnail : placeholder}
       />
       <div className="flex w-full space-x-2 ">
         <Image
