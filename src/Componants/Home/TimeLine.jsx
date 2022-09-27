@@ -9,6 +9,7 @@ import Market from "../../artifacts/contracts/Market.sol/NFTMarket.json";
 import { nftmarketaddress } from "../../functions/config";
 import { ethers } from "ethers";
 import InfiniteScroll from "react-infinite-scroll-component";
+import Loading from "../Loading/Loading";
 
 function TimeLine() {
   // for Playing only one at time
@@ -129,7 +130,7 @@ function TimeLine() {
     };
     fetch(
       `https://api.shyft.to/sol/v1/marketplace/active_listings?network=devnet&marketplace_address=${process.env.REACT_APP_SOLANA_MARKETPLACE_ADDRESS}`,
-      requestOptions,
+      requestOptions
     )
       .then((response) => response.json())
       .then((result) => {
@@ -140,17 +141,18 @@ function TimeLine() {
 
   return (
     <InfiniteScroll
-      className='w-full max-w-2xl space-y-6 mb-4'
+      className="w-full max-w-2xl space-y-6 my-4"
       dataLength={State.database.feedData.length} //This is important field to render the next data
       next={() => loadMoreData(State.database.feedData.length)}
       hasMore={hasMore}
-      loader={<button className='btn btn-ghost loading'></button>}
+      loader={<Loading msg={""} />}
       endMessage={
         <p style={{ textAlign: "center" }}>
-          <b className='text-brand1'>Yay! You have seen it all</b>
+          <b className="text-brand1">Yay! You have seen it all</b>
         </p>
       }
-      scrollableTarget={"scrollableDiv"}>
+      scrollableTarget={"scrollableDiv"}
+    >
       {State.database.feedData.map((post, i) => (
         <>
           <Post
@@ -190,7 +192,8 @@ function TimeLine() {
             superfan_data={post.superfan_data}
             gettingNFTData={gettingNFTData}
             nfts={nfts}
-            walletId={post.wallet_id}></Post>
+            walletId={post.wallet_id}
+          ></Post>
         </>
       ))}
     </InfiniteScroll>
