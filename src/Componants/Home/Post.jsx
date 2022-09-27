@@ -697,7 +697,26 @@ function Post(props) {
 
   return (
     <>
-      <div className="w-full h-fit lg:bg-slate-100 lg:dark:bg-slate-800 lg:rounded-xl p-4 lg:p-8 space-y-4 pb-4 border-b-2 lg:border-none  border-slate-200 dark:border-slate-900">
+      <div className="relative w-full h-fit lg:bg-slate-100 lg:dark:bg-slate-800 lg:rounded-xl p-4 lg:p-8 space-y-4 pb-4 border-b-2 lg:border-none  border-slate-200 dark:border-slate-900">
+        {props.tokenId && (
+          <svg
+            className="absolute -top-6 lg:top-0 left-4 "
+            width="30"
+            height="36"
+            viewBox="0 0 30 41"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M26.8716 38.8623C28.1991 39.7694 30 38.8188 30 37.211L30 2C30 0.89543 29.1046 -3.91405e-08 28 -8.74228e-08L2 -1.22392e-06C0.895432 -1.2722e-06 1.749e-06 0.89543 1.70072e-06 2L1.61596e-07 37.211C9.13172e-08 38.8188 1.80093 39.7694 3.12838 38.8623L13.8716 31.5211C14.552 31.0561 15.448 31.0561 16.1284 31.5211L26.8716 38.8623Z"
+              fill="#C026D3"
+            />
+            <path
+              d="M11.508 20H9.156L6.024 15.272V20H3.672V11.54H6.024L9.156 16.328V11.54H11.508V20ZM18.5838 11.54V13.412H15.1998V14.9H17.6958V16.688H15.1998V20H12.8478V11.54H18.5838ZM25.9463 11.54V13.412H23.6903V20H21.3383V13.412H19.1063V11.54H25.9463Z"
+              fill="white"
+            />
+          </svg>
+        )}
         <div className="flex justify-between items-center">
           <div
             onClick={() => nav(`../profile/${props.profileName}/posts`)}

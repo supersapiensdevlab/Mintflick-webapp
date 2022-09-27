@@ -266,7 +266,7 @@ function UserLivestream() {
                     <span className="absolute inline-flex rounded-full h-full w-full bg-teal-600"></span>
                   </span>
                   <p className="text-xs sm:text-sm font-semibold text-brand2 ml-2">
-                    Stream Starting on{" "}
+                    Streaming on{" "}
                     <span className="text-teal-600">
                       {moment(streamUser.streamSchedule * 1).format(
                         "MMMM Do YYYY, h:mm a"
