@@ -60,7 +60,7 @@ function MobileHeader() {
                 to={`/homescreen/profile/${
                   State.database.userData.data &&
                   State.database.userData.data.user.username
-                }/posts`}
+                }`}
                 className="  hover:dark:bg-slate-900"
               >
                 Profile

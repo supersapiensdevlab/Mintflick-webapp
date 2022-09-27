@@ -59,7 +59,7 @@ function App() {
         for (let i = 0; i < repos.data.length; i++) {
           await axios
             .get(
-              `${process.env.REACT_APP_SERVER_URL}/user/getuser_by_id/${repos.data[i].id}`,
+              `${process.env.REACT_APP_SERVER_URL}/user/getuser_by_id/${repos.data[i].id}`
             )
             .then((value) => {
               if (value.data !== "") State.addLiveUsers(value.data);
@@ -80,26 +80,22 @@ function App() {
     <div className={State.database.dark ? `dark` : " "}>
       <BrowserRouter>
         <Routes>
-          <Route path='/' element={<ConnectWallet />}>
-            <Route path='' element={<ConnectWalletComponant />} />
-            <Route path='create_new_user' element={<CreateNewUser />} />
+          <Route path="/" element={<ConnectWallet />}>
+            <Route path="" element={<ConnectWalletComponant />} />
+            <Route path="create_new_user" element={<CreateNewUser />} />
           </Route>
 
-          <Route path='/test' element={<HomeScreen />}></Route>
-          <Route path='/homescreen' element={<HomeScreen />}>
-            <Route path='home' element={<Home />} />
-            <Route path='live' element={<Live />} />
-            <Route path='golive' element={<GoLive />} />
-            <Route path='liveuser/:username' element={<UserLivestream />} />
-            <Route path='marketPlace' element={<Events></Events>} />
-            <Route path='profile' element={<Profile></Profile>}>
-              <Route path=':userName' element={<ProfileMedia></ProfileMedia>}>
-                <Route path='posts' element={<Posts></Posts>} />
-                <Route path='videos' element={<Videos></Videos>} />
-                <Route path='music' element={<Music></Music>} />
-                <Route path='playlists' element={<Playlists></Playlists>} />
-              </Route>
-            </Route>
+          <Route path="/test" element={<HomeScreen />}></Route>
+          <Route path="/homescreen" element={<HomeScreen />}>
+            <Route path="home" element={<Home />} />
+            <Route path="live" element={<Live />} />
+            <Route path="golive" element={<GoLive />} />
+            <Route path="liveuser/:username" element={<UserLivestream />} />
+            <Route path="marketPlace" element={<Events></Events>} />
+            <Route
+              path="profile/:userName"
+              element={<Profile></Profile>}
+            ></Route>
           </Route>
         </Routes>
         <ShareModal />

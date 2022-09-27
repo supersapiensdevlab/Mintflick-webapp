@@ -62,8 +62,8 @@ function LiveChannels() {
               <p className="cursor-pointer text-base font-medium text-brand3">
                 {channel.name}
               </p>
-              <p className="hidden group-hover:block cursor-pointer text-base  text-success ml-auto mr-2">
-                Watch stream
+              <p className="hidden group-hover:block cursor-pointer text-base  text-brand4 ml-auto mr-2">
+                Watch Now
               </p>
             </div>
           ))}
