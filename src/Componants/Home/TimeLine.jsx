@@ -74,19 +74,11 @@ function TimeLine() {
 
   return (
     <InfiniteScroll
-<<<<<<< HEAD
-      className="w-full max-w-2xl space-y-6 mb-4"
-      dataLength={State.database.feedData.length} //This is important field to render the next data
-      next={() => loadMoreData(State.database.feedData.length)}
-      hasMore={hasMore}
-      loader={<button className="btn btn-ghost loading"></button>}
-=======
       className="w-full max-w-2xl  space-y-6 mb-4"
       dataLength={State.database.feedData.length} //This is important field to render the next data
       next={() => loadMoreData(State.database.feedData.length)}
       hasMore={hasMore}
       loader={<Loading />}
->>>>>>> f5cf2e5bb73394cf21f49bcc0ccdc87f9331d44d
       endMessage={
         <p style={{ textAlign: "center" }}>
           <b className="text-brand1">Yay! You have seen it all</b>
@@ -132,11 +124,7 @@ function TimeLine() {
             reports={post.reports}
             superfan_data={post.superfan_data}
             gettingNFTData={gettingNFTData}
-<<<<<<< HEAD
             nfts={State.database.nftData}
-=======
-            nfts={nfts}
->>>>>>> f5cf2e5bb73394cf21f49bcc0ccdc87f9331d44d
             walletId={post.wallet_id}
           ></Post>
         </>
