@@ -15,19 +15,6 @@ function Profile() {
   const { userName } = useParams();
   const [loader, setloader] = useState(false);
 
-  const slangText = [
-    "NFTs are more than just a jpeg",
-    "Never share your private keys",
-    "Web3 is Web2 on steroids...",
-    "Blochain is the future",
-    "NFTs are the future",
-    "Buy the Dip",
-    "WAGMI",
-    "Decentralised doesn't mean Safe. Be cautious",
-    "Create. Mint. Vibe",
-    "Own your shit",
-  ];
-
   async function getUser() {
     await axios({
       method: "get",
@@ -74,7 +61,7 @@ function Profile() {
   ) : (
     // <Loading msg="Please wait getting profile details" />
     <div className='h-screen w-screen bg-slate-100 dark:bg-slate-800 '>
-      <Loading msg={slangText} />
+      <Loading />
     </div>
   );
 }

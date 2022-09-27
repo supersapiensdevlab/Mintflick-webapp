@@ -9,6 +9,7 @@ import Market from "../../artifacts/contracts/Market.sol/NFTMarket.json";
 import { nftmarketaddress } from "../../functions/config";
 import { ethers } from "ethers";
 import InfiniteScroll from "react-infinite-scroll-component";
+import Loading from "../Loading/Loading";
 
 function TimeLine() {
   // for Playing only one at time
@@ -140,11 +141,11 @@ function TimeLine() {
 
   return (
     <InfiniteScroll
-      className='w-full max-w-2xl space-y-6 mb-4'
+      className='w-full max-w-2xl  space-y-6 mb-4'
       dataLength={State.database.feedData.length} //This is important field to render the next data
       next={() => loadMoreData(State.database.feedData.length)}
       hasMore={hasMore}
-      loader={<button className='btn btn-ghost loading'></button>}
+      loader={<Loading />}
       endMessage={
         <p style={{ textAlign: "center" }}>
           <b className='text-brand1'>Yay! You have seen it all</b>
