@@ -209,7 +209,7 @@ function UserLivestream() {
   useEffect(() => {
     if (State.database.userData.data && streamUser) {
       const already = streamUser.follower_count.find(
-        (f) => f == State.database.userData.data.user.username,
+        (f) => f == State.database.userData.data.user.username
       );
       if (already) {
         setSubscribeButtonText("Unfollow");
@@ -218,19 +218,19 @@ function UserLivestream() {
   }, [State.database.userData?.data?.user, streamUser]);
 
   return streamUser && State.database.userData.data ? (
-    <div className='w-full min-h-screen h-fit pt-20 bg-white dark:bg-slate-900'>
+    <div className="w-full min-h-screen h-fit pt-20 bg-white dark:bg-slate-900">
       <div className={`flex flex-col lg:flex-row relative h-full p-4`}>
-        <div className='w-full lg:w-3/4 space-y-2'>
+        <div className="w-full lg:w-3/4 space-y-2">
           {streamUser ? (
             streamUser.thumbnail &&
             !streamUser.livepeer_data.isActive &&
             new Date(streamUser.streamSchedule * 1) > new Date() ? (
               <img
-                className='w-full aspect-video rounded-sm lg:rounded-xl object-cover'
+                className="w-full aspect-video rounded-sm lg:rounded-xl object-cover"
                 src={streamUser.thumbnail}
               />
             ) : (
-              <div className='rounded-sm lg:rounded-xl overflow-hidden'>
+              <div className="rounded-sm lg:rounded-xl overflow-hidden">
                 <ReactPlayer
                   controls={true}
                   width={"100%"}
@@ -242,111 +242,116 @@ function UserLivestream() {
             )
           ) : null}
 
-          <div className='space-y-2  w-full'>
-            <div className='w-full flex flex-col md:flex-row gap-2 '>
+          <div className="space-y-2  w-full">
+            <div className="w-full flex flex-wrap gap-2 ">
               {streamUser &&
               new Date(streamUser.streamSchedule * 1) > new Date() &&
               !streamUser.livepeer_data.isActive ? (
-                <span className='flex items-center h-8 w-fit bg-slate-100 dark:bg-slate-800  rounded-full px-3'>
-                  <span className='relative flex h-3 w-3'>
-                    <span className='animate-ping absolute inline-flex h-full w-full rounded-full bg-teal-500 opacity-75'></span>
-                    <span className='absolute inline-flex rounded-full h-full w-full bg-teal-600'></span>
+                <span className="flex items-center h-8 w-fit bg-slate-100 dark:bg-slate-800  rounded-full px-3">
+                  <span className="relative flex h-3 w-3">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-teal-500 opacity-75"></span>
+                    <span className="absolute inline-flex rounded-full h-full w-full bg-teal-600"></span>
                   </span>
-                  <p className='text-xs sm:text-sm font-semibold text-brand2 ml-2'>
+                  <p className="text-xs sm:text-sm font-semibold text-brand2 ml-2">
                     Streaming on{" "}
-                    <span className='text-teal-600'>
+                    <span className="text-teal-600">
                       {moment(streamUser.streamSchedule * 1).format(
-                        "MMMM Do YYYY, h:mm a",
+                        "MMMM Do YYYY, h:mm a"
                       )}
                     </span>
                   </p>
                 </span>
               ) : (
-                <span className='flex items-center  w-fit bg-slate-100 dark:bg-slate-800  rounded-full p-3'>
-                  <span className='relative flex h-3 w-3'>
-                    <span className='animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75'></span>
-                    <span className='absolute inline-flex rounded-full h-full w-full bg-red-600'></span>
+                <span className="flex items-center  w-fit bg-slate-100 dark:bg-slate-800  rounded-full p-3">
+                  <span className="relative flex h-3 w-3">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span>
+                    <span className="absolute inline-flex rounded-full h-full w-full bg-red-600"></span>
                   </span>
-                  <p className='text-xs sm:text-sm font-semibold text-brand2 mx-2'>
+                  <p className="text-xs sm:text-sm font-semibold text-brand2 mx-2">
                     Live now
                   </p>
                 </span>
               )}
-              <div className='md:ml-auto flex w-full md:w-fit justify-between gap-2'>
-                <span className='flex items-center gap-1 h-8 w-fit bg-slate-100 dark:bg-slate-800  rounded-full px-3'>
-                  <span className='text-teal-600'>
-                    <Eye size={16} />
-                  </span>
-                  <p className='text-xs sm:text-sm font-semibold text-brand2'>
-                    {livestreamViews}
-                  </p>
+              {/* <div className="md:ml-auto flex w-full md:w-fit justify-between gap-2"> */}
+              <span className="flex items-center gap-1 h-8 w-fit bg-slate-100 dark:bg-slate-800  rounded-full px-3">
+                <span className="text-teal-600">
+                  <Eye size={16} />
                 </span>
+                <p className="text-xs sm:text-sm font-semibold text-brand2">
+                  {livestreamViews}
+                </p>
+              </span>
 
-                <div
-                  onClick={() =>
-                    State.updateDatabase({
-                      shareModalOpen: true,
-                      sharePostUrl: `https://v2.mintflick.app/homescreen/liveuser/${streamUser.username}`,
-                    })
-                  }
-                  className='btn btn-outline btn-primary btn-sm rounded-full gap-2'>
-                  <Share size={16} />
-                  SHARE
-                </div>
+              <div
+                onClick={() =>
+                  State.updateDatabase({
+                    shareModalOpen: true,
+                    sharePostUrl: `https://v2.mintflick.app/homescreen/liveuser/${streamUser.username}`,
+                  })
+                }
+                className="btn btn-outline btn-primary btn-sm rounded-full gap-2 ml-auto"
+              >
+                <Share size={16} />
+                SHARE
               </div>
+              {/* </div> */}
             </div>
 
             {!privateUser ? (
               State.database.userData.data && streamUser ? (
-                <div className='lg:flex justify-between space-y-2 w-full'>
-                  <div className='flex justify-start items-start gap-2'>
+                <div className="flex justify-between space-y-2 w-full">
+                  <div className="flex justify-start items-start gap-2">
                     <Link
-                      className='w-20 aspect-square'
-                      to={`../profile/${streamUser.username}/posts`}>
+                      className="w-16 lg:w-20 aspect-square"
+                      to={`../profile/${streamUser.username}`}
+                    >
                       <img
                         src={
                           streamUser.profile_image
                             ? streamUser.profile_image
                             : placeholderImage
                         }
-                        alt='profile picture'
-                        className='h-full w-full rounded-full object-cover'
+                        alt="profile picture"
+                        className="h-full w-full rounded-full object-cover"
                       />
                     </Link>
-                    <div className='w-full '>
+                    <div className="w-full ">
                       <Link
-                        to={`../profile/${streamUser.username}/posts`}
-                        className='w-fit text-base text-brand1 font-semibold tracking-wider hover:underline'>
+                        to={`../profile/${streamUser.username}`}
+                        className="w-fit text-sm md:text-base text-brand1 font-semibold tracking-wider hover:underline"
+                      >
                         {streamUser.name}
                       </Link>
-                      <h1 className='text-lg text-brand2 font-semibold tracking-wider'>
+                      <h1 className="text-base md:text-lg text-brand2 font-semibold tracking-wider">
                         {streamUser && streamUser.streamDetails
                           ? streamUser.streamDetails.name
                           : null}
                       </h1>
                     </div>
                   </div>
-                  <div className='flex items-center gap-2'>
+                  <div className="flex items-center gap-2">
                     {streamUser.username !=
                     State.database.userData.data.user.username ? (
                       subscribeButtonText === "Follow" ? (
                         <button
-                          id='subscribeButton'
-                          className='btn btn-brand btn-sm'
+                          id="subscribeButton"
+                          className="btn btn-brand btn-sm"
                           onClick={
                             State.database.userData.data.user != null &&
                             trackFollowers
-                          }>
+                          }
+                        >
                           <span>{subscribeButtonText}</span>
                         </button>
                       ) : (
                         <button
-                          id='subscribeButton'
-                          className='btn btn-primary btn-outline btn-sm'
+                          id="subscribeButton"
+                          className="btn btn-primary btn-outline btn-sm"
                           onClick={
                             State.database.userData.data.user != null &&
                             trackFollowers
-                          }>
+                          }
+                        >
                           <span>{subscribeButtonText}</span>
                         </button>
                       )
@@ -358,7 +363,7 @@ function UserLivestream() {
                       streamUser.superfan_to.find(
                         (o) =>
                           o.username ==
-                          State.database.userData.data.user.username,
+                          State.database.userData.data.user.username
                       ) == undefined && (
                         <button
                           onClick={() => setJoinsuperfanModalOpen(true)}
@@ -366,14 +371,15 @@ function UserLivestream() {
                             streamUser.superfan_data
                               ? "btn btn-brand btn-sm"
                               : "hidden"
-                          }>
+                          }
+                        >
                           🥳 Become a Superfan
                         </button>
                       )}
                   </div>
                 </div>
               ) : (
-                <a className='btn btn-brand btn-outline'>
+                <a className="btn btn-brand btn-outline">
                   Login to Follow & Become a SuperFan
                 </a>
               )
@@ -394,34 +400,36 @@ function UserLivestream() {
                     </div> */}
 
             {streamUser && streamUser.streamDetails && (
-              <div className='p-4 text-lg text-brand3 w-full  h-fit bg-slate-100 dark:bg-slate-800  rounded-xl '>
+              <div className="p-4 text-lg text-brand3 w-full  h-fit bg-slate-100 dark:bg-slate-800  rounded-xl ">
                 {streamUser.streamDetails.description.length > 100 ? (
-                  <div className='w-full'>
-                    <div className='whitespace-pre-line truncate'>
+                  <div className="w-full">
+                    <div className="whitespace-pre-line truncate">
                       {readMore
                         ? streamUser.streamDetails.description
                         : streamUser.streamDetails.description.substring(
                             0,
-                            100,
+                            100
                           )}
                     </div>
                     {readMore ? (
                       <span
-                        className='text-sm font-semibold text-blue-700 cursor-pointer'
-                        onClick={() => setReadMore(false)}>
+                        className="text-sm font-semibold text-blue-700 cursor-pointer"
+                        onClick={() => setReadMore(false)}
+                      >
                         {" "}
                         Show Less
                       </span>
                     ) : (
                       <span
-                        className='text-sm font-semibold text-blue-700 cursor-pointer'
-                        onClick={() => setReadMore(true)}>
+                        className="text-sm font-semibold text-blue-700 cursor-pointer"
+                        onClick={() => setReadMore(true)}
+                      >
                         ...Read More
                       </span>
                     )}
                   </div>
                 ) : (
-                  <p className='whitespace-normal max-w-full'>
+                  <p className="whitespace-normal max-w-full">
                     {streamUser.streamDetails.description}
                   </p>
                 )}
@@ -429,17 +437,18 @@ function UserLivestream() {
             )}
           </div>
 
-          <div className='grid grid-cols-2 gap-4 grid-flow-row   '>
+          <div className="grid grid-cols-2 gap-4 grid-flow-row   ">
             {streamUser.streamLinks ? (
               streamUser.streamLinks.map((link, index) => {
                 return (
-                  <div key={index} className='h-full w-full'>
+                  <div key={index} className="h-full w-full">
                     <a
                       href={link.url}
-                      target='_blank'
-                      rel='noopener noreferrer'>
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
                       <img
-                        className='aspect-video object-cover w-full rounded-md'
+                        className="aspect-video object-cover w-full rounded-md"
                         src={link.image}
                       />
                     </a>
@@ -451,7 +460,7 @@ function UserLivestream() {
             )}
           </div>
         </div>
-        <div className='w-full lg:w-1/4'>
+        <div className="w-full lg:w-1/4">
           {/* {userData.username && (
                   <LiveChat userp={userData} privateUser={user}></LiveChat>
                 )} */}
@@ -460,7 +469,8 @@ function UserLivestream() {
       <div
         className={`${
           joinsuperfanModalOpen && "modal-open"
-        } modal modal-bottom sm:modal-middle`}>
+        } modal modal-bottom sm:modal-middle`}
+      >
         <JoinSuperfanModal
           setJoinSuperfanModal={setJoinsuperfanModalOpen}
           content={{}}
@@ -469,7 +479,7 @@ function UserLivestream() {
       </div>
     </div>
   ) : (
-    <div className='h-screen w-screen bg-slate-100 dark:bg-slate-800 '>
+    <div className="h-screen w-screen bg-slate-100 dark:bg-slate-800 ">
       <Loading />
     </div>
   );

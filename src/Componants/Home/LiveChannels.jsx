@@ -39,7 +39,7 @@ function LiveChannels() {
         <>
           {State.database.liveUsers.map((channel) => (
             <div
-              onClick={() => navigateTo(`../liveuser/${channel.name}`)}
+              onClick={() => navigateTo(`../liveuser/${channel.username}`)}
               className="group flex cursor-pointer items-center gap-2  rounded-full hover:bg-slate-100 dark:hover:bg-slate-800"
               key={channel.id}
             >
