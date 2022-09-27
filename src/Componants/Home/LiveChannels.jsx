@@ -4,6 +4,7 @@ import { UserContext } from "../../Store";
 import { Image } from "react-img-placeholder";
 import placeholderImage from "../../Assets/profile-pic.png";
 import { useNavigate } from "react-router-dom";
+import { Eye } from "tabler-icons-react";
 
 function LiveChannels() {
   const State = useContext(UserContext);
@@ -39,7 +40,7 @@ function LiveChannels() {
           {State.database.liveUsers.map((channel) => (
             <div
               onClick={() => navigateTo(`../liveuser/${channel.name}`)}
-              className="group flex cursor-pointer items-center gap-2  rounded-full hover:bg-slate-200 dark:hover:bg-slate-700"
+              className="group flex cursor-pointer items-center gap-2  rounded-full hover:bg-slate-100 dark:hover:bg-slate-800"
               key={channel.id}
             >
               {/* <img
@@ -62,8 +63,9 @@ function LiveChannels() {
               <p className="cursor-pointer text-base font-medium text-brand3">
                 {channel.name}
               </p>
-              <p className="hidden group-hover:block cursor-pointer text-base  text-success ml-auto mr-2">
-                Watch stream
+              <p className="hidden  group-hover:flex items-center gap-1 cursor-pointer text-sm font-semibold  text-brand6 ml-auto mr-4">
+                Watch Now
+                {/* <Eye size={16} />  */}
               </p>
             </div>
           ))}
