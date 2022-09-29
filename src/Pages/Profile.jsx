@@ -10,6 +10,7 @@ import { Helmet } from "react-helmet";
 import Loading from "../Componants/Loading/Loading";
 import TimeLine from "../Componants/Home/TimeLine";
 import ProfileMedia from "../Componants/Profile/ProfileMedia";
+import MintWallet from "../Componants/Profile/MintWallet";
 
 function Profile() {
   const State = useContext(UserContext);
@@ -54,12 +55,14 @@ function Profile() {
         />
         <TextChannels></TextChannels>
       </div>
-      <div className="w-full lg:w-2/4 flex flex-col items-center  h-full pt-14 lg:pt-24 overflow-y-auto">
+      <div className="w-full lg:w-2/4 flex flex-col items-center  lg:h-full pt-14 lg:pt-24 lg:overflow-y-auto">
         <ProfileMedia className="z-10" userName={userName}></ProfileMedia>
 
         {/* <TimeLine></TimeLine> */}
       </div>
-      <div className="hidden lg:flex flex-col items-end h-full w-1/4 pt-24 mr-12 ml-4"></div>
+      <div className="flex flex-col h-fit lg:h-full w-full lg:w-1/4 lg:ml-4 lg:mr-12 pt-16 lg:pt-24 lg:space-y-6 lg:overflow-y-auto">
+        <MintWallet />
+      </div>
     </div>
   ) : (
     // <Loading msg="Please wait getting profile details" />

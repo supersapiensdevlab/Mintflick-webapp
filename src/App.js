@@ -22,6 +22,7 @@ import GoLive from "./Componants/GoLive/GoLive";
 import Web3Connect from "./Componants/Wallet/Web3Connect";
 import UserLivestream from "./Componants/Live/UserLivestream";
 import ShareModal from "./Componants/Home/Modals/ShareModal";
+import BuyNFTModal from "./Componants/Home/Modals/BuyNFTModal";
 function App() {
   const State = useContext(UserContext);
   async function isUserAvaliable() {
@@ -99,6 +100,7 @@ function App() {
           </Route>
         </Routes>
         <ShareModal />
+        <BuyNFTModal />
       </BrowserRouter>
     </div>
   );
