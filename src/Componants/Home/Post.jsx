@@ -1253,6 +1253,8 @@ function Post(props) {
           setJoinSuperfanModal={setJoinsuperfanModalOpen}
           content={props.content}
           superfan_data={props.superfan_data}
+          toPay={props.walletId}
+          postUsername={props.profileName}
         />
       </div>
     </>
