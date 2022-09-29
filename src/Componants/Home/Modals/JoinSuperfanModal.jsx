@@ -41,7 +41,8 @@ const JoinSuperfanModal = ({
   const State = useContext(UserContext);
   const [whatToShow, setWhatToShow] = useState(null);
   const [explorerLink, setExplorerLink] = useState(null);
-  const [isSuperfan, setIsSuperfan] = useState(false);
+  const [isSuperfan, setIsSuperfan] = useState(null);
+  const [buyingPlan, setBuyingPlan] = useState(false);
 
   const handleJoinSuperfan = (plan) => {
     switch (plan) {
@@ -62,7 +63,7 @@ const JoinSuperfanModal = ({
     if (State.database.userData) {
       State.database.userData?.data?.user?.superfan_of?.forEach((value) => {
         if (value.username === postUsername) {
-          setIsSuperfan(true);
+          setIsSuperfan(value.plan);
         }
       });
     }
@@ -70,7 +71,6 @@ const JoinSuperfanModal = ({
 
   const handleTransactionSucess = (receipt, plan) => {
     const link = `https://explorer.solana.com/tx/${receipt}?cluster=devnet`;
-    console.log(link, plan);
     const superfanData = {
       txnHash: link,
       superfanof: postUsername,
@@ -86,6 +86,7 @@ const JoinSuperfanModal = ({
       .then(async (data) => {
         setExplorerLink(link);
         State.toast("success", "Yay! You are now a superfan");
+        setBuyingPlan(false);
         await axios({
           method: "post",
           url: `${process.env.REACT_APP_SERVER_URL}/user/getuser_by_wallet`,
@@ -104,15 +105,18 @@ const JoinSuperfanModal = ({
           })
           .catch(function (error) {
             console.log(error);
+            setBuyingPlan(false);
           });
       })
       .catch((err) => {
         console.log(err);
         State.toast("error", "Transaction failed. Please try again");
+        setBuyingPlan(false);
       });
   };
 
   const handleBuySuperfanPlan = async () => {
+    setBuyingPlan(true);
     if (!State.database.provider) {
       console.log("provider not initialized yet");
       return;
@@ -131,6 +135,7 @@ const JoinSuperfanModal = ({
       })
       .catch((err) => {
         console.log(err);
+        setBuyingPlan(false);
       });
   };
 
@@ -153,33 +158,55 @@ const JoinSuperfanModal = ({
         </div>
       </div>
 
-      {isSuperfan ? (
+      {/* {isSuperfan ? (
         <div className="w-full flex justify-center items-center p-4">
           <p className="text-brand">
             You are already {postUsername}'s superfan!
           </p>
         </div>
-      ) : (
-        <>
-          {whatToShow == null ? (
-            <div className="w-full p-4 space-y-3">
-              <img
-                src="https://media.newyorker.com/photos/5d72cf9af8ab740008388389/master/w_2560%2Cc_limit/190916_r34943.jpg"
-                className="w-full h-48 object-cover rounded-lg"
-              />
-              <div className="space-y-1 w-full flex justify-center">
-                <p className="text-white">
-                  Don't have SOL ?{" "}
-                  <a
-                    href={`https://staging-global.transak.com/?apiKey=a0aac8e7-6e2c-43b4-9434-394165e36bd5&redirectURL=https://transak.com&cryptoCurrencyList=ETH,DAI,USDT&defaultCryptoCurrency=SOL&walletAddress=${State.database.walletAddress}&disableWalletAddressForm=true&exchangeScreenTitle=My%20dApp%20is%20the%20best&isFeeCalculationHidden=true&fiatCurrency=USD&defaultPaymentMethod=google_pay&countryCode=IN`}
-                    className="text-primary"
-                    target="_blank"
-                  >
-                    Buy here
-                  </a>
-                </p>
-              </div>
-              {plans.map((plan) => (
+      ) : ( */}
+      {/* <> */}
+      {whatToShow == null ? (
+        <div className="w-full p-4 space-y-3">
+          <img
+            src="https://media.newyorker.com/photos/5d72cf9af8ab740008388389/master/w_2560%2Cc_limit/190916_r34943.jpg"
+            className="w-full h-48 object-cover rounded-lg"
+          />
+          <div className="space-y-1 w-full flex justify-center">
+            <p className="text-white">
+              Don't have SOL ?{" "}
+              <a
+                href={`https://staging-global.transak.com/?apiKey=a0aac8e7-6e2c-43b4-9434-394165e36bd5&redirectURL=https://transak.com&cryptoCurrencyList=ETH,DAI,USDT&defaultCryptoCurrency=SOL&walletAddress=${State.database.walletAddress}&disableWalletAddressForm=true&exchangeScreenTitle=My%20dApp%20is%20the%20best&isFeeCalculationHidden=true&fiatCurrency=USD&defaultPaymentMethod=google_pay&countryCode=IN`}
+                className="text-primary"
+                target="_blank"
+              >
+                Buy here
+              </a>
+            </p>
+          </div>
+          {plans.map((plan) => (
+            <>
+              {isSuperfan == plan.name ? (
+                // <div className="w-full flex justify-center items-center p-4">
+                //   <p className="text-brand">
+                //     You are already {postUsername}'s superfan!
+                //   </p>
+                // </div>
+                <div className="flex w-full bg-slate-200 dark:bg-slate-700 h-20 rounded-lg overflow-hidden hover:ring-2 ring-primary dark:ring-brand">
+                  <img
+                    src={plan.img}
+                    className="h-full w-32 bg-red-600 object-cover"
+                  />
+                  <span className="p-2 h-full flex-grow ">
+                    <h3 className="text-xl font-semibold text-primary dark:text-brand">
+                      {plan.name}
+                    </h3>
+                    <h5 className="w-full text-sm font-medium text-brand">
+                      You have already subscribed to this plan
+                    </h5>
+                  </span>
+                </div>
+              ) : (
                 <div className="flex w-full bg-slate-200 dark:bg-slate-700 h-20 rounded-lg overflow-hidden hover:ring-2 ring-primary dark:ring-brand">
                   <img
                     src={plan.img}
@@ -210,107 +237,111 @@ const JoinSuperfanModal = ({
                     </span>
                   </button>
                 </div>
-              ))}
-            </div>
-          ) : (
-            <div className="flex-col space-y-3 text-white p-2">
-              <div className="flex space-x-2 items-center">
-                <button
-                  className=" btn btn-circle btn-sm "
-                  onClick={() => {
-                    setWhatToShow(null);
-                  }}
-                >
-                  <ChevronLeft size={24} />
-                </button>
-                <h2 className="font-semibold">SUMMARY</h2>
+              )}
+            </>
+          ))}
+        </div>
+      ) : (
+        <div className="flex-col space-y-3 text-white p-2">
+          <div className="flex space-x-2 items-center">
+            <button
+              className=" btn btn-circle btn-sm "
+              onClick={() => {
+                setWhatToShow(null);
+              }}
+            >
+              <ChevronLeft size={24} />
+            </button>
+            <h2 className="font-semibold">SUMMARY</h2>
+          </div>
+          <hr className="text-white mx-2 opacity-10" />
+          <div className="space-x-2 w-full space-y-2">
+            <div className="flex justify-between items-end w-full px-1">
+              <div className="flex-col space-y-0 pl-1">
+                <p className="text-brand font-semibold text-xl">Plan</p>
+                <p>{whatToShow?.name}</p>
               </div>
-              <hr className="text-white mx-2 opacity-10" />
-              <div className="space-x-2 w-full space-y-2">
-                <div className="flex justify-between items-end w-full px-1">
-                  <div className="flex-col space-y-0 pl-1">
-                    <p className="text-brand font-semibold text-xl">Plan</p>
-                    <p>{whatToShow?.name}</p>
-                  </div>
+              <span className="flex justify-center items-center px-2 space-x-2">
+                {State.database.chainId === 1 ? (
+                  <PolygonToken size={16}></PolygonToken>
+                ) : State.database.chainId === 0 ? (
+                  <SolanaToken size={16}></SolanaToken>
+                ) : null}
+                <p>{whatToShow?.price}</p>
+              </span>
+            </div>
+            <hr className="text-white mx-2 opacity-10" />
+            <div className="flex-col space-y-0">
+              <p className="text-brand font-semibold text-xl">Perks</p>
+              <p>{whatToShow?.description}</p>
+            </div>
+            <hr className="text-white mx-2 opacity-10" />
+            <div className="flex-col space-y-0">
+              <p className="text-brand font-semibold text-xl">
+                You should know
+              </p>
+              <p className="flex ">
+                5% platform fees +{" "}
+                <span className="flex justify-center items-center px-2 space-x-2">
+                  {State.database.chainId === 1 ? (
+                    <PolygonToken size={16}></PolygonToken>
+                  ) : State.database.chainId === 0 ? (
+                    <SolanaToken size={16}></SolanaToken>
+                  ) : null}
+                  <p>{whatToShow?.price}</p>
+                </span>{" "}
+                ={" "}
+                <span className="flex justify-center items-center px-2 space-x-2">
+                  {State.database.chainId === 1 ? (
+                    <PolygonToken size={16}></PolygonToken>
+                  ) : State.database.chainId === 0 ? (
+                    <SolanaToken size={16}></SolanaToken>
+                  ) : null}
+                  <p>
+                    {parseFloat(whatToShow?.price * 0.05) +
+                      parseFloat(whatToShow?.price)}
+                  </p>
+                </span>
+              </p>
+            </div>
+            <div className="w-full pr-4 pb-2">
+              {explorerLink ? (
+                <div className="flex-col space-y-1">
+                  <a
+                    href={explorerLink}
+                    target="_blank"
+                    className="text-primary underline"
+                  >
+                    View on Solana Explorer
+                  </a>
+                </div>
+              ) : (
+                <button
+                  onClick={handleBuySuperfanPlan}
+                  className={`btn btn-brand w-full ${
+                    buyingPlan ? "loading" : ""
+                  } `}
+                >
+                  Pay{" "}
                   <span className="flex justify-center items-center px-2 space-x-2">
                     {State.database.chainId === 1 ? (
                       <PolygonToken size={16}></PolygonToken>
                     ) : State.database.chainId === 0 ? (
                       <SolanaToken size={16}></SolanaToken>
                     ) : null}
-                    <p>{whatToShow?.price}</p>
+                    <p>
+                      {parseFloat(whatToShow?.price * 0.05) +
+                        parseFloat(whatToShow?.price)}
+                    </p>
                   </span>
-                </div>
-                <hr className="text-white mx-2 opacity-10" />
-                <div className="flex-col space-y-0">
-                  <p className="text-brand font-semibold text-xl">Perks</p>
-                  <p>{whatToShow?.description}</p>
-                </div>
-                <hr className="text-white mx-2 opacity-10" />
-                <div className="flex-col space-y-0">
-                  <p className="text-brand font-semibold text-xl">
-                    You should know
-                  </p>
-                  <p className="flex ">
-                    5% platform fees +{" "}
-                    <span className="flex justify-center items-center px-2 space-x-2">
-                      {State.database.chainId === 1 ? (
-                        <PolygonToken size={16}></PolygonToken>
-                      ) : State.database.chainId === 0 ? (
-                        <SolanaToken size={16}></SolanaToken>
-                      ) : null}
-                      <p>{whatToShow?.price}</p>
-                    </span>{" "}
-                    ={" "}
-                    <span className="flex justify-center items-center px-2 space-x-2">
-                      {State.database.chainId === 1 ? (
-                        <PolygonToken size={16}></PolygonToken>
-                      ) : State.database.chainId === 0 ? (
-                        <SolanaToken size={16}></SolanaToken>
-                      ) : null}
-                      <p>
-                        {parseFloat(whatToShow?.price * 0.05) +
-                          parseFloat(whatToShow?.price)}
-                      </p>
-                    </span>
-                  </p>
-                </div>
-                <div className="w-full pr-4 pb-2">
-                  {explorerLink ? (
-                    <div className="flex-col space-y-1">
-                      <a
-                        href={explorerLink}
-                        target="_blank"
-                        className="text-primary underline"
-                      >
-                        View on Solana Explorer
-                      </a>
-                    </div>
-                  ) : (
-                    <button
-                      onClick={handleBuySuperfanPlan}
-                      className="btn btn-brand w-full "
-                    >
-                      Pay{" "}
-                      <span className="flex justify-center items-center px-2 space-x-2">
-                        {State.database.chainId === 1 ? (
-                          <PolygonToken size={16}></PolygonToken>
-                        ) : State.database.chainId === 0 ? (
-                          <SolanaToken size={16}></SolanaToken>
-                        ) : null}
-                        <p>
-                          {parseFloat(whatToShow?.price * 0.05) +
-                            parseFloat(whatToShow?.price)}
-                        </p>
-                      </span>
-                    </button>
-                  )}
-                </div>
-              </div>
+                </button>
+              )}
             </div>
-          )}
-        </>
+          </div>
+        </div>
       )}
+      {/* </> */}
+      {/* )} */}
     </div>
   );
 };

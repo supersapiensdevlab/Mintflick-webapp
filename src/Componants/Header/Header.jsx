@@ -198,22 +198,39 @@ function Header() {
   };
 
   const showListedNFTs = () => {
-    console.log("in");
-    var myHeaders = new Headers();
-    myHeaders.append("x-api-key", `${process.env.REACT_APP_SHYFT_API_KEY}`);
+    // console.log("in");
+    // var myHeaders = new Headers();
+    // myHeaders.append("x-api-key", `${process.env.REACT_APP_SHYFT_API_KEY}`);
 
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
+    // var requestOptions = {
+    //   method: "GET",
+    //   headers: myHeaders,
+    //   redirect: "follow",
+    // };
+    // fetch(
+    //   `https://api.shyft.to/sol/v1/marketplace/active_listings?network=devnet&marketplace_address=${process.env.REACT_APP_SOLANA_MARKETPLACE_ADDRESS}`,
+    //   requestOptions
+    // )
+    //   .then((response) => response.text())
+    //   .then((result) => console.log(result))
+    //   .catch((error) => console.log("error", error));
+    const superfanData = {
+      txnHash: "jhsdvfkjugvdsuyfguersgyftuerygtu",
+      superfanof: "orion",
+      plan: "Basic",
     };
-    fetch(
-      `https://api.shyft.to/sol/v1/marketplace/active_listings?network=devnet&marketplace_address=${process.env.REACT_APP_SOLANA_MARKETPLACE_ADDRESS}`,
-      requestOptions
-    )
-      .then((response) => response.text())
-      .then((result) => console.log(result))
-      .catch((error) => console.log("error", error));
+    axios
+      .post(`${process.env.REACT_APP_SERVER_URL}/user/superfan`, superfanData, {
+        headers: {
+          "content-type": "application/json",
+          "auth-token": JSON.stringify(localStorage.getItem("authtoken")),
+        },
+      })
+      .then(async (data) => {})
+      .catch((err) => {
+        console.log(err);
+        State.toast("error", "Transaction failed. Please try again");
+      });
   };
 
   return (
