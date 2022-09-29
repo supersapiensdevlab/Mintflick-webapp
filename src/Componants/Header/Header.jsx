@@ -336,7 +336,15 @@ function Header() {
         </div>
 
         <button class="btn btn-circle btn-ghost " onClick={showListedNFTs}>
-          <MessageDots size={28}></MessageDots>
+          <NavLink
+            to={`/homescreen/chat/${
+              State.database.userData.data
+                ? State.database.userData.data.user.username
+                : ""
+            }`}
+          >
+            <MessageDots size={28}></MessageDots>
+          </NavLink>
         </button>
 
         <div class="dropdown dropdown-end">
