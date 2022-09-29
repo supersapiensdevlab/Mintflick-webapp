@@ -23,6 +23,7 @@ import Web3Connect from "./Componants/Wallet/Web3Connect";
 import UserLivestream from "./Componants/Live/UserLivestream";
 import ShareModal from "./Componants/Home/Modals/ShareModal";
 import BuyNFTModal from "./Componants/Home/Modals/BuyNFTModal";
+import ChatRoom from "./Componants/ChatRoom/ChatRoom";
 function App() {
   const State = useContext(UserContext);
   async function isUserAvaliable() {
@@ -96,6 +97,10 @@ function App() {
             <Route
               path="profile/:userName"
               element={<Profile></Profile>}
+            ></Route>
+            <Route
+              path="chat/:username"
+              element={<ChatRoom></ChatRoom>}
             ></Route>
           </Route>
         </Routes>

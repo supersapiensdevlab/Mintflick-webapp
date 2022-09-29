@@ -21,12 +21,9 @@ function Toast(props) {
       onClick={() => State.deleteToast()}
       className={`flex items-center gap-2 p-4 w-full max-w-xl  rounded-lg mx-auto transform-gpu shadow-md transition ease-in-out delay-100  ' ${
         animation ? "translate-y-0" : "translate-y-24"
-      } ${
-        props.type === "success" &&
-        "bg-success text-success-content text-white'"
-      }
-      ${props.type === "info" && "bg-info text-info-content text-white'"} ${
-        props.type === "error" && "bg-error text-error-content text-white'"
+      } ${props.type === "success" && "bg-success  text-white"}
+      ${props.type === "info" && "bg-info  text-white"} ${
+        props.type === "error" && "bg-error  text-white"
       }`}
     >
       {props.type === "success" && <CircleCheck />}
