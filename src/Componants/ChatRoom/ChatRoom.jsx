@@ -123,6 +123,7 @@ function ChatRoom(props) {
         // }, 1500);
       });
       socket.on("message", (msg) => {
+        console.log("mesg income");
         setMessages((prevArray) => [...prevArray, msg]);
         setTimeout(() => {
           chatRef.current.scrollIntoView({
@@ -137,9 +138,16 @@ function ChatRoom(props) {
     }
     return () => {
       socket.disconnect();
+      socket.off("message");
+      socket.off("getmore");
+      socket.off("init");
     };
     // eslint-disable-next-line
-  }, []);
+  }, [username]);
+
+  useEffect(() => {
+    console.log("msg");
+  }, [messages]);
 
   // set a new message in gun, update the local state to reset the form field
   function saveMessage(e) {
