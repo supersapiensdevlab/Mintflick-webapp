@@ -23,7 +23,7 @@ function ChatRoom(props) {
   const user = useContext(UserContext);
   const location = useLocation();
   const { username } = useParams();
-  const { isPM, user2 } = location.state;
+  const { isDM, user2 } = location.state;
   const chatRef = useRef(null);
   const loadingRef = useRef(null);
   // the form state manages the form input for creating a new message
@@ -83,7 +83,7 @@ function ChatRoom(props) {
     if (user.database.userData.data) {
       loadingRef.current.continuousStart();
       socket.connect();
-      if (!isPM) {
+      if (!isDM) {
         socket.emit("joinroom", {
           user_id: user.database.userData.data.user._id,
           room_id: username,
@@ -167,7 +167,7 @@ function ChatRoom(props) {
           if (formState.replyto) {
             room.chat.reply_to = formState.replyto;
           }
-          if (!isPM) {
+          if (!isDM) {
             socket.emit("chatMessage", room);
           } else {
             console.log("emmiting chatDM");
@@ -214,7 +214,7 @@ function ChatRoom(props) {
       room.chat.reply_to = formState.replyto;
     }
     if (socket) {
-      if (!isPM) {
+      if (!isDM) {
         socket.emit("chatMessage", room);
       } else {
         socket.emit("chatDM", {
@@ -309,7 +309,7 @@ function ChatRoom(props) {
               loadMore={() => {
                 if (socket && currentPage > 0 && !loadingOldChats) {
                   setLoadingOldChats(true);
-                  if (isPM) {
+                  if (isDM) {
                     socket.emit("loaddm", {
                       user_id: user.database.userData.data.user.id,
                       room_id: user2.id,

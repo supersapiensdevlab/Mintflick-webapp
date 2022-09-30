@@ -359,6 +359,10 @@ function Header() {
                 ? State.database.userData.data.user.username
                 : ""
             }`}
+            state={{
+              isDM: false,
+              user2: {},
+            }}
           >
             <MessageDots size={28}></MessageDots>
           </NavLink>

@@ -15,7 +15,7 @@ function TextChannels() {
             : ""
         }`}
         state={{
-          isPM: false,
+          isDM: false,
           user2: State.database.userProfileData
             ? State.database.userProfileData.data
             : null,
@@ -34,7 +34,7 @@ function TextChannels() {
                 : ""
             }`}
             state={{
-              isPM: true,
+              isDM: true,
               user2: State.database.userProfileData
                 ? State.database.userProfileData.data
                 : null,
