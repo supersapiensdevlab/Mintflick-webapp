@@ -14,7 +14,7 @@ import { makeStorageClient } from "../../Helper/uploadHelper";
 import { detectURLs } from "../../Helper/uploadHelperWeb3Storage";
 
 // https://mintflickchats.herokuapp.com
-const socket = io("https://mintflickchats.herokuapp.com", {
+const socket = io(`${process.env.REACT_APP_CHAT_URL}`, {
   autoConnect: false,
 });
 

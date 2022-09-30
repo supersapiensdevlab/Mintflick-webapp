@@ -12,7 +12,7 @@ import JoinSuperfanModal from "../Home/Modals/JoinSuperfanModal";
 import Loading from "../Loading/Loading";
 import { Eye, Share } from "tabler-icons-react";
 
-const socket = io("https://mintflickviews.herokuapp.com", {
+const socket = io(`${process.env.REACT_APP_VIEWS_URL}`, {
   autoConnect: false,
 });
 

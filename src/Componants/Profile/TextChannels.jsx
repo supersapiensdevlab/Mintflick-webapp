@@ -45,6 +45,29 @@ function TextChannels() {
             </button>
           </Link>
         )}
+      {State.database.userProfileData &&
+        State.database.userData.data &&
+        State.database.userData.data.user.conversations &&
+        State.database.userProfileData.data.username ==
+          State.database.userData.data.user.username && (
+          <>
+            {State.database.userData.data.user.conversations.map((conv) => {
+              return (
+                <div className="text-slate-100">
+                  <Link
+                    to={`/homescreen/chat/${conv.username}`}
+                    state={{
+                      isDM: true,
+                      user2: { id: conv.user_id },
+                    }}
+                  >
+                    {conv.username}
+                  </Link>
+                </div>
+              );
+            })}
+          </>
+        )}
     </div>
   );
 }
