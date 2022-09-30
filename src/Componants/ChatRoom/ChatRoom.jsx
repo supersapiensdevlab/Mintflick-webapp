@@ -9,20 +9,21 @@ import ChatLinkPreview from "./ChatLinkPreview";
 import InfiniteScroll from "react-infinite-scroller";
 import { useContext } from "react";
 import { UserContext } from "../../Store";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { makeStorageClient } from "../../Helper/uploadHelper";
 import { detectURLs } from "../../Helper/uploadHelperWeb3Storage";
 
-const socket = io("https://mintflickchats.herokuapp.com", {
+// https://mintflickchats.herokuapp.com
+const socket = io("http://localhost:4000", {
   autoConnect: false,
 });
 
 function ChatRoom(props) {
   // to get loggedin user from   localstorage
   const user = useContext(UserContext);
-
+  const location = useLocation();
   const { username } = useParams();
-
+  const { isPM, user2 } = location.state;
   const chatRef = useRef(null);
   const loadingRef = useRef(null);
   // the form state manages the form input for creating a new message
@@ -75,15 +76,24 @@ function ChatRoom(props) {
   const onEmojiClick = (event, emojiObject) => {
     setForm({ ...formState, message: formState.message + emojiObject.emoji });
   };
+
+  const [roomId, setRoomId] = useState(null);
   useEffect(() => {
     // initialize gun locally
     if (user.database.userData.data) {
       loadingRef.current.continuousStart();
       socket.connect();
-      socket.emit("joinroom", {
-        user_id: user.database.userData.data.user._id,
-        room_id: username,
-      });
+      if (!isPM) {
+        socket.emit("joinroom", {
+          user_id: user.database.userData.data.user._id,
+          room_id: username,
+        });
+      } else {
+        socket.emit("joindm", {
+          user_id: user.database.userData.data.user.id,
+          room_id: user2.id,
+        });
+      }
       socket.on("init", (msgs) => {
         if (loadingRef.current) {
           loadingRef.current.complete();
@@ -91,6 +101,7 @@ function ChatRoom(props) {
         setMessages(msgs.chats);
         setTotalpages(msgs.totalPages);
         setCurrentpage(msgs.currentPage);
+        if (msgs.roomId) setRoomId(msgs.roomId);
         setTimeout(() => {
           if (chatRef.current) {
             chatRef.current.scrollIntoView({
@@ -156,7 +167,17 @@ function ChatRoom(props) {
           if (formState.replyto) {
             room.chat.reply_to = formState.replyto;
           }
-          socket.emit("chatMessage", room);
+          if (!isPM) {
+            socket.emit("chatMessage", room);
+          } else {
+            console.log("emmiting chatDM");
+            socket.emit("chatDM", {
+              chat: room.chat,
+              user_id: user.database.userData.data.user.id,
+              user2_id: user2.id,
+              room_id: roomId,
+            });
+          }
           setForm({
             message: "",
             replyto: null,
@@ -192,7 +213,18 @@ function ChatRoom(props) {
     if (formState.replyto) {
       room.chat.reply_to = formState.replyto;
     }
-    if (socket) socket.emit("chatMessage", room);
+    if (socket) {
+      if (!isPM) {
+        socket.emit("chatMessage", room);
+      } else {
+        socket.emit("chatDM", {
+          chat: room.chat,
+          user_id: user.database.userData.data.user.id,
+          user2_id: user2.id,
+          room_id: roomId,
+        });
+      }
+    }
     setForm({
       message: "",
       replyto: null,
@@ -277,11 +309,19 @@ function ChatRoom(props) {
               loadMore={() => {
                 if (socket && currentPage > 0 && !loadingOldChats) {
                   setLoadingOldChats(true);
-                  socket.emit("loadmore", {
-                    user_id: user.database.userData.data.user._id,
-                    room_id: username,
-                    page_no: currentPage - 1,
-                  });
+                  if (isPM) {
+                    socket.emit("loaddm", {
+                      user_id: user.database.userData.data.user.id,
+                      room_id: user2.id,
+                      page_no: currentPage - 1,
+                    });
+                  } else {
+                    socket.emit("loadmore", {
+                      user_id: user.database.userData.data.user._id,
+                      room_id: username,
+                      page_no: currentPage - 1,
+                    });
+                  }
                 }
               }}
               hasMore={currentPage > 0}

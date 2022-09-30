@@ -1,6 +1,6 @@
 import React from "react";
 import { useContext } from "react";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { UserContext } from "../../Store";
 
 function TextChannels() {
@@ -14,9 +14,37 @@ function TextChannels() {
             ? State.database.userProfileData.data.username
             : ""
         }`}
+        state={{
+          isPM: false,
+          user2: State.database.userProfileData
+            ? State.database.userProfileData.data
+            : null,
+        }}
       >
         <button className="text-base text-brand3 font-medium btn">#Chat</button>
       </NavLink>
+      {State.database.userProfileData &&
+        State.database.userData.data &&
+        State.database.userProfileData.data.username !=
+          State.database.userData.data.user.username && (
+          <Link
+            to={`/homescreen/chat/${
+              State.database.userProfileData
+                ? State.database.userProfileData.data.username
+                : ""
+            }`}
+            state={{
+              isPM: true,
+              user2: State.database.userProfileData
+                ? State.database.userProfileData.data
+                : null,
+            }}
+          >
+            <button className="text-base text-brand3 font-medium btn">
+              #DM
+            </button>
+          </Link>
+        )}
     </div>
   );
 }
