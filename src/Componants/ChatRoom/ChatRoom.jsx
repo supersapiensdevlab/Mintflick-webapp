@@ -387,7 +387,7 @@ function ChatRoom(props) {
                           >
                             <div className="w-fit h-full space-y-1">
                               <div
-                                className="opacity-0 group-hover:opacity-100 cursor-pointer p-1 w-fit text-sm text-brand font-semibold rounded-full bg-slate-200 dark:bg-slate-700"
+                                className="opacity-0 group-hover:opacity-100 cursor-pointer p-1 w-fit text-sm text-teal-700 font-semibold rounded-full bg-slate-200 dark:bg-slate-700"
                                 onClick={() => onreply(message)}
                               >
                                 <ArrowBackUp />
@@ -510,7 +510,7 @@ function ChatRoom(props) {
                               {message.type == "video" ? (
                                 <div className="flex gap-1 items-center p-2 text-brand4 bg-slate-300 dark:bg-slate-800 rounded-md">
                                   <Video />
-                                  <p className="font-semibold text-sm">
+                                  <p className="font-semibold text-sm w-24 truncate">
                                     {message.url.split("/").pop()}
                                   </p>
                                   {/* <p className="text-gray-400 text-xs">
@@ -530,7 +530,7 @@ function ChatRoom(props) {
                               {message.type == "file" ? (
                                 <div className="flex gap-1 items-center p-2 text-brand4 bg-slate-300 dark:bg-slate-800 rounded-md">
                                   <File />
-                                  <p className="font-semibold text-sm">
+                                  <p className="font-semibold text-sm w-24 truncate">
                                     {message.url.split("/").pop()}
                                   </p>
                                   {/* <p className="text-gray-400 text-xs ">
