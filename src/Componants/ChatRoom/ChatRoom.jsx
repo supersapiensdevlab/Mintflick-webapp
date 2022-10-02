@@ -5,6 +5,7 @@ import Picker from "emoji-picker-react";
 import person from "../../Assets/profile-pic.png";
 import ReactAudioPlayer from "react-audio-player";
 import LoadingBar from "react-top-loading-bar";
+import Loading from "../Loading/Loading";
 import ChatLinkPreview from "./ChatLinkPreview";
 import InfiniteScroll from "react-infinite-scroller";
 import { useContext } from "react";
@@ -12,6 +13,14 @@ import { UserContext } from "../../Store";
 import { useLocation, useParams } from "react-router-dom";
 import { makeStorageClient } from "../../Helper/uploadHelper";
 import { detectURLs } from "../../Helper/uploadHelperWeb3Storage";
+import {
+  ArrowBackUp,
+  ChevronDown,
+  CloudDownload,
+  File,
+  Video,
+} from "tabler-icons-react";
+import ReactPlayer from "react-player";
 
 // https://mintflickchats.herokuapp.com
 const socket = io(`${process.env.REACT_APP_CHAT_URL}`, {
@@ -306,7 +315,7 @@ function ChatRoom(props) {
       );
 
   return (
-    <div className="text-gray-400 relative	 box-border   h-max md:col-span-6 lg:col-span-7 col-span-8 w-full bg-slate-800">
+    <div className="text-gray-400 relative	 box-border   h-max md:col-span-6 lg:col-span-7 col-span-8 w-full dark:bg-slate-800 bg-slate-100">
       <LoadingBar ref={loadingRef} color="#00d3ff" shadow={true} />
       <div className="full-height">
         <main className=" pt-16 chat-container-height   ">
@@ -334,9 +343,9 @@ function ChatRoom(props) {
               }}
               hasMore={currentPage > 0}
               loader={
-                <div className="flex justify-center">
-                  <div className="text-center animate-spin rounded-full h-7 w-7 ml-3 border-t-2 border-b-2 bg-gradient-to-r from-green-400 to-blue-500 "></div>
-                </div>
+                <Loading /> // <div className="flex justify-center">
+                //   <div className="text-center animate-spin rounded-full h-7 w-7 ml-3 border-t-2 border-b-2 bg-gradient-to-r from-green-400 to-blue-500 "></div>
+                // </div>
               }
               useWindow={false}
               isReverse={true}
@@ -348,25 +357,52 @@ function ChatRoom(props) {
                     let urls = detectURLs(message.message);
                     let urlstext = renderText(message.message);
                     return (
-                      <>
+                      <div className="">
                         {dates.has(dateNum.toDateString()) ? null : (
-                          <p className="my-1 rounded-3xl bg-dbeats-dark-secondary px-3 py-1 block w-max mx-auto">
+                          <p className="text-sm text-brand4 font-semibold py-1 px-3 w-fit mx-auto my-1 rounded-full bg-slate-200 dark:bg-slate-700">
                             {renderDate(message, dateNum.toDateString())}
                           </p>
                         )}
+
                         <div
                           className={`${
                             message.username
                               ? message.username ===
                                 user.database.userData.data.user.username
-                                ? "ml-auto mr-0  "
-                                : " "
+                                ? "ml-auto mr-0"
+                                : ""
                               : " "
-                          }    w-max   my-2`}
+                          } w-max my-2 `}
                           key={message._id}
                           ref={(el) => (messageRef.current[message._id] = el)}
                         >
-                          <div>
+                          <div
+                            className={
+                              message.username &&
+                              message.username ===
+                                user.database.userData.data.user.username
+                                ? "flex items-end flex-row-reverse  gap-1 group"
+                                : "flex items-end gap-1 group"
+                            }
+                          >
+                            <div className="w-fit h-full space-y-1">
+                              <div
+                                className="opacity-0 group-hover:opacity-100 cursor-pointer p-1 w-fit text-sm text-brand font-semibold rounded-full bg-slate-200 dark:bg-slate-700"
+                                onClick={() => onreply(message)}
+                              >
+                                <ArrowBackUp />
+                              </div>
+
+                              <img
+                                className="w-8 h-8 rounded-full object-cover "
+                                alt="profile"
+                                src={
+                                  message.profile_image
+                                    ? message.profile_image
+                                    : person
+                                }
+                              />
+                            </div>
                             <div
                               className={`${
                                 message.reply_to
@@ -375,30 +411,33 @@ function ChatRoom(props) {
                                         .username ||
                                     message.username ===
                                       user.database.userData.data.user.username
-                                    ? "ml-auto mr-0  "
+                                    ? "ml-auto mr-0"
                                     : " "
                                   : " "
-                              }  px-3 p-2 rounded	 dark: bg-dbeats-dark-secondary	my-1 w-max  shadow`}
+                              } p-2 bg-slate-200 dark:bg-slate-700 rounded-md`}
                             >
                               {message.reply_to ? (
                                 <div
                                   onClick={() => scrollTo(message.reply_to._id)}
-                                  className="cursor-pointer flex justify-between items-center group  px-3 py-2 border-l-2 border-dbeats-light  dark: nm-inset-dbeats-dark-primary"
+                                  className={`cursor-pointer flex justify-between items-center group p-2 border-l-4  bg-slate-300 dark:bg-slate-800 rounded-md ${
+                                    message.reply_to.username ===
+                                    user.database.userData.data.user.username
+                                      ? "border-green-400 drak:border-green-700"
+                                      : "border-violet-400 drak:border-violet-700"
+                                  }`}
                                 >
                                   <div className="">
                                     <p
                                       className={
-                                        message.reply_to.username ===
-                                        user.database.userData.data.user
-                                          .username
-                                          ? "text-sm  mb-1  text-dbeats-light"
-                                          : "text-sm  mb-1 text-white	"
+                                        "text-base text-brand2 text-semibold"
                                       }
                                     >
-                                      {" "}
-                                      {message.reply_to.username}
+                                      {message.reply_to.username ===
+                                      user.database.userData.data.user.username
+                                        ? "You"
+                                        : message.reply_to.username}
                                     </p>
-                                    <p className="text-xs">
+                                    <p className="text-sm text-brand3">
                                       {message.reply_to.message}
                                     </p>
                                   </div>
@@ -419,16 +458,45 @@ function ChatRoom(props) {
                                 </div>
                               ) : null}
                               {message.type == "image" ? (
-                                <div className="w-250 ">
+                                <div className="relative after:w-250 h-fit group rounded-md overflow-clip">
                                   <img width={250} src={message.url}></img>
-                                  <p className="text-gray-400 text-xs">
-                                    {message.url.split("/").pop()}
-                                  </p>
-                                  <p className="text-gray-400 text-xs hidden">
-                                    Size: {"1024 kb"}
-                                  </p>
+                                  {/* <p className="text-brand4 text-xs">
+                                  {message.url.split("/").pop()}
+                                </p> */}
+                                  {/* <p className="text-brand4 text-xs ">
+                                  Size: {"1024 kb"}
+                                </p> */}
                                   <a
-                                    className="text-opacity-25 text-white hover:text-opacity-100 "
+                                    className=" gap-1 items-center py-1 px-2 rounded-full text-slate-500 text-sm font-semibold bg-slate-50/50  bottom-2 right-2 absolute hidden  group-hover:flex"
+                                    href={message.url}
+                                    download
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                  >
+                                    <CloudDownload size={20} />
+                                    Download
+                                  </a>
+                                </div>
+                              ) : null}
+                              {/* audio option desabled  */}
+                              {/* {message.type == "sound" ? (
+                              <div className=" md:ml-3 p-2 border border-dbeats-light rounded-md">
+                                <div className="md:flex items-center">
+                                  <i className="fas fa-music text-4xl text-dbeats-light"></i>
+                                  <ReactAudioPlayer
+                                    className="w-full md:w-44"
+                                    src={message.url}
+                                    controls
+                                  />
+                                </div>
+                                <p className="text-gray-400 text-xs">
+                                  {message.url.split("/").pop()}
+                                </p>
+                                <p className="text-gray-400 text-xs hidden">
+                                  Size: {"1024 kb"}
+                                </p>
+                                <p className="text-gray-400 text-xs">
+                                  <a
                                     href={message.url}
                                     download
                                     target="_blank"
@@ -436,68 +504,41 @@ function ChatRoom(props) {
                                   >
                                     Download
                                   </a>
-                                </div>
-                              ) : null}
-                              {message.type == "sound" ? (
-                                <div className=" md:ml-3 p-2 border border-dbeats-light rounded-md">
-                                  <div className="md:flex items-center">
-                                    <i className="fas fa-music text-4xl text-dbeats-light"></i>
-                                    <ReactAudioPlayer
-                                      className="w-full md:w-44"
-                                      src={message.url}
-                                      controls
-                                    />
-                                  </div>
-                                  <p className="text-gray-400 text-xs">
-                                    {message.url.split("/").pop()}
-                                  </p>
-                                  <p className="text-gray-400 text-xs hidden">
-                                    Size: {"1024 kb"}
-                                  </p>
-                                  <p className="text-gray-400 text-xs">
-                                    <a
-                                      href={message.url}
-                                      download
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                    >
-                                      Download
-                                    </a>
-                                  </p>
-                                </div>
-                              ) : null}
+                                </p>
+                              </div>
+                            ) : null} */}
                               {message.type == "video" ? (
-                                <div className="w-250 ml-3 p-2 border border-dbeats-light rounded-md">
-                                  <i className="fas fa-video text-4xl text-dbeats-light"></i>
-                                  <p className="text-gray-400 text-xs">
+                                <div className="flex gap-1 items-center p-2 text-brand4 bg-slate-300 dark:bg-slate-800 rounded-md">
+                                  <Video />
+                                  <p className="font-semibold text-sm">
                                     {message.url.split("/").pop()}
                                   </p>
-                                  <p className="text-gray-400 text-xs hidden">
-                                    Size: {"1024 kb"}
-                                  </p>
-                                  <p className="text-gray-400 text-xs">
-                                    <a
-                                      href={message.url}
-                                      download
-                                      rel="noopener noreferrer"
-                                      target="_blank"
-                                    >
-                                      Download
-                                    </a>
-                                  </p>
+                                  {/* <p className="text-gray-400 text-xs">
+                                  Size: {"1024 kb"}
+                                </p> */}
+                                  <a
+                                    className="btn btn-sm btn-ghost text-success ml-auto capitalize"
+                                    href={message.url}
+                                    download
+                                    rel="noopener noreferrer"
+                                    target="_blank"
+                                  >
+                                    Download
+                                  </a>
                                 </div>
                               ) : null}
                               {message.type == "file" ? (
-                                <div className="w-250 ml-3 p-2 border border-dbeats-light rounded-md">
-                                  <i className="fas fa-file text-4xl text-dbeats-light"></i>
-                                  <p className="text-gray-400 text-xs">
+                                <div className="flex gap-1 items-center p-2 text-brand4 bg-slate-300 dark:bg-slate-800 rounded-md">
+                                  <File />
+                                  <p className="font-semibold text-sm">
                                     {message.url.split("/").pop()}
                                   </p>
-                                  <p className="text-gray-400 text-xs hidden">
-                                    Size: {"1024 kb"}
-                                  </p>
+                                  {/* <p className="text-gray-400 text-xs ">
+                                  Size: {"1024 kb"}
+                                </p> */}
                                   <p className="text-gray-400 text-xs">
                                     <a
+                                      className="btn btn-sm btn-ghost text-success ml-auto capitalize"
                                       href={message.url}
                                       download
                                       rel="noopener noreferrer"
@@ -508,37 +549,21 @@ function ChatRoom(props) {
                                   </p>
                                 </div>
                               ) : null}
-                              <div className="inline-flex items-start group">
-                                <div className="chat_message_profile pr-2 pt-2 h-12 w-12">
-                                  <img
-                                    height="50px"
-                                    width="50px"
-                                    className="rounded-full"
-                                    style={{ width: "auto", maxWidth: "50px" }}
-                                    alt="profile"
-                                    src={
-                                      message.profile_image
-                                        ? message.profile_image
-                                        : person
-                                    }
-                                  />
-                                </div>
-                                <div className="p-1 mt-1">
+                              <div className=" w-full group">
+                                <div className="w-full mt-1 ">
                                   <p
-                                    className={
-                                      message.username ===
-                                      user.database.userData.data.user.username
-                                        ? "text-base font-bold   text-dbeats-light"
-                                        : "text-base font-bold  text-white	"
-                                    }
+                                    className={`flex gap-1 justify-between items-center text-base font-bold text-brand3`}
                                   >
-                                    {message.username}{" "}
+                                    {message.username ===
+                                    user.database.userData.data.user.username
+                                      ? "You"
+                                      : message.username}
                                     {message.type == "live" ? (
-                                      <span className="text-white bg-red-500 rounded-md font-normal px-2 mx-1 text-sm">
+                                      <span className="text-white bg-rose-700 rounded-md font-normal px-2 mx-1 text-sm">
                                         LIVE
                                       </span>
                                     ) : null}
-                                    <span className="text-xs text-gray-300 font-light">
+                                    <span className="text-xs text-brand4 font-light">
                                       {new Date(
                                         message.createdAt
                                       ).toLocaleString("en-US", {
@@ -548,7 +573,7 @@ function ChatRoom(props) {
                                       })}
                                     </span>
                                   </p>
-                                  <p className="text whitespace-pre-line">
+                                  <p className="text-brand4  whitespace-pre-line">
                                     {urlstext}
                                   </p>
                                   {message.type == "live" ? (
@@ -586,14 +611,11 @@ function ChatRoom(props) {
                                       );
                                     })}
                                 </div>
-                                <div onClick={() => onreply(message)}>
-                                  <i className="pt-8  opacity-0 group-hover:opacity-100 fas fa-reply ml-2 w-4 h-4 cursor-pointer text-dbeats-white text-opacity-40 hover:text-opacity-100"></i>
-                                </div>
                               </div>
                             </div>
                           </div>
                         </div>
-                      </>
+                      </div>
                     );
                   })
                 : "<></>"}
@@ -606,9 +628,9 @@ function ChatRoom(props) {
                   inline: "nearest",
                 });
               }}
-              className="text-xl bg-slate-700 text-slate-200 fixed right-4 bottom-24 px-4 py-2 rounded-full  xl:text-2xl xl:right-8 cursor-pointer z-100"
+              className="btn btn-circle btn-sm fixed right-4 bottom-24 z-100"
             >
-              <i className="fas fa-angle-down "></i>
+              <ChevronDown />
             </div>
             <div ref={chatRef} />
           </div>
