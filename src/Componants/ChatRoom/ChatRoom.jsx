@@ -614,7 +614,7 @@ function ChatRoom(props) {
       </div>
 
       <div className="   absolute  bottom-0 w-full bg-slate-300 dark:bg-slate-900">
-        <div className="  py-4 md:px-4">
+        <div className="  py-4 px-2 md:px-4">
           {formState.replyto ? (
             <div className="px-3 p-2 flex items-center	justify-between rounded-xl mb-4">
               <div className="flex">
@@ -827,7 +827,7 @@ function ChatRoom(props) {
             </div> */}
 
             <form
-              className="flex flex-grow gap-1"
+              className="flex items-center flex-grow gap-1"
               id="chat-form"
               onSubmit={saveMessage}
             >
@@ -859,13 +859,17 @@ function ChatRoom(props) {
                   <i className="fas fa-paper-plane mr-2" />
                   <p className="hidden md:inline">Send</p>
                 </button> */}
+              {/*  */}
               <button
+                disabled={formState.message.length < 1}
                 type="submit"
-                className={`${formState.message.length < 1 && "hidden"} ${
-                  uploadingFile && "loading"
-                } btn btn-xs md:btn-md btn-primary rounded-full gap-2  capitalize`}
+                className={`
+               
+                 ${
+                   uploadingFile && "loading"
+                 } btn btn-circle btn-primary  gap-2`}
               >
-                <Send size={20}></Send>send
+                {!uploadingFile && <Send size={20}></Send>}
               </button>
             </form>
           </div>
