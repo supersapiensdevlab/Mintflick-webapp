@@ -374,11 +374,11 @@ function ChatRoom(props) {
                           message.username &&
                           message.username ===
                             user.database.userData.data.user.username
-                            ? "flex items-end flex-row-reverse  gap-1 group w-full"
-                            : "flex items-end gap-1 group w-full"
+                            ? "flex items-start md:items-end flex-row-reverse gap-1 group w-full"
+                            : "flex items-start md:items-end gap-1 group w-full"
                         }
                       >
-                        <div className="w-fit max-w-full h-full space-y-1">
+                        <div className="hidden md:block w-fit max-w-full h-full space-y-1">
                           <div
                             className="opacity-0 group-hover:opacity-100 cursor-pointer p-1 w-fit text-sm text-teal-700 font-semibold rounded-full bg-slate-200 dark:bg-slate-700"
                             onClick={() => onreply(message)}
@@ -443,7 +443,7 @@ function ChatRoom(props) {
                                     ? "You"
                                     : message.reply_to.username}
                                 </p>
-                                <p className="text-sm max-w-xs md:max-w-lg truncate text-brand3">
+                                <p className="text-sm w-48  truncate text-brand3">
                                   {message.reply_to.message}
                                 </p>
                               </div>
@@ -555,7 +555,7 @@ function ChatRoom(props) {
                               </p>
                             </div>
                           ) : null}
-                          <div className="max-w-sm md:max-w-lg w-full group">
+                          <div className="max-w-xs md:max-w-lg w-full group">
                             <p className="text-brand4 whitespace-pre-line break-words">
                               {urlstext}
                             </p>
@@ -591,6 +591,12 @@ function ChatRoom(props) {
                               })}
                           </div>
                         </div>
+                        <div
+                          className="md:hidden opacity-0 group-hover:opacity-100 cursor-pointer p-1 w-fit text-sm text-teal-700 font-semibold rounded-full bg-slate-200 dark:bg-slate-700"
+                          onClick={() => onreply(message)}
+                        >
+                          <ArrowBackUp />
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -606,41 +612,36 @@ function ChatRoom(props) {
               inline: "nearest",
             });
           }}
-          className="btn btn-circle btn-sm fixed right-4 bottom-24 z-100"
+          className="p-1 absolute w-screen flex justify-center bottom-20  z-100"
         >
-          <ChevronDown />
+          <div className="py-1 px-2 rounded-full bg-slate-400/40 dark:bg-slate-600/40  text-brand2 flex gap-1 cursor-pointer backdrop-blur-sm">
+            <ChevronDown /> Recent messages
+          </div>
         </div>
         <div ref={chatRef} />
       </div>
 
       <div className="   absolute  bottom-0 w-full bg-slate-300 dark:bg-slate-900">
-        <div className="  py-4 px-2 md:px-4">
+        <div className="py-4 px-2 md:px-4">
           {formState.replyto ? (
-            <div className="px-3 p-2 flex items-center	justify-between rounded-xl mb-4">
-              <div className="flex">
-                <div className="chat_message_profile pr-2">
-                  <img
-                    height="50px"
-                    width="50px"
-                    className="rounded-full"
-                    alt="profile"
-                    src={
-                      formState.replyto.profile_image
-                        ? formState.replyto.profile_image
-                        : person
-                    }
-                  />
-                </div>
-                <div className="p-1">
-                  <p
-                    className={
-                      formState.replyto.username === user.username
-                        ? "text-base font-bold mb-1  text-dbeats-light"
-                        : "text-base font-bold mb-1 text-white	"
-                    }
-                  >
-                    {formState.replyto.username}{" "}
-                    <span className="text-xs text-gray-300 font-light">
+            <div className="w-full p-2 flex items-center bg-slate-200 dark:bg-slate-800	justify-between rounded-md mb-4">
+              <div className="flex-grow flex gap-1">
+                <img
+                  className="w-8 h-8 object-cover rounded-full"
+                  alt="profile"
+                  src={
+                    formState.replyto.profile_image
+                      ? formState.replyto.profile_image
+                      : person
+                  }
+                />
+
+                <div className="flex-grow ">
+                  <p className={"text-base font-bold  text-brand2"}>
+                    {formState.replyto.username === user.username
+                      ? "You"
+                      : formState.replyto.username}
+                    <span className="text-xs text-brand5 font-light ml-2">
                       {new Date(formState.replyto.createdAt).toLocaleString(
                         "en-US",
                         {
@@ -651,11 +652,13 @@ function ChatRoom(props) {
                       )}
                     </span>
                   </p>
-                  <p className="text">{formState.replyto.message}</p>
+                  <div className="text-sm w-10/12 max-w-xs md:max-w-lg truncate text-brand3">
+                    {formState.replyto.message}
+                  </div>
                 </div>
               </div>
               <button
-                className="px-3 py-1 rounded-full nm-convex-dbeats-dark-secondary hover:nm-concave-dbeats-dark-secondary-sm   cursor-pointer"
+                className="btn btn-xs btn-error btn-circle  text-white "
                 onClick={() => {
                   setForm({ ...formState, replyto: null });
                 }}
@@ -665,9 +668,9 @@ function ChatRoom(props) {
             </div>
           ) : null}
           {selectedFile ? (
-            <div className="flex justify-between">
+            <div className="flex gap-2 rounded-md justify-between p-2 bg-slate-200 dark:bg-slate-800 mb-4">
               {selectedFile.type == "image" && (
-                <img src={selectedFile.localurl} className="w-24 h-24"></img>
+                <img src={selectedFile.localurl} className=" h-24 "></img>
               )}
               {selectedFile.type == "sound" && (
                 <div className="ml-3 p-2 border border-dbeats-light rounded-md">
@@ -678,17 +681,17 @@ function ChatRoom(props) {
                 </div>
               )}
               {selectedFile.type == "video" && (
-                <div className="ml-3 p-2 border border-dbeats-light rounded-md">
-                  <i className="fas fa-video text-3xl text-dbeats-light"></i>
-                  <p className="text-gray-400 text-xs">
+                <div className="flex gap-1 items-center p-2 text-brand4 bg-slate-300 dark:bg-slate-700 rounded-md">
+                  <Video />
+                  <p className="font-semibold text-sm ">
                     {selectedFile.file[0].name}
                   </p>
                 </div>
               )}
               {selectedFile.type == "file" && (
-                <div className="ml-3 p-2 border border-dbeats-light rounded-md">
-                  <i className="fas fa-file text-3xl text-dbeats-light"></i>
-                  <p className="text-gray-400 text-xs">
+                <div className="flex gap-1 items-center p-2 text-brand4 bg-slate-300 dark:bg-slate-700 rounded-md">
+                  <File />
+                  <p className="font-semibold text-sm  ">
                     {selectedFile.file[0].name}
                   </p>
                 </div>
@@ -698,7 +701,9 @@ function ChatRoom(props) {
                   setSelectedFile(null);
                 }}
               >
-                <i className="fas fa-times"></i>
+                <div className="btn btn-xs btn-error btn-circle  text-white">
+                  <i className="fas fa-times"></i>
+                </div>
               </button>
             </div>
           ) : null}
@@ -867,7 +872,7 @@ function ChatRoom(props) {
                
                  ${
                    uploadingFile && "loading"
-                 } btn btn-circle btn-primary  gap-2`}
+                 } btn btn-square btn-primary  gap-2`}
               >
                 {!uploadingFile && <Send size={20}></Send>}
               </button>
