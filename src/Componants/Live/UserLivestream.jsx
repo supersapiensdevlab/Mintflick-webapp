@@ -11,6 +11,7 @@ import placeholderImage from "../../Assets/profile-pic.png";
 import JoinSuperfanModal from "../Home/Modals/JoinSuperfanModal";
 import Loading from "../Loading/Loading";
 import { Eye, Share } from "tabler-icons-react";
+import LiveRoom from "./LiveRoom";
 
 const socket = io(`${process.env.REACT_APP_VIEWS_URL}`, {
   autoConnect: false,
@@ -216,6 +217,7 @@ function UserLivestream() {
       }
     }
   }, [State.database.userData?.data?.user, streamUser]);
+
 
   return streamUser && State.database.userData.data ? (
     <div className="w-full min-h-screen h-fit pt-20 bg-white dark:bg-slate-900">
@@ -461,9 +463,9 @@ function UserLivestream() {
           </div>
         </div>
         <div className="w-full lg:w-1/4">
-          {/* {userData.username && (
-                  <LiveChat userp={userData} privateUser={user}></LiveChat>
-                )} */}
+          {streamUser.username && streamUser.livepeer_data.isActive && (
+            <LiveRoom username={streamUser.username}></LiveRoom>
+          )}
         </div>
       </div>
       <div
