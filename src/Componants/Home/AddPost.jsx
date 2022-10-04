@@ -92,7 +92,7 @@ function AddPost() {
         </div>
       </div>
       {/* FAB */}
-      <div className="lg:hidden fixed bottom-24 right-2 z-50 dropdown dropdown-top dropdown-end ">
+      <div className="lg:hidden fixed bottom-24 right-2 z-40 dropdown dropdown-top dropdown-end ">
         <label tabindex="0" className="btn btn-lg btn-circle btn-brand">
           <Plus />
         </label>
