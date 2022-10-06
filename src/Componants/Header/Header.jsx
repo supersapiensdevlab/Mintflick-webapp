@@ -75,34 +75,34 @@ function Header() {
       !onlyOnce
     ) {
       setOnlyOnce(true);
-      if (State.database.userData.data.user.notification.length > 0) {
+      if (State.database.userData.data?.user.notification.length > 0) {
         setNewNotification(
-          State.database.userData.data.user.notification.length
+          State.database.userData.data?.user.notification.length
         );
         let data = [];
         for (
           let i = 0;
-          i < State.database.userData.data.user.oldnotification.length;
+          i < State.database.userData.data?.user.oldnotification.length;
           i++
         ) {
-          data.push(State.database.userData.data.user.oldnotification[i]);
+          data.push(State.database.userData.data?.user.oldnotification[i]);
         }
         for (
           let i = 0;
-          i < State.database.userData.data.user.notification.length;
+          i < State.database.userData.data?.user.notification.length;
           i++
         ) {
-          data.push(State.database.userData.data.user.notification[i]);
+          data.push(State.database.userData.data?.user.notification[i]);
         }
         setNotification(data.reverse());
       } else {
         let data = [];
         for (
           let i = 0;
-          i < State.database.userData.data.user.oldnotification.length;
+          i < State.database.userData.data?.user.oldnotification.length;
           i++
         ) {
-          data.push(State.database.userData.data.user.oldnotification[i]);
+          data.push(State.database.userData.data?.user.oldnotification[i]);
         }
         setNotification(data.reverse());
       }
@@ -468,7 +468,7 @@ function Header() {
       <ChatModal
         open={chatModalOpen}
         setOpen={setchatModalOpen}
-        userName={State.database.userData.data.user.username}
+        userName={State.database.userData?.data?.user?.username}
         state={{
           isDM: false,
           user2: {},

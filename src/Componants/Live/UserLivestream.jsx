@@ -48,7 +48,7 @@ function UserLivestream() {
   const trackFollowers = async () => {
     const followData = {
       following: `${streamUser.username}`,
-      follower: `${State.database.userData.data.user.username}`,
+      follower: `${State.database.userData.data?.user.username}`,
     };
 
     if (subscribeButtonText === "Follow") {
@@ -105,7 +105,7 @@ function UserLivestream() {
           if (
             State.database.userData.data
               ? value.data.follower_count[i] ===
-                State.database.userData.data.user.username
+                State.database.userData.data?.user.username
               : false
           ) {
             setSubscribeButtonText("Unfollow");
@@ -334,7 +334,7 @@ function UserLivestream() {
                   </div>
                   <div className="flex items-center gap-2">
                     {streamUser.username !=
-                    State.database.userData.data.user.username ? (
+                    State.database.userData.data?.user.username ? (
                       subscribeButtonText === "Follow" ? (
                         <button
                           id="subscribeButton"
@@ -351,7 +351,7 @@ function UserLivestream() {
                           id="subscribeButton"
                           className="btn btn-primary btn-outline btn-sm"
                           onClick={
-                            State.database.userData.data.user != null &&
+                            State.database.userData.data?.user != null &&
                             trackFollowers
                           }
                         >
@@ -362,11 +362,11 @@ function UserLivestream() {
 
                     {streamUser.superfan_data &&
                       streamUser.username !=
-                        State.database.userData.data.user.username &&
+                        State.database.userData.data?.user.username &&
                       streamUser.superfan_to.find(
                         (o) =>
                           o.username ==
-                          State.database.userData.data.user.username
+                          State.database.userData.data?.user.username
                       ) == undefined && (
                         <button
                           onClick={() => setJoinsuperfanModalOpen(true)}

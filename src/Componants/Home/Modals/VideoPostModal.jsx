@@ -304,11 +304,11 @@ function VideoPostModal({ setVideoPostModalOpen }) {
           let formData = new FormData(); // Currently empty
           formData.append(
             "userName",
-            State.database.userData.data.user.username
+            State.database.userData.data?.user.username
           );
           formData.append(
             "userImage",
-            State.database.userData.data.user.profile_image
+            State.database.userData.data?.user.profile_image
           );
 
           formData.append("videoName", videoData.videoName);
