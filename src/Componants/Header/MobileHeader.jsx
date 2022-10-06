@@ -132,7 +132,7 @@ function MobileHeader() {
       <ChatModal
         open={chatModalOpen}
         setOpen={setchatModalOpen}
-        userName={State.database.userData.data.user.username}
+        userName={State.database.userData.data?.user?.username}
         state={{
           isDM: false,
           user2: {},

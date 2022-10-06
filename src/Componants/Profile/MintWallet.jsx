@@ -1,8 +1,22 @@
 import React from "react";
-import { Diamond, DotsVertical, Gift, Send, Wallet } from "tabler-icons-react";
+import { useState } from "react";
+import {
+  Diamond,
+  DotsVertical,
+  Gift,
+  Send,
+  Wallet,
+  Coin,
+} from "tabler-icons-react";
 import EachTransaction from "./EachTransaction";
+import CollectCoinsModal from "./Modals/CollectCoinsModal";
 
 function MintWallet() {
+  const [collectCoinsModalVisible, setCollectCoinsModalVisible] =
+    useState(false);
+
+  const [totalCoins, setTotalCoins] = useState(0);
+
   return (
     <div className="flex flex-col items-start bg-slate-100 dark:bg-slate-800 w-full h-fit rounded-lg overflow-clip">
       <div className="flex justify-between items-center w-full h-fit p-2 bg-slate-300 dark:bg-slate-700">
@@ -16,6 +30,20 @@ function MintWallet() {
         ></DotsVertical>
       </div>
       <div className="p-2 w-full flex flex-col gap-2 items-center">
+        <span className="flex justify-between items-center w-full p-2 px-4  rounded-md bg-slate-200 dark:bg-slate-700">
+          <h3 className="flex items-center font-semibold text-3xl text-brand-gradient">
+            {totalCoins}
+            <Coin className="text-white" size={32} />
+          </h3>{" "}
+          <button
+            onClick={() => {
+              setCollectCoinsModalVisible(true);
+            }}
+            className="ml-auto btn btn-sm btn-primary btn-outline capitalize"
+          >
+            collect
+          </button>
+        </span>
         <span className="flex justify-between items-center w-full p-2 px-4  rounded-md bg-slate-200 dark:bg-slate-700">
           <h3 className="flex items-center font-semibold text-3xl text-brand-gradient">
             1234
@@ -40,6 +68,16 @@ function MintWallet() {
         <button className="btn gap-2 px-8 w-full max-w-lg rounded-full btn-brand btn-primary capitalize">
           <Send size={20} /> send
         </button>
+      </div>
+      <div
+        className={`${
+          collectCoinsModalVisible && "modal-open"
+        } modal modal-bottom sm:modal-middle`}
+      >
+        <CollectCoinsModal
+          setCollectCoinsModalVisible={setCollectCoinsModalVisible}
+          setTotalCoins={setTotalCoins}
+        />
       </div>
     </div>
   );
