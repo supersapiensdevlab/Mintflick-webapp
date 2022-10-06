@@ -218,7 +218,6 @@ function UserLivestream() {
     }
   }, [State.database.userData?.data?.user, streamUser]);
 
-
   return streamUser && State.database.userData.data ? (
     <div className="w-full min-h-screen h-fit pt-20 bg-white dark:bg-slate-900">
       <div className={`flex flex-col lg:flex-row relative h-full p-4`}>
@@ -264,12 +263,12 @@ function UserLivestream() {
                   </p>
                 </span>
               ) : (
-                <span className="flex items-center  w-fit bg-slate-100 dark:bg-slate-800  rounded-full p-3">
+                <span className="flex items-center h-8 w-fit bg-slate-100 dark:bg-slate-800  rounded-full px-3">
                   <span className="relative flex h-3 w-3">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span>
                     <span className="absolute inline-flex rounded-full h-full w-full bg-red-600"></span>
                   </span>
-                  <p className="text-xs sm:text-sm font-semibold text-brand2 mx-2">
+                  <p className="text-xs sm:text-sm font-semibold text-brand2 ml-2">
                     Live now
                   </p>
                 </span>
