@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { MessageDots } from "tabler-icons-react";
 import { UserContext } from "../../Store";
 import Main_logo from "../../Assets/logos/Main_logo";
@@ -6,9 +6,12 @@ import Main_logo_dark from "../../Assets/logos/Main_logo_dark";
 import { NavLink } from "react-router-dom";
 import coverImage from "../../Assets/backgrounds/cover.png";
 import axios from "axios";
+import ChatModal from "../ChatRoom/ChatModal";
 
 function MobileHeader() {
   const State = useContext(UserContext);
+
+  const [chatModalOpen, setchatModalOpen] = useState(false);
 
   async function getUserData() {
     await axios({
@@ -119,10 +122,22 @@ function MobileHeader() {
           <Main_logo></Main_logo>
         )}
 
-        <button class="btn btn-circle btn-ghost ">
+        <button
+          class="btn btn-circle btn-ghost "
+          onClick={() => setchatModalOpen(true)}
+        >
           <MessageDots size={28}></MessageDots>
         </button>
       </div>
+      <ChatModal
+        open={chatModalOpen}
+        setOpen={setchatModalOpen}
+        userName={State.database.userData.data.user.username}
+        state={{
+          isDM: false,
+          user2: {},
+        }}
+      />
     </div>
   );
 }

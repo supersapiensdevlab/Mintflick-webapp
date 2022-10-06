@@ -12,8 +12,9 @@ import JoinSuperfanModal from "../Home/Modals/JoinSuperfanModal";
 import Loading from "../Loading/Loading";
 import { Eye, Share } from "tabler-icons-react";
 import livePlaceholder from "../../Assets/Gaming Posters/liveplaceholder.jpg";
+import LiveRoom from "./LiveRoom";
 
-const socket = io("https://mintflickviews.herokuapp.com", {
+const socket = io(`${process.env.REACT_APP_VIEWS_URL}`, {
   autoConnect: false,
 });
 
@@ -463,9 +464,9 @@ function UserLivestream() {
           </div>
         </div>
         <div className="w-full lg:w-1/4">
-          {/* {userData.username && (
-                  <LiveChat userp={userData} privateUser={user}></LiveChat>
-                )} */}
+          {streamUser.username && streamUser.livepeer_data.isActive && (
+            <LiveRoom username={streamUser.username}></LiveRoom>
+          )}
         </div>
       </div>
       <div

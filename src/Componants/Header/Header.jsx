@@ -12,6 +12,7 @@ import EmptyNotification from "./EmptyNotification";
 import { Image } from "react-img-placeholder";
 import placeholderImage from "../../Assets/profile-pic.png";
 import useWeb3Auth from "../../Hooks/useWeb3Auth";
+import ChatModal from "../ChatRoom/ChatModal";
 
 function Header() {
   const State = useContext(UserContext);
@@ -20,7 +21,7 @@ function Header() {
 
   //get all users
   const [alluser, setAllUser] = useState([]);
-
+  const [chatModalOpen, setchatModalOpen] = useState(false);
   //filtered search data
   const [filteredData, setFilteredData] = useState([]);
   const [filteredVideoData, setFilteredVideoData] = useState([]);
@@ -352,16 +353,26 @@ function Header() {
           </div>
         </div>
 
-        <button class="btn btn-circle btn-ghost " onClick={showListedNFTs}>
+        {/* <button class="btn btn-circle btn-ghost " onClick={showListedNFTs}>
           <NavLink
             to={`/homescreen/chat/${
               State.database.userData.data
                 ? State.database.userData.data.user.username
                 : ""
             }`}
+            state={{
+              isDM: false,
+              user2: {},
+            }}
           >
             <MessageDots size={28}></MessageDots>
           </NavLink>
+        </button> */}
+        <button
+          class="btn btn-circle btn-ghost "
+          onClick={() => setchatModalOpen(true)}
+        >
+          <MessageDots size={28}></MessageDots>
         </button>
 
         <div class="dropdown dropdown-end">
@@ -454,6 +465,15 @@ function Header() {
           </ul>
         </div>
       </div>
+      <ChatModal
+        open={chatModalOpen}
+        setOpen={setchatModalOpen}
+        userName={State.database.userData.data.user.username}
+        state={{
+          isDM: false,
+          user2: {},
+        }}
+      />
     </div>
   );
 }

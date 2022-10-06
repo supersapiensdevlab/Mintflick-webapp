@@ -11,6 +11,8 @@ function Store(props) {
     liveUsers: [],
     feedData: [],
     nftData: [],
+    //chat modal
+    chatModalOpen: false,
     //report post modal
     reportPostValue: {},
     reportModalOpen: false,

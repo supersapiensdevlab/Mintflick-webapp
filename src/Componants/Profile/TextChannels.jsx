@@ -1,6 +1,6 @@
 import React from "react";
 import { useContext } from "react";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { UserContext } from "../../Store";
 
 function TextChannels() {
@@ -14,9 +14,60 @@ function TextChannels() {
             ? State.database.userProfileData.data.username
             : ""
         }`}
+        state={{
+          isDM: false,
+          user2: State.database.userProfileData
+            ? State.database.userProfileData.data
+            : null,
+        }}
       >
         <button className="text-base text-brand3 font-medium btn">#Chat</button>
       </NavLink>
+      {State.database.userProfileData &&
+        State.database.userData.data &&
+        State.database.userProfileData.data.username !=
+          State.database.userData.data.user.username && (
+          <Link
+            to={`/homescreen/chat/${
+              State.database.userProfileData
+                ? State.database.userProfileData.data.username
+                : ""
+            }`}
+            state={{
+              isDM: true,
+              user2: State.database.userProfileData
+                ? State.database.userProfileData.data
+                : null,
+            }}
+          >
+            <button className="text-base text-brand3 font-medium btn">
+              #DM
+            </button>
+          </Link>
+        )}
+      {State.database.userProfileData &&
+        State.database.userData.data &&
+        State.database.userData.data.user.conversations &&
+        State.database.userProfileData.data.username ==
+          State.database.userData.data.user.username && (
+          <>
+            {State.database.userData.data.user.conversations.map((conv) => {
+              return (
+                <div className="text-slate-100">
+                  <Link
+                    to={`/homescreen/chat/${conv.username}`}
+                    state={{
+                      isDM: true,
+                      user2: { id: conv.user_id },
+                    }}
+                  >
+                    {conv.username}
+                  </Link>
+                </div>
+              );
+            })}
+          </>
+        )}
     </div>
   );
 }
