@@ -353,7 +353,7 @@ function Header() {
           </div>
         </div>
 
-        {/* <button class="btn btn-circle btn-ghost " onClick={showListedNFTs}>
+        <button class="btn btn-circle btn-ghost " onClick={showListedNFTs}>
           <NavLink
             to={`/homescreen/chat/${
               State.database.userData.data
@@ -367,13 +367,13 @@ function Header() {
           >
             <MessageDots size={28}></MessageDots>
           </NavLink>
-        </button> */}
-        <button
+        </button>
+        {/* <button
           class="btn btn-circle btn-ghost "
           onClick={() => setchatModalOpen(true)}
         >
           <MessageDots size={28}></MessageDots>
-        </button>
+        </button> */}
 
         <div class="dropdown dropdown-end">
           <label tabindex="0" className=" avatar">

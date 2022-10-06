@@ -10,9 +10,11 @@ import ChatLinkPreview from "./ChatLinkPreview";
 import InfiniteScroll from "react-infinite-scroller";
 import { useContext } from "react";
 import { UserContext } from "../../Store";
-import { useLocation, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import { makeStorageClient } from "../../Helper/uploadHelper";
 import { detectURLs } from "../../Helper/uploadHelperWeb3Storage";
+import placeholderImage from "../../Assets/profile-pic.png";
+
 import {
   ArrowBackUp,
   ChevronDown,
@@ -22,6 +24,9 @@ import {
   Video,
 } from "tabler-icons-react";
 import ReactPlayer from "react-player";
+import TextChannels from "../Profile/TextChannels";
+import ChatsList from "./ChatsList";
+import { Image } from "react-img-placeholder";
 
 // https://mintflickchats.herokuapp.com
 const socket = io(`${process.env.REACT_APP_CHAT_URL}`, {
@@ -316,176 +321,200 @@ function ChatRoom(props) {
       );
 
   return (
-    <div className=" relative	py-16 lg:py-20 h-screen w-full dark:bg-slate-800 bg-slate-100">
-      <LoadingBar ref={loadingRef} color="#00d3ff" shadow={true} />
+    <div className=" flex h-screen bg-slate-100 dark:bg-slate-800 lg:bg-white lg:dark:bg-slate-900">
+      <div className="hidden lg:flex flex-col h-full w-1/4 ml-12 mr-4 pt-24 space-y-6 overflow-y-auto">
+        <ChatsList />
+      </div>
+      <div className="relative rounded-md flex flex-col lg:w-2/4 w-full h-screen  pt-14 lg:pt-20 bg-slate-100 dark:bg-slate-800 ">
+        <div className="w-full h-fit p-2 bg-slate-300 dark:bg-slate-700">
+          <Link
+            to={`../profile/${username}`}
+            className=" w-full flex cursor-pointer items-center gap-2  rounded-md p-1"
+          >
+            <Image
+              width={33}
+              height={33}
+              className="h-full rounded-full border-2"
+              src={placeholderImage}
+              alt="profileImage"
+              placeholderSrc={placeholderImage}
+            />
+            <p className="cursor-pointer text-base font-medium text-brand3">
+              {username}
+            </p>
+          </Link>
+        </div>
 
-      <div className="p-1 chat-height overflow-y-scroll	overflow-x-hidden mb-4">
-        <div ref={scrollTop}></div>
-        <InfiniteScroll
-          pageStart={0}
-          loadMore={() => {
-            if (socket && currentPage > 0 && !loadingOldChats) {
-              setLoadingOldChats(true);
-              if (isDM) {
-                socket.emit("loaddm", {
-                  user_id: user.database.userData.data.user.id,
-                  room_id: user2.id,
-                  page_no: currentPage - 1,
-                });
-              } else {
-                socket.emit("loadmore", {
-                  user_id: user.database.userData.data.user._id,
-                  room_id: username,
-                  page_no: currentPage - 1,
-                });
+        <LoadingBar ref={loadingRef} color="#00d3ff" shadow={true} />
+
+        <div className=" h-full overflow-y-scroll	overflow-x-hidden pb-20">
+          <div ref={scrollTop}></div>
+          <InfiniteScroll
+            className="px-4"
+            pageStart={0}
+            loadMore={() => {
+              if (socket && currentPage > 0 && !loadingOldChats) {
+                setLoadingOldChats(true);
+                if (isDM) {
+                  socket.emit("loaddm", {
+                    user_id: user.database.userData.data.user.id,
+                    room_id: user2.id,
+                    page_no: currentPage - 1,
+                  });
+                } else {
+                  socket.emit("loadmore", {
+                    user_id: user.database.userData.data.user._id,
+                    room_id: username,
+                    page_no: currentPage - 1,
+                  });
+                }
               }
+            }}
+            hasMore={currentPage > 0}
+            loader={
+              <Loading /> // <div className="flex justify-center">
+              //   <div className="text-center animate-spin rounded-full h-7 w-7 ml-3 border-t-2 border-b-2 bg-gradient-to-r from-green-400 to-blue-500 "></div>
+              // </div>
             }
-          }}
-          hasMore={currentPage > 0}
-          loader={
-            <Loading /> // <div className="flex justify-center">
-            //   <div className="text-center animate-spin rounded-full h-7 w-7 ml-3 border-t-2 border-b-2 bg-gradient-to-r from-green-400 to-blue-500 "></div>
-            // </div>
-          }
-          useWindow={false}
-          isReverse={true}
-        >
-          {messages
-            ? messages.map((message, index) => {
-                const dateNum = new Date(message.createdAt);
-                let size = 0;
-                let urls = detectURLs(message.message);
-                let urlstext = renderText(message.message);
-                return (
-                  <div className="w-full">
-                    {dates.has(dateNum.toDateString()) ? null : (
-                      <p className="text-sm text-brand4 font-semibold py-1 px-3 w-fit mx-auto my-1 rounded-full bg-slate-200 dark:bg-slate-700">
-                        {renderDate(message, dateNum.toDateString())}
-                      </p>
-                    )}
+            useWindow={false}
+            isReverse={true}
+          >
+            {messages
+              ? messages.map((message, index) => {
+                  const dateNum = new Date(message.createdAt);
+                  let size = 0;
+                  let urls = detectURLs(message.message);
+                  let urlstext = renderText(message.message);
+                  return (
+                    <div className="w-full">
+                      {dates.has(dateNum.toDateString()) ? null : (
+                        <p className="text-sm text-brand4 font-semibold py-1 px-3 w-fit mx-auto my-1 rounded-full bg-slate-200 dark:bg-slate-700">
+                          {renderDate(message, dateNum.toDateString())}
+                        </p>
+                      )}
 
-                    <div
-                      className={` w-full my-2`}
-                      key={message._id}
-                      ref={(el) => (messageRef.current[message._id] = el)}
-                    >
                       <div
-                        className={
-                          message.username &&
-                          message.username ===
-                            user.database.userData.data.user.username
-                            ? "flex items-start md:items-end flex-row-reverse gap-1 group w-full"
-                            : "flex items-start md:items-end gap-1 group w-full"
-                        }
+                        className={` w-full my-2`}
+                        key={message._id}
+                        ref={(el) => (messageRef.current[message._id] = el)}
                       >
-                        <div className="hidden md:block w-fit max-w-full h-full space-y-1">
-                          <div
-                            className="opacity-0 group-hover:opacity-100 cursor-pointer p-1 w-fit text-sm text-teal-700 font-semibold rounded-full bg-slate-200 dark:bg-slate-700"
-                            onClick={() => onreply(message)}
-                          >
-                            <ArrowBackUp />
-                          </div>
-
-                          <img
-                            className="w-8 h-8 rounded-full object-cover "
-                            alt="profile"
-                            src={
-                              message.profile_image
-                                ? message.profile_image
-                                : person
-                            }
-                          />
-                        </div>
                         <div
-                          className={`p-2 bg-slate-200 dark:bg-slate-700 rounded-md space-y-2`}
+                          className={
+                            message.username &&
+                            message.username ===
+                              user.database.userData.data.user.username
+                              ? "flex items-start md:items-end flex-row-reverse gap-1 group w-full"
+                              : "flex items-start md:items-end gap-1 group w-full"
+                          }
                         >
-                          <p
-                            className={`flex gap-1 justify-between items-center text-base font-bold text-brand3`}
-                          >
-                            {message.username ===
-                            user.database.userData.data.user.username
-                              ? "You"
-                              : message.username}
-                            {message.type == "live" ? (
-                              <span className="text-white bg-rose-700 rounded-md font-normal px-2 mx-1 text-sm">
-                                LIVE
-                              </span>
-                            ) : null}
-                            <span className="text-sm font-semibold text-brand5 ">
-                              {new Date(message.createdAt).toLocaleString(
-                                "en-US",
-                                {
-                                  hour: "2-digit",
-                                  minute: "2-digit",
-                                  hour12: true,
-                                }
-                              )}
-                            </span>
-                          </p>
-                          {message.reply_to ? (
+                          <div className="hidden md:block w-fit max-w-full h-full space-y-1">
                             <div
-                              onClick={() => scrollTo(message.reply_to._id)}
-                              className={`cursor-pointer flex justify-between items-center group p-2 border-l-4  bg-slate-300 dark:bg-slate-800 rounded-md ${
-                                message.reply_to.username ===
-                                user.database.userData.data.user.username
-                                  ? "border-green-400 drak:border-green-700"
-                                  : "border-violet-400 drak:border-violet-700"
-                              }`}
+                              className="opacity-0 group-hover:opacity-100 cursor-pointer p-1 w-fit text-sm text-teal-700 font-semibold rounded-full bg-slate-200 dark:bg-slate-700"
+                              onClick={() => onreply(message)}
                             >
-                              <div className="">
-                                <p
-                                  className={
-                                    "text-base text-brand2 text-semibold"
-                                  }
-                                >
-                                  {message.reply_to.username ===
-                                  user.database.userData.data.user.username
-                                    ? "You"
-                                    : message.reply_to.username}
-                                </p>
-                                <p className="text-sm w-48  truncate text-brand3">
-                                  {message.reply_to.message}
-                                </p>
-                              </div>
-                              <div className="p-2">
-                                {message.reply_to.type == "image" && (
-                                  <i className="fas fa-image text-2xl text-brand3"></i>
-                                )}
-                                {message.reply_to.type == "sound" && (
-                                  <i className="fas fa-music text-2xl text-brand3"></i>
-                                )}
-                                {message.reply_to.type == "video" && (
-                                  <i className="fas fa-video text-2xl text-brand3"></i>
-                                )}
-                                {message.reply_to.type == "file" && (
-                                  <i className="fas fa-file text-2xl text-brand3"></i>
-                                )}
-                              </div>
+                              <ArrowBackUp />
                             </div>
-                          ) : null}
-                          {message.type == "image" ? (
-                            <div className="relative after:w-250 h-fit group rounded-md overflow-clip">
-                              <img width={250} src={message.url}></img>
-                              {/* <p className="text-brand4 text-xs">
+
+                            <img
+                              className="w-8 h-8 rounded-full object-cover "
+                              alt="profile"
+                              src={
+                                message.profile_image
+                                  ? message.profile_image
+                                  : person
+                              }
+                            />
+                          </div>
+                          <div
+                            className={`p-2 bg-slate-200 dark:bg-slate-700 rounded-md space-y-2`}
+                          >
+                            <p
+                              className={`flex gap-1 justify-between items-center text-base font-bold text-brand3`}
+                            >
+                              {message.username ===
+                              user.database.userData.data.user.username
+                                ? "You"
+                                : message.username}
+                              {message.type == "live" ? (
+                                <span className="text-white bg-rose-700 rounded-md font-normal px-2 mx-1 text-sm">
+                                  LIVE
+                                </span>
+                              ) : null}
+                              <span className="text-sm font-semibold text-brand5 ">
+                                {new Date(message.createdAt).toLocaleString(
+                                  "en-US",
+                                  {
+                                    hour: "2-digit",
+                                    minute: "2-digit",
+                                    hour12: true,
+                                  }
+                                )}
+                              </span>
+                            </p>
+                            {message.reply_to ? (
+                              <div
+                                onClick={() => scrollTo(message.reply_to._id)}
+                                className={`cursor-pointer flex justify-between items-center group p-2 border-l-4  bg-slate-300 dark:bg-slate-800 rounded-md ${
+                                  message.reply_to.username ===
+                                  user.database.userData.data.user.username
+                                    ? "border-green-400 drak:border-green-700"
+                                    : "border-violet-400 drak:border-violet-700"
+                                }`}
+                              >
+                                <div className="">
+                                  <p
+                                    className={
+                                      "text-base text-brand2 text-semibold"
+                                    }
+                                  >
+                                    {message.reply_to.username ===
+                                    user.database.userData.data.user.username
+                                      ? "You"
+                                      : message.reply_to.username}
+                                  </p>
+                                  <p className="text-sm w-48  truncate text-brand3">
+                                    {message.reply_to.message}
+                                  </p>
+                                </div>
+                                <div className="p-2">
+                                  {message.reply_to.type == "image" && (
+                                    <i className="fas fa-image text-2xl text-brand3"></i>
+                                  )}
+                                  {message.reply_to.type == "sound" && (
+                                    <i className="fas fa-music text-2xl text-brand3"></i>
+                                  )}
+                                  {message.reply_to.type == "video" && (
+                                    <i className="fas fa-video text-2xl text-brand3"></i>
+                                  )}
+                                  {message.reply_to.type == "file" && (
+                                    <i className="fas fa-file text-2xl text-brand3"></i>
+                                  )}
+                                </div>
+                              </div>
+                            ) : null}
+                            {message.type == "image" ? (
+                              <div className="relative after:w-250 h-fit group rounded-md overflow-clip">
+                                <img width={250} src={message.url}></img>
+                                {/* <p className="text-brand4 text-xs">
                                   {message.url.split("/").pop()}
                                 </p> */}
-                              {/* <p className="text-brand4 text-xs ">
+                                {/* <p className="text-brand4 text-xs ">
                                   Size: {"1024 kb"}
                                 </p> */}
-                              <a
-                                className=" gap-1 items-center py-1 px-2 rounded-full text-slate-500 text-sm font-semibold bg-slate-50/50  bottom-2 right-2 absolute hidden  group-hover:flex"
-                                href={message.url}
-                                download
-                                target="_blank"
-                                rel="noopener noreferrer"
-                              >
-                                <CloudDownload size={20} />
-                                Download
-                              </a>
-                            </div>
-                          ) : null}
-                          {/* audio option desabled  */}
-                          {/* {message.type == "sound" ? (
+                                <a
+                                  className=" gap-1 items-center py-1 px-2 rounded-full text-slate-500 text-sm font-semibold bg-slate-50/50  bottom-2 right-2 absolute hidden  group-hover:flex"
+                                  href={message.url}
+                                  download
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                >
+                                  <CloudDownload size={20} />
+                                  Download
+                                </a>
+                              </div>
+                            ) : null}
+                            {/* audio option desabled  */}
+                            {/* {message.type == "sound" ? (
                               <div className=" md:ml-3 p-2 border border-dbeats-light rounded-md">
                                 <div className="md:flex items-center">
                                   <i className="fas fa-music text-4xl text-dbeats-light"></i>
@@ -513,36 +542,15 @@ function ChatRoom(props) {
                                 </p>
                               </div>
                             ) : null} */}
-                          {message.type == "video" ? (
-                            <div className="flex gap-1 items-center p-2 text-brand4 bg-slate-300 dark:bg-slate-800 rounded-md">
-                              <Video />
-                              <p className="font-semibold text-sm w-24 truncate">
-                                {message.url.split("/").pop()}
-                              </p>
-                              {/* <p className="text-gray-400 text-xs">
+                            {message.type == "video" ? (
+                              <div className="flex gap-1 items-center p-2 text-brand4 bg-slate-300 dark:bg-slate-800 rounded-md">
+                                <Video />
+                                <p className="font-semibold text-sm w-24 truncate">
+                                  {message.url.split("/").pop()}
+                                </p>
+                                {/* <p className="text-gray-400 text-xs">
                                   Size: {"1024 kb"}
                                 </p> */}
-                              <a
-                                className="btn btn-sm btn-ghost text-success ml-auto capitalize"
-                                href={message.url}
-                                download
-                                rel="noopener noreferrer"
-                                target="_blank"
-                              >
-                                Download
-                              </a>
-                            </div>
-                          ) : null}
-                          {message.type == "file" ? (
-                            <div className="flex gap-1 items-center p-2 text-brand4 bg-slate-300 dark:bg-slate-800 rounded-md">
-                              <File />
-                              <p className="font-semibold text-sm w-24 truncate">
-                                {message.url.split("/").pop()}
-                              </p>
-                              {/* <p className="text-gray-400 text-xs ">
-                                  Size: {"1024 kb"}
-                                </p> */}
-                              <p className="text-gray-400 text-xs">
                                 <a
                                   className="btn btn-sm btn-ghost text-success ml-auto capitalize"
                                   href={message.url}
@@ -552,176 +560,198 @@ function ChatRoom(props) {
                                 >
                                   Download
                                 </a>
-                              </p>
-                            </div>
-                          ) : null}
-                          <div className="max-w-xs md:max-w-lg w-full group">
-                            <p className="text-brand4 whitespace-pre-line break-words">
-                              {urlstext}
-                            </p>
-                            {message.type == "live" ? (
-                              <a
-                                href={`${process.env.REACT_APP_CLIENT_URL}/live/${username}`}
-                                target="__blank"
-                              >
-                                {message.url ? (
-                                  <img
-                                    src={message.url}
-                                    className="w-full max-h-96 max-w-sm"
-                                  ></img>
-                                ) : (
-                                  <h1 className="text-center text-4xl font-bold text-dbeats-light">
-                                    I am Live
-                                  </h1>
-                                )}
-                              </a>
+                              </div>
                             ) : null}
-
-                            {urls &&
-                              urls.map((u, index) => {
-                                return (
-                                  <a href={u} key={index}>
-                                    <ChatLinkPreview
-                                      linkurl={u}
-                                      setShowLinkPreview={setShowLinkPreview}
-                                      setLinkPreviewData={setLinkPreviewData}
-                                    />
+                            {message.type == "file" ? (
+                              <div className="flex gap-1 items-center p-2 text-brand4 bg-slate-300 dark:bg-slate-800 rounded-md">
+                                <File />
+                                <p className="font-semibold text-sm w-24 truncate">
+                                  {message.url.split("/").pop()}
+                                </p>
+                                {/* <p className="text-gray-400 text-xs ">
+                                  Size: {"1024 kb"}
+                                </p> */}
+                                <p className="text-gray-400 text-xs">
+                                  <a
+                                    className="btn btn-sm btn-ghost text-success ml-auto capitalize"
+                                    href={message.url}
+                                    download
+                                    rel="noopener noreferrer"
+                                    target="_blank"
+                                  >
+                                    Download
                                   </a>
-                                );
-                              })}
+                                </p>
+                              </div>
+                            ) : null}
+                            <div className="max-w-xs w-full group">
+                              <p className="text-brand4 whitespace-pre-line break-words">
+                                {urlstext}
+                              </p>
+                              {message.type == "live" ? (
+                                <a
+                                  href={`${process.env.REACT_APP_CLIENT_URL}/live/${username}`}
+                                  target="__blank"
+                                >
+                                  {message.url ? (
+                                    <img
+                                      src={message.url}
+                                      className="w-full max-h-96 max-w-sm"
+                                    ></img>
+                                  ) : (
+                                    <h1 className="text-center text-4xl font-bold text-dbeats-light">
+                                      I am Live
+                                    </h1>
+                                  )}
+                                </a>
+                              ) : null}
+
+                              {urls &&
+                                urls.map((u, index) => {
+                                  return (
+                                    <a href={u} key={index}>
+                                      <ChatLinkPreview
+                                        linkurl={u}
+                                        setShowLinkPreview={setShowLinkPreview}
+                                        setLinkPreviewData={setLinkPreviewData}
+                                      />
+                                    </a>
+                                  );
+                                })}
+                            </div>
                           </div>
-                        </div>
-                        <div
-                          className="md:hidden opacity-0 group-hover:opacity-100 cursor-pointer p-1 w-fit text-sm text-teal-700 font-semibold rounded-full bg-slate-200 dark:bg-slate-700"
-                          onClick={() => onreply(message)}
-                        >
-                          <ArrowBackUp />
+                          <div
+                            className="md:hidden opacity-0 group-hover:opacity-100 cursor-pointer p-1 w-fit text-sm text-teal-700 font-semibold rounded-full bg-slate-200 dark:bg-slate-700"
+                            onClick={() => onreply(message)}
+                          >
+                            <ArrowBackUp />
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                );
-              })
-            : "<></>"}
-        </InfiniteScroll>
-        <div
-          onClick={() => {
-            chatRef.current.scrollIntoView({
-              behavior: "smooth",
-              block: "end",
-              inline: "nearest",
-            });
-          }}
-          className="p-1 absolute w-screen flex justify-center bottom-20  z-100"
-        >
-          <div className="py-1 px-2 rounded-full bg-slate-400/40 dark:bg-slate-600/40  text-brand2 flex gap-1 cursor-pointer backdrop-blur-sm">
-            <ChevronDown /> Recent messages
+                  );
+                })
+              : "<></>"}
+          </InfiniteScroll>
+          <div
+            onClick={() => {
+              chatRef.current.scrollIntoView({
+                behavior: "smooth",
+                block: "end",
+                inline: "nearest",
+              });
+            }}
+            className="p-1 absolute w-full flex justify-center bottom-20  z-100"
+          >
+            <div className="py-1 px-2 rounded-full bg-slate-400/40 dark:bg-slate-600/40  text-brand2 flex gap-1 cursor-pointer backdrop-blur-sm">
+              <ChevronDown /> Recent messages
+            </div>
           </div>
-        </div>
-        <div ref={chatRef} />
-      </div>
+          <div ref={chatRef} />
+          <div className="absolute  bottom-0 w-full bg-slate-300 dark:bg-slate-900">
+            <div className="py-4 px-2 md:px-4">
+              {formState.replyto ? (
+                <div className="w-full p-2 flex items-center bg-slate-200 dark:bg-slate-800	justify-between rounded-md mb-4">
+                  <div className="flex-grow flex gap-1">
+                    <img
+                      className="w-8 h-8 object-cover rounded-full"
+                      alt="profile"
+                      src={
+                        formState.replyto.profile_image
+                          ? formState.replyto.profile_image
+                          : person
+                      }
+                    />
 
-      <div className="   absolute  bottom-0 w-full bg-slate-300 dark:bg-slate-900">
-        <div className="py-4 px-2 md:px-4">
-          {formState.replyto ? (
-            <div className="w-full p-2 flex items-center bg-slate-200 dark:bg-slate-800	justify-between rounded-md mb-4">
-              <div className="flex-grow flex gap-1">
-                <img
-                  className="w-8 h-8 object-cover rounded-full"
-                  alt="profile"
-                  src={
-                    formState.replyto.profile_image
-                      ? formState.replyto.profile_image
-                      : person
-                  }
-                />
-
-                <div className="flex-grow ">
-                  <p className={"text-base font-bold  text-brand2"}>
-                    {formState.replyto.username === user.username
-                      ? "You"
-                      : formState.replyto.username}
-                    <span className="text-xs text-brand5 font-light ml-2">
-                      {new Date(formState.replyto.createdAt).toLocaleString(
-                        "en-US",
-                        {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                          hour12: true,
-                        }
-                      )}
-                    </span>
-                  </p>
-                  <div className="text-sm w-10/12 max-w-xs md:max-w-lg truncate text-brand3">
-                    {formState.replyto.message}
+                    <div className="flex-grow ">
+                      <p className={"text-base font-bold  text-brand2"}>
+                        {formState.replyto.username === user.username
+                          ? "You"
+                          : formState.replyto.username}
+                        <span className="text-xs text-brand5 font-light ml-2">
+                          {new Date(formState.replyto.createdAt).toLocaleString(
+                            "en-US",
+                            {
+                              hour: "2-digit",
+                              minute: "2-digit",
+                              hour12: true,
+                            }
+                          )}
+                        </span>
+                      </p>
+                      <div className="text-sm w-10/12 max-w-xs md:max-w-lg truncate text-brand3">
+                        {formState.replyto.message}
+                      </div>
+                    </div>
+                  </div>
+                  <button
+                    className="btn btn-xs btn-error btn-circle  text-white "
+                    onClick={() => {
+                      setForm({ ...formState, replyto: null });
+                    }}
+                  >
+                    <i className="fa-solid fa-xmark text-lg  "></i>
+                  </button>
+                </div>
+              ) : null}
+              {selectedFile ? (
+                <div className="flex gap-2 rounded-md justify-between p-2 bg-slate-200 dark:bg-slate-800 mb-4">
+                  {selectedFile.type == "image" && (
+                    <img src={selectedFile.localurl} className=" h-24 "></img>
+                  )}
+                  {selectedFile.type == "sound" && (
+                    <div className="ml-3 p-2 border border-dbeats-light rounded-md">
+                      <i className="fas fa-music text-3xl text-dbeats-light"></i>
+                      <p className="text-gray-400 text-xs">
+                        {selectedFile.file[0].name}
+                      </p>
+                    </div>
+                  )}
+                  {selectedFile.type == "video" && (
+                    <div className="flex gap-1 items-center p-2 text-brand4 bg-slate-300 dark:bg-slate-700 rounded-md">
+                      <Video />
+                      <p className="font-semibold text-sm ">
+                        {selectedFile.file[0].name}
+                      </p>
+                    </div>
+                  )}
+                  {selectedFile.type == "file" && (
+                    <div className="flex gap-1 items-center p-2 text-brand4 bg-slate-300 dark:bg-slate-700 rounded-md">
+                      <File />
+                      <p className="font-semibold text-sm  ">
+                        {selectedFile.file[0].name}
+                      </p>
+                    </div>
+                  )}
+                  <button
+                    onClick={() => {
+                      setSelectedFile(null);
+                    }}
+                  >
+                    <div className="btn btn-xs btn-error btn-circle  text-white">
+                      <i className="fas fa-times"></i>
+                    </div>
+                  </button>
+                </div>
+              ) : null}
+              <div className="flex justify-start items-center gap-1">
+                <div>
+                  <div className="dropdown dropdown-top">
+                    <label
+                      tabIndex={0}
+                      className="m-1 cursor-pointer text-brand2"
+                    >
+                      <i className="far fa-laugh text-base md:text-2xl "></i>
+                    </label>
+                    <div
+                      tabIndex={0}
+                      className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52"
+                    >
+                      <Picker onEmojiClick={onEmojiClick} />
+                    </div>
                   </div>
                 </div>
-              </div>
-              <button
-                className="btn btn-xs btn-error btn-circle  text-white "
-                onClick={() => {
-                  setForm({ ...formState, replyto: null });
-                }}
-              >
-                <i className="fa-solid fa-xmark text-lg  "></i>
-              </button>
-            </div>
-          ) : null}
-          {selectedFile ? (
-            <div className="flex gap-2 rounded-md justify-between p-2 bg-slate-200 dark:bg-slate-800 mb-4">
-              {selectedFile.type == "image" && (
-                <img src={selectedFile.localurl} className=" h-24 "></img>
-              )}
-              {selectedFile.type == "sound" && (
-                <div className="ml-3 p-2 border border-dbeats-light rounded-md">
-                  <i className="fas fa-music text-3xl text-dbeats-light"></i>
-                  <p className="text-gray-400 text-xs">
-                    {selectedFile.file[0].name}
-                  </p>
-                </div>
-              )}
-              {selectedFile.type == "video" && (
-                <div className="flex gap-1 items-center p-2 text-brand4 bg-slate-300 dark:bg-slate-700 rounded-md">
-                  <Video />
-                  <p className="font-semibold text-sm ">
-                    {selectedFile.file[0].name}
-                  </p>
-                </div>
-              )}
-              {selectedFile.type == "file" && (
-                <div className="flex gap-1 items-center p-2 text-brand4 bg-slate-300 dark:bg-slate-700 rounded-md">
-                  <File />
-                  <p className="font-semibold text-sm  ">
-                    {selectedFile.file[0].name}
-                  </p>
-                </div>
-              )}
-              <button
-                onClick={() => {
-                  setSelectedFile(null);
-                }}
-              >
-                <div className="btn btn-xs btn-error btn-circle  text-white">
-                  <i className="fas fa-times"></i>
-                </div>
-              </button>
-            </div>
-          ) : null}
-          <div className="flex justify-start items-center gap-1">
-            <div>
-              <div className="dropdown dropdown-top">
-                <label tabIndex={0} className="m-1 cursor-pointer text-brand2">
-                  <i className="far fa-laugh text-base md:text-2xl "></i>
-                </label>
-                <div
-                  tabIndex={0}
-                  className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52"
-                >
-                  <Picker onEmojiClick={onEmojiClick} />
-                </div>
-              </div>
-            </div>
-            {/* <div
+                {/* <div
               onClick={() => {
                 setShowAttachmentDropdown(
                   showAttachmentDropdown ? !showAttachmentDropdown : showAttachmentDropdown,
@@ -738,55 +768,58 @@ function ChatRoom(props) {
               </span>
             </div> */}
 
-            <div className="dropdown dropdown-top">
-              <label tabIndex={0} className="m-1 cursor-pointer text-brand2">
-                <i className="fas fa-paperclip text-base md:text-2xl "></i>
-              </label>
-              <ul
-                tabIndex={0}
-                className="dropdown-content menu p-2 mb-4 shadow rounded-box w-52 bg-slate-300 dark:bg-slate-700  text-brand2"
-              >
-                <input
-                  name="image"
-                  type="file"
-                  accept=".jpg,.png,.jpeg,.gif,.webp"
-                  onChange={onFileChange}
-                  className="hidden"
-                  ref={imageInput}
-                />
-                <input
-                  name="sound"
-                  type="file"
-                  accept=".mp3, .weba"
-                  onChange={onFileChange}
-                  className="hidden"
-                  ref={soundInput}
-                />
-                <input
-                  name="video"
-                  type="file"
-                  accept=".mp4, .mkv, .mov, .avi"
-                  onChange={onFileChange}
-                  className="hidden"
-                  ref={videoInput}
-                />
-                <input
-                  name="file"
-                  type="file"
-                  onChange={onFileChange}
-                  className="hidden"
-                  ref={fileInput}
-                />
-                <li
-                  onClick={() => {
-                    imageInput.current.click();
-                  }}
-                >
-                  <div className="dark:hover:bg-slate-800">
-                    <i className="fas fa-camera "></i>Image
-                  </div>
-                </li>
-                {/* <li
+                <div className="dropdown dropdown-top">
+                  <label
+                    tabIndex={0}
+                    className="m-1 cursor-pointer text-brand2"
+                  >
+                    <i className="fas fa-paperclip text-base md:text-2xl "></i>
+                  </label>
+                  <ul
+                    tabIndex={0}
+                    className="dropdown-content menu p-2 mb-4 shadow rounded-box w-52 bg-slate-300 dark:bg-slate-700  text-brand2"
+                  >
+                    <input
+                      name="image"
+                      type="file"
+                      accept=".jpg,.png,.jpeg,.gif,.webp"
+                      onChange={onFileChange}
+                      className="hidden"
+                      ref={imageInput}
+                    />
+                    <input
+                      name="sound"
+                      type="file"
+                      accept=".mp3, .weba"
+                      onChange={onFileChange}
+                      className="hidden"
+                      ref={soundInput}
+                    />
+                    <input
+                      name="video"
+                      type="file"
+                      accept=".mp4, .mkv, .mov, .avi"
+                      onChange={onFileChange}
+                      className="hidden"
+                      ref={videoInput}
+                    />
+                    <input
+                      name="file"
+                      type="file"
+                      onChange={onFileChange}
+                      className="hidden"
+                      ref={fileInput}
+                    />
+                    <li
+                      onClick={() => {
+                        imageInput.current.click();
+                      }}
+                    >
+                      <div className="dark:hover:bg-slate-800">
+                        <i className="fas fa-camera "></i>Image
+                      </div>
+                    </li>
+                    {/* <li
                         onClick={() => {
                           soundInput.current.click();
                         }}
@@ -795,28 +828,28 @@ function ChatRoom(props) {
                           <i className="fas fa-music "></i>Sound
                         </div>
                       </li> */}
-                <li
-                  onClick={() => {
-                    videoInput.current.click();
-                  }}
-                >
-                  <div className="dark:hover:bg-slate-800">
-                    <i className="fas fa-video "></i>Video
-                  </div>
-                </li>
-                <li
-                  onClick={() => {
-                    fileInput.current.click();
-                  }}
-                >
-                  <div className="dark:hover:bg-slate-800">
-                    <i className="fas fa-file "></i>File
-                  </div>
-                </li>
-              </ul>
-            </div>
+                    <li
+                      onClick={() => {
+                        videoInput.current.click();
+                      }}
+                    >
+                      <div className="dark:hover:bg-slate-800">
+                        <i className="fas fa-video "></i>Video
+                      </div>
+                    </li>
+                    <li
+                      onClick={() => {
+                        fileInput.current.click();
+                      }}
+                    >
+                      <div className="dark:hover:bg-slate-800">
+                        <i className="fas fa-file "></i>File
+                      </div>
+                    </li>
+                  </ul>
+                </div>
 
-            {/* <div
+                {/* <div
               onClick={() => {
                 setShowAttachmentDropdown(!showAttachmentDropdown);
                 setShowEmojis(showEmojis ? !showEmojis : showEmojis);
@@ -831,28 +864,28 @@ function ChatRoom(props) {
               </span>
             </div> */}
 
-            <form
-              className="flex items-center flex-grow gap-1"
-              id="chat-form"
-              onSubmit={saveMessage}
-            >
-              {/* <div className="flex-grow rounded-md group w-fit  p-1  mx-1  cursor-pointer            font-medium          transform-gpu  transition-all duration-300 ease-in-out ">
+                <form
+                  className="flex items-center flex-grow gap-1"
+                  id="chat-form"
+                  onSubmit={saveMessage}
+                >
+                  {/* <div className="flex-grow rounded-md group w-fit  p-1  mx-1  cursor-pointer            font-medium          transform-gpu  transition-all duration-300 ease-in-out ">
                 {" "} */}
-              <textarea
-                onChange={onChange}
-                value={formState.message}
-                id="msg"
-                rows={1}
-                name="message"
-                type="text"
-                placeholder="Enter Message"
-                required
-                autoComplete="false"
-                className="w-full rounded-md textarea"
-              ></textarea>
-              {/* </div> */}
+                  <textarea
+                    onChange={onChange}
+                    value={formState.message}
+                    id="msg"
+                    rows={1}
+                    name="message"
+                    type="text"
+                    placeholder="Enter Message"
+                    required
+                    autoComplete="false"
+                    className="w-full rounded-md textarea"
+                  ></textarea>
+                  {/* </div> */}
 
-              {/* <button
+                  {/* <button
                    
                   type="submit"
                   className={`${
@@ -864,22 +897,25 @@ function ChatRoom(props) {
                   <i className="fas fa-paper-plane mr-2" />
                   <p className="hidden md:inline">Send</p>
                 </button> */}
-              {/*  */}
-              <button
-                disabled={formState.message.length < 1}
-                type="submit"
-                className={`
+                  {/*  */}
+                  <button
+                    disabled={formState.message.length < 1}
+                    type="submit"
+                    className={`
                
                  ${
                    uploadingFile && "loading"
                  } btn btn-square btn-primary  gap-2`}
-              >
-                {!uploadingFile && <Send size={20}></Send>}
-              </button>
-            </form>
+                  >
+                    {!uploadingFile && <Send size={20}></Send>}
+                  </button>
+                </form>
+              </div>
+            </div>
           </div>
         </div>
       </div>
+      <div className="hidden lg:flex flex-col items-end h-full w-1/4 pt-24 mr-12 ml-4"></div>
     </div>
   );
 }
