@@ -79,10 +79,9 @@ const CollectCoinsModal = ({ setCollectCoinsModalVisible, setTotalCoins }) => {
         break;
     }
     data.type = "social";
-    data.prevBalance =
-      State.database.userData.data?.user?.coins[
-        State.database.userData.data?.user?.coins?.length - 1
-      ].balance;
+    if (State.database.userData.data?.user?.coins) {
+      data.prevBalance = State.database.userData.data?.user?.coins?.balance;
+    }
 
     axios
       .post(`${process.env.REACT_APP_SERVER_URL}/user/send_gems`, data, {
