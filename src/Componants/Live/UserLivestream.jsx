@@ -11,6 +11,7 @@ import placeholderImage from "../../Assets/profile-pic.png";
 import JoinSuperfanModal from "../Home/Modals/JoinSuperfanModal";
 import Loading from "../Loading/Loading";
 import { Eye, Share } from "tabler-icons-react";
+import livePlaceholder from "../../Assets/Gaming Posters/liveplaceholder.jpg";
 
 const socket = io("https://mintflickviews.herokuapp.com", {
   autoConnect: false,
@@ -222,12 +223,13 @@ function UserLivestream() {
       <div className={`flex flex-col lg:flex-row relative h-full p-4`}>
         <div className="w-full lg:w-3/4 space-y-2">
           {streamUser ? (
-            streamUser.thumbnail &&
             !streamUser.livepeer_data.isActive &&
             new Date(streamUser.streamSchedule * 1) > new Date() ? (
               <img
                 className="w-full aspect-video rounded-sm lg:rounded-xl object-cover"
-                src={streamUser.thumbnail}
+                src={
+                  streamUser.thumbnail ? streamUser.thumbnail : livePlaceholder
+                }
               />
             ) : (
               <div className="rounded-sm lg:rounded-xl overflow-hidden">
