@@ -27,6 +27,8 @@ import ReactPlayer from "react-player";
 import TextChannels from "../Profile/TextChannels";
 import ChatsList from "./ChatsList";
 import { Image } from "react-img-placeholder";
+import axios from "axios";
+import ProfileVisitCard from "../Profile/ProfileVisitCard";
 
 // https://mintflickchats.herokuapp.com
 const socket = io(`${process.env.REACT_APP_CHAT_URL}`, {
@@ -36,6 +38,8 @@ const socket = io(`${process.env.REACT_APP_CHAT_URL}`, {
 function ChatRoom(props) {
   // to get loggedin user from   localstorage
   const user = useContext(UserContext);
+  const [showButton, setShowButton] = useState(false);
+
   const location = useLocation();
   const { username } = useParams();
   const { isDM, user2 } = location.state;
@@ -61,6 +65,7 @@ function ChatRoom(props) {
   }
 
   const [messages, setMessages] = useState([]);
+
   useEffect(() => {
     if (goToMessage) {
       if (messageRef.current[goToMessage]) {
@@ -323,17 +328,17 @@ function ChatRoom(props) {
   return (
     <div className=" flex h-screen bg-slate-100 dark:bg-slate-800 lg:bg-white lg:dark:bg-slate-900">
       <div className="hidden lg:flex flex-col h-full w-1/4 ml-12 mr-4 pt-24 space-y-6 overflow-y-auto">
-        <ChatsList />
+        <ChatsList userName={username} />
       </div>
-      <div className="relative rounded-md flex flex-col lg:w-2/4 w-full h-screen  pt-14 lg:pt-20 bg-slate-100 dark:bg-slate-800 ">
-        <div className="w-full h-fit p-2 bg-slate-300 dark:bg-slate-700">
+      <div className=" relative  rounded-lg flex flex-col lg:w-2/4 w-full overflow-clip  mt-14 lg:mt-24 bg-slate-100 dark:bg-slate-800 ">
+        <div className=" w-full h-fit p-1 border-b-2 border-slate-200 dark:border-slate-700 bg-slate-300 dark:bg-slate-800">
           <Link
             to={`../profile/${username}`}
-            className=" w-full flex cursor-pointer items-center gap-2  rounded-md p-1"
+            className=" w-full flex cursor-pointer items-center gap-2   p-1"
           >
             <Image
-              width={33}
-              height={33}
+              width={42}
+              height={42}
               className="h-full rounded-full border-2"
               src={placeholderImage}
               alt="profileImage"
@@ -347,7 +352,7 @@ function ChatRoom(props) {
 
         <LoadingBar ref={loadingRef} color="#00d3ff" shadow={true} />
 
-        <div className=" h-full overflow-y-scroll	overflow-x-hidden pb-20">
+        <div className=" h-full overflow-y-scroll	overflow-x-hidden ">
           <div ref={scrollTop}></div>
           <InfiniteScroll
             className="px-4"
@@ -641,117 +646,118 @@ function ChatRoom(props) {
                 inline: "nearest",
               });
             }}
-            className="p-1 absolute w-full flex justify-center bottom-20  z-100"
+            className="p-1 absolute w-full flex justify-center bottom-16   z-100"
           >
             <div className="py-1 px-2 rounded-full bg-slate-400/40 dark:bg-slate-600/40  text-brand2 flex gap-1 cursor-pointer backdrop-blur-sm">
               <ChevronDown /> Recent messages
             </div>
           </div>
           <div ref={chatRef} />
-          <div className="absolute  bottom-0 w-full bg-slate-300 dark:bg-slate-900">
-            <div className="py-4 px-2 md:px-4">
-              {formState.replyto ? (
-                <div className="w-full p-2 flex items-center bg-slate-200 dark:bg-slate-800	justify-between rounded-md mb-4">
-                  <div className="flex-grow flex gap-1">
-                    <img
-                      className="w-8 h-8 object-cover rounded-full"
-                      alt="profile"
-                      src={
-                        formState.replyto.profile_image
-                          ? formState.replyto.profile_image
-                          : person
-                      }
-                    />
+        </div>
+        <div className=" border-t-2 border-slate-200 dark:border-slate-700 w-full bg-slate-300 dark:bg-slate-800 ">
+          <div className="py-1 px-1 md:px-2">
+            {formState.replyto ? (
+              <div className="w-full p-2 flex items-center bg-slate-200 dark:bg-slate-800	justify-between rounded-md mb-4">
+                <div className="flex-grow flex gap-1">
+                  <img
+                    className="w-8 h-8 object-cover rounded-full"
+                    alt="profile"
+                    src={
+                      formState.replyto.profile_image
+                        ? formState.replyto.profile_image
+                        : person
+                    }
+                  />
 
-                    <div className="flex-grow ">
-                      <p className={"text-base font-bold  text-brand2"}>
-                        {formState.replyto.username === user.username
-                          ? "You"
-                          : formState.replyto.username}
-                        <span className="text-xs text-brand5 font-light ml-2">
-                          {new Date(formState.replyto.createdAt).toLocaleString(
-                            "en-US",
-                            {
-                              hour: "2-digit",
-                              minute: "2-digit",
-                              hour12: true,
-                            }
-                          )}
-                        </span>
-                      </p>
-                      <div className="text-sm w-10/12 max-w-xs md:max-w-lg truncate text-brand3">
-                        {formState.replyto.message}
-                      </div>
-                    </div>
-                  </div>
-                  <button
-                    className="btn btn-xs btn-error btn-circle  text-white "
-                    onClick={() => {
-                      setForm({ ...formState, replyto: null });
-                    }}
-                  >
-                    <i className="fa-solid fa-xmark text-lg  "></i>
-                  </button>
-                </div>
-              ) : null}
-              {selectedFile ? (
-                <div className="flex gap-2 rounded-md justify-between p-2 bg-slate-200 dark:bg-slate-800 mb-4">
-                  {selectedFile.type == "image" && (
-                    <img src={selectedFile.localurl} className=" h-24 "></img>
-                  )}
-                  {selectedFile.type == "sound" && (
-                    <div className="ml-3 p-2 border border-dbeats-light rounded-md">
-                      <i className="fas fa-music text-3xl text-dbeats-light"></i>
-                      <p className="text-gray-400 text-xs">
-                        {selectedFile.file[0].name}
-                      </p>
-                    </div>
-                  )}
-                  {selectedFile.type == "video" && (
-                    <div className="flex gap-1 items-center p-2 text-brand4 bg-slate-300 dark:bg-slate-700 rounded-md">
-                      <Video />
-                      <p className="font-semibold text-sm ">
-                        {selectedFile.file[0].name}
-                      </p>
-                    </div>
-                  )}
-                  {selectedFile.type == "file" && (
-                    <div className="flex gap-1 items-center p-2 text-brand4 bg-slate-300 dark:bg-slate-700 rounded-md">
-                      <File />
-                      <p className="font-semibold text-sm  ">
-                        {selectedFile.file[0].name}
-                      </p>
-                    </div>
-                  )}
-                  <button
-                    onClick={() => {
-                      setSelectedFile(null);
-                    }}
-                  >
-                    <div className="btn btn-xs btn-error btn-circle  text-white">
-                      <i className="fas fa-times"></i>
-                    </div>
-                  </button>
-                </div>
-              ) : null}
-              <div className="flex justify-start items-center gap-1">
-                <div>
-                  <div className="dropdown dropdown-top">
-                    <label
-                      tabIndex={0}
-                      className="m-1 cursor-pointer text-brand2"
-                    >
-                      <i className="far fa-laugh text-base md:text-2xl "></i>
-                    </label>
-                    <div
-                      tabIndex={0}
-                      className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52"
-                    >
-                      <Picker onEmojiClick={onEmojiClick} />
+                  <div className="flex-grow ">
+                    <p className={"text-base font-bold  text-brand2"}>
+                      {formState.replyto.username === user.username
+                        ? "You"
+                        : formState.replyto.username}
+                      <span className="text-xs text-brand5 font-light ml-2">
+                        {new Date(formState.replyto.createdAt).toLocaleString(
+                          "en-US",
+                          {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                            hour12: true,
+                          }
+                        )}
+                      </span>
+                    </p>
+                    <div className="text-sm w-10/12 max-w-xs md:max-w-lg truncate text-brand3">
+                      {formState.replyto.message}
                     </div>
                   </div>
                 </div>
-                {/* <div
+                <button
+                  className="btn btn-xs btn-error btn-circle  text-white "
+                  onClick={() => {
+                    setForm({ ...formState, replyto: null });
+                  }}
+                >
+                  <i className="fa-solid fa-xmark text-lg  "></i>
+                </button>
+              </div>
+            ) : null}
+            {selectedFile ? (
+              <div className="flex gap-2 rounded-md justify-between p-2 bg-slate-200 dark:bg-slate-800 mb-4">
+                {selectedFile.type == "image" && (
+                  <img src={selectedFile.localurl} className=" h-24 "></img>
+                )}
+                {selectedFile.type == "sound" && (
+                  <div className="ml-3 p-2 border border-dbeats-light rounded-md">
+                    <i className="fas fa-music text-3xl text-dbeats-light"></i>
+                    <p className="text-gray-400 text-xs">
+                      {selectedFile.file[0].name}
+                    </p>
+                  </div>
+                )}
+                {selectedFile.type == "video" && (
+                  <div className="flex gap-1 items-center p-2 text-brand4 bg-slate-300 dark:bg-slate-700 rounded-md">
+                    <Video />
+                    <p className="font-semibold text-sm ">
+                      {selectedFile.file[0].name}
+                    </p>
+                  </div>
+                )}
+                {selectedFile.type == "file" && (
+                  <div className="flex gap-1 items-center p-2 text-brand4 bg-slate-300 dark:bg-slate-700 rounded-md">
+                    <File />
+                    <p className="font-semibold text-sm  ">
+                      {selectedFile.file[0].name}
+                    </p>
+                  </div>
+                )}
+                <button
+                  onClick={() => {
+                    setSelectedFile(null);
+                  }}
+                >
+                  <div className="btn btn-xs btn-error btn-circle  text-white">
+                    <i className="fas fa-times"></i>
+                  </div>
+                </button>
+              </div>
+            ) : null}
+            <div className="flex justify-start items-center gap-2 ">
+              <div>
+                <div className="dropdown dropdown-top">
+                  <label
+                    tabIndex={0}
+                    className="m-1 cursor-pointer text-brand2"
+                  >
+                    <i className="far fa-laugh text-base "></i>
+                  </label>
+                  <div
+                    tabIndex={0}
+                    className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52"
+                  >
+                    <Picker onEmojiClick={onEmojiClick} />
+                  </div>
+                </div>
+              </div>
+              {/* <div
               onClick={() => {
                 setShowAttachmentDropdown(
                   showAttachmentDropdown ? !showAttachmentDropdown : showAttachmentDropdown,
@@ -768,58 +774,55 @@ function ChatRoom(props) {
               </span>
             </div> */}
 
-                <div className="dropdown dropdown-top">
-                  <label
-                    tabIndex={0}
-                    className="m-1 cursor-pointer text-brand2"
+              <div className="dropdown dropdown-top">
+                <label tabIndex={0} className="m-1 cursor-pointer text-brand2">
+                  <i className="fas fa-paperclip text-base "></i>
+                </label>
+                <ul
+                  tabIndex={0}
+                  className="dropdown-content menu p-2 mb-4 shadow rounded-box w-52 bg-slate-300 dark:bg-slate-700  text-brand2"
+                >
+                  <input
+                    name="image"
+                    type="file"
+                    accept=".jpg,.png,.jpeg,.gif,.webp"
+                    onChange={onFileChange}
+                    className="hidden"
+                    ref={imageInput}
+                  />
+                  <input
+                    name="sound"
+                    type="file"
+                    accept=".mp3, .weba"
+                    onChange={onFileChange}
+                    className="hidden"
+                    ref={soundInput}
+                  />
+                  <input
+                    name="video"
+                    type="file"
+                    accept=".mp4, .mkv, .mov, .avi"
+                    onChange={onFileChange}
+                    className="hidden"
+                    ref={videoInput}
+                  />
+                  <input
+                    name="file"
+                    type="file"
+                    onChange={onFileChange}
+                    className="hidden"
+                    ref={fileInput}
+                  />
+                  <li
+                    onClick={() => {
+                      imageInput.current.click();
+                    }}
                   >
-                    <i className="fas fa-paperclip text-base md:text-2xl "></i>
-                  </label>
-                  <ul
-                    tabIndex={0}
-                    className="dropdown-content menu p-2 mb-4 shadow rounded-box w-52 bg-slate-300 dark:bg-slate-700  text-brand2"
-                  >
-                    <input
-                      name="image"
-                      type="file"
-                      accept=".jpg,.png,.jpeg,.gif,.webp"
-                      onChange={onFileChange}
-                      className="hidden"
-                      ref={imageInput}
-                    />
-                    <input
-                      name="sound"
-                      type="file"
-                      accept=".mp3, .weba"
-                      onChange={onFileChange}
-                      className="hidden"
-                      ref={soundInput}
-                    />
-                    <input
-                      name="video"
-                      type="file"
-                      accept=".mp4, .mkv, .mov, .avi"
-                      onChange={onFileChange}
-                      className="hidden"
-                      ref={videoInput}
-                    />
-                    <input
-                      name="file"
-                      type="file"
-                      onChange={onFileChange}
-                      className="hidden"
-                      ref={fileInput}
-                    />
-                    <li
-                      onClick={() => {
-                        imageInput.current.click();
-                      }}
-                    >
-                      <div className="dark:hover:bg-slate-800">
-                        <i className="fas fa-camera "></i>Image
-                      </div>
-                    </li>
-                    {/* <li
+                    <div className="dark:hover:bg-slate-800">
+                      <i className="fas fa-camera "></i>Image
+                    </div>
+                  </li>
+                  {/* <li
                         onClick={() => {
                           soundInput.current.click();
                         }}
@@ -828,28 +831,28 @@ function ChatRoom(props) {
                           <i className="fas fa-music "></i>Sound
                         </div>
                       </li> */}
-                    <li
-                      onClick={() => {
-                        videoInput.current.click();
-                      }}
-                    >
-                      <div className="dark:hover:bg-slate-800">
-                        <i className="fas fa-video "></i>Video
-                      </div>
-                    </li>
-                    <li
-                      onClick={() => {
-                        fileInput.current.click();
-                      }}
-                    >
-                      <div className="dark:hover:bg-slate-800">
-                        <i className="fas fa-file "></i>File
-                      </div>
-                    </li>
-                  </ul>
-                </div>
+                  <li
+                    onClick={() => {
+                      videoInput.current.click();
+                    }}
+                  >
+                    <div className="dark:hover:bg-slate-800">
+                      <i className="fas fa-video "></i>Video
+                    </div>
+                  </li>
+                  <li
+                    onClick={() => {
+                      fileInput.current.click();
+                    }}
+                  >
+                    <div className="dark:hover:bg-slate-800">
+                      <i className="fas fa-file "></i>File
+                    </div>
+                  </li>
+                </ul>
+              </div>
 
-                {/* <div
+              {/* <div
               onClick={() => {
                 setShowAttachmentDropdown(!showAttachmentDropdown);
                 setShowEmojis(showEmojis ? !showEmojis : showEmojis);
@@ -864,28 +867,28 @@ function ChatRoom(props) {
               </span>
             </div> */}
 
-                <form
-                  className="flex items-center flex-grow gap-1"
-                  id="chat-form"
-                  onSubmit={saveMessage}
-                >
-                  {/* <div className="flex-grow rounded-md group w-fit  p-1  mx-1  cursor-pointer            font-medium          transform-gpu  transition-all duration-300 ease-in-out ">
+              <form
+                className="flex items-center flex-grow gap-1"
+                id="chat-form"
+                onSubmit={saveMessage}
+              >
+                {/* <div className="flex-grow rounded-md group w-fit  p-1  mx-1  cursor-pointer            font-medium          transform-gpu  transition-all duration-300 ease-in-out ">
                 {" "} */}
-                  <textarea
-                    onChange={onChange}
-                    value={formState.message}
-                    id="msg"
-                    rows={1}
-                    name="message"
-                    type="text"
-                    placeholder="Enter Message"
-                    required
-                    autoComplete="false"
-                    className="w-full rounded-md textarea"
-                  ></textarea>
-                  {/* </div> */}
+                <textarea
+                  onChange={onChange}
+                  value={formState.message}
+                  id="msg"
+                  rows={1}
+                  name="message"
+                  type="text"
+                  placeholder="Enter Message"
+                  required
+                  autoComplete="false"
+                  className="w-full rounded-md textarea "
+                ></textarea>
+                {/* </div> */}
 
-                  {/* <button
+                {/* <button
                    
                   type="submit"
                   className={`${
@@ -897,25 +900,26 @@ function ChatRoom(props) {
                   <i className="fas fa-paper-plane mr-2" />
                   <p className="hidden md:inline">Send</p>
                 </button> */}
-                  {/*  */}
-                  <button
-                    disabled={formState.message.length < 1}
-                    type="submit"
-                    className={`
+                {/*  */}
+                <button
+                  disabled={formState.message.length < 1}
+                  type="submit"
+                  className={`
                
                  ${
                    uploadingFile && "loading"
                  } btn btn-square btn-primary  gap-2`}
-                  >
-                    {!uploadingFile && <Send size={20}></Send>}
-                  </button>
-                </form>
-              </div>
+                >
+                  {!uploadingFile && <Send size={20}></Send>}
+                </button>
+              </form>
             </div>
           </div>
         </div>
       </div>
-      <div className="hidden lg:flex flex-col items-end h-full w-1/4 pt-24 mr-12 ml-4"></div>
+      <div className="hidden lg:flex flex-col items-end h-full w-1/4 pt-24 mr-12 ml-4">
+        <ProfileVisitCard />
+      </div>
     </div>
   );
 }

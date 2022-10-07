@@ -1,7 +1,11 @@
-import React, { useEffect, useState } from 'react';
-const mql = require('@microlink/mql');
+import React, { useEffect, useState } from "react";
+const mql = require("@microlink/mql");
 
-const ChatLinkPreview = ({ linkurl, setShowLinkPreview, setLinkPreviewData }) => {
+const ChatLinkPreview = ({
+  linkurl,
+  setShowLinkPreview,
+  setLinkPreviewData,
+}) => {
   const [linkData, setLinkData] = useState(null);
 
   useEffect(() => {
@@ -17,7 +21,7 @@ const ChatLinkPreview = ({ linkurl, setShowLinkPreview, setLinkPreviewData }) =>
       animations: true,
     });
 
-    if (data.title.indexOf('Page Not Found') === -1) {
+    if (data.title.indexOf("Page Not Found") === -1) {
       setLinkData(data);
       setLinkPreviewData(data);
     } else {
@@ -29,11 +33,15 @@ const ChatLinkPreview = ({ linkurl, setShowLinkPreview, setLinkPreviewData }) =>
       {linkData ? (
         <div className={`py-3 flex `}>
           <div
-            className={` items-center rounded-lg w-full max-w-sm h-max md:p-4  bg-dbeats-dark-primary text-white`}
+            className={` items-center rounded-lg w-full max-w-sm h-max md:p-4  bg-dbeats-dark-primary text-brand2`}
           >
             {linkData.image ? (
               <div className="flex items-center max-h-44 bg-dbeats-dark-alt">
-                <img src={linkData.image.url} className="max-h-40 w-full mx-auto" alt="link_image" />
+                <img
+                  src={linkData.image.url}
+                  className="max-h-40 w-full mx-auto"
+                  alt="link_image"
+                />
               </div>
             ) : null}
             <div className="py-2">
@@ -51,8 +59,10 @@ const ChatLinkPreview = ({ linkurl, setShowLinkPreview, setLinkPreviewData }) =>
                 <div className="font-bold pl-1">{linkData.publisher}</div>
               </div>
               <div>
-                <div className="line-clamp-2 font-semibold text-sm">{linkData.title}</div>
-                <div className="line-clamp-2 text-xs text-gray-300 break-word">
+                <div className="line-clamp-2 font-semibold text-sm">
+                  {linkData.title}
+                </div>
+                <div className="line-clamp-2 text-xs text-brand4 break-word">
                   {linkData.description}
                 </div>
               </div>
