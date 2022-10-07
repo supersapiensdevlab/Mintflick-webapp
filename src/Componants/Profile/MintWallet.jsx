@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import {
   Diamond,
   DotsVertical,
@@ -10,12 +10,14 @@ import {
 } from "tabler-icons-react";
 import EachTransaction from "./EachTransaction";
 import CollectCoinsModal from "./Modals/CollectCoinsModal";
+import { UserContext } from "../../Store";
+import axios from "axios";
 
 function MintWallet() {
   const [collectCoinsModalVisible, setCollectCoinsModalVisible] =
     useState(false);
 
-  const [totalCoins, setTotalCoins] = useState(0);
+  const State = useContext(UserContext);
 
   return (
     <div className="flex flex-col items-start bg-slate-100 dark:bg-slate-800 w-full h-fit rounded-lg overflow-clip">
@@ -32,8 +34,8 @@ function MintWallet() {
       <div className="p-2 w-full flex flex-col gap-2 items-center">
         <span className="flex justify-between items-center w-full p-2 px-4  rounded-md bg-slate-200 dark:bg-slate-700">
           <h3 className="flex items-center font-semibold text-3xl text-brand-gradient">
-            {totalCoins}
-            <Coin className="text-white" size={32} />
+            {State.database.userData.data?.user?.coins?.balance}
+            <Coin className="text-white mx-1" size={32} />
           </h3>{" "}
           <button
             onClick={() => {
@@ -47,7 +49,7 @@ function MintWallet() {
         <span className="flex justify-between items-center w-full p-2 px-4  rounded-md bg-slate-200 dark:bg-slate-700">
           <h3 className="flex items-center font-semibold text-3xl text-brand-gradient">
             1234
-            <Diamond className="text-white" size={32} />
+            <Diamond className="text-white mx-1" size={32} />
           </h3>{" "}
           <button className="ml-auto btn btn-sm btn-primary btn-outline capitalize">
             redeem
@@ -76,7 +78,6 @@ function MintWallet() {
       >
         <CollectCoinsModal
           setCollectCoinsModalVisible={setCollectCoinsModalVisible}
-          setTotalCoins={setTotalCoins}
         />
       </div>
     </div>

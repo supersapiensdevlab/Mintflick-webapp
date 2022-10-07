@@ -8,23 +8,20 @@ import {
   BrandLinkedin,
   BrandDiscord,
   Coin,
+  Checkbox,
+  ChevronRight,
+  ChevronLeft,
+  Award,
 } from "tabler-icons-react";
 import useUserActions from "../../../Hooks/useUserActions";
 import { UserContext } from "../../../Store";
 
-const CollectCoinsModal = ({ setCollectCoinsModalVisible, setTotalCoins }) => {
-  const [updateHandleFollow, setUpdateHandleFollow] = useState({
-    twitter: false,
-    instagram: false,
-    linkedin: false,
-    discord: false,
-  });
-
+const CollectCoinsModal = ({ setCollectCoinsModalVisible }) => {
   const State = useContext(UserContext);
 
   const [loadFeed, loadUser] = useUserActions();
 
-  console.log(updateHandleFollow);
+  const [step, setStep] = useState(0);
 
   const handleUserCoins = (social) => {
     let data;
@@ -33,49 +30,39 @@ const CollectCoinsModal = ({ setCollectCoinsModalVisible, setTotalCoins }) => {
         data = {
           coins: 10,
           receivedBy: "following twitter",
+          update: "followedTwitter",
+          tasksPerformed:
+            State.database.userData.data?.user?.coins?.tasksPerformed,
         };
-        setUpdateHandleFollow((prevState) => {
-          return {
-            ...prevState,
-            twitter: true,
-          };
-        });
         break;
       case "instagram":
         data = {
           coins: 10,
           receivedBy: "following instagram",
+          update: "followedInstagram",
+          tasksPerformed:
+            State.database.userData.data?.user?.coins?.tasksPerformed,
         };
-        setUpdateHandleFollow((prevState) => {
-          return {
-            ...prevState,
-            instagram: true,
-          };
-        });
+
         break;
       case "linkedin":
         data = {
           coins: 10,
           receivedBy: "following linkedin",
+          update: "followedLinkedin",
+          tasksPerformed:
+            State.database.userData.data?.user?.coins?.tasksPerformed,
         };
-        setUpdateHandleFollow((prevState) => {
-          return {
-            ...prevState,
-            linkedin: true,
-          };
-        });
+
         break;
       case "discord":
         data = {
           coins: 10,
           receivedBy: "following discord",
+          update: "followedDiscord",
+          tasksPerformed:
+            State.database.userData.data?.user?.coins?.tasksPerformed,
         };
-        setUpdateHandleFollow((prevState) => {
-          return {
-            ...prevState,
-            discord: true,
-          };
-        });
         break;
     }
     data.type = "social";
@@ -91,7 +78,45 @@ const CollectCoinsModal = ({ setCollectCoinsModalVisible, setTotalCoins }) => {
         },
       })
       .then(async () => {
-        setTotalCoins((prev) => prev + 10);
+        await loadUser();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const handleClaimReward = (rewardFor) => {
+    let data;
+    if (rewardFor == "follow") {
+      data = {
+        coins: 50,
+        receivedBy: "Following 5 users",
+        update: "follow",
+        tasksPerformed:
+          State.database.userData.data?.user?.coins?.tasksPerformed,
+      };
+    }
+    if (rewardFor == "firstPost") {
+      data = {
+        coins: 20,
+        receivedBy: "Creating First Post on Mintflick",
+        update: "firstPost",
+        tasksPerformed:
+          State.database.userData.data?.user?.coins?.tasksPerformed,
+      };
+    }
+    data.type = "platformTasks";
+    if (State.database.userData.data?.user?.coins) {
+      data.prevBalance = State.database.userData.data?.user?.coins?.balance;
+    }
+    axios
+      .post(`${process.env.REACT_APP_SERVER_URL}/user/send_gems`, data, {
+        headers: {
+          "content-type": "application/json",
+          "auth-token": JSON.stringify(localStorage.getItem("authtoken")),
+        },
+      })
+      .then(async () => {
         await loadUser();
       })
       .catch((err) => {
@@ -110,106 +135,228 @@ const CollectCoinsModal = ({ setCollectCoinsModalVisible, setTotalCoins }) => {
           <X
             onClick={() => {
               setCollectCoinsModalVisible(false);
+              setStep(0);
             }}
             className="text-brand2 cursor-pointer"
           ></X>
         </div>
       </div>
       <div className="w-fill p-4 space-y-3 text-white">
-        <div className="w-full space-y-1">
-          <p className="flex">
-            Follow our social handles & earn 10 <Coin className="mx-1" /> for
-            each &#128525;
-          </p>
-          <div className="flex items-center justify-between w-full">
-            <div className="flex space-x-2">
-              <p>Twitter </p>
-              <span>
-                <BrandTwitter size={24} color="#0084b4" />
+        {step == 0 ? (
+          <div className="w-full space-y-2 ">
+            <div className="flex justify-between items-center">
+              <p className="flex mb-2">
+                Task 1 - Follow our social handles & earn 10{" "}
+                <Coin className="mx-1" /> for each &#128525;
+              </p>
+              <span className="mb-2">
+                <ChevronRight
+                  size={26}
+                  className="text-white"
+                  onClick={() => {
+                    setStep(step + 1);
+                  }}
+                />
               </span>
             </div>
-            {!updateHandleFollow.twitter ? (
-              <button
-                onClick={() => {
-                  handleUserCoins("twitter");
-                }}
-                className="btn btn-sm btn-primary btn-outline capitalize"
-              >
-                Follow
-              </button>
-            ) : (
-              <div className="flex">
-                10 <Coin className="mx-1" /> claimed
+            <div className="flex items-center justify-between w-full">
+              <div className="flex space-x-2">
+                <p>Twitter </p>
+                <span>
+                  <BrandTwitter size={24} color="#0084b4" />
+                </span>
               </div>
-            )}
+              {!State.database.userData.data?.user?.coins?.tasksPerformed
+                .followedTwitter ? (
+                <button
+                  onClick={() => {
+                    handleUserCoins("twitter");
+                  }}
+                  className="btn btn-sm btn-primary btn-outline capitalize"
+                >
+                  Follow
+                </button>
+              ) : (
+                <div className="flex">
+                  claimed{" "}
+                  <Checkbox className="mx-1" size={24} color="rgb(21 128 61)" />
+                </div>
+              )}
+            </div>
+            <div className="flex items-center justify-between w-full">
+              <div className="flex space-x-2">
+                <p>Instagram </p>
+                <span>
+                  <BrandInstagram size={24} color="#E4405F" />
+                </span>
+              </div>
+              {!State.database.userData.data?.user?.coins?.tasksPerformed
+                .followedInstagram ? (
+                <button
+                  onClick={() => {
+                    handleUserCoins("instagram");
+                  }}
+                  className="btn btn-sm btn-primary btn-outline capitalize"
+                >
+                  Follow
+                </button>
+              ) : (
+                <div className="flex">
+                  claimed{" "}
+                  <Checkbox className="mx-1" size={24} color="rgb(21 128 61)" />
+                </div>
+              )}
+            </div>
+            <div className="flex items-center justify-between w-full">
+              <div className="flex space-x-2">
+                <p>Linkedin </p>
+                <span>
+                  <BrandLinkedin size={24} color="#0077b5" />
+                </span>
+              </div>
+              {!State.database.userData.data?.user?.coins?.tasksPerformed
+                .followedLinkedin ? (
+                <button
+                  onClick={() => {
+                    handleUserCoins("linkedin");
+                  }}
+                  className="btn btn-sm btn-primary btn-outline capitalize"
+                >
+                  Follow
+                </button>
+              ) : (
+                <div className="flex">
+                  claimed{" "}
+                  <Checkbox className="mx-1" size={24} color="rgb(21 128 61)" />
+                </div>
+              )}
+            </div>
+            <div className="flex items-center justify-between w-full">
+              <div className="flex space-x-2">
+                <p>Discord </p>
+                <span>
+                  <BrandDiscord size={24} color="#7289d9" />
+                </span>
+              </div>
+              {!State.database.userData.data?.user?.coins?.tasksPerformed
+                .followedDiscord ? (
+                <button
+                  onClick={() => {
+                    handleUserCoins("discord");
+                  }}
+                  className="btn btn-sm btn-primary btn-outline capitalize"
+                >
+                  Follow
+                </button>
+              ) : (
+                <div className="flex">
+                  claimed{" "}
+                  <Checkbox className="mx-1" size={24} color="rgb(21 128 61)" />
+                </div>
+              )}
+            </div>
           </div>
-          <div className="flex items-center justify-between w-full">
-            <div className="flex space-x-2">
-              <p>Instagram </p>
-              <span>
-                <BrandInstagram size={24} color="#E4405F" />
+        ) : step == 1 ? (
+          <div className="w-full space-y-2 ">
+            <div className="flex justify-between items-center">
+              <span className="mb-2">
+                <ChevronLeft
+                  size={26}
+                  className="text-white"
+                  onClick={() => {
+                    setStep(step - 1);
+                  }}
+                />
+              </span>
+              <p className="flex mb-2">
+                Task 2 - Make your 1st post & earn 20 <Coin className="mx-1" />{" "}
+                &#128525;
+              </p>
+              <span className="mb-2">
+                <ChevronRight
+                  size={26}
+                  className="text-white"
+                  onClick={() => {
+                    setStep(step + 1);
+                  }}
+                />
               </span>
             </div>
-            {!updateHandleFollow.instagram ? (
-              <button
-                onClick={() => {
-                  handleUserCoins("instagram");
-                }}
-                className="btn btn-sm btn-primary btn-outline capitalize"
-              >
-                Follow
-              </button>
-            ) : (
-              <div className="flex">
-                10 <Coin className="mx-1" /> claimed
-              </div>
-            )}
-          </div>
-          <div className="flex items-center justify-between w-full">
-            <div className="flex space-x-2">
-              <p>Linkedin </p>
-              <span>
-                <BrandLinkedin size={24} color="#0077b5" />
-              </span>
+            <div className="flex space-y-6 justify-center items-center">
+              {!State.database.userData.data?.user?.coins?.tasksPerformed
+                ?.firstPost ? (
+                <button
+                  className={`btn ${
+                    State.database.userData.data?.user?.videos.length +
+                      State.database.userData.data?.user?.tracks.length +
+                      State.database.userData.data?.user?.posts.length +
+                      State.database.userData.data?.user?.polls.length >=
+                    1
+                      ? "btn-brand"
+                      : "btn-disabled"
+                  } normal-case w-1/2 mb-2`}
+                  onClick={() => {
+                    handleClaimReward("firstPost");
+                  }}
+                >
+                  <span>
+                    <Award size={20} className="mx-1" />
+                  </span>
+                  Claim reward
+                </button>
+              ) : (
+                <div className="flex">
+                  claimed{" "}
+                  <Checkbox className="mx-1" size={24} color="rgb(21 128 61)" />
+                </div>
+              )}
             </div>
-            {!updateHandleFollow.linkedin ? (
-              <button
-                onClick={() => {
-                  handleUserCoins("linkedin");
-                }}
-                className="btn btn-sm btn-primary btn-outline capitalize"
-              >
-                Follow
-              </button>
-            ) : (
-              <div className="flex">
-                10 <Coin className="mx-1" /> claimed
-              </div>
-            )}
           </div>
-          <div className="flex items-center justify-between w-full">
-            <div className="flex space-x-2">
-              <p>Discord </p>
-              <span>
-                <BrandDiscord size={24} color="#7289d9" />
+        ) : step == 2 ? (
+          <div className="w-full space-y-2 ">
+            <div className="flex items-center">
+              <span className="mb-2">
+                <ChevronLeft
+                  size={26}
+                  className="text-white"
+                  onClick={() => {
+                    setStep(step - 1);
+                  }}
+                />
               </span>
+              <p className="flex mb-2 ml-6">
+                Task 3 - Follow 5 creators & earn 10 <Coin className="mx-1" />{" "}
+                for each &#128525;
+              </p>
             </div>
-            {!updateHandleFollow.discord ? (
-              <button
-                onClick={() => {
-                  handleUserCoins("discord");
-                }}
-                className="btn btn-sm btn-primary btn-outline capitalize"
-              >
-                Follow
-              </button>
-            ) : (
-              <div className="flex">
-                10 <Coin className="mx-1" /> claimed
-              </div>
-            )}
+            <div className="flex space-y-6 justify-center items-center">
+              {!State.database.userData.data?.user?.coins?.tasksPerformed
+                ?.followFive ? (
+                <button
+                  className={`btn ${
+                    State.database.userData.data?.user?.followee_count.length >=
+                    5
+                      ? "btn-brand"
+                      : "btn-disabled"
+                  } normal-case w-1/2 mb-2`}
+                  onClick={() => {
+                    handleClaimReward("follow");
+                  }}
+                >
+                  <span>
+                    <Award size={20} className="mx-1" />
+                  </span>
+                  Claim reward
+                </button>
+              ) : (
+                <div className="flex">
+                  claimed{" "}
+                  <Checkbox className="mx-1" size={24} color="rgb(21 128 61)" />
+                </div>
+              )}
+            </div>
           </div>
-        </div>
+        ) : null}
       </div>
     </div>
   );
