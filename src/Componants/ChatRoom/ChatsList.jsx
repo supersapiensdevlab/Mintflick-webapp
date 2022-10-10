@@ -26,8 +26,8 @@ function ChatsList(props) {
                   }}
                   className={`${
                     props.userName === conv.username &&
-                    "border-l-4 border-green-700 bg-slate-200 dark:bg-slate-700"
-                  } group w-full flex cursor-pointer items-center gap-2 p-2 hover:bg-slate-200 dark:hover:bg-slate-700`}
+                    "border-r-4 border-green-700 bg-slate-200 dark:bg-slate-900/60"
+                  } group w-full flex cursor-pointer items-center gap-2 p-2 hover:bg-slate-200 dark:hover:bg-slate-700/60`}
                 >
                   <Image
                     width={46}

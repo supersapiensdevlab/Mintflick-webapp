@@ -905,7 +905,7 @@ function ChatRoom(props) {
                   disabled={formState.message.length < 1}
                   type="submit"
                   className={`
-               
+                 
                  ${
                    uploadingFile && "loading"
                  } btn btn-square btn-primary  gap-2`}
