@@ -10,7 +10,7 @@ import { UserContext } from "../../Store";
 import placeholderImage from "../../Assets/profile-pic.png";
 import JoinSuperfanModal from "../Home/Modals/JoinSuperfanModal";
 import Loading from "../Loading/Loading";
-import { Eye, Message, Share } from "tabler-icons-react";
+import { Eye, Message, Share, X } from "tabler-icons-react";
 import livePlaceholder from "../../Assets/Gaming Posters/liveplaceholder.jpg";
 import LiveRoom from "./LiveRoom";
 
@@ -243,7 +243,7 @@ function UserLiveFullScreen() {
         )
       ) : null}
       <div className="relative flex-grow overflow-auto">
-        <div className="w-full flex flex-wrap gap-2 p-2">
+        <div className=" w-full flex flex-wrap gap-2 p-2">
           {streamUser &&
           new Date(streamUser.streamSchedule * 1) > new Date() &&
           !streamUser.livepeer_data.isActive ? (
@@ -273,16 +273,22 @@ function UserLiveFullScreen() {
             </span>
           )}
           {/* <div className="md:ml-auto flex w-full md:w-fit justify-between gap-2"> */}
-          <span
-            onClick={() => setshowChat(true)}
-            className="flex items-center gap-1 h-8 w-fit bg-slate-100 dark:bg-slate-800  rounded-full px-3"
-          >
+          <span className="flex items-center gap-1 h-8 w-fit bg-slate-100 dark:bg-slate-800  rounded-full px-3">
             <span className="text-teal-600">
-              <Message size={16} />
+              <Eye size={16} />
             </span>
             <p className="text-xs sm:text-sm font-semibold text-brand2">
               {livestreamViews}
             </p>
+          </span>
+          <span
+            onClick={() => setshowChat(true)}
+            className="flex items-center gap-1 h-8 w-fit bg-slate-100 dark:bg-slate-800 cursor-pointer rounded-full px-3"
+          >
+            <span className="text-teal-600">
+              <Message size={16} />
+            </span>
+            <p className="text-xs sm:text-sm font-semibold text-brand2"></p>
           </span>
 
           <div
@@ -435,13 +441,19 @@ function UserLiveFullScreen() {
             <></>
           )}
         </div>
+        {streamUser?.username && streamUser.livepeer_data.isActive && (
+          <div
+            className={` ${
+              showChat ? "absolute top-0 left-0" : "hidden"
+            } w-full h-full`}
+          >
+            <div className="flex-grow flex justify-between p-2 text-brand3 bg-white dark:bg-slate-900">
+              live chat <X onClick={() => setshowChat(false)} />
+            </div>
+            <LiveRoom username={streamUser.username}></LiveRoom>
+          </div>
+        )}
       </div>
-      {streamUser.username && streamUser.livepeer_data.isActive && (
-        <div className={` ${showChat ? "absolute top-0" : "hidden"} `}>
-          <div className="flex justify-between p-2">live chat</div>
-          <LiveRoom username={streamUser.username}></LiveRoom>
-        </div>
-      )}
     </div>
   );
 }

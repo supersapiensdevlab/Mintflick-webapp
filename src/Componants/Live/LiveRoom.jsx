@@ -271,141 +271,140 @@ function LiveRoom({ username }) {
       );
 
   return (
-    <div className="text-gray-400 relative	 box-border   h-max md:col-span-6 lg:col-span-7 col-span-8 w-full dark:bg-slate-800 bg-slate-100">
+    <div className="h-full relative w-full dark:bg-slate-800 bg-slate-100">
       <LoadingBar ref={loadingRef} color="#00d3ff" shadow={true} />
-      <div className="h-full">
-        <main className="chat-container-height   ">
-          <div className="  p-4 chat-height overflow-y-scroll	overflow-x-hidden mb-4">
-            <div ref={scrollTop}></div>
-            {messages
-              ? messages.map((message, index) => {
-                  const dateNum = new Date(message.createdAt);
-                  let size = 0;
-                  let urls = detectURLs(message.message);
-                  let urlstext = renderText(message.message);
-                  return (
-                    <div className="">
-                      {dates.has(dateNum.toDateString()) ? null : (
-                        <p className="text-sm text-brand4 font-semibold py-1 px-3 w-fit mx-auto my-1 rounded-full bg-slate-200 dark:bg-slate-700">
-                          {renderDate(message, dateNum.toDateString())}
-                        </p>
-                      )}
+      <main className=" h-full ">
+        <div className="  p-4  overflow-y-scroll	overflow-x-hidden mb-4">
+          <div ref={scrollTop}></div>
+          {messages
+            ? messages.map((message, index) => {
+                const dateNum = new Date(message.createdAt);
+                let size = 0;
+                let urls = detectURLs(message.message);
+                let urlstext = renderText(message.message);
+                return (
+                  <div className="">
+                    {dates.has(dateNum.toDateString()) ? null : (
+                      <p className="text-sm text-brand4 font-semibold py-1 px-3 w-fit mx-auto my-1 rounded-full bg-slate-200 dark:bg-slate-700">
+                        {renderDate(message, dateNum.toDateString())}
+                      </p>
+                    )}
 
+                    <div
+                      className={`${
+                        message.username
+                          ? message.username ===
+                            user.database.userData.data.user.username
+                            ? "ml-auto mr-0"
+                            : ""
+                          : " "
+                      } w-max my-2 `}
+                      key={message._id}
+                      ref={(el) => (messageRef.current[message._id] = el)}
+                    >
                       <div
-                        className={`${
-                          message.username
-                            ? message.username ===
-                              user.database.userData.data.user.username
-                              ? "ml-auto mr-0"
-                              : ""
-                            : " "
-                        } w-max my-2 `}
-                        key={message._id}
-                        ref={(el) => (messageRef.current[message._id] = el)}
+                        className={
+                          message.username &&
+                          message.username ==
+                            user.database.userData.data.user.username
+                            ? "flex items-end flex-row-reverse  gap-1 group"
+                            : "flex items-end gap-1 group"
+                        }
                       >
-                        <div
-                          className={
-                            message.username &&
-                            message.username ==
-                              user.database.userData.data.user.username
-                              ? "flex items-end flex-row-reverse  gap-1 group"
-                              : "flex items-end gap-1 group"
-                          }
-                        >
-                          <div className="w-fit h-full space-y-1">
-                            <div
-                              className="opacity-0 group-hover:opacity-100 cursor-pointer p-1 w-fit text-sm text-teal-700 font-semibold rounded-full bg-slate-200 dark:bg-slate-700"
-                              onClick={() => onreply(message)}
-                            >
-                              <ArrowBackUp />
-                            </div>
-
-                            <img
-                              className="w-8 h-8 rounded-full object-cover "
-                              alt="profile"
-                              src={
-                                message.profile_image
-                                  ? message.profile_image
-                                  : person
-                              }
-                            />
-                          </div>
+                        <div className="w-fit h-full space-y-1">
                           <div
-                            className={`${
-                              message.reply_to
-                                ? message.reply_to.username ===
-                                    user.database.userData.data.user.username ||
-                                  message.username ===
-                                    user.database.userData.data.user.username
-                                  ? "ml-auto mr-0"
-                                  : " "
-                                : " "
-                            } p-2 bg-slate-200 dark:bg-slate-700 rounded-md`}
+                            className="opacity-0 group-hover:opacity-100 cursor-pointer p-1 w-fit text-sm text-teal-700 font-semibold rounded-full bg-slate-200 dark:bg-slate-700"
+                            onClick={() => onreply(message)}
                           >
-                            {message.reply_to ? (
-                              <div
-                                onClick={() => scrollTo(message.reply_to._id)}
-                                className={`cursor-pointer flex justify-between items-center group p-2 border-l-4  bg-slate-300 dark:bg-slate-800 rounded-md ${
-                                  message.reply_to.username ===
+                            <ArrowBackUp />
+                          </div>
+
+                          <img
+                            className="w-8 h-8 rounded-full object-cover "
+                            alt="profile"
+                            src={
+                              message.profile_image
+                                ? message.profile_image
+                                : person
+                            }
+                          />
+                        </div>
+                        <div
+                          className={`${
+                            message.reply_to
+                              ? message.reply_to.username ===
+                                  user.database.userData.data.user.username ||
+                                message.username ===
                                   user.database.userData.data.user.username
-                                    ? "border-green-400 drak:border-green-700"
-                                    : "border-violet-400 drak:border-violet-700"
-                                }`}
-                              >
-                                <div className="">
-                                  <p
-                                    className={
-                                      "text-base text-brand2 text-semibold"
-                                    }
-                                  >
-                                    {message.reply_to.username ===
-                                    user.database.userData.data.user.username
-                                      ? "You"
-                                      : message.reply_to.username}
-                                  </p>
-                                  <p className="text-sm text-brand3">
-                                    {message.reply_to.message}
-                                  </p>
-                                </div>
-                                <div className="p-2">
-                                  {message.reply_to.type == "image" && (
-                                    <i className="fas fa-image text-2xl text-dbeats-light"></i>
-                                  )}
-                                  {message.reply_to.type == "sound" && (
-                                    <i className="fas fa-music text-2xl text-dbeats-light"></i>
-                                  )}
-                                  {message.reply_to.type == "video" && (
-                                    <i className="fas fa-video text-2xl text-dbeats-light"></i>
-                                  )}
-                                  {message.reply_to.type == "file" && (
-                                    <i className="fas fa-file text-2xl text-dbeats-light"></i>
-                                  )}
-                                </div>
+                                ? "ml-auto mr-0"
+                                : " "
+                              : " "
+                          } p-2 bg-slate-200 dark:bg-slate-700 rounded-md`}
+                        >
+                          {message.reply_to ? (
+                            <div
+                              onClick={() => scrollTo(message.reply_to._id)}
+                              className={`cursor-pointer flex justify-between items-center group p-2 border-l-4  bg-slate-300 dark:bg-slate-800 rounded-md ${
+                                message.reply_to.username ===
+                                user.database.userData.data.user.username
+                                  ? "border-green-400 drak:border-green-700"
+                                  : "border-violet-400 drak:border-violet-700"
+                              }`}
+                            >
+                              <div className="">
+                                <p
+                                  className={
+                                    "text-base text-brand2 text-semibold"
+                                  }
+                                >
+                                  {message.reply_to.username ===
+                                  user.database.userData.data.user.username
+                                    ? "You"
+                                    : message.reply_to.username}
+                                </p>
+                                <p className="text-sm text-brand3">
+                                  {message.reply_to.message}
+                                </p>
                               </div>
-                            ) : null}
-                            {message.type == "image" ? (
-                              <div className="relative after:w-250 h-fit group rounded-md overflow-clip">
-                                <img width={250} src={message.url}></img>
-                                {/* <p className="text-brand4 text-xs">
+                              <div className="p-2">
+                                {message.reply_to.type == "image" && (
+                                  <i className="fas fa-image text-2xl text-dbeats-light"></i>
+                                )}
+                                {message.reply_to.type == "sound" && (
+                                  <i className="fas fa-music text-2xl text-dbeats-light"></i>
+                                )}
+                                {message.reply_to.type == "video" && (
+                                  <i className="fas fa-video text-2xl text-dbeats-light"></i>
+                                )}
+                                {message.reply_to.type == "file" && (
+                                  <i className="fas fa-file text-2xl text-dbeats-light"></i>
+                                )}
+                              </div>
+                            </div>
+                          ) : null}
+                          {message.type == "image" ? (
+                            <div className="relative after:w-250 h-fit group rounded-md overflow-clip">
+                              <img width={250} src={message.url}></img>
+                              {/* <p className="text-brand4 text-xs">
                                   {message.url.split("/").pop()}
                                 </p> */}
-                                {/* <p className="text-brand4 text-xs ">
+                              {/* <p className="text-brand4 text-xs ">
                                   Size: {"1024 kb"}
                                 </p> */}
-                                <a
-                                  className=" gap-1 items-center py-1 px-2 rounded-full text-slate-500 text-sm font-semibold bg-slate-50/50  bottom-2 right-2 absolute hidden  group-hover:flex"
-                                  href={message.url}
-                                  download
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                >
-                                  <CloudDownload size={20} />
-                                  Download
-                                </a>
-                              </div>
-                            ) : null}
-                            {/* audio option desabled  */}
-                            {/* {message.type == "sound" ? (
+                              <a
+                                className=" gap-1 items-center py-1 px-2 rounded-full text-slate-500 text-sm font-semibold bg-slate-50/50  bottom-2 right-2 absolute hidden  group-hover:flex"
+                                href={message.url}
+                                download
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              >
+                                <CloudDownload size={20} />
+                                Download
+                              </a>
+                            </div>
+                          ) : null}
+                          {/* audio option desabled  */}
+                          {/* {message.type == "sound" ? (
                               <div className=" md:ml-3 p-2 border border-dbeats-light rounded-md">
                                 <div className="md:flex items-center">
                                   <i className="fas fa-music text-4xl text-dbeats-light"></i>
@@ -433,15 +432,36 @@ function LiveRoom({ username }) {
                                 </p>
                               </div>
                             ) : null} */}
-                            {message.type == "video" ? (
-                              <div className="flex gap-1 items-center p-2 text-brand4 bg-slate-300 dark:bg-slate-800 rounded-md">
-                                <Video />
-                                <p className="font-semibold text-sm w-24 truncate">
-                                  {message.url.split("/").pop()}
-                                </p>
-                                {/* <p className="text-gray-400 text-xs">
+                          {message.type == "video" ? (
+                            <div className="flex gap-1 items-center p-2 text-brand4 bg-slate-300 dark:bg-slate-800 rounded-md">
+                              <Video />
+                              <p className="font-semibold text-sm w-24 truncate">
+                                {message.url.split("/").pop()}
+                              </p>
+                              {/* <p className="text-gray-400 text-xs">
                                   Size: {"1024 kb"}
                                 </p> */}
+                              <a
+                                className="btn btn-sm btn-ghost text-success ml-auto capitalize"
+                                href={message.url}
+                                download
+                                rel="noopener noreferrer"
+                                target="_blank"
+                              >
+                                Download
+                              </a>
+                            </div>
+                          ) : null}
+                          {message.type == "file" ? (
+                            <div className="flex gap-1 items-center p-2 text-brand4 bg-slate-300 dark:bg-slate-800 rounded-md">
+                              <File />
+                              <p className="font-semibold text-sm w-24 truncate">
+                                {message.url.split("/").pop()}
+                              </p>
+                              {/* <p className="text-gray-400 text-xs ">
+                                  Size: {"1024 kb"}
+                                </p> */}
+                              <p className="text-gray-400 text-xs">
                                 <a
                                   className="btn btn-sm btn-ghost text-success ml-auto capitalize"
                                   href={message.url}
@@ -451,223 +471,195 @@ function LiveRoom({ username }) {
                                 >
                                   Download
                                 </a>
-                              </div>
-                            ) : null}
-                            {message.type == "file" ? (
-                              <div className="flex gap-1 items-center p-2 text-brand4 bg-slate-300 dark:bg-slate-800 rounded-md">
-                                <File />
-                                <p className="font-semibold text-sm w-24 truncate">
-                                  {message.url.split("/").pop()}
-                                </p>
-                                {/* <p className="text-gray-400 text-xs ">
-                                  Size: {"1024 kb"}
-                                </p> */}
-                                <p className="text-gray-400 text-xs">
-                                  <a
-                                    className="btn btn-sm btn-ghost text-success ml-auto capitalize"
-                                    href={message.url}
-                                    download
-                                    rel="noopener noreferrer"
-                                    target="_blank"
-                                  >
-                                    Download
-                                  </a>
-                                </p>
-                              </div>
-                            ) : null}
-                            <div className=" w-full group">
-                              <div className="w-full mt-1 ">
-                                <p
-                                  className={`flex gap-1 justify-between items-center text-base font-bold text-brand3`}
-                                >
-                                  {message.username ===
-                                  user.database.userData.data.user.username
-                                    ? "You"
-                                    : message.username}
-                                  {message.type == "live" ? (
-                                    <span className="text-white bg-rose-700 rounded-md font-normal px-2 mx-1 text-sm">
-                                      LIVE
-                                    </span>
-                                  ) : null}
-                                  <span className="text-xs text-brand4 font-light">
-                                    {new Date(message.createdAt).toLocaleString(
-                                      "en-US",
-                                      {
-                                        hour: "2-digit",
-                                        minute: "2-digit",
-                                        hour12: true,
-                                      }
-                                    )}
-                                  </span>
-                                </p>
-                                <p className="text-brand4  whitespace-pre-line">
-                                  {urlstext}
-                                </p>
+                              </p>
+                            </div>
+                          ) : null}
+                          <div className=" w-full group">
+                            <div className="w-full mt-1 ">
+                              <p
+                                className={`flex gap-1 justify-between items-center text-base font-bold text-brand3`}
+                              >
+                                {message.username ===
+                                user.database.userData.data.user.username
+                                  ? "You"
+                                  : message.username}
                                 {message.type == "live" ? (
-                                  <a
-                                    href={`${process.env.REACT_APP_CLIENT_URL}/live/${username}`}
-                                    target="__blank"
-                                  >
-                                    {message.url ? (
-                                      <img
-                                        src={message.url}
-                                        className="w-full max-h-96 max-w-sm"
-                                      ></img>
-                                    ) : (
-                                      <h1 className="text-center text-4xl font-bold text-dbeats-light">
-                                        I am Live
-                                      </h1>
-                                    )}
-                                  </a>
+                                  <span className="text-white bg-rose-700 rounded-md font-normal px-2 mx-1 text-sm">
+                                    LIVE
+                                  </span>
                                 ) : null}
+                                <span className="text-xs text-brand4 font-light">
+                                  {new Date(message.createdAt).toLocaleString(
+                                    "en-US",
+                                    {
+                                      hour: "2-digit",
+                                      minute: "2-digit",
+                                      hour12: true,
+                                    }
+                                  )}
+                                </span>
+                              </p>
+                              <p className="text-brand4  whitespace-pre-line">
+                                {urlstext}
+                              </p>
+                              {message.type == "live" ? (
+                                <a
+                                  href={`${process.env.REACT_APP_CLIENT_URL}/live/${username}`}
+                                  target="__blank"
+                                >
+                                  {message.url ? (
+                                    <img
+                                      src={message.url}
+                                      className="w-full max-h-96 max-w-sm"
+                                    ></img>
+                                  ) : (
+                                    <h1 className="text-center text-4xl font-bold text-dbeats-light">
+                                      I am Live
+                                    </h1>
+                                  )}
+                                </a>
+                              ) : null}
 
-                                {urls &&
-                                  urls.map((u, index) => {
-                                    return (
-                                      <a href={u} key={index}>
-                                        <ChatLinkPreview
-                                          linkurl={u}
-                                          setShowLinkPreview={
-                                            setShowLinkPreview
-                                          }
-                                          setLinkPreviewData={
-                                            setLinkPreviewData
-                                          }
-                                        />
-                                      </a>
-                                    );
-                                  })}
-                              </div>
+                              {urls &&
+                                urls.map((u, index) => {
+                                  return (
+                                    <a href={u} key={index}>
+                                      <ChatLinkPreview
+                                        linkurl={u}
+                                        setShowLinkPreview={setShowLinkPreview}
+                                        setLinkPreviewData={setLinkPreviewData}
+                                      />
+                                    </a>
+                                  );
+                                })}
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  );
-                })
-              : "No messages"}
-            <div
-              onClick={() => {
-                chatRef.current.scrollIntoView({
-                  behavior: "smooth",
-                  block: "end",
-                  inline: "nearest",
-                });
-              }}
-              className="btn btn-circle btn-sm fixed right-4 bottom-24 z-100"
-            >
-              <ChevronDown />
-            </div>
-            <div ref={chatRef} />
+                  </div>
+                );
+              })
+            : "No messages"}
+          <div
+            onClick={() => {
+              chatRef.current.scrollIntoView({
+                behavior: "smooth",
+                block: "end",
+                inline: "nearest",
+              });
+            }}
+            className="btn btn-circle btn-sm fixed right-4 bottom-24 z-100"
+          >
+            <ChevronDown />
           </div>
+          <div ref={chatRef} />
+        </div>
 
-          <div className="   absolute  bottom-0 w-full bg-slate-900">
-            <div className="  py-4 md:px-4   bg-dbeats-dark-secondary  ">
-              {formState.replyto ? (
-                <div className="px-3 p-2 flex items-center	justify-between rounded-xl mb-4">
-                  <div className="flex">
-                    <div className="chat_message_profile pr-2">
-                      <img
-                        height="50px"
-                        width="50px"
-                        className="rounded-full"
-                        alt="profile"
-                        src={
-                          formState.replyto.profile_image
-                            ? formState.replyto.profile_image
-                            : person
-                        }
-                      />
-                    </div>
-                    <div className="p-1">
-                      <p
-                        className={
-                          formState.replyto.username === user.username
-                            ? "text-base font-bold mb-1  text-dbeats-light"
-                            : "text-base font-bold mb-1 text-white	"
-                        }
-                      >
-                        {formState.replyto.username}{" "}
-                        <span className="text-xs text-gray-300 font-light">
-                          {new Date(formState.replyto.createdAt).toLocaleString(
-                            "en-US",
-                            {
-                              hour: "2-digit",
-                              minute: "2-digit",
-                              hour12: true,
-                            }
-                          )}
-                        </span>
-                      </p>
-                      <p className="text">{formState.replyto.message}</p>
-                    </div>
-                  </div>
-                  <button
-                    className="px-3 py-1 rounded-full nm-convex-dbeats-dark-secondary hover:nm-concave-dbeats-dark-secondary-sm   cursor-pointer"
-                    onClick={() => {
-                      setForm({ ...formState, replyto: null });
-                    }}
-                  >
-                    <i className="fa-solid fa-xmark text-lg  "></i>
-                  </button>
-                </div>
-              ) : null}
-              {selectedFile ? (
-                <div className="flex justify-between">
-                  {selectedFile.type == "image" && (
+        <div className="   absolute  bottom-0 w-full bg-slate-900">
+          <div className="  py-4 md:px-4   bg-dbeats-dark-secondary  ">
+            {formState.replyto ? (
+              <div className="px-3 p-2 flex items-center	justify-between rounded-xl mb-4">
+                <div className="flex">
+                  <div className="chat_message_profile pr-2">
                     <img
-                      src={selectedFile.localurl}
-                      className="w-24 h-24"
-                    ></img>
-                  )}
-                  {selectedFile.type == "sound" && (
-                    <div className="ml-3 p-2 border border-dbeats-light rounded-md">
-                      <i className="fas fa-music text-3xl text-dbeats-light"></i>
-                      <p className="text-gray-400 text-xs">
-                        {selectedFile.file[0].name}
-                      </p>
-                    </div>
-                  )}
-                  {selectedFile.type == "video" && (
-                    <div className="ml-3 p-2 border border-dbeats-light rounded-md">
-                      <i className="fas fa-video text-3xl text-dbeats-light"></i>
-                      <p className="text-gray-400 text-xs">
-                        {selectedFile.file[0].name}
-                      </p>
-                    </div>
-                  )}
-                  {selectedFile.type == "file" && (
-                    <div className="ml-3 p-2 border border-dbeats-light rounded-md">
-                      <i className="fas fa-file text-3xl text-dbeats-light"></i>
-                      <p className="text-gray-400 text-xs">
-                        {selectedFile.file[0].name}
-                      </p>
-                    </div>
-                  )}
-                  <button
-                    onClick={() => {
-                      setSelectedFile(null);
-                    }}
-                  >
-                    <i className="fas fa-times"></i>
-                  </button>
-                </div>
-              ) : null}
-              <div className="flex justify-start items-center ">
-                <div>
-                  <div className="dropdown dropdown-top">
-                    <label tabIndex={0} className="m-1 cursor-pointer">
-                      <i className="far fa-laugh text-base md:text-2xl px-2 py-1"></i>
-                    </label>
-                    <div
-                      tabIndex={0}
-                      className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52"
+                      height="50px"
+                      width="50px"
+                      className="rounded-full"
+                      alt="profile"
+                      src={
+                        formState.replyto.profile_image
+                          ? formState.replyto.profile_image
+                          : person
+                      }
+                    />
+                  </div>
+                  <div className="p-1">
+                    <p
+                      className={
+                        formState.replyto.username === user.username
+                          ? "text-base font-bold mb-1  text-dbeats-light"
+                          : "text-base font-bold mb-1 text-white	"
+                      }
                     >
-                      <Picker onEmojiClick={onEmojiClick} />
-                    </div>
+                      {formState.replyto.username}{" "}
+                      <span className="text-xs text-gray-300 font-light">
+                        {new Date(formState.replyto.createdAt).toLocaleString(
+                          "en-US",
+                          {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                            hour12: true,
+                          }
+                        )}
+                      </span>
+                    </p>
+                    <p className="text">{formState.replyto.message}</p>
                   </div>
                 </div>
-                {/* <div
+                <button
+                  className="px-3 py-1 rounded-full nm-convex-dbeats-dark-secondary hover:nm-concave-dbeats-dark-secondary-sm   cursor-pointer"
+                  onClick={() => {
+                    setForm({ ...formState, replyto: null });
+                  }}
+                >
+                  <i className="fa-solid fa-xmark text-lg  "></i>
+                </button>
+              </div>
+            ) : null}
+            {selectedFile ? (
+              <div className="flex justify-between">
+                {selectedFile.type == "image" && (
+                  <img src={selectedFile.localurl} className="w-24 h-24"></img>
+                )}
+                {selectedFile.type == "sound" && (
+                  <div className="ml-3 p-2 border border-dbeats-light rounded-md">
+                    <i className="fas fa-music text-3xl text-dbeats-light"></i>
+                    <p className="text-gray-400 text-xs">
+                      {selectedFile.file[0].name}
+                    </p>
+                  </div>
+                )}
+                {selectedFile.type == "video" && (
+                  <div className="ml-3 p-2 border border-dbeats-light rounded-md">
+                    <i className="fas fa-video text-3xl text-dbeats-light"></i>
+                    <p className="text-gray-400 text-xs">
+                      {selectedFile.file[0].name}
+                    </p>
+                  </div>
+                )}
+                {selectedFile.type == "file" && (
+                  <div className="ml-3 p-2 border border-dbeats-light rounded-md">
+                    <i className="fas fa-file text-3xl text-dbeats-light"></i>
+                    <p className="text-gray-400 text-xs">
+                      {selectedFile.file[0].name}
+                    </p>
+                  </div>
+                )}
+                <button
+                  onClick={() => {
+                    setSelectedFile(null);
+                  }}
+                >
+                  <i className="fas fa-times"></i>
+                </button>
+              </div>
+            ) : null}
+            <div className="flex justify-start items-center ">
+              <div>
+                <div className="dropdown dropdown-top">
+                  <label tabIndex={0} className="m-1 cursor-pointer">
+                    <i className="far fa-laugh text-base md:text-2xl px-2 py-1"></i>
+                  </label>
+                  <div
+                    tabIndex={0}
+                    className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52"
+                  >
+                    <Picker onEmojiClick={onEmojiClick} />
+                  </div>
+                </div>
+              </div>
+              {/* <div
               onClick={() => {
                 setShowAttachmentDropdown(
                   showAttachmentDropdown ? !showAttachmentDropdown : showAttachmentDropdown,
@@ -684,7 +676,7 @@ function LiveRoom({ username }) {
               </span>
             </div> */}
 
-                {/* <div
+              {/* <div
               onClick={() => {
                 setShowAttachmentDropdown(!showAttachmentDropdown);
                 setShowEmojis(showEmojis ? !showEmojis : showEmojis);
@@ -699,29 +691,29 @@ function LiveRoom({ username }) {
               </span>
             </div> */}
 
-                <form
-                  className="flex flex-grow"
-                  id="chat-form"
-                  onSubmit={saveMessage}
-                >
-                  <div className="flex-grow rounded-md group w-fit  p-1  mx-1  cursor-pointer            font-medium          transform-gpu  transition-all duration-300 ease-in-out ">
-                    {" "}
-                    <textarea
-                      onChange={onChange}
-                      value={formState.message}
-                      id="msg"
-                      rows={1}
-                      name="message"
-                      type="text"
-                      placeholder="Enter Message"
-                      required
-                      autoComplete="false"
-                      className="w-full rounded-md border-0 ring-0 focus:ring-0 focus:border-0  md:px-4 p-2  nm-flat-dbeats-dark-primary-sm  hover:nm-inset-dbeats-dark-secondary focus:nm-inset-dbeats-dark-primary text-slate-100 bg-slate-700"
-                    ></textarea>
-                  </div>
+              <form
+                className="flex flex-grow"
+                id="chat-form"
+                onSubmit={saveMessage}
+              >
+                <div className="flex-grow rounded-md group w-fit  p-1  mx-1  cursor-pointer            font-medium          transform-gpu  transition-all duration-300 ease-in-out ">
+                  {" "}
+                  <textarea
+                    onChange={onChange}
+                    value={formState.message}
+                    id="msg"
+                    rows={1}
+                    name="message"
+                    type="text"
+                    placeholder="Enter Message"
+                    required
+                    autoComplete="false"
+                    className="w-full rounded-md border-0 ring-0 focus:ring-0 focus:border-0  md:px-4 p-2  nm-flat-dbeats-dark-primary-sm  hover:nm-inset-dbeats-dark-secondary focus:nm-inset-dbeats-dark-primary text-slate-100 bg-slate-700"
+                  ></textarea>
+                </div>
 
-                  <div className="">
-                    {/* <button
+                <div className="">
+                  {/* <button
                    
                   type="submit"
                   className={`${
@@ -733,29 +725,28 @@ function LiveRoom({ username }) {
                   <i className="fas fa-paper-plane mr-2" />
                   <p className="hidden md:inline">Send</p>
                 </button> */}
-                    <button
-                      disabled={uploadingFile}
-                      type="submit"
-                      className={`${
-                        uploadingFile || formState.message.length < 1
-                          ? "dark:bg-dbeats-dark-primary hidden"
-                          : "nm-convex-dbeats-dark-secondary  hover:nm-inset-dbeats-dark-primary"
-                      }  px-4 py-2  rounded-3xl group flex items-center justify-center  `}
-                    >
-                      <i className="fas fa-paper-plane mr-2" />
-                      <p className="hidden md:inline">Send</p>
-                    </button>
-                  </div>
-                  <div
-                    className="animate-spin rounded-full h-7 w-7 ml-3 border-t-2 border-b-2 bg-gradient-to-r from-green-400 to-blue-500 "
-                    hidden={!uploadingFile}
-                  ></div>
-                </form>
-              </div>
+                  <button
+                    disabled={uploadingFile}
+                    type="submit"
+                    className={`${
+                      uploadingFile || formState.message.length < 1
+                        ? "dark:bg-dbeats-dark-primary hidden"
+                        : "nm-convex-dbeats-dark-secondary  hover:nm-inset-dbeats-dark-primary"
+                    }  px-4 py-2  rounded-3xl group flex items-center justify-center  `}
+                  >
+                    <i className="fas fa-paper-plane mr-2" />
+                    <p className="hidden md:inline">Send</p>
+                  </button>
+                </div>
+                <div
+                  className="animate-spin rounded-full h-7 w-7 ml-3 border-t-2 border-b-2 bg-gradient-to-r from-green-400 to-blue-500 "
+                  hidden={!uploadingFile}
+                ></div>
+              </form>
             </div>
           </div>
-        </main>
-      </div>
+        </div>
+      </main>
     </div>
   );
 }

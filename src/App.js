@@ -24,6 +24,7 @@ import UserLivestream from "./Componants/Live/UserLivestream";
 import ShareModal from "./Componants/Home/Modals/ShareModal";
 import BuyNFTModal from "./Componants/Home/Modals/BuyNFTModal";
 import ChatRoom from "./Componants/ChatRoom/ChatRoom";
+import UserLiveFullScreen from "./Componants/Live/UserLiveFullScreen";
 function App() {
   const State = useContext(UserContext);
   async function isUserAvaliable() {
