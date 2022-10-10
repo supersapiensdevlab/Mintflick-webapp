@@ -806,14 +806,14 @@ function GoLive() {
 
         <div className="w-full lg:w-96 flex flex-col gap-2">
           <div className="w-full h-fit bg-slate-100 dark:bg-slate-800  rounded-xl p-2 space-y-2">
-            <div className="flex gap-2">
-              <div className="w-1/2 p-2 flex gap-2 border-2 border-slate-200 dark:border-slate-700  rounded-md text-brand3">
+            <div className="flex flex-col gap-2">
+              <div className="w-full p-2 flex gap-2 border-2 border-slate-200 dark:border-slate-700  rounded-md text-brand3">
                 <span className="font-semibold text-base">Name</span>
                 <p className="text-base text-brand4">
                   {user.database.userData.data.user.name}
                 </p>
               </div>
-              <div className="w-1/2 p-2 flex gap-2 border-2 border-slate-200 dark:border-slate-700  rounded-md text-brand3">
+              <div className="w-full p-2 flex gap-2 border-2 border-slate-200 dark:border-slate-700  rounded-md text-brand3">
                 <span className="font-semibold text-base">Username</span>
                 <p className="text-base text-brand4">
                   {user.database.userData.data.user.username}

@@ -24,65 +24,69 @@ const CollectCoinsModal = ({ setCollectCoinsModalVisible }) => {
   const [step, setStep] = useState(0);
 
   const handleUserCoins = (social) => {
-    let data;
-    switch (social) {
-      case "twitter":
-        data = {
-          coins: 10,
-          receivedBy: "following twitter",
-          update: "followedTwitter",
-          tasksPerformed:
-            State.database.userData.data?.user?.coins?.tasksPerformed,
-        };
-        break;
-      case "instagram":
-        data = {
-          coins: 10,
-          receivedBy: "following instagram",
-          update: "followedInstagram",
-          tasksPerformed:
-            State.database.userData.data?.user?.coins?.tasksPerformed,
-        };
+    const timer = setTimeout(() => {
+      console.log("in");
+      let data;
+      switch (social) {
+        case "twitter":
+          data = {
+            coins: 10,
+            receivedBy: "following twitter",
+            update: "followedTwitter",
+            tasksPerformed:
+              State.database.userData.data?.user?.coins?.tasksPerformed,
+          };
+          break;
+        case "instagram":
+          data = {
+            coins: 10,
+            receivedBy: "following instagram",
+            update: "followedInstagram",
+            tasksPerformed:
+              State.database.userData.data?.user?.coins?.tasksPerformed,
+          };
 
-        break;
-      case "linkedin":
-        data = {
-          coins: 10,
-          receivedBy: "following linkedin",
-          update: "followedLinkedin",
-          tasksPerformed:
-            State.database.userData.data?.user?.coins?.tasksPerformed,
-        };
+          break;
+        case "linkedin":
+          data = {
+            coins: 10,
+            receivedBy: "following linkedin",
+            update: "followedLinkedin",
+            tasksPerformed:
+              State.database.userData.data?.user?.coins?.tasksPerformed,
+          };
 
-        break;
-      case "discord":
-        data = {
-          coins: 10,
-          receivedBy: "following discord",
-          update: "followedDiscord",
-          tasksPerformed:
-            State.database.userData.data?.user?.coins?.tasksPerformed,
-        };
-        break;
-    }
-    data.type = "social";
-    if (State.database.userData.data?.user?.coins) {
-      data.prevBalance = State.database.userData.data?.user?.coins?.balance;
-    }
+          break;
+        case "discord":
+          data = {
+            coins: 10,
+            receivedBy: "following discord",
+            update: "followedDiscord",
+            tasksPerformed:
+              State.database.userData.data?.user?.coins?.tasksPerformed,
+          };
+          break;
+      }
+      data.type = "social";
+      if (State.database.userData.data?.user?.coins) {
+        data.prevBalance = State.database.userData.data?.user?.coins?.balance;
+      }
 
-    axios
-      .post(`${process.env.REACT_APP_SERVER_URL}/user/send_gems`, data, {
-        headers: {
-          "content-type": "application/json",
-          "auth-token": JSON.stringify(localStorage.getItem("authtoken")),
-        },
-      })
-      .then(async () => {
-        await loadUser();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+      axios
+        .post(`${process.env.REACT_APP_SERVER_URL}/user/send_gems`, data, {
+          headers: {
+            "content-type": "application/json",
+            "auth-token": JSON.stringify(localStorage.getItem("authtoken")),
+          },
+        })
+        .then(async () => {
+          await loadUser();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }, 10000);
+    return () => clearTimeout(timer);
   };
 
   const handleClaimReward = (rewardFor) => {
@@ -168,14 +172,16 @@ const CollectCoinsModal = ({ setCollectCoinsModalVisible }) => {
               </div>
               {!State.database.userData.data?.user?.coins?.tasksPerformed
                 .followedTwitter ? (
-                <button
-                  onClick={() => {
-                    handleUserCoins("twitter");
-                  }}
-                  className="btn btn-sm btn-primary btn-outline capitalize"
-                >
-                  Follow
-                </button>
+                <a href="https://mintflick.network" target="_blank">
+                  <button
+                    onClick={() => {
+                      handleUserCoins("twitter");
+                    }}
+                    className="btn btn-sm btn-primary btn-outline capitalize"
+                  >
+                    Follow
+                  </button>
+                </a>
               ) : (
                 <div className="flex">
                   claimed{" "}
@@ -192,14 +198,16 @@ const CollectCoinsModal = ({ setCollectCoinsModalVisible }) => {
               </div>
               {!State.database.userData.data?.user?.coins?.tasksPerformed
                 .followedInstagram ? (
-                <button
-                  onClick={() => {
-                    handleUserCoins("instagram");
-                  }}
-                  className="btn btn-sm btn-primary btn-outline capitalize"
-                >
-                  Follow
-                </button>
+                <a href="https://mintflick.network" target="_blank">
+                  <button
+                    onClick={() => {
+                      handleUserCoins("instagram");
+                    }}
+                    className="btn btn-sm btn-primary btn-outline capitalize"
+                  >
+                    Follow
+                  </button>
+                </a>
               ) : (
                 <div className="flex">
                   claimed{" "}
@@ -216,14 +224,19 @@ const CollectCoinsModal = ({ setCollectCoinsModalVisible }) => {
               </div>
               {!State.database.userData.data?.user?.coins?.tasksPerformed
                 .followedLinkedin ? (
-                <button
-                  onClick={() => {
-                    handleUserCoins("linkedin");
-                  }}
-                  className="btn btn-sm btn-primary btn-outline capitalize"
+                <a
+                  href="https://www.linkedin.com/company/mintflick"
+                  target="_blank"
                 >
-                  Follow
-                </button>
+                  <button
+                    onClick={() => {
+                      handleUserCoins("linkedin");
+                    }}
+                    className="btn btn-sm btn-primary btn-outline capitalize"
+                  >
+                    Follow
+                  </button>
+                </a>
               ) : (
                 <div className="flex">
                   claimed{" "}
@@ -240,14 +253,16 @@ const CollectCoinsModal = ({ setCollectCoinsModalVisible }) => {
               </div>
               {!State.database.userData.data?.user?.coins?.tasksPerformed
                 .followedDiscord ? (
-                <button
-                  onClick={() => {
-                    handleUserCoins("discord");
-                  }}
-                  className="btn btn-sm btn-primary btn-outline capitalize"
-                >
-                  Follow
-                </button>
+                <a href="https://discord.com/invite/xZavZyAbx4" target="_blank">
+                  <button
+                    onClick={() => {
+                      handleUserCoins("discord");
+                    }}
+                    className="btn btn-sm btn-primary btn-outline capitalize"
+                  >
+                    Follow
+                  </button>
+                </a>
               ) : (
                 <div className="flex">
                   claimed{" "}
