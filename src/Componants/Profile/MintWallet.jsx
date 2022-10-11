@@ -12,10 +12,12 @@ import EachTransaction from "./EachTransaction";
 import CollectCoinsModal from "./Modals/CollectCoinsModal";
 import { UserContext } from "../../Store";
 import axios from "axios";
+import GiftModal from "../Live/Modals/GiftModal";
 
 function MintWallet() {
   const [collectCoinsModalVisible, setCollectCoinsModalVisible] =
     useState(false);
+  const [showGiftModal, setShowGiftModal] = useState(false);
 
   const State = useContext(UserContext);
 
@@ -67,7 +69,12 @@ function MintWallet() {
           <EachTransaction />
           <EachTransaction />
         </div>{" "}
-        <button className="btn gap-2 px-8 w-full max-w-lg rounded-full btn-brand btn-primary capitalize">
+        <button
+          onClick={() => {
+            setShowGiftModal(true);
+          }}
+          className="btn gap-2 px-8 w-full max-w-lg rounded-full btn-brand btn-primary capitalize"
+        >
           <Send size={20} /> send
         </button>
       </div>
@@ -79,6 +86,13 @@ function MintWallet() {
         <CollectCoinsModal
           setCollectCoinsModalVisible={setCollectCoinsModalVisible}
         />
+      </div>
+      <div
+        className={`${
+          showGiftModal && "modal-open"
+        } modal modal-bottom sm:modal-middle`}
+      >
+        <GiftModal setShowGiftModal={setShowGiftModal} />
       </div>
     </div>
   );
