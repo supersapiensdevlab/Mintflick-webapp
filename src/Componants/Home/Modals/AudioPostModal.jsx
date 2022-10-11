@@ -27,10 +27,12 @@ import {
   confirmTransactionFromFrontend,
 } from "../Utility/utilityFunc";
 import { clusterApiUrl, Connection, PublicKey } from "@solana/web3.js";
+import useLoadNfts from "../../../Hooks/useLoadNfts";
 
 function AudioPostModal({ setAudioPostModalOpen }) {
   const State = useContext(UserContext);
   const [loadFeed] = useUserActions();
+  const [loadNfts] = useLoadNfts();
 
   const web3 = new Web3(State.database.provider);
 
@@ -243,8 +245,13 @@ function AudioPostModal({ setAudioPostModalOpen }) {
         .then(async (data) => {
           console.log("MintID", data.data.result.mint);
           setTokenAddress(data.data.result.mint);
-          await signTransaction("devnet", data.data.result.encoded_transaction);
-          nftMinted(formData, data.data.result.mint);
+          await signTransaction(
+            "devnet",
+            data.data.result.encoded_transaction,
+            () => {
+              nftMinted(formData, data.data.result.mint);
+            }
+          );
         })
         .catch((err) => {
           console.log(err);
@@ -274,9 +281,15 @@ function AudioPostModal({ setAudioPostModalOpen }) {
       })
       .then(async (data) => {
         console.log(data.data);
-        await signTransaction("devnet", data.data.result.encoded_transaction);
-        setMintSuccess("NFT Listed Successfully");
-        setUploadingTrack(false);
+        await signTransaction(
+          "devnet",
+          data.data.result.encoded_transaction,
+          async () => {
+            setMintSuccess("NFT Listed Successfully");
+            setUploadingTrack(false);
+            await loadNfts();
+          }
+        );
       })
       .catch((err) => {
         console.log(err);
@@ -350,11 +363,11 @@ function AudioPostModal({ setAudioPostModalOpen }) {
           let formData = new FormData(); // Currently empty
           formData.append(
             "userName",
-            State.database.userData.data.user.username
+            State.database.userData.data?.user.username
           );
           formData.append(
             "userImage",
-            State.database.userData.data.user.profile_image
+            State.database.userData.data?.user.profile_image
           );
           formData.append("trackName", track.trackName);
           formData.append("genre", track.genre);

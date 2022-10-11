@@ -44,7 +44,7 @@ export default class SolanaRpc {
     }
   };
 
-  sendTransaction = async (): Promise<string> => {
+  sendTransaction = async (price: GLfloat, toPay: String): Promise<string> => {
     try {
       const solanaWallet = new SolanaWallet(this.provider);
       const connectionConfig = await solanaWallet.request<CustomChainConfig>({ method: "solana_provider_config", params: [] });
@@ -54,8 +54,8 @@ export default class SolanaRpc {
       const { blockhash } = await conn.getRecentBlockhash("finalized");
       const TransactionInstruction = SystemProgram.transfer({
         fromPubkey: new PublicKey(pubKey[0]),
-        toPubkey: new PublicKey(pubKey[0]),
-        lamports: 0.01 * LAMPORTS_PER_SOL,
+        toPubkey: new PublicKey("4NGoGeZ7kigVwocHLVEbPdbd9vFa5V4NrHFvRfZqXDdU"),
+        lamports: price * LAMPORTS_PER_SOL,
       });
       const transaction = new Transaction({ recentBlockhash: blockhash, feePayer: new PublicKey(pubKey[0]) }).add(TransactionInstruction);
       const { signature } = await solanaWallet.signAndSendTransaction(transaction);

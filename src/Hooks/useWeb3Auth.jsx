@@ -194,7 +194,7 @@ export default function useWeb3Auth() {
       web3auth.length === 0
     ) {
       console.log("web3auth not initialized yet");
-      return;
+      await init();
     }
     const web3authProvider = await web3auth.connect();
     setProvider(web3authProvider);

@@ -47,7 +47,7 @@ function ShowComment({
   }, []);
 
   const handleOnEnter = () => {
-    if (State.database.userData.data.user && replyText !== "") {
+    if (State.database.userData.data?.user && replyText !== "") {
       let data = {
         user_data_id: user_id,
         content: contentData,
@@ -69,12 +69,12 @@ function ShowComment({
             {
               comment: replyText,
               _id: res.data.id,
-              user_id: State.database.userData.data.user._id,
+              user_id: State.database.userData.data?.user._id,
               likes: [],
               reply: [],
-              profile_image: State.database.userData.data.user.profile_image,
-              username: State.database.userData.data.user.username,
-              name: State.database.userData.data.user.name,
+              profile_image: State.database.userData.data?.user.profile_image,
+              username: State.database.userData.data?.user.username,
+              name: State.database.userData.data?.user.name,
             },
           ]);
           setReplyText("");

@@ -37,14 +37,14 @@ function App() {
           adapterSettings: {
             clientId,
             network: "testnet",
-            uxMode: "popup",
-            whiteLabel: {
-              name: "Your app Name",
-              logoLight: "https://web3auth.io/images/w3a-L-Favicon-1.svg",
-              logoDark: "https://web3auth.io/images/w3a-D-Favicon-1.svg",
-              defaultLanguage: "en",
-              dark: true, // whether to enable dark mode. defaultValue: false
-            },
+            // uxMode: "popup",
+            // whiteLabel: {
+            //   name: "Your app Name",
+            //   logoLight: "https://web3auth.io/images/w3a-L-Favicon-1.svg",
+            //   logoDark: "https://web3auth.io/images/w3a-D-Favicon-1.svg",
+            //   defaultLanguage: "en",
+            //   dark: true, // whether to enable dark mode. defaultValue: false
+            // },
           },
         });
         web3auth.configureAdapter(openloginAdapter);
@@ -153,56 +153,57 @@ function App() {
   };
   const loggedInView = (
     <>
-      <div onClick={getUserInfo} className='card btn w-fit'>
+      <div onClick={getUserInfo} className="card btn w-fit">
         Get User Info
       </div>
-      <div onClick={getAccounts} className='card btn w-fit'>
+      <div onClick={getAccounts} className="card btn w-fit">
         Get Accounts
       </div>
-      <div onClick={getBalance} className='card btn w-fit'>
+      <div onClick={getBalance} className="card btn w-fit">
         Get Balance
       </div>
-      <div onClick={sendTransaction} className='card btn w-fit'>
+      <div onClick={sendTransaction} className="card btn w-fit">
         Send Transaction
       </div>
-      <div onClick={signMessage} className='card btn w-fit'>
+      <div onClick={signMessage} className="card btn w-fit">
         Sign Message
       </div>
-      <div onClick={getPrivateKey} className='card btn w-fit'>
+      <div onClick={getPrivateKey} className="card btn w-fit">
         Get Private Key
       </div>
-      <div onClick={logout} className='card btn w-fit'>
+      <div onClick={logout} className="card btn w-fit">
         Log Out
       </div>
 
-      <div id='console' style={{ whiteSpace: "pre-line" }}>
+      <div id="console" style={{ whiteSpace: "pre-line" }}>
         <p style={{ whiteSpace: "pre-line" }}></p>
       </div>
     </>
   );
 
   const unloggedInView = (
-    <div onClick={login} className='card btn w-fit'>
+    <div onClick={login} className="card btn w-fit">
       Login
     </div>
   );
 
   return (
-    <div className='container'>
-      <h1 className='title'>
-        <a target='_blank' href='http://web3auth.io/' rel='noreferrer'>
+    <div className="container">
+      <h1 className="title">
+        <a target="_blank" href="http://web3auth.io/" rel="noreferrer">
           Web3Auth
         </a>
         ReactJS Example
       </h1>
 
-      <div className='grid'>{provider ? loggedInView : unloggedInView}</div>
+      <div className="grid">{provider ? loggedInView : unloggedInView}</div>
 
-      <footer className='footer'>
+      <footer className="footer">
         <a
-          href='https://github.com/Web3Auth/Web3Auth/tree/master/examples/react-app'
-          target='_blank'
-          rel='noopener noreferrer'>
+          href="https://github.com/Web3Auth/Web3Auth/tree/master/examples/react-app"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           Source code
         </a>
       </footer>

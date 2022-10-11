@@ -6,6 +6,7 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import Store from "./Store";
 import { createRoot } from "react-dom/client";
+import { BrowserRouter } from "react-router-dom";
 
 const rootElement = document.getElementById("root");
 const root = createRoot(rootElement); // createRoot(container!) if you use TypeScript
@@ -14,7 +15,11 @@ const root = createRoot(rootElement); // createRoot(container!) if you use TypeS
 if (rootElement) {
   //   hydrateRoot(<Store data={<App />}></Store>, root);
   // } else {
-  root.render(<Store data={<App />}></Store>);
+  root.render(
+    <BrowserRouter>
+      <Store data={<App />}></Store>
+    </BrowserRouter>
+  );
 }
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

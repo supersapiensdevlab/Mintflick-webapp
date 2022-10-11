@@ -1,40 +1,59 @@
 import React, { useState } from "react";
+import game1 from "../../Assets/Gaming Posters/Bgmi.jpg";
+import game2 from "../../Assets/Gaming Posters/fallguys.webp";
+import game3 from "../../Assets/Gaming Posters/Fifa.webp";
+import game4 from "../../Assets/Gaming Posters/Fortnite.jpg";
+import game5 from "../../Assets/Gaming Posters/Godofwar.jfif";
+import game6 from "../../Assets/Gaming Posters/Gta.jpg";
+import game7 from "../../Assets/Gaming Posters/Rocketleague.jpg";
+import game8 from "../../Assets/Gaming Posters/valorant.jpg";
+import game9 from "../../Assets/Gaming Posters/apexlegends.jpg";
 
 function LiveCategories() {
   const [data, setData] = useState([
     {
-      name: "Game name",
-      img: "https://images.pexels.com/photos/3165335/pexels-photo-3165335.jpeg?cs=srgb&dl=pexels-lucie-liz-3165335.jpg&fm=jpg",
+      name: "Battleground Mobile India",
+      img: game1,
       url: "",
     },
     {
-      name: "Game name",
-      img: "https://images.pexels.com/photos/3165335/pexels-photo-3165335.jpeg?cs=srgb&dl=pexels-lucie-liz-3165335.jpg&fm=jpg",
+      name: "Fall Guys",
+      img: game2,
       url: "",
     },
     {
-      name: "Game name",
-      img: "https://images.pexels.com/photos/3165335/pexels-photo-3165335.jpeg?cs=srgb&dl=pexels-lucie-liz-3165335.jpg&fm=jpg",
+      name: "FIFA 2023",
+      img: game3,
       url: "",
     },
     {
-      name: "Game name",
-      img: "https://images.pexels.com/photos/3165335/pexels-photo-3165335.jpeg?cs=srgb&dl=pexels-lucie-liz-3165335.jpg&fm=jpg",
+      name: "Fortnite",
+      img: game4,
       url: "",
     },
     {
-      name: "Game name",
-      img: "https://images.pexels.com/photos/3165335/pexels-photo-3165335.jpeg?cs=srgb&dl=pexels-lucie-liz-3165335.jpg&fm=jpg",
+      name: "God Of War",
+      img: game5,
       url: "",
     },
     {
-      name: "Game name",
-      img: "https://images.pexels.com/photos/3165335/pexels-photo-3165335.jpeg?cs=srgb&dl=pexels-lucie-liz-3165335.jpg&fm=jpg",
+      name: "Grand Theft Auto",
+      img: game6,
       url: "",
     },
     {
-      name: "Game name",
-      img: "https://images.pexels.com/photos/3165335/pexels-photo-3165335.jpeg?cs=srgb&dl=pexels-lucie-liz-3165335.jpg&fm=jpg",
+      name: "Rocket League",
+      img: game7,
+      url: "",
+    },
+    {
+      name: "Valorant",
+      img: game8,
+      url: "",
+    },
+    {
+      name: "Apex Legends",
+      img: game9,
       url: "",
     },
   ]);

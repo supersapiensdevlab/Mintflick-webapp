@@ -1,4 +1,5 @@
 import { data } from "autoprefixer";
+import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import { Photo } from "tabler-icons-react";
 import { UserContext } from "../../../Store";
@@ -8,6 +9,19 @@ function Posts() {
   const State = useContext(UserContext);
   const [data, setdata] = useState([]);
   const [feedModal, setfeedModal] = useState(false);
+
+  function getUserTimeline(userName) {
+    axios({
+      method: "post",
+      url: `${process.env.REACT_APP_SERVER_URL}/feed/${userName}`,
+    })
+      .then((response) => {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
 
   useEffect(() => {
     setdata(

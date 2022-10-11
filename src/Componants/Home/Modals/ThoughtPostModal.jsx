@@ -17,6 +17,7 @@ import {
 } from "../Utility/utilityFunc";
 import { Connection } from "@solana/web3.js";
 import { SolanaWallet } from "@web3auth/solana-provider";
+import useLoadNfts from "../../../Hooks/useLoadNfts";
 
 function ThoughtPostModal({ setthoughtPostModalOpen }) {
   const State = useContext(UserContext);
@@ -30,8 +31,8 @@ function ThoughtPostModal({ setthoughtPostModalOpen }) {
   const [solanaMintId, setSolanaMintId] = useState(null);
   const [listSuccess, setListSuccess] = useState(false);
   const [successMsg, setSuccessMsg] = useState("");
-  const [cid, setCid] = useState(null);
   const textRef = useRef();
+  const [loadNfts] = useLoadNfts();
 
   async function signTransaction(network, transaction, callback) {
     //const phantom = new PhantomWalletAdapter();
@@ -88,6 +89,7 @@ function ThoughtPostModal({ setthoughtPostModalOpen }) {
             setSuccessMsg("NFT Listed Successfully");
             setUploadingPost(false);
             await loadFeed();
+            await loadNfts();
           }
         );
       })
@@ -119,99 +121,73 @@ function ThoughtPostModal({ setthoughtPostModalOpen }) {
       });
   };
 
-  const convertTextToImage = useCallback(
-    (myData) => {
-      if (textRef.current === null) {
-        return;
-      }
+  const convertTextToImage = (myData) => {
+    if (textRef.current === null) {
+      return;
+    }
 
-      toPng(textRef.current, { cacheBust: true })
-        .then(async (dataUrl) => {
-          console.log(dataUrl);
-          console.log(caption);
-          // const blob = dataURLtoBlob(dataUrl);
-          // var file = convertBlobToFile(blob, "meta.json");
-          const res = await fetch(dataUrl);
-          const buf = await res.arrayBuffer();
-          const file = new File([buf], "meta.png");
+    toPng(textRef.current, { cacheBust: true })
+      .then(async (dataUrl) => {
+        console.log(dataUrl);
+        console.log(caption);
+        const res = await fetch(dataUrl);
+        const buf = await res.arrayBuffer();
+        const file = new File([buf], "meta.png");
 
-          uploadFile(file)
-            .then(async (cid) => {
-              console.log(cid);
+        uploadFile(file)
+          .then(async (cid) => {
+            let nftSolanaData = {
+              network: "devnet",
+              wallet: State.database.walletAddress,
+              name: `${
+                State.database.userData?.data?.user?.name
+              } - ${caption.slice(0, 5)} ...`,
+              symbol: "FLICK",
+              attributes: JSON.stringify([
+                { trait_type: "Created on", value: Date.now() },
+              ]),
+              description: caption,
+              external_url: "https://ipfs.io/ipfs/" + cid + "/" + "meta.png",
+              max_supply: 1,
+              royalty: 5,
+              file: file,
+            };
 
-              // const optionalData = {
-              //   content: caption,
-              //   creator: State.database.walletAddress,
-              // };
-
-              // function convertBlobToFile(blob, fileName) {
-              //   blob.lastModifiedDate = new Date();
-              //   blob.name = fileName;
-              //   return blob;
-              // }
-
-              // const blob = new Blob([JSON.stringify(optionalData)], {
-              //   type: "application/json",
-              // });
-              // console.log(blob);
-              // let metafile = convertBlobToFile(blob, "meta.json");
-              // console.log(metafile);
-
-              let nftSolanaData = {
-                network: "devnet",
-                wallet: State.database.walletAddress,
-                name: `${
-                  State.database.userData?.data?.user?.name
-                } - ${caption.slice(0, 5)} ...`,
-                symbol: "FLICK",
-                attributes: JSON.stringify([
-                  { trait_type: "Created on", value: Date.now() },
-                ]),
-                description: caption,
-                external_url: "https://ipfs.io/ipfs/" + cid + "/" + "meta.png",
-                max_supply: 1,
-                royalty: 5,
-                file: file,
-                // data: metafile,
-              };
-
-              console.log(nftSolanaData);
-              axios
-                .post(
-                  `https://api.shyft.to/sol/v1/nft/create_detach`,
-                  nftSolanaData,
-                  {
-                    headers: {
-                      "x-api-key": `${process.env.REACT_APP_SHYFT_API_KEY}`,
-                      "content-type": "multipart/form-data",
-                    },
+            console.log(nftSolanaData);
+            axios
+              .post(
+                `https://api.shyft.to/sol/v1/nft/create_detach`,
+                nftSolanaData,
+                {
+                  headers: {
+                    "x-api-key": `${process.env.REACT_APP_SHYFT_API_KEY}`,
+                    "content-type": "multipart/form-data",
+                  },
+                }
+              )
+              .then(async (data) => {
+                console.log("MintID", data.data.result.mint);
+                await signTransaction(
+                  "devnet",
+                  data.data.result.encoded_transaction,
+                  () => {
+                    nftMinted(myData, data.data.result.mint);
                   }
-                )
-                .then(async (data) => {
-                  console.log("MintID", data.data.result.mint);
-                  await signTransaction(
-                    "devnet",
-                    data.data.result.encoded_transaction,
-                    () => {
-                      nftMinted(myData, data.data.result.mint);
-                    }
-                  );
-                })
-                .catch((err) => {
-                  console.log(err);
-                  State.toast("error", "Error minting NFT. Please try again!");
-                });
-            })
-            .catch((err) => {
-              console.log(err);
-            });
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
-    [textRef]
-  );
+                );
+              })
+              .catch((err) => {
+                console.log(err);
+                State.toast("error", "Error minting NFT. Please try again!");
+              });
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   console.log(caption);
 

@@ -153,7 +153,7 @@ function GoLive() {
           i++
         ) {
           new_array.push(
-            user.database.userData.data.user.multistream_platform[i],
+            user.database.userData.data.user.multistream_platform[i]
           );
         }
         setMultiStreamConnected(new_array);
@@ -162,7 +162,7 @@ function GoLive() {
         setMultiStreamConnected([]);
       }
       setPlaybackUrl(
-        `https://cdn.livepeer.com/hls/${user.database.userData.data.user.livepeer_data.playbackId}/index.m3u8`,
+        `https://cdn.livepeer.com/hls/${user.database.userData.data.user.livepeer_data.playbackId}/index.m3u8`
       );
       //setName(user.database.userData.data.user.livepeer_data.name);
       setUserStreams(user.database.userData.data.user.livepeer_data);
@@ -405,16 +405,16 @@ function GoLive() {
                 headers: {
                   "content-type": "application/json",
                   "auth-token": JSON.stringify(
-                    localStorage.getItem("authtoken"),
+                    localStorage.getItem("authtoken")
                   ),
                 },
-              },
+              }
             )
             .then((res) => {
               let latestVideoId =
                 res.data.videos[res.data.videos.length - 1].videoId;
               setsharable_data(
-                `${process.env.REACT_APP_CLIENT_URL}/playback/${res.data.username}/${latestVideoId}`,
+                `${process.env.REACT_APP_CLIENT_URL}/playback/${res.data.username}/${latestVideoId}`
               );
               setShow(true);
             });
@@ -471,7 +471,7 @@ function GoLive() {
         .then(async (cid) => {
           setUploadingFile(false);
           console.log(
-            "https://ipfs.io/ipfs/" + cid + "/" + selectedFile.file[0].name,
+            "https://ipfs.io/ipfs/" + cid + "/" + selectedFile.file[0].name
           );
           const data = {
             url:
@@ -545,7 +545,7 @@ function GoLive() {
                 "content-type": "application/json",
                 "auth-token": JSON.stringify(localStorage.getItem("authtoken")),
               },
-            },
+            }
           )
           .then((data) => {
             user.toast("success", "Stream Details Updated Successfully!");
@@ -554,7 +554,7 @@ function GoLive() {
       } catch (err) {
         user.toast(
           "error",
-          "Oops!somthing went wrong stream details updating!",
+          "Oops!somthing went wrong stream details updating!"
         );
         console.log(err);
       }
@@ -575,7 +575,7 @@ function GoLive() {
         .then(async (cid) => {
           setUploadingLink(false);
           console.log(
-            "https://ipfs.io/ipfs/" + cid + "/" + selectedLinkFile.file[0].name,
+            "https://ipfs.io/ipfs/" + cid + "/" + selectedLinkFile.file[0].name
           );
           const data = {
             image:
@@ -648,10 +648,10 @@ function GoLive() {
       });
   };
   return user.database.userData.data ? (
-    <div className=' bg-white dark:bg-slate-900 pt-20 '>
-      <div className='flex flex-col lg:flex-row p-4 gap-2'>
-        <div className='flex-1 space-y-2'>
-          <div className='rounded-sm lg:rounded-xl overflow-hidden'>
+    <div className=" bg-white dark:bg-slate-900 pt-20 ">
+      <div className="flex flex-col lg:flex-row p-4 gap-2">
+        <div className="flex-1 space-y-2">
+          <div className="rounded-sm lg:rounded-xl overflow-hidden">
             <ReactPlayer
               controls={true}
               width={"100%"}
@@ -661,31 +661,34 @@ function GoLive() {
               footer={false}
             />
           </div>
-          <div className='w-full flex items-center flex-wrap justify-start gap-2'>
+          <div className="w-full flex items-center flex-wrap justify-start gap-2">
             <button
               onClick={() => setScheduleStreamModal(true)}
-              className='btn btn-outline btn-primary rounded-full gap-1'>
+              className="btn btn-outline btn-primary rounded-full gap-1"
+            >
               <CalendarTime />
               Schedule upcoming Stream
             </button>
 
-            <div className=' flex items-center  w-fit bg-slate-100 dark:bg-slate-800  rounded-full '>
-              <p className='text-sm font-semibold text-brand2 mx-4'>
+            <div className=" flex items-center  w-fit bg-slate-100 dark:bg-slate-800  rounded-full ">
+              <p className="text-sm font-semibold text-brand2 mx-4">
                 To create NFT
               </p>
               {!recording ? (
                 <button
-                  className='flex items-center text-success p-2 px-4 border-2 border-success rounded-full gap-2'
-                  onClick={startRecording}>
+                  className="flex items-center text-success p-2 px-4 border-2 border-success rounded-full gap-2"
+                  onClick={startRecording}
+                >
                   <PlayerPlay /> Start Recording
                 </button>
               ) : (
                 <button
-                  className='flex items-center text-error p-2 px-4 border-2 border-error rounded-full gap-2'
-                  onClick={stopRecording}>
-                  <span className='relative flex h-4 w-4'>
-                    <span className='animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75'></span>
-                    <span className='absolute inline-flex rounded-full h-4 w-4 bg-red-600'></span>
+                  className="flex items-center text-error p-2 px-4 border-2 border-error rounded-full gap-2"
+                  onClick={stopRecording}
+                >
+                  <span className="relative flex h-4 w-4">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span>
+                    <span className="absolute inline-flex rounded-full h-4 w-4 bg-red-600"></span>
                   </span>
                   Stop Recording
                 </button>
@@ -695,63 +698,66 @@ function GoLive() {
             {user.database.userData.data.user &&
             user.database.userData.data.user.streamSchedule > Date.now() &&
             !user.database.userData.data.user.livepeer_data.isActive ? (
-              <span className='flex items-center  w-fit bg-slate-100 dark:bg-slate-800  rounded-full p-3'>
-                <span className='relative flex h-3 w-3'>
-                  <span className='animate-ping absolute inline-flex h-full w-full rounded-full bg-teal-500 opacity-75'></span>
-                  <span className='absolute inline-flex rounded-full h-full w-full bg-teal-600'></span>
+              <span className="flex items-center  w-fit bg-slate-100 dark:bg-slate-800  rounded-full p-3">
+                <span className="relative flex h-3 w-3">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-teal-500 opacity-75"></span>
+                  <span className="absolute inline-flex rounded-full h-full w-full bg-teal-600"></span>
                 </span>
-                <p className='text-sm font-semibold text-brand2 mx-2'>
+                <p className="text-sm font-semibold text-brand2 mx-2">
                   Stream Starting on{" "}
-                  <span className='text-teal-600'>
+                  <span className="text-teal-600">
                     {moment(
-                      user.database.userData.data.user.streamSchedule * 1,
+                      user.database.userData.data.user.streamSchedule * 1
                     ).format("MMMM Do YYYY, h:mm a")}
                   </span>
                 </p>
               </span>
             ) : (
-              <span className='flex items-center  w-fit bg-slate-100 dark:bg-slate-800  rounded-full p-3'>
-                <span className='relative flex h-3 w-3'>
-                  <span className='animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75'></span>
-                  <span className='absolute inline-flex rounded-full h-full w-full bg-red-600'></span>
+              <span className="flex items-center  w-fit bg-slate-100 dark:bg-slate-800  rounded-full p-3">
+                <span className="relative flex h-3 w-3">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span>
+                  <span className="absolute inline-flex rounded-full h-full w-full bg-red-600"></span>
                 </span>
-                <p className='text-sm font-semibold text-brand2 mx-2'>
+                <p className="text-sm font-semibold text-brand2 mx-2">
                   Live now
                 </p>
               </span>
             )}
           </div>
 
-          <div className='w-full flex flex-col gap-2'>
-            <div className='p-2 flex flex-col gap-1 text-brand3 h-fit bg-slate-100 dark:bg-slate-800  rounded-xl '>
-              <div className='text-brand2 text-base font-semibold'>
+          <div className="w-full flex flex-col gap-2">
+            <div className="p-2 flex flex-col gap-1 text-brand3 h-fit bg-slate-100 dark:bg-slate-800  rounded-xl ">
+              <div className="text-brand2 text-base font-semibold">
                 Add banners to live stream (Max 4)
               </div>
-              <div className='w-full flex flex-wrap'>
+              <div className="w-full flex flex-wrap">
                 {user.database.userData.data.user.streamLinks &&
                   user.database.userData.data.user.streamLinks.map(
                     (link, index) => (
-                      <div key={index} className='relative w-1/2 p-2'>
+                      <div key={index} className="relative w-1/2 p-2">
                         <img
-                          className='rounded-md w-full aspect-video object-cover'
+                          className="rounded-md w-full aspect-video object-cover"
                           src={link.image}
-                          alt='banner'
+                          alt="banner"
                         />
                         <X
                           onClick={() => deleteStreamLink(link)}
-                          className='absolute top-3 right-3 btn btn-circle btn-xs '></X>
+                          className="absolute top-3 right-3 btn btn-circle btn-xs "
+                        ></X>
                       </div>
-                    ),
+                    )
                   )}
               </div>
               {user.database.userData.data.user.streamLinks.length < 4 && (
-                <form onSubmit={uploadLink} className='space-y-1'>
+                <form onSubmit={uploadLink} className="space-y-1">
                   <progress
                     hidden={!uploadingLink}
-                    className='progress progress-success w-full dark:bg-slate-400'></progress>
+                    className="progress progress-success w-full dark:bg-slate-400"
+                  ></progress>
                   <label
-                    htmlFor='file'
-                    className=' cursor-pointer flex justify-start items-center gap-2  w-full p-2 border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4'>
+                    htmlFor="file"
+                    className=" cursor-pointer flex justify-start items-center gap-2  w-full p-2 border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4"
+                  >
                     {selectedLinkFile ? (
                       selectedLinkFile.file ? (
                         `${selectedLinkFile.file[0].name.substring(0, 10)}`
@@ -759,19 +765,19 @@ function GoLive() {
                     ) : (
                       <>
                         Choose Image( PNG, JPG, GIF)
-                        <span className='text-red-600 text-xl'>*</span>
+                        <span className="text-red-600 text-xl">*</span>
                       </>
                     )}
                     <input
-                      accept='.jpg,.png,.jpeg,.gif,.webp'
+                      accept=".jpg,.png,.jpeg,.gif,.webp"
                       required={true}
                       onChange={onLinkFileChange}
-                      type='file'
-                      id='file'
-                      className='sr-only'
+                      type="file"
+                      id="file"
+                      className="sr-only"
                     />
                   </label>
-                  <div className='w-full flex flex-col sm:flex-row gap-2'>
+                  <div className="w-full flex flex-col sm:flex-row gap-2">
                     <input
                       required={true}
                       value={streamLink.url}
@@ -781,15 +787,15 @@ function GoLive() {
                           url: e.target.value,
                         })
                       }
-                      placeholder='URL'
-                      className='input flex-grow'
+                      placeholder="URL"
+                      className="input flex-grow"
                       type={"url"}
                     />
                     <input
                       disabled={uploadingLink}
                       type={"submit"}
-                      value='Add Banner'
-                      className='btn btn-success'
+                      value="Add Banner"
+                      className="btn btn-success"
                     />
                   </div>
                 </form>
@@ -798,51 +804,52 @@ function GoLive() {
           </div>
         </div>
 
-        <div className='w-full lg:w-96 flex flex-col gap-2'>
-          <div className='w-full h-fit bg-slate-100 dark:bg-slate-800  rounded-xl p-2 space-y-2'>
-            <div className='flex gap-2'>
-              <div className='w-1/2 p-2 flex gap-2 border-2 border-slate-200 dark:border-slate-700  rounded-md text-brand3'>
-                <span className='font-semibold text-base'>Name</span>
-                <p className='text-base text-brand4'>
+        <div className="w-full lg:w-96 flex flex-col gap-2">
+          <div className="w-full h-fit bg-slate-100 dark:bg-slate-800  rounded-xl p-2 space-y-2">
+            <div className="flex flex-col gap-2">
+              <div className="w-full p-2 flex gap-2 border-2 border-slate-200 dark:border-slate-700  rounded-md text-brand3">
+                <span className="font-semibold text-base">Name</span>
+                <p className="text-base text-brand4">
                   {user.database.userData.data.user.name}
                 </p>
               </div>
-              <div className='w-1/2 p-2 flex gap-2 border-2 border-slate-200 dark:border-slate-700  rounded-md text-brand3'>
-                <span className='font-semibold text-base'>Username</span>
-                <p className='text-base text-brand4'>
+              <div className="w-full p-2 flex gap-2 border-2 border-slate-200 dark:border-slate-700  rounded-md text-brand3">
+                <span className="font-semibold text-base">Username</span>
+                <p className="text-base text-brand4">
                   {user.database.userData.data.user.username}
                 </p>
               </div>
             </div>
-            <div className='p-2 flex flex-col gap-1 border-2 border-slate-200 dark:border-slate-700  rounded-md text-brand3'>
-              <span className='font-semibold text-base'>RTMP URL</span>
-              <p className='text-base flex gap-1 text-brand4'>
+            <div className="p-2 flex flex-col gap-1 border-2 border-slate-200 dark:border-slate-700  rounded-md text-brand3">
+              <span className="font-semibold text-base">RTMP URL</span>
+              <p className="text-base flex gap-1 text-brand4">
                 rtmp://rtmp.livepeer.com/live
-                <CopyToClipboard text='rtmp://rtmp.livepeer.com/live' />
+                <CopyToClipboard text="rtmp://rtmp.livepeer.com/live" />
               </p>
             </div>
-            <div className='p-2 flex flex-col gap-1 border-2 border-slate-200 dark:border-slate-700  rounded-md text-brand3'>
-              <span className='font-semibold text-base'>Streamer Key</span>
-              <p className='text-base flex gap-1 text-brand4'>
+            <div className="p-2 flex flex-col gap-1 border-2 border-slate-200 dark:border-slate-700  rounded-md text-brand3">
+              <span className="font-semibold text-base">Streamer Key</span>
+              <p className="text-base flex gap-1 text-brand4">
                 {userStreams.streamKey}
                 <CopyToClipboard text={userStreams.streamKey} />
               </p>
             </div>
-            <div className='p-2 flex flex-col gap-1 border-2 border-slate-200 dark:border-slate-700  rounded-md text-brand3'>
-              <span className='font-semibold text-base'>Playback URL</span>
-              <p className='text-base flex gap-1 text-brand4'>
-                <span className='w-5/6 truncate'>{playbackUrl}</span>
+            <div className="p-2 flex flex-col gap-1 border-2 border-slate-200 dark:border-slate-700  rounded-md text-brand3">
+              <span className="font-semibold text-base">Playback URL</span>
+              <p className="text-base flex gap-1 text-brand4">
+                <span className="w-5/6 truncate">{playbackUrl}</span>
                 <CopyToClipboard text={playbackUrl} />
               </p>
             </div>
-            <div className='p-2 flex flex-col gap-1 border-2 border-slate-200 dark:border-slate-700  rounded-md text-brand3'>
-              <span className='font-semibold text-base'>Live URL</span>
-              <p className='text-base flex gap-1 text-brand4'>
+            <div className="p-2 flex flex-col gap-1 border-2 border-slate-200 dark:border-slate-700  rounded-md text-brand3">
+              <span className="font-semibold text-base">Live URL</span>
+              <p className="text-base flex gap-1 text-brand4">
                 <a
-                  className='w-5/6 truncate'
+                  className="w-5/6 truncate"
                   href={`https://beta.mintflick.app/live/${user.database.userData.data.user.username}`}
-                  target='_blank'
-                  rel='noopener noreferrer'>
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   {`${process.env.REACT_APP_CLIENT_URL}/live/${user.database.userData.data.user.username}`}
                 </a>
                 <CopyToClipboard text={playbackUrl} />
@@ -855,46 +862,47 @@ function GoLive() {
 
             {/* Stream Links */}
 
-            <div className='hidden'>
-              <div className='flex flex-col'>
-                <p className='text-center mb-1'>Currently Connected :</p>
-                <div className='flex flex-wrap justify-center'>
+            <div className="hidden">
+              <div className="flex flex-col">
+                <p className="text-center mb-1">Currently Connected :</p>
+                <div className="flex flex-wrap justify-center">
                   {multiStreamConnected.map((value, index) => {
                     ////console.log(value);
                     return (
-                      <div key={index} className='m-1'>
+                      <div key={index} className="m-1">
                         <img
                           src={value.platform.logo}
-                          alt='logo'
-                          className='h-6 lg:h-10 w-auto'
+                          alt="logo"
+                          className="h-6 lg:h-10 w-auto"
                         />
                       </div>
                     );
                   })}
                 </div>
-                <div className='nm-flat-dbeats-dark-primary-sm p-1 rounded-3xl hover:nm-inset-dbeats-dark-secondary-xs w-max mx-auto'>
+                <div className="nm-flat-dbeats-dark-primary-sm p-1 rounded-3xl hover:nm-inset-dbeats-dark-secondary-xs w-max mx-auto">
                   <button
-                    variant='primary'
-                    className='bg-dbeats-dark-secondary text-center content-center justify-center align-middle hover:nm-inset-dbeats-light flex text-white rounded-3xl font-bold px-2 py-3 tracking-widest w-max'
-                    type='button'
+                    variant="primary"
+                    className="bg-dbeats-dark-secondary text-center content-center justify-center align-middle hover:nm-inset-dbeats-light flex text-white rounded-3xl font-bold px-2 py-3 tracking-widest w-max"
+                    type="button"
                     onClick={
                       multiStreamConnected.length < 3
                         ? () => setShowDestinationModal(true)
                         : () => setShowPriceModal(true)
-                    }>
+                    }
+                  >
                     Add MultiStream Platforms
-                    <i className='fas fa-solid fa-video mx-2 cursor-pointer pt-1'></i>
+                    <i className="fas fa-solid fa-video mx-2 cursor-pointer pt-1"></i>
                   </button>
                 </div>
               </div>
             </div>
           </div>
-          <div className='p-2 flex flex-col gap-1 text-brand3 h-fit bg-slate-100 dark:bg-slate-800  rounded-xl '>
+          <div className="p-2 flex flex-col gap-1 text-brand3 h-fit bg-slate-100 dark:bg-slate-800  rounded-xl ">
             <form onSubmit={handleStreamDetails}>
               <div>
-                <label className=' text-sm text-brand3'>Stream Title </label>
+                <label className=" text-sm text-brand3">Stream Title </label>
                 <input
-                  className='input w-full'
+                  className="input w-full"
                   required={true}
                   value={streamDetails.name}
                   onChange={(e) =>
@@ -903,11 +911,11 @@ function GoLive() {
                       name: e.target.value,
                     })
                   }
-                  type='text'
+                  type="text"
                 />
               </div>
-              <div className='mt-2'>
-                <label className=' text-sm text-brand3'>
+              <div className="mt-2">
+                <label className=" text-sm text-brand3">
                   Stream Description
                 </label>
                 <textarea
@@ -920,21 +928,22 @@ function GoLive() {
                     })
                   }
                   rows={2}
-                  className='w-full textarea'
-                  type='text'
+                  className="w-full textarea"
+                  type="text"
                 />
               </div>
-              <div className='mt-2'>
-                <label className=' text-sm text-brand3'>Stream Category</label>
+              <div className="mt-2">
+                <label className=" text-sm text-brand3">Stream Category</label>
                 <select
-                  className='select block w-full'
+                  className="select block w-full"
                   onChange={(e) =>
                     setStreamDetails({
                       ...streamDetails,
                       category: e.target.value,
                     })
                   }
-                  value={streamDetails.category}>
+                  value={streamDetails.category}
+                >
                   <option disabled selected>
                     Categories
                   </option>
@@ -943,51 +952,57 @@ function GoLive() {
                   ))}
                 </select>
               </div>
-              <div className='mt-2 flex gap-2 justify-end'>
+              <div className="mt-2 flex gap-2 justify-end">
                 <button
                   onClick={cancelStreamDetails}
-                  className='btn btn-sm btn-ghost'>
+                  className="btn btn-sm btn-ghost"
+                >
                   reset
                 </button>
                 <input
-                  className='btn btn-sm btn-success'
-                  type='submit'
-                  value='update'
+                  className="btn btn-sm btn-success"
+                  type="submit"
+                  value="update"
                 />
               </div>
             </form>
           </div>
-          <div className='p-2 flex flex-col gap-1 text-brand3 h-fit bg-slate-100 dark:bg-slate-800  rounded-xl '>
-            <span className='font-semibold text-base'>Thumbnail</span>
+          <div className="p-2 flex flex-col gap-1 text-brand3 h-fit bg-slate-100 dark:bg-slate-800  rounded-xl ">
+            <span className="font-semibold text-base">Thumbnail</span>
             {selectedFile ? (
               <img
                 src={selectedFile.localurl}
-                className='aspect-video object-cover w-full rounded-md'></img>
+                className="aspect-video object-cover w-full rounded-md"
+              ></img>
             ) : user.database.userData.data.user.thumbnail ? (
               <img
                 src={user.database.userData.data.user.thumbnail}
-                className='aspect-video object-cover w-full rounded-md'></img>
+                className="aspect-video object-cover w-full rounded-md"
+              ></img>
             ) : null}
             <progress
               hidden={!uploadingFile}
-              className='progress progress-success w-full dark:bg-slate-400'></progress>
+              className="progress progress-success w-full dark:bg-slate-400"
+            ></progress>
             <form
-              className='flex flex-col items-center gap-1'
-              onSubmit={uploadThumbnail}>
+              className="flex flex-col items-center gap-1"
+              onSubmit={uploadThumbnail}
+            >
               <input
-                className='p-0 input h-fit w-full '
-                name='Thumbnail image'
-                type='file'
-                accept='.jpg,.png,.jpeg,.gif,.webp'
+                className="p-0 input h-fit w-full "
+                name="Thumbnail image"
+                type="file"
+                accept=".jpg,.png,.jpeg,.gif,.webp"
                 required={true}
                 onChange={onFileChange}
               />
               <button
                 disabled={uploadingFile}
-                type='submit'
+                type="submit"
                 className={`btn btn-sm btn-success w-full ${
                   uploadingFile || !selectedFile ? " btn-disabled" : ""
-                }`}>
+                }`}
+              >
                 <p>Upload</p>
               </button>
             </form>
@@ -1126,54 +1141,57 @@ function GoLive() {
       <div
         className={`${
           mintClipModal && "modal-open"
-        } modal  modal-bottom sm:modal-middle`}>
-        <div className='modal-box p-0 bg-slate-100 dark:bg-slate-800 '>
-          <div className='w-full h-fit p-2 bg-slate-300 dark:bg-slate-700'>
-            <div className='flex justify-between items-center p-2'>
-              <h3 className='flex items-center gap-2 font-bold text-lg text-brand2'>
+        } modal  modal-bottom sm:modal-middle`}
+      >
+        <div className="modal-box p-0 bg-slate-100 dark:bg-slate-800 ">
+          <div className="w-full h-fit p-2 bg-slate-300 dark:bg-slate-700">
+            <div className="flex justify-between items-center p-2">
+              <h3 className="flex items-center gap-2 font-bold text-lg text-brand2">
                 Mint video
               </h3>
               <X
                 onClick={() => setmintClipModal(false)}
-                className='text-brand2 cursor-pointer'></X>
+                className="text-brand2 cursor-pointer"
+              ></X>
             </div>
           </div>
-          <div className='p-4 space-y-2'>
+          <div className="p-4 space-y-2">
             <video
               src={recordUrl}
-              width='100%'
-              height='100%'
+              width="100%"
+              height="100%"
               controls
               autoPlay={true}
               muted={false}
-              className='rounded-md'
+              className="rounded-md"
             />
             <progress
               hidden={!hideButton}
               value={uploading}
-              max='100'
-              className='progress progress-success w-full dark:bg-slate-400'></progress>
-            <div className='flex gap-2'>
+              max="100"
+              className="progress progress-success w-full dark:bg-slate-400"
+            ></progress>
+            <div className="flex gap-2">
               <input
-                type='text'
-                name='videoName'
-                id='videoName'
+                type="text"
+                name="videoName"
+                id="videoName"
                 value={recordvideo.videoName}
                 onChange={handleVideoInputs}
-                className='input w-full '
-                placeholder='Enter video title...'
+                className="input w-full "
+                placeholder="Enter video title..."
               />
               <input
-                type='text'
-                name='price'
-                id='price'
+                type="text"
+                name="price"
+                id="price"
                 value={recordvideo.price}
                 onChange={handleVideoInputs}
-                className='input w-full'
-                placeholder='Enter price...'
+                className="input w-full"
+                placeholder="Enter price..."
               />
             </div>
-            <select className='select  w-full' onChange={(e) => {}}>
+            <select className="select  w-full" onChange={(e) => {}}>
               <option disabled selected>
                 Categories
               </option>
@@ -1182,12 +1200,12 @@ function GoLive() {
               ))}
             </select>
             <textarea
-              id='videoDescription'
-              name='description'
+              id="videoDescription"
+              name="description"
               rows={3}
               value={recordvideo.description}
               onChange={handleVideoInputs}
-              className='textarea w-full'
+              className="textarea w-full"
               placeholder="Any Behind the scenes you'll like your Audience to know!"
             />
             <div
@@ -1196,7 +1214,8 @@ function GoLive() {
                 // mintNFT();
                 // setHideButton(true);
               }}
-              className='btn btn-brand w-full'>
+              className="btn btn-brand w-full"
+            >
               Mint as NFT
             </div>
           </div>
@@ -1206,31 +1225,33 @@ function GoLive() {
       <div
         className={`${
           scheduleStreamModal && "modal-open"
-        } modal  modal-bottom sm:modal-middle`}>
-        <div className='modal-box p-0 bg-slate-100 dark:bg-slate-800 '>
-          <div className='w-full h-fit p-2 bg-slate-300 dark:bg-slate-700'>
-            <div className='flex justify-between items-center p-2'>
-              <h3 className='flex items-center gap-2 font-bold text-lg text-brand2'>
+        } modal  modal-bottom sm:modal-middle`}
+      >
+        <div className="modal-box p-0 bg-slate-100 dark:bg-slate-800 ">
+          <div className="w-full h-fit p-2 bg-slate-300 dark:bg-slate-700">
+            <div className="flex justify-between items-center p-2">
+              <h3 className="flex items-center gap-2 font-bold text-lg text-brand2">
                 Schedule upcoming Stream
               </h3>
               <X
                 onClick={() => setScheduleStreamModal(false)}
-                className='text-brand2 cursor-pointer'></X>
+                className="text-brand2 cursor-pointer"
+              ></X>
             </div>
           </div>
-          <form onSubmit={handleStreamSchedule} className='space-y-2 m-4'>
-            <label className='text-sm  text-brand2'>Select Date & Time</label>
+          <form onSubmit={handleStreamSchedule} className="space-y-2 m-4">
+            <label className="text-sm  text-brand2">Select Date & Time</label>
             <input
               value={streamSchedule}
               onChange={(e) => setStreamSchedule(e.target.value)}
-              className='w-full input'
+              className="w-full input"
               type={"datetime-local"}
               min={moment().format("YYYY-MM-DDThh:mm")}
               required={true}
             />
 
             <input
-              className='btn btn-brand w-full'
+              className="btn btn-brand w-full"
               value={"Schedule stream"}
               type={"submit"}
             />
@@ -1239,7 +1260,7 @@ function GoLive() {
       </div>
     </div>
   ) : (
-    <div className='h-screen w-screen bg-slate-100 dark:bg-slate-800 '>
+    <div className="h-screen w-screen bg-slate-100 dark:bg-slate-800 ">
       <Loading />
     </div>
   );
