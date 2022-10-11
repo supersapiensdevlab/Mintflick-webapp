@@ -42,7 +42,7 @@ function Store(props) {
   };
   const addLiveUsers = (data) => {
     updateStore({
-      liveUsers: [...data],
+      liveUsers: data,
     });
   };
   const addFeed = (data) => {
@@ -66,8 +66,7 @@ function Store(props) {
         addLiveUsers: addLiveUsers,
         addFeed: addFeed,
         addNFT: addNFT,
-      }}
-    >
+      }}>
       {props.data}
     </UserContext.Provider>
   );

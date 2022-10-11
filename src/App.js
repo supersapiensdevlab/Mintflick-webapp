@@ -28,7 +28,7 @@ import UserLiveFullScreen from "./Componants/Live/UserLiveFullScreen";
 import useWeb3Auth from "./Hooks/useWeb3Auth";
 function App() {
   const State = useContext(UserContext);
-  const  [login, logout] = useWeb3Auth();
+  const [login, logout] = useWeb3Auth();
   async function isUserAvaliable() {
     await axios({
       method: "post",
@@ -62,9 +62,10 @@ function App() {
       .get(`${process.env.REACT_APP_SERVER_URL}/get_activeusers`)
       .then(async (repos) => {
         for (let i = 0; i < repos.data.length; i++) {
+          console.log(repos);
           await axios
             .get(
-              `${process.env.REACT_APP_SERVER_URL}/user/getuser_by_id/${repos.data[i].id}`
+              `${process.env.REACT_APP_SERVER_URL}/user/getuser_by_id/${repos.data[i].id}`,
             )
             .then((value) => {
               if (value.data !== "") State.addLiveUsers(value.data);
@@ -82,38 +83,32 @@ function App() {
       });
   }, []);
 
-  useEffect(() => {
-    if(State.database.provider == null ){
-      login();
-    }
-  }, [State.database?.provider]);
+  // useEffect(() => {
+  //   if(State.database.provider == null ){
+  //     login();
+  //   }
+  // }, [State.database?.provider]);
   return (
     <div className={State.database.dark ? `dark` : " "}>
-        <Routes>
-          <Route path="/" element={<ConnectWallet />}>
-            <Route path="" element={<ConnectWalletComponant />} />
-            <Route path="create_new_user" element={<CreateNewUser />} />
-          </Route>
+      <Routes>
+        <Route path='/' element={<ConnectWallet />}>
+          <Route path='' element={<ConnectWalletComponant />} />
+          <Route path='create_new_user' element={<CreateNewUser />} />
+        </Route>
 
-          <Route path="/test" element={<HomeScreen />}></Route>
-          <Route path="/homescreen" element={<HomeScreen />}>
-            <Route path="home" element={<Home />} />
-            <Route path="live" element={<Live />} />
-            <Route path="golive" element={<GoLive />} />
-            <Route path="liveuser/:username" element={<UserLivestream />} />
-            <Route path="marketPlace" element={<Events></Events>} />
-            <Route
-              path="profile/:userName"
-              element={<Profile></Profile>}
-            ></Route>
-            <Route
-              path="chat/:username"
-              element={<ChatRoom></ChatRoom>}
-            ></Route>
-          </Route>
-        </Routes>
-        <ShareModal />
-        <BuyNFTModal />
+        <Route path='/test' element={<HomeScreen />}></Route>
+        <Route path='/homescreen' element={<HomeScreen />}>
+          <Route path='home' element={<Home />} />
+          <Route path='live' element={<Live />} />
+          <Route path='golive' element={<GoLive />} />
+          <Route path='liveuser/:username' element={<UserLivestream />} />
+          <Route path='marketPlace' element={<Events></Events>} />
+          <Route path='profile/:userName' element={<Profile></Profile>}></Route>
+          <Route path='chat/:username' element={<ChatRoom></ChatRoom>}></Route>
+        </Route>
+      </Routes>
+      <ShareModal />
+      <BuyNFTModal />
     </div>
   );
 }
