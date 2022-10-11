@@ -185,7 +185,14 @@ export default function useWeb3Auth() {
 
   const login = async () => {
     console.log("login called");
-    if (!web3auth) {
+    if (
+      !web3auth ||
+      web3auth === null ||
+      web3auth === undefined ||
+      web3auth === "undefined" ||
+      web3auth === "null" ||
+      web3auth.length === 0
+    ) {
       console.log("web3auth not initialized yet");
       return;
     }

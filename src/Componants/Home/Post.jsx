@@ -15,6 +15,7 @@ import {
   Share,
   ShoppingCart,
   Trash,
+  Wallet,
 } from "tabler-icons-react";
 import PolygonToken from "../../Assets/logos/PolygonToken";
 import coverImage from "../../Assets/backgrounds/cover.png";
@@ -1070,8 +1071,8 @@ function Post(props) {
               className='cursor-pointer items-center  btn btn-xs btn-primary btn-outline gap-1 ml-auto rounded-md'>
               {/* <PolygonToken></PolygonToken> */}
               {/* <p className="text-sm  mx-1">{props.price}</p> */}
-              <ShoppingCart size={20} />
-              Buy this NFT
+              <Wallet size={20} />
+              Buy
             </div>
           </div>
         ) : null}
