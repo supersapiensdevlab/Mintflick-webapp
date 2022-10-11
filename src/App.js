@@ -39,7 +39,7 @@ function App() {
     })
       .then((response) => {
         console.log(response);
-
+        fetchLiveUserData();
         State.updateDatabase({
           userData: response,
           walletAddress: response.data.user.wallet_id,
@@ -50,14 +50,15 @@ function App() {
       });
   }
   useEffect(() => {
-    !State.database.userData.data && isUserAvaliable();
+    !State.database.userData.data &&
+      localStorage.getItem("walletAddress") &&
+      isUserAvaliable();
     console.log(State.database.userData);
 
     console.log(localStorage.getItem("authtoken"));
   }, []);
 
-  // For Live Users
-  useEffect(() => {
+  function fetchLiveUserData() {
     axios
       .get(`${process.env.REACT_APP_SERVER_URL}/get_activeusers`)
       .then(async (repos) => {
@@ -72,7 +73,12 @@ function App() {
             });
         }
       });
-  }, []);
+  }
+
+  // For Live Users
+  // useEffect(() => {
+  // fetchLiveUserData();
+  // }, [ ]);
 
   //update Price
   useEffect(() => {
