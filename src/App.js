@@ -25,8 +25,10 @@ import ShareModal from "./Componants/Home/Modals/ShareModal";
 import BuyNFTModal from "./Componants/Home/Modals/BuyNFTModal";
 import ChatRoom from "./Componants/ChatRoom/ChatRoom";
 import UserLiveFullScreen from "./Componants/Live/UserLiveFullScreen";
+import useWeb3Auth from "./Hooks/useWeb3Auth";
 function App() {
   const State = useContext(UserContext);
+  const  [login, logout] = useWeb3Auth();
   async function isUserAvaliable() {
     await axios({
       method: "post",
@@ -79,9 +81,14 @@ function App() {
         State.updateDatabase({ price: repos.data });
       });
   }, []);
+
+  useEffect(() => {
+    if(State.database.provider == null ){
+      login();
+    }
+  }, [State.database?.provider]);
   return (
     <div className={State.database.dark ? `dark` : " "}>
-      <BrowserRouter>
         <Routes>
           <Route path="/" element={<ConnectWallet />}>
             <Route path="" element={<ConnectWalletComponant />} />
@@ -107,7 +114,6 @@ function App() {
         </Routes>
         <ShareModal />
         <BuyNFTModal />
-      </BrowserRouter>
     </div>
   );
 }

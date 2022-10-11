@@ -87,13 +87,7 @@ function MintWallet() {
           setCollectCoinsModalVisible={setCollectCoinsModalVisible}
         />
       </div>
-      <div
-        className={`${
-          showGiftModal && "modal-open"
-        } modal modal-bottom sm:modal-middle`}
-      >
-        <GiftModal setShowGiftModal={setShowGiftModal} />
-      </div>
+
     </div>
   );
 }

@@ -12,6 +12,8 @@ import { UserContext } from "../../Store";
 import { useLocation, useParams } from "react-router-dom";
 import { makeStorageClient } from "../../Helper/uploadHelper";
 import { detectURLs } from "../../Helper/uploadHelperWeb3Storage";
+import GiftModal from "./Modals/GiftModal";
+
 import {
   ArrowBackUp,
   ChevronDown,
@@ -50,6 +52,9 @@ function LiveRoom({ username }) {
   }
 
   const [messages, setMessages] = useState([]);
+
+  const [showGiftModal, setShowGiftModal] = useState(false);
+
   useEffect(() => {
     if (goToMessage) {
       if (messageRef.current[goToMessage]) {
@@ -274,7 +279,10 @@ function LiveRoom({ username }) {
     <div className="h-full relative w-full dark:bg-slate-800 bg-slate-100">
       <LoadingBar ref={loadingRef} color="#00d3ff" shadow={true} />
       <main className=" h-full ">
-        <div className="  p-4  overflow-y-scroll	overflow-x-hidden mb-4">
+        <div
+          className="  p-4  overflow-y-scroll	overflow-x-hidden mb-4"
+          style={{ height: "80vh" }}
+        >
           <div ref={scrollTop}></div>
           {messages
             ? messages.map((message, index) => {
@@ -382,16 +390,19 @@ function LiveRoom({ username }) {
                               </div>
                             </div>
                           ) : null}
-                          {message.type == "image" ? (
+                          {message.type == "sticker" ? (
                             <div className="relative after:w-250 h-fit group rounded-md overflow-clip">
-                              <img width={250} src={message.url}></img>
+                              <img
+                                width={100}
+                                src={`${process.env.REACT_APP_CLIENT_URL}${message.url}`}
+                              ></img>
                               {/* <p className="text-brand4 text-xs">
                                   {message.url.split("/").pop()}
                                 </p> */}
                               {/* <p className="text-brand4 text-xs ">
                                   Size: {"1024 kb"}
                                 </p> */}
-                              <a
+                              {/* <a
                                 className=" gap-1 items-center py-1 px-2 rounded-full text-slate-500 text-sm font-semibold bg-slate-50/50  bottom-2 right-2 absolute hidden  group-hover:flex"
                                 href={message.url}
                                 download
@@ -400,7 +411,32 @@ function LiveRoom({ username }) {
                               >
                                 <CloudDownload size={20} />
                                 Download
-                              </a>
+                              </a> */}
+                            </div>
+                          ) : null}
+                          {message.type == "magicchat" ? (
+                            <div className="relative after:w-250 h-fit group rounded-md overflow-clip">
+                              <img
+                                width={200}
+                                height={60}
+                                src={`${process.env.REACT_APP_CLIENT_URL}${message.url}`}
+                              ></img>
+                              {/* <p className="text-brand4 text-xs">
+                                  {message.url.split("/").pop()}
+                                </p> */}
+                              {/* <p className="text-brand4 text-xs ">
+                                  Size: {"1024 kb"}
+                                </p> */}
+                              {/* <a
+                                className=" gap-1 items-center py-1 px-2 rounded-full text-slate-500 text-sm font-semibold bg-slate-50/50  bottom-2 right-2 absolute hidden  group-hover:flex"
+                                href={message.url}
+                                download
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              >
+                                <CloudDownload size={20} />
+                                Download
+                              </a> */}
                             </div>
                           ) : null}
                           {/* audio option desabled  */}
@@ -488,6 +524,11 @@ function LiveRoom({ username }) {
                                     LIVE
                                   </span>
                                 ) : null}
+                                {message.type == "sticker" && (
+                                  <span className="bg-rose-500 rounded-md px-2 mx-1 text-xs">
+                                    GIFT <i class="fa-solid fa-gift"></i>
+                                  </span>
+                                )}
                                 <span className="text-xs text-brand4 font-light">
                                   {new Date(message.createdAt).toLocaleString(
                                     "en-US",
@@ -500,7 +541,7 @@ function LiveRoom({ username }) {
                                 </span>
                               </p>
                               <p className="text-brand4  whitespace-pre-line">
-                                {urlstext}
+                                {message.type != "sticker" && urlstext}
                               </p>
                               {message.type == "live" ? (
                                 <a
@@ -646,7 +687,8 @@ function LiveRoom({ username }) {
               </div>
             ) : null}
             <div className="flex justify-start items-center ">
-              <div>
+              {/* Emoji */}
+              {/* <div>
                 <div className="dropdown dropdown-top">
                   <label tabIndex={0} className="m-1 cursor-pointer">
                     <i className="far fa-laugh text-base md:text-2xl px-2 py-1"></i>
@@ -658,7 +700,15 @@ function LiveRoom({ username }) {
                     <Picker onEmojiClick={onEmojiClick} />
                   </div>
                 </div>
+              </div> */}
+
+              <div
+                className="btn btn-circle"
+                onClick={() => setShowGiftModal(true)}
+              >
+                <i class="fa-solid fa-gift"></i>
               </div>
+
               {/* <div
               onClick={() => {
                 setShowAttachmentDropdown(
@@ -747,6 +797,17 @@ function LiveRoom({ username }) {
           </div>
         </div>
       </main>
+      <div
+        className={`${
+          showGiftModal && "modal-open"
+        } modal modal-bottom sm:modal-middle`}
+      >
+        <GiftModal
+          setShowGiftModal={setShowGiftModal}
+          socket={socket}
+          username={username}
+        />
+      </div>{" "}
     </div>
   );
 }

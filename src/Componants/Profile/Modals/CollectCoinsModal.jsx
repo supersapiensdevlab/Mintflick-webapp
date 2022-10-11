@@ -172,7 +172,7 @@ const CollectCoinsModal = ({ setCollectCoinsModalVisible }) => {
               </div>
               {!State.database.userData.data?.user?.coins?.tasksPerformed
                 .followedTwitter ? (
-                <a href="https://mintflick.network" target="_blank">
+                <a href="https://twitter.com/mintflickApp" target="_blank">
                   <button
                     onClick={() => {
                       handleUserCoins("twitter");
@@ -198,7 +198,7 @@ const CollectCoinsModal = ({ setCollectCoinsModalVisible }) => {
               </div>
               {!State.database.userData.data?.user?.coins?.tasksPerformed
                 .followedInstagram ? (
-                <a href="https://mintflick.network" target="_blank">
+                <a href="https://www.instagram.com/mintflick.app/" target="_blank">
                   <button
                     onClick={() => {
                       handleUserCoins("instagram");

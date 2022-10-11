@@ -9,15 +9,18 @@ import {
   ChevronLeft,
 } from "tabler-icons-react";
 import sticker from "../../../Assets/characters/Untitled_Artwork.png";
-import preview from "../../../Assets/background-preview.jpg";
+import preview from "../../../Assets/Preview/previewgif.gif";
+import { useContext } from "react";
+import { UserContext } from "../../../Store";
 
-const GiftModal = ({ setShowGiftModal }) => {
+const GiftModal = ({ setShowGiftModal, socket, username }) => {
+  const user = useContext(UserContext);
   const [step, setStep] = useState(0);
   const [selectedSticker, setSelectedSticker] = useState(null);
   const [selectedMagicChat, setSelectedMagicChat] = useState({
     value: null,
     i: null,
-    text: null,
+    text: "",
   });
 
   const stickers = [
@@ -40,6 +43,47 @@ const GiftModal = ({ setShowGiftModal }) => {
   ];
 
   console.log(selectedMagicChat);
+  console.log(selectedSticker);
+
+  const sendSticker = () => {
+    if (socket && selectedSticker) {
+      let room = {
+        room_admin: username,
+        chat: {
+          user_id: user.database.userData.data.user._id,
+          type: "sticker",
+          username: user.database.userData.data.user.username,
+          profile_image: user.database.userData.data.user.profile_image,
+          message: "Sticker",
+          createdAt: Date.now(),
+          url: selectedSticker.value.sticker,
+          value: selectedSticker.value.value,
+        },
+      };
+      setShowGiftModal(false);
+      socket.emit("live_chatMessage", room);
+    }
+  };
+
+  const sendMagicChat = () => {
+    if (socket && selectedMagicChat.text && selectedMagicChat.value) {
+      let room = {
+        room_admin: username,
+        chat: {
+          user_id: user.database.userData.data.user._id,
+          type: "magicchat",
+          username: user.database.userData.data.user.username,
+          profile_image: user.database.userData.data.user.profile_image,
+          message: selectedMagicChat.text,
+          createdAt: Date.now(),
+          url: selectedMagicChat.value.sticker,
+          value: selectedMagicChat.value.value,
+        },
+      };
+      setShowGiftModal(false);
+      socket.emit("live_chatMessage", room);
+    }
+  };
 
   return (
     <div className="modal-box p-0 bg-slate-100 dark:bg-slate-800 ">
@@ -126,6 +170,7 @@ const GiftModal = ({ setShowGiftModal }) => {
               className={`flex space-x-2 items-center justify-center  btn ${
                 selectedSticker ? "btn-brand" : "btn-disabled"
               } w-full mt-4 `}
+              onClick={sendSticker}
             >
               <Wand size={20} />
               <p>Gift</p>
@@ -143,7 +188,10 @@ const GiftModal = ({ setShowGiftModal }) => {
                     i === selectedMagicChat?.i ? "border border-white" : ""
                   } w-1/4 flex flex-col justify-center items-center py-3 space-y-1 rounded-lg cursor-pointer`}
                   onClick={() => {
-                    setSelectedMagicChat({ value: value, i: i });
+                    setSelectedMagicChat({
+                      value: { sticker: preview, value: value.value },
+                      i: i,
+                    });
                   }}
                 >
                   <img src={value.sticker} className="h-10 w-10 object-fill" />
@@ -181,6 +229,7 @@ const GiftModal = ({ setShowGiftModal }) => {
               className={`flex space-x-2 items-center justify-center  btn ${
                 selectedMagicChat.value ? "btn-brand" : "btn-disabled"
               } w-full mt-4 `}
+              onClick={sendMagicChat}
             >
               <Wand size={20} />
               <p>Gift</p>
