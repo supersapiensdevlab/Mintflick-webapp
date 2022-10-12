@@ -30,6 +30,7 @@ function GoLive() {
   const [showPriceModal, setShowPriceModal] = useState(false);
   const [scheduleStreamModal, setScheduleStreamModal] = useState(false);
   const [mintClipModal, setmintClipModal] = useState(false);
+  //
 
   //MultiStreams
   const [userStreams, setUserStreams] = useState([]);
