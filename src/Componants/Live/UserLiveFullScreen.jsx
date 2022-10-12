@@ -418,7 +418,7 @@ function UserLiveFullScreen() {
               </div>
             ) : (
               <p className="whitespace-normal max-w-full">
-                {streamUser.streamDetails.description}
+                {streamUser?.streamDetails?.description}
               </p>
             )}
           </div>
@@ -428,10 +428,10 @@ function UserLiveFullScreen() {
             streamUser.streamLinks.map((link, index) => {
               return (
                 <div key={index} className="h-full w-full">
-                  <a href={link.url} target="_blank" rel="noopener noreferrer">
+                  <a href={link?.url} target="_blank" rel="noopener noreferrer">
                     <img
                       className="aspect-video object-cover w-full rounded-md"
-                      src={link.image}
+                      src={link?.image}
                     />
                   </a>
                 </div>
@@ -454,7 +454,7 @@ function UserLiveFullScreen() {
                 onClick={() => setshowChat(false)}
               />
             </div>
-            <LiveRoom username={streamUser.username}></LiveRoom>
+            <LiveRoom username={streamUser?.username}></LiveRoom>
           </div>
         }
       </div>
