@@ -225,7 +225,7 @@ function UserLivestream() {
       <div className="lg:hidden">
         <UserLiveFullScreen />
       </div>
-      <div className=" w-full min-h-screen h-fit  lg:pt-20 pt-12 bg-white dark:bg-slate-900">
+      <div className="hidden lg:block w-full min-h-screen h-fit  lg:pt-20 pt-12 bg-white dark:bg-slate-900">
         <div className={`flex flex-col lg:flex-row relative md:px-4 h-full`}>
           <div className="w-full lg:w-3/4 space-y-2">
             {streamUser ? (
@@ -471,7 +471,7 @@ function UserLivestream() {
               </div>
             </div>
           </div>
-          <div className="fixed right-1 top-16 bottom-0 w-full lg:w-1/4 mt-4 md:mt-0">
+          <div className="fixed right-1 top-20 bottom-0 w-full lg:w-1/4 mt-4 md:mt-0">
             {/* && streamUser.livepeer_data.isActive */}
             {streamUser.username && (
               <LiveRoom username={streamUser.username}></LiveRoom>
