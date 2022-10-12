@@ -137,7 +137,7 @@ function UserLivestream() {
     // eslint-disable-next-line
   }, []);
 
-  //https://dbeats-live-view-heroku.herokuapp.com/
+  
   // useEffect(() => {
   //   const socket = io(`wss://localhost:4000`, {
   //     transports: ["websocket"],
@@ -222,9 +222,9 @@ function UserLivestream() {
 
   return streamUser && State.database.userData.data ? (
     <>
-      <div className="lg:hidden">
-        <UserLiveFullScreen />
-      </div>
+//       <div className="lg:hidden">
+//         <UserLiveFullScreen />
+//       </div>
       <div className="hidden lg:block w-full min-h-screen h-fit  lg:pt-20 pt-12 bg-white dark:bg-slate-900">
         <div className={`flex flex-col lg:flex-row relative md:px-4 h-full`}>
           <div className="w-full lg:w-3/4 space-y-2">
