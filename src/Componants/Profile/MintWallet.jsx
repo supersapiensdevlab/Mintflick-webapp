@@ -50,7 +50,7 @@ function MintWallet() {
         </span>
         <span className="flex justify-between items-center w-full p-2 px-4  rounded-md bg-slate-200 dark:bg-slate-700">
           <h3 className="flex items-center font-semibold text-3xl text-brand-gradient">
-            1234
+            {State.database.userData.data?.user?.gems?.balance}
             <Diamond className="text-white mx-1" size={32} />
           </h3>{" "}
           <button className="ml-auto btn btn-sm btn-primary btn-outline capitalize">
@@ -87,7 +87,6 @@ function MintWallet() {
           setCollectCoinsModalVisible={setCollectCoinsModalVisible}
         />
       </div>
-
     </div>
   );
 }

@@ -21,6 +21,7 @@ import {
   File,
   Video,
 } from "tabler-icons-react";
+import useUserActions from "../../Hooks/useUserActions";
 
 // https://mintflickchats.herokuapp.com
 const socket = io(`${process.env.REACT_APP_CHAT_URL}`, {
@@ -37,6 +38,8 @@ function LiveRoom({ username }) {
     message: "",
     replyto: null,
   });
+
+  const [loadFeed, loadUser] = useUserActions();
 
   const imageInput = useRef();
   const soundInput = useRef();
@@ -114,7 +117,13 @@ function LiveRoom({ username }) {
           }
         }, 1000);
       });
-      socket.on("live_message", (msg) => {
+      socket.on("live_message", async (msg) => {
+        if (
+          msg.username == user.database.userData.data?.user?.username &&
+          msg.value
+        ) {
+          await loadUser();
+        }
         console.log("mesg income");
         setMessages((prevArray) => [...prevArray, msg]);
         setTimeout(() => {

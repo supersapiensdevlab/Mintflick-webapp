@@ -7,6 +7,7 @@ import {
   Messages,
   Diamond,
   ChevronLeft,
+  BuildingStore,
 } from "tabler-icons-react";
 import sticker from "../../../Assets/characters/Untitled_Artwork.png";
 import preview from "../../../Assets/Preview/previewgif.gif";
@@ -22,66 +23,92 @@ const GiftModal = ({ setShowGiftModal, socket, username }) => {
     i: null,
     text: "",
   });
-
+  const [insufficientGemsForSticker, setInsufficientGemsForSticker] =
+    useState(null);
+  const [insufficientGemsForChat, setInsufficientGemsForChat] = useState(null);
   const stickers = [
     {
       sticker: sticker,
-      value: 20,
+      value: 2,
     },
     {
       sticker: sticker,
-      value: 20,
+      value: 2,
     },
     {
       sticker: sticker,
-      value: 20,
+      value: 2,
     },
     {
       sticker: sticker,
-      value: 20,
+      value: 2,
     },
   ];
 
-  console.log(selectedMagicChat);
-  console.log(selectedSticker);
+  const clearData = () => {
+    setShowGiftModal(false);
+    setStep(0);
+    setSelectedSticker(null);
+    setSelectedMagicChat({
+      value: null,
+      i: null,
+      text: null,
+    });
+    setInsufficientGemsForSticker(null);
+    setInsufficientGemsForChat(null);
+  };
 
-  const sendSticker = () => {
-    if (socket && selectedSticker) {
-      let room = {
-        room_admin: username,
-        chat: {
-          user_id: user.database.userData.data.user._id,
-          type: "sticker",
-          username: user.database.userData.data.user.username,
-          profile_image: user.database.userData.data.user.profile_image,
-          message: "Sticker",
-          createdAt: Date.now(),
-          url: selectedSticker.value.sticker,
-          value: selectedSticker.value.value,
-        },
-      };
-      setShowGiftModal(false);
-      socket.emit("live_chatMessage", room);
+  const sendSticker = async () => {
+    if (
+      selectedSticker.value.value <=
+      user.database.userData.data?.user?.gems?.balance
+    ) {
+      if (socket && selectedSticker) {
+        let room = {
+          room_admin: username,
+          chat: {
+            user_id: user.database.userData.data.user._id,
+            type: "sticker",
+            username: user.database.userData.data.user.username,
+            profile_image: user.database.userData.data.user.profile_image,
+            message: "Sticker",
+            createdAt: Date.now(),
+            url: selectedSticker.value.sticker,
+            value: selectedSticker.value.value,
+          },
+        };
+        clearData();
+        socket.emit("live_chatMessage", room);
+      }
+    } else {
+      setInsufficientGemsForSticker("Insufficient Gems, Buy from the store");
     }
   };
 
-  const sendMagicChat = () => {
-    if (socket && selectedMagicChat.text && selectedMagicChat.value) {
-      let room = {
-        room_admin: username,
-        chat: {
-          user_id: user.database.userData.data.user._id,
-          type: "magicchat",
-          username: user.database.userData.data.user.username,
-          profile_image: user.database.userData.data.user.profile_image,
-          message: selectedMagicChat.text,
-          createdAt: Date.now(),
-          url: selectedMagicChat.value.sticker,
-          value: selectedMagicChat.value.value,
-        },
-      };
-      setShowGiftModal(false);
-      socket.emit("live_chatMessage", room);
+  const sendMagicChat = async () => {
+    if (
+      selectedMagicChat.value.value <=
+      user.database.userData.data?.user?.gems?.balance
+    ) {
+      if (socket && selectedMagicChat.text && selectedMagicChat.value) {
+        let room = {
+          room_admin: username,
+          chat: {
+            user_id: user.database.userData.data.user._id,
+            type: "magicchat",
+            username: user.database.userData.data.user.username,
+            profile_image: user.database.userData.data.user.profile_image,
+            message: selectedMagicChat.text,
+            createdAt: Date.now(),
+            url: selectedMagicChat.value.sticker,
+            value: selectedMagicChat.value.value,
+          },
+        };
+        clearData();
+        socket.emit("live_chatMessage", room);
+      }
+    } else {
+      setInsufficientGemsForChat("Insufficient Gems, Buy from the store");
     }
   };
 
@@ -89,6 +116,14 @@ const GiftModal = ({ setShowGiftModal, socket, username }) => {
     <div className="modal-box p-0 bg-slate-100 dark:bg-slate-800 ">
       <div className="w-full h-fit p-2 bg-slate-300 dark:bg-slate-700">
         <div className="flex justify-between items-center p-2">
+          {step !== 0 && (
+            <ChevronLeft
+              onClick={() => {
+                setStep(0);
+              }}
+              className="text-white"
+            />
+          )}
           <h3 className="flex items-center gap-2 font-bold text-lg text-brand2">
             <Wand />
             Show you support
@@ -96,24 +131,20 @@ const GiftModal = ({ setShowGiftModal, socket, username }) => {
           {step === 0 ? (
             <X
               onClick={() => {
-                setShowGiftModal(false);
-                setStep(0);
-                setSelectedSticker(null);
-                setSelectedMagicChat({
-                  value: null,
-                  i: null,
-                  text: null,
-                });
+                clearData();
               }}
               className="text-brand2 cursor-pointer"
             ></X>
           ) : (
-            <ChevronLeft
-              onClick={() => {
-                setStep(0);
-              }}
-              className="text-white"
-            />
+            <div className="flex space-x-3 items-center">
+              <div className="flex space-x-1 text-white">
+                <Diamond size={20} className="text-blue-500" />
+                <p>{user.database.userData?.data?.user?.gems?.balance}</p>
+              </div>
+              <div className="btn btn-brand btn-sm p-2">
+                <BuildingStore size={20} />
+              </div>
+            </div>
           )}
         </div>
       </div>
@@ -165,11 +196,16 @@ const GiftModal = ({ setShowGiftModal, socket, username }) => {
               );
             })}
           </div>
+          {insufficientGemsForSticker && (
+            <div className="text-red-500 text-center w-full mt-3">
+              {insufficientGemsForSticker}
+            </div>
+          )}
           <div className="w-full">
             <button
               className={`flex space-x-2 items-center justify-center  btn ${
                 selectedSticker ? "btn-brand" : "btn-disabled"
-              } w-full mt-4 `}
+              } w-full mt-2 `}
               onClick={sendSticker}
             >
               <Wand size={20} />
@@ -179,7 +215,28 @@ const GiftModal = ({ setShowGiftModal, socket, username }) => {
         </div>
       ) : step === 2 ? (
         <div className="flex flex-col  px-4 py-4 w-full text-white">
-          <div className="flex w-full">
+          {selectedMagicChat.value && (
+            <div className="w-full space-y-1 mb-1">
+              <p className="pl-1">Preview in chat</p>
+              <div className="w-full ">
+                <img src={preview} className="h-20 w-full rounded-t-lg" />
+                <input
+                  type="text"
+                  className="textarea w-full text-sm "
+                  placeholder="Say something ... "
+                  onChange={(e) => {
+                    setSelectedMagicChat((prev) => {
+                      return {
+                        ...prev,
+                        text: e.target.value,
+                      };
+                    });
+                  }}
+                />
+              </div>
+            </div>
+          )}
+          <div className="flex w-full mt-3">
             {stickers.map((value, i) => {
               return (
                 <div
@@ -203,25 +260,9 @@ const GiftModal = ({ setShowGiftModal, socket, username }) => {
               );
             })}
           </div>
-          {selectedMagicChat.value && (
-            <div className="w-full my-3 space-y-1">
-              <p className="pl-1">Preview in chat</p>
-              <div className="w-full ">
-                <img src={preview} className="h-20 w-full rounded-t-lg" />
-                <input
-                  type="text"
-                  className="textarea w-full text-sm "
-                  placeholder="Say something ... "
-                  onChange={(e) => {
-                    setSelectedMagicChat((prev) => {
-                      return {
-                        ...prev,
-                        text: e.target.value,
-                      };
-                    });
-                  }}
-                />
-              </div>
+          {insufficientGemsForChat && (
+            <div className="text-red-500 text-center w-full mt-3">
+              {insufficientGemsForChat}
             </div>
           )}
           <div className="w-full">

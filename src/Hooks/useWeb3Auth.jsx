@@ -199,6 +199,7 @@ export default function useWeb3Auth() {
     }
     const web3authProvider = await web3auth.connect();
     setProvider(web3authProvider);
+    console.log(web3authProvider);
     State.updateDatabase({
       provider: web3authProvider,
     });

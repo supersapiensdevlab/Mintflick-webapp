@@ -473,7 +473,7 @@ function UserLivestream() {
           </div>
           <div className="fixed right-1 top-16 bottom-0 w-full lg:w-1/4 mt-4 md:mt-0">
             {/* && streamUser.livepeer_data.isActive */}
-            {streamUser.username && streamUser.livepeer_data.isActive && (
+            {streamUser.username && (
               <LiveRoom username={streamUser.username}></LiveRoom>
             )}
           </div>
