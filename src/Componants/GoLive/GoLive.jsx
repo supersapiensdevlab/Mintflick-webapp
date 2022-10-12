@@ -846,7 +846,7 @@ function GoLive() {
               <p className="text-base flex gap-1 text-brand4">
                 <a
                   className="w-5/6 truncate"
-                  href={`https://beta.mintflick.app/live/${user.database.userData.data.user.username}`}
+                  href={`${process.env.REACT_APP_CLIENT_URL}/live/${user.database.userData.data.user.username}`}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
