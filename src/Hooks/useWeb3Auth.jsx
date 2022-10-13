@@ -15,38 +15,38 @@ export default function useWeb3Auth() {
   // const modal = useWebModal();
   const clientId =
     "BDHO2TAO1JeWQqhvAdqA40Fzjixs_sEf-yXhp-QAK3MfnUclbzYHRsE_BvG9F5cmDopDkGV3LJ1n-nR7Ohtn_wc";
-  const [web3auth, setWeb3auth] = useState(null);
+  // const [web3auth, setWeb3auth] = useState(null);
   const [provider, setProvider] = useState(null);
   const State = useContext(UserContext);
   const navigateTo = useNavigate();
-
+  const web3auth = new Web3Auth({
+    clientId,
+    chainConfig: {
+      chainNamespace:
+        State.database.chainId == 0
+          ? CHAIN_NAMESPACES.SOLANA
+          : CHAIN_NAMESPACES.EIP155,
+      chainId: State.database.chainId == 0 ? "0x1" : "0x89",
+      rpcTarget:
+        State.database.chainId == 0
+          ? process.env.REACT_APP_SOLANA_RPC
+          : "https://rpc.ankr.com/polygon", // This is the public RPC we have added, please pass on your own endpoint while creating an app
+      displayName: "Polygon Mainnet",
+      blockExplorer: "https://polygonscan.com",
+      ticker: "MATIC",
+      tickerName: "Matic",
+    },
+    uiConfig: {
+      theme: "dark",
+      loginMethodsOrder: ["facebook", "google"],
+      appLogo:
+        "https://ipfs.io/ipfs/bafybeihshcxswtnebaobbgjdvqgam6ynr676gcmbq3ambsg4aznytv3dwi/Mintflick%20icon-12%20%281%29.png", // Your App Logo Here
+    },
+  });
   const init = async () => {
     console.log("init called");
     try {
-      const web3auth = new Web3Auth({
-        clientId,
-        chainConfig: {
-          chainNamespace:
-            State.database.chainId === 0
-              ? CHAIN_NAMESPACES.SOLANA
-              : CHAIN_NAMESPACES.EIP155,
-          chainId: State.database.chainId === 0 ? "0x1" : "0x89",
-          rpcTarget:
-            State.database.chainId === 0
-              ? process.env.REACT_APP_SOLANA_RPC
-              : "https://rpc.ankr.com/polygon", // This is the public RPC we have added, please pass on your own endpoint while creating an app
-          displayName: "Polygon Mainnet",
-          blockExplorer: "https://polygonscan.com",
-          ticker: "MATIC",
-          tickerName: "Matic",
-        },
-        uiConfig: {
-          theme: "dark",
-          loginMethodsOrder: ["facebook", "google"],
-          appLogo:
-            "https://ipfs.io/ipfs/bafybeihshcxswtnebaobbgjdvqgam6ynr676gcmbq3ambsg4aznytv3dwi/Mintflick%20icon-12%20%281%29.png", // Your App Logo Here
-        },
-      });
+      console.log(web3auth);
       if (State.database.chainId !== 0) {
         const torusWalletAdapter = new TorusWalletAdapter({
           adapterSettings: {
@@ -72,36 +72,21 @@ export default function useWeb3Auth() {
         });
         web3auth.configureAdapter(torusWalletAdapter);
       }
-
-      setWeb3auth(web3auth);
-      await web3auth.initModal({
-        modalConfig: {
-          [WALLET_ADAPTERS.OPENLOGIN]: {
-            label: "openlogin",
-            loginMethods: {
-              reddit: {
-                showOnModal: false,
-                name: "reddit",
-              },
-            },
-          },
-        },
-      });
-
-      if (web3auth.provider) {
-        setProvider(web3auth.provider);
-      }
     } catch (error) {
       console.error(error);
     }
   };
 
+  // useEffect(() => {
+  //   init();
+  //   console.log("use called");
+  //   loadOptions();
+  // }, [State.database.chainId]);
+
   useEffect(() => {
     init();
     console.log("use called");
-    loadOptions();
-  }, [State.database.chainId]);
-
+  }, []);
   async function isUserAvaliable(walletAddress) {
     if (
       web3auth.provider ||
@@ -197,6 +182,27 @@ export default function useWeb3Auth() {
       await init();
       return;
     }
+    // setWeb3auth(web3auth);
+    await web3auth.initModal({
+      modalConfig: {
+        [WALLET_ADAPTERS.OPENLOGIN]: {
+          label: "openlogin",
+          loginMethods: {
+            reddit: {
+              showOnModal: false,
+              name: "reddit",
+            },
+          },
+        },
+      },
+    }); 
+
+    // if (web3auth.provider) {
+    //   setProvider(web3auth.provider);
+    //   State.updateDatabase({
+    //     provider: web3auth.provider,
+    //   });
+    // }
     const web3authProvider = await web3auth.connect();
     setProvider(web3authProvider);
     console.log(web3authProvider);
@@ -212,6 +218,9 @@ export default function useWeb3Auth() {
       return;
     }
     await web3auth.logout();
+    State.updateDatabase({
+      provider: null,
+    });
     setProvider(null);
   };
 
