@@ -559,7 +559,7 @@ function UserLivestream() {
                 <span className="text-teal-600">
                   <Message size={16} />
                 </span>
-                <p className="text-xs sm:text-sm font-semibold text-brand2"></p>
+                <p className="text-xs sm:text-sm font-semibold text-brand2">Live Chat</p>
               </span>
 
               <div
