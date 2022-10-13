@@ -130,6 +130,7 @@ const GiftModal = ({ setShowGiftModal, socket, username }) => {
               console.log(response.data);
               await loadUser();
               setStep(0);
+              //
             });
         } catch (err) {
           console.log(err);
