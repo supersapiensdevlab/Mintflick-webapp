@@ -35,10 +35,14 @@ export default function useWeb3Auth() {
             State.database.chainId === 0
               ? process.env.REACT_APP_SOLANA_RPC
               : "https://rpc.ankr.com/polygon", // This is the public RPC we have added, please pass on your own endpoint while creating an app
-          displayName: "Polygon Mainnet",
-          blockExplorer: "https://polygonscan.com",
-          ticker: "MATIC",
-          tickerName: "Matic",
+          displayName:
+            State.database.chainId === 0 ? "Solana Mainnet" : "Polygon Mainnet",
+          blockExplorer:
+            State.database.chainId === 0
+              ? "https://explorer.solana.com"
+              : "https://polygonscan.com",
+          ticker: State.database.chainId === 0 ? "SOL" : "MATIC",
+          tickerName: State.database.chainId === 0 ? "Solana" : "Matic",
         },
         uiConfig: {
           theme: "dark",

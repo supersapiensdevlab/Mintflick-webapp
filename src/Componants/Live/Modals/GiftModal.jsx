@@ -9,39 +9,89 @@ import {
   ChevronLeft,
   BuildingStore,
 } from "tabler-icons-react";
-import sticker from "../../../Assets/characters/Untitled_Artwork.png";
+import sticker1 from "../../../Assets/characters/IMG_3560.PNG";
+import sticker2 from "../../../Assets/characters/IMG_3561.PNG";
+import sticker3 from "../../../Assets/characters/IMG_3562.PNG";
+import sticker4 from "../../../Assets/characters/IMG_3563.PNG";
+import sticker5 from "../../../Assets/characters/IMG_3564.PNG";
+import sticker6 from "../../../Assets/characters/IMG_3565.PNG";
+import sticker7 from "../../../Assets/characters/IMG_3566.PNG";
+import sticker8 from "../../../Assets/characters/IMG_3565_low.png";
+
 import preview from "../../../Assets/Preview/previewgif.gif";
 import { useContext } from "react";
 import { UserContext } from "../../../Store";
+import useRazorpay from "react-razorpay";
+import axios from "axios";
+import useUserActions from "../../../Hooks/useUserActions";
 
 const GiftModal = ({ setShowGiftModal, socket, username }) => {
   const user = useContext(UserContext);
+  const [loadFeed, loadUser] = useUserActions();
   const [step, setStep] = useState(0);
   const [selectedSticker, setSelectedSticker] = useState(null);
+  const [selectedGemsPlan, setSelectedGemsPlan] = useState(null);
   const [selectedMagicChat, setSelectedMagicChat] = useState({
     value: null,
     i: null,
     text: "",
   });
+  const Razorpay = useRazorpay();
   const [insufficientGemsForSticker, setInsufficientGemsForSticker] =
     useState(null);
   const [insufficientGemsForChat, setInsufficientGemsForChat] = useState(null);
+  const [paymentComplete, setPaymentComplete] = useState(false);
   const stickers = [
     {
-      sticker: sticker,
+      sticker: sticker1,
       value: 2,
     },
     {
-      sticker: sticker,
+      sticker: sticker2,
       value: 2,
     },
     {
-      sticker: sticker,
+      sticker: sticker3,
       value: 2,
     },
     {
-      sticker: sticker,
+      sticker: sticker4,
       value: 2,
+    },
+    {
+      sticker: sticker5,
+      value: 2,
+    },
+    {
+      sticker: sticker6,
+      value: 2,
+    },
+    {
+      sticker: sticker7,
+      value: 2,
+    },
+    {
+      sticker: sticker8,
+      value: 2,
+    },
+  ];
+
+  const gemPlans = [
+    {
+      gems: 100,
+      value: 10,
+    },
+    {
+      gems: 200,
+      value: 20,
+    },
+    {
+      gems: 300,
+      value: 30,
+    },
+    {
+      gems: 500,
+      value: 50,
     },
   ];
 
@@ -56,6 +106,41 @@ const GiftModal = ({ setShowGiftModal, socket, username }) => {
     });
     setInsufficientGemsForSticker(null);
     setInsufficientGemsForChat(null);
+  };
+
+  const handlePayment = async (amount) => {
+    const orderUrl = `${process.env.REACT_APP_SERVER_URL}/order`;
+    const response = await axios.post(orderUrl, { amount: amount });
+    const { data } = response;
+    const options = {
+      key: process.env.RAZORPAY_KEY_ID,
+      name: "Mintflick",
+      description: "Decentralised platform for creators",
+      order_id: data.id,
+      handler: async (response) => {
+        try {
+          const paymentId = response.razorpay_payment_id;
+          const url = `${process.env.REACT_APP_SERVER_URL}/capture/${paymentId}`;
+          await axios
+            .post(url, {
+              amount: amount,
+              username: user.database.userData.data?.user?.username,
+            })
+            .then(async (response) => {
+              console.log(response.data);
+              await loadUser();
+              setStep(0);
+            });
+        } catch (err) {
+          console.log(err);
+        }
+      },
+      theme: {
+        color: "#686CFD",
+      },
+    };
+    const rzp1 = new Razorpay(options);
+    rzp1.open();
   };
 
   const sendSticker = async () => {
@@ -141,7 +226,12 @@ const GiftModal = ({ setShowGiftModal, socket, username }) => {
                 <Diamond size={20} className="text-blue-500" />
                 <p>{user.database.userData?.data?.user?.gems?.balance}</p>
               </div>
-              <div className="btn btn-brand btn-sm p-2">
+              <div
+                className="btn btn-brand btn-sm p-2"
+                onClick={() => {
+                  setStep(3);
+                }}
+              >
                 <BuildingStore size={20} />
               </div>
             </div>
@@ -175,14 +265,14 @@ const GiftModal = ({ setShowGiftModal, socket, username }) => {
         </div>
       ) : step === 1 ? (
         <div className="flex flex-col  px-4 py-4 w-full text-white">
-          <div className="flex w-full">
+          <div className="grid grid-cols-4 align- w-full">
             {stickers.map((value, i) => {
               return (
                 <div
                   key={i}
                   className={`${
                     i === selectedSticker?.i ? "border border-white" : ""
-                  } w-1/4 flex flex-col justify-center items-center py-3 space-y-1 rounded-lg cursor-pointer`}
+                  }  flex flex-col justify-center items-center py-3 space-y-1 rounded-lg cursor-pointer`}
                   onClick={() => {
                     setSelectedSticker({ value: value, i: i });
                   }}
@@ -271,6 +361,46 @@ const GiftModal = ({ setShowGiftModal, socket, username }) => {
                 selectedMagicChat.value ? "btn-brand" : "btn-disabled"
               } w-full mt-4 `}
               onClick={sendMagicChat}
+            >
+              <Wand size={20} />
+              <p>Gift</p>
+            </button>
+          </div>
+        </div>
+      ) : step === 3 ? (
+        <div className="flex flex-col p-4 w-full text-white">
+          <div className="flex w-full mt-3">
+            {gemPlans.map((value, i) => {
+              return (
+                <div
+                  key={i}
+                  className={`${
+                    i === selectedGemsPlan?.i ? "border border-white" : ""
+                  } w-1/4 flex flex-col justify-center items-center py-3 space-y-1 rounded-lg cursor-pointer`}
+                  onClick={() => {
+                    setSelectedGemsPlan({
+                      value: { gems: value.gems, value: value.value },
+                      i: i,
+                    });
+                  }}
+                >
+                  <div className="flex space-x-1 items-center justify-center ">
+                    <p>{value.gems}</p>
+                    <Diamond size={20} className="text-blue-400" />
+                  </div>
+                  <div className="mt-3">{value.value} INR</div>
+                </div>
+              );
+            })}
+          </div>
+          <div className="w-full">
+            <button
+              className={`flex space-x-2 items-center justify-center  btn ${
+                selectedGemsPlan ? "btn-brand" : "btn-disabled"
+              } w-full mt-6 `}
+              onClick={() => {
+                handlePayment(selectedGemsPlan.value.value);
+              }}
             >
               <Wand size={20} />
               <p>Gift</p>

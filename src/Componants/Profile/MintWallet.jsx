@@ -7,17 +7,19 @@ import {
   Send,
   Wallet,
   Coin,
+  ArrowsDown,
 } from "tabler-icons-react";
 import EachTransaction from "./EachTransaction";
 import CollectCoinsModal from "./Modals/CollectCoinsModal";
 import { UserContext } from "../../Store";
 import axios from "axios";
 import GiftModal from "../Live/Modals/GiftModal";
+import TreasuryConvertModal from "./Modals/TreasuryConvertModal";
 
 function MintWallet() {
   const [collectCoinsModalVisible, setCollectCoinsModalVisible] =
     useState(false);
-  const [showGiftModal, setShowGiftModal] = useState(false);
+  const [showConversionModal, setShowConversionModal] = useState(false);
 
   const State = useContext(UserContext);
 
@@ -35,7 +37,7 @@ function MintWallet() {
       </div>
       <div className="p-2 w-full flex flex-col gap-2 items-center">
         <span className="flex justify-between items-center w-full p-2 px-4  rounded-md bg-slate-200 dark:bg-slate-700">
-          <h3 className="flex items-center font-semibold text-3xl text-brand-gradient">
+          <h3 className="flex items-center font-semibold text-3xl text-white">
             {State.database.userData.data?.user?.coins?.balance}
             <Coin className="text-white mx-1" size={32} />
           </h3>{" "}
@@ -48,8 +50,16 @@ function MintWallet() {
             collect
           </button>
         </span>
+        <div
+          className="btn btn-square -my-7 z-10"
+          onClick={() => {
+            setShowConversionModal(true);
+          }}
+        >
+          <ArrowsDown size={24} className=" text-white" />
+        </div>
         <span className="flex justify-between items-center w-full p-2 px-4  rounded-md bg-slate-200 dark:bg-slate-700">
-          <h3 className="flex items-center font-semibold text-3xl text-brand-gradient">
+          <h3 className="flex items-center font-semibold text-3xl text-white">
             {State.database.userData.data?.user?.gems?.balance}
             <Diamond className="text-white mx-1" size={32} />
           </h3>{" "}
@@ -69,12 +79,7 @@ function MintWallet() {
           <EachTransaction />
           <EachTransaction />
         </div>{" "}
-        <button
-          onClick={() => {
-            setShowGiftModal(true);
-          }}
-          className="btn gap-2 px-8 w-full max-w-lg rounded-full btn-brand btn-primary capitalize"
-        >
+        <button className="btn gap-2 px-8 w-full max-w-lg rounded-full btn-brand btn-primary capitalize">
           <Send size={20} /> send
         </button>
       </div>
@@ -86,6 +91,13 @@ function MintWallet() {
         <CollectCoinsModal
           setCollectCoinsModalVisible={setCollectCoinsModalVisible}
         />
+      </div>
+      <div
+        className={`${
+          showConversionModal && "modal-open"
+        } modal modal-bottom sm:modal-middle`}
+      >
+        <TreasuryConvertModal setShowConversionModal={setShowConversionModal} />
       </div>
     </div>
   );
