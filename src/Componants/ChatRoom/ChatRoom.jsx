@@ -328,7 +328,7 @@ function ChatRoom(props) {
 
   return (
     <div className=" flex h-screen bg-slate-100 dark:bg-slate-800 lg:bg-white lg:dark:bg-slate-900">
-       <div className="flex lg:hidden flex-col  w-full py-20">
+       <div className="flex lg:hidden z-[9999] fixed top-0 left-0 flex-col  w-screen h-screen ">
         <ChatsListMobile userName={username} />
       </div>
       <div className="hidden lg:flex flex-col h-full w-1/4 ml-12 mr-4 pt-24 space-y-6 overflow-y-auto">
