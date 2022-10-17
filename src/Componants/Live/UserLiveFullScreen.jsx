@@ -418,7 +418,7 @@ function UserLiveFullScreen() {
               </div>
             ) : (
               <p className="whitespace-normal max-w-full">
-                {streamUser.streamDetails.description}
+                {streamUser?.streamDetails?.description}
               </p>
             )}
           </div>
@@ -428,10 +428,10 @@ function UserLiveFullScreen() {
             streamUser.streamLinks.map((link, index) => {
               return (
                 <div key={index} className="h-full w-full">
-                  <a href={link.url} target="_blank" rel="noopener noreferrer">
+                  <a href={link?.url} target="_blank" rel="noopener noreferrer">
                     <img
                       className="aspect-video object-cover w-full rounded-md"
-                      src={link.image}
+                      src={link?.image}
                     />
                   </a>
                 </div>
@@ -441,18 +441,22 @@ function UserLiveFullScreen() {
             <></>
           )}
         </div>
-        {streamUser?.username && streamUser.livepeer_data.isActive && (
+        {
           <div
             className={` ${
-              showChat ? "absolute top-0 left-0" : "hidden"
-            } w-full h-full`}
+              showChat ? "absolute bottom-0 left-0" : "hidden"
+            } w-full h-full pb-10`}
           >
-            <div className="flex-grow flex justify-between p-2 text-brand3 bg-white dark:bg-slate-900">
-              live chat <X onClick={() => setshowChat(false)} />
+            <div className="flex-grow flex justify-between p-2 text-brand3 bg-slate-200 dark:bg-slate-700">
+              live chat
+              <X
+                className="cursor-pointer"
+                onClick={() => setshowChat(false)}
+              />
             </div>
-            <LiveRoom username={streamUser.username}></LiveRoom>
+            <LiveRoom username={streamUser?.username}></LiveRoom>
           </div>
-        )}
+        }
       </div>
     </div>
   );
