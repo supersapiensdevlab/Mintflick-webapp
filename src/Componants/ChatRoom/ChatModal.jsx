@@ -9,13 +9,17 @@ import Loading from "../Loading/Loading";
 import ChatLinkPreview from "./ChatLinkPreview";
 import InfiniteScroll from "react-infinite-scroller";
 import { useContext } from "react";
+import placeholderImage from "../../Assets/profile-pic.png";
+
 import { UserContext } from "../../Store";
-import { useLocation, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import { makeStorageClient } from "../../Helper/uploadHelper";
 import { detectURLs } from "../../Helper/uploadHelperWeb3Storage";
 import {
   ArrowBackUp,
   ChevronDown,
+  ChevronDownLeft,
+  ChevronLeft,
   CloudDownload,
   File,
   Send,
@@ -24,6 +28,7 @@ import {
   X,
 } from "tabler-icons-react";
 import ReactPlayer from "react-player";
+import { Image } from "react-img-placeholder";
 
 // https://mintflickchats.herokuapp.com
 const socket = io(`${process.env.REACT_APP_CHAT_URL}`, {
@@ -323,23 +328,39 @@ function ChatModal(props) {
     >
       <div className="relative flex flex-col w-full h-full  p-0 bg-slate-100 dark:bg-slate-800 ">
         <div className="w-full h-fit p-2 bg-slate-300 dark:bg-slate-700">
-          <div className="flex justify-between items-center p-2">
-            <h3 className="flex items-center gap-2 font-bold text-lg text-brand2">
-              <Share />
-              Chat
-            </h3>
-            <X
-              onClick={() => props.setOpen(false)}
-              className="text-brand2 cursor-pointer"
-            ></X>
+          <div className="flex justify-between items-center  ">
+          <div  onClick={() => props.setOpen(false)}
+              className="  btn btn-circle  btn-ghost "><ChevronLeft
+          size={20}
+             
+            ></ChevronLeft></div><Link
+            to={`../profile/${username}`}
+            className=" w-full flex cursor-pointer items-center gap-2   p-1"
+          >
+            <Image
+              width={42}
+              height={42}
+              className="h-full rounded-full border-2"
+              src={placeholderImage}
+              alt="profileImage"
+              placeholderSrc={placeholderImage}
+            />
+            <p className="cursor-pointer text-base font-medium text-brand3">
+              {username}
+            </p>
+          </Link>
+            
           </div>
         </div>
 
+        <div className=" relative flex flex-col lg:w-2/4 w-full overflow-clip bg-slate-100 dark:bg-slate-800 ">
+
         <LoadingBar ref={loadingRef} color="#00d3ff" shadow={true} />
 
-        <div className="p-1 flex-grow overflow-y-scroll	overflow-x-hidden pb-20">
+        <div className=" h-full overflow-y-scroll	overflow-x-hidden ">
           <div ref={scrollTop}></div>
           <InfiniteScroll
+            className="px-4"
             pageStart={0}
             loadMore={() => {
               if (socket && currentPage > 0 && !loadingOldChats) {
@@ -630,7 +651,7 @@ function ChatModal(props) {
                 inline: "nearest",
               });
             }}
-            className="p-1 absolute w-screen flex justify-center bottom-20  z-100"
+            className="p-1 absolute w-full flex justify-center bottom-16   z-100"
           >
             <div className="py-1 px-2 rounded-full bg-slate-400/40 dark:bg-slate-600/40  text-brand2 flex gap-1 cursor-pointer backdrop-blur-sm">
               <ChevronDown /> Recent messages
@@ -638,9 +659,8 @@ function ChatModal(props) {
           </div>
           <div ref={chatRef} />
         </div>
-
-        <div className="fixed  bottom-0 w-full bg-slate-300 dark:bg-slate-900">
-          <div className="py-4 px-2 md:px-4">
+        <div className=" border-t-2 border-slate-200 dark:border-slate-700 w-full bg-slate-300 dark:bg-slate-800 ">
+          <div className="py-1 px-1 md:px-2">
             {formState.replyto ? (
               <div className="w-full p-2 flex items-center bg-slate-200 dark:bg-slate-800	justify-between rounded-md mb-4">
                 <div className="flex-grow flex gap-1">
@@ -725,14 +745,14 @@ function ChatModal(props) {
                 </button>
               </div>
             ) : null}
-            <div className="flex justify-start items-center gap-1">
+            <div className="flex justify-start items-center gap-2 ">
               <div>
                 <div className="dropdown dropdown-top">
                   <label
                     tabIndex={0}
                     className="m-1 cursor-pointer text-brand2"
                   >
-                    <i className="far fa-laugh text-base md:text-2xl "></i>
+                    <i className="far fa-laugh text-base "></i>
                   </label>
                   <div
                     tabIndex={0}
@@ -761,7 +781,7 @@ function ChatModal(props) {
 
               <div className="dropdown dropdown-top">
                 <label tabIndex={0} className="m-1 cursor-pointer text-brand2">
-                  <i className="fas fa-paperclip text-base md:text-2xl "></i>
+                  <i className="fas fa-paperclip text-base "></i>
                 </label>
                 <ul
                   tabIndex={0}
@@ -869,7 +889,7 @@ function ChatModal(props) {
                   placeholder="Enter Message"
                   required
                   autoComplete="false"
-                  className="w-full rounded-md textarea"
+                  className="w-full rounded-md textarea "
                 ></textarea>
                 {/* </div> */}
 
@@ -890,7 +910,7 @@ function ChatModal(props) {
                   disabled={formState.message.length < 1}
                   type="submit"
                   className={`
-               
+                 
                  ${
                    uploadingFile && "loading"
                  } btn btn-square btn-primary  gap-2`}
@@ -901,6 +921,7 @@ function ChatModal(props) {
             </div>
           </div>
         </div>
+      </div>
       </div>
     </div>
   );

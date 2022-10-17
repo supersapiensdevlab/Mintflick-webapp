@@ -29,6 +29,7 @@ import ChatsList from "./ChatsList";
 import { Image } from "react-img-placeholder";
 import axios from "axios";
 import ProfileVisitCard from "../Profile/ProfileVisitCard";
+import ChatsListMobile from "./ChatListMobile";
 
 // https://mintflickchats.herokuapp.com
 const socket = io(`${process.env.REACT_APP_CHAT_URL}`, {
@@ -327,10 +328,14 @@ function ChatRoom(props) {
 
   return (
     <div className=" flex h-screen bg-slate-100 dark:bg-slate-800 lg:bg-white lg:dark:bg-slate-900">
+       <div className="flex lg:hidden flex-col  w-full py-20">
+        <ChatsListMobile userName={username} />
+      </div>
       <div className="hidden lg:flex flex-col h-full w-1/4 ml-12 mr-4 pt-24 space-y-6 overflow-y-auto">
         <ChatsList userName={username} />
       </div>
-      <div className=" relative  rounded-lg flex flex-col lg:w-2/4 w-full overflow-clip  mt-14 lg:mt-24 bg-slate-100 dark:bg-slate-800 ">
+     
+      <div className=" relative  rounded-lg hidden  lg:flex flex-col lg:w-2/4 w-full overflow-clip  mt-14 lg:mt-24 bg-slate-100 dark:bg-slate-800 ">
         <div className=" w-full h-fit p-1 border-b-2 border-slate-200 dark:border-slate-700 bg-slate-300 dark:bg-slate-800">
           <Link
             to={`../profile/${username}`}
