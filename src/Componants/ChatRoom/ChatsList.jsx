@@ -9,7 +9,7 @@ import { User, Users } from "tabler-icons-react";
 
 function ChatsList(props) {
   const State = useContext(UserContext);
-  const [showChats, setshowChats] = useState(false);
+  const [showChats, setshowChats] = useState(true);
 
   return (
     <div className="flex flex-col items-start py-2 bg-slate-100 dark:bg-slate-800 w-full h-fit rounded-lg ">

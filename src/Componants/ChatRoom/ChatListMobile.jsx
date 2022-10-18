@@ -14,7 +14,7 @@ function ChatsListMobile(props) {
     State.database.userData.data.user.username
   );
   const [chatState, setchatState] = useState({});
-  const [showChats, setshowChats] = useState(false);
+  const [showChats, setshowChats] = useState(true);
 
   return (
     <div className="flex flex-col items-start bg-slate-100 dark:bg-slate-800 w-full h-full ">
