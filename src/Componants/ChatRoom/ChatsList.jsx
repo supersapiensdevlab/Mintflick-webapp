@@ -21,7 +21,7 @@ function ChatsList(props) {
                 <Link
                   to={`/homescreen/chat/${conv.username}`}
                   state={{
-                    isDM: true,
+                    isDM: conv.isGroup ? false : true,
                     user2: { id: conv.user_id },
                   }}
                   className={`${
@@ -40,6 +40,13 @@ function ChatsList(props) {
                   <div className="flex flex-col">
                     <p className="cursor-pointer text-base font-semibold text-brand3">
                       {conv.username}
+                      {conv.isGroup ? (
+                        <span className=" text-xs font-normal rounded mx-2 px-1 py-0.5 bg-orange-500">
+                          Group
+                        </span>
+                      ) : (
+                        <span className=" text-xs font-normal rounded mx-2 px-1 py-0.5 bg-green-500">DM</span>
+                      )}
                     </p>
                     <p className="cursor-pointer text-base w-2/3 truncate text-brand5">
                       this is recent message sent by user
