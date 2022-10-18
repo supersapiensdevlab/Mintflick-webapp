@@ -107,7 +107,7 @@ function ChatsListMobile(props) {
         open={mobilechatModalOpen}
         setOpen={setmobilechatModalOpen}
         userName={chatUserName}
-        state={{ chatState }}
+        state={{ ...chatState }}
       />
     </div>
   );
