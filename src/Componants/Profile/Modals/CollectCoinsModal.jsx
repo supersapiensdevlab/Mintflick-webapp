@@ -171,7 +171,7 @@ const CollectCoinsModal = ({ setCollectCoinsModalVisible }) => {
                 </span>
               </div>
               {!State.database.userData.data?.user?.coins?.tasksPerformed
-                .followedTwitter ? (
+                ?.followedTwitter ? (
                 <a href="https://twitter.com/mintflickApp" target="_blank">
                   <button
                     onClick={() => {
@@ -197,8 +197,11 @@ const CollectCoinsModal = ({ setCollectCoinsModalVisible }) => {
                 </span>
               </div>
               {!State.database.userData.data?.user?.coins?.tasksPerformed
-                .followedInstagram ? (
-                <a href="https://www.instagram.com/mintflick.app/" target="_blank">
+                ?.followedInstagram ? (
+                <a
+                  href="https://www.instagram.com/mintflick.app/"
+                  target="_blank"
+                >
                   <button
                     onClick={() => {
                       handleUserCoins("instagram");
@@ -223,7 +226,7 @@ const CollectCoinsModal = ({ setCollectCoinsModalVisible }) => {
                 </span>
               </div>
               {!State.database.userData.data?.user?.coins?.tasksPerformed
-                .followedLinkedin ? (
+                ?.followedLinkedin ? (
                 <a
                   href="https://www.linkedin.com/company/mintflick"
                   target="_blank"
@@ -252,7 +255,7 @@ const CollectCoinsModal = ({ setCollectCoinsModalVisible }) => {
                 </span>
               </div>
               {!State.database.userData.data?.user?.coins?.tasksPerformed
-                .followedDiscord ? (
+                ?.followedDiscord ? (
                 <a href="https://discord.com/invite/xZavZyAbx4" target="_blank">
                   <button
                     onClick={() => {

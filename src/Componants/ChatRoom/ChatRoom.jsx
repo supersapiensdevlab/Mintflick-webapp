@@ -29,6 +29,7 @@ import ChatsList from "./ChatsList";
 import { Image } from "react-img-placeholder";
 import axios from "axios";
 import ProfileVisitCard from "../Profile/ProfileVisitCard";
+import ChatsListMobile from "./ChatListMobile";
 
 // https://mintflickchats.herokuapp.com
 const socket = io(`${process.env.REACT_APP_CHAT_URL}`, {
@@ -163,7 +164,7 @@ function ChatRoom(props) {
       socket.off("init");
     };
     // eslint-disable-next-line
-  }, [username]);
+  }, [username, isDM]);
 
   useEffect(() => {
     console.log("msg");
@@ -327,10 +328,14 @@ function ChatRoom(props) {
 
   return (
     <div className=" flex h-screen bg-slate-100 dark:bg-slate-800 lg:bg-white lg:dark:bg-slate-900">
+      <div className="flex lg:hidden z-[9999] fixed top-0 left-0 flex-col  w-screen h-screen ">
+        <ChatsListMobile userName={username} />
+      </div>
       <div className="hidden lg:flex flex-col h-full w-1/4 ml-12 mr-4 pt-24 space-y-6 overflow-y-auto">
         <ChatsList userName={username} />
       </div>
-      <div className=" relative  rounded-lg flex flex-col lg:w-2/4 w-full overflow-clip  mt-14 lg:mt-24 bg-slate-100 dark:bg-slate-800 ">
+
+      <div className=" relative  rounded-lg hidden  lg:flex flex-col lg:w-2/4 w-full overflow-clip  mt-14 lg:mt-24 bg-slate-100 dark:bg-slate-800 ">
         <div className=" w-full h-fit p-1 border-b-2 border-slate-200 dark:border-slate-700 bg-slate-300 dark:bg-slate-800">
           <Link
             to={`../profile/${username}`}
@@ -648,8 +653,8 @@ function ChatRoom(props) {
             }}
             className="p-1 absolute w-full flex justify-center bottom-16   z-100"
           >
-            <div className="py-1 px-2 rounded-full bg-slate-400/40 dark:bg-slate-600/40  text-brand2 flex gap-1 cursor-pointer backdrop-blur-sm">
-              <ChevronDown /> Recent messages
+            <div className="p-2 rounded-full bg-slate-400/40 dark:bg-slate-600/40  text-brand2 flex gap-1 cursor-pointer backdrop-blur-sm">
+              <ChevronDown />
             </div>
           </div>
           <div ref={chatRef} />

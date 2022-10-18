@@ -121,13 +121,27 @@ function MobileHeader() {
         ) : (
           <Main_logo></Main_logo>
         )}
-
-        <button
+<button class="btn btn-circle btn-ghost " >
+          <NavLink
+            to={`/homescreen/chat/${
+              State.database.userData.data
+                ? State.database.userData.data.user.username
+                : ""
+            }`}
+            state={{
+              isDM: false,
+              user2: {},
+            }}
+          >
+            <MessageDots size={28}></MessageDots>
+          </NavLink>
+        </button>
+        {/* <button
           class="btn btn-circle btn-ghost "
           onClick={() => setchatModalOpen(true)}
         >
           <MessageDots size={28}></MessageDots>
-        </button>
+        </button> */}
       </div>
       <ChatModal
         open={chatModalOpen}

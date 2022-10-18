@@ -465,7 +465,7 @@ function Header() {
           </ul>
         </div>
       </div>
-      <ChatModal
+      {/* <ChatModal
         open={chatModalOpen}
         setOpen={setchatModalOpen}
         userName={State.database.userData?.data?.user?.username}
@@ -473,7 +473,7 @@ function Header() {
           isDM: false,
           user2: {},
         }}
-      />
+      /> */}
     </div>
   );
 }
