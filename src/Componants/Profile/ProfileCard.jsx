@@ -6,15 +6,12 @@ import coverImage from "../../Assets/backgrounds/cover.png";
 import { UserContext } from "../../Store";
 import MarketplaceModal from "../Home/Modals/MarketplaceModal";
 import SetupMarketplaceModal from "../Home/Modals/SetupMarketplaceModal";
-import EditProfileModal from "./Modals/EditProfileModal";
-import ManageSuperfanModal from "./Modals/ManageSuperfanModal";
+import SettingsModal from "./Modals/SettingsModal";
 
 function ProfileCard(props) {
   const State = useContext(UserContext);
-  const [marketPlaceModalOpen, setMarketPlaceModalOpen] = useState(false);
-  const [editProfileModalOpen, seteditProfileModalOpen] = useState(false);
-  const [manageSuperfansModalOpen, setmanageSuperfansModalOpen] =
-    useState(false);
+  // const [marketPlaceModalOpen, setMarketPlaceModalOpen] = useState(false);
+  const [settingsModalOpen, setsettingsModalOpen] = useState(false);
 
   async function isUserAvaliable() {
     await axios({
@@ -105,55 +102,44 @@ function ProfileCard(props) {
           {State.database.userData.data &&
             (State.database.userData.data.user.username === props.userName ? (
               <>
-                <button
+                {/* <button
                   onClick={() => {
                     setMarketPlaceModalOpen(true);
                   }}
                   className="btn btn-primary btn-outline btn-sm w-full"
                 >
                   Setup Marketplace
-                </button>
+                </button> */}
                 <button
-                  onClick={() => seteditProfileModalOpen(true)}
-                  className="btn btn-primary btn-outline btn-sm w-full"
+                  onClick={() => setsettingsModalOpen(true)}
+                  className="btn btn-primary btn-outline btn-sm w-full capitalize"
                 >
-                  Edit profile
-                </button>
-                <button
-                  onClick={() => setmanageSuperfansModalOpen(true)}
-                  className="btn btn-primary btn-outline btn-sm w-full"
-                >
-                  Manage Supefans
+                  Settings
                 </button>
               </>
             ) : (
-              <>
-                <button className="btn btn-brand btn-sm w-full">follow</button>
-                <button className="btn btn-primary btn-outline btn-sm w-full">
+              <div className="flex gap-1">
+                <button className="btn  btn-primary btn-outline btn-sm flex-grow">
+                  follow
+                </button>
+                <button className="btn btn-brand btn-sm ">
                   become superfan
                 </button>
-              </>
+              </div>
             ))}
         </div>
       </div>
-      <div
+      {/* <div
         className={`${
           marketPlaceModalOpen && "modal-open"
         } modal modal-bottom sm:modal-middle`}
       >
-        {/* <MarketplaceModal setMarketPlaceModalOpen={setMarketPlaceModalOpen} /> */}
+        <MarketplaceModal setMarketPlaceModalOpen={setMarketPlaceModalOpen} />
         <SetupMarketplaceModal
           setMarketPlaceModalOpen={setMarketPlaceModalOpen}
         />
-      </div>
-      <EditProfileModal
-        open={editProfileModalOpen}
-        setOpen={seteditProfileModalOpen}
-      />
-      <ManageSuperfanModal
-        open={manageSuperfansModalOpen}
-        setOpen={setmanageSuperfansModalOpen}
-      />
+      </div> */}
+      <SettingsModal open={settingsModalOpen} setOpen={setsettingsModalOpen} />
     </div>
   );
 }
