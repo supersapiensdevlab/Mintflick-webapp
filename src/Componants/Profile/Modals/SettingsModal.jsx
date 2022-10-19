@@ -54,7 +54,7 @@ function SettingsModal(props) {
           <div className="flex px-2 -mb-2">
             <span
               onClick={() => setactiveTab("editProfile")}
-              className={`cursor-pointer text-brand2 px-2 pt-1 ${
+              className={`cursor-pointer text-sm text-brand2 px-2 pt-1 ${
                 activeTab === "editProfile" &&
                 "bg-slate-100 dark:bg-slate-800 rounded-t-lg"
               }`}
@@ -63,7 +63,7 @@ function SettingsModal(props) {
             </span>
             <span
               onClick={() => setactiveTab("manageSuperfans")}
-              className={`cursor-pointer text-brand2 px-2 pt-1 ${
+              className={`cursor-pointer text-sm text-brand2 px-2 pt-1 ${
                 activeTab === "manageSuperfans" &&
                 "bg-slate-100 dark:bg-slate-800 rounded-t-lg"
               }`}
