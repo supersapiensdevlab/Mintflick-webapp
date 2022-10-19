@@ -95,8 +95,9 @@
   bg-brand hover:bg-brand  border-none hover:ring-1 hover:ring-primary dark:hover:ring-slate-100;
 }
 .btn-outline {
-  @apply hover:bg-gradient-to-tr   from-[#A36CFC]  via-primary  to-brand text-white;
+  @apply hover:bg-gradient-to-tr  from-[#A36CFC]  via-primary  to-brand;
 }
+
 .btn-primary {
   @apply hover:text-white;
 }

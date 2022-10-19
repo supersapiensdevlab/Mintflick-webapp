@@ -6,10 +6,15 @@ import coverImage from "../../Assets/backgrounds/cover.png";
 import { UserContext } from "../../Store";
 import MarketplaceModal from "../Home/Modals/MarketplaceModal";
 import SetupMarketplaceModal from "../Home/Modals/SetupMarketplaceModal";
+import EditProfileModal from "./Modals/EditProfileModal";
+import ManageSuperfanModal from "./Modals/ManageSuperfanModal";
 
 function ProfileCard(props) {
   const State = useContext(UserContext);
   const [marketPlaceModalOpen, setMarketPlaceModalOpen] = useState(false);
+  const [editProfileModalOpen, seteditProfileModalOpen] = useState(false);
+  const [manageSuperfansModalOpen, setmanageSuperfansModalOpen] =
+    useState(false);
 
   async function isUserAvaliable() {
     await axios({
@@ -108,8 +113,17 @@ function ProfileCard(props) {
                 >
                   Setup Marketplace
                 </button>
-                <button className="btn btn-primary btn-outline btn-sm w-full">
+                <button
+                  onClick={() => seteditProfileModalOpen(true)}
+                  className="btn btn-primary btn-outline btn-sm w-full"
+                >
                   Edit profile
+                </button>
+                <button
+                  onClick={() => setmanageSuperfansModalOpen(true)}
+                  className="btn btn-primary btn-outline btn-sm w-full"
+                >
+                  Manage Supefans
                 </button>
               </>
             ) : (
@@ -132,6 +146,14 @@ function ProfileCard(props) {
           setMarketPlaceModalOpen={setMarketPlaceModalOpen}
         />
       </div>
+      <EditProfileModal
+        open={editProfileModalOpen}
+        setOpen={seteditProfileModalOpen}
+      />
+      <ManageSuperfanModal
+        open={manageSuperfansModalOpen}
+        setOpen={setmanageSuperfansModalOpen}
+      />
     </div>
   );
 }

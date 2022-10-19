@@ -207,7 +207,7 @@ const JoinSuperfanModal = ({
                   </span>
                 </div>
               ) : (
-                <div className="flex w-full bg-slate-200 dark:bg-slate-700 h-20 rounded-lg overflow-hidden hover:ring-2 ring-primary dark:ring-brand">
+                <div className="flex w-full bg-slate-200 dark:bg-slate-700 h-fit rounded-lg overflow-hidden hover:ring-2 ring-primary dark:ring-brand">
                   <img
                     src={plan.img}
                     className="h-full w-32 bg-red-600 object-cover"
