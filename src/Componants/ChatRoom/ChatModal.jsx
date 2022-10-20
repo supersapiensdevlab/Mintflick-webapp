@@ -160,7 +160,7 @@ function ChatModal(props) {
       socket.off("init");
     };
     // eslint-disable-next-line
-  }, [username]);
+  }, [username, isDM]);
 
   useEffect(() => {
     console.log("msg");

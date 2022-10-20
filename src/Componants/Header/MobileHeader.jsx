@@ -143,7 +143,7 @@ function MobileHeader() {
           <MessageDots size={28}></MessageDots>
         </button> */}
       </div>
-      <ChatModal
+      {/* <ChatModal
         open={chatModalOpen}
         setOpen={setchatModalOpen}
         userName={State.database.userData.data?.user?.username}
@@ -151,7 +151,7 @@ function MobileHeader() {
           isDM: false,
           user2: {},
         }}
-      />
+      /> */}
     </div>
   );
 }

@@ -25,6 +25,21 @@ function TextChannels() {
       >
         <button className="text-base text-brand3 font-medium btn">#Chat</button>
       </NavLink>
+      <NavLink
+        to={`/homescreen/chat/${
+          State.database.userProfileData
+            ? State.database.userProfileData.data.username
+            : ""
+        }`}
+        state={{
+          isDM: true,
+          user2: State.database.userProfileData
+            ? State.database.userProfileData.data
+            : null,
+        }}
+      >
+        <button className="text-base text-brand3 font-medium btn">#DM</button>
+      </NavLink>
     </div>
   );
 }

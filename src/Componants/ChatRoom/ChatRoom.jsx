@@ -41,6 +41,9 @@ function ChatRoom(props) {
   const user = useContext(UserContext);
   const [showButton, setShowButton] = useState(false);
 
+  const [dms, setDms] = useState([]);
+  const [rooms, setRooms] = useState([]);
+
   const location = useLocation();
   const { username } = useParams();
   const { isDM, user2 } = location.state;
@@ -154,6 +157,11 @@ function ChatRoom(props) {
           });
         }, 200);
       });
+
+      socket.on("conversations", (conversations) => {
+        if (conversations.dms) setDms(conversations.dms);
+        if (conversations.rooms) setRooms(conversations.rooms);
+      });
     } else {
       window.history.replaceState({}, "Home", "/");
     }
@@ -162,6 +170,7 @@ function ChatRoom(props) {
       socket.off("message");
       socket.off("getmore");
       socket.off("init");
+      socket.off("conversations");
     };
     // eslint-disable-next-line
   }, [username, isDM]);
@@ -332,7 +341,7 @@ function ChatRoom(props) {
         <ChatsListMobile userName={username} />
       </div>
       <div className="hidden lg:flex flex-col h-full w-1/4 ml-12 mr-4 pt-24 space-y-6 overflow-y-auto">
-        <ChatsList userName={username} />
+        <ChatsList userName={username} dms={dms} rooms={rooms} />
       </div>
 
       <div className=" relative  rounded-lg hidden  lg:flex flex-col lg:w-2/4 w-full overflow-clip  mt-14 lg:mt-24 bg-slate-100 dark:bg-slate-800 ">
