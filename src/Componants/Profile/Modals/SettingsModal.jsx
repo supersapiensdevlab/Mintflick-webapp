@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useContext } from "react";
 import {
   DeviceFloppy,
   Edit,
@@ -10,29 +11,117 @@ import {
 } from "tabler-icons-react";
 import coverImage from "../../../Assets/backgrounds/cover.png";
 import SolanaToken from "../../../Assets/logos/SolanaToken";
+import useUserActions from "../../../Hooks/useUserActions";
+import { UserContext } from "../../../Store";
+import axios from "axios";
 
 function SettingsModal(props) {
   const [activeTab, setactiveTab] = useState("editProfile");
-  const plans = [
-    {
-      img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYttbDyk8tE55gznNpc1ujtwlaNTtX4ahdrg&usqp=CAU",
-      name: "Silver",
-      description: ` asdasd asdasd asdasd asdasd ff fe efefe dasdas asdasasd asd`,
-      price: `12`,
-    },
-    {
-      img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYttbDyk8tE55gznNpc1ujtwlaNTtX4ahdrg&usqp=CAU",
-      name: "Gold",
-      description: `asdasdasd  dsfsfd dasd dasdas asdasd asdasd asdasd asdasd ff fe efefe dasdas asdasasd asd`,
-      price: `12`,
-    },
-    {
-      img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYttbDyk8tE55gznNpc1ujtwlaNTtX4ahdrg&usqp=CAU",
-      name: "Platinum",
-      description: `asdasdasd asdasd sdasdasdas asdasd asdasd asdasd asdasd ff fe efefe dasdas asdasasd asd`,
-      price: `12`,
-    },
-  ];
+  const planImage =
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYttbDyk8tE55gznNpc1ujtwlaNTtX4ahdrg&usqp=CAU";
+  const State = useContext(UserContext);
+  const [superfanPlans, setSuperfanPlans] = useState({
+    plan: "Basic",
+    plan2: "Silver",
+    plan3: "Gold",
+    perks: State.database.userData.data?.user?.superfan_data?.perks
+      ? State.database.userData.data?.user?.superfan_data?.perks
+      : "",
+    perks2: State.database.userData.data?.user?.superfan_data?.perks2
+      ? State.database.userData.data?.user?.superfan_data?.perks2
+      : "",
+    perks3: State.database.userData.data?.user?.superfan_data?.perks3
+      ? State.database.userData.data?.user?.superfan_data?.perks3
+      : "",
+    price: State.database.userData.data?.user?.superfan_data?.price
+      ? State.database.userData.data?.user?.superfan_data?.price
+      : "",
+    price2: State.database.userData.data?.user?.superfan_data?.price2
+      ? State.database.userData.data?.user?.superfan_data?.price2
+      : "",
+    price3: State.database.userData.data?.user?.superfan_data?.price3
+      ? State.database.userData.data?.user?.superfan_data?.price3
+      : "",
+  });
+  const [loadFeed, loadUser] = useUserActions();
+  const [warning, setWarning] = useState(null);
+  const [success, setSuccess] = useState(null);
+
+  const handleUpdateSuperfanPlans = async () => {
+    if (superfanPlans === State.database.userData.data?.user?.superfan_data)
+      return;
+    if (
+      superfanPlans.price == "" ||
+      superfanPlans.price == "0" ||
+      superfanPlans.price2 == "" ||
+      superfanPlans.price2 == "0" ||
+      superfanPlans.price3 == "" ||
+      superfanPlans.price3 == "0"
+    ) {
+      setWarning("Price must be > 0");
+      return;
+    }
+
+    if (
+      superfanPlans.perks == "" ||
+      superfanPlans.perks2 == "" ||
+      superfanPlans.perks3 == ""
+    ) {
+      setWarning("Please add perks");
+      return;
+    }
+    console.log(superfanPlans);
+    setWarning(null);
+    let data = {
+      superfanData: superfanPlans,
+    };
+    axios({
+      method: "POST",
+      url: `${process.env.REACT_APP_SERVER_URL}/user/update_superfanplans`,
+      data: data,
+      headers: {
+        "content-type": "application/json",
+        "auth-token": JSON.stringify(localStorage.getItem("authtoken")),
+      },
+    })
+      .then(async () => {
+        await loadUser();
+        setSuccess("Plans updated successfully");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const clearData = () => {
+    props.setOpen(false);
+    setSuperfanPlans({
+      plan: "Basic",
+      plan2: "Silver",
+      plan3: "Gold",
+      perks: State.database.userData.data?.user?.superfan_data?.perks
+        ? State.database.userData.data?.user?.superfan_data?.perks
+        : "",
+      perks2: State.database.userData.data?.user?.superfan_data?.perks2
+        ? State.database.userData.data?.user?.superfan_data?.perks2
+        : "",
+      perks3: State.database.userData.data?.user?.superfan_data?.perks3
+        ? State.database.userData.data?.user?.superfan_data?.perks3
+        : "",
+      price: State.database.userData.data?.user?.superfan_data?.price
+        ? State.database.userData.data?.user?.superfan_data?.price
+        : "",
+      price2: State.database.userData.data?.user?.superfan_data?.price2
+        ? State.database.userData.data?.user?.superfan_data?.price2
+        : "",
+      price3: State.database.userData.data?.user?.superfan_data?.price3
+        ? State.database.userData.data?.user?.superfan_data?.price3
+        : "",
+    });
+    setSuccess(null);
+    setWarning(null);
+  };
+
   return (
     <div
       className={`${
@@ -47,7 +136,7 @@ function SettingsModal(props) {
               Settings{" "}
             </h3>
             <X
-              onClick={() => props.setOpen(false)}
+              onClick={() => clearData()}
               className="text-brand2 cursor-pointer"
             ></X>
           </div>
@@ -157,49 +246,223 @@ function SettingsModal(props) {
             <span className="divider my-2 text-brand4 font-semibold ">
               Choose plan to edit
             </span>
-            {plans.map((plan) => (
-              <div className="group p-1 hover:ring-2 ring-primary dark:ring-brand rounded-lg">
-                <div className="flex w-full bg-slate-200 dark:bg-slate-700 h-fit rounded-lg overflow-hidden ">
-                  <img
-                    src={plan.img}
-                    className=" w-32 bg-red-600 object-cover"
-                  />
-                  <span className="p-2 h-full flex-grow ">
-                    <h3 className="text-xl font-semibold text-primary dark:text-brand">
-                      {plan.name}
-                    </h3>
-                    <h5 className="w-full text-sm font-medium text-brand4">
-                      {plan.description}
-                    </h5>
-                  </span>
-                  <button onClick={() => {}}>
-                    <span className="flex items-center justify-center w-28 gap-2 p-4 h-full  bg-slate-300 dark:bg-slate-600">
-                      <SolanaToken size={24}></SolanaToken>
+            <div className="group p-1 hover:ring-2 ring-primary dark:ring-brand rounded-lg">
+              <div className="flex w-full bg-slate-200 dark:bg-slate-700 h-fit rounded-lg overflow-hidden ">
+                <img
+                  src={planImage}
+                  className=" w-32 bg-red-600 object-cover"
+                />
+                <span className="p-2 h-full flex-grow ">
+                  <h3 className="text-xl font-semibold text-primary dark:text-brand">
+                    Basic
+                  </h3>
+                  <h5 className="w-full text-sm font-medium text-brand4">
+                    {State.database.userData.data?.user?.superfan_data?.perks
+                      ? State.database.userData.data?.user?.superfan_data?.perks
+                      : ""}
+                  </h5>
+                </span>
+                <button onClick={() => {}}>
+                  <span className="flex items-center justify-center w-28 gap-2 p-4 h-full  bg-slate-300 dark:bg-slate-600">
+                    <SolanaToken size={24}></SolanaToken>
 
-                      <h3 className="text-xl font-semibold text-brand2">
-                        {plan.price}
-                      </h3>
+                    <h3 className="text-xl font-semibold text-brand2">
+                      {State.database.userData.data?.user?.superfan_data?.price
+                        ? State.database.userData.data?.user?.superfan_data
+                            ?.price
+                        : "0"}
+                    </h3>
+                  </span>
+                </button>
+              </div>
+              <div className=" w-full gap-2 hidden group-hover:flex flex-col">
+                <div className="flex flex-col items-start gap-1 w-full">
+                  <span className="text-brand4 text-sm mt-2">Price </span>
+                  <label className="input-group w-full">
+                    <input
+                      type="number"
+                      className="input w-full"
+                      onChange={(e) => {
+                        if (e.target.value !== "") {
+                          superfanPlans.price = e.target.value;
+                        } else {
+                          superfanPlans.price =
+                            State.database.userData.data?.user?.superfan_data?.price;
+                        }
+                      }}
+                    />
+                    <span className="bg-slate-300 dark:bg-slate-600">
+                      <SolanaToken size={16}></SolanaToken>
                     </span>
-                  </button>
+                  </label>
                 </div>
-                <div className=" w-full gap-2 hidden group-hover:flex flex-col">
-                  <div className="flex flex-col items-start gap-1 w-full">
-                    <span className="text-brand4 text-sm mt-2">Price </span>
-                    <label className="input-group w-full">
-                      <input type="number" className="input w-full" />
-                      <span className="bg-slate-300 dark:bg-slate-600">
-                        <SolanaToken size={16}></SolanaToken>
-                      </span>
-                    </label>
-                  </div>
-                  <div className="flex flex-col items-start gap-1 w-full">
-                    <span className="text-brand4 text-sm">Perks </span>
-                    <textarea className="textarea w-full" />
-                  </div>
+                <div className="flex flex-col items-start gap-1 w-full">
+                  <span className="text-brand4 text-sm">Perks </span>
+                  <textarea
+                    className="textarea w-full"
+                    onChange={(e) => {
+                      if (e.target.value !== "") {
+                        superfanPlans.perks = e.target.value;
+                      } else {
+                        superfanPlans.perks =
+                          State.database.userData.data?.user?.superfan_data?.perks;
+                      }
+                    }}
+                  />
                 </div>
               </div>
-            ))}
-            <button className="btn btn-brand gap-2 capitalize ">
+            </div>
+            <div className="group p-1 hover:ring-2 ring-primary dark:ring-brand rounded-lg">
+              <div className="flex w-full bg-slate-200 dark:bg-slate-700 h-fit rounded-lg overflow-hidden ">
+                <img
+                  src={planImage}
+                  className=" w-32 bg-red-600 object-cover"
+                />
+                <span className="p-2 h-full flex-grow ">
+                  <h3 className="text-xl font-semibold text-primary dark:text-brand">
+                    Silver
+                  </h3>
+                  <h5 className="w-full text-sm font-medium text-brand4">
+                    {State.database.userData.data?.user?.superfan_data?.perks2
+                      ? State.database.userData.data?.user?.superfan_data
+                          ?.perks2
+                      : ""}
+                  </h5>
+                </span>
+                <button onClick={() => {}}>
+                  <span className="flex items-center justify-center w-28 gap-2 p-4 h-full  bg-slate-300 dark:bg-slate-600">
+                    <SolanaToken size={24}></SolanaToken>
+
+                    <h3 className="text-xl font-semibold text-brand2">
+                      {State.database.userData.data?.user?.superfan_data?.price2
+                        ? State.database.userData.data?.user?.superfan_data
+                            ?.price2
+                        : "0"}
+                    </h3>
+                  </span>
+                </button>
+              </div>
+              <div className=" w-full gap-2 hidden group-hover:flex flex-col">
+                <div className="flex flex-col items-start gap-1 w-full">
+                  <span className="text-brand4 text-sm mt-2">Price </span>
+                  <label className="input-group w-full">
+                    <input
+                      type="number"
+                      className="input w-full"
+                      onChange={(e) => {
+                        if (e.target.value !== "") {
+                          superfanPlans.price2 = e.target.value;
+                        } else {
+                          superfanPlans.price2 =
+                            State.database.userData.data?.user?.superfan_data?.price2;
+                        }
+                      }}
+                    />
+                    <span className="bg-slate-300 dark:bg-slate-600">
+                      <SolanaToken size={16}></SolanaToken>
+                    </span>
+                  </label>
+                </div>
+                <div className="flex flex-col items-start gap-1 w-full">
+                  <span className="text-brand4 text-sm">Perks </span>
+                  <textarea
+                    className="textarea w-full"
+                    onChange={(e) => {
+                      if (e.target.value !== "") {
+                        superfanPlans.perks2 = e.target.value;
+                      } else {
+                        superfanPlans.perks2 =
+                          State.database.userData.data?.user?.superfan_data?.perks2;
+                      }
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="group p-1 hover:ring-2 ring-primary dark:ring-brand rounded-lg">
+              <div className="flex w-full bg-slate-200 dark:bg-slate-700 h-fit rounded-lg overflow-hidden ">
+                <img
+                  src={planImage}
+                  className=" w-32 bg-red-600 object-cover"
+                />
+                <span className="p-2 h-full flex-grow ">
+                  <h3 className="text-xl font-semibold text-primary dark:text-brand">
+                    Gold
+                  </h3>
+                  <h5 className="w-full text-sm font-medium text-brand4">
+                    {State.database.userData.data?.user?.superfan_data?.perks3
+                      ? State.database.userData.data?.user?.superfan_data
+                          ?.perks3
+                      : ""}
+                  </h5>
+                </span>
+                <button onClick={() => {}}>
+                  <span className="flex items-center justify-center w-28 gap-2 p-4 h-full  bg-slate-300 dark:bg-slate-600">
+                    <SolanaToken size={24}></SolanaToken>
+
+                    <h3 className="text-xl font-semibold text-brand2">
+                      {State.database.userData.data?.user?.superfan_data?.price3
+                        ? State.database.userData.data?.user?.superfan_data
+                            ?.price3
+                        : "0"}
+                    </h3>
+                  </span>
+                </button>
+              </div>
+              <div className=" w-full gap-2 hidden group-hover:flex flex-col">
+                <div className="flex flex-col items-start gap-1 w-full">
+                  <span className="text-brand4 text-sm mt-2">Price </span>
+                  <label className="input-group w-full">
+                    <input
+                      type="number"
+                      className="input w-full"
+                      onChange={(e) => {
+                        if (e.target.value !== "") {
+                          superfanPlans.price3 = e.target.value;
+                        } else {
+                          superfanPlans.price3 =
+                            State.database.userData.data?.user?.superfan_data?.price3;
+                        }
+                      }}
+                    />
+                    <span className="bg-slate-300 dark:bg-slate-600">
+                      <SolanaToken size={16}></SolanaToken>
+                    </span>
+                  </label>
+                </div>
+                <div className="flex flex-col items-start gap-1 w-full">
+                  <span className="text-brand4 text-sm">Perks </span>
+                  <textarea
+                    className="textarea w-full"
+                    onChange={(e) => {
+                      if (e.target.value !== "") {
+                        superfanPlans.perks3 = e.target.value;
+                      } else {
+                        superfanPlans.perks3 =
+                          State.database.userData.data?.user?.superfan_data?.perks3;
+                      }
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+            {warning && (
+              <div className="w-full text-center text-rose-500 my-1">
+                {warning}
+              </div>
+            )}
+            {success && (
+              <div className="w-full text-center text-green-500 my-1">
+                {success}
+              </div>
+            )}
+            <button
+              className="btn btn-brand gap-2 capitalize "
+              onClick={(e) => {
+                e.preventDefault();
+                handleUpdateSuperfanPlans();
+              }}
+            >
               <DeviceFloppy /> Save Changes
             </button>
           </div>
