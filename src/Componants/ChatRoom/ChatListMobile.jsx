@@ -29,20 +29,20 @@ function ChatsListMobile(props) {
           Messages
         </div>
       </div>
-      <div className="tabs tabs-boxed w-full bg-slate-200 dark:bg-slate-600 rounded-none ">
+      <div className="flex w-full   bg-slate-200 dark:bg-slate-600 rounded-none ">
         <div
-          className={`tab ${
-            showChats && "tab-active"
+          className={`flex items-center p-2  gap-1 w-1/2 justify-center  ${
+            showChats && "bg-slate-100  border-b-2 border-success dark:bg-slate-800"
           } text-brand2 font-semibold`}
           onClick={() => setshowChats(true)}
         >
           <User size={16} /> Chats
         </div>
         <div
-          className={`tab ${
-            !showChats && "tab-active"
+          className={`flex items-center p-2  gap-1 w-1/2 justify-center ${
+            !showChats && "bg-slate-100 border-b-2 border-success  dark:bg-slate-800"
           } text-brand2 font-semibold`}
-          onClick={() => setshowChats(false)}
+          onClick={() => setshowChats(false)}   
         >
           <Users size={16} /> Channels
         </div>

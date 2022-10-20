@@ -17,6 +17,8 @@ import axios from "axios";
 
 function SettingsModal(props) {
   const [activeTab, setactiveTab] = useState("editProfile");
+  const [selectedPlan, setselectedPlan] = useState(0);
+
   const planImage =
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYttbDyk8tE55gznNpc1ujtwlaNTtX4ahdrg&usqp=CAU";
   const State = useContext(UserContext);
@@ -143,7 +145,7 @@ function SettingsModal(props) {
           <div className="flex px-2 -mb-2">
             <span
               onClick={() => setactiveTab("editProfile")}
-              className={`cursor-pointer text-sm text-brand2 px-2 pt-1 ${
+              className={`cursor-pointer text-sm text-brand2 p-2 ${
                 activeTab === "editProfile" &&
                 "bg-slate-100 dark:bg-slate-800 rounded-t-lg"
               }`}
@@ -152,7 +154,7 @@ function SettingsModal(props) {
             </span>
             <span
               onClick={() => setactiveTab("manageSuperfans")}
-              className={`cursor-pointer text-sm text-brand2 px-2 pt-1 ${
+              className={`cursor-pointer text-sm text-brand2  p-2 ${
                 activeTab === "manageSuperfans" &&
                 "bg-slate-100 dark:bg-slate-800 rounded-t-lg"
               }`}
@@ -246,7 +248,7 @@ function SettingsModal(props) {
             <span className="divider my-2 text-brand4 font-semibold ">
               Choose plan to edit
             </span>
-            <div className="group p-1 hover:ring-2 ring-primary dark:ring-brand rounded-lg">
+            <div onClick={()=>setselectedPlan(1)} className={`${selectedPlan === 1 && "ring-2"} cursor-pointer p-1 ring-primary dark:ring-brand rounded-lg`}>
               <div className="flex w-full bg-slate-200 dark:bg-slate-700 h-fit rounded-lg overflow-hidden ">
                 <img
                   src={planImage}
@@ -263,7 +265,7 @@ function SettingsModal(props) {
                   </h5>
                 </span>
                 <button onClick={() => {}}>
-                  <span className="flex items-center justify-center w-28 gap-2 p-4 h-full  bg-slate-300 dark:bg-slate-600">
+                  <span className="flex items-center justify-center w-fit gap-2 px-4 h-full  bg-slate-300 dark:bg-slate-600">
                     <SolanaToken size={24}></SolanaToken>
 
                     <h3 className="text-xl font-semibold text-brand2">
@@ -275,7 +277,8 @@ function SettingsModal(props) {
                   </span>
                 </button>
               </div>
-              <div className=" w-full gap-2 hidden group-hover:flex flex-col">
+              {selectedPlan === 1 && 
+              <div className=" w-full gap-2 flex flex-col">
                 <div className="flex flex-col items-start gap-1 w-full">
                   <span className="text-brand4 text-sm mt-2">Price </span>
                   <label className="input-group w-full">
@@ -310,9 +313,9 @@ function SettingsModal(props) {
                     }}
                   />
                 </div>
-              </div>
+              </div>}
             </div>
-            <div className="group p-1 hover:ring-2 ring-primary dark:ring-brand rounded-lg">
+            <div onClick={()=>setselectedPlan(2)} className={`${selectedPlan === 2 && "ring-2"} cursor-pointer p-1 ring-primary dark:ring-brand rounded-lg`}>
               <div className="flex w-full bg-slate-200 dark:bg-slate-700 h-fit rounded-lg overflow-hidden ">
                 <img
                   src={planImage}
@@ -330,7 +333,7 @@ function SettingsModal(props) {
                   </h5>
                 </span>
                 <button onClick={() => {}}>
-                  <span className="flex items-center justify-center w-28 gap-2 p-4 h-full  bg-slate-300 dark:bg-slate-600">
+                  <span className="flex items-center justify-center w-fit gap-2 px-4 h-full  bg-slate-300 dark:bg-slate-600">
                     <SolanaToken size={24}></SolanaToken>
 
                     <h3 className="text-xl font-semibold text-brand2">
@@ -342,7 +345,8 @@ function SettingsModal(props) {
                   </span>
                 </button>
               </div>
-              <div className=" w-full gap-2 hidden group-hover:flex flex-col">
+              {selectedPlan === 2 && 
+              <div className=" w-full gap-2 flex flex-col">
                 <div className="flex flex-col items-start gap-1 w-full">
                   <span className="text-brand4 text-sm mt-2">Price </span>
                   <label className="input-group w-full">
@@ -377,9 +381,9 @@ function SettingsModal(props) {
                     }}
                   />
                 </div>
-              </div>
+              </div>}
             </div>
-            <div className="group p-1 hover:ring-2 ring-primary dark:ring-brand rounded-lg">
+            <div onClick={()=>setselectedPlan(3)} className={`${selectedPlan === 3 && "ring-2"} cursor-pointer p-1 ring-primary dark:ring-brand rounded-lg`}>
               <div className="flex w-full bg-slate-200 dark:bg-slate-700 h-fit rounded-lg overflow-hidden ">
                 <img
                   src={planImage}
@@ -397,7 +401,7 @@ function SettingsModal(props) {
                   </h5>
                 </span>
                 <button onClick={() => {}}>
-                  <span className="flex items-center justify-center w-28 gap-2 p-4 h-full  bg-slate-300 dark:bg-slate-600">
+                  <span className="flex items-center justify-center w-fit gap-2 px-4 h-full  bg-slate-300 dark:bg-slate-600">
                     <SolanaToken size={24}></SolanaToken>
 
                     <h3 className="text-xl font-semibold text-brand2">
@@ -409,7 +413,8 @@ function SettingsModal(props) {
                   </span>
                 </button>
               </div>
-              <div className=" w-full gap-2 hidden group-hover:flex flex-col">
+              {selectedPlan === 3 && 
+              <div className=" w-full gap-2 flex flex-col">
                 <div className="flex flex-col items-start gap-1 w-full">
                   <span className="text-brand4 text-sm mt-2">Price </span>
                   <label className="input-group w-full">
@@ -444,7 +449,7 @@ function SettingsModal(props) {
                     }}
                   />
                 </div>
-              </div>
+              </div>}
             </div>
             {warning && (
               <div className="w-full text-center text-rose-500 my-1">
