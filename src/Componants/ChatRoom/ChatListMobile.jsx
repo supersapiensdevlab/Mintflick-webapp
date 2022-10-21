@@ -32,7 +32,8 @@ function ChatsListMobile(props) {
       <div className="flex w-full   bg-slate-200 dark:bg-slate-600 rounded-none ">
         <div
           className={`flex items-center p-2  gap-1 w-1/2 justify-center  ${
-            showChats && "bg-slate-100  border-b-2 border-success dark:bg-slate-800"
+            showChats &&
+            "bg-slate-100  border-t-2 border-success dark:bg-slate-800"
           } text-brand2 font-semibold`}
           onClick={() => setshowChats(true)}
         >
@@ -40,9 +41,10 @@ function ChatsListMobile(props) {
         </div>
         <div
           className={`flex items-center p-2  gap-1 w-1/2 justify-center ${
-            !showChats && "bg-slate-100 border-b-2 border-success  dark:bg-slate-800"
+            !showChats &&
+            "bg-slate-100 border-t-2 border-success  dark:bg-slate-800"
           } text-brand2 font-semibold`}
-          onClick={() => setshowChats(false)}   
+          onClick={() => setshowChats(false)}
         >
           <Users size={16} /> Channels
         </div>

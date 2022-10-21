@@ -6,12 +6,14 @@ import coverImage from "../../Assets/backgrounds/cover.png";
 import { UserContext } from "../../Store";
 import MarketplaceModal from "../Home/Modals/MarketplaceModal";
 import SetupMarketplaceModal from "../Home/Modals/SetupMarketplaceModal";
+import FollowersModal from "./Modals/FollowersModal";
 import SettingsModal from "./Modals/SettingsModal";
 
 function ProfileCard(props) {
   const State = useContext(UserContext);
   // const [marketPlaceModalOpen, setMarketPlaceModalOpen] = useState(false);
   const [settingsModalOpen, setsettingsModalOpen] = useState(false);
+  const [followersModalOpen, setfollowersModalOpen] = useState(false);
 
   async function isUserAvaliable() {
     await axios({
@@ -78,19 +80,28 @@ function ProfileCard(props) {
           </p>
         </span>
         <div className="w-full flex p-2 justify-around">
-          <span className="flex flex-col items-center gap-1 text-lg text-brand3 font-bold">
+          <span
+            onClick={() => setfollowersModalOpen(true)}
+            className="cursor-pointer flex flex-col items-center gap-1 text-lg text-brand3 font-bold"
+          >
             {props.follower_count}
             <p className="flex items-center  text-xs text-primary font-medium">
               Followers
             </p>
           </span>
-          <span className="flex flex-col items-center gap-1 text-lg text-brand3 font-bold">
+          <span
+            onClick={() => setfollowersModalOpen(true)}
+            className="cursor-pointer flex flex-col items-center gap-1 text-lg text-brand3 font-bold"
+          >
             {props.followee_count}
             <p className="flex items-center  text-xs text-primary font-medium">
               Following
             </p>
           </span>
-          <span className="flex flex-col items-center gap-1 text-lg text-brand3 font-bold">
+          <span
+            onClick={() => setfollowersModalOpen(true)}
+            className="cursor-pointer flex flex-col items-center gap-1 text-lg text-brand3 font-bold"
+          >
             {props.superfan_of}
             <p className="flex items-center gap-1 text-xs text-primary font-medium">
               SuperFans
@@ -140,6 +151,10 @@ function ProfileCard(props) {
         />
       </div> */}
       <SettingsModal open={settingsModalOpen} setOpen={setsettingsModalOpen} />
+      <FollowersModal
+        open={followersModalOpen}
+        setOpen={setfollowersModalOpen}
+      />
     </div>
   );
 }
