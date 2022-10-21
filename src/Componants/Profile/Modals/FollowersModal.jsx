@@ -77,9 +77,9 @@ function FollowersModal(props) {
             {superfans.length} Superfans
           </span>
         </div>
-        <div className="flex flex-col flex-grow overflow-y-auto  p-4 w-full  justify-start">
+        <div className="flex flex-col flex-grow overflow-y-auto pt-2  sm:p-2 w-full  justify-start">
           {/* search bar */}
-          <div className="flex items-center m-4">
+          <div className="flex items-center px-2 mb-2">
             <input
               type="text"
               placeholder="Search…"
