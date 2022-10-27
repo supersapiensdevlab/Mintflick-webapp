@@ -14,6 +14,7 @@ function ProfileCard(props) {
   // const [marketPlaceModalOpen, setMarketPlaceModalOpen] = useState(false);
   const [settingsModalOpen, setsettingsModalOpen] = useState(false);
   const [followersModalOpen, setfollowersModalOpen] = useState(false);
+  const [tab, settab] = useState(0);
 
   async function isUserAvaliable() {
     await axios({
@@ -81,7 +82,10 @@ function ProfileCard(props) {
         </span>
         <div className="w-full flex p-2 justify-around">
           <span
-            onClick={() => setfollowersModalOpen(true)}
+            onClick={() => {
+              settab(1);
+              setfollowersModalOpen(true);
+            }}
             className="cursor-pointer flex flex-col items-center gap-1 text-lg text-brand3 font-bold"
           >
             {props.follower_count}
@@ -90,7 +94,10 @@ function ProfileCard(props) {
             </p>
           </span>
           <span
-            onClick={() => setfollowersModalOpen(true)}
+            onClick={() => {
+              settab(2);
+              setfollowersModalOpen(true);
+            }}
             className="cursor-pointer flex flex-col items-center gap-1 text-lg text-brand3 font-bold"
           >
             {props.followee_count}
@@ -99,7 +106,10 @@ function ProfileCard(props) {
             </p>
           </span>
           <span
-            onClick={() => setfollowersModalOpen(true)}
+            onClick={() => {
+              settab(3);
+              setfollowersModalOpen(true);
+            }}
             className="cursor-pointer flex flex-col items-center gap-1 text-lg text-brand3 font-bold"
           >
             {props.superfan_of}
@@ -154,6 +164,8 @@ function ProfileCard(props) {
       <FollowersModal
         open={followersModalOpen}
         setOpen={setfollowersModalOpen}
+        tab={tab}
+        settab={settab}
       />
     </div>
   );

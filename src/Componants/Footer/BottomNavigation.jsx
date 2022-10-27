@@ -30,7 +30,7 @@ function BottomNavigation() {
     {
       icon: <Search size={24}></Search>,
       isActive: 4,
-      link: "/homescreen/marketPlace",
+      link: "/homescreen/explore",
     },
     {
       icon: <Bell size={24}></Bell>,

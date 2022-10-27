@@ -25,15 +25,15 @@ function MintWallet() {
 
   return (
     <div className="flex flex-col items-start bg-slate-100 dark:bg-slate-800 w-full h-fit rounded-lg overflow-clip">
-      <div className="flex justify-between items-center w-full h-fit p-2 bg-slate-300 dark:bg-slate-700">
+      <div className="hidden lg:flex justify-between items-center w-full h-fit p-2 bg-slate-300 dark:bg-slate-700">
         <h3 className="flex items-center gap-2 font-semibold text-base text-brand2">
           <Wallet />
           Wallet
         </h3>
-        <DotsVertical
+        {/* <DotsVertical
           size={20}
           className="text-brand2 cursor-pointer"
-        ></DotsVertical>
+        ></DotsVertical> */}
       </div>
       <div className="p-2 w-full flex flex-col gap-2 items-center">
         <span className="flex justify-between items-center w-full p-2 px-4  rounded-md bg-slate-200 dark:bg-slate-700">

@@ -2,22 +2,33 @@ import React, { useContext, useEffect, useState } from "react";
 import { Image } from "react-img-placeholder";
 import { Search, X } from "tabler-icons-react";
 import placeholderImage from "../../../Assets/profile-pic.png";
+import { filterData } from "../../../functions/searchFunction";
 import { UserContext } from "../../../Store";
 
 function FollowersModal(props) {
   const State = useContext(UserContext);
 
-  const [activeTab, setactiveTab] = useState(1);
-
   const [followers, setfollowers] = useState([]);
   const [following, setfollowing] = useState([]);
   const [superfans, setsuperfans] = useState([]);
+
+  const [filteredFollowersData, setFilteredFollowersData] = useState([]);
+  const [filteredfollowingData, setFilteredfollowingData] = useState([]);
+  const [filteredSuperfansData, setFilteredSuperfansData] = useState([]);
+
   useEffect(() => {
     setfollowers(State.database.userProfileData?.data.follower_count);
     setfollowing(State.database.userProfileData?.data.followee_count);
     setsuperfans(State.database.userProfileData?.data.superfan_of);
-  }, []);
 
+    setFilteredFollowersData(
+      State.database.userProfileData?.data.follower_count
+    );
+    setFilteredfollowingData(
+      State.database.userProfileData?.data.followee_count
+    );
+    setFilteredSuperfansData(State.database.userProfileData?.data.superfan_of);
+  }, []);
   return (
     <div
       className={`${
@@ -50,47 +61,55 @@ function FollowersModal(props) {
         </div>
         <div className="flex w-full  bg-slate-200 dark:bg-slate-600  ">
           <span
-            onClick={() => setactiveTab(1)}
+            onClick={() => props.settab(1)}
             className={`flex-grow flex justify-center font-semibold cursor-pointer text-sm text-brand2 p-2 ${
-              activeTab === 1 &&
+              props.tab === 1 &&
               "bg-slate-100  border-t-2 border-success dark:bg-slate-800"
             }`}
           >
             {followers.length} Followers
           </span>
           <span
-            onClick={() => setactiveTab(2)}
+            onClick={() => props.settab(2)}
             className={`flex-grow flex justify-center font-semibold cursor-pointer text-sm text-brand2  p-2 ${
-              activeTab === 2 &&
+              props.tab === 2 &&
               "bg-slate-100  border-t-2 border-success dark:bg-slate-800"
             }`}
           >
             {following.length} Following
           </span>
           <span
-            onClick={() => setactiveTab(3)}
+            onClick={() => props.settab(3)}
             className={`flex-grow flex justify-center font-semibold cursor-pointer text-sm text-brand2  p-2 ${
-              activeTab === 3 &&
+              props.tab === 3 &&
               "bg-slate-100  border-t-2 border-success dark:bg-slate-800"
             }`}
           >
             {superfans.length} Superfans
           </span>
         </div>
-        <div className="flex flex-col flex-grow overflow-y-auto pt-2  sm:p-2 w-full  justify-start">
-          {/* search bar */}
-          <div className="flex items-center px-2 mb-2">
-            <input
-              type="text"
-              placeholder="Search…"
-              className="input input-sm  w-full"
-            />
-            <span className="-ml-8">
-              <Search size={16} className=" dark:text-slate-100"></Search>
-            </span>
-          </div>
-          {activeTab === 1 &&
-            followers.map((follower) => (
+
+        {props.tab === 1 && (
+          <div className="flex flex-col flex-grow overflow-y-auto pt-2  sm:p-2 w-full  justify-start">
+            {/* search bar */}
+            <div className="flex items-center px-2 mb-2">
+              <input
+                onChange={(e) =>
+                  filterData(
+                    e.target.value,
+                    followers,
+                    setFilteredFollowersData
+                  )
+                }
+                type="text"
+                placeholder="Search…"
+                className="input input-sm  w-full"
+              />
+              <span className="-ml-8">
+                <Search size={16} className=" dark:text-slate-100"></Search>
+              </span>
+            </div>
+            {filteredFollowersData.map((follower) => (
               <div
                 onClick={() => {}}
                 // to={`/homescreen/chat/${conv.username}`}
@@ -129,8 +148,29 @@ function FollowersModal(props) {
                 </button>
               </div>
             ))}
-          {activeTab === 2 &&
-            following.map((followee) => (
+          </div>
+        )}
+        {props.tab === 2 && (
+          <div className="flex flex-col flex-grow overflow-y-auto pt-2  sm:p-2 w-full  justify-start">
+            {/* search bar */}
+            <div className="flex items-center px-2 mb-2">
+              <input
+                onChange={(e) =>
+                  filterData(
+                    e.target.value,
+                    following,
+                    setFilteredfollowingData
+                  )
+                }
+                type="text"
+                placeholder="Search…"
+                className="input input-sm  w-full"
+              />
+              <span className="-ml-8">
+                <Search size={16} className=" dark:text-slate-100"></Search>
+              </span>
+            </div>
+            {filteredfollowingData.map((followee) => (
               <div
                 onClick={() => {}}
                 // to={`/homescreen/chat/${conv.username}`}
@@ -162,8 +202,29 @@ function FollowersModal(props) {
                 </button>
               </div>
             ))}
-          {activeTab === 3 &&
-            superfans.map((fan) => (
+          </div>
+        )}
+        {props.tab === 3 && (
+          <div className="flex flex-col flex-grow overflow-y-auto pt-2  sm:p-2 w-full  justify-start">
+            {/* search bar */}
+            <div className="flex items-center px-2 mb-2">
+              <input
+                onChange={(e) =>
+                  filterData(
+                    e.target.value,
+                    superfans,
+                    setFilteredSuperfansData
+                  )
+                }
+                type="text"
+                placeholder="Search…"
+                className="input input-sm  w-full"
+              />
+              <span className="-ml-8">
+                <Search size={16} className=" dark:text-slate-100"></Search>
+              </span>
+            </div>
+            {filteredSuperfansData.map((fan) => (
               <div
                 onClick={() => {}}
                 // to={`/homescreen/chat/${conv.username}`}
@@ -198,7 +259,8 @@ function FollowersModal(props) {
                 </button>
               </div>
             ))}
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );

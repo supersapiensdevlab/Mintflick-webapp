@@ -7,11 +7,13 @@ import { NavLink } from "react-router-dom";
 import coverImage from "../../Assets/backgrounds/cover.png";
 import axios from "axios";
 import ChatModal from "../ChatRoom/ChatModal";
+import MintWalletModal from "../Profile/Modals/MintWalletModal";
 
 function MobileHeader() {
   const State = useContext(UserContext);
 
   const [chatModalOpen, setchatModalOpen] = useState(false);
+  const [walletModalOpen, setwalletModalOpen] = useState(false);
 
   async function getUserData() {
     await axios({
@@ -72,6 +74,14 @@ function MobileHeader() {
             <li>
               <a className=" hover:dark:bg-slate-900">Settings</a>
             </li>
+            <li>
+              <span
+                onClick={() => setwalletModalOpen(true)}
+                className=" hover:dark:bg-slate-900"
+              >
+                Wallet
+              </span>
+            </li>
             {/* <label className="swap swap-rotate dark:text-gray-100">
               <input
                 onChange={() =>
@@ -121,7 +131,7 @@ function MobileHeader() {
         ) : (
           <Main_logo></Main_logo>
         )}
-<button class="btn btn-circle btn-ghost " >
+        <button class="btn btn-circle btn-ghost ">
           <NavLink
             to={`/homescreen/chat/${
               State.database.userData.data
@@ -152,6 +162,7 @@ function MobileHeader() {
           user2: {},
         }}
       /> */}
+      <MintWalletModal open={walletModalOpen} setOpen={setwalletModalOpen} />
     </div>
   );
 }
