@@ -27,6 +27,8 @@ import ChatRoom from "./Componants/ChatRoom/ChatRoom";
 import UserLiveFullScreen from "./Componants/Live/UserLiveFullScreen";
 import useWeb3Auth from "./Hooks/useWeb3Auth";
 import Explore from "./Pages/Explore";
+import MobileNotifications from "./Pages/MobileNotifications";
+import PostDetails from "./Pages/PostDetails";
 function App() {
   const State = useContext(UserContext);
   const [login, logout] = useWeb3Auth();
@@ -113,9 +115,11 @@ function App() {
           <Route path="liveuser/:username" element={<UserLivestream />} />
           <Route path="marketPlace" element={<Events></Events>} />
           <Route path="explore" element={<Explore />} />
+          <Route path="notifications" element={<MobileNotifications />} />
 
           <Route path="profile/:userName" element={<Profile></Profile>}></Route>
           <Route path="chat/:username" element={<ChatRoom></ChatRoom>}></Route>
+          <Route path="post/:id" element={<PostDetails />}></Route>
         </Route>
       </Routes>
       <ShareModal />

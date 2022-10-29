@@ -35,7 +35,7 @@ function BottomNavigation() {
     {
       icon: <Bell size={24}></Bell>,
       isActive: 5,
-      link: "/homescreen/marketPlace",
+      link: "/homescreen/notifications",
     },
   ];
   return (
