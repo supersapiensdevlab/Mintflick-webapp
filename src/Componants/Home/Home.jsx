@@ -66,7 +66,6 @@ function Home() {
       </div>
       <div className="hidden lg:flex flex-col items-end h-full w-1/4 pt-24 mr-12 ml-4">
         <GameOfLuck></GameOfLuck>
-        {/* <NavLink to={"../post/1234"}>Postdetails</NavLink> */}
       </div>
       {showButton && (
         <div className="absolute bottom-20 lg:bottom-5 w-screen flex justify-center lg:justify-end p-1">

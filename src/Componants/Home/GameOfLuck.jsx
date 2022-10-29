@@ -1,4 +1,5 @@
 import React from "react";
+import { NavLink } from "react-router-dom";
 
 function GameOfLuck() {
   return (
@@ -9,6 +10,7 @@ function GameOfLuck() {
       <p className="w-full font-medium text-sm text-brand3">
         Welcome to the Spin Game, here you can play the game of chance and win
         big. You can play the game by clicking on the button below.
+        <NavLink to={"../post/1234"}>Go to Post details</NavLink>
       </p>
 
       <button className="btn  btn-brand" onClick={() => {}}>
