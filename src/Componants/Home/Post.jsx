@@ -93,7 +93,11 @@ function Post(props) {
   const ref1 = useRef();
 
   //sharable data
-  const sharable_data = `${process.env.REACT_APP_CLIENT_URL}/${props.profileUsername}`;
+  const sharable_data = `${process.env.REACT_APP_CLIENT_URL}/homescreen/${
+    props.profileUsername
+  }/${props.contentType}/${
+    props.postId || props.videoId || props.pollId || props.trackId
+  }`;
 
   //Delete Confirmation Modal
   const [deleteConfirmationModal, setDeleteConfirmationModal] = useState(false);

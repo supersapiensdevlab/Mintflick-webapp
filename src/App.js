@@ -119,7 +119,7 @@ function App() {
 
           <Route path="profile/:userName" element={<Profile></Profile>}></Route>
           <Route path="chat/:username" element={<ChatRoom></ChatRoom>}></Route>
-          <Route path="post/:id" element={<PostDetails />}></Route>
+          <Route path=":userName/:type/:id" element={<PostDetails />}></Route>
         </Route>
       </Routes>
       <ShareModal />

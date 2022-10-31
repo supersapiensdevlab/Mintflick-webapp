@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { Web3Auth } from "@web3auth/web3auth";
 import RPC from "./../Componants/Wallet/solanaRPC";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { TorusWalletAdapter } from "@web3auth/torus-evm-adapter";
 import { WALLET_ADAPTERS } from "@web3auth/base";
 import { CHAIN_NAMESPACES, SafeEventEmitterProvider } from "@web3auth/base";
@@ -19,6 +19,7 @@ export default function useWeb3Auth() {
   const [provider, setProvider] = useState(null);
   const State = useContext(UserContext);
   const navigateTo = useNavigate();
+  const redirectLocation = useLocation();
   const web3auth = new Web3Auth({
     clientId,
     chainConfig: {
@@ -112,6 +113,7 @@ export default function useWeb3Auth() {
   // }, [State.database.chainId]);
 
   useEffect(() => {
+    console.log("RedirectTo", redirectLocation.pathname);
     init();
     console.log("use called");
   }, []);
@@ -150,7 +152,7 @@ export default function useWeb3Auth() {
             localStorage.getItem("walletAddress") !== "null" &&
             localStorage.getItem("walletAddress").length > 0
           ) {
-            response.status === 200 && navigateTo("/homescreen/home");
+            response.status === 200 && navigateTo(redirectLocation.pathname);
           }
         })
         .catch(function (error) {
