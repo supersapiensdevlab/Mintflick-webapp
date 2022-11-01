@@ -46,12 +46,14 @@ function Profile() {
           name={State.database.userProfileData?.data.name}
           userName={State.database.userProfileData?.data.username}
           follower_count={
-            State.database.userProfileData?.data.follower_count.length
+            State.database.userProfileData?.data?.follower_count?.length
           }
           followee_count={
-            State.database.userProfileData?.data.followee_count.length
+            State.database.userProfileData?.data?.followee_count?.length
           }
-          superfan_of={State.database.userProfileData?.data.superfan_of.length}
+          superfan_of={
+            State.database.userProfileData?.data?.superfan_of?.length
+          }
         />
         <TextChannels></TextChannels>
       </div>

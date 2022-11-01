@@ -3,10 +3,14 @@ import { Image } from "react-img-placeholder";
 import { Search, X } from "tabler-icons-react";
 import placeholderImage from "../../../Assets/profile-pic.png";
 import { filterData } from "../../../functions/searchFunction";
+import useUserActions from "../../../Hooks/useUserActions";
 import { UserContext } from "../../../Store";
+import axios from "axios";
 
 function FollowersModal(props) {
   const State = useContext(UserContext);
+
+  const [loadFeed, loadUser, loadProfileCard] = useUserActions();
 
   const [followers, setfollowers] = useState([]);
   const [following, setfollowing] = useState([]);
@@ -28,7 +32,56 @@ function FollowersModal(props) {
       State.database.userProfileData?.data.followee_count
     );
     setFilteredSuperfansData(State.database.userProfileData?.data.superfan_of);
-  }, []);
+  }, [
+    State.database.userProfileData?.data?.follower_count,
+    State.database.userProfileData?.data?.followee_count,
+    State.database.userProfileData?.data?.superfan_of,
+  ]);
+
+  const handleFollowUser = async (toFollow) => {
+    const followData = {
+      following: toFollow,
+    };
+    await axios({
+      method: "POST",
+      url: `${process.env.REACT_APP_SERVER_URL}/user/follow`,
+      headers: {
+        "content-type": "application/json",
+        "auth-token": JSON.stringify(localStorage.getItem("authtoken")),
+      },
+      data: followData,
+    })
+      .then(async function (response) {
+        await loadUser();
+        loadProfileCard();
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+  const handleUnfollowUser = async (toUnfollow) => {
+    const unfollowData = {
+      following: toUnfollow,
+    };
+    await axios({
+      method: "POST",
+      url: `${process.env.REACT_APP_SERVER_URL}/user/unfollow`,
+      headers: {
+        "content-type": "application/json",
+        "auth-token": JSON.stringify(localStorage.getItem("authtoken")),
+      },
+      data: unfollowData,
+    })
+      .then(async function (response) {
+        await loadUser();
+        await loadProfileCard();
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
   return (
     <div
       className={`${
@@ -143,9 +196,23 @@ function FollowersModal(props) {
                       Remove
                     </button>
                   )}
-                <button className="p-1 px-2 bg-slate-500/10 rounded-md text-primary text-sm capitalize">
-                  Follow
-                </button>
+                {State.database.userData.data.user.followee_count.includes(
+                  follower
+                ) ? (
+                  <button
+                    onClick={() => handleUnfollowUser(follower)}
+                    className="p-1 px-2 bg-slate-500/10 rounded-md text-brand3 text-sm capitalize"
+                  >
+                    unfollow
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => handleFollowUser(follower)}
+                    className="p-1 bg-slate-500/10 rounded-md text-primary px-4 text-sm capitalize"
+                  >
+                    Follow
+                  </button>
+                )}
               </div>
             ))}
           </div>
@@ -197,7 +264,12 @@ function FollowersModal(props) {
                     Name{" "}
                   </p>
                 </div>
-                <button className="p-1 px-2 bg-slate-500/10 rounded-md text-brand3 text-sm capitalize">
+                <button
+                  onClick={() => {
+                    handleUnfollowUser(followee);
+                  }}
+                  className="p-1 px-2 bg-slate-500/10 rounded-md text-brand3 text-sm capitalize"
+                >
                   unfollow
                 </button>
               </div>
@@ -255,7 +327,7 @@ function FollowersModal(props) {
                   {fan.plan}
                 </button>
                 <button className="p-1 px-2 bg-slate-500/10 rounded-md text-brand3 text-sm capitalize">
-                  unfollow
+                  change
                 </button>
               </div>
             ))}
