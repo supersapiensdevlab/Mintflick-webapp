@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { Search } from "tabler-icons-react";
 import { UserContext } from "../Store";
-
+import { Link } from "react-router-dom";
 function Explore() {
   const State = useContext(UserContext);
 
@@ -56,6 +56,10 @@ function Explore() {
       setFilteredVideoData(newVideoFilter);
     }
   };
+
+  useEffect(() => {
+    console.log(filteredData);
+  }, [filteredData]);
   useEffect(() => {
     function handleClickOutside(event) {
       if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
@@ -139,17 +143,23 @@ function Explore() {
         <div className="p-2 md:p-3 my-2 md:mx-4 md:rounded-xl bg-slate-100 dark:bg-slate-800">
           <span className="font-bold text-base text-brand5">Profiles</span>
           <div className="flex gap-1 md:gap-2 mt-2 w-full overflow-x-auto ">
-            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3].map(() => (
-              <div className="flex flex-col items-center">
-                <img
-                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKVy7fXC26IPrrGOXVepyQiQvHEkyEHGWyjA&usqp=CAU"
-                  alt="user profile pic"
-                  className="h-12 w-12 md:h-16 md:w-16 rounded-full object-cover"
-                />
-                <span className="text-sm text-brand4 font-medium">
-                  Username
-                </span>
-              </div>
+            {filteredData.map((u) => (
+              <Link to={`/homescreen/profile/${u.username}`}>
+                <div className="flex flex-col items-center">
+                  <img
+                    src={
+                      u.profile_image
+                        ? u.profile_image
+                        : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKVy7fXC26IPrrGOXVepyQiQvHEkyEHGWyjA&usqp=CAU"
+                    }
+                    alt="user profile pic"
+                    className="h-12 w-12 md:h-16 md:w-16 rounded-full object-cover"
+                  />
+                  <span className="text-sm text-brand4 font-medium">
+                    {u.username}
+                  </span>
+                </div>
+              </Link>
             ))}
           </div>
         </div>

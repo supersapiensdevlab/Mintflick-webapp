@@ -335,9 +335,23 @@ function FollowersModal(props) {
                 <button className="p-1 px-2 bg-brand rounded-md text-primary text-sm capitalize">
                   {fan.plan}
                 </button>
-                <button className="p-1 px-2 bg-slate-500/10 rounded-md text-brand3 text-sm capitalize">
-                  change
-                </button>
+                {State.database.userData.data.user.followee_count.includes(
+                  fan.username
+                ) ? (
+                  <button
+                    onClick={() => handleUnfollowUser(fan.username)}
+                    className="p-1 px-2 bg-slate-500/10 rounded-md text-brand3 text-sm capitalize"
+                  >
+                    unfollow
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => handleFollowUser(fan.username)}
+                    className="p-1 bg-slate-500/10 rounded-md text-primary px-4 text-sm capitalize"
+                  >
+                    Follow
+                  </button>
+                )}
               </div>
             ))}
           </div>

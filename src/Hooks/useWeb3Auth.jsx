@@ -152,7 +152,7 @@ export default function useWeb3Auth() {
             localStorage.getItem("walletAddress") !== "null" &&
             localStorage.getItem("walletAddress").length > 0
           ) {
-            response.status === 200 && navigateTo(redirectLocation.pathname);
+            response.status === 200 && navigateTo(redirectLocation.pathname !== '/' ? redirectLocation.pathname : '/homescreen/home');
           }
         })
         .catch(function (error) {
