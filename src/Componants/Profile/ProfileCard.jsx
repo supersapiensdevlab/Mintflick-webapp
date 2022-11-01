@@ -5,12 +5,15 @@ import { Share } from "tabler-icons-react";
 import coverImage from "../../Assets/backgrounds/cover.png";
 import useUserActions from "../../Hooks/useUserActions";
 import { UserContext } from "../../Store";
+import JoinSuperfanModal from "../Home/Modals/JoinSuperfanModal";
 import MarketplaceModal from "../Home/Modals/MarketplaceModal";
 import SetupMarketplaceModal from "../Home/Modals/SetupMarketplaceModal";
 import FollowersModal from "./Modals/FollowersModal";
 import SettingsModal from "./Modals/SettingsModal";
 
 function ProfileCard(props) {
+  //Join superfan modal
+  const [joinsuperfanModalOpen, setJoinsuperfanModalOpen] = useState(false);
   const State = useContext(UserContext);
   // const [marketPlaceModalOpen, setMarketPlaceModalOpen] = useState(false);
   const [settingsModalOpen, setsettingsModalOpen] = useState(false);
@@ -204,7 +207,10 @@ function ProfileCard(props) {
                     Follow
                   </button>
                 )}
-                <button className="btn btn-brand btn-sm ">
+                <button
+                  className="btn btn-brand btn-sm "
+                  onClick={() => setJoinsuperfanModalOpen(true)}
+                >
                   become superfan
                 </button>
               </div>
@@ -228,6 +234,19 @@ function ProfileCard(props) {
         tab={tab}
         settab={settab}
       />
+      <div
+        className={`${
+          joinsuperfanModalOpen && "modal-open"
+        } modal modal-bottom sm:modal-middle`}
+      >
+        <JoinSuperfanModal
+          setJoinSuperfanModal={setJoinsuperfanModalOpen}
+          // content={props.content}
+          superfan_data={State.database.userProfileData?.data?.superfan_data}
+          toPay={State.database.userProfileData?.data?.wallet_id}
+          postUsername={State.database.userProfileData?.data?.username}
+        />
+      </div>
     </div>
   );
 }
