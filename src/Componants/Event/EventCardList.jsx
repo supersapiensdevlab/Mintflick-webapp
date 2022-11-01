@@ -106,9 +106,9 @@ function EventCardList() {
               <p className="w-64 my-1 text-sm font-medium text-brand3 truncate">
                 {event.timeline}
               </p>
-              <p className="w-64 my-1 text-base font-semibold text-emerald-600 truncate">
-                {event.prices}
-              </p>
+              <div onClick={() => window.unlockProtocol && window.unlockProtocol.loadCheckoutModal()} className="float-right w-full my-1 text-base font-semibold text-white truncate btn btn-accent" >
+                Join
+              </div>
             </div>
           ))}
         </div>

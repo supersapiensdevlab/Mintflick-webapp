@@ -219,30 +219,30 @@ function FollowersModal(props) {
                     {follower.name}
                   </p>
                 </div>
-                {State.database.userData.data &&
-                  State.database.userData.data.user.username ===
-                    State.database.userProfileData?.data.username && (
-                    <button className="p-1 px-2 bg-slate-500/10 rounded-md text-error text-sm capitalize">
-                      Remove
-                    </button>
-                  )}
+                
                 {State.database.userData.data.user.followee_count.includes(
                   follower.username
                 ) ? (
                   <button
                     onClick={() => handleUnfollowUser(follower.username)}
-                    className="p-1 px-2 bg-slate-500/10 rounded-md text-brand3 text-sm capitalize"
+                    className="p-1 px-2  rounded-md bg-slate-500/20 text-opacity-20 btn-primary btn-outline   text-sm capitalize"
                   >
                     unfollow
                   </button>
                 ) : (
                   <button
                     onClick={() => handleFollowUser(follower.username)}
-                    className="p-1 bg-slate-500/10 rounded-md text-primary px-4 text-sm capitalize"
+                    className="p-1 btn-primary btn-outline  bg-slate-500/20   rounded-md  text-white px-4 text-sm capitalize"
                   >
                     Follow
                   </button>
-                )}
+                )}{State.database.userData.data &&
+                  State.database.userData.data.user.username ===
+                    State.database.userProfileData?.data.username && (
+                    <button className="p-1 px-2 bg-transparent rounded-md text-error text-sm capitalize">
+                      Remove
+                    </button>
+                  )}
               </div>
             ))}
           </div>

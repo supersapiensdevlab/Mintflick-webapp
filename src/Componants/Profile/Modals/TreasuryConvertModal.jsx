@@ -56,7 +56,7 @@ const TreasuryConvertModal = ({ setShowConversionModal }) => {
       <div className="w-full h-fit p-2 bg-slate-300 dark:bg-slate-700">
         <div className="flex justify-between items-center p-2">
           <h3 className="flex items-center gap-2 font-bold text-lg text-brand2">
-            <Currency />
+             
             <p className="flex space-x-2 items-center">
               <p>Convert</p> <Coin size={24} /> <ArrowRight size={24} />{" "}
               <Diamond size={24} />
@@ -98,6 +98,8 @@ const TreasuryConvertModal = ({ setShowConversionModal }) => {
               }
             />
           </div>
+
+          <p className="text-white flex">Avl. {State.database.userData.data?.user?.coins?.balance}<Coin size={24} /></p> 
         </div>
         {insufficientCoins && (
           <div className="text-red-500 text-center w-full mt-6">
