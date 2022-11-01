@@ -190,14 +190,15 @@ function SettingsModal(props) {
               <input
                 type="text"
                 className="input  w-full"
-                placeholder="Username"
+                placeholder={State.database.userData?.data?.user?.username}
+                readOnly
                 //   onChange={(e) =>
                 //   value={}
               />
               <input
                 type="text"
                 className="input  w-full"
-                placeholder="Name"
+                placeholder={State.database.userData?.data?.user?.name}
                 //   onChange={(e) =>
                 //   value={}
               />
@@ -206,7 +207,8 @@ function SettingsModal(props) {
             <input
               type="text"
               className="input  w-full"
-              placeholder="Email"
+              placeholder={State.database.userData?.data?.user?.email}
+              readOnly
               //   onChange={(e) =>
               //   value={}
             />
@@ -248,7 +250,12 @@ function SettingsModal(props) {
             <span className="divider my-2 text-brand4 font-semibold ">
               Choose plan to edit
             </span>
-            <div onClick={()=>setselectedPlan(1)} className={`${selectedPlan === 1 && "ring-2"} cursor-pointer p-1 ring-primary dark:ring-brand rounded-lg`}>
+            <div
+              onClick={() => setselectedPlan(1)}
+              className={`${
+                selectedPlan === 1 && "ring-2"
+              } cursor-pointer p-1 ring-primary dark:ring-brand rounded-lg`}
+            >
               <div className="flex w-full bg-slate-200 dark:bg-slate-700 h-fit rounded-lg overflow-hidden ">
                 <img
                   src={planImage}
@@ -277,45 +284,58 @@ function SettingsModal(props) {
                   </span>
                 </button>
               </div>
-              {selectedPlan === 1 && 
-              <div className=" w-full gap-2 flex flex-col">
-                <div className="flex flex-col items-start gap-1 w-full">
-                  <span className="text-brand4 text-sm mt-2">Price </span>
-                  <label className="input-group w-full">
-                    <input
-                      type="number"
-                      className="input w-full"
+              {selectedPlan === 1 && (
+                <div className=" w-full gap-2 flex flex-col">
+                  <div className="flex flex-col items-start gap-1 w-full">
+                    <span className="text-brand4 text-sm mt-2">Price </span>
+                    <label className="input-group w-full">
+                      <input
+                        type="number"
+                        className="input w-full"
+                        placeholder={
+                          State.database.userData.data?.user?.superfan_data
+                            ?.price
+                        }
+                        onChange={(e) => {
+                          if (e.target.value !== "") {
+                            superfanPlans.price = e.target.value;
+                          } else {
+                            superfanPlans.price =
+                              State.database.userData.data?.user?.superfan_data?.price;
+                          }
+                        }}
+                      />
+                      <span className="bg-slate-300 dark:bg-slate-600">
+                        <SolanaToken size={16}></SolanaToken>
+                      </span>
+                    </label>
+                  </div>
+                  <div className="flex flex-col items-start gap-1 w-full">
+                    <span className="text-brand4 text-sm">Perks </span>
+                    <textarea
+                      className="textarea w-full"
+                      placeholder={
+                        State.database.userData.data?.user?.superfan_data?.perks
+                      }
                       onChange={(e) => {
                         if (e.target.value !== "") {
-                          superfanPlans.price = e.target.value;
+                          superfanPlans.perks = e.target.value;
                         } else {
-                          superfanPlans.price =
-                            State.database.userData.data?.user?.superfan_data?.price;
+                          superfanPlans.perks =
+                            State.database.userData.data?.user?.superfan_data?.perks;
                         }
                       }}
                     />
-                    <span className="bg-slate-300 dark:bg-slate-600">
-                      <SolanaToken size={16}></SolanaToken>
-                    </span>
-                  </label>
+                  </div>
                 </div>
-                <div className="flex flex-col items-start gap-1 w-full">
-                  <span className="text-brand4 text-sm">Perks </span>
-                  <textarea
-                    className="textarea w-full"
-                    onChange={(e) => {
-                      if (e.target.value !== "") {
-                        superfanPlans.perks = e.target.value;
-                      } else {
-                        superfanPlans.perks =
-                          State.database.userData.data?.user?.superfan_data?.perks;
-                      }
-                    }}
-                  />
-                </div>
-              </div>}
+              )}
             </div>
-            <div onClick={()=>setselectedPlan(2)} className={`${selectedPlan === 2 && "ring-2"} cursor-pointer p-1 ring-primary dark:ring-brand rounded-lg`}>
+            <div
+              onClick={() => setselectedPlan(2)}
+              className={`${
+                selectedPlan === 2 && "ring-2"
+              } cursor-pointer p-1 ring-primary dark:ring-brand rounded-lg`}
+            >
               <div className="flex w-full bg-slate-200 dark:bg-slate-700 h-fit rounded-lg overflow-hidden ">
                 <img
                   src={planImage}
@@ -345,45 +365,59 @@ function SettingsModal(props) {
                   </span>
                 </button>
               </div>
-              {selectedPlan === 2 && 
-              <div className=" w-full gap-2 flex flex-col">
-                <div className="flex flex-col items-start gap-1 w-full">
-                  <span className="text-brand4 text-sm mt-2">Price </span>
-                  <label className="input-group w-full">
-                    <input
-                      type="number"
-                      className="input w-full"
+              {selectedPlan === 2 && (
+                <div className=" w-full gap-2 flex flex-col">
+                  <div className="flex flex-col items-start gap-1 w-full">
+                    <span className="text-brand4 text-sm mt-2">Price </span>
+                    <label className="input-group w-full">
+                      <input
+                        type="number"
+                        className="input w-full"
+                        placeholder={
+                          State.database.userData.data?.user?.superfan_data
+                            ?.price2
+                        }
+                        onChange={(e) => {
+                          if (e.target.value !== "") {
+                            superfanPlans.price2 = e.target.value;
+                          } else {
+                            superfanPlans.price2 =
+                              State.database.userData.data?.user?.superfan_data?.price2;
+                          }
+                        }}
+                      />
+                      <span className="bg-slate-300 dark:bg-slate-600">
+                        <SolanaToken size={16}></SolanaToken>
+                      </span>
+                    </label>
+                  </div>
+                  <div className="flex flex-col items-start gap-1 w-full">
+                    <span className="text-brand4 text-sm">Perks </span>
+                    <textarea
+                      className="textarea w-full"
+                      placeholder={
+                        State.database.userData.data?.user?.superfan_data
+                          ?.perks2
+                      }
                       onChange={(e) => {
                         if (e.target.value !== "") {
-                          superfanPlans.price2 = e.target.value;
+                          superfanPlans.perks2 = e.target.value;
                         } else {
-                          superfanPlans.price2 =
-                            State.database.userData.data?.user?.superfan_data?.price2;
+                          superfanPlans.perks2 =
+                            State.database.userData.data?.user?.superfan_data?.perks2;
                         }
                       }}
                     />
-                    <span className="bg-slate-300 dark:bg-slate-600">
-                      <SolanaToken size={16}></SolanaToken>
-                    </span>
-                  </label>
+                  </div>
                 </div>
-                <div className="flex flex-col items-start gap-1 w-full">
-                  <span className="text-brand4 text-sm">Perks </span>
-                  <textarea
-                    className="textarea w-full"
-                    onChange={(e) => {
-                      if (e.target.value !== "") {
-                        superfanPlans.perks2 = e.target.value;
-                      } else {
-                        superfanPlans.perks2 =
-                          State.database.userData.data?.user?.superfan_data?.perks2;
-                      }
-                    }}
-                  />
-                </div>
-              </div>}
+              )}
             </div>
-            <div onClick={()=>setselectedPlan(3)} className={`${selectedPlan === 3 && "ring-2"} cursor-pointer p-1 ring-primary dark:ring-brand rounded-lg`}>
+            <div
+              onClick={() => setselectedPlan(3)}
+              className={`${
+                selectedPlan === 3 && "ring-2"
+              } cursor-pointer p-1 ring-primary dark:ring-brand rounded-lg`}
+            >
               <div className="flex w-full bg-slate-200 dark:bg-slate-700 h-fit rounded-lg overflow-hidden ">
                 <img
                   src={planImage}
@@ -413,43 +447,52 @@ function SettingsModal(props) {
                   </span>
                 </button>
               </div>
-              {selectedPlan === 3 && 
-              <div className=" w-full gap-2 flex flex-col">
-                <div className="flex flex-col items-start gap-1 w-full">
-                  <span className="text-brand4 text-sm mt-2">Price </span>
-                  <label className="input-group w-full">
-                    <input
-                      type="number"
-                      className="input w-full"
+              {selectedPlan === 3 && (
+                <div className=" w-full gap-2 flex flex-col">
+                  <div className="flex flex-col items-start gap-1 w-full">
+                    <span className="text-brand4 text-sm mt-2">Price </span>
+                    <label className="input-group w-full">
+                      <input
+                        type="number"
+                        className="input w-full"
+                        placeholder={
+                          State.database.userData.data?.user?.superfan_data
+                            ?.price3
+                        }
+                        onChange={(e) => {
+                          if (e.target.value !== "") {
+                            superfanPlans.price3 = e.target.value;
+                          } else {
+                            superfanPlans.price3 =
+                              State.database.userData.data?.user?.superfan_data?.price3;
+                          }
+                        }}
+                      />
+                      <span className="bg-slate-300 dark:bg-slate-600">
+                        <SolanaToken size={16}></SolanaToken>
+                      </span>
+                    </label>
+                  </div>
+                  <div className="flex flex-col items-start gap-1 w-full">
+                    <span className="text-brand4 text-sm">Perks </span>
+                    <textarea
+                      className="textarea w-full"
+                      placeholder={
+                        State.database.userData.data?.user?.superfan_data
+                          ?.perks3
+                      }
                       onChange={(e) => {
                         if (e.target.value !== "") {
-                          superfanPlans.price3 = e.target.value;
+                          superfanPlans.perks3 = e.target.value;
                         } else {
-                          superfanPlans.price3 =
-                            State.database.userData.data?.user?.superfan_data?.price3;
+                          superfanPlans.perks3 =
+                            State.database.userData.data?.user?.superfan_data?.perks3;
                         }
                       }}
                     />
-                    <span className="bg-slate-300 dark:bg-slate-600">
-                      <SolanaToken size={16}></SolanaToken>
-                    </span>
-                  </label>
+                  </div>
                 </div>
-                <div className="flex flex-col items-start gap-1 w-full">
-                  <span className="text-brand4 text-sm">Perks </span>
-                  <textarea
-                    className="textarea w-full"
-                    onChange={(e) => {
-                      if (e.target.value !== "") {
-                        superfanPlans.perks3 = e.target.value;
-                      } else {
-                        superfanPlans.perks3 =
-                          State.database.userData.data?.user?.superfan_data?.perks3;
-                      }
-                    }}
-                  />
-                </div>
-              </div>}
+              )}
             </div>
             {warning && (
               <div className="w-full text-center text-rose-500 my-1">

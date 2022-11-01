@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Share } from "tabler-icons-react";
 import coverImage from "../../Assets/backgrounds/cover.png";
+import useUserActions from "../../Hooks/useUserActions";
 import { UserContext } from "../../Store";
 import MarketplaceModal from "../Home/Modals/MarketplaceModal";
 import SetupMarketplaceModal from "../Home/Modals/SetupMarketplaceModal";
@@ -15,6 +16,8 @@ function ProfileCard(props) {
   const [settingsModalOpen, setsettingsModalOpen] = useState(false);
   const [followersModalOpen, setfollowersModalOpen] = useState(false);
   const [tab, settab] = useState(0);
+
+  const [loadFeed, loadUser, loadProfileCard] = useUserActions();
 
   async function isUserAvaliable() {
     await axios({
@@ -40,6 +43,50 @@ function ProfileCard(props) {
   useEffect(() => {
     !State.database.userData.data && isUserAvaliable();
   }, []);
+
+  const handleFollowUser = async (toFollow) => {
+    const followData = {
+      following: toFollow,
+    };
+    await axios({
+      method: "POST",
+      url: `${process.env.REACT_APP_SERVER_URL}/user/follow`,
+      headers: {
+        "content-type": "application/json",
+        "auth-token": JSON.stringify(localStorage.getItem("authtoken")),
+      },
+      data: followData,
+    })
+      .then(async function (response) {
+        await loadUser();
+        loadProfileCard();
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+  const handleUnfollowUser = async (toUnfollow) => {
+    const unfollowData = {
+      following: toUnfollow,
+    };
+    await axios({
+      method: "POST",
+      url: `${process.env.REACT_APP_SERVER_URL}/user/unfollow`,
+      headers: {
+        "content-type": "application/json",
+        "auth-token": JSON.stringify(localStorage.getItem("authtoken")),
+      },
+      data: unfollowData,
+    })
+      .then(async function (response) {
+        await loadUser();
+        await loadProfileCard();
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
 
   return (
     <div className="flex flex-col items-center  bg-slate-100 dark:bg-slate-800 w-full h-fit rounded-lg ">
@@ -140,9 +187,23 @@ function ProfileCard(props) {
               </>
             ) : (
               <div className="flex gap-1">
-                <button className="btn  btn-primary btn-outline btn-sm flex-grow">
-                  follow
-                </button>
+                {State.database.userData.data.user.followee_count.includes(
+                  props.userName
+                ) ? (
+                  <button
+                    onClick={() => handleUnfollowUser(props.userName)}
+                    className="btn  btn-primary btn-outline btn-sm flex-grow"
+                  >
+                    Unfollow
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => handleFollowUser(props.userName)}
+                    className="btn  btn-primary btn-outline btn-sm flex-grow"
+                  >
+                    Follow
+                  </button>
+                )}
                 <button className="btn btn-brand btn-sm ">
                   become superfan
                 </button>
