@@ -21,17 +21,43 @@ function FollowersModal(props) {
   const [filteredSuperfansData, setFilteredSuperfansData] = useState([]);
 
   useEffect(() => {
+    setFilteredFollowersData([]);
+    setFilteredfollowingData([]);
+    setFilteredSuperfansData([]);
     setfollowers(State.database.userProfileData?.data.follower_count);
     setfollowing(State.database.userProfileData?.data.followee_count);
     setsuperfans(State.database.userProfileData?.data.superfan_of);
 
-    setFilteredFollowersData(
-      State.database.userProfileData?.data.follower_count
-    );
-    setFilteredfollowingData(
-      State.database.userProfileData?.data.followee_count
-    );
-    setFilteredSuperfansData(State.database.userProfileData?.data.superfan_of);
+    // setFilteredFollowersData(
+    //   State.database.userProfileData?.data.follower_count
+    // );
+    // setFilteredfollowingData(
+    //   State.database.userProfileData?.data.followee_count
+    // );
+    // setFilteredSuperfansData(State.database.userProfileData?.data.superfan_of);
+    if (State.database.userProfileData) {
+      if (State.database.userProfileData.data.follower_count) {
+        filterData(
+          "",
+          State.database.userProfileData.data.follower_count,
+          setFilteredFollowersData
+        );
+      }
+      if (State.database.userProfileData.data.followee_count) {
+        filterData(
+          "",
+          State.database.userProfileData.data.followee_count,
+          setFilteredfollowingData
+        );
+      }
+      if (State.database.userProfileData.data.superfan_of) {
+        filterData(
+          "",
+          State.database.userProfileData.data.superfan_of,
+          setFilteredSuperfansData
+        );
+      }
+    }
   }, [
     State.database.userProfileData?.data?.follower_count,
     State.database.userProfileData?.data?.followee_count,
@@ -177,16 +203,20 @@ function FollowersModal(props) {
                   width={46}
                   height={46}
                   className="h-full rounded-full border-2"
-                  src={placeholderImage}
+                  src={
+                    follower.profile_image
+                      ? follower.profile_image
+                      : placeholderImage
+                  }
                   alt="profileImage"
                   placeholderSrc={placeholderImage}
                 />
                 <div className="flex flex-grow flex-col">
                   <p className="cursor-pointer text-base font-semibold text-brand3">
-                    {follower}
+                    {follower.username}
                   </p>
                   <p className="cursor-pointer text-base w-2/3 truncate text-brand5">
-                    Name{" "}
+                    {follower.name}
                   </p>
                 </div>
                 {State.database.userData.data &&
@@ -197,17 +227,17 @@ function FollowersModal(props) {
                     </button>
                   )}
                 {State.database.userData.data.user.followee_count.includes(
-                  follower
+                  follower.username
                 ) ? (
                   <button
-                    onClick={() => handleUnfollowUser(follower)}
+                    onClick={() => handleUnfollowUser(follower.username)}
                     className="p-1 px-2 bg-slate-500/10 rounded-md text-brand3 text-sm capitalize"
                   >
                     unfollow
                   </button>
                 ) : (
                   <button
-                    onClick={() => handleFollowUser(follower)}
+                    onClick={() => handleFollowUser(follower.username)}
                     className="p-1 bg-slate-500/10 rounded-md text-primary px-4 text-sm capitalize"
                   >
                     Follow
@@ -252,30 +282,34 @@ function FollowersModal(props) {
                   width={46}
                   height={46}
                   className="h-full rounded-full border-2"
-                  src={placeholderImage}
+                  src={
+                    followee.profile_image
+                      ? followee.profile_image
+                      : placeholderImage
+                  }
                   alt="profileImage"
                   placeholderSrc={placeholderImage}
                 />
                 <div className="flex flex-grow flex-col">
                   <p className="cursor-pointer text-base font-semibold text-brand3">
-                    {followee}
+                    {followee.username}
                   </p>
                   <p className="cursor-pointer text-base w-2/3 truncate text-brand5">
-                    Name{" "}
+                    {followee.name}
                   </p>
                 </div>
                 {State.database.userData.data.user.followee_count.includes(
-                  followee
+                  followee.username
                 ) ? (
                   <button
-                    onClick={() => handleUnfollowUser(followee)}
+                    onClick={() => handleUnfollowUser(followee.username)}
                     className="p-1 px-2 bg-slate-500/10 rounded-md text-brand3 text-sm capitalize"
                   >
                     unfollow
                   </button>
                 ) : (
                   <button
-                    onClick={() => handleFollowUser(followee)}
+                    onClick={() => handleFollowUser(followee.username)}
                     className="p-1 bg-slate-500/10 rounded-md text-primary px-4 text-sm capitalize"
                   >
                     Follow
@@ -320,7 +354,7 @@ function FollowersModal(props) {
                   width={46}
                   height={46}
                   className="h-full rounded-full border-2"
-                  src={placeholderImage}
+                  src={fan.profile_image ? fan.profile_image : placeholderImage}
                   alt="profileImage"
                   placeholderSrc={placeholderImage}
                 />
@@ -329,7 +363,7 @@ function FollowersModal(props) {
                     {fan.username}
                   </p>
                   <p className="cursor-pointer text-base w-2/3 truncate text-brand5">
-                    Name{" "}
+                   {fan.name}
                   </p>
                 </div>
                 <button className="p-1 px-2 bg-brand rounded-md text-primary text-sm capitalize">

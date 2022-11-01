@@ -5,7 +5,7 @@ import axios from "axios";
 import Main_logo from "../../Assets/logos/Main_logo";
 import TopNavigation from "./TopNavigation";
 import Main_logo_dark from "../../Assets/logos/Main_logo_dark";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import coverImage from "../../Assets/backgrounds/cover.png";
 import NotificationContent from "./NotificationContent";
 import EmptyNotification from "./EmptyNotification";
@@ -23,8 +23,8 @@ function Header() {
   const [alluser, setAllUser] = useState([]);
   const [chatModalOpen, setchatModalOpen] = useState(false);
   //filtered search data
-  const [filteredData, setFilteredData] = useState([]);
-  const [filteredVideoData, setFilteredVideoData] = useState([]);
+  // const [filteredData, setFilteredData] = useState([]);
+  // const [filteredVideoData, setFilteredVideoData] = useState([]);
 
   //searched word in search bar
   const [wordEntered, setWordEntered] = useState("");
@@ -190,11 +190,15 @@ function Header() {
     });
 
     if (searchWord === "") {
-      setFilteredData([]);
-      setFilteredVideoData([]);
+      State.updateDatabase({
+        filteredData: [],
+        filteredVideoData: [],
+      });
     } else {
-      setFilteredData(newFilter);
-      setFilteredVideoData(newVideoFilter);
+      State.updateDatabase({
+        filteredData: newFilter,
+        filteredVideoData: newVideoFilter,
+      });
     }
   };
 
@@ -258,38 +262,44 @@ function Header() {
             className=" bg-white  dark:bg-slate-700 dark:text-white ml-1.5 mt-1 rounded-lg absolute self-center lg:w-11/12 w-3/5 h-max max-h-80 overflow-hidden overflow-y-auto"
             hidden={filterResultDisplay}
           >
-            {filteredVideoData.length !== 0 && (
+            {State.database.filteredVideoData.length !== 0 && (
               <>
-                {filteredVideoData.slice(0, 15).map((value, key) => {
-                  return (
-                    <div
-                      key={key}
-                      className="p-2 pl-3 dark:hover:bg-dbeats-dark-primary flex items-center"
-                    >
-                      <Search
-                        className=" dark:text-slate-100  opacity-60 mr-2"
-                        size={16}
-                      ></Search>
-                      {value.video.videoName.toLowerCase()}{" "}
-                    </div>
-                  );
-                })}
+                {State.database.filteredVideoData
+                  .slice(0, 15)
+                  .map((value, key) => {
+                    return (
+                      <Link to={`/homescreen/explore`}>
+                        <div
+                          key={key}
+                          className="p-2 pl-3 dark:hover:bg-dbeats-dark-primary flex items-center cursor-pointer"
+                        >
+                          <Search
+                            className=" dark:text-slate-100  opacity-60 mr-2"
+                            size={16}
+                          ></Search>
+                          {value.video.videoName.toLowerCase()}{" "}
+                        </div>
+                      </Link>
+                    );
+                  })}
               </>
             )}
-            {filteredData.length !== 0 && (
+            {State.database.filteredData.length !== 0 && (
               <>
-                {filteredData.slice(0, 15).map((value, key) => {
+                {State.database.filteredData.slice(0, 15).map((value, key) => {
                   return (
-                    <div
-                      key={key}
-                      className="p-2 pl-3 dark:hover:bg-dbeats-dark-primary flex items-center"
-                    >
-                      <Search
-                        className=" dark:text-slate-100 opacity-60 mr-2"
-                        size={16}
-                      ></Search>
-                      {value.username.toLowerCase()}{" "}
-                    </div>
+                    <Link to={`/homescreen/explore`}>
+                      <div
+                        key={key}
+                        className="p-2 pl-3 dark:hover:bg-dbeats-dark-primary flex items-center cursor-pointer"
+                      >
+                        <Search
+                          className=" dark:text-slate-100 opacity-60 mr-2"
+                          size={16}
+                        ></Search>
+                        {value.username.toLowerCase()}{" "}
+                      </div>
+                    </Link>
                   );
                 })}
               </>

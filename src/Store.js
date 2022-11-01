@@ -26,6 +26,8 @@ function Store(props) {
     toasts: [],
     //chain id
     chainId: 0,
+    filteredData: [],
+    filteredVideoData: [],
   });
   const updateStore = (data) => {
     setstore((prev) => ({
@@ -66,7 +68,8 @@ function Store(props) {
         addLiveUsers: addLiveUsers,
         addFeed: addFeed,
         addNFT: addNFT,
-      }}>
+      }}
+    >
       {props.data}
     </UserContext.Provider>
   );
