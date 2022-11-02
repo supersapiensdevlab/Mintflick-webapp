@@ -121,7 +121,7 @@ function FollowersModal(props) {
               <Image
                 width={28}
                 height={28}
-                className="h-full rounded-full border-2"
+                className="h-full aspect-square object-cover rounded-full border-2 "
                 src={
                   State.database.userProfileData?.data.profile_image
                     ? State.database.userProfileData?.data.profile_image
@@ -202,7 +202,7 @@ function FollowersModal(props) {
                 <Image
                   width={46}
                   height={46}
-                  className="h-full rounded-full border-2"
+                  className="h-full aspect-square object-cover rounded-full border-2"
                   src={
                     follower.profile_image
                       ? follower.profile_image
@@ -282,7 +282,7 @@ function FollowersModal(props) {
                 <Image
                   width={46}
                   height={46}
-                  className="h-full rounded-full border-2"
+                  className="h-full aspect-square object-cover rounded-full border-2"
                   src={
                     followee.profile_image
                       ? followee.profile_image
@@ -354,7 +354,7 @@ function FollowersModal(props) {
                 <Image
                   width={46}
                   height={46}
-                  className={`h-full rounded-full border-2 ${
+                  className={`h-full aspect-square object-cover rounded-full border-2 ${
                     fan.plan == "Basic"
                       ? "border-super_platinum"
                       : fan.plan == "Silver"
