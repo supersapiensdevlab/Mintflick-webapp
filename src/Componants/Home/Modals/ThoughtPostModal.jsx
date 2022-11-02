@@ -18,8 +18,10 @@ import {
 import { Connection } from "@solana/web3.js";
 import { SolanaWallet } from "@web3auth/solana-provider";
 import useLoadNfts from "../../../Hooks/useLoadNfts";
-
+import { useEffect } from "react";
+import "./MentionsInputCSS.css";
 function ThoughtPostModal({ setthoughtPostModalOpen }) {
+  const mentionsRef = useRef();
   const State = useContext(UserContext);
   const [uploadingPost, setUploadingPost] = useState(false);
   const [caption, setCaption] = useState("");
@@ -34,6 +36,9 @@ function ThoughtPostModal({ setthoughtPostModalOpen }) {
   const textRef = useRef();
   const [loadNfts] = useLoadNfts();
 
+  useEffect(() => {
+    mentionsRef.current.style.overflow = "scroll";
+  }, []);
   async function signTransaction(network, transaction, callback) {
     //const phantom = new PhantomWalletAdapter();
     //await phantom.connect();
@@ -282,9 +287,10 @@ function ThoughtPostModal({ setthoughtPostModalOpen }) {
               value={caption}
               onChange={(e) => setCaption(e.target.value)}
               style={defaultStyle}
-              className="textarea w-full h-24  pt-2 focus:outline-0"
+              className="textarea w-full h-24  pt-2 focus:outline-0 overflow-scroll mentionsinputoverflow"
               placeholder={"Whats on your mind!"}
               a11ySuggestionsListLabel={"Suggested mentions"}
+              inputRef={mentionsRef}
             >
               <Mention
                 trigger="@"
