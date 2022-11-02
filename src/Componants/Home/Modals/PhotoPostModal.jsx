@@ -79,10 +79,12 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
     uploadToServer(formData, mintId);
   };
 
-  async function partialSignWithWallet(encodedTransaction, wallet) {
+  async function partialSignWithWallet(encodedTransaction) {
     //we have to pass the recoveredTransaction received in the previous step in the encodedTransaction parameter
     const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
-    const signedTx = await wallet.signTransaction(encodedTransaction);
+    const solanaWallet = new SolanaWallet(State.database?.provider); // web3auth.provider
+    const signedTx = await solanaWallet.signTransaction(encodedTransaction);
+
     //signing transaction with the creator_wallet
     const confirmTransaction = await connection.sendRawTransaction(
       signedTx.serialize()
@@ -103,7 +105,7 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
         external_url:
           "https://ipfs.io/ipfs/" + cid + "/" + selectedPost.file[0].name,
         max_supply: 1,
-        fee_payer: "62ziodquMcf6PHgcndcjV9rN9YxGpsyRVPz6oqV1KEbV",
+        fee_payer: `${process.env.REACT_APP_FEEPAYER_WALLET}`,
         royalty: 5,
         image: selectedPost.file[0],
       };
@@ -128,11 +130,11 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
           // );
           await signTransaction(
             data.data.result.encoded_transaction,
-            `${process.env.REACT_APP_WALLET_PRIVATEKEY}`
+            `${process.env.REACT_APP_FEEPAYER_PRIVATEKEY}`
           )
             .then((res) => {
               console.log(res);
-              partialSignWithWallet(res[0], res[1]).then(() => {
+              partialSignWithWallet(res).then(() => {
                 nftMinted(formData, data.data.result.mint);
               });
             })
@@ -308,7 +310,7 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
         // );
         await signTransaction(
           data.data.result.encoded_transaction,
-          `${process.env.REACT_APP_WALLET_PRIVATEKEY}`
+          `${process.env.REACT_APP_FEEPAYER_PRIVATEKEY}`
         )
           .then(async () => {
             setMintSuccess("NFT Listed Successfully");
@@ -401,12 +403,11 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
       // return recoveredTransaction;
       const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
       const feePayer = Keypair.fromSecretKey(decode(key));
-      const wallet = new NodeWallet(feePayer);
       const recoveredTransaction = Transaction.from(
         Buffer.from(transaction, "base64")
       );
       recoveredTransaction.partialSign(feePayer); //partially signing transaction with privatekey of the fee_payer
-      return [recoveredTransaction, wallet];
+      return recoveredTransaction;
     } catch (error) {
       console.log(error);
     }
