@@ -26,7 +26,7 @@ function FollowersModal(props) {
     setFilteredSuperfansData([]);
     setfollowers(State.database.userProfileData?.data.follower_count);
     setfollowing(State.database.userProfileData?.data.followee_count);
-    setsuperfans(State.database.userProfileData?.data.superfan_of);
+    setsuperfans(State.database.userProfileData?.data.superfan_to);
 
     // setFilteredFollowersData(
     //   State.database.userProfileData?.data.follower_count
@@ -34,7 +34,7 @@ function FollowersModal(props) {
     // setFilteredfollowingData(
     //   State.database.userProfileData?.data.followee_count
     // );
-    // setFilteredSuperfansData(State.database.userProfileData?.data.superfan_of);
+    // setFilteredSuperfansData(State.database.userProfileData?.data.superfan_to);
     if (State.database.userProfileData) {
       if (State.database.userProfileData.data.follower_count) {
         filterData(
@@ -50,10 +50,10 @@ function FollowersModal(props) {
           setFilteredfollowingData
         );
       }
-      if (State.database.userProfileData.data.superfan_of) {
+      if (State.database.userProfileData.data.superfan_to) {
         filterData(
           "",
-          State.database.userProfileData.data.superfan_of,
+          State.database.userProfileData.data.superfan_to,
           setFilteredSuperfansData
         );
       }
@@ -61,7 +61,7 @@ function FollowersModal(props) {
   }, [
     State.database.userProfileData?.data?.follower_count,
     State.database.userProfileData?.data?.followee_count,
-    State.database.userProfileData?.data?.superfan_of,
+    State.database.userProfileData?.data?.superfan_to,
   ]);
 
   const handleFollowUser = async (toFollow) => {
@@ -219,7 +219,7 @@ function FollowersModal(props) {
                     {follower.name}
                   </p>
                 </div>
-                
+
                 {State.database.userData.data.user.followee_count.includes(
                   follower.username
                 ) ? (
@@ -236,7 +236,8 @@ function FollowersModal(props) {
                   >
                     Follow
                   </button>
-                )}{State.database.userData.data &&
+                )}
+                {State.database.userData.data &&
                   State.database.userData.data.user.username ===
                     State.database.userProfileData?.data.username && (
                     <button className="p-1 px-2 bg-transparent rounded-md text-error text-sm capitalize">
@@ -353,7 +354,13 @@ function FollowersModal(props) {
                 <Image
                   width={46}
                   height={46}
-                  className="h-full rounded-full border-2"
+                  className={`h-full rounded-full border-2 ${
+                    fan.plan == "Basic"
+                      ? "border-super_platinum"
+                      : fan.plan == "Silver"
+                      ? "border-super_silver"
+                      : "border-super_gold"
+                  }`}
                   src={fan.profile_image ? fan.profile_image : placeholderImage}
                   alt="profileImage"
                   placeholderSrc={placeholderImage}
@@ -363,10 +370,18 @@ function FollowersModal(props) {
                     {fan.username}
                   </p>
                   <p className="cursor-pointer text-base w-2/3 truncate text-brand5">
-                   {fan.name}
+                    {fan.name}
                   </p>
                 </div>
-                <button className="p-1 px-2 bg-brand rounded-md text-primary text-sm capitalize">
+                <button
+                  className={`p-1 px-2 ${
+                    fan.plan == "Basic"
+                      ? "bg-super_platinum"
+                      : fan.plan == "Silver"
+                      ? "bg-super_silver"
+                      : "bg-super_gold"
+                  } rounded-md text-white text-sm capitalize`}
+                >
                   {fan.plan}
                 </button>
                 {State.database.userData.data.user.followee_count.includes(

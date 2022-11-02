@@ -51,8 +51,8 @@ function Profile() {
           followee_count={
             State.database.userProfileData?.data?.followee_count?.length
           }
-          superfan_of={
-            State.database.userProfileData?.data?.superfan_of?.length
+          superfan_to={
+            State.database.userProfileData?.data?.superfan_to?.length
           }
         />
         <TextChannels></TextChannels>

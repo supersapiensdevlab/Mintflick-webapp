@@ -93,11 +93,13 @@ function ProfileCard(props) {
 
   return (
     <div className="flex flex-col items-center  bg-slate-100 dark:bg-slate-800 w-full h-fit rounded-lg ">
-      <img
-        src={props.coverImage ? props.coverImage : coverImage}
-        alt="cover image"
-        className="w-full aspect-{4/2} rounded-lg object-cover"
-      />
+      <div className="w-full h-32">
+        <img
+          src={props.coverImage ? props.coverImage : coverImage}
+          alt="cover image"
+          className="w-full h-full aspect-{4/2} rounded-lg object-cover"
+        />
+      </div>
       <img
         src={props.profileImage ? props.profileImage : coverImage}
         alt="Profile image"
@@ -162,7 +164,7 @@ function ProfileCard(props) {
             }}
             className="cursor-pointer flex flex-col items-center gap-1 text-lg text-brand3 font-bold"
           >
-            {props.superfan_of}
+            {props.superfan_to}
             <p className="flex items-center gap-1 text-xs text-primary font-medium">
               SuperFans
             </p>

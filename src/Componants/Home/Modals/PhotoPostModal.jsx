@@ -10,13 +10,15 @@ import { MentionsInput, Mention } from "react-mentions";
 import defaultStyle from "../defaultStyle";
 import { UserContext } from "../../../Store";
 import { SolanaWallet } from "@web3auth/solana-provider";
-
+import { Keypair, Transaction } from "@solana/web3.js";
 import { PhantomWalletAdapter } from "@solana/wallet-adapter-phantom";
 import {
   clusterUrl,
   confirmTransactionFromFrontend,
 } from "../Utility/utilityFunc";
+import { decode } from "bs58";
 import { clusterApiUrl, Connection, PublicKey } from "@solana/web3.js";
+import { NodeWallet } from "@metaplex/js";
 import SolanaToken from "../../../Assets/logos/SolanaToken";
 import { createPandoraExpressSDK } from "pandora-express";
 import Web3 from "web3";
@@ -77,13 +79,23 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
     uploadToServer(formData, mintId);
   };
 
+  async function partialSignWithWallet(encodedTransaction, wallet) {
+    //we have to pass the recoveredTransaction received in the previous step in the encodedTransaction parameter
+    const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
+    const signedTx = await wallet.signTransaction(encodedTransaction);
+    //signing transaction with the creator_wallet
+    const confirmTransaction = await connection.sendRawTransaction(
+      signedTx.serialize()
+    );
+    return confirmTransaction;
+  }
+
   const mintOnSolana = (formData) => {
     uploadFile(selectedPost.file[0]).then(async (cid) => {
       console.log("stored files with cid:", cid);
-      console.log(State.database);
       let nftSolanaData = {
         network: "devnet",
-        wallet: State.database.walletAddress,
+        creator_wallet: State.database.walletAddress,
         name: caption,
         symbol: "FLICK",
         attributes: JSON.stringify([{ trait_type: "Power", value: "100" }]),
@@ -91,13 +103,14 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
         external_url:
           "https://ipfs.io/ipfs/" + cid + "/" + selectedPost.file[0].name,
         max_supply: 1,
+        fee_payer: "62ziodquMcf6PHgcndcjV9rN9YxGpsyRVPz6oqV1KEbV",
         royalty: 5,
-        file: selectedPost.file[0],
+        image: selectedPost.file[0],
       };
 
       console.log(nftSolanaData);
       axios
-        .post(`https://api.shyft.to/sol/v1/nft/create_detach`, nftSolanaData, {
+        .post(`https://api.shyft.to/sol/v2/nft/create`, nftSolanaData, {
           headers: {
             "x-api-key": `${process.env.REACT_APP_SHYFT_API_KEY}`,
             "content-type": "multipart/form-data",
@@ -106,13 +119,26 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
         .then(async (data) => {
           console.log("MintID", data.data.result.mint);
           setTokenAddress(data.data.result.mint);
+          // await signTransaction(
+          //   "devnet",
+          //   data.data.result.encoded_transaction,
+          //   () => {
+          //     nftMinted(formData, data.data.result.mint);
+          //   }
+          // );
           await signTransaction(
-            "devnet",
             data.data.result.encoded_transaction,
-            () => {
-              nftMinted(formData, data.data.result.mint);
-            }
-          );
+            `${process.env.REACT_APP_WALLET_PRIVATEKEY}`
+          )
+            .then((res) => {
+              console.log(res);
+              partialSignWithWallet(res[0], res[1]).then(() => {
+                nftMinted(formData, data.data.result.mint);
+              });
+            })
+            .catch((err) => {
+              console.log(err);
+            });
         })
         .catch((err) => {
           console.log(err);
@@ -231,60 +257,6 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
             var file = convertBlobToFile(blob, "meta.json");
             console.log(file);
 
-            //  uploadFile(selectedPost.file[0]).then(async (cid) => {
-            //     console.log("stored files with cid:", cid);
-            //     console.log(State.database);
-            //     let nftSolanaData = {
-            //       network: "devnet",
-            //       wallet: State.database.walletAddress,
-            //       name: caption,
-            //       symbol: "FLICK",
-            //       attributes: JSON.stringify([
-            //         { trait_type: "Power", value: "100" },
-            //       ]),
-            //       description: caption,
-            //       external_url:
-            //         "https://ipfs.io/ipfs/" +
-            //         cid +
-            //         "/" +
-            //         selectedPost.file[0].name,
-            //       max_supply: 1,
-            //       royalty: 5,
-            //       file: selectedPost.file[0],
-            //     };
-
-            //     console.log(nftSolanaData);
-            //     axios
-            //       .post(
-            //         `https://api.shyft.to/sol/v1/nft/create_detach`,
-            //         nftSolanaData,
-            //         {
-            //           headers: {
-            //             "x-api-key": `${process.env.REACT_APP_SHYFT_API_KEY}`,
-            //             "content-type": "multipart/form-data",
-            //           },
-            //         },
-            //       )
-            //       .then(async (data) => {
-            //         // setUploadingPost(false);
-            //         // setSelectedPost(null);
-            //         // setCaption("");
-            //         // setTagged([]);
-            //         // setphotoPostModalOpen(false);
-            //         // await loadFeed();
-            //         console.log("MintID", data.data.result.mint);
-            //         setTokenAddress(data.data.result.mint);
-            //         await signTransaction(
-            //           "devnet",
-            //           data.data.result.encoded_transaction,
-            //           listNFTForSale(data.data.result.mint, nftPrice, formData),
-            //         );
-            //       })
-            //       .catch((err) => {
-            //         console.log(err);
-            //         clearData();
-            //       });
-            //   });
             if (State.database.chainId === 1) {
               mintOnPolygon(formData, file);
             } else if (State.database.chainId === 0) {
@@ -325,15 +297,27 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
       })
       .then(async (data) => {
         console.log(data.data);
+        // await signTransaction(
+        //   "devnet",
+        //   data.data.result.encoded_transaction,
+        //   async () => {
+        //     setMintSuccess("NFT Listed Successfully");
+        //     setUploadingPost(false);
+        //     await loadNfts();
+        //   }
+        // );
         await signTransaction(
-          "devnet",
           data.data.result.encoded_transaction,
-          async () => {
+          `${process.env.REACT_APP_WALLET_PRIVATEKEY}`
+        )
+          .then(async () => {
             setMintSuccess("NFT Listed Successfully");
             setUploadingPost(false);
             await loadNfts();
-          }
-        );
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       })
       .catch((err) => {
         console.log(err);
@@ -375,29 +359,57 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
     console.log("NFT Minted");
   }
 
-  async function signTransaction(network, transaction, callback) {
-    //const phantom = new PhantomWalletAdapter();
-    //await phantom.connect();
-    const solanaWallet = new SolanaWallet(State.database.provider); // web3auth.provider
+  // async function signTransaction(network, transaction, callback) {
+  //   //const phantom = new PhantomWalletAdapter();
+  //   //await phantom.connect();
+  //   const solanaWallet = new SolanaWallet(State.database.provider); // web3auth.provider
 
-    const rpcUrl = clusterUrl(network);
-    console.log(rpcUrl);
-    const connection = new Connection(rpcUrl, "confirmed");
-    //console.log(connection.rpcEndpoint);
-    const ret = await confirmTransactionFromFrontend(
-      connection,
-      transaction,
-      solanaWallet
-    );
-    // const checks = await connection.confirmTransaction({signature:ret},'finalised');
+  //   const rpcUrl = clusterUrl(network);
+  //   console.log(rpcUrl);
+  //   const connection = new Connection(rpcUrl, "confirmed");
+  //   //console.log(connection.rpcEndpoint);
+  //   const ret = await confirmTransactionFromFrontend(
+  //     connection,
+  //     transaction,
+  //     solanaWallet
+  //   );
+  //   // const checks = await connection.confirmTransaction({signature:ret},'finalised');
 
-    // console.log(checks);
-    // await connection.confirmTransaction({
-    //     blockhash: transaction.blockhash,
-    //     signature: ret,
-    //   });
-    connection.onSignature(ret, callback, "finalized");
-    return ret;
+  //   // console.log(checks);
+  //   // await connection.confirmTransaction({
+  //   //     blockhash: transaction.blockhash,
+  //   //     signature: ret,
+  //   //   });
+  //   connection.onSignature(ret, callback, "finalized");
+  //   return ret;
+  // }
+
+  async function signTransaction(transaction, key) {
+    console.log(transaction, key);
+    try {
+      // const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
+      // const feePayer = Keypair.fromSecretKey(decode(key));
+      // console.log(feePayer);
+      // const recoveredTransaction = Transaction.from(
+      //   Buffer.from(transaction, "base64")
+      // );
+      // console.log(recoveredTransaction);
+      // recoveredTransaction.partialSign(feePayer);
+      // // const txnSignature = await connection.sendRawTransaction(
+      // //   signedTrasaction.serialize()
+      // // );
+      // return recoveredTransaction;
+      const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
+      const feePayer = Keypair.fromSecretKey(decode(key));
+      const wallet = new NodeWallet(feePayer);
+      const recoveredTransaction = Transaction.from(
+        Buffer.from(transaction, "base64")
+      );
+      recoveredTransaction.partialSign(feePayer); //partially signing transaction with privatekey of the fee_payer
+      return [recoveredTransaction, wallet];
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   return (

@@ -14,10 +14,15 @@ import SolanaToken from "../../../Assets/logos/SolanaToken";
 import useUserActions from "../../../Hooks/useUserActions";
 import { UserContext } from "../../../Store";
 import axios from "axios";
+import CoverImageModal from "./CoverImageModal";
+import ProfileImageModal from "./ProfileImageModal";
 
 function SettingsModal(props) {
   const [activeTab, setactiveTab] = useState("editProfile");
   const [selectedPlan, setselectedPlan] = useState(0);
+
+  const [showCoverImageModal, setShowCoverImageModal] = useState(false);
+  const [showProfileImageModal, setShowProfileImageModal] = useState(false);
 
   const planImage =
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYttbDyk8tE55gznNpc1ujtwlaNTtX4ahdrg&usqp=CAU";
@@ -165,23 +170,52 @@ function SettingsModal(props) {
         </div>
         {activeTab === "editProfile" && (
           <div className="flex flex-col gap-2 p-4 w-full  justify-center">
-            <div className="w-full relative">
+            <div className="w-full relative h-32">
               <img
-                src={coverImage}
+                src={
+                  State.database.userData?.data?.user?.cover_image
+                    ? State.database.userData?.data?.user?.cover_image
+                    : coverImage
+                }
                 alt="cover image"
-                className="w-full aspect-{4/2} rounded-lg object-cover"
+                className="w-full aspect-{4/2} rounded-lg object-cover h-full"
               />
-              <button className="p-1 rounded-full bg-slate-400/40 dark:bg-slate-600/40  text-brand2 flex gap-1 cursor-pointer backdrop-blur-sm absolute top-1 right-1">
+              <button
+                onClick={() => {
+                  setShowCoverImageModal(true);
+                }}
+                className="p-1 rounded-full bg-slate-400/40 dark:bg-slate-600/40  text-brand2 flex gap-1 cursor-pointer backdrop-blur-sm absolute top-1 right-1"
+              >
                 <Pencil className="text-primary " size={16} />
+                {/* <input
+                    className=""
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageChange}
+                    required={true}
+                    onClick={(event) => {
+                      event.target.value = null;
+                      setSelectedCoverImage(null);
+                    }}
+                  /> */}
               </button>
             </div>
             <div className="mx-auto relative">
               <img
-                src={coverImage}
+                src={
+                  State.database.userData?.data?.user?.profile_image
+                    ? State.database.userData?.data?.user?.profile_image
+                    : coverImage
+                }
                 alt="Profile image"
-                className="w-24 h-24 -mt-14 object-cover  rounded-full"
+                className="w-24 h-24 -mt-14 object-cover rounded-full"
               />
-              <button className="p-1 rounded-full bg-slate-400/40 dark:bg-slate-600/40  text-brand2 flex gap-1 cursor-pointer backdrop-blur-sm absolute bottom-0 right-0">
+              <button
+                onClick={() => {
+                  setShowProfileImageModal(true);
+                }}
+                className="p-1 rounded-full bg-slate-400/40 dark:bg-slate-600/40  text-brand2 flex gap-1 cursor-pointer backdrop-blur-sm absolute bottom-0 right-0"
+              >
                 <Pencil className="text-primary " size={16} />
               </button>
             </div>
@@ -515,6 +549,22 @@ function SettingsModal(props) {
             </button>
           </div>
         )}
+      </div>
+      <div
+        className={`${
+          showCoverImageModal && "modal-open"
+        } modal  modal-bottom sm:modal-middle`}
+      >
+        <CoverImageModal setShowCoverImageModal={setShowCoverImageModal} />
+      </div>
+      <div
+        className={`${
+          showProfileImageModal && "modal-open"
+        } modal  modal-bottom sm:modal-middle`}
+      >
+        <ProfileImageModal
+          setShowProfileImageModal={setShowProfileImageModal}
+        />
       </div>
     </div>
   );
