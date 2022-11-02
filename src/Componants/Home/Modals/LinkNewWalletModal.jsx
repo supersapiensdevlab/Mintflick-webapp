@@ -2,10 +2,12 @@ import React, { useState } from "react";
 import { X, AlertTriangle, Link, AlertCircle } from "tabler-icons-react";
 
 const LinkNewWalletModal = ({ open, setOpen }) => {
-  const [accepted, setaccepted] = useState(false);
+  const [accepted1, setaccepted1] = useState(false);
+  const [accepted2, setaccepted2] = useState(false);
+
   return (
     <div
-      className={`${open && "modal-open"} modal modal-bottom sm:modal-middle`}
+      className={`modal ${open && "modal-open"}  modal-bottom sm:modal-middle`}
     >
       <div className="modal-box p-0 bg-slate-100 dark:bg-slate-800 ">
         <div className="w-full h-fit p-2 bg-slate-300 dark:bg-slate-700">
@@ -30,31 +32,29 @@ const LinkNewWalletModal = ({ open, setOpen }) => {
             //   value={}
           />
           <div className="flex items-center gap-2 border border-rose-600 text-rose-500 rounded-md p-2">
-            <AlertCircle size={16} />
-            <span className="text-brand2 text-sm">Warning</span>
+            <input
+              onChange={() => setaccepted1(!accepted1)}
+              checked={accepted1}
+              type="checkbox"
+              className="checkbox checkbox-sm checkbox-error"
+            />
+            <span className="label-text text-brand1">I accept warning 1</span>
           </div>
-          <div className="flex gap-2 border border-rose-600 text-rose-500 rounded-md p-2">
-            <AlertCircle size={16} />
-            <span className="text-brand2 text-sm">Warning 2</span>
-          </div>
-
-          <div className="form-control w-fit ">
-            <label className="cursor-pointer label gap-2">
-              <input
-                onChange={() => setaccepted(!accepted)}
-                checked={accepted}
-                type="checkbox"
-                className="checkbox checkbox-success"
-              />
-              <span className="label-text text-brand1">I accept</span>
-            </label>
+          <div className="flex items-center gap-2 border border-rose-600 text-rose-500 rounded-md p-2">
+            <input
+              onChange={() => setaccepted2(!accepted2)}
+              checked={accepted2}
+              type="checkbox"
+              className="checkbox checkbox-sm checkbox-error"
+            />
+            <span className="label-text text-brand1">I accept warning 2</span>
           </div>
 
           <div className="flex justify-end gap-2 w-full ">
             <button
               //   onClick={() => setOpen(false)}
               className={`btn gap-1 flex-grow ${
-                accepted ? "btn-brand" : " btn-disabled "
+                accepted1 && accepted2 ? "btn-brand" : " btn-disabled "
               }`}
             >
               <Link />

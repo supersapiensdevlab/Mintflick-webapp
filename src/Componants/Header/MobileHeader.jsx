@@ -3,7 +3,7 @@ import { MessageDots } from "tabler-icons-react";
 import { UserContext } from "../../Store";
 import Main_logo from "../../Assets/logos/Main_logo";
 import Main_logo_dark from "../../Assets/logos/Main_logo_dark";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import coverImage from "../../Assets/backgrounds/cover.png";
 import axios from "axios";
 import ChatModal from "../ChatRoom/ChatModal";
@@ -11,6 +11,7 @@ import MintWalletModal from "../Profile/Modals/MintWalletModal";
 
 function MobileHeader() {
   const State = useContext(UserContext);
+  const navigateTo = useNavigate();
 
   const [chatModalOpen, setchatModalOpen] = useState(false);
   const [walletModalOpen, setwalletModalOpen] = useState(false);
@@ -125,12 +126,14 @@ function MobileHeader() {
             </li>
           </ul>
         </div>
+        <NavLink to={`/homescreen/home`}>
+          {!State.database.dark ? (
+            <Main_logo_dark></Main_logo_dark>
+          ) : (
+            <Main_logo></Main_logo>
+          )}
+        </NavLink>
 
-        {!State.database.dark ? (
-          <Main_logo_dark></Main_logo_dark>
-        ) : (
-          <Main_logo></Main_logo>
-        )}
         <button class="btn btn-circle btn-ghost ">
           <NavLink
             to={`/homescreen/chat/${
