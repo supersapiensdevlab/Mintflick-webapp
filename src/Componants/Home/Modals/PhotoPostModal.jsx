@@ -1,5 +1,5 @@
 import axios from "axios";
-import React from "react";
+import React, { useRef } from "react";
 import { useState, useContext } from "react";
 import { Camera, File, FileCheck, X } from "tabler-icons-react";
 import PolygonToken from "../../../Assets/logos/PolygonToken";
@@ -41,6 +41,12 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
   const [loadNfts] = useLoadNfts();
   //Instance of pandora
   const ExpressSDK = createPandoraExpressSDK();
+
+  const mentionsRef = useRef();
+
+  useEffect(() => {
+    mentionsRef.current.style.overflow = "scroll";
+  }, []);
 
   // Minting
   const [minting, setMinting] = useState(null);
@@ -482,9 +488,10 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
             value={caption}
             onChange={(e) => setCaption(e.target.value)}
             style={defaultStyle}
-            className="textarea w-full h-24  pt-2 focus:outline-0"
+            className="textarea w-full h-24  pt-2 focus:outline-0 overflow-scroll mentionsinputoverflow"
             placeholder={"Enter caption."}
             a11ySuggestionsListLabel={"Suggested mentions"}
+            inputRef={mentionsRef}
           >
             <Mention
               trigger="@"

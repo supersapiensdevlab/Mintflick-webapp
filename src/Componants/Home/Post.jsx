@@ -1039,7 +1039,7 @@ function Post(props) {
             </div>
           </>
         )}
-        {console.log(owner ? owner : "", props.tokenId)}
+        {/* {console.log(owner ? owner : "", props.tokenId)} */}
 
         {props.tokenId && owner ? (
           <div

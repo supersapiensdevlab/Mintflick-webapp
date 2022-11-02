@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import { useState } from "react";
 import {
   Camera,
@@ -41,6 +41,12 @@ function AudioPostModal({ setAudioPostModalOpen }) {
   const [solanaMintId, setSolanaMintId] = useState(null);
   const [mintSuccess, setMintSuccess] = useState("");
   const [tokenAddress, setTokenAddress] = useState("");
+
+  const mentionsRef = useRef();
+
+  useEffect(() => {
+    mentionsRef.current.style.overflow = "scroll";
+  }, []);
 
   const genre = [
     "EDM",
@@ -681,9 +687,10 @@ function AudioPostModal({ setAudioPostModalOpen }) {
               setTrack({ ...track, description: e.target.value })
             }
             style={defaultStyle}
-            className="textarea w-full h-24  pt-2 focus:outline-0"
+            className="textarea w-full h-24  pt-2 focus:outline-0  overflow-scroll mentionsinputoverflow"
             placeholder={"Enter caption."}
             a11ySuggestionsListLabel={"Suggested mentions"}
+            inputRef={mentionsRef}
           >
             <Mention
               trigger="@"

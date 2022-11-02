@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import { useState } from "react";
 import ReactPlayer from "react-player";
 import {
@@ -76,6 +76,12 @@ function VideoPostModal({ setVideoPostModalOpen }) {
   ];
 
   const [tagged, setTagged] = useState([]);
+
+  const mentionsRef = useRef();
+
+  useEffect(() => {
+    mentionsRef.current.style.overflow = "scroll";
+  }, []);
 
   const [uploadingVideo, setUploadingVideo] = useState(false);
   const [selectedVideo, setSelectedVideo] = useState(null);
@@ -578,9 +584,10 @@ function VideoPostModal({ setVideoPostModalOpen }) {
               setVideoData({ ...videoData, description: e.target.value })
             }
             style={defaultStyle}
-            className="textarea w-full h-24  pt-2 focus:outline-0"
+            className="textarea w-full h-24  pt-2 focus:outline-0 overflow-scroll mentionsinputoverflow"
             placeholder={"Enter caption."}
             a11ySuggestionsListLabel={"Suggested mentions"}
+            inputRef={mentionsRef}
           >
             <Mention
               trigger="@"
