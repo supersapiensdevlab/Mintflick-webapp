@@ -22,12 +22,15 @@
     "axios": "^0.27.2",
     "bs58": "^5.0.0",
     "daisyui": "^2.19.0",
+    "dotenv": "^16.0.3",
     "emoji-picker-react": "^3.6.1",
     "ethers": "^5.6.9",
+    "express": "^4.18.2",
     "framer-motion": "^7.3.5",
     "html-to-image": "^1.10.8",
     "lottie-react": "^2.3.1",
     "moment": "^2.29.4",
+    "mongoose": "^6.7.1",
     "net": "^1.0.2",
     "pandora-express": "^1.0.9",
     "react": "^18.2.0",
@@ -59,7 +62,8 @@
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
     "test": "react-app-rewired test",
-    "eject": "react-app-rewired eject"
+    "eject": "react-app-rewired eject",
+    "server": "npm run build&&node server/server.js"
   },
   "eslintConfig": {
     "extends": [

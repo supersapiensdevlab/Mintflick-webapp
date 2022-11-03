@@ -32,31 +32,36 @@
 
     <title>MintFlick</title>
 
-      <!-- Unlock snippet -->
-      <script>
-        (function(d, s) {
-          var js = d.createElement(s),
-            sc = d.getElementsByTagName(s)[0];
-          js.src = "https://paywall.unlock-protocol.com/static/unlock.latest.min.js";
-          sc.parentNode.insertBefore(js, sc);
-        }(document, "script"));
-      </script>
-      
-      <script>
-        var unlockProtocolConfig = {
-          "network": 137, // Network ID (1 is for mainnet, 4 for rinkeby, 100 for xDai, etc)  
-          "locks": {
-            "0xa41038e1a7cc20ca58e6cdb6ed525a2a87175620": {
-              "name": "MintFlick"
-            }
-          },
-          "icon": "https://unlock-protocol.com/static/images/svg/unlock-word-mark.svg",
-          "callToAction": {
-            "default": "Please buy  this  nft  to get access"
-          }
-        }
-      </script>
+    <!-- Unlock snippet -->
+    <script>
+      (function (d, s) {
+        var js = d.createElement(s),
+          sc = d.getElementsByTagName(s)[0];
+        js.src =
+          "https://paywall.unlock-protocol.com/static/unlock.latest.min.js";
+        sc.parentNode.insertBefore(js, sc);
+      })(document, "script");
+    </script>
 
+    <script>
+      var unlockProtocolConfig = {
+        network: 137, // Network ID (1 is for mainnet, 4 for rinkeby, 100 for xDai, etc)
+        locks: {
+          "0xa41038e1a7cc20ca58e6cdb6ed525a2a87175620": {
+            name: "MintFlick",
+          },
+        },
+        icon: "https://unlock-protocol.com/static/images/svg/unlock-word-mark.svg",
+        callToAction: {
+          default: "Please buy  this  nft  to get access",
+        },
+      };
+    </script>
+
+    <meta name="description" content="Decentralized Live Streaming, Videos & NFT Marketplace. Ditch Patreon & Onlyfans and become a superfan on Mintflick to donate cryptos directly to your favourite creators." />
+    <meta name="og:title" content="MintFlick - NFT | Streaming | Social" />
+    <meta name="og:description" content="Decentralized Live Streaming, Videos & NFT Marketplace. Ditch Patreon & Onlyfans and become a superfan on Mintflick to donate cryptos directly to your favourite creators." />
+    <meta name="og:image" content="https://v2.mintflick.app/Mintflick-favicon.png" />
   </head>
 
   <body>
@@ -79,5 +84,4 @@
     crossorigin="anonymous"
     referrerpolicy="no-referrer"
   ></script>
-  
 </html>
