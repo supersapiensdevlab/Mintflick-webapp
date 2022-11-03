@@ -5,7 +5,7 @@ import axios from "axios";
 import Main_logo from "../../Assets/logos/Main_logo";
 import TopNavigation from "./TopNavigation";
 import Main_logo_dark from "../../Assets/logos/Main_logo_dark";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import coverImage from "../../Assets/backgrounds/cover.png";
 import NotificationContent from "./NotificationContent";
 import EmptyNotification from "./EmptyNotification";
@@ -18,7 +18,7 @@ function Header() {
   const State = useContext(UserContext);
 
   const [login, logout] = useWeb3Auth();
-
+  const navigateTo = useNavigate();
   //get all users
   const [alluser, setAllUser] = useState([]);
   const [chatModalOpen, setchatModalOpen] = useState(false);
@@ -241,11 +241,13 @@ function Header() {
   return (
     <div className="hidden lg:flex fixed z-50  top-0  px-4 lg:px-12 justify-between items-center h-20 bg-white dark:bg-slate-900 w-full shadow-mintflick	">
       <div className="flex items-center space-x-4 h-full w-1/3 -ml-2">
-        {!State.database.dark ? (
-          <Main_logo_dark></Main_logo_dark>
-        ) : (
-          <Main_logo></Main_logo>
-        )}
+        <NavLink to={`/homescreen/home`}>
+          {!State.database.dark ? (
+            <Main_logo_dark></Main_logo_dark>
+          ) : (
+            <Main_logo></Main_logo>
+          )}
+        </NavLink>
         <div className="relative w-full">
           <div className="hidden lg:flex items-center flex-grow">
             <input

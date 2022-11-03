@@ -36,7 +36,7 @@ function Profile() {
   useEffect(() => {
     setloader(true);
     getUser();
-  }, []);
+  }, [userName]);
   return !loader ? (
     <div className=" lg:flex  h-screen bg-slate-100 dark:bg-slate-800 lg:bg-white lg:dark:bg-slate-900 overflow-y-auto">
       <div className="flex flex-col h-fit lg:h-full w-full lg:w-1/4 lg:ml-12 lg:mr-4 pt-16 lg:pt-24 lg:space-y-6 lg:overflow-y-auto">

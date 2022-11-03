@@ -97,7 +97,9 @@
 .btn-outline {
   @apply hover:bg-gradient-to-tr  from-[#A36CFC]  via-primary  to-brand;
 }
-
+.btn-ghost {
+  @apply dark:text-white;
+}
 .btn-primary {
   @apply hover:text-white;
 }

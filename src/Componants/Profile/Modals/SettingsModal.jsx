@@ -16,6 +16,8 @@ import { UserContext } from "../../../Store";
 import axios from "axios";
 import CoverImageModal from "./CoverImageModal";
 import ProfileImageModal from "./ProfileImageModal";
+import ConfirmationModal from "../../Home/Modals/ConfirmationModal";
+import LinkNewWalletModal from "../../Home/Modals/LinkNewWalletModal";
 
 function SettingsModal(props) {
   const [activeTab, setactiveTab] = useState("editProfile");
@@ -23,6 +25,8 @@ function SettingsModal(props) {
 
   const [showCoverImageModal, setShowCoverImageModal] = useState(false);
   const [showProfileImageModal, setShowProfileImageModal] = useState(false);
+  const [unlinkWalletModal, setunlinkWalletModal] = useState(false);
+  const [linkNewWalletModalopen, setlinkNewWalletModalopen] = useState(false);
 
   const planImage =
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYttbDyk8tE55gznNpc1ujtwlaNTtX4ahdrg&usqp=CAU";
@@ -254,13 +258,20 @@ function SettingsModal(props) {
                 <span className="flex-grow truncate">
                   {localStorage.getItem("walletAddress")}
                 </span>
-                <div className="tooltip" data-tip="Unlink wallet">
+                <div
+                  onClick={() => setunlinkWalletModal(true)}
+                  className="tooltip"
+                  data-tip="Unlink wallet"
+                >
                   <button className="p-1 rounded-full bg-slate-200 dark:bg-slate-700 text-brand2 flex gap-1 cursor-pointer backdrop-blur-sm">
                     <Unlink className="text-primary " size={16} />
                   </button>
                 </div>
               </div>
-              <button className="btn btn-outline btn-primary btn-xs gap-1 mx-auto w-fit rounded-full capitalize">
+              <button
+                onClick={() => setlinkNewWalletModalopen(true)}
+                className="btn btn-outline btn-primary btn-xs gap-1 mx-auto w-fit rounded-full capitalize"
+              >
                 <Link size={16} />
                 link other wallet
               </button>
@@ -566,6 +577,18 @@ function SettingsModal(props) {
           setShowProfileImageModal={setShowProfileImageModal}
         />
       </div>
+      <ConfirmationModal
+        icon={<Unlink className="text-error " />}
+        title="Unlink wallet"
+        content="Do you want to unlink {wallet address} this wallet?"
+        open={unlinkWalletModal}
+        setOpen={setunlinkWalletModal}
+        buttonLable="Unlink"
+      />
+      <LinkNewWalletModal
+        open={linkNewWalletModalopen}
+        setOpen={setlinkNewWalletModalopen}
+      />
     </div>
   );
 }
