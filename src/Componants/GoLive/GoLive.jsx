@@ -761,7 +761,7 @@ function GoLive() {
     <div className=" bg-white dark:bg-slate-900 pt-20 ">
       <div className="flex flex-col lg:flex-row p-4 gap-2">
         <div className="flex-1 space-y-2">
-          <div className="rounded-sm lg:rounded-xl overflow-hidden">
+          <div className="rounded-sm overflow-hidden">
             <ReactPlayer
               controls={true}
               width={"100%"}
@@ -915,8 +915,12 @@ function GoLive() {
         </div>
 
         <div className="w-full lg:w-96 flex flex-col gap-2">
-          <div className="w-full h-fit bg-slate-100 dark:bg-slate-800  rounded-xl p-2 space-y-2">
-            <div className="flex flex-col gap-2">
+          <div className="collapse collapse-arrow w-full text-brand3  bg-slate-100 dark:bg-slate-800  rounded-xl  ">
+            <input type="checkbox" />
+            <div className="collapse-title text-xl font-medium">
+              <span className="font-semibold text-base ">Sreaming Details</span>
+            </div>
+            <div className="collapse-content w-full space-y-2">
               <div className="w-full p-2 flex gap-2 border-2 border-slate-200 dark:border-slate-700  rounded-md text-brand3">
                 <span className="font-semibold text-base">Name</span>
                 <p className="text-base text-brand4">
@@ -929,84 +933,120 @@ function GoLive() {
                   {user.database.userData.data.user.username}
                 </p>
               </div>
-            </div>
-            <div className="p-2 flex flex-col gap-1 border-2 border-slate-200 dark:border-slate-700  rounded-md text-brand3">
-              <span className="font-semibold text-base">RTMP URL</span>
-              <p className="text-base flex gap-1 text-brand4">
-                rtmp://rtmp.livepeer.com/live
-                <CopyToClipboard text="rtmp://rtmp.livepeer.com/live" />
-              </p>
-            </div>
-            <div className="p-2 flex flex-col gap-1 border-2 border-slate-200 dark:border-slate-700  rounded-md text-brand3">
-              <span className="font-semibold text-base">Streamer Key</span>
-              <p className="text-base flex gap-1 text-brand4">
-                {userStreams.streamKey}
-                <CopyToClipboard text={userStreams.streamKey} />
-              </p>
-            </div>
-            <div className="p-2 flex flex-col gap-1 border-2 border-slate-200 dark:border-slate-700  rounded-md text-brand3">
-              <span className="font-semibold text-base">Playback URL</span>
-              <p className="text-base flex gap-1 text-brand4">
-                <span className="w-5/6 truncate">{playbackUrl}</span>
-                <CopyToClipboard text={playbackUrl} />
-              </p>
-            </div>
-            <div className="p-2 flex flex-col gap-1 border-2 border-slate-200 dark:border-slate-700  rounded-md text-brand3">
-              <span className="font-semibold text-base">Live URL</span>
-              <p className="text-base flex gap-1 text-brand4">
-                <a
-                  className="w-5/6 truncate"
-                  href={`${process.env.REACT_APP_CLIENT_URL}/live/${user.database.userData.data.user.username}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {`${process.env.REACT_APP_CLIENT_URL}/live/${user.database.userData.data.user.username}`}
-                </a>
-                <CopyToClipboard text={playbackUrl} />
-              </p>
-            </div>
-
-            {/* Stream Title */}
-
-            {/* Stream Schedule */}
-
-            {/* Stream Links */}
-
-            <div className="hidden">
-              <div className="flex flex-col">
-                <p className="text-center mb-1">Currently Connected :</p>
-                <div className="flex flex-wrap justify-center">
-                  {multiStreamConnected.map((value, index) => {
-                    ////console.log(value);
-                    return (
-                      <div key={index} className="m-1">
-                        <img
-                          src={value.platform.logo}
-                          alt="logo"
-                          className="h-6 lg:h-10 w-auto"
-                        />
-                      </div>
-                    );
-                  })}
-                </div>
-                <div className="nm-flat-dbeats-dark-primary-sm p-1 rounded-3xl hover:nm-inset-dbeats-dark-secondary-xs w-max mx-auto">
-                  <button
-                    variant="primary"
-                    className="bg-dbeats-dark-secondary text-center content-center justify-center align-middle hover:nm-inset-dbeats-light flex text-white rounded-3xl font-bold px-2 py-3 tracking-widest w-max"
-                    type="button"
-                    onClick={
-                      multiStreamConnected.length < 3
-                        ? () => setShowDestinationModal(true)
-                        : () => setShowPriceModal(true)
-                    }
+              <div className="p-2 flex flex-col gap-1 border-2 border-slate-200 dark:border-slate-700  rounded-md text-brand3">
+                <span className="font-semibold text-base">RTMP URL</span>
+                <p className="text-base flex gap-1 text-brand4">
+                  rtmp://rtmp.livepeer.com/live
+                  <CopyToClipboard text="rtmp://rtmp.livepeer.com/live" />
+                </p>
+              </div>
+              <div className="p-2 flex flex-col gap-1 border-2 border-slate-200 dark:border-slate-700  rounded-md text-brand3">
+                <span className="font-semibold text-base">Streamer Key</span>
+                <p className="text-base flex gap-1 text-brand4">
+                  {userStreams.streamKey}
+                  <CopyToClipboard text={userStreams.streamKey} />
+                </p>
+              </div>
+              <div className="p-2 flex flex-col gap-1 border-2 border-slate-200 dark:border-slate-700  rounded-md text-brand3">
+                <span className="font-semibold text-base">Playback URL</span>
+                <p className="text-base flex gap-1 text-brand4">
+                  <span className="w-5/6 truncate">{playbackUrl}</span>
+                  <CopyToClipboard text={playbackUrl} />
+                </p>
+              </div>
+              <div className="p-2 flex flex-col gap-1 border-2 border-slate-200 dark:border-slate-700  rounded-md text-brand3">
+                <span className="font-semibold text-base">Live URL</span>
+                <p className="text-base flex gap-1 text-brand4">
+                  <a
+                    className="w-5/6 truncate"
+                    href={`${process.env.REACT_APP_CLIENT_URL}/live/${user.database.userData.data.user.username}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
                   >
-                    Add MultiStream Platforms
-                    <i className="fas fa-solid fa-video mx-2 cursor-pointer pt-1"></i>
-                  </button>
+                    {`${process.env.REACT_APP_CLIENT_URL}/live/${user.database.userData.data.user.username}`}
+                  </a>
+                  <CopyToClipboard text={playbackUrl} />
+                </p>
+              </div>
+              {/* Stream Title */}
+              {/* Stream Schedule */}
+              {/* Stream Links */}
+              <div className="hidden">
+                <div className="flex flex-col">
+                  <p className="text-center mb-1">Currently Connected :</p>
+                  <div className="flex flex-wrap justify-center">
+                    {multiStreamConnected.map((value, index) => {
+                      ////console.log(value);
+                      return (
+                        <div key={index} className="m-1">
+                          <img
+                            src={value.platform.logo}
+                            alt="logo"
+                            className="h-6 lg:h-10 w-auto"
+                          />
+                        </div>
+                      );
+                    })}
+                  </div>
+                  <div className="nm-flat-dbeats-dark-primary-sm p-1 rounded-3xl hover:nm-inset-dbeats-dark-secondary-xs w-max mx-auto">
+                    <button
+                      variant="primary"
+                      className="bg-dbeats-dark-secondary text-center content-center justify-center align-middle hover:nm-inset-dbeats-light flex text-white rounded-3xl font-bold px-2 py-3 tracking-widest w-max"
+                      type="button"
+                      onClick={
+                        multiStreamConnected.length < 3
+                          ? () => setShowDestinationModal(true)
+                          : () => setShowPriceModal(true)
+                      }
+                    >
+                      Add MultiStream Platforms
+                      <i className="fas fa-solid fa-video mx-2 cursor-pointer pt-1"></i>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
+          <div className="p-2 flex flex-col gap-1 text-brand3 h-fit bg-slate-100 dark:bg-slate-800  rounded-xl ">
+            <span className="font-semibold text-base">Thumbnail</span>
+            {selectedFile ? (
+              <img
+                src={selectedFile.localurl}
+                className="aspect-video object-cover w-full rounded-md"
+              ></img>
+            ) : user.database.userData.data.user.thumbnail ? (
+              <img
+                src={user.database.userData.data.user.thumbnail}
+                className="aspect-video object-cover w-full rounded-md"
+              ></img>
+            ) : null}
+            <progress
+              hidden={!uploadingFile}
+              className="progress progress-success w-full dark:bg-slate-400"
+            ></progress>
+            <form
+              className="flex flex-col items-center gap-1"
+              onSubmit={uploadThumbnail}
+            >
+              <input
+                className="p-0 input h-fit w-full "
+                name="Thumbnail image"
+                type="file"
+                accept=".jpg,.png,.jpeg,.gif,.webp"
+                required={true}
+                onChange={onFileChange}
+              />
+              <button
+                disabled={uploadingFile}
+                type="submit"
+                className={`btn btn-sm btn-success w-full ${
+                  uploadingFile || !selectedFile ? " btn-disabled" : ""
+                }`}
+              >
+                <p>Upload</p>
+              </button>
+            </form>
+          </div>{" "}
           <div className="p-2 flex flex-col gap-1 text-brand3 h-fit bg-slate-100 dark:bg-slate-800  rounded-xl ">
             <form onSubmit={handleStreamDetails}>
               <div>
@@ -1075,46 +1115,6 @@ function GoLive() {
                   value="update"
                 />
               </div>
-            </form>
-          </div>
-          <div className="p-2 flex flex-col gap-1 text-brand3 h-fit bg-slate-100 dark:bg-slate-800  rounded-xl ">
-            <span className="font-semibold text-base">Thumbnail</span>
-            {selectedFile ? (
-              <img
-                src={selectedFile.localurl}
-                className="aspect-video object-cover w-full rounded-md"
-              ></img>
-            ) : user.database.userData.data.user.thumbnail ? (
-              <img
-                src={user.database.userData.data.user.thumbnail}
-                className="aspect-video object-cover w-full rounded-md"
-              ></img>
-            ) : null}
-            <progress
-              hidden={!uploadingFile}
-              className="progress progress-success w-full dark:bg-slate-400"
-            ></progress>
-            <form
-              className="flex flex-col items-center gap-1"
-              onSubmit={uploadThumbnail}
-            >
-              <input
-                className="p-0 input h-fit w-full "
-                name="Thumbnail image"
-                type="file"
-                accept=".jpg,.png,.jpeg,.gif,.webp"
-                required={true}
-                onChange={onFileChange}
-              />
-              <button
-                disabled={uploadingFile}
-                type="submit"
-                className={`btn btn-sm btn-success w-full ${
-                  uploadingFile || !selectedFile ? " btn-disabled" : ""
-                }`}
-              >
-                <p>Upload</p>
-              </button>
             </form>
           </div>
         </div>
