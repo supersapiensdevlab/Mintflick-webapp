@@ -1,22 +1,23 @@
 import React, { useState } from "react";
 
 function CopyToClipboard(props) {
-  const [copied, setCopied] = useState("copy");
+  const [copied, setCopied] = useState(props.title ? props.title : "Copy");
 
-  const handleCopied = () =>{
-    setCopied("copied");
-    setTimeout(()=>{
-      setCopied("copy")
-    },3000)
-  }
+  const handleCopied = () => {
+    setCopied("Copied");
+    setTimeout(() => {
+      setCopied(props.title ? props.title : "Copy");
+    }, 3000);
+  };
   return (
     <div
-      className="font-medium mr-4 text-green-700 cursor-pointer"
+      className="font-medium  text-green-700 cursor-pointer"
       onClick={() => {
         navigator.clipboard.writeText(props.text);
         handleCopied();
       }}
     >
+      {props.children}
       {copied}
     </div>
   );

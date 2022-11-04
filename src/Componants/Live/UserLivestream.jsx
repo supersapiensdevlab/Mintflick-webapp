@@ -230,7 +230,7 @@ function UserLivestream() {
               !streamUser.livepeer_data.isActive &&
               new Date(streamUser.streamSchedule * 1) > new Date() ? (
                 <img
-                  className="w-full aspect-video rounded-sm lg:rounded-xl object-cover "
+                  className="w-full aspect-video rounded-sm   object-cover "
                   src={
                     streamUser.thumbnail
                       ? streamUser.thumbnail
@@ -238,7 +238,7 @@ function UserLivestream() {
                   }
                 />
               ) : (
-                <div className="rounded-sm lg:rounded-xl overflow-hidden ">
+                <div className="rounded-sm  overflow-hidden ">
                   <ReactPlayer
                     controls={true}
                     width={"100%"}
@@ -496,7 +496,7 @@ function UserLivestream() {
             !streamUser.livepeer_data.isActive &&
             new Date(streamUser.streamSchedule * 1) > new Date() ? (
               <img
-                className=" w-full  object-cover "
+                className=" w-full aspect-video object-cover "
                 src={
                   streamUser.thumbnail ? streamUser.thumbnail : livePlaceholder
                 }
