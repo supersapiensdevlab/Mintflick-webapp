@@ -116,11 +116,13 @@ const JoinSuperfanModal = ({
   };
 
   const handleBuySuperfanPlan = async () => {
+    console.log("in 1");
     setBuyingPlan(true);
     if (!State.database.provider) {
       console.log("provider not initialized yet");
       return;
     }
+    console.log("in 2");
     const rpc = new RPC(State.database.provider);
     await rpc
       .sendTransaction(
@@ -131,6 +133,7 @@ const JoinSuperfanModal = ({
         console.log(typeof receipt);
         if (typeof receipt != "object") {
           handleTransactionSucess(receipt, whatToShow?.name);
+          console.log("in 3");
         }
       })
       .catch((err) => {

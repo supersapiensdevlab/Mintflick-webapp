@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useContext, useEffect } from "react";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import BottomNavigation from "../Componants/Footer/BottomNavigation";
 import Header from "../Componants/Header/Header";
 import MobileHeader from "../Componants/Header/MobileHeader";
@@ -11,6 +11,7 @@ import ToastContainer from "../Componants/Toast/ToastContainer";
 function HomeScreen() {
   const State = useContext(UserContext);
   const navigateTo = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     // console.log(localStorage.getItem("walletAddress"));
@@ -25,7 +26,11 @@ function HomeScreen() {
         <link rel="canonical" href="https://mintflick.app" />
       </Helmet>
       <MobileHeader></MobileHeader>
-      <Header className=""></Header>
+      {location.pathname == "/homescreen" ? (
+        <></>
+      ) : (
+        <Header className=""></Header>
+      )}
       <div className=" w-full">
         <Outlet></Outlet>
       </div>

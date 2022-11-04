@@ -11,6 +11,11 @@ import CopyToClipboard from "../CopyButton/CopyToClipboard";
 import { motion, useDragControls } from "framer-motion";
 import useWindowDimensions from "../../Hooks/useWindowDimentions";
 import Loading from "../Loading/Loading";
+import { uploadFile } from "../../Helper/uploadHelper";
+import { decode } from "bs58";
+import { clusterApiUrl, Connection } from "@solana/web3.js";
+import { SolanaWallet } from "@web3auth/solana-provider";
+import { Keypair, Transaction } from "@solana/web3.js";
 
 function GoLive() {
   const user = useContext(UserContext);
@@ -88,7 +93,10 @@ function GoLive() {
   const [livestreamViews, setLivestreamViews] = useState(0);
 
   const [minting, setMinting] = useState(null);
+  const [mintSuccess, setMintSuccess] = useState(null);
   const [mintingProgress, setMintingProgress] = useState(0);
+
+  const [tokenAddress, setTokenAddress] = useState("");
 
   const [isNFT, setIsNFT] = useState(true);
   const [NFTprice, setPrice] = useState(0);
@@ -291,6 +299,21 @@ function GoLive() {
     setLoader(true);
     alert(" Multistream Connection Successfull !!!");
     setShowStreamModal(false);
+  };
+
+  const clearNftMintModalData = () => {
+    setTokenAddress("");
+    setMinting(false);
+    setMintSuccess(null);
+    setRecordVideo({
+      videoName: "",
+      videoFile: null,
+      category: "",
+      description: "",
+      price: "",
+      royality: "",
+    });
+    setmintClipModal(false);
   };
 
   //edit platform
@@ -528,6 +551,92 @@ function GoLive() {
       }
     }
   }, [user.database.userData.data?.user]);
+
+  console.log(recordvideo);
+
+  async function partialSignWithWallet(encodedTransaction) {
+    //we have to pass the recoveredTransaction received in the previous step in the encodedTransaction parameter
+    const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
+    const solanaWallet = new SolanaWallet(user.database?.provider); // web3auth.provider
+    const signedTx = await solanaWallet.signTransaction(encodedTransaction);
+
+    //signing transaction with the creator_wallet
+    const confirmTransaction = await connection.sendRawTransaction(
+      signedTx.serialize()
+    );
+    return confirmTransaction;
+  }
+
+  async function signTransaction(transaction, key) {
+    console.log(transaction, key);
+    try {
+      const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
+      const feePayer = Keypair.fromSecretKey(decode(key));
+      const recoveredTransaction = Transaction.from(
+        Buffer.from(transaction, "base64")
+      );
+      recoveredTransaction.partialSign(feePayer); //partially signing transaction with privatekey of the fee_payer
+      return recoveredTransaction;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const handleMinting = () => {
+    if (recordvideo && recordvideo.videoFile) {
+      setMinting(true);
+      uploadFile(recordvideo.videoFile).then(async (cid) => {
+        console.log("stored files with cid:", cid);
+        let nftSolanaData = {
+          network: "devnet",
+          creator_wallet: user.database.walletAddress,
+          name: recordvideo?.videoName,
+          symbol: "FLICK",
+          attributes: JSON.stringify([{ trait_type: "Power", value: "100" }]),
+          description: recordvideo?.description,
+          external_url:
+            "https://ipfs.io/ipfs/" + cid + "/" + recordvideo.videoFile.name,
+          max_supply: 1,
+          fee_payer: `${process.env.REACT_APP_FEEPAYER_WALLET}`,
+          royalty: 5,
+          image: recordvideo.videoFile,
+        };
+
+        console.log(nftSolanaData);
+        axios
+          .post(`https://api.shyft.to/sol/v2/nft/create`, nftSolanaData, {
+            headers: {
+              "x-api-key": `${process.env.REACT_APP_SHYFT_API_KEY}`,
+              "content-type": "multipart/form-data",
+            },
+          })
+          .then(async (data) => {
+            console.log("MintID", data.data.result.mint);
+            setTokenAddress(data.data.result.mint);
+            await signTransaction(
+              data.data.result.encoded_transaction,
+              `${process.env.REACT_APP_FEEPAYER_PRIVATEKEY}`
+            )
+              .then((res) => {
+                console.log(res);
+                partialSignWithWallet(res).then(() => {
+                  console.log("success");
+                  setMintSuccess("NFT Minted Successfully");
+                  setMinting(false);
+                });
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          })
+          .catch((err) => {
+            console.log(err);
+            user.toast("error", "Error minting NFT. Please try again!");
+          });
+      });
+    }
+  };
+
   // on Stream Details Submit
   const handleStreamDetails = async (e) => {
     e.preventDefault();
@@ -1151,7 +1260,7 @@ function GoLive() {
                 Mint video
               </h3>
               <X
-                onClick={() => setmintClipModal(false)}
+                onClick={() => clearNftMintModalData()}
                 className="text-brand2 cursor-pointer"
               ></X>
             </div>
@@ -1209,13 +1318,19 @@ function GoLive() {
               className="textarea w-full"
               placeholder="Any Behind the scenes you'll like your Audience to know!"
             />
+            {mintSuccess && (
+              <p className="w-full text-center my-2 text-green-500">
+                {mintSuccess}
+              </p>
+            )}
             <div
               disabled={hideButton}
               onClick={() => {
                 // mintNFT();
                 // setHideButton(true);
+                handleMinting();
               }}
-              className="btn btn-brand w-full"
+              className={`btn btn-brand w-full ${minting ? "loading" : ""}`}
             >
               Mint as NFT
             </div>
