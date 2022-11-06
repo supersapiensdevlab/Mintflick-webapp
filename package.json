@@ -60,12 +60,11 @@
   
   "scripts": {
     "dev": "webpack serve --mode development",
-
-    "start": "cd server && node server.js ",
+    "start": "react-app-rewired start",
     "build": "react-app-rewired build",
     "test": "react-app-rewired test",
     "eject": "react-app-rewired eject",
-    "server": "npm run build&&node server/server.js"
+    "server": "npm run build&&cd server&&node server.js"
   },
   "eslintConfig": {
     "extends": [
