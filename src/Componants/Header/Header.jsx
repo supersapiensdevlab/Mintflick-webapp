@@ -13,6 +13,7 @@ import { Image } from "react-img-placeholder";
 import placeholderImage from "../../Assets/profile-pic.png";
 import useWeb3Auth from "../../Hooks/useWeb3Auth";
 import ChatModal from "../ChatRoom/ChatModal";
+import SettingsModal from "../Profile/Modals/SettingsModal";
 
 function Header() {
   const State = useContext(UserContext);
@@ -34,6 +35,9 @@ function Header() {
 
   //reference to search div
   const wrapperRef = useRef(null);
+
+  //settings modal
+  const [settingsModalOpen, setsettingsModalOpen] = useState(false);
 
   //new notification
   const [newNotification, setNewNotification] = useState(0);
@@ -202,6 +206,12 @@ function Header() {
     }
   };
 
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter" && wordEntered.length>0) {
+      navigateTo('/homescreen/explore')
+    }
+  };
+
   const showListedNFTs = () => {
     // console.log("in");
     // var myHeaders = new Headers();
@@ -241,13 +251,13 @@ function Header() {
   return (
     <div className="hidden lg:flex fixed z-50  top-0  px-4 lg:px-12 justify-between items-center h-20 bg-white dark:bg-slate-900 w-full shadow-mintflick	">
       <div className="flex items-center space-x-4 h-full w-1/3 -ml-2">
-        <NavLink to={`/homescreen/home`}>
+        <Link to={`/homescreen/home`}>
           {!State.database.dark ? (
             <Main_logo_dark></Main_logo_dark>
           ) : (
             <Main_logo></Main_logo>
           )}
-        </NavLink>
+        </Link>
         <div className="relative w-full">
           <div className="hidden lg:flex items-center flex-grow">
             <input
@@ -256,6 +266,7 @@ function Header() {
               className="input input-bordered w-full max-w-xl "
               onChange={handleFilter}
               value={wordEntered}
+              onKeyDown={handleKeyDown}
             ></input>
             <Search className="-translate-x-8 dark:text-slate-100"></Search>
           </div>
@@ -427,7 +438,7 @@ function Header() {
               </NavLink>
             </li>
 
-            <li>
+            <li onClick={() => setsettingsModalOpen(true)}>
               <a className=" hover:dark:bg-slate-900">Settings</a>
             </li>
 
@@ -486,6 +497,7 @@ function Header() {
           user2: {},
         }}
       /> */}
+      <SettingsModal open={settingsModalOpen} setOpen={setsettingsModalOpen} />
     </div>
   );
 }

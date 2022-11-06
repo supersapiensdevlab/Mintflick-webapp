@@ -15,6 +15,9 @@ import {
   Share,
   ShoppingCart,
   Trash,
+  UserMinus,
+  UserOff,
+  UserPlus,
   Wallet,
 } from "tabler-icons-react";
 import PolygonToken from "../../Assets/logos/PolygonToken";
@@ -42,7 +45,7 @@ function Post(props) {
   const nav = useNavigate();
   // Common State and Functions
   const State = useContext(UserContext);
-  const [loadFeed] = useUserActions();
+  const [loadFeed, loadUser, loadProfileCard] = useUserActions();
 
   const [videoLikes, setVideoLikes] = useState(0);
   const [videoLiked, setVideoLiked] = useState(null);
@@ -134,6 +137,50 @@ function Post(props) {
       });
     }
   }, [props.nfts]);
+
+  const handleUnfollowUser = async (toUnfollow) => {
+    const unfollowData = {
+      following: toUnfollow,
+    };
+    await axios({
+      method: "POST",
+      url: `${process.env.REACT_APP_SERVER_URL}/user/unfollow`,
+      headers: {
+        "content-type": "application/json",
+        "auth-token": JSON.stringify(localStorage.getItem("authtoken")),
+      },
+      data: unfollowData,
+    })
+      .then(async function (response) {
+        await loadUser();
+        await loadProfileCard();
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+  const handleFollowUser = async (toFollow) => {
+    const followData = {
+      following: toFollow,
+    };
+    await axios({
+      method: "POST",
+      url: `${process.env.REACT_APP_SERVER_URL}/user/follow`,
+      headers: {
+        "content-type": "application/json",
+        "auth-token": JSON.stringify(localStorage.getItem("authtoken")),
+      },
+      data: followData,
+    })
+      .then(async function (response) {
+        await loadUser();
+        await loadProfileCard();
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
 
   const onEmojiClick = (event, emojiObject) => {
     setText(text + emojiObject.emoji);
@@ -800,6 +847,27 @@ function Post(props) {
                       <a className="hover:bg-rose-500">
                         <AlertOctagon />
                         Report
+                      </a>
+                    </li>
+                  )}
+                  {State.database.userData?.data?.user?.followee_count.includes(
+                    props.profileUsername
+                  ) ? (
+                    <li
+                      onClick={() => handleUnfollowUser(props.profileUsername)}
+                    >
+                      <a className="dark:hover:bg-slate-800">
+                        <UserOff className="" /> Unfollow
+                      </a>
+                    </li>
+                  ) : (
+                    <li
+                      onClick={() => {
+                        handleFollowUser(props.profileUsername);
+                      }}
+                    >
+                      <a className="dark:hover:bg-slate-800">
+                        <UserPlus className="" /> Follow
                       </a>
                     </li>
                   )}

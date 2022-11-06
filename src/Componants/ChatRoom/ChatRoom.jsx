@@ -269,6 +269,111 @@ function ChatRoom(props) {
     });
     setShowEmojis(false);
   }
+
+  const handleKeyDown = (event) => {
+    // Get the code of pressed key
+    const keyCode = event.which || event.keyCode;
+
+    // 13 represents the Enter key
+    if (keyCode === 13 && !event.shiftKey) {
+      // Don't generate a new line
+      event.preventDefault();
+
+      // Do something else such as send the message to back-end
+      // ...
+      if (event.key === "Enter" && formState.message.length > 0) {
+        if (selectedFile) {
+          setUploadingFile(true);
+          storeWithProgress(selectedFile.file)
+            .then((cid) => {
+              setUploadingFile(false);
+              console.log(
+                "https://ipfs.io/ipfs/" + cid + "/" + selectedFile.file[0].name
+              );
+              let room = {
+                room_admin: username,
+                chat: {
+                  user_id: user.database.userData.data.user._id,
+                  type: selectedFile.type,
+                  message: formState.message,
+                  createdAt: Date.now(),
+                  url:
+                    "https://ipfs.io/ipfs/" +
+                    cid +
+                    "/" +
+                    selectedFile.file[0].name,
+                  size: selectedFile.size,
+                },
+              };
+              if (formState.replyto) {
+                room.chat.reply_to = formState.replyto;
+              }
+              if (!isDM) {
+                socket.emit("chatMessage", room);
+              } else {
+                console.log("emmiting chatDM");
+                socket.emit("chatDM", {
+                  chat: room.chat,
+                  user_id: user.database.userData.data.user.id,
+                  user2_id: user2.id,
+                  room_id: roomId,
+                });
+              }
+              setForm({
+                message: "",
+                replyto: null,
+              });
+              setShowEmojis(false);
+              setShowAttachmentDropdown(false);
+              setSelectedFile(null);
+            })
+            .catch((err) => {
+              console.log(err);
+              setForm({
+                message: "",
+                replyto: null,
+              });
+              setUploadingFile(false);
+              setShowEmojis(false);
+              setShowAttachmentDropdown(false);
+              setSelectedFile(null);
+            });
+          return;
+        }
+        let room = {
+          room_admin: username,
+          chat: {
+            user_id: user.database.userData.data.user._id,
+            username: user.database.userData.data.user.username,
+            profile_image: user.database.userData.data.user.profile_image,
+            type: "text",
+            message: formState.message,
+            createdAt: Date.now(),
+          },
+        };
+        if (formState.replyto) {
+          room.chat.reply_to = formState.replyto;
+        }
+        if (socket) {
+          if (!isDM) {
+            socket.emit("chatMessage", room);
+          } else {
+            socket.emit("chatDM", {
+              chat: room.chat,
+              user_id: user.database.userData.data.user.id,
+              user2_id: user2.id,
+              room_id: roomId,
+            });
+          }
+        }
+        setForm({
+          message: "",
+          replyto: null,
+        });
+        setShowEmojis(false);
+      }
+    }
+  };
   const renderDate = (chat, dateNum) => {
     const timestampDate = new Date(chat.createdAt);
     // Add to Set so it does not render again
@@ -336,9 +441,7 @@ function ChatRoom(props) {
       );
 
   return (
-    
     <div className=" flex h-screen bg-slate-100 dark:bg-slate-800 lg:bg-white lg:dark:bg-slate-900">
-      
       <div className="flex lg:hidden z-[9999] fixed top-0 left-0 flex-col  w-screen h-screen ">
         <ChatsListMobile userName={username} />
       </div>
@@ -901,6 +1004,7 @@ function ChatRoom(props) {
                   required
                   autoComplete="false"
                   className="w-full rounded-md textarea "
+                  onKeyDown={handleKeyDown}
                 ></textarea>
                 {/* </div> */}
 

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import moment from "moment";
 import { useEffect } from "react";
 import CircleLogo from "../../../src/Assets/profile-pic.png";
+import { Link } from "react-router-dom";
 moment().format();
 
 const NotificationContent = ({ data }) => {
@@ -16,10 +17,7 @@ const NotificationContent = ({ data }) => {
 
   return (
     <div className="p-2 w-full hover:bg-slate-200 dark:hover:bg-slate-800 rounded-md">
-      <a
-        // href={data.link ? data.link : `/live/${data.username}`}
-        className="flex items-center gap-2 cursor-pointer "
-      >
+      <Link to={data?.link} className="flex items-center gap-2 cursor-pointer ">
         <img
           src={CircleLogo}
           alt="announcement_info"
@@ -51,7 +49,7 @@ const NotificationContent = ({ data }) => {
             className="h-12 w-12 ml-auto rounded-sm object-cover"
           />
         )}
-      </a>
+      </Link>
     </div>
   );
 };
