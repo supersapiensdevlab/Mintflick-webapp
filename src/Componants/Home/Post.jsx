@@ -38,7 +38,7 @@ import defaultStyle from "./defaultStyle";
 import placeholderImage from "../../Assets/profile-pic.png";
 import trackPlaceholder from "../../Assets/track-placeholder.jpg";
 import { Image } from "react-img-placeholder";
-
+import { Link } from "react-router-dom";
 import ReportModal from "./Modals/ReportModal";
 import { useNavigate } from "react-router-dom";
 function Post(props) {
@@ -770,43 +770,45 @@ function Post(props) {
           </svg>
         )}
         <div className="flex justify-between items-center">
-          <div
-            onClick={() => nav(`../profile/${props.profileName}`)}
-            className="flex items-center space-x-4 cursor-pointer"
-          >
-            {props.profilePic ? (
-              // <img
-              //   className="h-12 w-12 rounded-full object-cover"
-              //   src={props.profilePic ? props.profilePic : placeholderImage}
-              //   alt={props.profileName}
-              // />
-              <Image
-                className="h-12 w-12 rounded-full object-cover"
-                width={50}
-                height={50}
-                src={props.profilePic ? props.profilePic : placeholderImage}
-                alt={props.profileName}
-                placeholderSrc={placeholderImage}
-              />
-            ) : (
-              <div class="avatar placeholder">
-                <div class="bg-neutral-focus text-neutral-content rounded-full w-12">
-                  <span class="text-3xl uppercase">
-                    {props.profileName.slice(0, 1)}
-                  </span>
+          <Link to={`/homescreen/profile/${props.profileName}`}>
+            <div
+              // onClick={() => nav(`../profile/${props.profileName}`)}
+              className="flex items-center space-x-4 cursor-pointer"
+            >
+              {props.profilePic ? (
+                // <img
+                //   className="h-12 w-12 rounded-full object-cover"
+                //   src={props.profilePic ? props.profilePic : placeholderImage}
+                //   alt={props.profileName}
+                // />
+                <Image
+                  className="h-12 w-12 rounded-full object-cover"
+                  width={50}
+                  height={50}
+                  src={props.profilePic ? props.profilePic : placeholderImage}
+                  alt={props.profileName}
+                  placeholderSrc={placeholderImage}
+                />
+              ) : (
+                <div class="avatar placeholder">
+                  <div class="bg-neutral-focus text-neutral-content rounded-full w-12">
+                    <span class="text-3xl uppercase">
+                      {props.profileName.slice(0, 1)}
+                    </span>
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
 
-            <div>
-              <p className="font-semibold text-base text-brand1">
-                {props.profileName}
-              </p>
-              <p className="font-normal text-xs text-brand4">
-                {moment(props.timestamp * 1000).fromNow()}
-              </p>
+              <div>
+                <p className="font-semibold text-base text-brand1">
+                  {props.profileName}
+                </p>
+                <p className="font-normal text-xs text-brand4">
+                  {moment(props.timestamp * 1000).fromNow()}
+                </p>
+              </div>
             </div>
-          </div>
+          </Link>
           <div className=" ">
             <div className="dropdown dropdown-end">
               <label

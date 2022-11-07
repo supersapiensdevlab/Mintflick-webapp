@@ -8,6 +8,7 @@ import {
   Wallet,
   Coin,
   ArrowsDown,
+  BuildingStore,
 } from "tabler-icons-react";
 import EachTransaction from "./EachTransaction";
 import CollectCoinsModal from "./Modals/CollectCoinsModal";
@@ -15,12 +16,13 @@ import { UserContext } from "../../Store";
 import axios from "axios";
 import GiftModal from "../Live/Modals/GiftModal";
 import TreasuryConvertModal from "./Modals/TreasuryConvertModal";
+import BuyGemsModal from "./Modals/BuyGemsModal";
 
 function MintWallet() {
   const [collectCoinsModalVisible, setCollectCoinsModalVisible] =
     useState(false);
   const [showConversionModal, setShowConversionModal] = useState(false);
-
+  const [showBuyGemsModal, setShowBuyGemsModal] = useState(false);
   const State = useContext(UserContext);
 
   return (
@@ -67,6 +69,14 @@ function MintWallet() {
             redeem
           </button>
         </span>
+        <button
+          onClick={() => {
+            setShowBuyGemsModal(true);
+          }}
+          className="btn gap-2 px-8 w-full max-w-lg rounded-full btn-brand btn-primary capitalize"
+        >
+          <BuildingStore size={20} /> Buy Gems
+        </button>
         <div className="flex flex-col w-full h-72 overflow-auto gap-1">
           <span className="text-xs text-brand4">Jaunary 03 2022</span>
           <EachTransaction />
@@ -98,6 +108,13 @@ function MintWallet() {
         } modal modal-bottom sm:modal-middle`}
       >
         <TreasuryConvertModal setShowConversionModal={setShowConversionModal} />
+      </div>
+      <div
+        className={`${
+          showBuyGemsModal && "modal-open"
+        } modal modal-bottom sm:modal-middle`}
+      >
+        <BuyGemsModal setShowBuyGemsModal={setShowBuyGemsModal} />
       </div>
     </div>
   );

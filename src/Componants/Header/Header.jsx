@@ -376,7 +376,7 @@ function Header() {
           </div>
         </div>
 
-        <button class="btn btn-circle btn-ghost " onClick={showListedNFTs}>
+        <div>
           <NavLink
             to={`/homescreen/chat/${
               State.database.userData.data
@@ -388,9 +388,11 @@ function Header() {
               user2: {},
             }}
           >
-            <MessageDots size={28}></MessageDots>
+            <button class="btn btn-circle btn-ghost " onClick={showListedNFTs}>
+              <MessageDots size={28}></MessageDots>
+            </button>
           </NavLink>
-        </button>
+        </div>
         {/* <button
           class="btn btn-circle btn-ghost "
           onClick={() => setchatModalOpen(true)}
@@ -400,7 +402,7 @@ function Header() {
 
         <div class="dropdown dropdown-end">
           <label tabindex="0" className=" avatar">
-            <div className="w-10 rounded-full">
+            <div className="w-10 rounded-full cursor-pointer">
               {/* <img
                 src={
                   State.database.userData.data?.user.profile_image

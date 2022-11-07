@@ -11,7 +11,7 @@ function ChatsListMobile(props) {
   const State = useContext(UserContext);
   const [mobilechatModalOpen, setmobilechatModalOpen] = useState(false);
   const [chatUserName, setchatUserName] = useState(
-    State.database.userData.data.user.username
+    State.database.userData.data?.user?.username
   );
   const [chatState, setchatState] = useState({});
   const [showChats, setshowChats] = useState(true);

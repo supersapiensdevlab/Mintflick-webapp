@@ -954,7 +954,7 @@ function ChatRoom(props) {
         </div>
       </div>
       <div className="hidden lg:flex flex-col items-end h-full w-1/4 pt-24 mr-12 ml-4">
-        <ProfileVisitCard />
+        <ProfileVisitCard username={username} />
       </div>
     </div>
   );

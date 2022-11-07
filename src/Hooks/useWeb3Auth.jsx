@@ -10,6 +10,7 @@ import { CHAIN_NAMESPACES, SafeEventEmitterProvider } from "@web3auth/base";
 import Web3 from "web3";
 import { loadOptions } from "@babel/core";
 import { UserContext } from "../Store";
+import { OpenloginAdapter } from "@web3auth/openlogin-adapter";
 
 export default function useWeb3Auth() {
   // const modal = useWebModal();
@@ -75,6 +76,21 @@ export default function useWeb3Auth() {
             "https://ipfs.io/ipfs/bafybeihshcxswtnebaobbgjdvqgam6ynr676gcmbq3ambsg4aznytv3dwi/Mintflick%20icon-12%20%281%29.png", // Your App Logo Here
         },
       });
+      const openloginAdapter = new OpenloginAdapter({
+        adapterSettings: {
+          clientId,
+          network: "devnet",
+          uxMode: "popup",
+          whiteLabel: {
+            name: "Mintflick",
+            logoLight: "https://web3auth.io/images/w3a-L-Favicon-1.svg",
+            logoDark: "https://web3auth.io/images/w3a-D-Favicon-1.svg",
+            defaultLanguage: "en",
+            dark: true, // whether to enable dark mode. defaultValue: false
+          },
+        },
+      });
+      web3auth.configureAdapter(openloginAdapter);
       console.log(web3auth);
       if (State.database.chainId !== 0) {
         const torusWalletAdapter = new TorusWalletAdapter({
@@ -152,7 +168,12 @@ export default function useWeb3Auth() {
             localStorage.getItem("walletAddress") !== "null" &&
             localStorage.getItem("walletAddress").length > 0
           ) {
-            response.status === 200 && navigateTo(redirectLocation.pathname !== '/' ? redirectLocation.pathname : '/homescreen/home');
+            response.status === 200 &&
+              navigateTo(
+                redirectLocation.pathname !== "/"
+                  ? redirectLocation.pathname
+                  : "/homescreen/home"
+              );
           }
         })
         .catch(function (error) {
