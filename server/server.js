@@ -9,15 +9,18 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const indexPath = path.resolve(__dirname, "..", "build", "index.html");
 
-const uri = process.env.ATLAS_URI;
+async function connectingtoDB() {
+  const uri = process.env.ATLAS_URI;
+  // console.log(uri);
+  mongoose.connect(uri);
+}
+connectingtoDB();
 
-mongoose.connect(uri);
+// const connection = mongoose.connection;
 
-const connection = mongoose.connection;
-
-connection.once("open", () => {
-  //console.log('MongoDB database connection established successfully');
-});
+// connection.once("open", () => {
+//   //console.log('MongoDB database connection established successfully');
+// });
 
 // static resources should just be served as they are
 app.use(
@@ -87,8 +90,14 @@ app.get("/homescreen/:username/:type/:id", (req, res, next) => {
     htmlData = htmlData
       .replace("<title>MintFlick</title>", `<title>${title}</title>`)
       .replace("MintFlick - NFT | Streaming | Social", title)
-      .replace("Decentralized Live Streaming, Videos & NFT Marketplace. Ditch Patreon & Onlyfans and become a superfan on Mintflick to donate cryptos directly to your favourite creators.", description)
-      .replace("Decentralized Live Streaming, Videos & NFT Marketplace. Ditch Patreon & Onlyfans and become a superfan on Mintflick to donate cryptos directly to your favourite creators.", description)
+      .replace(
+        "Decentralized Live Streaming, Videos & NFT Marketplace. Ditch Patreon & Onlyfans and become a superfan on Mintflick to donate cryptos directly to your favourite creators.",
+        description
+      )
+      .replace(
+        "Decentralized Live Streaming, Videos & NFT Marketplace. Ditch Patreon & Onlyfans and become a superfan on Mintflick to donate cryptos directly to your favourite creators.",
+        description
+      )
       .replace("https://v2.mintflick.app/Mintflick-favicon.png", image);
     return res.send(htmlData);
   });

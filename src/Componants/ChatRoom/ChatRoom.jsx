@@ -180,8 +180,8 @@ function ChatRoom(props) {
   }, [messages]);
 
   // set a new message in gun, update the local state to reset the form field
-  function saveMessage(e) {
-    e.preventDefault();
+
+  function saveMsg() {
     if (selectedFile) {
       setUploadingFile(true);
       storeWithProgress(selectedFile.file)
@@ -269,6 +269,27 @@ function ChatRoom(props) {
     });
     setShowEmojis(false);
   }
+  function saveMessage(e) {
+    e.preventDefault();
+    saveMsg();
+  }
+
+  const handleKeyDown = (event) => {
+    // Get the code of pressed key
+    const keyCode = event.which || event.keyCode;
+
+    // 13 represents the Enter key
+    if (keyCode === 13 && !event.shiftKey) {
+      // Don't generate a new line
+      event.preventDefault();
+
+      // Do something else such as send the message to back-end
+      // ...
+      if (event.key === "Enter" && formState.message.length > 0) {
+          saveMsg();
+      }
+    }
+  };
   const renderDate = (chat, dateNum) => {
     const timestampDate = new Date(chat.createdAt);
     // Add to Set so it does not render again
@@ -336,9 +357,7 @@ function ChatRoom(props) {
       );
 
   return (
-    
     <div className=" flex h-screen bg-slate-100 dark:bg-slate-800 lg:bg-white lg:dark:bg-slate-900">
-      
       <div className="flex lg:hidden z-[9999] fixed top-0 left-0 flex-col  w-screen h-screen ">
         <ChatsListMobile userName={username} />
       </div>
@@ -901,6 +920,7 @@ function ChatRoom(props) {
                   required
                   autoComplete="false"
                   className="w-full rounded-md textarea "
+                  onKeyDown={handleKeyDown}
                 ></textarea>
                 {/* </div> */}
 
@@ -934,7 +954,7 @@ function ChatRoom(props) {
         </div>
       </div>
       <div className="hidden lg:flex flex-col items-end h-full w-1/4 pt-24 mr-12 ml-4">
-        <ProfileVisitCard />
+        <ProfileVisitCard username={username} />
       </div>
     </div>
   );

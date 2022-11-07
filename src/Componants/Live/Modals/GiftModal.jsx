@@ -146,8 +146,9 @@ const GiftModal = ({ setShowGiftModal, socket, username }) => {
 
   const sendSticker = async () => {
     if (
+      user.database.userData.data?.user?.username == username ||
       selectedSticker.value.value <=
-      user.database.userData.data?.user?.gems?.balance
+        user.database.userData.data?.user?.gems?.balance
     ) {
       if (socket && selectedSticker) {
         let room = {
@@ -173,8 +174,9 @@ const GiftModal = ({ setShowGiftModal, socket, username }) => {
 
   const sendMagicChat = async () => {
     if (
+      user.database.userData.data?.user?.username == username ||
       selectedMagicChat.value.value <=
-      user.database.userData.data?.user?.gems?.balance
+        user.database.userData.data?.user?.gems?.balance
     ) {
       if (socket && selectedMagicChat.text && selectedMagicChat.value) {
         let room = {

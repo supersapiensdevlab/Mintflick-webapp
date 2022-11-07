@@ -73,10 +73,6 @@ function Header() {
   }, []);
 
   useEffect(() => {
-    console.log(navigateTo);
-  });
-
-  useEffect(() => {
     if (
       State.database.userData.data?.user &&
       State.database.userData.data?.user.notification &&
@@ -210,6 +206,12 @@ function Header() {
     }
   };
 
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter" && wordEntered.length>0) {
+      navigateTo('/homescreen/explore')
+    }
+  };
+
   const showListedNFTs = () => {
     // console.log("in");
     // var myHeaders = new Headers();
@@ -268,6 +270,7 @@ function Header() {
               className="input input-bordered w-full max-w-xl "
               onChange={handleFilter}
               value={wordEntered}
+              onKeyDown={handleKeyDown}
             ></input>
             <Search className="-translate-x-8 dark:text-slate-100"></Search>
           </div>
@@ -377,7 +380,7 @@ function Header() {
           </div>
         </div>
 
-        <button class="btn btn-circle btn-ghost " onClick={showListedNFTs}>
+        <div>
           <NavLink
             to={`/homescreen/chat/${
               State.database.userData.data
@@ -389,9 +392,11 @@ function Header() {
               user2: {},
             }}
           >
-            <MessageDots size={28}></MessageDots>
+            <button class="btn btn-circle btn-ghost " onClick={showListedNFTs}>
+              <MessageDots size={28}></MessageDots>
+            </button>
           </NavLink>
-        </button>
+        </div>
         {/* <button
           class="btn btn-circle btn-ghost "
           onClick={() => setchatModalOpen(true)}
@@ -401,7 +406,7 @@ function Header() {
 
         <div class="dropdown dropdown-end">
           <label tabindex="0" className=" avatar">
-            <div className="w-10 rounded-full">
+            <div className="w-10 rounded-full cursor-pointer">
               {/* <img
                 src={
                   State.database.userData.data?.user.profile_image

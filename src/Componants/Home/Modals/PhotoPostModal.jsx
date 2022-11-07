@@ -24,6 +24,11 @@ import { createPandoraExpressSDK } from "pandora-express";
 import Web3 from "web3";
 import { useEffect } from "react";
 import useLoadNfts from "../../../Hooks/useLoadNfts";
+import {
+  mintNFTOnSolana,
+  signTransaction,
+  partialSignWithWallet,
+} from "../../../Helper/mintOnSolana";
 
 function PhotoPostModal({ setphotoPostModalOpen }) {
   const State = useContext(UserContext);
@@ -85,62 +90,28 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
     uploadToServer(formData, mintId);
   };
 
-  async function partialSignWithWallet(encodedTransaction) {
-    //we have to pass the recoveredTransaction received in the previous step in the encodedTransaction parameter
-    const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
-    const solanaWallet = new SolanaWallet(State.database?.provider); // web3auth.provider
-    const signedTx = await solanaWallet.signTransaction(encodedTransaction);
-
-    //signing transaction with the creator_wallet
-    const confirmTransaction = await connection.sendRawTransaction(
-      signedTx.serialize()
-    );
-    return confirmTransaction;
-  }
-
-  const mintOnSolana = (formData) => {
+  const mintOnSolana = async (formData) => {
     uploadFile(selectedPost.file[0]).then(async (cid) => {
       console.log("stored files with cid:", cid);
-      let nftSolanaData = {
-        network: "devnet",
-        creator_wallet: State.database.walletAddress,
-        name: caption,
-        symbol: "FLICK",
-        attributes: JSON.stringify([{ trait_type: "Power", value: "100" }]),
-        description: caption,
-        external_url:
-          "https://ipfs.io/ipfs/" + cid + "/" + selectedPost.file[0].name,
-        max_supply: 1,
-        fee_payer: `${process.env.REACT_APP_FEEPAYER_WALLET}`,
-        royalty: 5,
-        image: selectedPost.file[0],
-      };
-
-      console.log(nftSolanaData);
-      axios
-        .post(`https://api.shyft.to/sol/v2/nft/create`, nftSolanaData, {
-          headers: {
-            "x-api-key": `${process.env.REACT_APP_SHYFT_API_KEY}`,
-            "content-type": "multipart/form-data",
-          },
-        })
+      let url = "https://ipfs.io/ipfs/" + cid + "/" + selectedPost.file[0].name;
+      let image = selectedPost.file[0];
+      await mintNFTOnSolana(
+        State.database.walletAddress,
+        caption,
+        caption,
+        url,
+        image
+      )
         .then(async (data) => {
           console.log("MintID", data.data.result.mint);
           setTokenAddress(data.data.result.mint);
-          // await signTransaction(
-          //   "devnet",
-          //   data.data.result.encoded_transaction,
-          //   () => {
-          //     nftMinted(formData, data.data.result.mint);
-          //   }
-          // );
           await signTransaction(
             data.data.result.encoded_transaction,
             `${process.env.REACT_APP_FEEPAYER_PRIVATEKEY}`
           )
             .then((res) => {
               console.log(res);
-              partialSignWithWallet(res).then(() => {
+              partialSignWithWallet(res, State.database?.provider).then(() => {
                 nftMinted(formData, data.data.result.mint);
               });
             })
@@ -297,7 +268,7 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
 
     console.log(raw);
     axios
-      .post(`https://api.shyft.to/sol/v1/marketplace/list`, raw, {
+      .post(`https://api.shyft.to/sol/v1/marketplace/list_gasless`, raw, {
         headers: {
           "x-api-key": `${process.env.REACT_APP_SHYFT_API_KEY}`,
           "content-type": "application/json",
@@ -318,10 +289,12 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
           data.data.result.encoded_transaction,
           `${process.env.REACT_APP_FEEPAYER_PRIVATEKEY}`
         )
-          .then(async () => {
-            setMintSuccess("NFT Listed Successfully");
-            setUploadingPost(false);
-            await loadNfts();
+          .then(async (res) => {
+            partialSignWithWallet(res).then(async () => {
+              setMintSuccess("NFT Listed Successfully");
+              setUploadingPost(false);
+              await loadNfts();
+            });
           })
           .catch((err) => {
             console.log(err);
@@ -391,33 +364,6 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
   //   connection.onSignature(ret, callback, "finalized");
   //   return ret;
   // }
-
-  async function signTransaction(transaction, key) {
-    console.log(transaction, key);
-    try {
-      // const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
-      // const feePayer = Keypair.fromSecretKey(decode(key));
-      // console.log(feePayer);
-      // const recoveredTransaction = Transaction.from(
-      //   Buffer.from(transaction, "base64")
-      // );
-      // console.log(recoveredTransaction);
-      // recoveredTransaction.partialSign(feePayer);
-      // // const txnSignature = await connection.sendRawTransaction(
-      // //   signedTrasaction.serialize()
-      // // );
-      // return recoveredTransaction;
-      const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
-      const feePayer = Keypair.fromSecretKey(decode(key));
-      const recoveredTransaction = Transaction.from(
-        Buffer.from(transaction, "base64")
-      );
-      recoveredTransaction.partialSign(feePayer); //partially signing transaction with privatekey of the fee_payer
-      return recoveredTransaction;
-    } catch (error) {
-      console.log(error);
-    }
-  }
 
   return (
     <div className="modal-box p-0 bg-slate-100 dark:bg-slate-800 ">
