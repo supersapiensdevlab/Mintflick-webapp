@@ -147,8 +147,7 @@ function LiveRoom({ username }) {
   }, [username]);
 
   // set a new message in gun, update the local state to reset the form field
-  function saveMessage(e) {
-    e.preventDefault();
+  function saveMsg() {
     if (selectedFile) {
       setUploadingFile(true);
       storeWithProgress(selectedFile.file)
@@ -219,6 +218,28 @@ function LiveRoom({ username }) {
     });
     setShowEmojis(false);
   }
+  function saveMessage(e) {
+    e.preventDefault();
+    saveMsg();
+  }
+
+  const handleKeyDown = (event) => {
+    // Get the code of pressed key
+    const keyCode = event.which || event.keyCode;
+
+    // 13 represents the Enter key
+    if (keyCode === 13 && !event.shiftKey) {
+      // Don't generate a new line
+      event.preventDefault();
+
+      // Do something else such as send the message to back-end
+      // ...
+      if (event.key === "Enter" && formState.message.length > 0) {
+        saveMsg();
+      }
+    }
+  };
+
   const renderDate = (chat, dateNum) => {
     const timestampDate = new Date(chat.createdAt);
     // Add to Set so it does not render again
@@ -408,6 +429,7 @@ function LiveRoom({ username }) {
                   required
                   autoComplete="false"
                   className="w-full textarea"
+                  onKeyDown={handleKeyDown}
                 ></textarea>
               </div>
 
