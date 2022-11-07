@@ -288,7 +288,7 @@ function LiveRoom({ username }) {
   return (
     <div className="h-full w-full relative flex flex-col dark:bg-slate-800 bg-slate-100">
       <LoadingBar ref={loadingRef} color="#00d3ff" shadow={true} />
-      <div className="p-2 flex-grow  overflow-y-scroll	overflow-x-hidden ">
+      <div className="p-2 pt-3 flex-grow  overflow-y-scroll	overflow-x-hidden ">
         <div ref={scrollTop}></div>
         {messages
           ? messages.map((message, index) => {

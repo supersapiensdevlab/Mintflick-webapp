@@ -55,7 +55,6 @@ function ChatsList({ userName, dms, rooms }) {
                       (u) => u != State.database.userData.data.user.id
                     )
                   : "";
-                  console.log(userid)
                 return (
                   <Link
                     to={`/homescreen/chat/${username}`}

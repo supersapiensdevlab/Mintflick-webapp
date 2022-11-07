@@ -14,8 +14,7 @@ import {
   TelegramShareButton,
   WhatsappShareButton,
 } from "react-share";
-import { CopyToClipboard } from "react-copy-to-clipboard";
-
+import CopyToClipboard from "../../CopyButton/CopyToClipboard";
 function ShareModal() {
   const State = useContext(UserContext);
   return (
@@ -37,6 +36,7 @@ function ShareModal() {
             ></X>
           </div>
         </div>
+
         <div className="flex flex-wrap p-4 w-full  justify-center">
           <div className="w-fit cursor-pointer space-y-2 p-2 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700">
             <WhatsappShareButton url={State.database.sharePostUrl}>
@@ -91,17 +91,17 @@ function ShareModal() {
                 Telegram
               </h3>
             </TelegramShareButton>
-          </div>
+          </div>{" "}
           <div className="w-fit  cursor-pointer  space-y-2 p-2 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700">
-            <CopyToClipboard text={State.database.sharePostUrl}>
+            <CopyToClipboard
+              title="Copy link"
+              text={State.database.sharePostUrl}
+            >
               <div>
                 <img
                   className="h-12 w-12 rounded-full object-center mx-auto"
                   src={copy}
                 />
-                <h3 className="text-brand3 w-full text-center  text-sm">
-                  Copy Link
-                </h3>
               </div>
             </CopyToClipboard>
           </div>

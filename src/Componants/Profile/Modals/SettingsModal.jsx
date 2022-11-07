@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useContext } from "react";
 import {
+  AlertTriangle,
+  CircleCheck,
   DeviceFloppy,
   Edit,
   Link,
@@ -151,26 +153,26 @@ function SettingsModal(props) {
               className="text-brand2 cursor-pointer"
             ></X>
           </div>
-          <div className="flex px-2 -mb-2">
-            <span
-              onClick={() => setactiveTab("editProfile")}
-              className={`cursor-pointer text-sm text-brand2 p-2 ${
-                activeTab === "editProfile" &&
-                "bg-slate-100 dark:bg-slate-800 rounded-t-lg"
-              }`}
-            >
-              Edit Profile
-            </span>
-            <span
-              onClick={() => setactiveTab("manageSuperfans")}
-              className={`cursor-pointer text-sm text-brand2  p-2 ${
-                activeTab === "manageSuperfans" &&
-                "bg-slate-100 dark:bg-slate-800 rounded-t-lg"
-              }`}
-            >
-              Manage Superfans
-            </span>
-          </div>
+        </div>
+        <div className="flex w-full  bg-slate-200 dark:bg-slate-600  ">
+          <span
+            onClick={() => setactiveTab("editProfile")}
+            className={`  flex justify-center font-semibold cursor-pointer text-sm text-brand2 p-2 ${
+              activeTab === "editProfile" &&
+              "bg-slate-100  border-t-2 border-success dark:bg-slate-800"
+            }`}
+          >
+            Edit Profile
+          </span>
+          <span
+            onClick={() => setactiveTab("manageSuperfans")}
+            className={`  flex justify-center font-semibold cursor-pointer text-sm text-brand2 p-2 ${
+              activeTab === "manageSuperfans" &&
+              "bg-slate-100  border-t-2 border-success dark:bg-slate-800"
+            }`}
+          >
+            Manage Superfans
+          </span>
         </div>
         {activeTab === "editProfile" && (
           <div className="flex flex-col gap-2 p-4 w-full  justify-center">
@@ -284,7 +286,9 @@ function SettingsModal(props) {
         {activeTab === "manageSuperfans" && (
           <div className="flex flex-col gap-2 p-4 w-full  justify-center">
             <div className="flex flex-col items-start gap-1">
-              <span className="text-brand4 text-sm">Your Wallet address</span>
+              <span className=" text-brand4 font-semibold">
+                Your Wallet address
+              </span>
               <input
                 type="text"
                 className="input w-full"
@@ -292,14 +296,14 @@ function SettingsModal(props) {
                 readOnly
               />
             </div>
-            <span className="divider my-2 text-brand4 font-semibold ">
+            <span className=" text-brand font-semibold ">
               Choose plan to edit
             </span>
             <div
               onClick={() => setselectedPlan(1)}
               className={`${
                 selectedPlan === 1 && "ring-2"
-              } cursor-pointer p-1 ring-primary dark:ring-brand rounded-lg`}
+              } cursor-pointer p-1 -m-1 ring-primary dark:ring-brand rounded-lg`}
             >
               <div className="flex w-full bg-slate-200 dark:bg-slate-700 h-fit rounded-lg overflow-hidden ">
                 <img
@@ -379,7 +383,7 @@ function SettingsModal(props) {
               onClick={() => setselectedPlan(2)}
               className={`${
                 selectedPlan === 2 && "ring-2"
-              } cursor-pointer p-1 ring-primary dark:ring-brand rounded-lg`}
+              } cursor-pointer p-1 -m-1 ring-primary dark:ring-brand rounded-lg`}
             >
               <div className="flex w-full bg-slate-200 dark:bg-slate-700 h-fit rounded-lg overflow-hidden ">
                 <img
@@ -461,7 +465,7 @@ function SettingsModal(props) {
               onClick={() => setselectedPlan(3)}
               className={`${
                 selectedPlan === 3 && "ring-2"
-              } cursor-pointer p-1 ring-primary dark:ring-brand rounded-lg`}
+              } cursor-pointer p-1 -m-1 ring-primary dark:ring-brand rounded-lg`}
             >
               <div className="flex w-full bg-slate-200 dark:bg-slate-700 h-fit rounded-lg overflow-hidden ">
                 <img
@@ -540,12 +544,14 @@ function SettingsModal(props) {
               )}
             </div>
             {warning && (
-              <div className="w-full text-center text-rose-500 my-1">
+              <div className="flex gap-2 bg-rose-600 rounded-md p-2 text-white">
+                <AlertTriangle />
                 {warning}
               </div>
             )}
             {success && (
-              <div className="w-full text-center text-green-500 my-1">
+              <div className="flex gap-2 bg-green-600 rounded-md p-2 text-white">
+                <CircleCheck />
                 {success}
               </div>
             )}

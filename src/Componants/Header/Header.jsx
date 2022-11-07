@@ -73,10 +73,6 @@ function Header() {
   }, []);
 
   useEffect(() => {
-    console.log(navigateTo);
-  });
-
-  useEffect(() => {
     if (
       State.database.userData.data?.user &&
       State.database.userData.data?.user.notification &&
@@ -210,6 +206,12 @@ function Header() {
     }
   };
 
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter" && wordEntered.length>0) {
+      navigateTo('/homescreen/explore')
+    }
+  };
+
   const showListedNFTs = () => {
     // console.log("in");
     // var myHeaders = new Headers();
@@ -264,6 +266,7 @@ function Header() {
               className="input input-bordered w-full max-w-xl "
               onChange={handleFilter}
               value={wordEntered}
+              onKeyDown={handleKeyDown}
             ></input>
             <Search className="-translate-x-8 dark:text-slate-100"></Search>
           </div>
