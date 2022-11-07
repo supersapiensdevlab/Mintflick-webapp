@@ -92,9 +92,18 @@ function AddPost() {
         </div>
       </div>
       {/* FAB */}
-      <div className="lg:hidden fixed bottom-24 right-2 z-40 dropdown dropdown-top dropdown-end ">
-        <label tabindex="0" className="btn btn-lg btn-circle btn-brand">
-          <Plus />
+      <div
+        className={`${
+          State.database.showHeader ? "bottom-24" : "bottom-4"
+        } transition-all ease-in-out lg:hidden fixed  right-2 z-40 dropdown dropdown-top dropdown-end `}
+      >
+        <label
+          tabindex="0"
+          className={`${
+            State.database.showHeader ? "gap-2 " : "btn-circle"
+          } btn btn-md rounded-full btn-brand`}
+        >
+          <Plus /> {State.database.showHeader && "Post"}
         </label>
         <ul
           tabindex="0"

@@ -31,10 +31,17 @@ function HomeScreen() {
       ) : (
         <Header className=""></Header>
       )}
-      <div className=" w-full">
+      <div className={` w-full`}>
         <Outlet></Outlet>
       </div>
-      <div className="lg:hidden w-full sticky z-40 bottom-0">
+      <div
+        className={`${
+          State.database.showHeader ? "" : "translate-y-28"
+        } transition ease-in-out lg:hidden w-full sticky z-40 bottom-0`}
+      >
+        {/* <button onClick={() => State.updateDatabase({ showBottomNav: false })}>
+          show
+        </button> */}
         <BottomNavigation></BottomNavigation>
       </div>
       <ToastContainer />

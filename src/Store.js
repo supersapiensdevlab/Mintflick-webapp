@@ -28,6 +28,10 @@ function Store(props) {
     chainId: 0,
     filteredData: [],
     filteredVideoData: [],
+    //bottom nav
+    showBottomNav: true,
+    //header
+    showHeader: true,
   });
   const updateStore = (data) => {
     setstore((prev) => ({
