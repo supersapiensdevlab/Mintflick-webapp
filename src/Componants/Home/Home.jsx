@@ -13,6 +13,8 @@ import { useRef } from "react";
 import { ArrowUpCircle, ChevronUp } from "tabler-icons-react";
 
 function Home() {
+  const State = useContext(UserContext);
+
   const buttonRef = useRef();
   const timelineRef = useRef();
 
@@ -34,10 +36,12 @@ function Home() {
       if (prevScrollPostion <= scrollPosition) {
         setPrevScrollPosition(scrollPosition);
         setShowButton(false);
+        State.updateDatabase({ showHeader: false });
       } else if (prevScrollPostion > scrollPosition) {
         setPrevScrollPosition(scrollPosition);
         if (scrollPosition > 80 && !scrollTopCalled) {
           setShowButton(true);
+          State.updateDatabase({ showHeader: true });
         } else {
           setShowButton(false);
           setScrollTopCalled(false);

@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
 import { BrowserRouter } from "react-router-dom";
@@ -32,6 +32,7 @@ import PostDetails from "./Pages/PostDetails";
 function App() {
   const State = useContext(UserContext);
   const [login, logout] = useWeb3Auth();
+
   async function isUserAvaliable() {
     await axios({
       method: "post",

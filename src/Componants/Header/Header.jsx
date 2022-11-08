@@ -249,7 +249,11 @@ function Header() {
   };
 
   return (
-    <div className="hidden lg:flex fixed z-50  top-0  px-4 lg:px-12 justify-between items-center h-20 bg-white dark:bg-slate-900 w-full shadow-mintflick	">
+    <div
+      className={`${
+        State.database.showHeader ? "" : "-translate-y-24"
+      } transition ease-in-out hidden lg:flex fixed z-50  top-0  px-4 lg:px-12 justify-between items-center h-20 bg-white dark:bg-slate-900 w-full shadow-mintflick`}
+    >
       <div className="flex items-center space-x-4 h-full w-1/3 -ml-2">
         <Link to={`/homescreen/home`}>
           {!State.database.dark ? (
