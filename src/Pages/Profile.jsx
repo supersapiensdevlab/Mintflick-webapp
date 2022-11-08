@@ -14,7 +14,9 @@ import MintWallet from "../Componants/Profile/MintWallet";
 
 function Profile() {
   const State = useContext(UserContext);
-
+  useEffect(() => {
+    State.updateDatabase({ showHeader: true });
+  }, []);
   const { userName } = useParams();
   const [loader, setloader] = useState(false);
 

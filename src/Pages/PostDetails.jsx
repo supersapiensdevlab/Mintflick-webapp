@@ -6,6 +6,9 @@ import { UserContext } from "../Store";
 
 function PostDetails() {
   const State = useContext(UserContext);
+  useEffect(() => {
+    State.updateDatabase({ showHeader: true });
+  }, []);
   const { userName, type, id } = useParams();
   const [post, setpost] = useState(null);
 

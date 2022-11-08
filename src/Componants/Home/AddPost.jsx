@@ -94,8 +94,8 @@ function AddPost() {
       {/* FAB */}
       <div
         className={`${
-          State.database.showHeader ? "bottom-24" : "bottom-4"
-        } transition-all ease-in-out lg:hidden fixed  right-2 z-40 dropdown dropdown-top dropdown-end `}
+          State.database.showHeader ? "" : "translate-y-20"
+        } bottom-24 transition-all ease-in-out lg:hidden fixed  right-2 z-40 dropdown dropdown-top dropdown-end `}
       >
         <label
           tabindex="0"
@@ -103,7 +103,14 @@ function AddPost() {
             State.database.showHeader ? "gap-2 " : "btn-circle"
           } btn btn-md rounded-full btn-brand`}
         >
-          <Plus /> {State.database.showHeader && "Post"}
+          <Plus />
+          <span
+            className={`${
+              State.database.showHeader ? "w-fit opacity-100" : "w-0 opacity-0"
+            }`}
+          >
+            Post
+          </span>
         </label>
         <ul
           tabindex="0"

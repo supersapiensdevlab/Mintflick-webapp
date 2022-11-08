@@ -46,7 +46,7 @@ function MobileHeader() {
     <div
       className={`${
         State.database.showHeader ? "" : "-translate-y-16"
-      } transition ease-in-out lg:hidden fixed z-50  top-0 flex px-4 lg:px-12 justify-between items-center h-16 bg-white dark:bg-slate-900 w-full shadow-mintflick`}
+      } transition-all ease-in-out lg:hidden fixed z-50  top-0 flex px-4 lg:px-12 justify-between items-center h-16 bg-white dark:bg-slate-900 w-full shadow-mintflick`}
     >
       <div className="flex justify-between items-center space-x-4 h-full w-full">
         <div className="dropdown  mt-2">
