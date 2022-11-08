@@ -71,7 +71,7 @@ function AddPost() {
             <Video className="group-hover:motion-safe:animate-bounce"></Video>
             Video
           </button>
-          <button
+          {/* <button
             onClick={() => {
               setaudioPostModalOpen(true);
             }}
@@ -79,7 +79,7 @@ function AddPost() {
           >
             <Music className="group-hover:motion-safe:animate-bounce"></Music>
             Music
-          </button>
+          </button> */}
           <button
             onClick={() => {
               setpollModalOpen(true);
@@ -133,7 +133,7 @@ function AddPost() {
               Video
             </a>
           </li>
-          <li>
+          {/* <li>
             <a
               onClick={() => {
                 setaudioPostModalOpen(true);
@@ -143,7 +143,7 @@ function AddPost() {
               <Music />
               Audio
             </a>
-          </li>
+          </li> */}
           <li>
             <a
               onClick={() => {

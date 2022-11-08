@@ -20,7 +20,7 @@ async function filterData(value, list, func, isNew = false) {
   });
 }
 
-function ChatsList({ userName, dms, rooms }) {
+function ChatsList({ userName, dms, rooms, socket }) {
   const State = useContext(UserContext);
   const [showChats, setshowChats] = useState(true);
   const location = useLocation();
@@ -81,6 +81,80 @@ function ChatsList({ userName, dms, rooms }) {
       setFilteredRooms(rooms);
     }
   }, [search]);
+
+  // For latest message
+  // useEffect(() => {
+  //   // initialize gun locally
+  //   if (user.database.userData.data) {
+  //     loadingRef.current.continuousStart();
+  //     socket.connect();
+  //     if (!isDM) {
+  //       socket.emit("joinroom", {
+  //         user_id: user.database.userData.data.user._id,
+  //         room_id: username,
+  //       });
+  //     } else {
+  //       socket.emit("joindm", {
+  //         user_id: user.database.userData.data.user.id,
+  //         room_id: user2.id,
+  //       });
+  //     }
+  //     socket.on("init", (msgs) => {
+  //       if (loadingRef.current) {
+  //         loadingRef.current.complete();
+  //       }
+  //       setMessages(msgs.chats);
+  //       setTotalpages(msgs.totalPages);
+  //       setCurrentpage(msgs.currentPage);
+  //       if (msgs.roomId) setRoomId(msgs.roomId);
+  //       setTimeout(() => {
+  //         if (chatRef.current) {
+  //           chatRef.current.scrollIntoView({
+  //             behavior: "smooth",
+  //             block: "end",
+  //             inline: "nearest",
+  //           });
+  //         }
+  //       }, 1000);
+  //     });
+  //     socket.on("getmore", (msgs) => {
+  //       // loadingRef.current.complete();
+  //       setMessages((prevArray) => [...msgs.chats, ...prevArray]);
+  //       setTotalpages(msgs.totalPages);
+  //       setCurrentpage(msgs.currentPage);
+  //       setLoadingOldChats(false);
+  //       // setTimeout(() => {
+  //       //   chatRef.current.scrollIntoView({ behavior: 'smooth' });
+  //       // }, 1500);
+  //     });
+  //     socket.on("message", (msg) => {
+  //       console.log("mesg income");
+  //       setMessages((prevArray) => [...prevArray, msg]);
+  //       setTimeout(() => {
+  //         chatRef.current.scrollIntoView({
+  //           behavior: "smooth",
+  //           block: "end",
+  //           inline: "nearest",
+  //         });
+  //       }, 200);
+  //     });
+
+  //     socket.on("conversations", (conversations) => {
+  //       if (conversations.dms) setDms(conversations.dms);
+  //       if (conversations.rooms) setRooms(conversations.rooms);
+  //     });
+  //   } else {
+  //     window.history.replaceState({}, "Home", "/");
+  //   }
+  //   return () => {
+  //     socket.disconnect();
+  //     socket.off("message");
+  //     socket.off("getmore");
+  //     socket.off("init");
+  //     socket.off("conversations");
+  //   };
+  //   // eslint-disable-next-line
+  // }, [username, isDM]);
 
   return (
     <div className="flex flex-col items-start py-2 bg-slate-100 dark:bg-slate-800 w-full h-fit rounded-lg ">
