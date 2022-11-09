@@ -1215,7 +1215,6 @@ function Post(props) {
           </div>
         ) : (
           <>
-            {console.log(props.profileUsername)}
             {State.database.userData?.data?.user?.username ==
               props.profileUsername && props.contentType == "post" ? (
               <div className="w-full flex justify-end">

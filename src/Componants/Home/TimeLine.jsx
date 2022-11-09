@@ -70,8 +70,6 @@ function TimeLine() {
       .catch((error) => console.log("error", error));
   }, []);
 
-  console.log(nfts);
-
   return (
     <InfiniteScroll
       className="w-full max-w-2xl  space-y-6 mb-4"

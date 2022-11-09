@@ -194,7 +194,6 @@ function ThoughtPostModal({ setthoughtPostModalOpen }) {
       });
   };
 
-  console.log(caption);
 
   // Minting
   // const [minting, setMinting] = useState(null);
@@ -209,8 +208,6 @@ function ThoughtPostModal({ setthoughtPostModalOpen }) {
     tagged.push(e);
     console.log(tagged);
   };
-
-  console.log(isNFT);
 
   //handle thought submit
   const handleThoughtPost = () => {

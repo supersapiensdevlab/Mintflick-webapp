@@ -452,7 +452,6 @@ function Header() {
                 {notification.map((value, i) => {
                   return (
                     <div key={i} className="w-full ">
-                      {console.log(value)}
                       <NotificationContent data={value} />
                     </div>
                   );

@@ -8,7 +8,6 @@ moment().format();
 const NotificationContent = ({ data }) => {
   const [userLiveTime, setUserLiveTime] = useState(null);
 
-  console.log(data);
 
   useEffect(() => {
     const timestamp = new Date(data.time * 1000); // This would be the timestamp you want to format
