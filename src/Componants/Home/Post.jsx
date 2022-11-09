@@ -1414,6 +1414,8 @@ function Post(props) {
       <ListNFTModal
         listModalOpen={listModalOpen}
         setListModalOpen={setListModalOpen}
+        content={props?.image}
+        tokenId={props.content?.tokenId}
       />
     </>
   );

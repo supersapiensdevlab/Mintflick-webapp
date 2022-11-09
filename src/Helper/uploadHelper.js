@@ -7,7 +7,7 @@ export function makeStorageClient() {
   });
 }
 
-export function uploadFile(files) {
+export async function uploadFile(files) {
   console.log(files);
   // show the root cid as soon as it's ready
   const onRootCidReady = (cid) => {
@@ -25,6 +25,7 @@ export function uploadFile(files) {
 
   // makeStorageClient returns an authorized Web3.Storage client instance
   const client = makeStorageClient();
+  console.log(client);
 
   // client.put will invoke our callbacks during the upload
   // and return the root cid when the upload completes

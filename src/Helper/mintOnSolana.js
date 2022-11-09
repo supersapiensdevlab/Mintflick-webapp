@@ -60,10 +60,14 @@ export async function signTransaction(transaction, key) {
 }
 
 export async function partialSignWithWallet(encodedTransaction, provider) {
+  console.log(encodedTransaction);
+
   //we have to pass the recoveredTransaction received in the previous step in the encodedTransaction parameter
   const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
   const solanaWallet = new SolanaWallet(provider); // web3auth.provider
+  console.log(solanaWallet);
   const signedTx = await solanaWallet.signTransaction(encodedTransaction);
+  console.log(signedTx);
 
   //signing transaction with the creator_wallet
   const confirmTransaction = await connection.sendRawTransaction(
@@ -71,3 +75,31 @@ export async function partialSignWithWallet(encodedTransaction, provider) {
   );
   return confirmTransaction;
 }
+
+export const listNFTOnSolana = async (nft_address, price, seller_wallet) => {
+  let response;
+  var raw = JSON.stringify({
+    network: "devnet",
+    marketplace_address: process.env.REACT_APP_SOLANA_MARKETPLACE_ADDRESS,
+    nft_address: nft_address,
+    price: parseInt(price),
+    seller_wallet: seller_wallet,
+  });
+
+  console.log(raw);
+  await axios
+    .post(`https://api.shyft.to/sol/v1/marketplace/list_gasless`, raw, {
+      headers: {
+        "x-api-key": `${process.env.REACT_APP_SHYFT_API_KEY}`,
+        "content-type": "application/json",
+      },
+    })
+    .then((res) => {
+      response = res;
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+
+  return response;
+};
