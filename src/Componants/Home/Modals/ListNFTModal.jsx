@@ -3,93 +3,69 @@ import { useState } from "react";
 import { Award, CheckupList, Share, X } from "tabler-icons-react";
 import { UserContext } from "../../../Store";
 import {
-  mintNFTOnSolana,
   signTransaction,
   partialSignWithWallet,
+  listNFTOnSolana,
 } from "../../../Helper/mintOnSolana";
 import axios from "axios";
 import useUserActions from "../../../Hooks/useUserActions";
+import useLoadNfts from "../../../Hooks/useLoadNfts";
+import SolanaToken from "../../../Assets/logos/SolanaToken";
+import PolygonToken from "../../../Assets/logos/PolygonToken";
 
-function ListNFTModal({ listModalOpen, setListModalOpen }) {
+function ListNFTModal({ listModalOpen, setListModalOpen, content, tokenId }) {
   const State = useContext(UserContext);
   const [successMessage, setSuccessMessage] = useState(
-    "Please confirm to mint this post as an NFT"
+    "Please enter the price & confirm to list the NFT for sale"
   );
-  const [minting, setMinting] = useState(false);
+  const [listing, setListing] = useState(false);
   const [loadFeed, loadUser] = useUserActions();
+  const [loadNfts] = useLoadNfts();
+  const [price, setPrice] = useState(0);
 
-  //   const uploadToServer = (mintId) => {
-  //     let data = {
-  //       tokenId: mintId,
-  //       contentId: id,
-  //     };
-  //     axios
-  //       .post(`${process.env.REACT_APP_SERVER_URL}/user/add_tokenid`, data, {
-  //         headers: {
-  //           "content-type": "application/json",
-  //           "auth-token": JSON.stringify(localStorage.getItem("authtoken")),
-  //         },
-  //       })
-  //       .then(async (res) => {
-  //         State.toast("success", "Your Photo uploded successfully!");
-  //         await loadFeed();
-  //         await loadUser();
-  //       })
-  //       .catch((err) => {
-  //         State.toast("error", "Oops!somthing went wrong uplaoding photo!");
-  //         console.log(err);
-  //         clearData();
-  //       });
-  //   };
+  const clearData = () => {
+    setListing(false);
+    setSuccessMessage(
+      "Please enter the price & confirm to list the NFT for sale"
+    );
+  };
 
-  //   const nftMinted = (mintId) => {
-  //     uploadToServer(mintId);
-  //     setMinting(false);
-  //     setSuccessMessage("NFT minted successfully!");
-  //   };
+  const handleListing = async (e) => {
+    e.preventDefault();
+    if (price > 0) {
+      setListing(true);
+      setSuccessMessage("Please sign the transaction to list the NFT");
 
-  //   const clearData = () => {
-  //     setMinting(false);
-  //     setSuccessMessage("Please confirm to mint this post as an NFT");
-  //   };
-
-  //   const handleMinting = async () => {
-  //     setMinting(true);
-
-  //     const response = await fetch(content);
-  //     // here image is url/location of image
-  //     const blob = await response.blob();
-  //     const file = new File([blob], "image.jpg", { type: blob.type });
-  //     console.log(file);
-  //     await mintNFTOnSolana(
-  //       State.database.walletAddress,
-  //       name,
-  //       name,
-  //       content,
-  //       file
-  //     )
-  //       .then(async (data) => {
-  //         console.log("MintID", data.data.result.mint);
-  //         await signTransaction(
-  //           data.data.result.encoded_transaction,
-  //           `${process.env.REACT_APP_FEEPAYER_PRIVATEKEY}`
-  //         )
-  //           .then((res) => {
-  //             console.log(res);
-  //             partialSignWithWallet(res, State.database?.provider).then(() => {
-  //               nftMinted(data.data.result.mint);
-  //             });
-  //           })
-  //           .catch((err) => {
-  //             console.log(err);
-  //           });
-  //       })
-  //       .catch((err) => {
-  //         console.log(err);
-  //         State.toast("error", "Error minting NFT. Please try again!");
-  //         clearData();
-  //       });
-  //   };
+      listNFTOnSolana(tokenId, price, State.database?.walletAddress)
+        .then(async (data) => {
+          console.log(data);
+          await signTransaction(
+            data.data.result.encoded_transaction,
+            `${process.env.REACT_APP_FEEPAYER_PRIVATEKEY}`
+          )
+            .then(async (res) => {
+              partialSignWithWallet(res, State.database?.provider).then(
+                async () => {
+                  setListing(false);
+                  setSuccessMessage("NFT listed successfully !");
+                  await loadNfts();
+                  await loadFeed();
+                }
+              );
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        })
+        .catch((err) => {
+          console.log(err);
+          State.toast("error", "Error listing NFT. Please try again!");
+        });
+    } else {
+      setSuccessMessage("Price should be greater than 0 !");
+      return;
+    }
+  };
   return (
     <div
       className={`${
@@ -106,15 +82,48 @@ function ListNFTModal({ listModalOpen, setListModalOpen }) {
             <X
               onClick={() => {
                 setListModalOpen(false);
-                // clearData();
+                clearData();
               }}
               className="text-brand2 cursor-pointer"
             ></X>
           </div>
         </div>
 
-        <div className="flex flex-wrap p-4 w-full space-y-4 justify-center text-white">
-          <p className="py-5">Comming Soon !</p>
+        <div className="flex flex-col flex-wrap p-4 w-full space-y-4 justify-center text-white">
+          <img src={content} className="h-96 w-full object-cover rounded-lg" />
+          <div className="form-control">
+            <label className="input-group">
+              <input
+                min={1}
+                type="number"
+                placeholder="1"
+                className="input input-bordered input-sm w-24"
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
+                required={true}
+              />
+              <span className="text-brand3 bg-slate-300 dark:bg-slate-600 ">
+                {State.database.chainId === 0 ? (
+                  <>
+                    <SolanaToken></SolanaToken>&nbsp; SOL
+                  </>
+                ) : (
+                  <>
+                    <PolygonToken></PolygonToken> &nbsp; Matic
+                  </>
+                )}
+              </span>
+            </label>
+          </div>
+          <p>{successMessage}</p>
+          <button
+            onClick={handleListing}
+            className={`btn  
+                    btn-brand
+                  w-full ${listing ? "loading" : ""} `}
+          >
+            confirm
+          </button>
         </div>
       </div>
     </div>

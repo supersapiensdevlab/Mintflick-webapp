@@ -60,56 +60,59 @@ function PollModal({ setPollModalOpen }) {
   }, [options]);
 
   return (
-    <div className='modal-box p-0 bg-slate-100 dark:bg-slate-800 '>
-      <div className='w-full h-fit p-2 bg-slate-300 dark:bg-slate-700'>
-        <div className='flex justify-between items-center p-2'>
-          <h3 className='flex items-center gap-2 font-bold text-lg text-brand2'>
+    <div className="modal-box p-0 bg-slate-100 dark:bg-slate-800 ">
+      <div className="w-full h-fit p-2 bg-slate-300 dark:bg-slate-700">
+        <div className="flex justify-between items-center p-2">
+          <h3 className="flex items-center gap-2 font-bold text-lg text-brand2">
             <ChartBar />
             Take Poll
           </h3>
           <X
             onClick={() => clearState()}
-            className='text-brand2 cursor-pointer'></X>
+            className="text-brand2 cursor-pointer"
+          ></X>
         </div>
       </div>
       <form onSubmit={handleSubmit}>
-        <div className='w-full p-4 space-y-3'>
+        <div className="w-full p-4 space-y-3">
           <input
-            type='text'
-            placeholder='Ask a question...'
-            className='input w-full '
+            type="text"
+            placeholder="Ask a question..."
+            className="input w-full "
             value={question}
             onChange={(e) => setQuestion(e.target.value)}
             required
           />
-          <div className='w-full flex flex-col gap-1'>
+          <div className="w-full flex flex-col gap-1">
             {options.map((option, i) => (
               <div
                 key={i}
-                className='flex gap-2 p-2 border-2 rounded-lg border-slate-200 dark:border-slate-700'>
-                <span className='w-full text-brand2 '>{option.option}</span>
+                className="flex gap-2 p-2 border-2 rounded-lg border-slate-200 dark:border-slate-700"
+              >
+                <span className="w-full text-brand2 ">{option.option}</span>
                 <button
                   onClick={() => {
                     setoptions(
                       options.filter((item, index) => {
                         return index !== i;
-                      }),
+                      })
                     );
                   }}
-                  className='btn  btn-error btn-xs text-slate-50'>
+                  className="btn  btn-error btn-xs text-slate-50"
+                >
                   remove
                 </button>
               </div>
             ))}
           </div>
           {options.length < 4 && (
-            <div className='flex gap-2'>
+            <div className="flex gap-2">
               <input
-                type='text'
+                type="text"
                 onChange={(e) => setoption(e.target.value)}
                 value={option}
-                placeholder='Add option'
-                className='input w-full '
+                placeholder="Add option"
+                className="input w-full "
               />
 
               <button
@@ -120,13 +123,14 @@ function PollModal({ setPollModalOpen }) {
                     setoption("");
                   }
                 }}
-                className={`btn  btn-primary btn-outline`}>
+                className={`btn  btn-primary btn-outline`}
+              >
                 Add
               </button>
             </div>
           )}
 
-          <div className='w-fit flex space-x-2'>
+          {/* <div className='w-fit flex space-x-2'>
             <label className='flex items-center cursor-pointer gap-2'>
               <input
                 type='checkbox'
@@ -162,16 +166,17 @@ function PollModal({ setPollModalOpen }) {
                 </label>
               </div>
             )}
-          </div>
+          </div> */}
           <button
             type={"submit"}
-            role='button'
-            aria-disabled='true'
-            className={`btn  w-full ${uploadingPoll ? "loading" : ""} ${
+            role="button"
+            aria-disabled="true"
+            className={`btn w-full ${uploadingPoll ? "loading" : ""} ${
               question == "" || options.length < 2 || option !== ""
                 ? "btn-disabled"
                 : "btn-brand"
-            }`}>
+            }`}
+          >
             Take poll
           </button>
         </div>

@@ -28,6 +28,7 @@ import {
   mintNFTOnSolana,
   signTransaction,
   partialSignWithWallet,
+  listNFTOnSolana,
 } from "../../../Helper/mintOnSolana";
 
 function PhotoPostModal({ setphotoPostModalOpen }) {
@@ -257,33 +258,9 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
   const listNFTForSale = async (e) => {
     e.preventDefault();
     setUploadingPost(true);
-    var raw = JSON.stringify({
-      network: "devnet",
-      marketplace_address: process.env.REACT_APP_SOLANA_MARKETPLACE_ADDRESS,
-      nft_address: solanaMintId,
-      price: parseInt(nftPrice),
-      seller_wallet: State.database.walletAddress,
-    });
-
-    console.log(raw);
-    axios
-      .post(`https://api.shyft.to/sol/v1/marketplace/list_gasless`, raw, {
-        headers: {
-          "x-api-key": `${process.env.REACT_APP_SHYFT_API_KEY}`,
-          "content-type": "application/json",
-        },
-      })
+    listNFTOnSolana(solanaMintId, nftPrice, State.database?.walletAddress)
       .then(async (data) => {
-        console.log(data.data);
-        // await signTransaction(
-        //   "devnet",
-        //   data.data.result.encoded_transaction,
-        //   async () => {
-        //     setMintSuccess("NFT Listed Successfully");
-        //     setUploadingPost(false);
-        //     await loadNfts();
-        //   }
-        // );
+        console.log(data);
         await signTransaction(
           data.data.result.encoded_transaction,
           `${process.env.REACT_APP_FEEPAYER_PRIVATEKEY}`
