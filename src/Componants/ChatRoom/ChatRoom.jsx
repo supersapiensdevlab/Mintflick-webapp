@@ -104,6 +104,10 @@ function ChatRoom(props) {
   const [roomId, setRoomId] = useState(null);
   useEffect(() => {
     // initialize gun locally
+    setForm({
+      message: "",
+      replyto: null,
+    });
     if (user.database.userData.data) {
       loadingRef.current.continuousStart();
       socket.connect();
@@ -180,8 +184,8 @@ function ChatRoom(props) {
   }, [messages]);
 
   // set a new message in gun, update the local state to reset the form field
-  function saveMessage(e) {
-    e.preventDefault();
+
+  function saveMsg() {
     if (selectedFile) {
       setUploadingFile(true);
       storeWithProgress(selectedFile.file)
@@ -269,6 +273,10 @@ function ChatRoom(props) {
     });
     setShowEmojis(false);
   }
+  function saveMessage(e) {
+    e.preventDefault();
+    saveMsg();
+  }
 
   const handleKeyDown = (event) => {
     // Get the code of pressed key
@@ -282,95 +290,7 @@ function ChatRoom(props) {
       // Do something else such as send the message to back-end
       // ...
       if (event.key === "Enter" && formState.message.length > 0) {
-        if (selectedFile) {
-          setUploadingFile(true);
-          storeWithProgress(selectedFile.file)
-            .then((cid) => {
-              setUploadingFile(false);
-              console.log(
-                "https://ipfs.io/ipfs/" + cid + "/" + selectedFile.file[0].name
-              );
-              let room = {
-                room_admin: username,
-                chat: {
-                  user_id: user.database.userData.data.user._id,
-                  type: selectedFile.type,
-                  message: formState.message,
-                  createdAt: Date.now(),
-                  url:
-                    "https://ipfs.io/ipfs/" +
-                    cid +
-                    "/" +
-                    selectedFile.file[0].name,
-                  size: selectedFile.size,
-                },
-              };
-              if (formState.replyto) {
-                room.chat.reply_to = formState.replyto;
-              }
-              if (!isDM) {
-                socket.emit("chatMessage", room);
-              } else {
-                console.log("emmiting chatDM");
-                socket.emit("chatDM", {
-                  chat: room.chat,
-                  user_id: user.database.userData.data.user.id,
-                  user2_id: user2.id,
-                  room_id: roomId,
-                });
-              }
-              setForm({
-                message: "",
-                replyto: null,
-              });
-              setShowEmojis(false);
-              setShowAttachmentDropdown(false);
-              setSelectedFile(null);
-            })
-            .catch((err) => {
-              console.log(err);
-              setForm({
-                message: "",
-                replyto: null,
-              });
-              setUploadingFile(false);
-              setShowEmojis(false);
-              setShowAttachmentDropdown(false);
-              setSelectedFile(null);
-            });
-          return;
-        }
-        let room = {
-          room_admin: username,
-          chat: {
-            user_id: user.database.userData.data.user._id,
-            username: user.database.userData.data.user.username,
-            profile_image: user.database.userData.data.user.profile_image,
-            type: "text",
-            message: formState.message,
-            createdAt: Date.now(),
-          },
-        };
-        if (formState.replyto) {
-          room.chat.reply_to = formState.replyto;
-        }
-        if (socket) {
-          if (!isDM) {
-            socket.emit("chatMessage", room);
-          } else {
-            socket.emit("chatDM", {
-              chat: room.chat,
-              user_id: user.database.userData.data.user.id,
-              user2_id: user2.id,
-              room_id: roomId,
-            });
-          }
-        }
-        setForm({
-          message: "",
-          replyto: null,
-        });
-        setShowEmojis(false);
+        saveMsg();
       }
     }
   };
@@ -446,7 +366,12 @@ function ChatRoom(props) {
         <ChatsListMobile userName={username} />
       </div>
       <div className="hidden lg:flex flex-col h-full w-1/4 ml-12 mr-4 pt-24 space-y-6 overflow-y-auto">
-        <ChatsList userName={username} dms={dms} rooms={rooms} />
+        <ChatsList
+          userName={username}
+          dms={dms}
+          rooms={rooms}
+          socket={socket}
+        />
       </div>
 
       <div className=" relative  rounded-lg hidden  lg:flex flex-col lg:w-2/4 w-full overflow-clip  mt-14 lg:mt-24 bg-slate-100 dark:bg-slate-800 ">
@@ -809,13 +734,13 @@ function ChatRoom(props) {
                     </div>
                   </div>
                 </div>
-                <button
-                  className="btn btn-xs btn-error btn-circle  text-white "
-                  onClick={() => {
-                    setForm({ ...formState, replyto: null });
-                  }}
-                >
-                  <i className="fa-solid fa-xmark text-lg  "></i>
+                <button className="btn btn-xs btn-error btn-circle  text-white ">
+                  <i
+                    onClick={() => {
+                      setForm({ ...formState, replyto: null });
+                    }}
+                    className="fa-solid fa-xmark text-lg  cursor-pointer"
+                  ></i>
                 </button>
               </div>
             ) : null}

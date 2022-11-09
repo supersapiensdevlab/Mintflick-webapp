@@ -92,9 +92,25 @@ function AddPost() {
         </div>
       </div>
       {/* FAB */}
-      <div className="lg:hidden fixed bottom-24 right-2 z-40 dropdown dropdown-top dropdown-end ">
-        <label tabindex="0" className="btn btn-lg btn-circle btn-brand">
+      <div
+        className={`${
+          State.database.showHeader ? "" : "translate-y-20"
+        } bottom-24 transition-all ease-in-out lg:hidden fixed  right-2 z-40 dropdown dropdown-top dropdown-end `}
+      >
+        <label
+          tabindex="0"
+          className={`${
+            State.database.showHeader ? "gap-2 " : "btn-circle"
+          } btn btn-md rounded-full btn-brand`}
+        >
           <Plus />
+          <span
+            className={`${
+              State.database.showHeader ? "w-fit opacity-100" : "w-0 opacity-0"
+            }`}
+          >
+            Post
+          </span>
         </label>
         <ul
           tabindex="0"
@@ -133,7 +149,7 @@ function AddPost() {
               Video
             </a>
           </li>
-          <li>
+          {/* <li>
             <a
               onClick={() => {
                 setaudioPostModalOpen(true);
@@ -143,7 +159,7 @@ function AddPost() {
               <Music />
               Audio
             </a>
-          </li>
+          </li> */}
           <li>
             <a
               onClick={() => {
