@@ -182,8 +182,7 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
       });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = () => {
     if (!uploadingPost) {
       let filter = [];
       tagged.forEach((value) => {
@@ -548,7 +547,10 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
                 </button>
               ) : (
                 <button
-                  onClick={handleSubmit}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleSubmit();
+                  }}
                   className={`btn  ${
                     !selectedPost?.file[0] ? "btn-disabled" : "btn-brand"
                   } w-full ${uploadingPost ? "loading " : ""}`}
