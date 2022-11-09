@@ -7,7 +7,7 @@ export function makeStorageClient() {
   });
 }
 
-export async function uploadFile(files) {
+export function uploadFile(files) {
   console.log(files);
   // show the root cid as soon as it's ready
   const onRootCidReady = (cid) => {
