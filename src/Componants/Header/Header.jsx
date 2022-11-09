@@ -207,8 +207,8 @@ function Header() {
   };
 
   const handleKeyDown = (event) => {
-    if (event.key === "Enter" && wordEntered.length>0) {
-      navigateTo('/homescreen/explore')
+    if (event.key === "Enter" && wordEntered.length > 0) {
+      navigateTo("/homescreen/explore");
     }
   };
 
@@ -248,9 +248,52 @@ function Header() {
       });
   };
 
+  const handleAuthorityUpdate = async () => {
+    // let data = {
+    //   network: "devnet",
+    //   marketplace_address: "48y3xy4e4YbYKYfbGUjojdqDxJ59HwLXpqCyoTckuQhR",
+    //   authority_wallet: "4uHdbP7FkB4BSx6QAL15wgaphNn33jtpRq9ohMoMC8U2",
+    //   new_authority_address: "8RLBjB2P1ttf5tvn1CimRfrzDg1eThn7dvADXUsbTnPK",
+    // };
+    // await axios
+    //   .post(`https://api.shyft.to/sol/v1/marketplace/update`, data, {
+    //     headers: {
+    //       "x-api-key": `${process.env.REACT_APP_SHYFT_API_KEY}`,
+    //       "content-type": "application/json",
+    //     },
+    //   })
+    //   .then((res) => {
+    //     console.log(res);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
+    let data = {
+      network: "devnet",
+      creator_wallet: "8RLBjB2P1ttf5tvn1CimRfrzDg1eThn7dvADXUsbTnPK",
+      transaction_fee: 10,
+    };
+    await axios
+      .post(`https://api.shyft.to/sol/v1/marketplace/create`, data, {
+        headers: {
+          "x-api-key": `${process.env.REACT_APP_SHYFT_API_KEY}`,
+          "content-type": "application/json",
+        },
+      })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <div className="hidden lg:flex fixed z-50  top-0  px-4 lg:px-12 justify-between items-center h-20 bg-white dark:bg-slate-900 w-full shadow-mintflick	">
-      <div className="flex items-center space-x-4 h-full w-1/3 -ml-2">
+      <div
+        className="flex items-center space-x-4 h-full w-1/3 -ml-2"
+        onClick={handleAuthorityUpdate}
+      >
         <Link to={`/homescreen/home`}>
           {!State.database.dark ? (
             <Main_logo_dark></Main_logo_dark>

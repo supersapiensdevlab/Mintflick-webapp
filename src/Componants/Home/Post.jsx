@@ -4,6 +4,8 @@ import {
   AlertOctagon,
   ArrowNarrowRight,
   At,
+  Award,
+  CheckupList,
   CircleCheck,
   Comet,
   DotsVertical,
@@ -41,6 +43,8 @@ import { Image } from "react-img-placeholder";
 import { Link } from "react-router-dom";
 import ReportModal from "./Modals/ReportModal";
 import { useNavigate } from "react-router-dom";
+import MintNFTModal from "./Modals/MintNFTModal";
+import ListNFTModal from "./Modals/ListNFTModal";
 function Post(props) {
   const nav = useNavigate();
   // Common State and Functions
@@ -106,6 +110,10 @@ function Post(props) {
   const [deleteConfirmationModal, setDeleteConfirmationModal] = useState(false);
   //Join superfan modal
   const [joinsuperfanModalOpen, setJoinsuperfanModalOpen] = useState(false);
+
+  const [mintModalOpen, setMintModalOpen] = useState(false);
+
+  const [listModalOpen, setListModalOpen] = useState(false);
 
   const [pollOptions, setPollOptions] = useState([]);
 
@@ -1128,43 +1136,83 @@ function Post(props) {
                 {owner?.slice(0, 6) + "..." + owner?.slice(-4)}
               </p>
             </div>
-            <div
-              onClick={() =>
-                State.updateDatabase({
-                  buyNFTModalData: {
-                    ownedBy: owner,
-                    nftName: props.trackName
-                      ? props.trackName
-                      : props.videoName
-                      ? props.videoName
-                      : props.text
-                      ? props.text
-                      : null,
-                    nftImage: props.trackImage
-                      ? props.trackImage
-                      : props.videoImage
-                      ? props.videoImage
-                      : props.image
-                      ? props.image
-                      : "https://lh3.googleusercontent.com/yCbypC0JI61YbUFf_5ULkHJonhKZpLt63wY4ZAP5DZLYuMfcwr28zdq5TDSyhtl0Ifg2mNrtrJ3tbBOW_XKEWNctFdx1LEaLTaDExg=w600",
-                    nftDescription: props.content.description,
-                    nftPrice: price,
-                    tokenId: props.content.tokenId,
-                    sellerAddress: props.walletId,
-                  },
+            {price > 0 ? (
+              <div
+                onClick={() =>
+                  State.updateDatabase({
+                    buyNFTModalData: {
+                      ownedBy: owner,
+                      nftName: props.trackName
+                        ? props.trackName
+                        : props.videoName
+                        ? props.videoName
+                        : props.text
+                        ? props.text
+                        : null,
+                      nftImage: props.trackImage
+                        ? props.trackImage
+                        : props.videoImage
+                        ? props.videoImage
+                        : props.image
+                        ? props.image
+                        : "https://lh3.googleusercontent.com/yCbypC0JI61YbUFf_5ULkHJonhKZpLt63wY4ZAP5DZLYuMfcwr28zdq5TDSyhtl0Ifg2mNrtrJ3tbBOW_XKEWNctFdx1LEaLTaDExg=w600",
+                      nftDescription: props.content.description,
+                      nftPrice: price,
+                      tokenId: props.content.tokenId,
+                      sellerAddress: props.walletId,
+                    },
 
-                  buyNFTModalOpen: true,
-                })
-              }
-              className="cursor-pointer items-center  btn btn-xs btn-primary btn-outline gap-1 ml-auto rounded-md"
-            >
-              {/* <PolygonToken></PolygonToken> */}
-              {/* <p className="text-sm  mx-1">{props.price}</p> */}
-              <Wallet size={20} />
-              Buy
-            </div>
+                    buyNFTModalOpen: true,
+                  })
+                }
+                className="cursor-pointer items-center  btn btn-xs btn-primary btn-outline gap-1 ml-auto rounded-md"
+              >
+                {/* <PolygonToken></PolygonToken> */}
+                {/* <p className="text-sm  mx-1">{props.price}</p> */}
+                <Wallet size={18} />
+                Buy
+              </div>
+            ) : (
+              <>
+                {State.database.userData?.data?.user?.username ===
+                props.profileUsername ? (
+                  <div
+                    className="cursor-pointer items-center  btn btn-xs btn-primary btn-outline gap-1 ml-auto rounded-md"
+                    onClick={() => setListModalOpen(true)}
+                  >
+                    {/* <PolygonToken></PolygonToken> */}
+                    {/* <p className="text-sm  mx-1">{props.price}</p> */}
+                    <CheckupList size={18} />
+                    List
+                  </div>
+                ) : (
+                  <></>
+                )}
+              </>
+            )}
           </div>
-        ) : null}
+        ) : (
+          <>
+            {State.database.userData?.data?.user?.username ===
+              props.profileUsername && props.content_type == "post" ? (
+              <div className="w-full flex justify-end">
+                <div
+                  className="cursor-pointer items-center btn btn-xs btn-primary btn-outline gap-1 ml-auto rounded-md"
+                  onClick={() => {
+                    setMintModalOpen(true);
+                  }}
+                >
+                  {/* <PolygonToken></PolygonToken> */}
+                  {/* <p className="text-sm  mx-1">{props.price}</p> */}
+                  <Award size={18} />
+                  Mint
+                </div>
+              </div>
+            ) : (
+              <></>
+            )}
+          </>
+        )}
         <div className="flex justify-between">
           <div className="flex items-center space-x-4">
             {props.contentType === "post" && (
@@ -1333,6 +1381,17 @@ function Post(props) {
           postUsername={props.profileName}
         />
       </div>
+      <MintNFTModal
+        mintModalOpen={mintModalOpen}
+        setMintModalOpen={setMintModalOpen}
+        content={props?.image}
+        name={props.text}
+        id={props.postId}
+      />
+      <ListNFTModal
+        listModalOpen={listModalOpen}
+        setListModalOpen={setListModalOpen}
+      />
     </>
   );
 }

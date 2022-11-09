@@ -161,7 +161,7 @@ function FollowersModal(props) {
               "bg-slate-100  border-t-2 border-success dark:bg-slate-800"
             }`}
           >
-            {followers.length} Followers
+            {followers?.length} Followers
           </span>
           <span
             onClick={() => props.settab(2)}
@@ -170,7 +170,7 @@ function FollowersModal(props) {
               "bg-slate-100  border-t-2 border-success dark:bg-slate-800"
             }`}
           >
-            {following.length} Following
+            {following?.length} Following
           </span>
           <span
             onClick={() => props.settab(3)}
@@ -179,7 +179,7 @@ function FollowersModal(props) {
               "bg-slate-100  border-t-2 border-success dark:bg-slate-800"
             }`}
           >
-            {superfans.length} Superfans
+            {superfans?.length} Superfans
           </span>
         </div>
 
@@ -350,7 +350,7 @@ function FollowersModal(props) {
                   "bg-slate-100  border-b-2 border-success dark:bg-slate-800"
                 }`}
               >
-                {superfans.length} Superfans
+                {superfans?.length} Superfans
               </span>
               <span
                 onClick={() => setSuperfanTab(1)}
@@ -359,7 +359,7 @@ function FollowersModal(props) {
                   "bg-slate-100  border-b-2 border-success dark:bg-slate-800"
                 }`}
               >
-                {superfansTo.length} Superfan To
+                {superfansTo?.length} Superfan To
               </span>
             </div>
             {superfanTab == 0 ? (
