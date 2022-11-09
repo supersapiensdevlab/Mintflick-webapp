@@ -34,6 +34,7 @@ function ProfileVisitCard({ username }) {
   }
 
   useEffect(() => {
+    console.log("called");
     getUser();
   }, [username]);
 
@@ -133,7 +134,7 @@ function ProfileVisitCard({ username }) {
               setfollowersModalOpen(true);
             }}
           >
-            {cardUser?.follower_count?.length}
+            {cardUser?.followee_count?.length}
             <p className="flex items-center  text-xs text-primary font-medium">
               Following
             </p>
@@ -207,6 +208,7 @@ function ProfileVisitCard({ username }) {
         open={followersModalOpen}
         setOpen={setfollowersModalOpen}
         tab={tab}
+        cardUser={cardUser}
         settab={settab}
       />
       <SettingsModal open={settingsModalOpen} setOpen={setsettingsModalOpen} />

@@ -27,14 +27,14 @@ const JoinSuperfanModal = ({
     {
       img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLL5-aWLswOM1S1pvyzl_K9pPV0WL2KDSjJA&usqp=CAU",
       name: "Silver",
-      description: `Silver Plan + ${superfan_data?.perks2}`,
+      description: `${superfan_data?.perks2}`,
       price: `${superfan_data?.price2}`,
     },
     {
       img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQASf34hYLt1x9akOACzs-0nCeYzmKP1zeeow&usqp=CAU",
       name: "Gold",
-      description: `Gold Plan + ${superfan_data?.perks3}`,
-      price: `${superfan_data?.price}`,
+      description: `${superfan_data?.perks3}`,
+      price: `${superfan_data?.price3}`,
     },
   ]);
   const [loadFeed] = useUserActions();
@@ -197,7 +197,7 @@ const JoinSuperfanModal = ({
                 // </div>
                 <div className="flex w-full bg-slate-200 dark:bg-slate-700 h-20 rounded-lg overflow-hidden hover:ring-2 ring-primary dark:ring-brand">
                   <img
-                    src={plan.img}
+                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYttbDyk8tE55gznNpc1ujtwlaNTtX4ahdrg&usqp=CAU"
                     className="h-full w-32 bg-red-600 object-cover"
                   />
                   <span className="p-2 h-full flex-grow ">
@@ -212,7 +212,7 @@ const JoinSuperfanModal = ({
               ) : (
                 <div className="flex w-full bg-slate-200 dark:bg-slate-700 h-fit rounded-lg overflow-hidden hover:ring-2 ring-primary dark:ring-brand">
                   <img
-                    src={plan.img}
+                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYttbDyk8tE55gznNpc1ujtwlaNTtX4ahdrg&usqp=CAU"
                     className="h-full w-32 bg-red-600 object-cover"
                   />
                   <span className="p-2 h-full flex-grow ">

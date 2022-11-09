@@ -290,11 +290,13 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
           `${process.env.REACT_APP_FEEPAYER_PRIVATEKEY}`
         )
           .then(async (res) => {
-            partialSignWithWallet(res).then(async () => {
-              setMintSuccess("NFT Listed Successfully");
-              setUploadingPost(false);
-              await loadNfts();
-            });
+            partialSignWithWallet(res, State.database?.provider).then(
+              async () => {
+                setMintSuccess("NFT Listed Successfully");
+                setUploadingPost(false);
+                await loadNfts();
+              }
+            );
           })
           .catch((err) => {
             console.log(err);

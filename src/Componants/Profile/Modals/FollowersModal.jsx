@@ -30,10 +30,61 @@ function FollowersModal(props) {
     setFilteredfollowingData([]);
     setFilteredSuperfansData([]);
     setFilteredSuperfansToData([]);
-    setfollowers(State.database.userProfileData?.data?.follower_count);
-    setfollowing(State.database.userProfileData?.data?.followee_count);
-    setsuperfans(State.database.userProfileData?.data?.superfan_to);
-    setSuperfansTo(State.database.userProfileData?.data?.superfan_of);
+    if (props.cardUser) {
+      console.log("in");
+      setfollowers(props.cardUser?.follower_count);
+      setfollowing(props.cardUser?.followee_count);
+      setsuperfans(props.cardUser?.superfan_to);
+      setSuperfansTo(props.cardUser?.superfan_of);
+
+      if (props.cardUser.follower_count) {
+        filterData("", props.cardUser.follower_count, setFilteredFollowersData);
+      }
+      if (props.cardUser.followee_count) {
+        filterData("", props.cardUser.followee_count, setFilteredfollowingData);
+      }
+      if (props.cardUser.superfan_to) {
+        filterData("", props.cardUser.superfan_to, setFilteredSuperfansData);
+      }
+      if (props.cardUser.superfan_of) {
+        filterData("", props.cardUser.superfan_of, setFilteredSuperfansToData);
+      }
+    } else {
+      setfollowers(State.database.userProfileData?.data?.follower_count);
+      setfollowing(State.database.userProfileData?.data?.followee_count);
+      setsuperfans(State.database.userProfileData?.data?.superfan_to);
+      setSuperfansTo(State.database.userProfileData?.data?.superfan_of);
+      if (State.database.userProfileData) {
+        if (State.database.userProfileData.data.follower_count) {
+          filterData(
+            "",
+            State.database.userProfileData.data.follower_count,
+            setFilteredFollowersData
+          );
+        }
+        if (State.database.userProfileData.data.followee_count) {
+          filterData(
+            "",
+            State.database.userProfileData.data.followee_count,
+            setFilteredfollowingData
+          );
+        }
+        if (State.database.userProfileData.data.superfan_to) {
+          filterData(
+            "",
+            State.database.userProfileData.data.superfan_to,
+            setFilteredSuperfansData
+          );
+        }
+        if (State.database.userProfileData.data.superfan_of) {
+          filterData(
+            "",
+            State.database.userProfileData.data.superfan_of,
+            setFilteredSuperfansToData
+          );
+        }
+      }
+    }
 
     // setFilteredFollowersData(
     //   State.database.userProfileData?.data.follower_count
@@ -42,41 +93,12 @@ function FollowersModal(props) {
     //   State.database.userProfileData?.data.followee_count
     // );
     // setFilteredSuperfansData(State.database.userProfileData?.data.superfan_to);
-    if (State.database.userProfileData) {
-      if (State.database.userProfileData.data.follower_count) {
-        filterData(
-          "",
-          State.database.userProfileData.data.follower_count,
-          setFilteredFollowersData
-        );
-      }
-      if (State.database.userProfileData.data.followee_count) {
-        filterData(
-          "",
-          State.database.userProfileData.data.followee_count,
-          setFilteredfollowingData
-        );
-      }
-      if (State.database.userProfileData.data.superfan_to) {
-        filterData(
-          "",
-          State.database.userProfileData.data.superfan_to,
-          setFilteredSuperfansData
-        );
-      }
-      if (State.database.userProfileData.data.superfan_of) {
-        filterData(
-          "",
-          State.database.userProfileData.data.superfan_of,
-          setFilteredSuperfansToData
-        );
-      }
-    }
   }, [
     State.database.userProfileData?.data?.follower_count,
     State.database.userProfileData?.data?.followee_count,
     State.database.userProfileData?.data?.superfan_to,
     State.database.userProfileData?.data?.superfan_oo,
+    props?.cardUser,
   ]);
 
   const handleFollowUser = async (toFollow) => {

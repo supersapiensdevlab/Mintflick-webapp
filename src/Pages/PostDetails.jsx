@@ -34,7 +34,7 @@ function PostDetails() {
       .catch(function (error) {
         console.log(error);
       });
-  }, []);
+  }, [id]);
   return (
     <div className=" flex h-screen bg-slate-100 dark:bg-slate-800 lg:bg-white lg:dark:bg-slate-900">
       <div className="hidden lg:flex flex-col h-full w-1/4 ml-12 mr-4 pt-24 space-y-6 overflow-y-auto"></div>

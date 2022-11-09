@@ -399,7 +399,7 @@ function Post(props) {
       )
         .then((response) => response.json())
         .then((result) => {
-          setOwner(result.result.owner);
+          setOwner(result.result?.owner);
         })
         .catch((error) => console.log("error", error));
     }
@@ -781,7 +781,7 @@ function Post(props) {
           <Link to={`/homescreen/profile/${props.profileName}`}>
             <div
               // onClick={() => nav(`../profile/${props.profileName}`)}
-              className="flex items-center space-x-4 cursor-pointer"
+              className="flex items-start space-x-4 cursor-pointer"
             >
               {props.profilePic ? (
                 // <img
@@ -815,6 +815,28 @@ function Post(props) {
                   {moment(props.timestamp * 1000).fromNow()}
                 </p>
               </div>
+              {!State.database.userData?.data?.user?.followee_count.includes(
+                props.profileUsername
+              ) ? (
+                <>
+                  {State.database.userData?.data?.user?.username !==
+                  props.profileUsername ? (
+                    <div
+                      onClick={() => {
+                        handleFollowUser(props.profileUsername);
+                      }}
+                    >
+                      <button className="cursor-pointer items-center btn btn-xs btn-primary btn-outline gap-1 ml-auto rounded-md ">
+                        Follow
+                      </button>
+                    </div>
+                  ) : (
+                    <></>
+                  )}
+                </>
+              ) : (
+                <></>
+              )}
             </div>
           </Link>
           <div className=" ">
@@ -1193,9 +1215,11 @@ function Post(props) {
           </div>
         ) : (
           <>
-            {State.database.userData?.data?.user?.username ===
-              props.profileUsername && props.content_type == "post" ? (
+            {console.log(props.profileUsername)}
+            {State.database.userData?.data?.user?.username ==
+              props.profileUsername && props.contentType == "post" ? (
               <div className="w-full flex justify-end">
+                {console.log("in2")}
                 <div
                   className="cursor-pointer items-center btn btn-xs btn-primary btn-outline gap-1 ml-auto rounded-md"
                   onClick={() => {

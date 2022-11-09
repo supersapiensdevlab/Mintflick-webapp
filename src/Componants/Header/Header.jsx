@@ -14,6 +14,12 @@ import placeholderImage from "../../Assets/profile-pic.png";
 import useWeb3Auth from "../../Hooks/useWeb3Auth";
 import ChatModal from "../ChatRoom/ChatModal";
 import SettingsModal from "../Profile/Modals/SettingsModal";
+import { SolanaWallet } from "@web3auth/solana-provider";
+import {
+  clusterUrl,
+  confirmTransactionFromFrontend,
+} from "../Home/Utility/utilityFunc";
+import { clusterApiUrl, Connection, PublicKey } from "@solana/web3.js";
 
 function Header() {
   const State = useContext(UserContext);
@@ -270,7 +276,7 @@ function Header() {
     //   });
     let data = {
       network: "devnet",
-      creator_wallet: "8RLBjB2P1ttf5tvn1CimRfrzDg1eThn7dvADXUsbTnPK",
+      creator_wallet: `${process.env.REACT_APP_FEEPAYER_WALLET}`,
       transaction_fee: 10,
     };
     await axios
@@ -280,13 +286,50 @@ function Header() {
           "content-type": "application/json",
         },
       })
-      .then((res) => {
-        console.log(res);
+      .then(async (res) => {
+        await signTransaction(
+          "devnet",
+          res.data.result.encoded_transaction,
+          () => {
+            console.log("callback");
+          }
+        )
+          .then(() => {
+            console.log("success");
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       })
       .catch((err) => {
         console.log(err);
       });
   };
+
+  async function signTransaction(network, transaction, callback) {
+    //const phantom = new PhantomWalletAdapter();
+    //await phantom.connect();
+    const solanaWallet = new SolanaWallet(State.database.provider); // web3auth.provider
+
+    const rpcUrl = clusterUrl(network);
+    console.log(rpcUrl);
+    const connection = new Connection(rpcUrl, "confirmed");
+    //console.log(connection.rpcEndpoint);
+    const ret = await confirmTransactionFromFrontend(
+      connection,
+      transaction,
+      solanaWallet
+    );
+    // const checks = await connection.confirmTransaction({signature:ret},'finalised');
+
+    // console.log(checks);
+    // await connection.confirmTransaction({
+    //     blockhash: transaction.blockhash,
+    //     signature: ret,
+    //   });
+    connection.onSignature(ret, callback, "finalized");
+    return ret;
+  }
 
   return (
     <div
@@ -294,7 +337,10 @@ function Header() {
         State.database.showHeader ? "" : "-translate-y-24"
       } transition-all ease-in-out hidden lg:flex fixed z-50  top-0  px-4 lg:px-12 justify-between items-center h-20 bg-white dark:bg-slate-900 w-full shadow-mintflick`}
     >
-      <div className="flex items-center space-x-4 h-full w-1/3 -ml-2">
+      <div
+        className="flex items-center space-x-4 h-full w-1/3 -ml-2"
+        onClick={handleAuthorityUpdate}
+      >
         <Link to={`/homescreen/home`}>
           {!State.database.dark ? (
             <Main_logo_dark></Main_logo_dark>
