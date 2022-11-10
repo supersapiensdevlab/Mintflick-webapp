@@ -187,7 +187,7 @@ function ProfileCard(props) {
                   onClick={() => setsettingsModalOpen(true)}
                   className="btn btn-primary btn-outline btn-sm w-full capitalize"
                 >
-                  Settings
+                  Edit Profile
                 </button>
               </>
             ) : (

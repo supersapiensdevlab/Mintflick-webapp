@@ -358,7 +358,9 @@ function Header() {
               value={wordEntered}
               onKeyDown={handleKeyDown}
             ></input>
-            <Search className="-translate-x-8 dark:text-slate-100"></Search>
+            <Link to={`/homescreen/explore`}>
+              <Search className="-translate-x-8 dark:text-slate-100 cursor-pointer"></Search>
+            </Link>
           </div>
           <div
             ref={wrapperRef}
@@ -371,18 +373,25 @@ function Header() {
                   .slice(0, 15)
                   .map((value, key) => {
                     return (
-                      <Link to={`/homescreen/explore`}>
-                        <div
-                          key={key}
-                          className="p-2 pl-3 dark:hover:bg-dbeats-dark-primary flex items-center cursor-pointer"
-                        >
-                          <Search
-                            className=" dark:text-slate-100  opacity-60 mr-2"
-                            size={16}
-                          ></Search>
-                          {value.video.videoName.toLowerCase()}{" "}
-                        </div>
-                      </Link>
+                      <div
+                        onClick={() => {
+                          setWordEntered(value.video.videoName.toLowerCase());
+                          setFilterResultDisplay(true);
+                        }}
+                      >
+                        <Link to={`/homescreen/explore`}>
+                          <div
+                            key={key}
+                            className="p-2 pl-3  flex items-center cursor-pointer hover:bg-slate-600"
+                          >
+                            <Search
+                              className=" dark:text-slate-100  opacity-60 mr-2"
+                              size={16}
+                            ></Search>
+                            {value.video.videoName.toLowerCase()}{" "}
+                          </div>
+                        </Link>
+                      </div>
                     );
                   })}
               </>
@@ -391,18 +400,25 @@ function Header() {
               <>
                 {State.database.filteredData.slice(0, 15).map((value, key) => {
                   return (
-                    <Link to={`/homescreen/explore`}>
-                      <div
-                        key={key}
-                        className="p-2 pl-3 dark:hover:bg-dbeats-dark-primary flex items-center cursor-pointer"
-                      >
-                        <Search
-                          className=" dark:text-slate-100 opacity-60 mr-2"
-                          size={16}
-                        ></Search>
-                        {value.username.toLowerCase()}{" "}
-                      </div>
-                    </Link>
+                    <div
+                      onClick={() => {
+                        setWordEntered(value.username.toLowerCase());
+                        setFilterResultDisplay(true);
+                      }}
+                    >
+                      <Link to={`/homescreen/explore`}>
+                        <div
+                          key={key}
+                          className="p-2 pl-3 hover:bg-slate-600 flex items-center cursor-pointer"
+                        >
+                          <Search
+                            className=" dark:text-slate-100 opacity-60 mr-2"
+                            size={16}
+                          ></Search>
+                          {value.username.toLowerCase()}{" "}
+                        </div>
+                      </Link>
+                    </div>
                   );
                 })}
               </>
