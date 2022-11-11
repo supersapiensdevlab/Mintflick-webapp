@@ -10,7 +10,15 @@ import {
 import axios from "axios";
 import useUserActions from "../../../Hooks/useUserActions";
 
-function MintNFTModal({ mintModalOpen, setMintModalOpen, content, name, id }) {
+function MintNFTModal({
+  mintModalOpen,
+  setMintModalOpen,
+  content,
+  videoImage,
+  name,
+  id,
+  contentType,
+}) {
   const State = useContext(UserContext);
   const [successMessage, setSuccessMessage] = useState(
     "Please confirm to mint this post as an NFT"
@@ -22,6 +30,7 @@ function MintNFTModal({ mintModalOpen, setMintModalOpen, content, name, id }) {
     let data = {
       tokenId: mintId,
       contentId: id,
+      contentType: contentType,
     };
     axios
       .post(`${process.env.REACT_APP_SERVER_URL}/user/add_tokenid`, data, {
@@ -65,7 +74,7 @@ function MintNFTModal({ mintModalOpen, setMintModalOpen, content, name, id }) {
       State.database.walletAddress,
       name,
       name,
-      content,
+      videoImage ? videoImage : content,
       file
     )
       .then(async (data) => {
@@ -114,7 +123,10 @@ function MintNFTModal({ mintModalOpen, setMintModalOpen, content, name, id }) {
         </div>
 
         <div className="flex flex-wrap p-4 w-full space-y-4 justify-center text-white">
-          <img src={content} className="h-96 w-full object-cover rounded-lg" />
+          <img
+            src={videoImage ? videoImage : content}
+            className="h-96 w-full object-cover rounded-lg"
+          />
           <p>{successMessage}</p>
           <button
             onClick={handleMinting}

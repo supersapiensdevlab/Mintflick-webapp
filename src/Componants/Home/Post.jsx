@@ -1216,7 +1216,8 @@ function Post(props) {
         ) : (
           <>
             {State.database.userData?.data?.user?.username ==
-              props.profileUsername && props.contentType == "post" ? (
+              props.profileUsername &&
+            (props.contentType == "post" || props.contentType == "video") ? (
               <div className="w-full flex justify-end">
                 {console.log("in2")}
                 <div
@@ -1407,14 +1408,16 @@ function Post(props) {
       <MintNFTModal
         mintModalOpen={mintModalOpen}
         setMintModalOpen={setMintModalOpen}
-        content={props?.image}
-        name={props.text}
-        id={props.postId}
+        content={props.contentType == "post" ? props.image : props.videoUrl}
+        videoImage={props.videoImage ? props.videoImage : null}
+        name={props.contentType == "post" ? props.text : props.videoName}
+        id={props.contentType == "post" ? props.postId : props.videoId}
+        contentType={props.contentType}
       />
       <ListNFTModal
         listModalOpen={listModalOpen}
         setListModalOpen={setListModalOpen}
-        content={props?.image}
+        content={props.contentType == "post" ? props.image : props.videoImage}
         tokenId={props.content?.tokenId}
       />
     </>

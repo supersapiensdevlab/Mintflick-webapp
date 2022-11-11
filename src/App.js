@@ -29,6 +29,10 @@ import useWeb3Auth from "./Hooks/useWeb3Auth";
 import Explore from "./Pages/Explore";
 import MobileNotifications from "./Pages/MobileNotifications";
 import PostDetails from "./Pages/PostDetails";
+import SpinWheel from "./Componants/Games/SpinWheel";
+import AllGames from "./Componants/Games/AllGames";
+import SpinGame from "./Componants/Games/SpinGame/SpinGame";
+import RollDice from "./Componants/Games/RollDice/RollDice";
 function App() {
   const State = useContext(UserContext);
   const [login, logout] = useWeb3Auth();
@@ -117,7 +121,10 @@ function App() {
           <Route path="marketPlace" element={<Events></Events>} />
           <Route path="explore" element={<Explore />} />
           <Route path="notifications" element={<MobileNotifications />} />
-
+          <Route path="allgames" element={<AllGames />} />
+          <Route path="game/spinwheel" element={<SpinWheel />} />
+          <Route path="game/rolldice" element={<RollDice />} />
+          <Route path="game/spingame" element={<SpinGame />} />
           <Route path="profile/:userName" element={<Profile></Profile>}></Route>
           <Route path="chat/:username" element={<ChatRoom></ChatRoom>}></Route>
           <Route path=":userName/:type/:id" element={<PostDetails />}></Route>

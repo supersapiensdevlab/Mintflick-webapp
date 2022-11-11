@@ -16,7 +16,11 @@ export async function filterData(value, list, func, isNew = false) {
         }`
       );
       if (res.data) {
-        alldata.push({...res.data,plan: filteredData[i].plan});
+        alldata.push({
+          ...res.data,
+          plan: filteredData[i].plan,
+          boughtOn: filteredData[i]?.boughtOn,
+        });
       }
     }
 

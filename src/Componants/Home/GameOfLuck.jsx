@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { UserContext } from "../../Store";
 
 function GameOfLuck() {
@@ -15,14 +15,16 @@ function GameOfLuck() {
         big. You can play the game by clicking on the button below.
       </p>
 
-      <button
-        className="btn  btn-brand"
-        onClick={() =>
-          State.updateDatabase({ showHeader: !State.database.showHeader })
-        }
-      >
-        Lets Go!
-      </button>
+      <Link to={`/homescreen/allgames`}>
+        <button
+          className="btn  btn-brand"
+          onClick={() =>
+            State.updateDatabase({ showHeader: !State.database.showHeader })
+          }
+        >
+          Lets Go!
+        </button>
+      </Link>
     </div>
   );
 }

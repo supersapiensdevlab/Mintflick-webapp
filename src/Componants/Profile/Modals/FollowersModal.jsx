@@ -7,6 +7,8 @@ import useUserActions from "../../../Hooks/useUserActions";
 import { UserContext } from "../../../Store";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import moment from "moment";
+moment().format();
 
 function FollowersModal(props) {
   const State = useContext(UserContext);
@@ -97,9 +99,11 @@ function FollowersModal(props) {
     State.database.userProfileData?.data?.follower_count,
     State.database.userProfileData?.data?.followee_count,
     State.database.userProfileData?.data?.superfan_to,
-    State.database.userProfileData?.data?.superfan_oo,
+    State.database.userProfileData?.data?.superfan_of,
     props?.cardUser,
   ]);
+
+  console.log(filteredSuperfansToData);
 
   const handleFollowUser = async (toFollow) => {
     const followData = {
@@ -439,7 +443,11 @@ function FollowersModal(props) {
                           {fan.username}
                         </p>
                         <p className="cursor-pointer text-base w-2/3 truncate text-brand5">
-                          {fan.name}
+                          {console.log(fan?.boughtOn)}
+                          Bought{" "}
+                          {fan.boughtOn
+                            ? moment(fan.boughtOn * 1000).fromNow()
+                            : "a while ago"}
                         </p>
                       </div>
                       <button
@@ -529,7 +537,10 @@ function FollowersModal(props) {
                           {fan.username}
                         </p>
                         <p className="cursor-pointer text-base w-2/3 truncate text-brand5">
-                          {fan.name}
+                          Bought{" "}
+                          {fan.boughtOn
+                            ? moment(fan.boughtOn * 1000).fromNow()
+                            : "a while ago"}
                         </p>
                       </div>
                       <button

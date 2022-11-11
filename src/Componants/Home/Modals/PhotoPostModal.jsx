@@ -9,16 +9,6 @@ import useUserActions from "../../../Hooks/useUserActions";
 import { MentionsInput, Mention } from "react-mentions";
 import defaultStyle from "../defaultStyle";
 import { UserContext } from "../../../Store";
-import { SolanaWallet } from "@web3auth/solana-provider";
-import { Keypair, Transaction } from "@solana/web3.js";
-import { PhantomWalletAdapter } from "@solana/wallet-adapter-phantom";
-import {
-  clusterUrl,
-  confirmTransactionFromFrontend,
-} from "../Utility/utilityFunc";
-import { decode } from "bs58";
-import { clusterApiUrl, Connection, PublicKey } from "@solana/web3.js";
-import { NodeWallet } from "@metaplex/js";
 import SolanaToken from "../../../Assets/logos/SolanaToken";
 import { createPandoraExpressSDK } from "pandora-express";
 import Web3 from "web3";
