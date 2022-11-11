@@ -61,7 +61,7 @@ const JoinSuperfanModal = ({
   useEffect(() => {
     console.log("called");
     if (State.database.userData) {
-      State.database.userData?.data?.user?.superfan_of?.forEach((value) => {
+      State.database.userData?.data?.user?.superfan_to?.forEach((value) => {
         if (value.username === postUsername) {
           setIsSuperfan(value.plan);
         }
@@ -277,6 +277,21 @@ const JoinSuperfanModal = ({
             <div className="flex-col space-y-0">
               <p className="text-brand font-semibold text-xl">Perks</p>
               <p>{whatToShow?.description}</p>
+            </div>
+            <hr className="text-white mx-2 opacity-10" />
+            <div className="flex-col space-y-0">
+              <p className="text-brand font-semibold text-xl">Duration</p>
+              <p className="flex space-x-1 items-center">
+                <p>{whatToShow?.price}</p>
+                <p>
+                  {State.database.chainId === 1 ? (
+                    <PolygonToken size={16}></PolygonToken>
+                  ) : State.database.chainId === 0 ? (
+                    <SolanaToken size={16}></SolanaToken>
+                  ) : null}
+                </p>
+                <p>for 1 month</p>
+              </p>
             </div>
             <hr className="text-white mx-2 opacity-10" />
             <div className="flex-col space-y-0">

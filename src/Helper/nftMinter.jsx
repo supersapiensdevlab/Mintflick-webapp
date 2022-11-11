@@ -8,6 +8,7 @@ import { tokenConfig } from "./tokenConfig";
 import { makeStorageClient } from "./uploadHelperWeb3Storage";
 
 export let storeWithProgress = (files) => {
+  console.log(files);
   // show the root cid as soon as it's ready
   const onRootCidReady = (cid) => {
     console.log("uploading files with cid:", cid);
@@ -22,7 +23,7 @@ export let storeWithProgress = (files) => {
     const pct = totalSize / uploaded;
     //console.log(`Uploading... ${pct.toFixed(2)}% complete`);
     console.log(
-      `Uploading... ${Math.min(pct * 100, 100).toFixed(2)}% complete`,
+      `Uploading... ${Math.min(pct * 100, 100).toFixed(2)}% complete`
     );
     let progress = Math.min(pct * 100, 100).toFixed(2);
     //setUploading(progress);
@@ -41,11 +42,11 @@ export let createToken = async (
   NFTPrice,
   provider,
   setMinting,
-  setMintingProgress,
+  setMintingProgress
 ) => {
   var tokenId = null;
   var biconomy = new Biconomy(provider, {
-    apiKey: `${process.env.REACT_APP_BICONOMY_API}`
+    apiKey: `${process.env.REACT_APP_BICONOMY_API}`,
   });
   console.log(provider);
   console.log(biconomy);
@@ -86,7 +87,7 @@ export let createToken = async (
           await contract.methods
             .createMarketItem(
               tokenId,
-              ethers.utils.parseUnits(NFTPrice.toString(), "ether"),
+              ethers.utils.parseUnits(NFTPrice.toString(), "ether")
             )
             .send({ from: provider.selectedAddress })
             .then(async (res) => {
@@ -98,7 +99,7 @@ export let createToken = async (
               axios
                 .get(
                   `${process.env.REACT_APP_SERVER_URL}/user/getLoggedInUser`,
-                  tokenConfig(),
+                  tokenConfig()
                 )
                 .then((res) => {});
             });

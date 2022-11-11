@@ -11,15 +11,15 @@ import SolanaToken from "../../../Assets/logos/SolanaToken";
 import { toPng } from "html-to-image";
 import { useRef } from "react";
 import { uploadFile } from "../../../Helper/uploadHelper";
-import {
-  clusterUrl,
-  confirmTransactionFromFrontend,
-} from "../Utility/utilityFunc";
-import { Connection } from "@solana/web3.js";
-import { SolanaWallet } from "@web3auth/solana-provider";
 import useLoadNfts from "../../../Hooks/useLoadNfts";
 import { useEffect } from "react";
 import "./MentionsInputCSS.css";
+import {
+  mintNFTOnSolana,
+  signTransaction,
+  partialSignWithWallet,
+  listNFTOnSolana,
+} from "../../../Helper/mintOnSolana";
 function ThoughtPostModal({ setthoughtPostModalOpen }) {
   const mentionsRef = useRef();
   const State = useContext(UserContext);
@@ -39,64 +39,83 @@ function ThoughtPostModal({ setthoughtPostModalOpen }) {
   useEffect(() => {
     mentionsRef.current.style.overflow = "scroll";
   }, []);
-  async function signTransaction(network, transaction, callback) {
-    //const phantom = new PhantomWalletAdapter();
-    //await phantom.connect();
-    const solanaWallet = new SolanaWallet(State.database.provider); // web3auth.provider
+  // async function signTransaction(network, transaction, callback) {
+  //   //const phantom = new PhantomWalletAdapter();
+  //   //await phantom.connect();
+  //   const solanaWallet = new SolanaWallet(State.database.provider); // web3auth.provider
 
-    const rpcUrl = clusterUrl(network);
-    console.log(rpcUrl);
-    const connection = new Connection(rpcUrl, "confirmed");
-    //console.log(connection.rpcEndpoint);
-    const ret = await confirmTransactionFromFrontend(
-      connection,
-      transaction,
-      solanaWallet
-    );
-    // const checks = await connection.confirmTransaction({signature:ret},'finalised');
+  //   const rpcUrl = clusterUrl(network);
+  //   console.log(rpcUrl);
+  //   const connection = new Connection(rpcUrl, "confirmed");
+  //   //console.log(connection.rpcEndpoint);
+  //   const ret = await confirmTransactionFromFrontend(
+  //     connection,
+  //     transaction,
+  //     solanaWallet
+  //   );
+  //   // const checks = await connection.confirmTransaction({signature:ret},'finalised');
 
-    // console.log(checks);
-    // await connection.confirmTransaction({
-    //     blockhash: transaction.blockhash,
-    //     signature: ret,
-    //   });
-    connection.onSignature(ret, callback, "finalized");
-    return ret;
-  }
+  //   // console.log(checks);
+  //   // await connection.confirmTransaction({
+  //   //     blockhash: transaction.blockhash,
+  //   //     signature: ret,
+  //   //   });
+  //   connection.onSignature(ret, callback, "finalized");
+  //   return ret;
+  // }
 
   const handleThoughtNFTListing = (e) => {
     console.log("listed", nftPrice);
     e.preventDefault();
     setUploadingPost(true);
-    var raw = JSON.stringify({
-      network: "devnet",
-      marketplace_address: process.env.REACT_APP_SOLANA_MARKETPLACE_ADDRESS,
-      nft_address: solanaMintId,
-      price: parseInt(nftPrice),
-      seller_wallet: State.database.walletAddress,
-    });
+    // var raw = JSON.stringify({
+    //   network: "devnet",
+    //   marketplace_address: process.env.REACT_APP_SOLANA_MARKETPLACE_ADDRESS,
+    //   nft_address: solanaMintId,
+    //   price: parseInt(nftPrice),
+    //   seller_wallet: State.database.walletAddress,
+    // });
 
-    console.log(raw);
-    axios
-      .post(`https://api.shyft.to/sol/v1/marketplace/list`, raw, {
-        headers: {
-          "x-api-key": `${process.env.REACT_APP_SHYFT_API_KEY}`,
-          "content-type": "application/json",
-        },
-      })
+    // console.log(raw);
+    // axios
+    //   .post(`https://api.shyft.to/sol/v1/marketplace/list`, raw, {
+    //     headers: {
+    //       "x-api-key": `${process.env.REACT_APP_SHYFT_API_KEY}`,
+    //       "content-type": "application/json",
+    //     },
+    //   })
+    listNFTOnSolana(solanaMintId, nftPrice, State.database?.walletAddress)
       .then(async (data) => {
         console.log(data.data);
+        // await signTransaction(
+        //   "devnet",
+        //   data.data.result.encoded_transaction,
+        //   async () => {
+        //     setListSuccess(true);
+        //     setSuccessMsg("NFT Listed Successfully");
+        //     setUploadingPost(false);
+        //     await loadFeed();
+        //     await loadNfts();
+        //   }
+        // );
         await signTransaction(
-          "devnet",
           data.data.result.encoded_transaction,
-          async () => {
-            setListSuccess(true);
-            setSuccessMsg("NFT Listed Successfully");
-            setUploadingPost(false);
-            await loadFeed();
-            await loadNfts();
-          }
-        );
+          `${process.env.REACT_APP_FEEPAYER_PRIVATEKEY}`
+        )
+          .then(async (res) => {
+            partialSignWithWallet(res, State.database?.provider).then(
+              async () => {
+                setListSuccess(true);
+                setSuccessMsg("NFT Listed Successfully");
+                setUploadingPost(false);
+                await loadFeed();
+                await loadNfts();
+              }
+            );
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       })
       .catch((err) => {
         console.log(err);
@@ -141,44 +160,41 @@ function ThoughtPostModal({ setthoughtPostModalOpen }) {
 
         uploadFile(file)
           .then(async (cid) => {
-            let nftSolanaData = {
-              network: "devnet",
-              wallet: State.database.walletAddress,
-              name: `${
-                State.database.userData?.data?.user?.name
-              } - ${caption.slice(0, 5)} ...`,
-              symbol: "FLICK",
-              attributes: JSON.stringify([
-                { trait_type: "Created on", value: Date.now() },
-              ]),
-              description: caption,
-              external_url: "https://ipfs.io/ipfs/" + cid + "/" + "meta.png",
-              max_supply: 1,
-              royalty: 5,
-              file: file,
-            };
+            let name =
+              State.database.userData?.data?.user?.name - caption.slice(0, 5);
+            let url = "https://ipfs.io/ipfs/" + cid + "/" + "meta.png";
+            await mintNFTOnSolana(
+              State.database.walletAddress,
+              name,
 
-            console.log(nftSolanaData);
-            axios
-              .post(
-                `https://api.shyft.to/sol/v1/nft/create_detach`,
-                nftSolanaData,
-                {
-                  headers: {
-                    "x-api-key": `${process.env.REACT_APP_SHYFT_API_KEY}`,
-                    "content-type": "multipart/form-data",
-                  },
-                }
-              )
+              caption,
+              url,
+              file
+            )
               .then(async (data) => {
                 console.log("MintID", data.data.result.mint);
+                // await signTransaction(
+                //   "devnet",
+                //   data.data.result.encoded_transaction,
+                //   () => {
+                //     nftMinted(myData, data.data.result.mint);
+                //   }
+                // );
                 await signTransaction(
-                  "devnet",
                   data.data.result.encoded_transaction,
-                  () => {
-                    nftMinted(myData, data.data.result.mint);
-                  }
-                );
+                  `${process.env.REACT_APP_FEEPAYER_PRIVATEKEY}`
+                )
+                  .then((res) => {
+                    console.log(res);
+                    partialSignWithWallet(res, State.database?.provider).then(
+                      () => {
+                        nftMinted(myData, data.data.result.mint);
+                      }
+                    );
+                  })
+                  .catch((err) => {
+                    console.log(err);
+                  });
               })
               .catch((err) => {
                 console.log(err);
@@ -193,7 +209,6 @@ function ThoughtPostModal({ setthoughtPostModalOpen }) {
         console.log(err);
       });
   };
-
 
   // Minting
   // const [minting, setMinting] = useState(null);

@@ -59,6 +59,7 @@ function SettingsModal(props) {
   const [loadFeed, loadUser] = useUserActions();
   const [warning, setWarning] = useState(null);
   const [success, setSuccess] = useState(null);
+  const [description, setDescription] = useState(null);
 
   const handleUpdateSuperfanPlans = async () => {
     if (superfanPlans === State.database.userData.data?.user?.superfan_data)
@@ -133,6 +134,12 @@ function SettingsModal(props) {
     });
     setSuccess(null);
     setWarning(null);
+  };
+
+  const handlePlanImageUpdate = (updateFor) => {
+    // let data = {
+    //   updateFor: updateFor,
+    // }
   };
 
   return (
@@ -296,6 +303,24 @@ function SettingsModal(props) {
                 readOnly
               />
             </div>
+            {/* <div className="flex flex-col items-start gap-1">
+              <span className=" text-brand4 font-semibold">
+                Superfan Description
+              </span>
+              <textarea
+                onChange={(e) => {
+                  setDescription(e.target.value);
+                }}
+                value={description}
+                rows={1}
+                name="superfanDescription"
+                type="text"
+                placeholder="Describe your plans"
+                required
+                autoComplete="false"
+                className="w-full rounded-md textarea "
+              ></textarea>
+            </div> */}
             <span className=" text-brand font-semibold ">
               Choose plan to edit
             </span>
@@ -309,6 +334,9 @@ function SettingsModal(props) {
                 <img
                   src={planImage}
                   className=" w-32 bg-red-600 object-cover"
+                  onClick={() => {
+                    handlePlanImageUpdate("basic");
+                  }}
                 />
                 <span className="p-2 h-full flex-grow ">
                   <h3 className="text-xl font-semibold text-primary dark:text-brand">
@@ -336,7 +364,9 @@ function SettingsModal(props) {
               {selectedPlan === 1 && (
                 <div className=" w-full gap-2 flex flex-col">
                   <div className="flex flex-col items-start gap-1 w-full">
-                    <span className="text-brand4 text-sm mt-2">Price </span>
+                    <span className="text-brand4 text-sm mt-2">
+                      Price per month{" "}
+                    </span>
                     <label className="input-group w-full">
                       <input
                         type="number"
@@ -389,6 +419,9 @@ function SettingsModal(props) {
                 <img
                   src={planImage}
                   className=" w-32 bg-red-600 object-cover"
+                  onClick={() => {
+                    handlePlanImageUpdate("silver");
+                  }}
                 />
                 <span className="p-2 h-full flex-grow ">
                   <h3 className="text-xl font-semibold text-primary dark:text-brand">
@@ -417,7 +450,9 @@ function SettingsModal(props) {
               {selectedPlan === 2 && (
                 <div className=" w-full gap-2 flex flex-col">
                   <div className="flex flex-col items-start gap-1 w-full">
-                    <span className="text-brand4 text-sm mt-2">Price </span>
+                    <span className="text-brand4 text-sm mt-2">
+                      Price per month{" "}
+                    </span>
                     <label className="input-group w-full">
                       <input
                         type="number"
@@ -471,6 +506,9 @@ function SettingsModal(props) {
                 <img
                   src={planImage}
                   className=" w-32 bg-red-600 object-cover"
+                  onClick={() => {
+                    handlePlanImageUpdate("gold");
+                  }}
                 />
                 <span className="p-2 h-full flex-grow ">
                   <h3 className="text-xl font-semibold text-primary dark:text-brand">
@@ -499,7 +537,9 @@ function SettingsModal(props) {
               {selectedPlan === 3 && (
                 <div className=" w-full gap-2 flex flex-col">
                   <div className="flex flex-col items-start gap-1 w-full">
-                    <span className="text-brand4 text-sm mt-2">Price </span>
+                    <span className="text-brand4 text-sm mt-2">
+                      Price per month
+                    </span>
                     <label className="input-group w-full">
                       <input
                         type="number"

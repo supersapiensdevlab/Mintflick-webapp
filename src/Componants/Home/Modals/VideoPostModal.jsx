@@ -19,13 +19,13 @@ import { MentionsInput, Mention } from "react-mentions";
 import defaultStyle from "../defaultStyle";
 import SolanaToken from "../../../Assets/logos/SolanaToken";
 import Web3 from "web3";
-import { SolanaWallet } from "@web3auth/solana-provider";
-import {
-  clusterUrl,
-  confirmTransactionFromFrontend,
-} from "../Utility/utilityFunc";
-import { clusterApiUrl, Connection, PublicKey } from "@solana/web3.js";
 import useLoadNfts from "../../../Hooks/useLoadNfts";
+import {
+  mintNFTOnSolana,
+  signTransaction,
+  partialSignWithWallet,
+  listNFTOnSolana,
+} from "../../../Helper/mintOnSolana";
 
 function VideoPostModal({ setVideoPostModalOpen }) {
   const State = useContext(UserContext);
@@ -165,42 +165,65 @@ function VideoPostModal({ setVideoPostModalOpen }) {
     //   });
   };
 
+  console.log(selectedVideo?.file);
+
   const mintOnSolana = (formData, file) => {
+    console.log(selectedVideo.file);
     uploadFile(selectedVideo.file).then(async (cid) => {
       console.log("stored files with cid:", cid);
-      console.log(State.database);
-      let nftSolanaData = {
-        network: "devnet",
-        wallet: State.database.walletAddress,
-        name: selectedVideo.file.name,
-        symbol: "FLICK",
-        attributes: JSON.stringify([{ trait_type: "Power", value: "100" }]),
-        description: videoData.description,
-        external_url:
-          "https://ipfs.io/ipfs/" + cid + "/" + selectedVideo.file.name,
-        max_supply: 1,
-        royalty: 5,
-        file: selectedVideo.file,
-      };
+      // let nftSolanaData = {
+      //   network: "devnet",
+      //   wallet: State.database.walletAddress,
+      //   name: selectedVideo.file.name,
+      //   symbol: "FLICK",
+      //   attributes: JSON.stringify([{ trait_type: "Power", value: "100" }]),
+      //   description: videoData.description,
+      //   external_url:
+      //     "https://ipfs.io/ipfs/" + cid + "/" + selectedVideo.file.name,
+      //   max_supply: 1,
+      //   royalty: 5,
+      //   file: selectedVideo.file,
+      // };
 
-      console.log(nftSolanaData);
-      axios
-        .post(`https://api.shyft.to/sol/v1/nft/create_detach`, nftSolanaData, {
-          headers: {
-            "x-api-key": `${process.env.REACT_APP_SHYFT_API_KEY}`,
-            "content-type": "multipart/form-data",
-          },
-        })
+      // console.log(nftSolanaData);
+      // axios
+      //   .post(`https://api.shyft.to/sol/v1/nft/create_detach`, nftSolanaData, {
+      //     headers: {
+      //       "x-api-key": `${process.env.REACT_APP_SHYFT_API_KEY}`,
+      //       "content-type": "multipart/form-data",
+      //     },
+      //   })
+      let url = "https://ipfs.io/ipfs/" + cid + "/" + selectedVideo.file.name;
+      await mintNFTOnSolana(
+        State.database.walletAddress,
+        videoData.videoName,
+        videoData.description,
+        url,
+        selectedVideo.file
+      )
         .then(async (data) => {
           console.log("MintID", data.data.result.mint);
           setTokenAddress(data.data.result.mint);
+          // await signTransaction(
+          //   "devnet",
+          //   data.data.result.encoded_transaction,
+          //   () => {
+          //     nftMinted(formData, data.data.result.mint);
+          //   }
+          // );
           await signTransaction(
-            "devnet",
             data.data.result.encoded_transaction,
-            () => {
-              nftMinted(formData, data.data.result.mint);
-            }
-          );
+            `${process.env.REACT_APP_FEEPAYER_PRIVATEKEY}`
+          )
+            .then((res) => {
+              console.log(res);
+              partialSignWithWallet(res, State.database?.provider).then(() => {
+                nftMinted(formData, data.data.result.mint);
+              });
+            })
+            .catch((err) => {
+              console.log(err);
+            });
         })
         .catch((err) => {
           console.log(err);
@@ -212,33 +235,50 @@ function VideoPostModal({ setVideoPostModalOpen }) {
   const listNFTForSale = async (e) => {
     e.preventDefault();
     setUploadingVideo(true);
-    var raw = JSON.stringify({
-      network: "devnet",
-      marketplace_address: process.env.REACT_APP_SOLANA_MARKETPLACE_ADDRESS,
-      nft_address: solanaMintId,
-      price: parseInt(nftPrice),
-      seller_wallet: State.database.walletAddress,
-    });
+    // var raw = JSON.stringify({
+    //   network: "devnet",
+    //   marketplace_address: process.env.REACT_APP_SOLANA_MARKETPLACE_ADDRESS,
+    //   nft_address: solanaMintId,
+    //   price: parseInt(nftPrice),
+    //   seller_wallet: State.database.walletAddress,
+    // });
 
-    console.log(raw);
-    axios
-      .post(`https://api.shyft.to/sol/v1/marketplace/list`, raw, {
-        headers: {
-          "x-api-key": `${process.env.REACT_APP_SHYFT_API_KEY}`,
-          "content-type": "application/json",
-        },
-      })
+    // console.log(raw);
+    // axios
+    //   .post(`https://api.shyft.to/sol/v1/marketplace/list`, raw, {
+    //     headers: {
+    //       "x-api-key": `${process.env.REACT_APP_SHYFT_API_KEY}`,
+    //       "content-type": "application/json",
+    //     },
+    //   })
+    listNFTOnSolana(solanaMintId, nftPrice, State.database?.walletAddress)
       .then(async (data) => {
         console.log(data.data);
+        // await signTransaction(
+        //   "devnet",
+        //   data.data.result.encoded_transaction,
+        //   async () => {
+        //     setMintSuccess("NFT Listed Successfully");
+        //     setUploadingVideo(false);
+        //     await loadNfts();
+        //   }
+        // );
         await signTransaction(
-          "devnet",
           data.data.result.encoded_transaction,
-          async () => {
-            setMintSuccess("NFT Listed Successfully");
-            setUploadingVideo(false);
-            await loadNfts();
-          }
-        );
+          `${process.env.REACT_APP_FEEPAYER_PRIVATEKEY}`
+        )
+          .then(async (res) => {
+            partialSignWithWallet(res, State.database?.provider).then(
+              async () => {
+                setMintSuccess("NFT Listed Successfully");
+                setUploadingVideo(false);
+                await loadNfts();
+              }
+            );
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       })
       .catch((err) => {
         console.log(err);
@@ -246,30 +286,30 @@ function VideoPostModal({ setVideoPostModalOpen }) {
       });
   };
 
-  async function signTransaction(network, transaction, callback) {
-    //const phantom = new PhantomWalletAdapter();
-    //await phantom.connect();
-    const solanaWallet = new SolanaWallet(State.database.provider); // web3auth.provider
+  // async function signTransaction(network, transaction, callback) {
+  //   //const phantom = new PhantomWalletAdapter();
+  //   //await phantom.connect();
+  //   const solanaWallet = new SolanaWallet(State.database.provider); // web3auth.provider
 
-    const rpcUrl = clusterUrl(network);
-    console.log(rpcUrl);
-    const connection = new Connection(rpcUrl, "confirmed");
-    //console.log(connection.rpcEndpoint);
-    const ret = await confirmTransactionFromFrontend(
-      connection,
-      transaction,
-      solanaWallet
-    );
-    // const checks = await connection.confirmTransaction({signature:ret},'finalised');
+  //   const rpcUrl = clusterUrl(network);
+  //   console.log(rpcUrl);
+  //   const connection = new Connection(rpcUrl, "confirmed");
+  //   //console.log(connection.rpcEndpoint);
+  //   const ret = await confirmTransactionFromFrontend(
+  //     connection,
+  //     transaction,
+  //     solanaWallet
+  //   );
+  //   // const checks = await connection.confirmTransaction({signature:ret},'finalised');
 
-    // console.log(checks);
-    // await connection.confirmTransaction({
-    //     blockhash: transaction.blockhash,
-    //     signature: ret,
-    //   });
-    connection.onSignature(ret, callback, "finalized");
-    return ret;
-  }
+  //   // console.log(checks);
+  //   // await connection.confirmTransaction({
+  //   //     blockhash: transaction.blockhash,
+  //   //     signature: ret,
+  //   //   });
+  //   connection.onSignature(ret, callback, "finalized");
+  //   return ret;
+  // }
 
   const nftMinted = (formData, mintId) => {
     setSolanaMintId(mintId);
