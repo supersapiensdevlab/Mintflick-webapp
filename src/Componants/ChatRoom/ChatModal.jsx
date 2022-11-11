@@ -54,6 +54,9 @@ function ChatModal(props) {
   const videoInput = useRef();
   const fileInput = useRef();
 
+  const [dms, setDms] = useState([]);
+  const [rooms, setRooms] = useState([]);
+
   // For reply click ref
   const scrollTop = useRef(null);
   const messageRef = useRef([]);
@@ -106,6 +109,7 @@ function ChatModal(props) {
           room_id: username,
         });
       } else {
+        console.log('joining room')
         socket.emit("joindm", {
           user_id: user.database.userData.data.user.id,
           room_id: user2.id,
@@ -150,6 +154,10 @@ function ChatModal(props) {
           });
         }, 200);
       });
+      socket.on("conversations", (conversations) => {
+        if (conversations.dms) setDms(conversations.dms);
+        if (conversations.rooms) setRooms(conversations.rooms);
+      });
     } else {
       window.history.replaceState({}, "Home", "/");
     }
@@ -163,7 +171,7 @@ function ChatModal(props) {
   }, [username, isDM]);
 
   useEffect(() => {
-    console.log("msg");
+    console.log(messages);
   }, [messages]);
 
   // set a new message in gun, update the local state to reset the form field
@@ -387,7 +395,7 @@ function ChatModal(props) {
                 //   <div className="text-center animate-spin rounded-full h-7 w-7 ml-3 border-t-2 border-b-2 bg-gradient-to-r from-green-400 to-blue-500 "></div>
                 // </div>
               }
-              useWindow={false}
+              useWindow={true}
               isReverse={true}
             >
               {messages
