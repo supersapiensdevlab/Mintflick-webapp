@@ -74,10 +74,10 @@ function SpinGame() {
         <h1 className="text-center text-4xl text-white py-6">Make a spin 🎰</h1>
 
         <div className="SlotMachine">
-          <div className="spin__slot mx-1">
-            <section className="spin__section">
+          <div className="spin__slot mx-1  ">
+            <section className="spin__section border bg-mintie   rounded-lg">
               <div
-                className=" spin__container bg-dbeats-dark-alt "
+                className=" spin__container   "
                 ref={slotRef[0]}
               >
                 {fruits.map((fruit, i) => (
@@ -89,7 +89,7 @@ function SpinGame() {
             </section>
           </div>
           <div className="spin__slot mx-1">
-            <section className="spin__section">
+            <section className="spin__section border bg-mintie   rounded-lg">
               <div
                 className="spin__container bg-dbeats-dark-alt"
                 ref={slotRef[1]}
@@ -103,7 +103,7 @@ function SpinGame() {
             </section>
           </div>
           <div className="spin__slot mx-1">
-            <section className="spin__section">
+            <section className="spin__section border bg-mintie   rounded-lg">
               <div
                 className="spin__container bg-dbeats-dark-alt shadow-md"
                 ref={slotRef[2]}
