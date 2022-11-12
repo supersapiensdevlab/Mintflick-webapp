@@ -11,6 +11,7 @@ import Loading from "../Componants/Loading/Loading";
 import TimeLine from "../Componants/Home/TimeLine";
 import ProfileMedia from "../Componants/Profile/ProfileMedia";
 import MintWallet from "../Componants/Profile/MintWallet";
+import Vouch from "../Componants/Profile/Vouch";
 
 function Profile() {
   const State = useContext(UserContext);
@@ -58,6 +59,7 @@ function Profile() {
           }
         />
         <TextChannels></TextChannels>
+        <Vouch />
       </div>
       <div className="w-full lg:w-2/4 flex flex-col items-center  lg:h-full pt-14 lg:pt-24 lg:overflow-y-auto">
         <ProfileMedia className="z-10" userName={userName}></ProfileMedia>

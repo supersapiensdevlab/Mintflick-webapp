@@ -2,13 +2,16 @@ import React, { useState } from "react";
 import { useContext } from "react";
 import {
   AlertTriangle,
+  Check,
   CircleCheck,
   DeviceFloppy,
   Edit,
   Link,
   Pencil,
   Settings,
+  Trash,
   Unlink,
+  Upload,
   X,
 } from "tabler-icons-react";
 import coverImage from "../../../Assets/backgrounds/cover.png";
@@ -20,6 +23,7 @@ import CoverImageModal from "./CoverImageModal";
 import ProfileImageModal from "./ProfileImageModal";
 import ConfirmationModal from "../../Home/Modals/ConfirmationModal";
 import LinkNewWalletModal from "../../Home/Modals/LinkNewWalletModal";
+import ListNavigation from "../ListNavigation";
 
 function SettingsModal(props) {
   const [activeTab, setactiveTab] = useState("editProfile");
@@ -29,6 +33,10 @@ function SettingsModal(props) {
   const [showProfileImageModal, setShowProfileImageModal] = useState(false);
   const [unlinkWalletModal, setunlinkWalletModal] = useState(false);
   const [linkNewWalletModalopen, setlinkNewWalletModalopen] = useState(false);
+
+  //verify account form fields
+  const [ensDomain, setensDomain] = useState("");
+  const [socialLinks, setsocialLinks] = useState([]);
 
   const planImage =
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYttbDyk8tE55gznNpc1ujtwlaNTtX4ahdrg&usqp=CAU";
@@ -153,7 +161,7 @@ function SettingsModal(props) {
           <div className="flex justify-between items-center p-2">
             <h3 className="flex items-center gap-2 font-bold text-lg text-brand2">
               <Settings />
-              Settings{" "}
+              Settings
             </h3>
             <X
               onClick={() => clearData()}
@@ -161,7 +169,7 @@ function SettingsModal(props) {
             ></X>
           </div>
         </div>
-        <div className="flex w-full  bg-slate-200 dark:bg-slate-600  ">
+        <div className="flex w-full  bg-slate-200 dark:bg-slate-600">
           <span
             onClick={() => setactiveTab("editProfile")}
             className={`  flex justify-center font-semibold cursor-pointer text-sm text-brand2 p-2 ${
@@ -180,6 +188,15 @@ function SettingsModal(props) {
           >
             Manage Superfans
           </span>
+          <span
+            onClick={() => setactiveTab("account")}
+            className={`  flex justify-center font-semibold cursor-pointer text-sm text-brand2 p-2 ${
+              activeTab === "account" &&
+              "bg-slate-100  border-t-2 border-success dark:bg-slate-800"
+            }`}
+          >
+            Account
+          </span>
         </div>
         {activeTab === "editProfile" && (
           <div className="flex flex-col gap-2 p-4 w-full  justify-center">
@@ -197,9 +214,10 @@ function SettingsModal(props) {
                 onClick={() => {
                   setShowCoverImageModal(true);
                 }}
-                className="p-1 rounded-full bg-slate-400/40 dark:bg-slate-600/40  text-brand2 flex gap-1 cursor-pointer backdrop-blur-sm absolute top-1 right-1"
+                className="p-1 rounded-full bg-slate-400/40 dark:bg-slate-600/50 text-brand2 flex gap-1 cursor-pointer backdrop-blur-sm absolute top-1 right-1"
               >
-                <Pencil className="text-primary " size={16} />
+                <Pencil className=" " size={16} />
+
                 {/* <input
                     className=""
                     type="file"
@@ -227,9 +245,9 @@ function SettingsModal(props) {
                 onClick={() => {
                   setShowProfileImageModal(true);
                 }}
-                className="p-1 rounded-full bg-slate-400/40 dark:bg-slate-600/40  text-brand2 flex gap-1 cursor-pointer backdrop-blur-sm absolute bottom-0 right-0"
+                className="p-1 rounded-full bg-slate-400/40 dark:bg-slate-600/40 text-brand2 flex gap-1 cursor-pointer backdrop-blur-sm absolute bottom-0 right-0"
               >
-                <Pencil className="text-primary " size={16} />
+                <Pencil className=" " size={16} />
               </button>
             </div>
 
@@ -259,6 +277,23 @@ function SettingsModal(props) {
               //   onChange={(e) =>
               //   value={}
             />
+            <div className="form-control w-full">
+              <label className="label">
+                <span className="label-text text-brand4 font-semibold">
+                  Category
+                </span>
+              </label>
+              <select className="select select-bordered">
+                <option disabled selected>
+                  What best describes you?
+                </option>
+                <option>option1</option>
+                <option>option2</option>
+                <option>option3</option>
+                <option>option4</option>
+                <option>option5</option>
+              </select>
+            </div>
             <div className="flex flex-col gap-1 w-full p-4 bg-white dark:bg-slate-700 rounded-lg">
               <span className="text-md font-semibold text-brand4">
                 Connected Wallets
@@ -605,6 +640,68 @@ function SettingsModal(props) {
               <DeviceFloppy /> Save Changes
             </button>
           </div>
+        )}
+        {activeTab === "account" && (
+          <ListNavigation
+            list={["Verify Account"]}
+            content={[
+              <div className="flex flex-col gap-2 p-4 w-full  justify-center">
+                <span className="text-base text-brand4 font-semibold">
+                  Step 1 : Collect vouches
+                </span>
+                <span className="text-base text-brand4 font-semibold">
+                  Step 2 : ENS Domain Name
+                </span>
+                <input
+                  type="text"
+                  className="input  w-full"
+                  placeholder={"Enter your ENS domain name"}
+
+                  //   onChange={(e) =>
+                  //   value={}
+                />
+                <div className="form-control w-full">
+                  <label className="label">
+                    <span className="label-text text-base text-brand4 font-semibold">
+                      Step 3: Social links
+                    </span>
+                  </label>
+                  {socialLinks.map((link, index) => (
+                    <div className="flex items-center gap-2 mb-1">
+                      <input
+                        type="text"
+                        className="input input-sm flex-grow"
+                        placeholder={"Enter link"}
+                        onChange={(e) => socialLinks[(index, e.target.value)]}
+                        //   value={}
+                      />
+                      <button
+                        onClick={() =>
+                          setsocialLinks(
+                            socialLinks.filter((item, i) => {
+                              return index !== i;
+                            })
+                          )
+                        }
+                        className="btn btn-square btn-sm  btn-error"
+                      >
+                        <Trash size={14} />
+                      </button>
+                    </div>
+                  ))}
+                  <button
+                    onClick={() => setsocialLinks([...socialLinks, ""])}
+                    className="btn btn-outline btn-primary btn-sm capitalize"
+                  >
+                    Add Link
+                  </button>
+                </div>
+                <button className="btn btn-brand gap-2 capitalize ">
+                  <Upload size={16} /> Submit
+                </button>
+              </div>,
+            ]}
+          />
         )}
       </div>
       <div
