@@ -811,13 +811,13 @@ function VideoPostModal({ setVideoPostModalOpen }) {
               ) : (
                 <button
                   type={"submit"}
-                  className={`btn  w-full  ${
+                  className={`btn capitalize w-full  ${
                     selectedVideo?.file && selectedThumbnail?.file
                       ? "btn-brand"
                       : "btn-disabled"
-                  } ${uploadingVideo ? "loading" : "btn-ghost"}`}
+                  } ${uploadingVideo ? "loading" : ""}`}
                 >
-                  Post Video
+                  Flick Video
                 </button>
               )}
             </>

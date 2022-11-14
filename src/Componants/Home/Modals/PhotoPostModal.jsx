@@ -520,9 +520,9 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
                   }}
                   className={`btn  ${
                     !selectedPost?.file[0] ? "btn-disabled" : "btn-brand"
-                  } w-full ${uploadingPost ? "loading " : ""}`}
+                  } w-full capitalize ${uploadingPost ? "loading " : ""}`}
                 >
-                  Post photo
+                  Flick Photo
                 </button>
               )}
             </>

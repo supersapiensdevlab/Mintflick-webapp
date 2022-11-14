@@ -171,7 +171,9 @@ function PollModal({ setPollModalOpen }) {
             type={"submit"}
             role="button"
             aria-disabled="true"
-            className={`btn w-full ${uploadingPoll ? "loading" : ""} ${
+            className={`btn capitalize w-full ${
+              uploadingPoll ? "loading" : ""
+            } ${
               question == "" || options.length < 2 || option !== ""
                 ? "btn-disabled"
                 : "btn-brand"

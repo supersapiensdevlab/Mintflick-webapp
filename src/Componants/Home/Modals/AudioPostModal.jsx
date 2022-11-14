@@ -885,13 +885,13 @@ function AudioPostModal({ setAudioPostModalOpen }) {
               ) : (
                 <button
                   type={"submit"}
-                  className={`btn  w-full ${
+                  className={`btn capitalize w-full ${
                     selectedTrack?.file && selectedThumbnail?.file
                       ? "btn-brand"
                       : "btn-disabled"
                   } ${uploadingTrack ? "loading" : ""}`}
                 >
-                  Post audio
+                  Flick Audio
                 </button>
               )}
             </>

@@ -52,7 +52,7 @@ function Home() {
   };
 
   return (
-    <div className=" flex h-screen bg-slate-100 dark:bg-slate-800 lg:bg-white lg:dark:bg-slate-900">
+    <div className=" flex h-screen w-screen bg-slate-100 dark:bg-slate-800 lg:bg-white lg:dark:bg-slate-900">
       <div className="hidden lg:flex flex-col h-full w-1/4 ml-12 mr-4 pt-24 space-y-6 overflow-y-auto">
         <Channels></Channels>
         <LiveChannels></LiveChannels>
@@ -67,7 +67,7 @@ function Home() {
         <div className="my-3"></div>
         <AddPost></AddPost>
         <div className="my-3"></div>
-        <TimeLine className="z-10"></TimeLine>
+        <TimeLine></TimeLine>
       </div>
       <div className="hidden lg:flex flex-col items-end h-full w-1/4 pt-24 mr-12 ml-4">
         <GameOfLuck></GameOfLuck>

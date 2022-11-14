@@ -774,31 +774,31 @@ function GoLive() {
           <div className="w-full flex items-center flex-wrap justify-start gap-2">
             <button
               onClick={() => setScheduleStreamModal(true)}
-              className="btn btn-outline btn-primary rounded-full gap-1"
+              className="btn btn-sm capitalize btn-outline btn-primary rounded-full gap-1"
             >
-              <CalendarTime />
+              <CalendarTime size={16} />
               Schedule upcoming Stream
             </button>
 
             <div className=" flex items-center  w-fit bg-slate-100 dark:bg-slate-800  rounded-full ">
-              <p className="text-sm font-semibold text-brand2 mx-4">
+              <p className="text-sm font-semibold text-brand2 mx-2">
                 To create NFT
               </p>
               {!recording ? (
                 <button
-                  className="flex items-center text-success p-2 px-4 border-2 border-success rounded-full gap-2"
+                  className="flex text-sm items-center text-success p-1 px-2 border-2 border-success rounded-full gap-1"
                   onClick={startRecording}
                 >
-                  <PlayerPlay /> Start Recording
+                  <PlayerPlay size={16} /> Start Recording
                 </button>
               ) : (
                 <button
-                  className="flex items-center text-error p-2 px-4 border-2 border-error rounded-full gap-2"
+                  className="flex items-center text-error p-1 text-sm px-2 border-2 border-error rounded-full gap-1"
                   onClick={stopRecording}
                 >
-                  <span className="relative flex h-4 w-4">
+                  <span className="relative flex h-2 w-2">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span>
-                    <span className="absolute inline-flex rounded-full h-4 w-4 bg-red-600"></span>
+                    <span className="absolute inline-flex rounded-full h-2 w-2 bg-red-600"></span>
                   </span>
                   Stop Recording
                 </button>
@@ -808,7 +808,7 @@ function GoLive() {
             {user.database.userData.data.user &&
             user.database.userData.data.user.streamSchedule > Date.now() &&
             !user.database.userData.data.user.livepeer_data.isActive ? (
-              <span className="flex items-center  w-fit bg-slate-100 dark:bg-slate-800  rounded-full p-3">
+              <span className="flex items-center  w-fit bg-slate-100 dark:bg-slate-800  rounded-full p-2">
                 <span className="relative flex h-3 w-3">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-teal-500 opacity-75"></span>
                   <span className="absolute inline-flex rounded-full h-full w-full bg-teal-600"></span>
@@ -823,7 +823,7 @@ function GoLive() {
                 </p>
               </span>
             ) : (
-              <span className="flex items-center  w-fit bg-slate-100 dark:bg-slate-800  rounded-full p-3">
+              <span className="flex items-center  w-fit bg-slate-100 dark:bg-slate-800  rounded-full p-2">
                 <span className="relative flex h-3 w-3">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span>
                   <span className="absolute inline-flex rounded-full h-full w-full bg-red-600"></span>
@@ -834,10 +834,35 @@ function GoLive() {
               </span>
             )}
           </div>
-
+          <div className="w-full flex  gap-2">
+            <div className="p-2 flex-grow flex flex-col gap-1 text-brand3 h-fit bg-slate-100 dark:bg-slate-800  rounded-xl ">
+              <div className="text-brand5 text-base font-semibold">
+                Stream Title
+              </div>
+              <div className="text-brand2 text-base ">{streamDetails.name}</div>
+            </div>
+            <div className="p-2 w-fit flex flex-col gap-1 text-brand3 h-fit bg-slate-100 dark:bg-slate-800  rounded-xl ">
+              <div className="text-brand5 text-base font-semibold">
+                Stream Category
+              </div>
+              <div className="text-brand2 w-fit text-base ">
+                {streamDetails.category}
+              </div>
+            </div>
+          </div>
           <div className="w-full flex flex-col gap-2">
             <div className="p-2 flex flex-col gap-1 text-brand3 h-fit bg-slate-100 dark:bg-slate-800  rounded-xl ">
-              <div className="text-brand2 text-base font-semibold">
+              <div className="text-brand5 text-base font-semibold">
+                Stream Description
+              </div>
+              <div className="text-brand2 text-base ">
+                {streamDetails.description}
+              </div>
+            </div>
+          </div>
+          <div className="w-full flex flex-col gap-2">
+            <div className="p-2 flex flex-col gap-1 text-brand3 h-fit bg-slate-100 dark:bg-slate-800  rounded-xl ">
+              <div className="text-brand5 text-base font-semibold">
                 Add banners to live stream (Max 4)
               </div>
               <div className="w-full flex flex-wrap">
@@ -1102,18 +1127,16 @@ function GoLive() {
                   ))}
                 </select>
               </div>
-              <div className="mt-2 flex gap-2 justify-end">
+              <div className="mt-4 flex gap-2 justify-end">
                 <button
                   onClick={cancelStreamDetails}
                   className="btn btn-sm btn-ghost"
                 >
-                  reset
+                  Undo
                 </button>
-                <input
-                  className="btn btn-sm btn-success"
-                  type="submit"
-                  value="update"
-                />
+                <button className="btn btn-sm btn-success" type="submit">
+                  Update
+                </button>
               </div>
             </form>
           </div>

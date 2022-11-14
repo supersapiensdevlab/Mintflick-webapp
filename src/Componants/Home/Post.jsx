@@ -777,7 +777,7 @@ function Post(props) {
             />
           </svg>
         )}
-        <div className="flex justify-between items-center">
+        <div className="flex w-full justify-between items-center">
           <Link to={`/homescreen/profile/${props.profileName}`}>
             <div
               // onClick={() => nav(`../profile/${props.profileName}`)}

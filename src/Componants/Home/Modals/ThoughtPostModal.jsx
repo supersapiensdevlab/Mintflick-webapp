@@ -293,7 +293,7 @@ function ThoughtPostModal({ setthoughtPostModalOpen }) {
             onChange={(e) => setCaption(e.target.value)}
             value={caption}
           ></textarea> */}
-          <div ref={textRef} className="bg-slate-700">
+          <div ref={textRef}>
             <MentionsInput
               multiline
               value={caption}
@@ -378,11 +378,11 @@ function ThoughtPostModal({ setthoughtPostModalOpen }) {
               type={"submit"}
               onClick={handleThoughtPost}
               // onClick={onButtonClick}
-              className={`btn  w-full  ${
+              className={`btn capitalize w-full  ${
                 caption ? "btn-brand" : "btn-disabled"
               }  ${uploadingPost ? "loading" : ""}`}
             >
-              Post thought
+              Flick thought
             </button>
           ) : (
             <>
