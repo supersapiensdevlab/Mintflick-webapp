@@ -213,7 +213,7 @@ function ProfileCard(props) {
                   className="btn btn-brand btn-sm "
                   onClick={() => setJoinsuperfanModalOpen(true)}
                 >
-                  become superfan
+                  Join Superfans
                 </button>
               </div>
             ))}

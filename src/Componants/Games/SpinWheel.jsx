@@ -46,7 +46,7 @@ const SpinWheel = () => {
             downDuration={1000}
           />
         </div>
-        <Lottie
+        {/* <Lottie
           className="w-1/2 absolute bottom-0 sm:h-1/2 right-1/2 -z-1"
           autoplay={true}
           loop={true}
@@ -57,7 +57,7 @@ const SpinWheel = () => {
           autoplay={true}
           loop={true}
           animationData={wheel}
-        />
+        /> */}
       </div>
     </div>
   );

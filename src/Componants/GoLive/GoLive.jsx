@@ -19,7 +19,6 @@ import { Keypair, Transaction } from "@solana/web3.js";
 
 function GoLive() {
   const user = useContext(UserContext);
-  const [playbackUrl, setPlaybackUrl] = useState("");
   const [StreamKey, setKey] = useState("");
   const [loader, setLoader] = useState(true);
   const [loadFeed, loadUser] = useUserActions();
@@ -35,6 +34,7 @@ function GoLive() {
   const [showPriceModal, setShowPriceModal] = useState(false);
   const [scheduleStreamModal, setScheduleStreamModal] = useState(false);
   const [mintClipModal, setmintClipModal] = useState(false);
+  const [playbackUrl, setPlaybackUrl] = useState("");
   //
 
   //MultiStreams
@@ -60,6 +60,8 @@ function GoLive() {
   const [uploading, setUploading] = useState(0);
 
   const [hideButton, setHideButton] = useState(false);
+
+  const liveUrl = `${process.env.REACT_APP_CLIENT_URL}/homescreen/liveuser/${user.database.userData?.data?.user?.username}`;
 
   //nft video
   const category = [
@@ -984,13 +986,13 @@ function GoLive() {
                 <p className="text-base flex gap-1 text-brand4">
                   <a
                     className="w-5/6 truncate"
-                    href={`${process.env.REACT_APP_CLIENT_URL}/live/${user.database.userData.data.user.username}`}
+                    href={`${process.env.REACT_APP_CLIENT_URL}/liveuser/${user.database.userData.data.user.username}`}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    {`${process.env.REACT_APP_CLIENT_URL}/live/${user.database.userData.data.user.username}`}
+                    {`${process.env.REACT_APP_CLIENT_URL}/liveuser/${user.database.userData.data.user.username}`}
                   </a>
-                  <CopyToClipboard text={playbackUrl} />
+                  <CopyToClipboard text={liveUrl} />
                 </p>
               </div>
               {/* Stream Title */}

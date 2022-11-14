@@ -270,6 +270,9 @@ function UserLivestream() {
                       </p>
                     </span>
                   ) : (
+                    <></>
+                  )}
+                  {streamUser && streamUser.livepeer_data.isActive ? (
                     <span className="flex items-center h-8 w-fit bg-slate-100 dark:bg-slate-800  rounded-full px-3">
                       <span className="relative flex h-3 w-3">
                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span>
@@ -279,6 +282,8 @@ function UserLivestream() {
                         Live now
                       </p>
                     </span>
+                  ) : (
+                    <></>
                   )}
                   {/* <div className="md:ml-auto flex w-full md:w-fit justify-between gap-2"> */}
                   <span className="flex items-center gap-1 h-8 w-fit bg-slate-100 dark:bg-slate-800  rounded-full px-3">

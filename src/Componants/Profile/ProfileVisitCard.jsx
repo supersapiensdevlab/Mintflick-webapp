@@ -36,7 +36,7 @@ function ProfileVisitCard({ username }) {
   useEffect(() => {
     console.log("called");
     getUser();
-  }, [username]);
+  }, [username, cardUser]);
 
   const handleFollowUser = async (toFollow) => {
     const followData = {
@@ -79,6 +79,8 @@ function ProfileVisitCard({ username }) {
         console.log(error);
       });
   };
+
+  console.log(cardUser);
 
   return (
     <div className="flex flex-col items-center  bg-slate-100 dark:bg-slate-800 w-full h-fit rounded-lg ">
@@ -186,7 +188,7 @@ function ProfileVisitCard({ username }) {
                 setJoinsuperfanModalOpen(true);
               }}
             >
-              become superfan
+              Join Superfans
             </button>
           </div>
         )}
