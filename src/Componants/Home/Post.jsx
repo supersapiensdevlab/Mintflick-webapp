@@ -821,15 +821,17 @@ function Post(props) {
                 <>
                   {State.database.userData?.data?.user?.username !==
                   props.profileUsername ? (
-                    <div
-                      onClick={() => {
-                        handleFollowUser(props.profileUsername);
-                      }}
-                    >
-                      <button className="cursor-pointer items-center btn btn-xs btn-primary btn-outline gap-1 ml-auto rounded-md ">
-                        Follow
-                      </button>
-                    </div>
+                    <Link to={"/homescreen/home"}>
+                      <div
+                        onClick={() => {
+                          handleFollowUser(props.profileUsername);
+                        }}
+                      >
+                        <button className="cursor-pointer items-center btn btn-xs btn-primary btn-outline gap-1 ml-auto rounded-md ">
+                          Follow
+                        </button>
+                      </div>
+                    </Link>
                   ) : (
                     <></>
                   )}
@@ -861,7 +863,7 @@ function Post(props) {
                         onClick={() => setJoinsuperfanModalOpen(true)}
                         className="dark:hover:bg-slate-800"
                       >
-                        <Comet className="-rotate-90" /> Join Superfan
+                        <Comet className="-rotate-90" /> Join Superfans
                       </a>
                     </li>
                   ) : null}

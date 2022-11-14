@@ -76,10 +76,7 @@ function SpinGame() {
         <div className="SlotMachine">
           <div className="spin__slot mx-1  ">
             <section className="spin__section border bg-mintie   rounded-lg">
-              <div
-                className=" spin__container   "
-                ref={slotRef[0]}
-              >
+              <div className=" spin__container   " ref={slotRef[0]}>
                 {fruits.map((fruit, i) => (
                   <div key={i}>
                     <span>{fruit}</span>
@@ -134,7 +131,7 @@ function SpinGame() {
           )}
         </div>
       </div>
-      <Lottie
+      {/* <Lottie
         className="w-1/2 absolute bottom-0 sm:h-1/2 right-1/2 -z-1"
         autoplay={true}
         loop={true}
@@ -145,7 +142,7 @@ function SpinGame() {
         autoplay={true}
         loop={true}
         animationData={wheel}
-      />
+      /> */}
     </>
   );
 }

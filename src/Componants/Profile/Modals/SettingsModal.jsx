@@ -6,6 +6,7 @@ import {
   CircleCheck,
   DeviceFloppy,
   Edit,
+  InfoCircle,
   Link,
   Pencil,
   Settings,
@@ -115,6 +116,8 @@ function SettingsModal(props) {
       });
   };
 
+  console.log(superfanPlans);
+
   const clearData = () => {
     props.setOpen(false);
     setSuperfanPlans({
@@ -142,6 +145,7 @@ function SettingsModal(props) {
     });
     setSuccess(null);
     setWarning(null);
+    setselectedPlan(0);
   };
 
   const handlePlanImageUpdate = (updateFor) => {
@@ -399,17 +403,20 @@ function SettingsModal(props) {
               {selectedPlan === 1 && (
                 <div className=" w-full gap-2 flex flex-col">
                   <div className="flex flex-col items-start gap-1 w-full">
-                    <span className="text-brand4 text-sm mt-2">
-                      Price per month{" "}
+                    <span className="text-brand4 text-sm mt-2 flex space-x-1 items-center">
+                      <p>Price per month</p>
+                      <p
+                        class="tooltip"
+                        data-tip="5% platform fees will be deducted"
+                      >
+                        <InfoCircle size={18} strokeWidth={2} />
+                      </p>
                     </span>
                     <label className="input-group w-full">
                       <input
                         type="number"
                         className="input w-full"
-                        placeholder={
-                          State.database.userData.data?.user?.superfan_data
-                            ?.price
-                        }
+                        placeholder={superfanPlans?.price}
                         onChange={(e) => {
                           if (e.target.value !== "") {
                             superfanPlans.price = e.target.value;
@@ -428,9 +435,7 @@ function SettingsModal(props) {
                     <span className="text-brand4 text-sm">Perks </span>
                     <textarea
                       className="textarea w-full"
-                      placeholder={
-                        State.database.userData.data?.user?.superfan_data?.perks
-                      }
+                      placeholder={superfanPlans?.perks}
                       onChange={(e) => {
                         if (e.target.value !== "") {
                           superfanPlans.perks = e.target.value;
@@ -485,17 +490,20 @@ function SettingsModal(props) {
               {selectedPlan === 2 && (
                 <div className=" w-full gap-2 flex flex-col">
                   <div className="flex flex-col items-start gap-1 w-full">
-                    <span className="text-brand4 text-sm mt-2">
-                      Price per month{" "}
+                    <span className="text-brand4 text-sm mt-2 flex space-x-1 items-center">
+                      <p>Price per month</p>
+                      <p
+                        class="tooltip"
+                        data-tip="5% platform fees will be deducted"
+                      >
+                        <InfoCircle size={18} strokeWidth={2} />
+                      </p>
                     </span>
                     <label className="input-group w-full">
                       <input
                         type="number"
                         className="input w-full"
-                        placeholder={
-                          State.database.userData.data?.user?.superfan_data
-                            ?.price2
-                        }
+                        placeholder={superfanPlans?.price2}
                         onChange={(e) => {
                           if (e.target.value !== "") {
                             superfanPlans.price2 = e.target.value;
@@ -514,10 +522,7 @@ function SettingsModal(props) {
                     <span className="text-brand4 text-sm">Perks </span>
                     <textarea
                       className="textarea w-full"
-                      placeholder={
-                        State.database.userData.data?.user?.superfan_data
-                          ?.perks2
-                      }
+                      placeholder={superfanPlans?.perks2}
                       onChange={(e) => {
                         if (e.target.value !== "") {
                           superfanPlans.perks2 = e.target.value;
@@ -572,17 +577,20 @@ function SettingsModal(props) {
               {selectedPlan === 3 && (
                 <div className=" w-full gap-2 flex flex-col">
                   <div className="flex flex-col items-start gap-1 w-full">
-                    <span className="text-brand4 text-sm mt-2">
-                      Price per month
+                    <span className="text-brand4 text-sm mt-2 flex space-x-1 items-center">
+                      <p>Price per month</p>
+                      <p
+                        class="tooltip"
+                        data-tip="5% platform fees will be deducted"
+                      >
+                        <InfoCircle size={18} strokeWidth={2} />
+                      </p>
                     </span>
                     <label className="input-group w-full">
                       <input
                         type="number"
                         className="input w-full"
-                        placeholder={
-                          State.database.userData.data?.user?.superfan_data
-                            ?.price3
-                        }
+                        placeholder={superfanPlans?.price3}
                         onChange={(e) => {
                           if (e.target.value !== "") {
                             superfanPlans.price3 = e.target.value;
@@ -601,10 +609,7 @@ function SettingsModal(props) {
                     <span className="text-brand4 text-sm">Perks </span>
                     <textarea
                       className="textarea w-full"
-                      placeholder={
-                        State.database.userData.data?.user?.superfan_data
-                          ?.perks3
-                      }
+                      placeholder={superfanPlans?.perks3}
                       onChange={(e) => {
                         if (e.target.value !== "") {
                           superfanPlans.perks3 = e.target.value;

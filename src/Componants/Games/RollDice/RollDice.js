@@ -58,7 +58,7 @@ class RollDice extends Component {
             {this.state.rolling ? "Rolling" : "Roll Dice!"}
           </div>
         </button>
-        <div>
+        {/* <div>
           <Lottie
             className="w-1/2 absolute bottom-0 sm:h-1/2 right-1/2 -z-1"
             autoplay={true}
@@ -71,7 +71,7 @@ class RollDice extends Component {
             loop={true}
             animationData={wheel}
           />
-        </div>
+        </div> */}
       </div>
     );
   }

@@ -19,7 +19,6 @@ import { Keypair, Transaction } from "@solana/web3.js";
 
 function GoLive() {
   const user = useContext(UserContext);
-  const [playbackUrl, setPlaybackUrl] = useState("");
   const [StreamKey, setKey] = useState("");
   const [loader, setLoader] = useState(true);
   const [loadFeed, loadUser] = useUserActions();
@@ -35,6 +34,7 @@ function GoLive() {
   const [showPriceModal, setShowPriceModal] = useState(false);
   const [scheduleStreamModal, setScheduleStreamModal] = useState(false);
   const [mintClipModal, setmintClipModal] = useState(false);
+  const [playbackUrl, setPlaybackUrl] = useState("");
   //
 
   //MultiStreams
@@ -60,6 +60,8 @@ function GoLive() {
   const [uploading, setUploading] = useState(0);
 
   const [hideButton, setHideButton] = useState(false);
+
+  const liveUrl = `${process.env.REACT_APP_CLIENT_URL}/homescreen/liveuser/${user.database.userData?.data?.user?.username}`;
 
   //nft video
   const category = [
@@ -806,8 +808,7 @@ function GoLive() {
             </div>
 
             {user.database.userData.data.user &&
-            user.database.userData.data.user.streamSchedule > Date.now() &&
-            !user.database.userData.data.user.livepeer_data.isActive ? (
+            user.database.userData.data.user.streamSchedule > Date.now() ? (
               <span className="flex items-center  w-fit bg-slate-100 dark:bg-slate-800  rounded-full p-3">
                 <span className="relative flex h-3 w-3">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-teal-500 opacity-75"></span>
@@ -823,6 +824,10 @@ function GoLive() {
                 </p>
               </span>
             ) : (
+              <></>
+            )}
+            {user.database.userData.data.user &&
+            user.database.userData.data.user.livepeer_data.isActive ? (
               <span className="flex items-center  w-fit bg-slate-100 dark:bg-slate-800  rounded-full p-3">
                 <span className="relative flex h-3 w-3">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span>
@@ -832,6 +837,8 @@ function GoLive() {
                   Live now
                 </p>
               </span>
+            ) : (
+              <></>
             )}
           </div>
 
@@ -959,13 +966,13 @@ function GoLive() {
                 <p className="text-base flex gap-1 text-brand4">
                   <a
                     className="w-5/6 truncate"
-                    href={`${process.env.REACT_APP_CLIENT_URL}/live/${user.database.userData.data.user.username}`}
+                    href={`${process.env.REACT_APP_CLIENT_URL}/liveuser/${user.database.userData.data.user.username}`}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    {`${process.env.REACT_APP_CLIENT_URL}/live/${user.database.userData.data.user.username}`}
+                    {`${process.env.REACT_APP_CLIENT_URL}/liveuser/${user.database.userData.data.user.username}`}
                   </a>
-                  <CopyToClipboard text={playbackUrl} />
+                  <CopyToClipboard text={liveUrl} />
                 </p>
               </div>
               {/* Stream Title */}

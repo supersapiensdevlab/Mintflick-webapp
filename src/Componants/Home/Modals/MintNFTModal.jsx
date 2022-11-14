@@ -19,6 +19,7 @@ function MintNFTModal({
   id,
   contentType,
 }) {
+  console.log(content);
   const State = useContext(UserContext);
   const [successMessage, setSuccessMessage] = useState(
     "Please confirm to mint this post as an NFT"
@@ -123,10 +124,12 @@ function MintNFTModal({
         </div>
 
         <div className="flex flex-wrap p-4 w-full space-y-4 justify-center text-white">
-          <img
-            src={videoImage ? videoImage : content}
-            className="h-96 w-full object-cover rounded-lg"
-          />
+          {(videoImage || content) && (
+            <img
+              src={videoImage ? videoImage : content}
+              className="h-96 w-full object-cover rounded-lg"
+            />
+          )}
           <p>{successMessage}</p>
           <button
             onClick={handleMinting}
