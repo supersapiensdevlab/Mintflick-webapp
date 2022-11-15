@@ -11,7 +11,7 @@ import InfiniteScroll from "react-infinite-scroller";
 import { useContext } from "react";
 import { UserContext } from "../../Store";
 import { Link, useLocation, useParams } from "react-router-dom";
-import { makeStorageClient } from "../../Helper/uploadHelper";
+import { makeStorageClient, uploadFile } from "../../Helper/uploadHelper";
 import { detectURLs } from "../../Helper/uploadHelperWeb3Storage";
 import placeholderImage from "../../Assets/profile-pic.png";
 
@@ -349,6 +349,8 @@ function ChatRoom(props) {
     return client.put(file, { onRootCidReady, onStoredChunk });
   }
 
+  console.log(selectedFile);
+
   // FOr Links
   // use whatever you want here
   const URL_REGEX =
@@ -361,7 +363,7 @@ function ChatRoom(props) {
       );
 
   return (
-    <div className=" flex h-screen bg-slate-100 dark:bg-slate-800 lg:bg-white lg:dark:bg-slate-900">
+    <div className=" flex h-screen bg-slate-100 dark:bg-slate-800 lg:bg-white lg:dark:bg-slate-900 relative">
       <div className="flex lg:hidden z-[9999] fixed top-0 left-0 flex-col  w-screen h-screen ">
         <ChatsListMobile
           userName={username}
@@ -687,20 +689,7 @@ function ChatRoom(props) {
                 })
               : "<></>"}
           </InfiniteScroll>
-          <div
-            onClick={() => {
-              chatRef.current.scrollIntoView({
-                behavior: "smooth",
-                block: "end",
-                inline: "nearest",
-              });
-            }}
-            className="p-1 absolute w-full flex justify-center bottom-16   z-100"
-          >
-            <div className="p-2 rounded-full bg-slate-400/40 dark:bg-slate-600/40  text-brand2 flex gap-1 cursor-pointer backdrop-blur-sm">
-              <ChevronDown />
-            </div>
-          </div>
+
           <div ref={chatRef} />
         </div>
         <div className=" border-t-2 border-slate-200 dark:border-slate-700 w-full bg-slate-300 dark:bg-slate-800 ">
@@ -931,7 +920,7 @@ function ChatRoom(props) {
                   name="message"
                   type="text"
                   placeholder="Enter Message"
-                  required
+                  required={selectedFile ? false : true}
                   autoComplete="false"
                   className="w-full rounded-md textarea "
                   onKeyDown={handleKeyDown}
@@ -952,7 +941,6 @@ function ChatRoom(props) {
                 </button> */}
                 {/*  */}
                 <button
-                  disabled={formState.message.length < 1}
                   type="submit"
                   className={`
                  
@@ -969,6 +957,20 @@ function ChatRoom(props) {
       </div>
       <div className="hidden lg:flex flex-col items-end h-full w-1/4 pt-24 mr-12 ml-4">
         <ProfileVisitCard username={username} />
+      </div>
+      <div
+        onClick={() => {
+          chatRef.current.scrollIntoView({
+            behavior: "smooth",
+            block: "end",
+            inline: "nearest",
+          });
+        }}
+        className="p-1 absolute w-full flex bottom-2 right-2 justify-end z-100"
+      >
+        <div className="p-2 rounded-full bg-slate-400/40 dark:bg-slate-600/40  text-brand2 flex gap-1 cursor-pointer backdrop-blur-sm">
+          <ChevronDown />
+        </div>
       </div>
     </div>
   );

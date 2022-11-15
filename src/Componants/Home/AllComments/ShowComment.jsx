@@ -5,6 +5,7 @@ import { UserContext } from "../../../Store";
 import Picker from "emoji-picker-react";
 import placeholderImage from "../../../Assets/profile-pic.png";
 import { Image } from "react-img-placeholder";
+import useUserActions from "../../../Hooks/useUserActions";
 
 function ShowComment({
   comment,
@@ -25,6 +26,8 @@ function ShowComment({
   const onEmojiClick = (event, emojiObject) => {
     setReplyText(replyText + emojiObject.emoji);
   };
+
+  const [loadFeed, loadUser] = useUserActions();
 
   const [profile, setProfile] = useState(null);
   const [name, setName] = useState(null);
@@ -121,9 +124,13 @@ function ShowComment({
       if (isLiked) {
         setLikeCount(likeCount - 1);
         setIsLiked(false);
+        await loadFeed();
+        await loadUser();
       } else {
         setLikeCount(likeCount + 1);
         setIsLiked(true);
+        await loadFeed();
+        await loadUser();
       }
     }
   };

@@ -35,6 +35,7 @@ function GoLive() {
   const [scheduleStreamModal, setScheduleStreamModal] = useState(false);
   const [mintClipModal, setmintClipModal] = useState(false);
   const [playbackUrl, setPlaybackUrl] = useState("");
+  const [saveSuccess, setSaveSuccess] = useState(null);
   //
 
   //MultiStreams
@@ -109,6 +110,8 @@ function GoLive() {
   const [sharable_data, setsharable_data] = useState();
   const [tokenId, setTokenId] = useState(null);
   const [formData, setFormData] = useState(null);
+
+  const [undoButton, setUndoButton] = useState(false);
 
   // Schedule Date & Time
   const [streamSchedule, setStreamSchedule] = useState(null);
@@ -316,6 +319,7 @@ function GoLive() {
       royality: "",
     });
     setmintClipModal(false);
+    setSaveSuccess(null);
   };
 
   //edit platform
@@ -546,6 +550,19 @@ function GoLive() {
 
   // console.log(user.database.userData.data.user);
 
+  const saveStream = () => {
+    const blobobject = new Blob([recordvideo?.videoFile]);
+    const blob = window.URL.createObjectURL(blobobject);
+    const anchor = document.createElement("a");
+    anchor.style.display = "none";
+    anchor.href = blob;
+    anchor.download = `${recordvideo?.videoFile?.name}`;
+    document.body.appendChild(anchor);
+    anchor.click();
+    window.URL.revokeObjectURL(blob);
+    setSaveSuccess(true);
+  };
+
   useEffect(() => {
     if (user.database.userData.data) {
       if (user.database.userData.data.user.streamDetails) {
@@ -553,8 +570,6 @@ function GoLive() {
       }
     }
   }, [user.database.userData.data?.user]);
-
-  console.log(recordvideo);
 
   async function partialSignWithWallet(encodedTransaction) {
     //we have to pass the recoveredTransaction received in the previous step in the encodedTransaction parameter
@@ -676,6 +691,7 @@ function GoLive() {
   const cancelStreamDetails = () => {
     if (user.database.userData.data.user.streamDetails) {
       setStreamDetails(user.database.userData.data.user.streamDetails);
+      setUndoButton(false);
     }
   };
 
@@ -825,6 +841,10 @@ function GoLive() {
                 </p>
               </span>
             ) : (
+              <></>
+            )}
+            {user.database.userData.data.user &&
+            user.database.userData.data.user.livepeer_data.isActive ? (
               <span className="flex items-center  w-fit bg-slate-100 dark:bg-slate-800  rounded-full p-2">
                 <span className="relative flex h-3 w-3">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span>
@@ -834,6 +854,8 @@ function GoLive() {
                   Live now
                 </p>
               </span>
+            ) : (
+              <></>
             )}
           </div>
           <div className="w-full flex  gap-2">
@@ -1082,12 +1104,13 @@ function GoLive() {
                   className="input w-full"
                   required={true}
                   value={streamDetails.name}
-                  onChange={(e) =>
+                  onChange={(e) => {
                     setStreamDetails({
                       ...streamDetails,
                       name: e.target.value,
-                    })
-                  }
+                    });
+                    setUndoButton(true);
+                  }}
                   type="text"
                 />
               </div>
@@ -1098,12 +1121,13 @@ function GoLive() {
                 <textarea
                   required={true}
                   value={streamDetails.description}
-                  onChange={(e) =>
+                  onChange={(e) => {
                     setStreamDetails({
                       ...streamDetails,
                       description: e.target.value,
-                    })
-                  }
+                    });
+                    setUndoButton(true);
+                  }}
                   rows={2}
                   className="w-full textarea"
                   type="text"
@@ -1113,12 +1137,13 @@ function GoLive() {
                 <label className=" text-sm text-brand3">Stream Category</label>
                 <select
                   className="select block w-full"
-                  onChange={(e) =>
+                  onChange={(e) => {
                     setStreamDetails({
                       ...streamDetails,
                       category: e.target.value,
-                    })
-                  }
+                    });
+                    setUndoButton(true);
+                  }}
                   value={streamDetails.category}
                 >
                   <option disabled selected>
@@ -1129,13 +1154,18 @@ function GoLive() {
                   ))}
                 </select>
               </div>
+
               <div className="mt-4 flex gap-2 justify-end">
-                <button
-                  onClick={cancelStreamDetails}
-                  className="btn btn-sm btn-ghost"
-                >
-                  Undo
-                </button>
+                {undoButton ? (
+                  <button
+                    onClick={cancelStreamDetails}
+                    className="btn btn-sm btn-ghost"
+                  >
+                    Undo
+                  </button>
+                ) : (
+                  <></>
+                )}
                 <button className="btn btn-sm btn-success" type="submit">
                   Update
                 </button>
@@ -1348,16 +1378,27 @@ function GoLive() {
                 {mintSuccess}
               </p>
             )}
-            <div
-              disabled={hideButton}
-              onClick={() => {
-                // mintNFT();
-                // setHideButton(true);
-                handleMinting();
-              }}
-              className={`btn btn-brand w-full ${minting ? "loading" : ""}`}
-            >
-              Mint as NFT
+            <div className="w-full px-1 flex space-x-2 -ml-1">
+              <div
+                disabled={hideButton}
+                onClick={() => {
+                  // mintNFT();
+                  // setHideButton(true);
+                  handleMinting();
+                }}
+                className={`btn btn-brand ${
+                  recordvideo?.videoFile ? "w-1/2" : "w-full"
+                }  ${minting ? "loading" : ""}`}
+              >
+                Mint as NFT
+              </div>
+              {recordvideo?.videoFile ? (
+                <button className="btn btn-brand w-1/2 " onClick={saveStream}>
+                  {saveSuccess ? "Saved" : "Save Stream"}
+                </button>
+              ) : (
+                <></>
+              )}
             </div>
           </div>
         </div>
