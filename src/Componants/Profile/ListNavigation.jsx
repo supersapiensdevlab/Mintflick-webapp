@@ -22,7 +22,7 @@ function ListNavigation(props) {
       </div>
       <div
         className={`${
-          active ? "w-full p-4" : "w-0 "
+          active ? "w-full py-2 px-1" : "w-0 "
         } absolute h-full right-0 top-0 bg-slate-100 dark:bg-slate-800  transition-all ease-in-out flex flex-col justify-start items-start `}
       >
         <button

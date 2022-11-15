@@ -7,19 +7,19 @@ function TopNavigation() {
   const [active, setActive] = useState(1);
   const data = [
     {
-      icon: <SmartHome size={28}> </SmartHome>,
+      icon: <SmartHome size={22}> </SmartHome>,
       isActive: 1,
       link: "/homescreen/home",
       name: "Home",
     },
     {
-      icon: <AccessPoint size={28}></AccessPoint>,
+      icon: <AccessPoint size={22}></AccessPoint>,
       isActive: 2,
       link: "/homescreen/live",
       name: "Live",
     },
     {
-      icon: <Confetti size={28}></Confetti>,
+      icon: <Confetti size={22}></Confetti>,
       isActive: 3,
       link: "/homescreen/marketPlace",
       name: "Event",
@@ -41,7 +41,7 @@ function TopNavigation() {
           }
         >
           {item.icon}
-          <p className="text-white normal-case">{item.name}</p>
+          <p className="font-semibold text-xs">{item.name}</p>
         </NavLink>
       ))}
     </div>
