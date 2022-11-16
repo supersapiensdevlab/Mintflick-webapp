@@ -9,8 +9,7 @@ import {
 import { OpenloginAdapter } from "@web3auth/openlogin-adapter";
 import RPC from "./solanaRPC";
 
-const clientId =
-  "BDHO2TAO1JeWQqhvAdqA40Fzjixs_sEf-yXhp-QAK3MfnUclbzYHRsE_BvG9F5cmDopDkGV3LJ1n-nR7Ohtn_wc"; // get from https://dashboard.web3auth.io
+const clientId = `${process.env.REACT_APP_WEB3AUTH_CLIENT_ID}`; // get from https://dashboard.web3auth.io
 
 function App() {
   const [web3auth, setWeb3auth] = useState(null);
