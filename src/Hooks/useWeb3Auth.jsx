@@ -78,7 +78,7 @@ export default function useWeb3Auth() {
       const openloginAdapter = new OpenloginAdapter({
         adapterSettings: {
           clientId,
-          network: "devnet",
+          network: "testnet",
           uxMode: "popup",
           whiteLabel: {
             name: "Mintflick",
