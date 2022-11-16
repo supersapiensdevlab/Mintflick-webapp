@@ -1,11 +1,17 @@
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
-import { ArrowNarrowRight, Heart } from "tabler-icons-react";
+import {
+  AlertTriangle,
+  ArrowNarrowRight,
+  Heart,
+  Trash,
+} from "tabler-icons-react";
 import { UserContext } from "../../../Store";
 import Picker from "emoji-picker-react";
 import placeholderImage from "../../../Assets/profile-pic.png";
 import { Image } from "react-img-placeholder";
 import useUserActions from "../../../Hooks/useUserActions";
+import ConfirmationModal from "../Modals/ConfirmationModal";
 
 function ShowComment({
   comment,
@@ -14,6 +20,7 @@ function ShowComment({
   setCommentCount,
   replyTo,
   original,
+  removeComment,
 }) {
   const [isLiked, setIsLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
@@ -31,6 +38,10 @@ function ShowComment({
 
   const [profile, setProfile] = useState(null);
   const [name, setName] = useState(null);
+  const [username, setUsername] = useState(null);
+
+  const [confirmModal, setConfirmModal] = useState(false);
+
   useEffect(() => {
     if (replyTo) {
       axios
@@ -44,6 +55,7 @@ function ShowComment({
               : "https://cdn-icons-png.flaticon.com/512/149/149071.png"
           );
           setName(res.data ? res.data.name : "deleted user");
+          setUsername(res.data ? res.data.username : "deleteduser");
         })
         .catch((err) => console.log(err));
     }
@@ -97,7 +109,6 @@ function ShowComment({
         console.log(like.user_id);
         console.log(State.database.userData.data.user._id);
         if (like == State.database.userData.data.user._id) {
-          console.log("setting trueeeeee");
           setIsLiked(true);
         }
       });
@@ -133,6 +144,42 @@ function ShowComment({
         await loadUser();
       }
     }
+  };
+
+  const handleDeleteComment = async () => {
+    try {
+      let data = {
+        user_data_id: user_id,
+        content: contentData,
+        comment: comment,
+        replyTo: replyTo,
+      };
+      const res = await axios({
+        method: "post",
+        url: `${process.env.REACT_APP_SERVER_URL}/user/commentdelete`,
+        data: data,
+        headers: {
+          "content-type": "application/json",
+          "auth-token": JSON.stringify(localStorage.getItem("authtoken")),
+        },
+      });
+      console.log(res);
+      if (res.status == 200) {
+        console.log("removed");
+        removeComment(comment);
+        setCommentCount((commentsNumber) => commentsNumber - 1);
+        await loadFeed();
+        await loadUser();
+      }
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setConfirmModal(false);
+    }
+  };
+
+  const removeMyReplyComments = (com) => {
+    setMyReplyComments((cmts) => cmts.filter((c) => c._id !== com._id));
   };
   return (
     <div
@@ -188,6 +235,32 @@ function ShowComment({
               <span onClick={() => setIsReply(true)}>Reply</span>
             </>
           )}
+          {comment.username === State.database.userData?.data?.user.username ? (
+            <>
+              <span>|</span>
+              <Trash
+                onClick={() => {
+                  setConfirmModal(true);
+                }}
+                size={16}
+                className={`${"text-red-500 hover:text-white fill-rose-500"} `}
+              ></Trash>
+            </>
+          ) : (
+            replyTo &&
+            username === State.database.userData?.data?.user.username && (
+              <>
+                <span>|</span>
+                <Trash
+                  onClick={() => {
+                    setConfirmModal(true);
+                  }}
+                  size={16}
+                  className={`${"text-red-500 hover:text-white fill-rose-500"} `}
+                ></Trash>
+              </>
+            )
+          )}
         </div>
 
         {/* For replies of comments */}
@@ -201,6 +274,7 @@ function ShowComment({
               contentData={contentData}
               setCommentCount={setCommentCount}
               replyTo={comment._id}
+              removeComment={removeComment}
             />
           ))
         ) : (
@@ -216,6 +290,7 @@ function ShowComment({
               contentData={contentData}
               setCommentCount={setCommentCount}
               replyTo={comment._id}
+              removeComment={removeMyReplyComments}
             />
           ))
         ) : (
@@ -252,6 +327,16 @@ function ShowComment({
           </div>
         )}
       </div>
+
+      <ConfirmationModal
+        icon={<AlertTriangle className="text-error " />}
+        title="Delete Comment"
+        content="Do you want to delete your comment ?"
+        open={confirmModal}
+        setOpen={setConfirmModal}
+        buttonLable="Delete"
+        onConfirm={handleDeleteComment}
+      />
     </div>
   );
 }

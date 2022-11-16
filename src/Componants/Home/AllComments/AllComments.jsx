@@ -4,7 +4,7 @@ import { Rss } from 'tabler-icons-react';
 import { UserContext } from '../../../Store';
 import ShowComment from './ShowComment';
 
-function AllComments({ contentData, user_id, myComments, setCommentCount }) {
+function AllComments({ contentData, user_id, myComments, setCommentCount,setMyComments }) {
     const State = useContext(UserContext);
     const [comments, setComments] = useState([]);
     const [totalComments, setTotalComments] = useState(0);
@@ -78,18 +78,47 @@ function AllComments({ contentData, user_id, myComments, setCommentCount }) {
             },
         });
     };
+
+    const removeComment = (com) =>{
+        setComments((cmts) =>
+        cmts.filter((c) => c._id !== com._id)
+      );
+    }
+    const removeComment2 = (com) =>{
+      let allcomments = comments;
+      for(var i=0;i<allcomments.length;i++){
+        if(allcomments[i]._id == com._id){
+            allcomments.splice(i,1);
+            return true;
+        }else{
+            if(allcomments[i].reply){
+                for(var j=0;j<allcomments[i].reply.length;j++){
+                    if(allcomments[i].reply[j]._id == com._id){
+                        allcomments[i].reply.splice(j,1);
+                        return true;
+                    }
+                }
+            }
+        }
+      }
+    }
+    const removeMyComment = (com) =>{
+        setMyComments((cmts) =>
+        cmts.filter((c) => c._id !== com._id)
+      );
+    }
     return (
         <div className=" justify-between w-full space-y-2">
             {myComments && myComments.length > 0 ? (
                 myComments.map((comment, index) => (
-                    <ShowComment original={true} id={comment._id} key={index} comment={comment} user_id={user_id} contentData={contentData} setCommentCount={setCommentCount} />
+                    <ShowComment original={true} id={comment._id} key={index} comment={comment} user_id={user_id} contentData={contentData} setCommentCount={setCommentCount} removeComment={removeMyComment} />
                 ))
             ) : (
                 <></>
             )}
             {comments && comments.length > 0 ? (
                 comments.map((comment, index) => (
-                    <ShowComment original={true} id={comment._id} key={index} comment={comment} user_id={user_id} contentData={contentData} setCommentCount={setCommentCount} />
+                    <ShowComment original={true} id={comment._id} key={index} comment={comment} user_id={user_id} contentData={contentData} setCommentCount={setCommentCount} removeComment={removeComment2} />
                 ))
             ) : (
                 // <div className="text-white">No comments</div>

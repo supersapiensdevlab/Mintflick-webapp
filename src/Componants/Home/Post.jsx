@@ -1367,6 +1367,7 @@ function Post(props) {
         {showComments && (props.comments || myComments.length > 0) ? (
           <AllComments
             myComments={myComments}
+            setMyComments={setMyComments}
             user_id={props.profileuser_id}
             contentData={props.content}
             setCommentCount={setCommentCount}

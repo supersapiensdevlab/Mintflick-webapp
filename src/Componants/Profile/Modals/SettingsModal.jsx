@@ -118,8 +118,6 @@ function SettingsModal(props) {
       });
   };
 
-  console.log(superfanPlans);
-
   const clearData = () => {
     props.setOpen(false);
     setSuperfanPlans({
