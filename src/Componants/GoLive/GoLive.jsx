@@ -4,7 +4,13 @@ import { io } from "socket.io-client";
 import axios from "axios";
 import { makeStorageClient } from "../../Helper/uploadHelper";
 import ReactPlayer from "react-player";
-import { CalendarTime, PlayerPlay, PlayerRecord, X } from "tabler-icons-react";
+import {
+  AccessPointOff,
+  CalendarTime,
+  PlayerPlay,
+  PlayerRecord,
+  X,
+} from "tabler-icons-react";
 import moment from "moment";
 import useUserActions from "../../Hooks/useUserActions";
 import CopyToClipboard from "../CopyButton/CopyToClipboard";
@@ -16,6 +22,7 @@ import { decode } from "bs58";
 import { clusterApiUrl, Connection } from "@solana/web3.js";
 import { SolanaWallet } from "@web3auth/solana-provider";
 import { Keypair, Transaction } from "@solana/web3.js";
+import placeholder from "../../Assets/Gaming Posters/liveplaceholder.jpg";
 
 function GoLive() {
   const user = useContext(UserContext);
@@ -780,14 +787,27 @@ function GoLive() {
       <div className="flex flex-col lg:flex-row p-4 gap-2">
         <div className="flex-1 space-y-2">
           <div className="rounded-sm overflow-hidden">
-            <ReactPlayer
-              controls={true}
-              width={"100%"}
-              height={"max-content"}
-              url={playbackUrl}
-              creatorData={user.database.userData.data.user}
-              footer={false}
-            />
+            {user.database.userData.data.user &&
+            user.database.userData.data.user.livepeer_data.isActive ? (
+              <ReactPlayer
+                controls={true}
+                width={"100%"}
+                height={"max-content"}
+                url={playbackUrl}
+                creatorData={user.database.userData.data.user}
+                footer={false}
+              />
+            ) : (
+              <img
+                className="border-2 border-slate-500 aspect-video w-full object-cover rounded-lg"
+                src={
+                  user.database.userData.data?.user.thumbnail
+                    ? user.database.userData.data.user.thumbnail
+                    :
+                  placeholder
+                }
+              />
+            )}
           </div>
           <div className="w-full flex items-center flex-wrap justify-start gap-2">
             <button
@@ -855,7 +875,10 @@ function GoLive() {
                 </p>
               </span>
             ) : (
-              <></>
+              <span className="flex items-center text-brand2 w-fit bg-slate-100 dark:bg-slate-800  rounded-full p-2">
+                <AccessPointOff size={16} />
+                <p className="text-sm font-semibold  mx-2">Offline</p>
+              </span>
             )}
           </div>
           <div className="w-full flex  gap-2">

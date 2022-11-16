@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useContext } from "react";
 import {
   AlertTriangle,
+  BrandInstagram,
+  BrandTwitter,
   Check,
   CircleCheck,
   DeviceFloppy,
@@ -671,6 +673,33 @@ function SettingsModal(props) {
                       Step 3: Social links
                     </span>
                   </label>
+                  <div className="mb-1 flex items-center">
+                    <BrandTwitter
+                      size={16}
+                      className="translate-x-2 text-[#00acee]"
+                    />
+                    <input
+                      type="text"
+                      className="input input-sm w-full  -ml-4 pl-8"
+                      placeholder={"Twitter link"}
+                      onChange={(e) => {}}
+                      //   value={}
+                    />
+                  </div>
+                  <div className="mb-1 flex items-center">
+                    <BrandInstagram
+                      size={16}
+                      className="translate-x-2 text-[#bc2a8d]"
+                    />
+                    <input
+                      type="text"
+                      className="input input-sm w-full  -ml-4 pl-8"
+                      placeholder={"Instagram link"}
+                      onChange={(e) => {}}
+                      //   value={}
+                    />
+                  </div>
+
                   {socialLinks.map((link, index) => (
                     <div className="flex items-center gap-2 mb-1">
                       <input
