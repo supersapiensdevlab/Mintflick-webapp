@@ -1,219 +1,47 @@
-import { useEffect, useState } from "react";
-import { Web3Auth } from "@web3auth/modal";
-import {
-  WALLET_ADAPTERS,
-  CHAIN_NAMESPACES,
-  SafeEventEmitterProvider,
-} from "@web3auth/base";
-import { OpenloginAdapter } from "@web3auth/openlogin-adapter";
-import RPC from "./solanaRPC";
+import { Web3Storage } from "web3.storage";
+import React, { useEffect } from "react";
 
-const clientId =
-  "BBFmlal-Ty4AJmMjgQ6ybm5f-e_aeIt8dhWrqbQMmR6Q09LaRZis66IGCWSnnd6wNt5ivjjrCvy6F3PzgbbeRyI"; // get from https://dashboard.web3auth.io
+function testConnect() {
+  async function upload(filesInput) {
+    console.log("UPLOADING...");
+    // Construct with token and endpoint
+    const client = new Web3Storage({
+      token:
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDBhNzk3MkY3QTRDNUNkZDJlOENBQzE1RDJCZjJBRUFlQTg1QmM3MzEiLCJpc3MiOiJ3ZWIzLXN0b3JhZ2UiLCJpYXQiOjE2Mjc1MTY1MTgyMjUsIm5hbWUiOiJEQmVhdHMifQ.16-okZlX7RmNcszqLq06lvzDkZ-Z8CHnmAIRXjQ2q5Q",
+    });
 
-function App() {
-  const [web3auth, setWeb3auth] = useState(null);
-  const [provider, setProvider] = useState(null);
+    // Pack files into a CAR and send to web3.storage
+    const rootCid = await client.put(filesInput); // Promise<CIDString>
+    console.log(rootCid);
 
-  useEffect(() => {
-    const init = async () => {
-      try {
-        const web3auth = new Web3Auth({
-          clientId,
-          chainConfig: {
-            chainNamespace: CHAIN_NAMESPACES.SOLANA,
-            chainId: "0x2", // Please use 0x1 for Mainnet, 0x2 for Testnet, 0x3 for Devnet
-            rpcTarget: "https://rpc.ankr.com/solana", // This is the public RPC we have added, please pass on your own endpoint while creating an app
-          },
-          uiConfig: {
-            theme: "dark",
-            loginMethodsOrder: ["facebook", "google"],
-            appLogo: "https://web3auth.io/images/w3a-L-Favicon-1.svg", // Your App Logo Here
-          },
-        });
+    // Get info on the Filecoin deals that the CID is stored in
+    const info = await client.status(rootCid); // Promise<Status | undefined>
+    console.log(info);
 
-        const openloginAdapter = new OpenloginAdapter({
-          adapterSettings: {
-            clientId,
-            network: "testnet",
-            uxMode: "popup",
-            whiteLabel: {
-              name: "Your app Name",
-              logoLight: "https://web3auth.io/images/w3a-L-Favicon-1.svg",
-              logoDark: "https://web3auth.io/images/w3a-D-Favicon-1.svg",
-              defaultLanguage: "en",
-              dark: true, // whether to enable dark mode. defaultValue: false
-            },
-          },
-        });
-        web3auth.configureAdapter(openloginAdapter);
-        setWeb3auth(web3auth);
+    // Fetch and verify files from web3.storage
+    const res = await client.get(rootCid); // Promise<Web3Response | null>
+    console.log(res);
 
-        await web3auth.initModal({
-          modalConfig: {
-            [WALLET_ADAPTERS.OPENLOGIN]: {
-              label: "openlogin",
-              loginMethods: {
-                google: {
-                  name: "google login",
-                  logoDark:
-                    "url to your custom logo which will shown in dark mode",
-                },
-                facebook: {
-                  // it will hide the facebook option from the Web3Auth modal.
-                  showOnModal: false,
-                },
-              },
-              // setting it to false will hide all social login methods from modal.
-              showOnModal: true,
-            },
-          },
-        });
-        if (web3auth.provider) {
-          setProvider(web3auth.provider);
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    init();
-  }, []);
-
-  const login = async () => {
-    if (!web3auth) {
-      console.log("web3auth not initialized yet");
-      return;
+    const files = await res.files(); // Promise<Web3File[]>
+    console.log(files);
+    for (const file of files) {
+      console.log(`${file.cid} ${file.name} ${file.size}`);
     }
-    const web3authProvider = await web3auth.connect();
-    setProvider(web3authProvider);
-  };
-
-  const getUserInfo = async () => {
-    if (!web3auth) {
-      console.log("web3auth not initialized yet");
-      return;
-    }
-    const user = await web3auth.getUserInfo();
-    console.log(user);
-  };
-
-  const logout = async () => {
-    if (!web3auth) {
-      console.log("web3auth not initialized yet");
-      return;
-    }
-    await web3auth.logout();
-    setProvider(null);
-  };
-
-  const getAccounts = async () => {
-    if (!provider) {
-      console.log("provider not initialized yet");
-      return;
-    }
-    const rpc = new RPC(provider);
-    const address = await rpc.getAccounts();
-    console.log(address);
-  };
-
-  const getBalance = async () => {
-    if (!provider) {
-      console.log("provider not initialized yet");
-      return;
-    }
-    const rpc = new RPC(provider);
-    const balance = await rpc.getBalance();
-    console.log(balance);
-  };
-
-  const sendTransaction = async () => {
-    if (!provider) {
-      console.log("provider not initialized yet");
-      return;
-    }
-    const rpc = new RPC(provider);
-    const receipt = await rpc.sendTransaction();
-    console.log(receipt);
-  };
-
-  const signMessage = async () => {
-    if (!provider) {
-      console.log("provider not initialized yet");
-      return;
-    }
-    const rpc = new RPC(provider);
-    const signedMessage = await rpc.signMessage();
-    console.log(signedMessage);
-  };
-
-  const getPrivateKey = async () => {
-    if (!provider) {
-      console.log("provider not initialized yet");
-      return;
-    }
-    const rpc = new RPC(provider);
-    const privateKey = await rpc.getPrivateKey();
-    console.log(privateKey);
-  };
-  const loggedInView = (
-    <>
-      <button onClick={getUserInfo} className="card">
-        Get User Info
-      </button>
-      <button onClick={getAccounts} className="card">
-        Get Accounts
-      </button>
-      <button onClick={getBalance} className="card">
-        Get Balance
-      </button>
-      <button onClick={sendTransaction} className="card">
-        Send Transaction
-      </button>
-      <button onClick={signMessage} className="card">
-        Sign Message
-      </button>
-      <button onClick={getPrivateKey} className="card">
-        Get Private Key
-      </button>
-      <button onClick={logout} className="card">
-        Log Out
-      </button>
-
-      <div id="console" style={{ whiteSpace: "pre-line" }}>
-        <p style={{ whiteSpace: "pre-line" }}></p>
-      </div>
-    </>
-  );
-
-  const unloggedInView = (
-    <button onClick={login} className="card">
-      Login
-    </button>
-  );
+  }
 
   return (
-    <div className="container">
-      <h1 className="title">
-        <a target="_blank" href="http://web3auth.io/" rel="noreferrer">
-          Web3Auth
-        </a>
-        & ReactJS Example
-      </h1>
-
-      <div className="grid">{provider ? loggedInView : unloggedInView}</div>
-
-      <footer className="footer">
-        <a
-          href="https://github.com/Web3Auth/Web3Auth/tree/master/examples/react-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Source code
-        </a>
-      </footer>
+    <div className="App">
+      <header className="App-header">
+        <input
+          type="file"
+          onChange={(e) => upload(e.target.files)}
+          id="avatar"
+          name="avatar"
+          accept="image/png, image/jpeg"
+        ></input>
+      </header>
     </div>
   );
 }
 
-export default App;
+export default testConnect;
