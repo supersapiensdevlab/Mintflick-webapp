@@ -7,7 +7,7 @@ function Vouch() {
 
   return (
     <div className="flex flex-col items-start   bg-slate-100 dark:bg-slate-800 w-full  rounded-lg  h-fit">
-      <p className="text-2xl text-slate-700 font-bold p-4 bg-brand w-full rounded-t-lg">
+      <p className="text-2xl text-white font-bold p-4 bg-slate-800  w-full rounded-t-lg">
         Mintflick<span className="font-medium">Vouch</span>
       </p>
 
@@ -31,7 +31,7 @@ function Vouch() {
         <textarea
           type="textarea"
           className=" textarea text-lg text-brand3 font-semibold w-full h-24"
-          placeholder={"Give a liner..."}
+          placeholder={"Vouch for your favorite creator"}
 
           //   onChange={(e) =>
           //   value={}

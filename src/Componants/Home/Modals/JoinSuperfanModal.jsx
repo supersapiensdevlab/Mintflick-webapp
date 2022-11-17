@@ -9,6 +9,10 @@ import { Link } from "react-router-dom";
 import { ChevronLeft } from "tabler-icons-react";
 import RPC from "../../../Componants/Wallet/solanaRPC";
 import { useEffect } from "react";
+import superfan_basic from "../../../Assets/logos/icons/superfans/superfan_basic.svg"
+import superfan_gold from "../../../Assets/logos/icons/superfans/superfan_gold.svg"
+
+import superfan_silver from "../../../Assets/logos/icons/superfans/superfan_silver.svg"
 
 const JoinSuperfanModal = ({
   setJoinSuperfanModal,
@@ -227,8 +231,8 @@ const JoinSuperfanModal = ({
                         className="h-full w-32 bg-red-600 object-cover"
                       />
                       <span className="p-2 h-full flex-grow ">
-                        <h3 className="text-xl font-semibold text-primary dark:text-brand">
-                          {plan.name}
+                        <h3 className="text-xl font-semibold text-primary dark:text-white flex gap-1">
+                          <img className="w-5" src={superfan_basic}/>{plan.name}
                         </h3>
                         <h5 className="w-full text-sm font-medium text-brand">
                           You have already subscribed to this plan
@@ -247,8 +251,8 @@ const JoinSuperfanModal = ({
                         className="h-full w-32 bg-red-600 object-cover"
                       />
                       <span className="p-2 h-full flex-grow ">
-                        <h3 className="text-xl font-semibold text-primary dark:text-brand">
-                          {plan.name}
+                      <h3 className="text-xl font-semibold text-primary dark:text-white flex gap-1">
+                          <img className="w-5" src={plan.name=="Silver"?superfan_silver:superfan_gold}/>{plan.name}
                         </h3>
                         <h5 className="w-full text-sm font-medium text-brand4">
                           {plan.description}
