@@ -147,7 +147,7 @@ const CollectCoinsModal = ({ setCollectCoinsModalVisible }) => {
           ></X>
         </div>
       </div>
-      <div className="w-full flex  text-brand2 bg-slate-200 dark:bg-slate-600 p-2">
+      <div className="w-full flex  text-brand2 bg-slate-200 dark:bg-slate-800 px-6 py-4">
         <button
           className={`my-auto btn btn-sm btn-square btn-primary ${
             step === 0 && "btn-disabled"
@@ -368,7 +368,7 @@ const CollectCoinsModal = ({ setCollectCoinsModalVisible }) => {
                     Claim Reward
                   </span>
                   <div
-                    className={`h-full z-10 absolute left-0 bg-success w-${State.database.userData.data?.user?.followee_count.length}/5`}
+                    className={`h-full z-10 absolute left-0 bg-success w-4/5  w-${State.database.userData.data?.user?.followee_count.length}/5`}
                   ></div>
                 </div>
               ) : (

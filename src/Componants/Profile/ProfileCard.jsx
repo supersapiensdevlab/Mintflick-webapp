@@ -114,23 +114,23 @@ function ProfileCard(props) {
           {"@" + `${props.userName}`}
           <p className="flex items-center gap-1 text-sm text-primary font-medium">
             {State.database.userProfileData &&
-              State.database.userData.data &&
+              State.database.userData.data && (
               State.database.userProfileData.data.username !=
-                State.database.userData.data.user.username && State.database.userData.data.user.followee_count.includes(
+              props.userName) && State.database.userData.data.user.followee_count.includes(
                   props.userName
                 ) ? (
                   <button
                     onClick={() => handleUnfollowUser(props.userName)}
                     className="btn  btn-primary btn-outline btn-xs flex-grow"
                   >
-                    Unfollow
+                    Unfollow 
                   </button>
                 ) : (
                   <button
                     onClick={() => handleFollowUser(props.userName)}
                     className="btn  btn-primary btn-outline btn-xs flex-grow"
                   >
-                    Follow
+                    Follow 
                   </button>
                 )}
           </p>
