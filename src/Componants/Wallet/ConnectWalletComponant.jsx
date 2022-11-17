@@ -45,8 +45,8 @@ function ConnectWalletComponant() {
           }}
           className="btn btn-brand w-full capitalize gap-1"
         >
-          <Emoji emoji="rocket" />
-          Get Started
+         
+          Let me In &nbsp;<Emoji emoji="rocket" />
         </button>
         {/* <button onClick={getUserInfo} className="card">
           Get User Info

@@ -47,13 +47,13 @@ function MintWallet() {
             onClick={() => {
               setCollectCoinsModalVisible(true);
             }}
-            className="ml-auto btn btn-sm btn-primary btn-outline capitalize"
+            className="ml-auto btn btn-sm   btn-accent capitalize"
           >
-            collect
+            Free Coins
           </button>
         </span>
         <div
-          className="btn btn-square -my-7 z-10"
+          className="btn btn-square -my-7 z-10 hidden"
           onClick={() => {
             setShowConversionModal(true);
           }}
@@ -90,7 +90,7 @@ function MintWallet() {
           <EachTransaction />
         </div>{" "}
         <button className="btn gap-2 px-8 w-full max-w-lg rounded-full btn-brand btn-primary capitalize">
-          <Send size={20} /> send
+          <Diamond size={20} /> send gems
         </button>
       </div>
       <div

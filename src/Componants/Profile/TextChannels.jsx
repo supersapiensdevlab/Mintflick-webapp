@@ -9,7 +9,7 @@ function TextChannels() {
   const State = useContext(UserContext);
   return (
     <div className="flex flex-col items-start p-4  bg-slate-100 dark:bg-slate-800 w-full h-fit rounded-lg ">
-      <p className="text-lg text-brand5 font-bold">Text Channel</p>
+      <p className="text-lg text-brand5 font-bold">Join Channels</p>
       <NavLink
         to={`/homescreen/chat/${
           State.database.userProfileData
@@ -23,23 +23,9 @@ function TextChannels() {
             : null,
         }}
       >
-        <button className="text-base text-brand3 font-medium btn">#Chat</button>
+        <button className=" text-brand2 font-medium btn btn-brand btn-sm">#Community</button>
       </NavLink>
-      <NavLink
-        to={`/homescreen/chat/${
-          State.database.userProfileData
-            ? State.database.userProfileData.data.username
-            : ""
-        }`}
-        state={{
-          isDM: true,
-          user2: State.database.userProfileData
-            ? State.database.userProfileData.data
-            : null,
-        }}
-      >
-        <button className="text-base text-brand3 font-medium btn">#DM</button>
-      </NavLink>
+      
     </div>
   );
 }
