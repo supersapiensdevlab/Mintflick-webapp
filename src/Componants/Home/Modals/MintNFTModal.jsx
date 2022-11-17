@@ -19,7 +19,6 @@ function MintNFTModal({
   id,
   contentType,
 }) {
-  console.log(content);
   const State = useContext(UserContext);
   const [successMessage, setSuccessMessage] = useState(
     "Please confirm to mint this post as an NFT"

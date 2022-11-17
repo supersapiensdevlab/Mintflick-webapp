@@ -165,7 +165,6 @@ function VideoPostModal({ setVideoPostModalOpen }) {
     //   });
   };
 
-  console.log(selectedVideo?.file);
 
   const mintOnSolana = (formData, file) => {
     console.log(selectedVideo.file);
