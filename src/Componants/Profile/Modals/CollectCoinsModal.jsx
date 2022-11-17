@@ -162,16 +162,16 @@ const CollectCoinsModal = ({ setCollectCoinsModalVisible }) => {
         </button>
         <ul className="steps steps-horizontal flex-grow">
           <li
-            className={`step ${
+            className={`step text-sm ${
               (step == 0 || step == 1 || step == 2) && "step-primary"
             }`}
           >
-            Task 1
+           Social 
           </li>
-          <li className={`step ${(step == 1 || step == 2) && "step-primary"}`}>
-            Task 2
+          <li className={`step text-sm ${(step == 1 || step == 2) && "step-primary"}`}>
+           Activity
           </li>
-          <li className={`step ${step == 2 && "step-primary"}`}>Task 3</li>
+          <li className={`step text-sm ${step == 2 && "step-primary"}`}>Community</li>
         </ul>
         <button
           className={`my-auto btn btn-sm btn-square btn-primary ${
@@ -368,7 +368,21 @@ const CollectCoinsModal = ({ setCollectCoinsModalVisible }) => {
                     Claim Reward
                   </span>
                   <div
-                    className={`h-full z-10 absolute left-0 bg-success w-4/5  w-${State.database.userData.data?.user?.followee_count.length}/5`}
+                    className={`h-full z-10 absolute left-0 bg-success  ${
+                      State.database.userData.data?.user?.followee_count.length ===
+                      1
+                        ? "w-1/5"
+                        : State.database.userData.data?.user?.followee_count
+                            .length === 2
+                        ? "w-2/5"
+                        : State.database.userData.data?.user?.followee_count
+                            .length === 3
+                        ? "w-3/5"
+                        : State.database.userData.data?.user?.followee_count
+                            .length === 4
+                        ? "w-4/5"
+                        : "w-full"
+                    }`}
                   ></div>
                 </div>
               ) : (
