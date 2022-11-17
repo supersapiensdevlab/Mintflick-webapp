@@ -35,8 +35,8 @@ function ConnectWalletComponant() {
         cryptocurrencies like Bitcoin and Ethereum.
       </p>
       <p className="text-brand4 text-lg font-medium">
-        Connect your crypto wallet to mint your NFT's in Mintflick.If you do not
-        have a wallet then just create one.
+        Connect your crypto wallet to mint your NFTs on Mintflick. If you do not
+        have a wallet then click below to create one or login into existing.
       </p>
       <div className="w-full flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4 pt-10">
         <button
