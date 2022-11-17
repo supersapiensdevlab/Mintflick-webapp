@@ -14,7 +14,12 @@ import { OpenloginAdapter } from "@web3auth/openlogin-adapter";
 
 export default function useWeb3Auth() {
   // const modal = useWebModal();
-  const clientId = `${process.env.REACT_APP_WEB3AUTH_CLIENT_ID}`;
+  let clientId;
+  if (process.env.REACT_APP_PRODUCTION == "false") {
+    clientId = `${process.env.REACT_APP_WEB3AUTH_TESTNET_CLIENT_ID}`;
+  } else {
+    clientId = `${process.env.REACT_APP_WEB3AUTH_MAINNET_CLIENT_ID}`;
+  }
   // const [web3auth, setWeb3auth] = useState(null);
   const [provider, setProvider] = useState(null);
   const State = useContext(UserContext);
@@ -27,12 +32,13 @@ export default function useWeb3Auth() {
         State.database.chainId == 0
           ? CHAIN_NAMESPACES.SOLANA
           : CHAIN_NAMESPACES.EIP155,
-      chainId: State.database.chainId == 0 ? "0x1" : "0x89",
+      chainId: "0x2",
       rpcTarget:
         State.database.chainId == 0
           ? process.env.REACT_APP_SOLANA_RPC
           : "https://rpc.ankr.com/polygon", // This is the public RPC we have added, please pass on your own endpoint while creating an app
-      displayName: "Polygon Mainnet",
+      displayName:
+        State.database.chainId === 0 ? "Solana Testnet" : "Polygon Mainnet",
       blockExplorer: "https://polygonscan.com",
       ticker: "MATIC",
       tickerName: "Matic",
@@ -54,13 +60,13 @@ export default function useWeb3Auth() {
             State.database.chainId === 0
               ? CHAIN_NAMESPACES.SOLANA
               : CHAIN_NAMESPACES.EIP155,
-          chainId: State.database.chainId === 0 ? "0x1" : "0x89",
+          chainId: State.database.chainId === 0 ? "0x2" : "0x89",
           rpcTarget:
             State.database.chainId === 0
               ? process.env.REACT_APP_SOLANA_RPC
               : "https://rpc.ankr.com/polygon", // This is the public RPC we have added, please pass on your own endpoint while creating an app
           displayName:
-            State.database.chainId === 0 ? "Solana Mainnet" : "Polygon Mainnet",
+            State.database.chainId === 0 ? "Solana Testnet" : "Polygon Mainnet",
           blockExplorer:
             State.database.chainId === 0
               ? "https://explorer.solana.com"

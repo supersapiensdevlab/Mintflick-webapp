@@ -1,6 +1,5 @@
-import React from "react";
 import { useEffect, useState } from "react";
-import { Web3Auth } from "@web3auth/web3auth";
+import { Web3Auth } from "@web3auth/modal";
 import {
   WALLET_ADAPTERS,
   CHAIN_NAMESPACES,
@@ -9,7 +8,8 @@ import {
 import { OpenloginAdapter } from "@web3auth/openlogin-adapter";
 import RPC from "./solanaRPC";
 
-const clientId = `${process.env.REACT_APP_WEB3AUTH_CLIENT_ID}`; // get from https://dashboard.web3auth.io
+const clientId =
+  "BBFmlal-Ty4AJmMjgQ6ybm5f-e_aeIt8dhWrqbQMmR6Q09LaRZis66IGCWSnnd6wNt5ivjjrCvy6F3PzgbbeRyI"; // get from https://dashboard.web3auth.io
 
 function App() {
   const [web3auth, setWeb3auth] = useState(null);
@@ -22,7 +22,7 @@ function App() {
           clientId,
           chainConfig: {
             chainNamespace: CHAIN_NAMESPACES.SOLANA,
-            chainId: "0x1", // Please use 0x1 for Mainnet, 0x2 for Testnet, 0x3 for Devnet
+            chainId: "0x2", // Please use 0x1 for Mainnet, 0x2 for Testnet, 0x3 for Devnet
             rpcTarget: "https://rpc.ankr.com/solana", // This is the public RPC we have added, please pass on your own endpoint while creating an app
           },
           uiConfig: {
@@ -36,14 +36,14 @@ function App() {
           adapterSettings: {
             clientId,
             network: "testnet",
-            // uxMode: "popup",
-            // whiteLabel: {
-            //   name: "Your app Name",
-            //   logoLight: "https://web3auth.io/images/w3a-L-Favicon-1.svg",
-            //   logoDark: "https://web3auth.io/images/w3a-D-Favicon-1.svg",
-            //   defaultLanguage: "en",
-            //   dark: true, // whether to enable dark mode. defaultValue: false
-            // },
+            uxMode: "popup",
+            whiteLabel: {
+              name: "Your app Name",
+              logoLight: "https://web3auth.io/images/w3a-L-Favicon-1.svg",
+              logoDark: "https://web3auth.io/images/w3a-D-Favicon-1.svg",
+              defaultLanguage: "en",
+              dark: true, // whether to enable dark mode. defaultValue: false
+            },
           },
         });
         web3auth.configureAdapter(openloginAdapter);
@@ -54,11 +54,18 @@ function App() {
             [WALLET_ADAPTERS.OPENLOGIN]: {
               label: "openlogin",
               loginMethods: {
-                reddit: {
+                google: {
+                  name: "google login",
+                  logoDark:
+                    "url to your custom logo which will shown in dark mode",
+                },
+                facebook: {
+                  // it will hide the facebook option from the Web3Auth modal.
                   showOnModal: false,
-                  name: "reddit",
                 },
               },
+              // setting it to false will hide all social login methods from modal.
+              showOnModal: true,
             },
           },
         });
@@ -80,7 +87,6 @@ function App() {
     }
     const web3authProvider = await web3auth.connect();
     setProvider(web3authProvider);
-    console.log("web3authProvider", web3authProvider);
   };
 
   const getUserInfo = async () => {
@@ -152,27 +158,27 @@ function App() {
   };
   const loggedInView = (
     <>
-      <div onClick={getUserInfo} className="card btn w-fit">
+      <button onClick={getUserInfo} className="card">
         Get User Info
-      </div>
-      <div onClick={getAccounts} className="card btn w-fit">
+      </button>
+      <button onClick={getAccounts} className="card">
         Get Accounts
-      </div>
-      <div onClick={getBalance} className="card btn w-fit">
+      </button>
+      <button onClick={getBalance} className="card">
         Get Balance
-      </div>
-      <div onClick={sendTransaction} className="card btn w-fit">
+      </button>
+      <button onClick={sendTransaction} className="card">
         Send Transaction
-      </div>
-      <div onClick={signMessage} className="card btn w-fit">
+      </button>
+      <button onClick={signMessage} className="card">
         Sign Message
-      </div>
-      <div onClick={getPrivateKey} className="card btn w-fit">
+      </button>
+      <button onClick={getPrivateKey} className="card">
         Get Private Key
-      </div>
-      <div onClick={logout} className="card btn w-fit">
+      </button>
+      <button onClick={logout} className="card">
         Log Out
-      </div>
+      </button>
 
       <div id="console" style={{ whiteSpace: "pre-line" }}>
         <p style={{ whiteSpace: "pre-line" }}></p>
@@ -181,9 +187,9 @@ function App() {
   );
 
   const unloggedInView = (
-    <div onClick={login} className="card btn w-fit">
+    <button onClick={login} className="card">
       Login
-    </div>
+    </button>
   );
 
   return (
@@ -192,7 +198,7 @@ function App() {
         <a target="_blank" href="http://web3auth.io/" rel="noreferrer">
           Web3Auth
         </a>
-        ReactJS Example
+        & ReactJS Example
       </h1>
 
       <div className="grid">{provider ? loggedInView : unloggedInView}</div>

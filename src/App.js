@@ -2,7 +2,7 @@ import { useContext, useEffect, useRef, useState } from "react";
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
 import { BrowserRouter } from "react-router-dom";
-
+import TestConnection from "../src/Componants/Wallet/testConnect";
 import { UserContext } from "./Store";
 import HomeScreen from "./Pages/HomeScreen";
 import Home from "./Componants/Home/Home";
@@ -19,7 +19,6 @@ import Playlists from "./Componants/Profile/ProfileMedia/Playlists";
 import Music from "./Componants/Profile/ProfileMedia/Music";
 import Videos from "./Componants/Profile/ProfileMedia/Videos";
 import GoLive from "./Componants/GoLive/GoLive";
-import Web3Connect from "./Componants/Wallet/Web3Connect";
 import UserLivestream from "./Componants/Live/UserLivestream";
 import ShareModal from "./Componants/Home/Modals/ShareModal";
 import BuyNFTModal from "./Componants/Home/Modals/BuyNFTModal";
@@ -112,7 +111,7 @@ function App() {
           <Route path="create_new_user" element={<CreateNewUser />} />
         </Route>
 
-        <Route path="/test" element={<HomeScreen />}></Route>
+        <Route path="/test" element={<TestConnection />}></Route>
         <Route path="/homescreen" element={<HomeScreen />}>
           <Route path="home" element={<Home />} />
           <Route path="live" element={<Live />} />
