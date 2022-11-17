@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState } from "react";
 import {
   AlertTriangle,
   ArrowNarrowRight,
+  Edit,
   Heart,
   Trash,
 } from "tabler-icons-react";
@@ -21,6 +22,7 @@ function ShowComment({
   replyTo,
   original,
   removeComment,
+  editComment,
 }) {
   const [isLiked, setIsLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
@@ -41,6 +43,13 @@ function ShowComment({
   const [username, setUsername] = useState(null);
 
   const [confirmModal, setConfirmModal] = useState(false);
+
+  // for edit
+  const [edit, setEdit] = useState(false);
+  const [editText, setEditText] = useState(comment.comment);
+  const onEmojiClick2 = (event, emojiObject) => {
+    setEditText(editText + emojiObject.emoji);
+  };
 
   useEffect(() => {
     if (replyTo) {
@@ -181,6 +190,62 @@ function ShowComment({
   const removeMyReplyComments = (com) => {
     setMyReplyComments((cmts) => cmts.filter((c) => c._id !== com._id));
   };
+
+  const editMyReplyComments = (com,editText2) => {
+    let allcomments = myReplyComments;
+    for (var i = 0; i < allcomments.length; i++) {
+      if (allcomments[i]._id == com._id) {
+        allcomments[i].comment = editText2;
+        return true;
+      } else {
+        if (allcomments[i].reply) {
+          for (var j = 0; j < allcomments[i].reply.length; j++) {
+            if (allcomments[i].reply[j]._id == com._id) {
+              allcomments[i].reply[j].comment = editText2;
+              return true;
+            }
+          }
+        }
+      }
+    }
+  };
+
+  // Edit
+  const handleCOmmentEdit = async () => {
+    try {
+      if (editText != "" && editText != comment.comment) {
+        let data = {
+          user_data_id: user_id,
+          content: contentData,
+          comment: comment,
+          replyTo: replyTo,
+          newText: editText,
+        };
+        const res = await axios({
+          method: "post",
+          url: `${process.env.REACT_APP_SERVER_URL}/user/commentedit`,
+          data: data,
+          headers: {
+            "content-type": "application/json",
+            "auth-token": JSON.stringify(localStorage.getItem("authtoken")),
+          },
+        });
+        console.log(res);
+        if (res.status == 200) {
+          console.log("edited");
+          setEdit(false);
+          editComment(comment, editText);
+          await loadFeed();
+          await loadUser();
+        }
+      }
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setEdit(false);
+    }
+  };
+
   return (
     <div
       className="w-full flex items-start space-x-1"
@@ -214,7 +279,39 @@ function ShowComment({
           <span className="text-brand3 font-semibold mr-1">
             {replyTo ? name : comment.name}
           </span>
-          {comment.comment}
+          {!edit ? (
+            comment.comment
+          ) : (
+            <div className="flex gap-2 items-center">
+              <textarea
+                onChange={(e) => setEditText(e.target.value)}
+                placeholder="Type here..."
+                className="input w-full pt-2"
+                value={editText}
+              ></textarea>
+              <div className="dropdown dropdown-top dropdown-end">
+                <label tabindex={0} className="btn m-1 btn-primary btn-outline">
+                  😃
+                </label>
+                <ul
+                  tabindex={0}
+                  className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52"
+                >
+                  <Picker onEmojiClick={onEmojiClick2} />
+                </ul>
+              </div>
+              <button
+                onClick={() => handleCOmmentEdit()}
+                className={`btn    ${
+                  editText !== "" && editText != comment.comment
+                    ? "btn-primary btn-outline"
+                    : "btn-disabled"
+                }`}
+              >
+                <ArrowNarrowRight />
+              </button>
+            </div>
+          )}
         </p>
         <div className="group cursor-pointer flex  items-center text-brand4  text-sm gap-1">
           <Heart
@@ -245,6 +342,14 @@ function ShowComment({
                 size={16}
                 className={`${"text-red-500 hover:text-white fill-rose-500"} `}
               ></Trash>
+              <span>|</span>
+              <Edit
+                onClick={() => {
+                  setEdit(true);
+                }}
+                size={16}
+                className={`${"text-blue-500 hover:text-white "} `}
+              ></Edit>
             </>
           ) : (
             replyTo &&
@@ -258,6 +363,14 @@ function ShowComment({
                   size={16}
                   className={`${"text-red-500 hover:text-white fill-rose-500"} `}
                 ></Trash>
+                <span>|</span>
+                <Edit
+                  onClick={() => {
+                    setEdit(true);
+                  }}
+                  size={16}
+                  className={`${"text-blue-500 hover:text-white "} `}
+                ></Edit>
               </>
             )
           )}
@@ -275,6 +388,7 @@ function ShowComment({
               setCommentCount={setCommentCount}
               replyTo={comment._id}
               removeComment={removeComment}
+              editComment={editComment}
             />
           ))
         ) : (
@@ -291,6 +405,7 @@ function ShowComment({
               setCommentCount={setCommentCount}
               replyTo={comment._id}
               removeComment={removeMyReplyComments}
+              editComment={editMyReplyComments}
             />
           ))
         ) : (
