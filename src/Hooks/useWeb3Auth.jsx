@@ -11,6 +11,7 @@ import Web3 from "web3";
 import { loadOptions } from "@babel/core";
 import { UserContext } from "../Store";
 import { OpenloginAdapter } from "@web3auth/openlogin-adapter";
+import { OPENLOGIN_NETWORK_TYPE } from "@web3auth/base";
 
 export default function useWeb3Auth() {
   // const modal = useWebModal();
@@ -83,7 +84,6 @@ export default function useWeb3Auth() {
       });
       const openloginAdapter = new OpenloginAdapter({
         adapterSettings: {
-          clientId,
           network: "testnet",
           uxMode: "popup",
           whiteLabel: {
