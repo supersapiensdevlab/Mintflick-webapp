@@ -15,12 +15,12 @@ import { OPENLOGIN_NETWORK_TYPE } from "@web3auth/base";
 
 export default function useWeb3Auth() {
   // const modal = useWebModal();
-  let clientId = `BIkayaVZreEWb-twRX4WscaqXcBJ0j9shAdTmUVp4Zzj5bKNkhQ2_NNd7g3nyoWmRJk9t5cPO9rUNQn-byPmEMs`;
-  // if (process.env.REACT_APP_PRODUCTION == "false") {
-  //   clientId = `${process.env.REACT_APP_WEB3AUTH_TESTNET_CLIENT_ID}`;
-  // } else {
-  //   clientId = `${process.env.REACT_APP_WEB3AUTH_MAINNET_CLIENT_ID}`;
-  // }
+  let clientId;
+  if (process.env.REACT_APP_PRODUCTION == "false") {
+    clientId = `${process.env.REACT_APP_WEB3AUTH_TESTNET_CLIENT_ID}`;
+  } else {
+    clientId = `${process.env.REACT_APP_WEB3AUTH_MAINNET_CLIENT_ID}`;
+  }
   // const [web3auth, setWeb3auth] = useState(null);
   const [provider, setProvider] = useState(null);
   const State = useContext(UserContext);
