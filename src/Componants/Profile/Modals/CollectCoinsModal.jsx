@@ -12,9 +12,11 @@ import {
   ChevronRight,
   ChevronLeft,
   Award,
+  CircleCheck,
 } from "tabler-icons-react";
 import useUserActions from "../../../Hooks/useUserActions";
 import { UserContext } from "../../../Store";
+import Emoji from "react-emojis";
 
 const CollectCoinsModal = ({ setCollectCoinsModalVisible }) => {
   const State = useContext(UserContext);
@@ -133,8 +135,8 @@ const CollectCoinsModal = ({ setCollectCoinsModalVisible }) => {
       <div className="w-full h-fit p-2 bg-slate-300 dark:bg-slate-700">
         <div className="flex justify-between items-center p-2">
           <h3 className="flex items-center gap-2 font-bold text-lg text-brand2">
-            <Bucket />
-            Complete Tasks & Earn
+            {/* <Bucket /> */}
+            Complete Tasks & Earn 🤑
           </h3>
           <X
             onClick={() => {
@@ -145,30 +147,60 @@ const CollectCoinsModal = ({ setCollectCoinsModalVisible }) => {
           ></X>
         </div>
       </div>
-      <div className="w-fill p-4 space-y-3 text-white">
+      <div className="w-full flex  text-brand2 bg-slate-200 dark:bg-slate-800 px-6 py-4">
+        <button
+          className={`my-auto btn btn-sm btn-square btn-primary ${
+            step === 0 && "btn-disabled"
+          }`}
+        >
+          <ChevronLeft
+            size={26}
+            onClick={() => {
+              setStep(step - 1);
+            }}
+          />
+        </button>
+        <ul className="steps steps-horizontal flex-grow">
+          <li
+            className={`step text-sm ${
+              (step == 0 || step == 1 || step == 2) && "step-primary"
+            }`}
+          >
+           Social 
+          </li>
+          <li className={`step text-sm ${(step == 1 || step == 2) && "step-primary"}`}>
+           Activity
+          </li>
+          <li className={`step text-sm ${step == 2 && "step-primary"}`}>Community</li>
+        </ul>
+        <button
+          className={`my-auto btn btn-sm btn-square btn-primary ${
+            step === 2 && "btn-disabled"
+          }`}
+        >
+          <ChevronRight
+            size={26}
+            onClick={() => {
+              setStep(step + 1);
+            }}
+          />
+        </button>
+      </div>
+      <div className="w-fill p-4 space-y-3 text-brand2">
         {step == 0 ? (
-          <div className="w-full space-y-2 ">
+          <div className="w-full space-y-1 ">
             <div className="flex justify-between items-center">
-              <p className="flex mb-2">
-                Task 1 - Follow our social handles & earn 10{" "}
-                <Coin className="mx-1" /> for each &#128525;
+              <p className="flex mb-2 mx-auto text-lg font-semibold">
+                Follow our social handles &#128525;
               </p>
-              <span className="mb-2">
-                <ChevronRight
-                  size={26}
-                  className="text-white"
-                  onClick={() => {
-                    setStep(step + 1);
-                  }}
-                />
-              </span>
             </div>
-            <div className="flex items-center justify-between w-full">
+
+            <div className="flex items-center justify-between w-full hover:bg-slate-200 dark:hover:bg-slate-700 p-2 rounded-lg">
               <div className="flex space-x-2">
-                <p>Twitter </p>
                 <span>
                   <BrandTwitter size={24} color="#0084b4" />
                 </span>
+                <p>Twitter </p>
               </div>
               {!State.database.userData.data?.user?.coins?.tasksPerformed
                 ?.followedTwitter ? (
@@ -179,22 +211,22 @@ const CollectCoinsModal = ({ setCollectCoinsModalVisible }) => {
                     }}
                     className="btn btn-sm btn-primary btn-outline capitalize"
                   >
-                    Follow
+                    Follow on twitter
                   </button>
                 </a>
               ) : (
-                <div className="flex">
-                  claimed{" "}
-                  <Checkbox className="mx-1" size={24} color="rgb(21 128 61)" />
+                <div className="flex text-success">
+                  {/* <CircleCheck className="mx-1" size={24} /> */}
+                  🎉 claimed 10 coins
                 </div>
               )}
             </div>
-            <div className="flex items-center justify-between w-full">
+            <div className="flex items-center justify-between w-full  hover:bg-slate-200 dark:hover:bg-slate-700 p-2 rounded-lg">
               <div className="flex space-x-2">
-                <p>Instagram </p>
                 <span>
                   <BrandInstagram size={24} color="#E4405F" />
-                </span>
+                </span>{" "}
+                <p>Instagram </p>
               </div>
               {!State.database.userData.data?.user?.coins?.tasksPerformed
                 ?.followedInstagram ? (
@@ -208,22 +240,22 @@ const CollectCoinsModal = ({ setCollectCoinsModalVisible }) => {
                     }}
                     className="btn btn-sm btn-primary btn-outline capitalize"
                   >
-                    Follow
+                    Follow on Instagram
                   </button>
                 </a>
               ) : (
-                <div className="flex">
-                  claimed{" "}
-                  <Checkbox className="mx-1" size={24} color="rgb(21 128 61)" />
+                <div className="flex text-success">
+                  {/* <CircleCheck className="mx-1" size={24} /> */}
+                  🎉 claimed 10 coins
                 </div>
               )}
             </div>
-            <div className="flex items-center justify-between w-full">
+            <div className="flex items-center justify-between w-full  hover:bg-slate-200 dark:hover:bg-slate-700 p-2 rounded-lg">
               <div className="flex space-x-2">
-                <p>Linkedin </p>
                 <span>
                   <BrandLinkedin size={24} color="#0077b5" />
-                </span>
+                </span>{" "}
+                <p>Linkedin </p>
               </div>
               {!State.database.userData.data?.user?.coins?.tasksPerformed
                 ?.followedLinkedin ? (
@@ -237,22 +269,22 @@ const CollectCoinsModal = ({ setCollectCoinsModalVisible }) => {
                     }}
                     className="btn btn-sm btn-primary btn-outline capitalize"
                   >
-                    Follow
+                    Follow on linkedin
                   </button>
                 </a>
               ) : (
-                <div className="flex">
-                  claimed{" "}
-                  <Checkbox className="mx-1" size={24} color="rgb(21 128 61)" />
+                <div className="flex text-success">
+                  {/* <CircleCheck className="mx-1" size={24} /> */}
+                  🎉 claimed 10 coins
                 </div>
               )}
             </div>
-            <div className="flex items-center justify-between w-full">
+            <div className="flex items-center justify-between w-full  hover:bg-slate-200 dark:hover:bg-slate-700 p-2 rounded-lg">
               <div className="flex space-x-2">
-                <p>Discord </p>
                 <span>
                   <BrandDiscord size={24} color="#7289d9" />
-                </span>
+                </span>{" "}
+                <p>Discord </p>
               </div>
               {!State.database.userData.data?.user?.coins?.tasksPerformed
                 ?.followedDiscord ? (
@@ -263,13 +295,13 @@ const CollectCoinsModal = ({ setCollectCoinsModalVisible }) => {
                     }}
                     className="btn btn-sm btn-primary btn-outline capitalize"
                   >
-                    Follow
+                    Join Server
                   </button>
                 </a>
               ) : (
-                <div className="flex">
-                  claimed{" "}
-                  <Checkbox className="mx-1" size={24} color="rgb(21 128 61)" />
+                <div className="flex text-success">
+                  {/* <CircleCheck className="mx-1" size={24} /> */}
+                  🎉 claimed 10 coins
                 </div>
               )}
             </div>
@@ -277,28 +309,9 @@ const CollectCoinsModal = ({ setCollectCoinsModalVisible }) => {
         ) : step == 1 ? (
           <div className="w-full space-y-2 ">
             <div className="flex justify-between items-center">
-              <span className="mb-2">
-                <ChevronLeft
-                  size={26}
-                  className="text-white"
-                  onClick={() => {
-                    setStep(step - 1);
-                  }}
-                />
-              </span>
-              <p className="flex mb-2">
-                Task 2 - Make your 1st post & earn 20 <Coin className="mx-1" />{" "}
-                &#128525;
+              <p className="flex mb-2 mx-auto text-lg font-semibold">
+                Task 2 - Make your 1st post 🤩
               </p>
-              <span className="mb-2">
-                <ChevronRight
-                  size={26}
-                  className="text-white"
-                  onClick={() => {
-                    setStep(step + 1);
-                  }}
-                />
-              </span>
             </div>
             <div className="flex space-y-6 justify-center items-center">
               {!State.database.userData.data?.user?.coins?.tasksPerformed
@@ -323,55 +336,70 @@ const CollectCoinsModal = ({ setCollectCoinsModalVisible }) => {
                   Claim reward
                 </button>
               ) : (
-                <div className="flex">
-                  claimed{" "}
-                  <Checkbox className="mx-1" size={24} color="rgb(21 128 61)" />
-                </div>
+                <div className="flex text-success">🎉 claimed 20 coins</div>
               )}
             </div>
           </div>
         ) : step == 2 ? (
           <div className="w-full space-y-2 ">
             <div className="flex items-center">
-              <span className="mb-2">
-                <ChevronLeft
-                  size={26}
-                  className="text-white"
-                  onClick={() => {
-                    setStep(step - 1);
-                  }}
-                />
-              </span>
-              <p className="flex mb-2 ml-6">
-                Task 3 - Follow 5 creators & earn 10 <Coin className="mx-1" />{" "}
-                for each &#128525;
+              <p className="flex mb-2 mx-auto text-lg font-semibold">
+                Task 3 - Follow 5 creators 😊
               </p>
             </div>
+
             <div className="flex space-y-6 justify-center items-center">
               {!State.database.userData.data?.user?.coins?.tasksPerformed
                 ?.followFive ? (
-                <button
-                  className={`btn ${
+                <div
+                  className={`relative overflow-clip flex items-center justify-center gap-2 bg-slate-300 dark:bg-slate-500 p-4 rounded-lg cursor-pointer ${
                     State.database.userData.data?.user?.followee_count.length >=
                     5
-                      ? "btn-brand"
-                      : "btn-disabled"
-                  } normal-case w-1/2 mb-2`}
+                      ? ""
+                      : ""
+                  } normal-case w-1/2 mb-2 `}
                   onClick={() => {
-                    handleClaimReward("follow");
+                    State.database.userData.data?.user?.followee_count.length >=
+                      5 && handleClaimReward("follow");
                   }}
                 >
-                  <span>
-                    <Award size={20} className="mx-1" />
+                  <Award size={20} className="text-white z-50 " />
+                  <span className="z-50 font-semibold text-white">
+                    Claim Reward
                   </span>
-                  Claim reward
-                </button>
-              ) : (
-                <div className="flex">
-                  claimed{" "}
-                  <Checkbox className="mx-1" size={24} color="rgb(21 128 61)" />
+                  <div
+                    className={`h-full z-10 absolute left-0 bg-success  ${
+                      State.database.userData.data?.user?.followee_count.length ===
+                      1
+                        ? "w-1/5"
+                        : State.database.userData.data?.user?.followee_count
+                            .length === 2
+                        ? "w-2/5"
+                        : State.database.userData.data?.user?.followee_count
+                            .length === 3
+                        ? "w-3/5"
+                        : State.database.userData.data?.user?.followee_count
+                            .length === 4
+                        ? "w-4/5"
+                        : "w-full"
+                    }`}
+                  ></div>
                 </div>
+              ) : (
+                <div className="flex text-success">🎉 claimed 50 coins</div>
               )}
+            </div>
+            <div className="w-full ">
+              {State.database.userData.data?.user?.followee_count.length <
+                5 && (
+                <span className="font-semibold flex justify-center text-success">
+                  Hurry up!! Follow{" "}
+                  {5 -
+                    State.database.userData.data?.user?.followee_count
+                      .length}{" "}
+                  more accounts to claim 50 coins 🥳
+                </span>
+              )}{" "}
             </div>
           </div>
         ) : null}

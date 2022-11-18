@@ -8,12 +8,17 @@
   font-weight: regular;
 }
 @font-face {
-  font-family: "Gilroy";
+  font-family: "Gilroy-Medium";
   src: url("./Assets/fonts/Gilroy-Font/Gilroy-Medium.woff");
   font-weight: medium;
 }
 @font-face {
-  font-family: "Gilroy";
+  font-family: "Gilroy-ExtraLight";
+  src: url("./Assets/fonts/Gilroy-Font/Gilroy-UltraLight.woff");
+  font-weight: light;
+}
+@font-face {
+  font-family: "Gilroy-Light";
   src: url("./Assets/fonts/Gilroy-Font/Gilroy-Light.woff");
   font-weight: light;
 }
@@ -22,21 +27,32 @@
   src: url("./Assets/fonts/Gilroy-Font/Gilroy-Heavy.woff");
   font-weight: heavy;
 }
+
 @font-face {
-  font-family: "Gilroy";
+  font-family: "Gilroy-Medium";
+  src: url("./Assets/fonts/Gilroy-Font/Gilroy-Medium.woff");
+  font-weight: heavy;
+}
+@font-face {
+  font-family: "Gilroy-ExtraBold";
   src: url("./Assets/fonts/Gilroy-Font/Gilroy-ExtraBold.woff");
   font-weight: extraBold;
 }
 @font-face {
-  font-family: "Gilroy";
+  font-family: "Gilroy-Bold";
   src: url("./Assets/fonts/Gilroy-Font/Gilroy-Bold.woff");
   font-weight: bold;
 }
 @font-face {
-  font-family: "Gilroy";
+  font-family: "Gilroy-Black";
   src: url("./Assets/fonts/Gilroy-Font/Gilroy-Black.woff");
   font-weight: black;
 }
+
+*{
+  font-family: "Gilroy";
+}
+
 /* width */
 ::-webkit-scrollbar {
   width: 0px;
@@ -142,6 +158,55 @@
 .bg-gradient {
   @apply bg-gradient-to-tr   from-[#A36CFC]  via-primary  to-brand;
 }
+ 
+.font-normal{
+  font-family: 'Gilroy';
+
+}
+
+
+.font-extralight{
+  font-family: 'Gilroy-ExtraLight';
+  }
+
+.font-light{
+font-family: 'Gilroy-Light';
+}
+
+.font-thin{
+  font-family: 'Gilroy-Thin';
+
+}
+
+
+.font-medium{
+  font-family: 'Gilroy-Medium';
+}
+
+.font-semibold{
+  font-family: 'Gilroy-SemiBold';
+}
+
+.font-bold{
+  font-family: 'Gilroy-Bold';
+
+}
+.font-extrabold{
+  font-family: "Gilroy-ExtraBold";
+}
+
+.font-black{
+  font-family: 'Gilroy-Black';
+
+}
+.btn-accent{
+  @apply text-white
+}
+
+p{
+font-family: 'Gilroy';  
+}
+
 .slideshow {
   margin: 0 auto;
   overflow: hidden;
@@ -183,3 +248,4 @@
 .slideshowDot.active {
   @apply bg-primary;
 }
+ 

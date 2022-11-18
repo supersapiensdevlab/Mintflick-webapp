@@ -39,6 +39,28 @@ function testConnect() {
           name="avatar"
           accept="image/png, image/jpeg"
         ></input>
+
+<p className="text-3xl">Heading</p>
+        <p className="font-thin text-3xl">Heading</p>
+
+        <p className="font-extralight text-3xl">Heading</p>
+
+        <p className="font-light text-3xl">Heading</p>
+
+        <p className="font-normal text-3xl">Heading</p>
+
+        <p className="font-medium text-3xl">Heading</p>
+
+
+        <p className="font-semibold text-3xl">Heading</p>
+
+        <p className="font-bold text-3xl">Heading</p>
+
+        <p className="font-extrabold text-3xl">Heading</p>
+
+        <p className="font-black text-3xl">Heading</p>
+
+
       </header>
     </div>
   );
