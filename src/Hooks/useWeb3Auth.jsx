@@ -14,7 +14,7 @@ import { OpenloginAdapter } from "@web3auth/openlogin-adapter";
 
 export default function useWeb3Auth() {
   // const modal = useWebModal();
-  let clientId = `${process.env.REACT_APP_WEB3AUTH_TESTNET_CLIENT_ID}`;
+  let clientId = `BIkayaVZreEWb-twRX4WscaqXcBJ0j9shAdTmUVp4Zzj5bKNkhQ2_NNd7g3nyoWmRJk9t5cPO9rUNQn-byPmEMs`;
   // if (process.env.REACT_APP_PRODUCTION == "false") {
   //   clientId = `${process.env.REACT_APP_WEB3AUTH_TESTNET_CLIENT_ID}`;
   // } else {
