@@ -14,12 +14,12 @@ import { OpenloginAdapter } from "@web3auth/openlogin-adapter";
 
 export default function useWeb3Auth() {
   // const modal = useWebModal();
-  let clientId;
-  if (process.env.REACT_APP_PRODUCTION == "false") {
-    clientId = `${process.env.REACT_APP_WEB3AUTH_TESTNET_CLIENT_ID}`;
-  } else {
-    clientId = `${process.env.REACT_APP_WEB3AUTH_MAINNET_CLIENT_ID}`;
-  }
+  let clientId = `${process.env.REACT_APP_WEB3AUTH_TESTNET_CLIENT_ID}`;
+  // if (process.env.REACT_APP_PRODUCTION == "false") {
+  //   clientId = `${process.env.REACT_APP_WEB3AUTH_TESTNET_CLIENT_ID}`;
+  // } else {
+  //   clientId = `${process.env.REACT_APP_WEB3AUTH_MAINNET_CLIENT_ID}`;
+  // }
   // const [web3auth, setWeb3auth] = useState(null);
   const [provider, setProvider] = useState(null);
   const State = useContext(UserContext);
