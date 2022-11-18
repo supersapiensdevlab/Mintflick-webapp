@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 // import useWebModal from "./../Componants/Wallet/useWebModal";
-import { Web3Auth } from "@web3auth/web3auth";
+import { Web3Auth } from "@web3auth/modal";
 import RPC from "./../Componants/Wallet/solanaRPC";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";

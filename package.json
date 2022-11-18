@@ -20,6 +20,7 @@
     "@web3auth/modal": "^3.0.4",
     "@web3auth/openlogin-adapter": "^3.0.4",
     "@web3auth/torus-evm-adapter": "^3.0.4",
+    "@web3auth/solana-provider":"^3.0.4",
     "0xsequence": "^0.40.4",
     "axios": "^0.27.2",
     "bs58": "^5.0.0",
