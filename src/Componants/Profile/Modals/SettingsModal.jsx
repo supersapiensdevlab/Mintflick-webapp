@@ -648,7 +648,7 @@ function SettingsModal(props) {
         )}
         {activeTab === "account" && (
           <ListNavigation
-            list={["Verify Account"]}
+            list={["Verify Account", "Snippets"]}
             content={[
               <div className="flex flex-col gap-2 p-4 w-full  justify-center">
                 <span className="text-base text-brand4 font-semibold">
@@ -731,6 +731,51 @@ function SettingsModal(props) {
                 <button className="btn btn-brand gap-2 capitalize ">
                   <Upload size={16} /> Submit
                 </button>
+              </div>,
+              <div className="mt-2">
+                <div
+                  tabIndex={0}
+                  className="collapse   collapse-plus text-brand3 "
+                >
+                  <div className="collapse-title text-lg font-medium -my-3 text-primary">
+                    New Snippet
+                  </div>
+                  <div className="collapse-content space-y-2 pt-2">
+                    <input className="input input-sm w-full"></input>
+                    <textarea className="  textarea   w-full"></textarea>
+                    <div className="flex justify-end">
+                      <button className="btn btn-primary btn-sm">
+                        Add snippet
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  tabIndex={1}
+                  className="collapse collapse-arrow text-brand3 "
+                >
+                  <div className="collapse-title text-lg font-medium -my-3">
+                    Snippet name
+                  </div>
+                  <div className="collapse-content">
+                    <p className="border-b-2 border-slate-300 dark:border-slate-600  ">
+                      Snippet content -
+                    </p>
+                  </div>
+                </div>
+                <div
+                  tabIndex={2}
+                  className="collapse collapse-arrow text-brand3 "
+                >
+                  <div className="collapse-title text-lg font-medium -my-3">
+                    Snippet name
+                  </div>
+                  <div className="collapse-content">
+                    <p className="border-b-2 border-slate-300 dark:border-slate-600 ">
+                      Snippet content -
+                    </p>
+                  </div>
+                </div>
               </div>,
             ]}
           />
