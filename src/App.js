@@ -96,12 +96,12 @@ function App() {
       });
   }, []);
 
-  useEffect(() => {
-    if (State.database?.provider == null) {
-      login();
-      console.log("login useEffect called");
-    }
-  }, [State.database.userData?.data]);
+  // useEffect(() => {
+  //   if (State.database?.provider == null) {
+  //     login();
+  //     console.log("login useEffect called");
+  //   }
+  // }, [State.database.userData?.data]);
 
   return (
     <div className={State.database.dark ? `dark` : " "}>

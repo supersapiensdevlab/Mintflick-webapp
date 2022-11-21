@@ -9,6 +9,7 @@ import SolanaToken from "../../Assets/logos/SolanaToken";
 import useWeb3Auth from "../../Hooks/useWeb3Auth";
 import { Rocket } from "tabler-icons-react";
 import Emoji from "react-emojis";
+import useWebModal from "./useWebModal";
 
 function ConnectWalletComponant() {
   const wallets = [twitter, discord, instagram];
@@ -20,7 +21,8 @@ function ConnectWalletComponant() {
 
   const State = useContext(UserContext);
 
-  const [login, logout] = useWeb3Auth();
+  // const [login, logout] = useWeb3Auth();
+  const modal = useWebModal();
 
   return (
     <div
@@ -41,12 +43,12 @@ function ConnectWalletComponant() {
       <div className="w-full flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4 pt-10">
         <button
           onClick={async () => {
-            await login();
+            modal(true);
           }}
           className="btn btn-brand w-full capitalize gap-1"
         >
-         
-          Let me In &nbsp;<Emoji emoji="rocket" />
+          Let me In &nbsp;
+          <Emoji emoji="rocket" />
         </button>
         {/* <button onClick={getUserInfo} className="card">
           Get User Info
@@ -59,10 +61,10 @@ function ConnectWalletComponant() {
           Create new wallet
         </button> */}
       </div>
-      <div className="flex text-white align-middle text-center gap-x-2">
+      {/* <div className="flex text-white align-middle text-center gap-x-2">
         Supports <SolanaToken size={24}></SolanaToken>
-      </div>
-      <div className="form-control w-fit  hidden">
+      </div> */}
+      <div className="form-control w-fit ">
         <label className="label cursor-pointer gap-4">
           <span className="label-text text-white">Switch Chains</span>
           <SolanaToken
@@ -82,9 +84,9 @@ function ConnectWalletComponant() {
           <PolygonToken
             className={State.database.chainId === 0 ? "saturate-0" : null}
           />
-          {/* {switching ? (
-            <button class='btn btn-ghost btn-square loading'></button>
-          ) : null} */}
+          {/* {switching ? ( */}
+          {/* <button class="btn btn-ghost btn-square loading"></button> */}
+          {/* ) : null} */}
         </label>
       </div>
       <div className="w-full md:w-fit border p-4 space-y-2 rounded-lg border-slate-800">

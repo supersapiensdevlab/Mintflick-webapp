@@ -7,7 +7,7 @@ import { sequence } from "0xsequence";
 import { UserContext } from "../../Store";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { Web3Auth } from "@web3auth/web3auth";
+
 import Main_logo from "../../Assets/logos/Main_logo";
 import RPC from "./solanaRPC";
 
@@ -70,22 +70,15 @@ function useWebModal() {
   };
 
   const newWalletProvider = {
-    web3auth: {
-      package: Web3Auth, // required
+    torus: {
+      package: Torus, // required
       options: {
-        dark: true,
-        infuraId: "52628805bda848a2bcbb48a778ac7583", // required
+        networkParams: {
+          chainId: "137", // default: 1
+          networkName: "Matic Mainnet",
+        },
       },
     },
-    // torus: {
-    //   package: Torus, // required
-    //   options: {
-    //     networkParams: {
-    //       chainId: "137", // default: 1
-    //       networkName: "Matic Mainnet",
-    //     },
-    //   },
-    // },
     sequence: {
       package: sequence, // required
       options: {
@@ -121,18 +114,18 @@ function useWebModal() {
           ...newWalletProvider,
         }
       : {
-          // torus: {
-          //   package: Torus, // required
-          //   display: {
-          //     description: "Create your wallet with torus",
-          //   },
-          //   options: {
-          //     networkParams: {
-          //       chainId: "137", // default: 1
-          //       networkName: "Matic Mainnet",
-          //     },
-          //   },
-          // },
+          torus: {
+            package: Torus, // required
+            display: {
+              description: "Create your wallet with torus",
+            },
+            options: {
+              networkParams: {
+                chainId: "137", // default: 1
+                networkName: "Matic Mainnet",
+              },
+            },
+          },
           sequence: {
             package: sequence, // required
             display: {
