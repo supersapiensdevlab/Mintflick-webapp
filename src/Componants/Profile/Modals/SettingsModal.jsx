@@ -27,6 +27,7 @@ import ProfileImageModal from "./ProfileImageModal";
 import ConfirmationModal from "../../Home/Modals/ConfirmationModal";
 import LinkNewWalletModal from "../../Home/Modals/LinkNewWalletModal";
 import ListNavigation from "../ListNavigation";
+import Snippets from "../AccountSettings/Snippets";
 
 function SettingsModal(props) {
   const [activeTab, setactiveTab] = useState("editProfile");
@@ -160,7 +161,7 @@ function SettingsModal(props) {
         props.open && "modal-open"
       } modal  modal-bottom sm:modal-middle`}
     >
-      <div className="modal-box p-0 bg-slate-100 dark:bg-slate-800 ">
+      <div className="flex flex-col modal-box h-screen p-0 bg-slate-100 dark:bg-slate-800 ">
         <div className="w-full h-fit p-2 bg-slate-300 dark:bg-slate-700">
           <div className="flex justify-between items-center p-2">
             <h3 className="flex items-center gap-2 font-bold text-lg text-brand2">
@@ -203,7 +204,7 @@ function SettingsModal(props) {
           </span>
         </div>
         {activeTab === "editProfile" && (
-          <div className="flex flex-col gap-2 p-4 w-full  justify-center">
+          <div className=" flex-grow overflow-auto flex flex-col gap-2 p-4 w-full  justify-center">
             <div className="w-full relative h-32">
               <img
                 src={
@@ -275,7 +276,7 @@ function SettingsModal(props) {
 
             <input
               type="text"
-              className="input  w-full"
+              className="input input-md w-full"
               placeholder={State.database.userData?.data?.user?.email}
               readOnly
               //   onChange={(e) =>
@@ -330,7 +331,7 @@ function SettingsModal(props) {
           </div>
         )}
         {activeTab === "manageSuperfans" && (
-          <div className="flex flex-col gap-2 p-4 w-full  justify-center">
+          <div className="flex-grow overflow-auto flex flex-col gap-2 p-4 w-full  justify-center">
             <div className="flex flex-col items-start gap-1">
               <span className=" text-brand4 font-semibold">
                 Your Wallet address
@@ -647,138 +648,96 @@ function SettingsModal(props) {
           </div>
         )}
         {activeTab === "account" && (
-          <ListNavigation
-            list={["Verify Account", "Snippets"]}
-            content={[
-              <div className="flex flex-col gap-2 p-4 w-full  justify-center">
-                <span className="text-base text-brand4 font-semibold">
-                  Step 1 : Collect vouches
-                </span>
-                <span className="text-base text-brand4 font-semibold">
-                  Step 2 : ENS Domain Name
-                </span>
-                <input
-                  type="text"
-                  className="input  w-full"
-                  placeholder={"Enter your ENS domain name"}
+          <div className="flex-grow w-full overflow-auto">
+            <ListNavigation
+              list={["Verify Account", "Snippets"]}
+              content={[
+                <div className="flex flex-col gap-2 p-4 w-full  justify-center">
+                  <span className="text-base text-brand4 font-semibold">
+                    Step 1 : Collect vouches
+                  </span>
+                  <span className="text-base text-brand4 font-semibold">
+                    Step 2 : ENS Domain Name
+                  </span>
+                  <input
+                    type="text"
+                    className="input  w-full"
+                    placeholder={"Enter your ENS domain name"}
 
-                  //   onChange={(e) =>
-                  //   value={}
-                />
-                <div className="form-control w-full">
-                  <label className="label">
-                    <span className="label-text text-base text-brand4 font-semibold">
-                      Step 3: Social links
-                    </span>
-                  </label>
-                  <div className="mb-1 flex items-center">
-                    <BrandTwitter
-                      size={16}
-                      className="translate-x-2 text-[#00acee]"
-                    />
-                    <input
-                      type="text"
-                      className="input input-sm w-full  -ml-4 pl-8"
-                      placeholder={"Twitter link"}
-                      onChange={(e) => {}}
-                      //   value={}
-                    />
-                  </div>
-                  <div className="mb-1 flex items-center">
-                    <BrandInstagram
-                      size={16}
-                      className="translate-x-2 text-[#bc2a8d]"
-                    />
-                    <input
-                      type="text"
-                      className="input input-sm w-full  -ml-4 pl-8"
-                      placeholder={"Instagram link"}
-                      onChange={(e) => {}}
-                      //   value={}
-                    />
-                  </div>
-
-                  {socialLinks.map((link, index) => (
-                    <div className="flex items-center gap-2 mb-1">
+                    //   onChange={(e) =>
+                    //   value={}
+                  />
+                  <div className="form-control w-full">
+                    <label className="label">
+                      <span className="label-text text-base text-brand4 font-semibold">
+                        Step 3: Social links
+                      </span>
+                    </label>
+                    <div className="mb-1 flex items-center">
+                      <BrandTwitter
+                        size={16}
+                        className="translate-x-2 text-[#00acee]"
+                      />
                       <input
                         type="text"
-                        className="input input-sm flex-grow"
-                        placeholder={"Enter link"}
-                        onChange={(e) => socialLinks[(index, e.target.value)]}
+                        className="input input-sm w-full  -ml-4 pl-8"
+                        placeholder={"Twitter link"}
+                        onChange={(e) => {}}
                         //   value={}
                       />
-                      <button
-                        onClick={() =>
-                          setsocialLinks(
-                            socialLinks.filter((item, i) => {
-                              return index !== i;
-                            })
-                          )
-                        }
-                        className="btn btn-square btn-sm  btn-error"
-                      >
-                        <Trash size={14} />
-                      </button>
                     </div>
-                  ))}
-                  <button
-                    onClick={() => setsocialLinks([...socialLinks, ""])}
-                    className="btn btn-outline btn-primary btn-sm capitalize"
-                  >
-                    Add Link
+                    <div className="mb-1 flex items-center">
+                      <BrandInstagram
+                        size={16}
+                        className="translate-x-2 text-[#bc2a8d]"
+                      />
+                      <input
+                        type="text"
+                        className="input input-sm w-full  -ml-4 pl-8"
+                        placeholder={"Instagram link"}
+                        onChange={(e) => {}}
+                        //   value={}
+                      />
+                    </div>
+
+                    {socialLinks.map((link, index) => (
+                      <div className="flex items-center gap-2 mb-1">
+                        <input
+                          type="text"
+                          className="input input-sm flex-grow"
+                          placeholder={"Enter link"}
+                          onChange={(e) => socialLinks[(index, e.target.value)]}
+                          //   value={}
+                        />
+                        <button
+                          onClick={() =>
+                            setsocialLinks(
+                              socialLinks.filter((item, i) => {
+                                return index !== i;
+                              })
+                            )
+                          }
+                          className="btn btn-square btn-sm  btn-error"
+                        >
+                          <Trash size={14} />
+                        </button>
+                      </div>
+                    ))}
+                    <button
+                      onClick={() => setsocialLinks([...socialLinks, ""])}
+                      className="btn btn-outline btn-primary btn-sm capitalize"
+                    >
+                      Add Link
+                    </button>
+                  </div>
+                  <button className="btn btn-brand gap-2 capitalize ">
+                    <Upload size={16} /> Submit
                   </button>
-                </div>
-                <button className="btn btn-brand gap-2 capitalize ">
-                  <Upload size={16} /> Submit
-                </button>
-              </div>,
-              <div className="mt-2">
-                <div
-                  tabIndex={0}
-                  className="collapse   collapse-plus text-brand3 "
-                >
-                  <div className="collapse-title text-lg font-medium -my-3 text-primary">
-                    New Snippet
-                  </div>
-                  <div className="collapse-content space-y-2 pt-2">
-                    <input className="input input-sm w-full"></input>
-                    <textarea className="  textarea   w-full"></textarea>
-                    <div className="flex justify-end">
-                      <button className="btn btn-primary btn-sm">
-                        Add snippet
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                <div
-                  tabIndex={1}
-                  className="collapse collapse-arrow text-brand3 "
-                >
-                  <div className="collapse-title text-lg font-medium -my-3">
-                    Snippet name
-                  </div>
-                  <div className="collapse-content">
-                    <p className="border-b-2 border-slate-300 dark:border-slate-600  ">
-                      Snippet content -
-                    </p>
-                  </div>
-                </div>
-                <div
-                  tabIndex={2}
-                  className="collapse collapse-arrow text-brand3 "
-                >
-                  <div className="collapse-title text-lg font-medium -my-3">
-                    Snippet name
-                  </div>
-                  <div className="collapse-content">
-                    <p className="border-b-2 border-slate-300 dark:border-slate-600 ">
-                      Snippet content -
-                    </p>
-                  </div>
-                </div>
-              </div>,
-            ]}
-          />
+                </div>,
+                <Snippets />,
+              ]}
+            />
+          </div>
         )}
       </div>
       <div

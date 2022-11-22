@@ -6,7 +6,7 @@ function ListNavigation(props) {
   const [activeTab, setactiveTab] = useState(0);
 
   return (
-    <div className="w-full h-96 relative">
+    <div className="w-full h-full relative">
       <div className="w-full flex flex-col justify-start items-start p-4">
         {props.list.map((x, index) => (
           <div
@@ -33,7 +33,10 @@ function ListNavigation(props) {
           Back
         </button>
         {props.content.map(
-          (x, index) => activeTab === index && <div className="w-full">{x}</div>
+          (x, index) =>
+            activeTab === index && (
+              <div className="w-full h-full overflow-auto">{x}</div>
+            )
         )}
       </div>
     </div>

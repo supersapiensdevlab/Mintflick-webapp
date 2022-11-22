@@ -799,7 +799,7 @@ function GoLive() {
               />
             ) : (
               <img
-                className="border-2 border-slate-500 aspect-video w-full object-cover rounded-lg"
+                className="border-2 border-slate-500 aspect-video w-full object-cover rounded-lg" 
                 src={
                   user.database.userData.data?.user.thumbnail
                     ? user.database.userData.data.user.thumbnail
