@@ -7,7 +7,8 @@ import { sequence } from "0xsequence";
 import { UserContext } from "../../Store";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-
+import SolanaTorus from "@toruslabs/solana-embed";
+import * as web3 from "@solana/web3.js";
 import Main_logo from "../../Assets/logos/Main_logo";
 import RPC from "./solanaRPC";
 
@@ -21,7 +22,17 @@ function useWebModal() {
   const State = useContext(UserContext);
   const navigateTo = useNavigate();
 
+  const getProvider = async () => {
+    if ("solana" in window) {
+      const provider = window.solana;
+      if (provider.isPhantom) {
+        return provider;
+      }
+    }
+  };
+
   async function isUserAvaliable(walletAddress, provider) {
+    console.log(walletAddress);
     await axios({
       method: "post",
       url: `${process.env.REACT_APP_SERVER_URL}/user/getuser_by_wallet`,
@@ -88,76 +99,159 @@ function useWebModal() {
     },
   };
 
+  // const newSolanaWalletProvider = {
+  //   torus: {
+  //     package: SolanaTorus, // required
+  //     options: {
+  //       networkParams: {
+  //         chainId: "0x2", // default: 1
+  //         networkName: "Solana Testnet",
+  //       },
+  //     },
+  //   },
+  // };
+
   return async function loadWebModal(newWallet, chainName) {
-    const providerOptions = newWallet
-      ? {
-          /* See Provider Options Section */ injected: {
-            display: {
-              name: "Default Wallet",
-              description: "Connect with the provider in your Browser",
-            },
-            options: {
-              networkParams: {
-                chainId: "137", // default: 1
-                networkName: "Matic Mainnet",
-              },
-            },
-            package: null,
-          },
+    if (State.database?.chainId == 0) {
+      // const providerOptions = newWallet
+      //   ? {
+      //       /* See Provider Options Section */ injected: {
+      //         display: {
+      //           name: "Default Wallet",
+      //           description: "Connect with the provider in your Browser",
+      //         },
+      //         options: {
+      //           networkParams: {
+      //             chainId: "0x2", // default: 1
+      //             networkName: "Solana Testnet",
+      //           },
+      //         },
+      //         package: null,
+      //       },
 
-          walletconnect: {
-            package: WalletConnectProvider, // required
-            options: {
-              infuraId: "27e484dcd9e3efcfd25a83a78777cdf1", // required
-            },
-          },
-          ...newWalletProvider,
+      //       ...newSolanaWalletProvider,
+      //     }
+      //   : {
+      //       torus: {
+      //         package: SolanaTorus, // required
+      //         display: {
+      //           description: "Create your wallet with torus",
+      //         },
+      //         options: {
+      //           networkParams: {
+      //             chainId: "0x2", // default: 1
+      //             networkName: "Solana Testnet",
+      //           },
+      //         },
+      //       },
+      //     };
+
+      // const web3Modal = new Web3Modal({
+      //   disableInjectedProvider: !newWallet,
+      //   network: "mainnet", // optional
+      //   cacheProvider: false, // optional
+      //   providerOptions, // required
+      //   theme: "dark",
+      // });
+
+      // const instance = await web3Modal.connect();
+      // const provider = new ethers.providers.Web3Provider(instance);
+      // console.log(provider);
+
+      // const signer = provider.getSigner();
+      // const Address = await signer.getAddress();
+      // State.updateDatabase({
+      //   walletAddress: Address,
+      // });
+
+      // console.log(Address);
+      const provider = await getProvider();
+      console.log(provider);
+      if (provider) {
+        try {
+          const response = await provider.connect();
+          const pubKey = await provider.publicKey;
+          console.log(pubKey);
+          const providers = provider;
+          const Address = response.publicKey.toString();
+          isUserAvaliable(Address, providers);
+        } catch (err) {
+          // { code: 4001, message: 'User rejected the request.' }
         }
-      : {
-          torus: {
-            package: Torus, // required
-            display: {
-              description: "Create your wallet with torus",
+      }
+    } else if (State.database?.chainId == 1) {
+      const providerOptions = newWallet
+        ? {
+            /* See Provider Options Section */ injected: {
+              display: {
+                name: "Default Wallet",
+                description: "Connect with the provider in your Browser",
+              },
+              options: {
+                networkParams: {
+                  chainId: "137", // default: 1
+                  networkName: "Matic Mainnet",
+                },
+              },
+              package: null,
             },
-            options: {
-              networkParams: {
-                chainId: "137", // default: 1
-                networkName: "Matic Mainnet",
+
+            walletconnect: {
+              package: WalletConnectProvider, // required
+              options: {
+                infuraId: "27e484dcd9e3efcfd25a83a78777cdf1", // required
               },
             },
-          },
-          sequence: {
-            package: sequence, // required
-            display: {
-              description: "Create your wallet with sequence",
+            ...newWalletProvider,
+          }
+        : {
+            torus: {
+              package: Torus, // required
+              display: {
+                description: "Create your wallet with torus",
+              },
+              options: {
+                networkParams: {
+                  chainId: "137", // default: 1
+                  networkName: "Matic Mainnet",
+                },
+              },
             },
-            options: {
-              appName: "MintFlick", // optional
-              defaultNetwork: "polygon", // optional
+            sequence: {
+              package: sequence, // required
+              display: {
+                description: "Create your wallet with sequence",
+              },
+              options: {
+                appName: "MintFlick", // optional
+                defaultNetwork: "polygon", // optional
+              },
             },
-          },
-        };
+          };
 
-    const web3Modal = new Web3Modal({
-      disableInjectedProvider: !newWallet,
-      network: "mainnet", // optional
-      cacheProvider: false, // optional
-      providerOptions, // required
-      theme: "dark",
-    });
+      const web3Modal = new Web3Modal({
+        disableInjectedProvider: !newWallet,
+        network: "mainnet", // optional
+        cacheProvider: false, // optional
+        providerOptions, // required
+        theme: "dark",
+      });
 
-    const instance = await web3Modal.connect();
-    const provider = new ethers.providers.Web3Provider(instance);
-    console.log(provider);
+      const instance = await web3Modal.connect();
+      const provider = new ethers.providers.Web3Provider(instance);
+      console.log(provider);
+      const signer = provider.getSigner();
+      const Address = await signer.getAddress();
+      State.updateDatabase({
+        walletAddress: Address,
+      });
 
-    const signer = provider.getSigner();
-    const Address = await signer.getAddress();
-    State.updateDatabase({
-      walletAddress: Address,
-    });
-
-    console.log(Address);
-    isUserAvaliable(Address, provider);
+      console.log(Address);
+      isUserAvaliable(Address, provider);
+      provider.on("connect", (chainId) => {
+        console.log(chainId);
+      });
+    }
   };
 }
 
