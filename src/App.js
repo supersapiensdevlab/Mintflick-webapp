@@ -32,6 +32,7 @@ import SpinWheel from "./Componants/Games/SpinWheel";
 import AllGames from "./Componants/Games/AllGames";
 import SpinGame from "./Componants/Games/SpinGame/SpinGame";
 import RollDice from "./Componants/Games/RollDice/RollDice";
+import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 function App() {
   const State = useContext(UserContext);
   const [login, logout] = useWeb3Auth();
@@ -134,5 +135,5 @@ function App() {
     </div>
   );
 }
-
+serviceWorkerRegistration.register();
 export default App;

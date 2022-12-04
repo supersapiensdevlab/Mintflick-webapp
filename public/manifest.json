@@ -5,21 +5,25 @@
     {
       "src": "Mintflick-favicon.png",
       "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
       "src": "Mintflick-favicon.png",
       "type": "image/png",
-      "sizes": "192x192"
+      "sizes": "192x192",
+      "purpose": "any maskable"
     },
     {
       "src": "Mintflick-favicon.png",
       "type": "image/png",
-      "sizes": "512x512"
+      "sizes": "512x512",
+      "purpose": "any maskable"
     }
   ],
   "start_url": ".",
   "display": "standalone",
   "theme_color": "#e2e8f0",
-  "background_color": "#0f172a"
+  "background_color": "#0f172a",
+  "purpose": "any maskable"
 }
