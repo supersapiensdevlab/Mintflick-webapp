@@ -204,7 +204,7 @@ function SettingsModal(props) {
           </span>
         </div>
         {activeTab === "editProfile" && (
-          <div className=" flex-grow overflow-auto flex flex-col gap-2 p-4 w-full  justify-center">
+          <div className=" flex-grow overflow-auto flex flex-col gap-2 p-4 w-full  justify-start  ">
             <div className="w-full relative h-32">
               <img
                 src={
@@ -331,7 +331,7 @@ function SettingsModal(props) {
           </div>
         )}
         {activeTab === "manageSuperfans" && (
-          <div className="flex-grow overflow-auto flex flex-col gap-2 p-4 w-full  justify-center">
+          <div className="flex-grow overflow-auto flex flex-col gap-2 p-4 w-full  justify-start">
             <div className="flex flex-col items-start gap-1">
               <span className=" text-brand4 font-semibold">
                 Your Wallet address
