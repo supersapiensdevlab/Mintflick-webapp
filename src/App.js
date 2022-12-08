@@ -33,6 +33,7 @@ import AllGames from "./Componants/Games/AllGames";
 import SpinGame from "./Componants/Games/SpinGame/SpinGame";
 import RollDice from "./Componants/Games/RollDice/RollDice";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
+import CreateEvent from "./Componants/Event/CreateEvent";
 function App() {
   const State = useContext(UserContext);
   const [login, logout] = useWeb3Auth();
@@ -115,10 +116,14 @@ function App() {
         <Route path="/test" element={<TestConnection />}></Route>
         <Route path="/homescreen" element={<HomeScreen />}>
           <Route path="home" element={<Home />} />
+
           <Route path="live" element={<Live />} />
           <Route path="golive" element={<GoLive />} />
           <Route path="liveuser/:username" element={<UserLivestream />} />
+
           <Route path="marketPlace" element={<Events></Events>} />
+          <Route path="create-event" element={<CreateEvent/>} />
+
           <Route path="explore" element={<Explore />} />
           <Route path="notifications" element={<MobileNotifications />} />
           <Route path="allgames" element={<AllGames />} />

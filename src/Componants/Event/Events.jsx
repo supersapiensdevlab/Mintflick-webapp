@@ -3,6 +3,8 @@ import EventCardList from "./EventCardList";
 import EventCategories from "./EventCategories";
 import Filter from "./Filter";
 import { useState, useEffect } from "react";
+import { Plus, Search } from "tabler-icons-react";
+import { Link } from "react-router-dom";
 function Event() {
   const [payWallStatus, setPayWallStatus] = useState();
   const [userInfo, setUserInfo] = useState();
@@ -31,17 +33,29 @@ function Event() {
   }, []);
 
   return (
-    <div className=' flex w-full h-screen  bg-white dark:bg-slate-900 '>
-      <div className='hidden lg:flex flex-col h-full w-1/4 ml-12 pt-24  space-y-6 overflow-y-auto'>
+    <div className='lg:px-12  w-screen h-screen  bg-white dark:bg-slate-900 '>
+      {/* <div className='hidden lg:flex flex-col h-full w-1/4 ml-12 pt-24  space-y-6 overflow-y-auto'>
         <Filter></Filter>
         <EventCategories></EventCategories>
-      </div>
+      </div> */}
 
-      <div className='w-full lg:w-3/4 lg:mr-12 h-full pt-24 space-y-6 overflow-y-auto pb-12'>
-        <div className='p-2 w-full h-52 rounded-xl bg-slate-100 dark:bg-slate-800'></div>
+      <div className='w-full    lg:mr-12 h-full pt-24 space-y-6 overflow-y-auto pb-12'>
+        <div className='p-2 w-full flex gap-2 lg:rounded-xl bg-slate-100 dark:bg-slate-800'>
+             <input
+              type="text"
+              placeholder="Search events"
+              className="input input-bordered w-full     flex-grow"
+             />
+               <Link
+          className="btn gap-2 btn-brand"
+           to={"../create-event"}
+        >
+          <Plus/>   
+        Create Event
+        </Link>
+            </div> 
         <EventCardList></EventCardList>
-
-        <EventCardList></EventCardList>
+         <EventCardList></EventCardList>
         <EventCardList></EventCardList>
       </div>
     </div>

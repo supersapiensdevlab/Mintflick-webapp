@@ -71,11 +71,11 @@ function EventCardList() {
     },
   ]);
   return (
-    <div className="w-full h-fit p-4 space-y-2 lg:rounded-xl bg-slate-100 dark:bg-slate-800 ">
-      <p className="font-bold text-base text-brand5 ">
+    <div className="w-full h-fit py-4 space-y-4 lg:rounded-xl bg-slate-100 dark:bg-slate-800 ">
+      <p className="font-bold mx-4 text-xl text-brand5 ">
         Category name will come here
       </p>
-      <div className=" w-full overflow-x-auto">
+      <div className=" w-full pl-4 overflow-x-auto">
         <div className="flex space-x-4 w-fit">
           {data.map((event) => (
             <div className="relative h-fit w-64 py-1 px-2 rounded-lg bg-slate-200 dark:bg-slate-700">

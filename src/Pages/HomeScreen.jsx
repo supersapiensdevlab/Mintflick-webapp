@@ -19,7 +19,7 @@ function HomeScreen() {
   }, []);
 
   return (
-    <div className="relative flex flex-col h-screen w-screen  ">
+    <div className="relative flex flex-col h-screen w-screen  bg-white dark:bg-slate-900">
       <Helmet>
         <meta charSet="utf-8" />
         <title>MintFlick - Feed</title>

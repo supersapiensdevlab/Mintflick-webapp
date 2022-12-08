@@ -341,6 +341,11 @@ function SettingsModal(props) {
                 className="input w-full"
                 value={localStorage.getItem("walletAddress")}
                 readOnly
+
+
+
+
+                
               />
             </div>
             {/* <div className="flex flex-col items-start gap-1">
