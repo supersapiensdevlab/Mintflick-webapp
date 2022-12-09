@@ -32,7 +32,7 @@ import SpinWheel from "./Componants/Games/SpinWheel";
 import AllGames from "./Componants/Games/AllGames";
 import SpinGame from "./Componants/Games/SpinGame/SpinGame";
 import RollDice from "./Componants/Games/RollDice/RollDice";
-import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
+// import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import CreateEvent from "./Componants/Event/CreateEvent";
 function App() {
   const State = useContext(UserContext);
