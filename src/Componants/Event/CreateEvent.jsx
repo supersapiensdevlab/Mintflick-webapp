@@ -26,10 +26,361 @@ function CreateEvent() {
   const [totalTickets, settotalTickets] = useState("");
 
   const [description, setdescription] = useState("");
+  const [date, setdate] = useState("");
+  const [timezone, settimezone] = useState("");
+  const timezones = [
+    "Europe/Andorra",
+    "Asia/Dubai",
+    "Asia/Kabul",
+    "Europe/Tirane",
+    "Asia/Yerevan",
+    "Antarctica/Casey",
+    "Antarctica/Davis",
+    "Antarctica/DumontDUrville", // https://bugs.chromium.org/p/chromium/issues/detail?id=928068
+    "Antarctica/Mawson",
+    "Antarctica/Palmer",
+    "Antarctica/Rothera",
+    "Antarctica/Syowa",
+    "Antarctica/Troll",
+    "Antarctica/Vostok",
+    "America/Argentina/Buenos_Aires",
+    "America/Argentina/Cordoba",
+    "America/Argentina/Salta",
+    "America/Argentina/Jujuy",
+    "America/Argentina/Tucuman",
+    "America/Argentina/Catamarca",
+    "America/Argentina/La_Rioja",
+    "America/Argentina/San_Juan",
+    "America/Argentina/Mendoza",
+    "America/Argentina/San_Luis",
+    "America/Argentina/Rio_Gallegos",
+    "America/Argentina/Ushuaia",
+    "Pacific/Pago_Pago",
+    "Europe/Vienna",
+    "Australia/Lord_Howe",
+    "Antarctica/Macquarie",
+    "Australia/Hobart",
+    "Australia/Currie",
+    "Australia/Melbourne",
+    "Australia/Sydney",
+    "Australia/Broken_Hill",
+    "Australia/Brisbane",
+    "Australia/Lindeman",
+    "Australia/Adelaide",
+    "Australia/Darwin",
+    "Australia/Perth",
+    "Australia/Eucla",
+    "Asia/Baku",
+    "America/Barbados",
+    "Asia/Dhaka",
+    "Europe/Brussels",
+    "Europe/Sofia",
+    "Atlantic/Bermuda",
+    "Asia/Brunei",
+    "America/La_Paz",
+    "America/Noronha",
+    "America/Belem",
+    "America/Fortaleza",
+    "America/Recife",
+    "America/Araguaina",
+    "America/Maceio",
+    "America/Bahia",
+    "America/Sao_Paulo",
+    "America/Campo_Grande",
+    "America/Cuiaba",
+    "America/Santarem",
+    "America/Porto_Velho",
+    "America/Boa_Vista",
+    "America/Manaus",
+    "America/Eirunepe",
+    "America/Rio_Branco",
+    "America/Nassau",
+    "Asia/Thimphu",
+    "Europe/Minsk",
+    "America/Belize",
+    "America/St_Johns",
+    "America/Halifax",
+    "America/Glace_Bay",
+    "America/Moncton",
+    "America/Goose_Bay",
+    "America/Blanc-Sablon",
+    "America/Toronto",
+    "America/Nipigon",
+    "America/Thunder_Bay",
+    "America/Iqaluit",
+    "America/Pangnirtung",
+    "America/Atikokan",
+    "America/Winnipeg",
+    "America/Rainy_River",
+    "America/Resolute",
+    "America/Rankin_Inlet",
+    "America/Regina",
+    "America/Swift_Current",
+    "America/Edmonton",
+    "America/Cambridge_Bay",
+    "America/Yellowknife",
+    "America/Inuvik",
+    "America/Creston",
+    "America/Dawson_Creek",
+    "America/Fort_Nelson",
+    "America/Vancouver",
+    "America/Whitehorse",
+    "America/Dawson",
+    "Indian/Cocos",
+    "Europe/Zurich",
+    "Africa/Abidjan",
+    "Pacific/Rarotonga",
+    "America/Santiago",
+    "America/Punta_Arenas",
+    "Pacific/Easter",
+    "Asia/Shanghai",
+    "Asia/Urumqi",
+    "America/Bogota",
+    "America/Costa_Rica",
+    "America/Havana",
+    "Atlantic/Cape_Verde",
+    "America/Curacao",
+    "Indian/Christmas",
+    "Asia/Nicosia",
+    "Asia/Famagusta",
+    "Europe/Prague",
+    "Europe/Berlin",
+    "Europe/Copenhagen",
+    "America/Santo_Domingo",
+    "Africa/Algiers",
+    "America/Guayaquil",
+    "Pacific/Galapagos",
+    "Europe/Tallinn",
+    "Africa/Cairo",
+    "Africa/El_Aaiun",
+    "Europe/Madrid",
+    "Africa/Ceuta",
+    "Atlantic/Canary",
+    "Europe/Helsinki",
+    "Pacific/Fiji",
+    "Atlantic/Stanley",
+    "Pacific/Chuuk",
+    "Pacific/Pohnpei",
+    "Pacific/Kosrae",
+    "Atlantic/Faroe",
+    "Europe/Paris",
+    "Europe/London",
+    "Asia/Tbilisi",
+    "America/Cayenne",
+    "Africa/Accra",
+    "Europe/Gibraltar",
+    "America/Godthab",
+    "America/Danmarkshavn",
+    "America/Scoresbysund",
+    "America/Thule",
+    "Europe/Athens",
+    "Atlantic/South_Georgia",
+    "America/Guatemala",
+    "Pacific/Guam",
+    "Africa/Bissau",
+    "America/Guyana",
+    "Asia/Hong_Kong",
+    "America/Tegucigalpa",
+    "America/Port-au-Prince",
+    "Europe/Budapest",
+    "Asia/Jakarta",
+    "Asia/Pontianak",
+    "Asia/Makassar",
+    "Asia/Jayapura",
+    "Europe/Dublin",
+    "Asia/Jerusalem",
+    "Asia/Kolkata",
+    "Indian/Chagos",
+    "Asia/Baghdad",
+    "Asia/Tehran",
+    "Atlantic/Reykjavik",
+    "Europe/Rome",
+    "America/Jamaica",
+    "Asia/Amman",
+    "Asia/Tokyo",
+    "Africa/Nairobi",
+    "Asia/Bishkek",
+    "Pacific/Tarawa",
+    "Pacific/Enderbury",
+    "Pacific/Kiritimati",
+    "Asia/Pyongyang",
+    "Asia/Seoul",
+    "Asia/Almaty",
+    "Asia/Qyzylorda",
+    "Asia/Qostanay", // https://bugs.chromium.org/p/chromium/issues/detail?id=928068
+    "Asia/Aqtobe",
+    "Asia/Aqtau",
+    "Asia/Atyrau",
+    "Asia/Oral",
+    "Asia/Beirut",
+    "Asia/Colombo",
+    "Africa/Monrovia",
+    "Europe/Vilnius",
+    "Europe/Luxembourg",
+    "Europe/Riga",
+    "Africa/Tripoli",
+    "Africa/Casablanca",
+    "Europe/Monaco",
+    "Europe/Chisinau",
+    "Pacific/Majuro",
+    "Pacific/Kwajalein",
+    "Asia/Yangon",
+    "Asia/Ulaanbaatar",
+    "Asia/Hovd",
+    "Asia/Choibalsan",
+    "Asia/Macau",
+    "America/Martinique",
+    "Europe/Malta",
+    "Indian/Mauritius",
+    "Indian/Maldives",
+    "America/Mexico_City",
+    "America/Cancun",
+    "America/Merida",
+    "America/Monterrey",
+    "America/Matamoros",
+    "America/Mazatlan",
+    "America/Chihuahua",
+    "America/Ojinaga",
+    "America/Hermosillo",
+    "America/Tijuana",
+    "America/Bahia_Banderas",
+    "Asia/Kuala_Lumpur",
+    "Asia/Kuching",
+    "Africa/Maputo",
+    "Africa/Windhoek",
+    "Pacific/Noumea",
+    "Pacific/Norfolk",
+    "Africa/Lagos",
+    "America/Managua",
+    "Europe/Amsterdam",
+    "Europe/Oslo",
+    "Asia/Kathmandu",
+    "Pacific/Nauru",
+    "Pacific/Niue",
+    "Pacific/Auckland",
+    "Pacific/Chatham",
+    "America/Panama",
+    "America/Lima",
+    "Pacific/Tahiti",
+    "Pacific/Marquesas",
+    "Pacific/Gambier",
+    "Pacific/Port_Moresby",
+    "Pacific/Bougainville",
+    "Asia/Manila",
+    "Asia/Karachi",
+    "Europe/Warsaw",
+    "America/Miquelon",
+    "Pacific/Pitcairn",
+    "America/Puerto_Rico",
+    "Asia/Gaza",
+    "Asia/Hebron",
+    "Europe/Lisbon",
+    "Atlantic/Madeira",
+    "Atlantic/Azores",
+    "Pacific/Palau",
+    "America/Asuncion",
+    "Asia/Qatar",
+    "Indian/Reunion",
+    "Europe/Bucharest",
+    "Europe/Belgrade",
+    "Europe/Kaliningrad",
+    "Europe/Moscow",
+    "Europe/Simferopol",
+    "Europe/Kirov",
+    "Europe/Astrakhan",
+    "Europe/Volgograd",
+    "Europe/Saratov",
+    "Europe/Ulyanovsk",
+    "Europe/Samara",
+    "Asia/Yekaterinburg",
+    "Asia/Omsk",
+    "Asia/Novosibirsk",
+    "Asia/Barnaul",
+    "Asia/Tomsk",
+    "Asia/Novokuznetsk",
+    "Asia/Krasnoyarsk",
+    "Asia/Irkutsk",
+    "Asia/Chita",
+    "Asia/Yakutsk",
+    "Asia/Khandyga",
+    "Asia/Vladivostok",
+    "Asia/Ust-Nera",
+    "Asia/Magadan",
+    "Asia/Sakhalin",
+    "Asia/Srednekolymsk",
+    "Asia/Kamchatka",
+    "Asia/Anadyr",
+    "Asia/Riyadh",
+    "Pacific/Guadalcanal",
+    "Indian/Mahe",
+    "Africa/Khartoum",
+    "Europe/Stockholm",
+    "Asia/Singapore",
+    "America/Paramaribo",
+    "Africa/Juba",
+    "Africa/Sao_Tome",
+    "America/El_Salvador",
+    "Asia/Damascus",
+    "America/Grand_Turk",
+    "Africa/Ndjamena",
+    "Indian/Kerguelen",
+    "Asia/Bangkok",
+    "Asia/Dushanbe",
+    "Pacific/Fakaofo",
+    "Asia/Dili",
+    "Asia/Ashgabat",
+    "Africa/Tunis",
+    "Pacific/Tongatapu",
+    "Europe/Istanbul",
+    "America/Port_of_Spain",
+    "Pacific/Funafuti",
+    "Asia/Taipei",
+    "Europe/Kiev",
+    "Europe/Uzhgorod",
+    "Europe/Zaporozhye",
+    "Pacific/Wake",
+    "America/New_York",
+    "America/Detroit",
+    "America/Kentucky/Louisville",
+    "America/Kentucky/Monticello",
+    "America/Indiana/Indianapolis",
+    "America/Indiana/Vincennes",
+    "America/Indiana/Winamac",
+    "America/Indiana/Marengo",
+    "America/Indiana/Petersburg",
+    "America/Indiana/Vevay",
+    "America/Chicago",
+    "America/Indiana/Tell_City",
+    "America/Indiana/Knox",
+    "America/Menominee",
+    "America/North_Dakota/Center",
+    "America/North_Dakota/New_Salem",
+    "America/North_Dakota/Beulah",
+    "America/Denver",
+    "America/Boise",
+    "America/Phoenix",
+    "America/Los_Angeles",
+    "America/Anchorage",
+    "America/Juneau",
+    "America/Sitka",
+    "America/Metlakatla",
+    "America/Yakutat",
+    "America/Nome",
+    "America/Adak",
+    "Pacific/Honolulu",
+    "America/Montevideo",
+    "Asia/Samarkand",
+    "Asia/Tashkent",
+    "America/Caracas",
+    "Asia/Ho_Chi_Minh",
+    "Pacific/Efate",
+    "Pacific/Wallis",
+    "Pacific/Apia",
+    "Africa/Johannesburg",
+  ];
 
   const [isFreeEvent, setisFreeEvent] = useState(false);
   const [isUnlimited, setisUnlimited] = useState(false);
-  const [date, setdate] = useState("");
 
   const [selectedPost, setSelectedPost] = useState(null);
 
@@ -146,7 +497,9 @@ function CreateEvent() {
             )}
 
             <button
-              onClick={() => setstep(2)}
+              onClick={() => {
+                name && type && Category && setstep(2);
+              }}
               className="mt-2 btn gap-2 btn-brand capitalize"
             >
               Next <ArrowNarrowRight />
@@ -175,6 +528,20 @@ function CreateEvent() {
                 min={moment().format("YYYY-MM-DDThh:mm")}
                 required={true}
               />
+            </div>{" "}
+            <div className="mt-2 ">
+              <label className="ml-2 text-sm font-bold">Event Category</label>
+              <select
+                onChange={(e) => settimezone(e.target.value)}
+                className="select block w-full font-semibold"
+              >
+                <option disabled selected>
+                  Select timezone
+                </option>
+                {timezones.map((timezone) => (
+                  <option>{timezone}</option>
+                ))}
+              </select>
             </div>
             <div className="mt-2 ">
               <label className="ml-2 text-sm font-bold">Ticket Image</label>
@@ -252,7 +619,9 @@ function CreateEvent() {
               </label>
             </div>
             <button
-              onClick={() => setstep(3)}
+              onClick={() => {
+                description && date && timezone && selectedPost && setstep(3);
+              }}
               className="mt-2 btn gap-2 btn-brand capitalize"
             >
               Next <ArrowNarrowRight />
@@ -316,17 +685,25 @@ function CreateEvent() {
         )}
         {step === 4 && (
           <>
-            <div className="mx-auto relative h-fit w-64  py-1 px-2 rounded-lg bg-slate-200 dark:bg-slate-700">
-              {/* <div className="absolute flex items-center gap-1  top-4 left-4 w-fit bg-slate-600/30 backdrop-blur-sm rounded-full px-1 text-slate-100 text-sm font-semibold">
-                <UserCircle size={16}></UserCircle> {event.bookings}
-              </div> */}
+            <div className="mx-auto relative h-fit w-64  rounded-lg bg-slate-200 dark:bg-slate-700 hover:scale-105 transition-all ease-in-out shadow-md overflow-hidden">
               <div
-                className="my-1 h-36 w-full bg-cover rounded-md"
+                className=" 
+absolute flex items-center gap-1  top-2 left-2 w-fit"
+              >
+                <div className=" bg-slate-600/30 backdrop-blur-sm rounded-full px-1 text-slate-100 text-sm font-semibold">
+                  {type}
+                </div>
+                <div className=" bg-slate-600/30 backdrop-blur-sm rounded-full px-1 text-slate-100 text-sm font-semibold">
+                  {Category}
+                </div>
+              </div>
+              <div
+                className="my-1 h-36 w-full bg-cover rounded-t-md"
                 style={{
                   backgroundImage: `url(${selectedPost.localurl}  )`,
                 }}
               ></div>
-              <div className="flex w-full space-x-2 my-1 ">
+              <div className="flex w-full space-x-2 my-1  py-1 px-2">
                 <img
                   className="h-10 w-10 rounded-full"
                   src={selectedPost.localurl}
@@ -343,9 +720,15 @@ function CreateEvent() {
                   </p>
                 </div>
               </div>
-              <p className="w-64 my-1 text-sm font-medium text-brand3 truncate">
+              <p className="w-64 my-1 px-2 text-sm font-medium text-success truncate">
                 {date}
               </p>
+              <span className=" absolute bottom-0 right-2 text-brand2 text-xs text-semibold z-[999]">
+                Only 20 tickets left
+              </span>{" "}
+              <div className="w-full relative bg-white/20 h-4">
+                <div className="w-1/3 absolute top-0 left-0 h-full bg-gradient-to-tr   from-[#A36CFC]  via-primary  to-brand px-1  "></div>
+              </div>
             </div>
             <button
               onClick={() => setstep(5)}
