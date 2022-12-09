@@ -15,20 +15,20 @@
 ], 
 "screenshots": [
   {
-    "src": "https://www.pwabuilder.com/assets/screenshots/screen1.png",
-    "sizes": "2880x1800",
+    "src": "/screenshots/screenshot1.png",
+    "sizes": "2940x1624",
     "type": "image/png",
     "description": "PWABuilder Home Screen"
   },
   {
-    "src": "https://www.pwabuilder.com/assets/screenshots/screen2.png",
-    "sizes": "2880/1800",
+    "src": "/screenshots/screenshot1.png",
+    "sizes": "2940/1624",
     "type": "image/png",
     "description": "PWABuilder Report Card"
   },
   {
-    "src": "https://www.pwabuilder.com/assets/screenshots/screen3.png",
-    "sizes": "2880x1800",
+    "src": "/screenshots/screenshot1.png",
+    "sizes": "2940x1624",
     "type": "image/png",
     "description": "Manifest information on the Report Card"
   }
