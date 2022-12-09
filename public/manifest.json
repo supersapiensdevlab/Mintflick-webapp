@@ -1,21 +1,21 @@
 {
   "short_name": "Mintflick",
-  "name": "Social NFT Marketplace",
+  "name": "Super App for Content",
   "icons": [
     {
-      "src": "Mintflick-favicon.png",
+      "src": "logo512.png",
       "sizes": "64x64 32x32 24x24 16x16",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "Mintflick-favicon.png",
+      "src": "logo512.png",
       "type": "image/png",
       "sizes": "192x192",
       "purpose": "any maskable"
     },
     {
-      "src": "Mintflick-favicon.png",
+      "src": "logo512.png",
       "type": "image/png",
       "sizes": "512x512",
       "purpose": "any maskable"
@@ -23,7 +23,13 @@
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#e2e8f0",
-  "background_color": "#0f172a",
-  "purpose": "any maskable"
+  "theme_color": "#2ce8e5",
+  "background_color": "#1e293b",
+  "purpose": "any maskable",
+  "description": "Build your community on Web3 with NFT Content &amp; own what you post.",
+  "orientation": "portrait",
+  "categories": [
+    "photo",
+    "social"
+  ]
 }
