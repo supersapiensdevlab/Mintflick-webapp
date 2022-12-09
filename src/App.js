@@ -140,5 +140,5 @@ function App() {
     </div>
   );
 }
-serviceWorkerRegistration.register();
+// serviceWorkerRegistration.register();
 export default App;
