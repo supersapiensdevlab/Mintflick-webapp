@@ -1,0 +1,6 @@
+[{
+        "relation": ["delegate_permission/common.handle_all_urls"],
+        "target" : { "namespace": "android_app", "package_name": "app.mintflick.network",
+                     "sha256_cert_fingerprints": ["0E:54:4E:F6:68:68:5D:A5:4E:69:EA:37:6D:B9:71:28:BC:86:ED:8B:90:31:EC:7F:7C:1A:7C:97:F7:3D:FA:A1"] }
+      }
+]
