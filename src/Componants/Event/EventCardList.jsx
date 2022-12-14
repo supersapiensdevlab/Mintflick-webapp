@@ -1,118 +1,232 @@
 import React, { useState } from "react";
 import { UserCircle } from "tabler-icons-react";
+import EventCard from "./EventCard";
 
 function EventCardList() {
   const [data, setData] = useState([
     {
+      type: "Online",
+      category: "Meetup",
+      isFreeEvent: true,
       channelName: "Organiser",
       channelProfile:
         "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%3Fid%3DOIP.gvS0FzhUJfjlwuq3aheoRgHaHa%26pid%3DApi&f=1",
       bookings: "1k",
       prices: "$30 onwards",
       timeline: " 10th to 11th December 2022",
-      topic: "Event name | Location",
+      description:
+        "Supermeet is back with it's Jaipur edition! This time for Builders, Creators, Operators and those that are web3 curious. Get access to the Superteam network & earning opportunities. We might have some special alpha for those that join us. You don’t want to miss this one! 🙂",
+      topic: "Event name",
       img: "https://pbs.twimg.com/media/DeYVmVqW4AEIjlk?format=jpg&name=medium",
       url: "",
     },
     {
+      type: "Online",
+      category: "Meetup",
+      isFreeEvent: true,
       channelName: "Organiser",
       channelProfile:
         "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%3Fid%3DOIP.gvS0FzhUJfjlwuq3aheoRgHaHa%26pid%3DApi&f=1",
       bookings: "1k",
       prices: "$30 onwards",
       timeline: " 10th to 11th December 2022",
-      topic: "Event name | Location",
+      description:
+        "Supermeet is back with it's Jaipur edition! This time for Builders, Creators, Operators and those that are web3 curious. Get access to the Superteam network & earning opportunities. We might have some special alpha for those that join us. You don’t want to miss this one! 🙂",
+      topic: "Event name",
       img: "https://pbs.twimg.com/media/DeYVmVqW4AEIjlk?format=jpg&name=medium",
       url: "",
     },
     {
+      type: "Online",
+      category: "Meetup",
+      isFreeEvent: true,
       channelName: "Organiser",
       channelProfile:
         "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%3Fid%3DOIP.gvS0FzhUJfjlwuq3aheoRgHaHa%26pid%3DApi&f=1",
       bookings: "1k",
       prices: "$30 onwards",
       timeline: " 10th to 11th December 2022",
-      topic: "Event name | Location",
+      description:
+        "Supermeet is back with it's Jaipur edition! This time for Builders, Creators, Operators and those that are web3 curious. Get access to the Superteam network & earning opportunities. We might have some special alpha for those that join us. You don’t want to miss this one! 🙂",
+      topic: "Event name",
       img: "https://pbs.twimg.com/media/DeYVmVqW4AEIjlk?format=jpg&name=medium",
       url: "",
     },
     {
+      type: "Online",
+      category: "Meetup",
+      isFreeEvent: true,
       channelName: "Organiser",
       channelProfile:
         "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%3Fid%3DOIP.gvS0FzhUJfjlwuq3aheoRgHaHa%26pid%3DApi&f=1",
       bookings: "1k",
       prices: "$30 onwards",
       timeline: " 10th to 11th December 2022",
-      topic: "Event name | Location",
+      description:
+        "Supermeet is back with it's Jaipur edition! This time for Builders, Creators, Operators and those that are web3 curious. Get access to the Superteam network & earning opportunities. We might have some special alpha for those that join us. You don’t want to miss this one! 🙂",
+      topic: "Event name",
       img: "https://pbs.twimg.com/media/DeYVmVqW4AEIjlk?format=jpg&name=medium",
       url: "",
     },
     {
+      type: "Online",
+      category: "Meetup",
+      isFreeEvent: true,
       channelName: "Organiser",
       channelProfile:
         "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%3Fid%3DOIP.gvS0FzhUJfjlwuq3aheoRgHaHa%26pid%3DApi&f=1",
       bookings: "1k",
       prices: "$30 onwards",
       timeline: " 10th to 11th December 2022",
-      topic: "Event name | Location",
+      description:
+        "Supermeet is back with it's Jaipur edition! This time for Builders, Creators, Operators and those that are web3 curious. Get access to the Superteam network & earning opportunities. We might have some special alpha for those that join us. You don’t want to miss this one! 🙂",
+      topic: "Event name",
       img: "https://pbs.twimg.com/media/DeYVmVqW4AEIjlk?format=jpg&name=medium",
       url: "",
     },
     {
+      type: "Online",
+      category: "Meetup",
+      isFreeEvent: true,
       channelName: "Organiser",
       channelProfile:
         "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%3Fid%3DOIP.gvS0FzhUJfjlwuq3aheoRgHaHa%26pid%3DApi&f=1",
       bookings: "1k",
       prices: "$30 onwards",
       timeline: " 10th to 11th December 2022",
-      topic: "Event name | Location",
+      description:
+        "Supermeet is back with it's Jaipur edition! This time for Builders, Creators, Operators and those that are web3 curious. Get access to the Superteam network & earning opportunities. We might have some special alpha for those that join us. You don’t want to miss this one! 🙂",
+      topic: "Event name",
+      img: "https://pbs.twimg.com/media/DeYVmVqW4AEIjlk?format=jpg&name=medium",
+      url: "",
+    },
+    {
+      type: "Online",
+      category: "Meetup",
+      isFreeEvent: true,
+      channelName: "Organiser",
+      channelProfile:
+        "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%3Fid%3DOIP.gvS0FzhUJfjlwuq3aheoRgHaHa%26pid%3DApi&f=1",
+      bookings: "1k",
+      prices: "$30 onwards",
+      timeline: " 10th to 11th December 2022",
+      description:
+        "Supermeet is back with it's Jaipur edition! This time for Builders, Creators, Operators and those that are web3 curious. Get access to the Superteam network & earning opportunities. We might have some special alpha for those that join us. You don’t want to miss this one! 🙂",
+      topic: "Event name",
+      img: "https://pbs.twimg.com/media/DeYVmVqW4AEIjlk?format=jpg&name=medium",
+      url: "",
+    },
+    {
+      type: "Online",
+      category: "Meetup",
+      isFreeEvent: true,
+      channelName: "Organiser",
+      channelProfile:
+        "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%3Fid%3DOIP.gvS0FzhUJfjlwuq3aheoRgHaHa%26pid%3DApi&f=1",
+      bookings: "1k",
+      prices: "$30 onwards",
+      timeline: " 10th to 11th December 2022",
+      description:
+        "Supermeet is back with it's Jaipur edition! This time for Builders, Creators, Operators and those that are web3 curious. Get access to the Superteam network & earning opportunities. We might have some special alpha for those that join us. You don’t want to miss this one! 🙂",
+      topic: "Event name",
+      img: "https://pbs.twimg.com/media/DeYVmVqW4AEIjlk?format=jpg&name=medium",
+      url: "",
+    },
+    {
+      type: "Online",
+      category: "Meetup",
+      isFreeEvent: true,
+      channelName: "Organiser",
+      channelProfile:
+        "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%3Fid%3DOIP.gvS0FzhUJfjlwuq3aheoRgHaHa%26pid%3DApi&f=1",
+      bookings: "1k",
+      prices: "$30 onwards",
+      timeline: " 10th to 11th December 2022",
+      description:
+        "Supermeet is back with it's Jaipur edition! This time for Builders, Creators, Operators and those that are web3 curious. Get access to the Superteam network & earning opportunities. We might have some special alpha for those that join us. You don’t want to miss this one! 🙂",
+      topic: "Event name",
+      img: "https://pbs.twimg.com/media/DeYVmVqW4AEIjlk?format=jpg&name=medium",
+      url: "",
+    },
+    {
+      type: "Online",
+      category: "Meetup",
+      isFreeEvent: true,
+      channelName: "Organiser",
+      channelProfile:
+        "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%3Fid%3DOIP.gvS0FzhUJfjlwuq3aheoRgHaHa%26pid%3DApi&f=1",
+      bookings: "1k",
+      prices: "$30 onwards",
+      timeline: " 10th to 11th December 2022",
+      description:
+        "Supermeet is back with it's Jaipur edition! This time for Builders, Creators, Operators and those that are web3 curious. Get access to the Superteam network & earning opportunities. We might have some special alpha for those that join us. You don’t want to miss this one! 🙂",
+      topic: "Event name",
+      img: "https://pbs.twimg.com/media/DeYVmVqW4AEIjlk?format=jpg&name=medium",
+      url: "",
+    },
+    {
+      type: "Online",
+      category: "Meetup",
+      isFreeEvent: true,
+      channelName: "Organiser",
+      channelProfile:
+        "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%3Fid%3DOIP.gvS0FzhUJfjlwuq3aheoRgHaHa%26pid%3DApi&f=1",
+      bookings: "1k",
+      prices: "$30 onwards",
+      timeline: " 10th to 11th December 2022",
+      description:
+        "Supermeet is back with it's Jaipur edition! This time for Builders, Creators, Operators and those that are web3 curious. Get access to the Superteam network & earning opportunities. We might have some special alpha for those that join us. You don’t want to miss this one! 🙂",
+      topic: "Event name",
+      img: "https://pbs.twimg.com/media/DeYVmVqW4AEIjlk?format=jpg&name=medium",
+      url: "",
+    },
+    {
+      type: "Online",
+      category: "Meetup",
+      isFreeEvent: true,
+      channelName: "Organiser",
+      channelProfile:
+        "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%3Fid%3DOIP.gvS0FzhUJfjlwuq3aheoRgHaHa%26pid%3DApi&f=1",
+      bookings: "1k",
+      prices: "$30 onwards",
+      timeline: " 10th to 11th December 2022",
+      description:
+        "Supermeet is back with it's Jaipur edition! This time for Builders, Creators, Operators and those that are web3 curious. Get access to the Superteam network & earning opportunities. We might have some special alpha for those that join us. You don’t want to miss this one! 🙂",
+      topic: "Event name",
+      img: "https://pbs.twimg.com/media/DeYVmVqW4AEIjlk?format=jpg&name=medium",
+      url: "",
+    },
+    {
+      type: "Online",
+      category: "Meetup",
+      isFreeEvent: true,
+      channelName: "Organiser",
+      channelProfile:
+        "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%3Fid%3DOIP.gvS0FzhUJfjlwuq3aheoRgHaHa%26pid%3DApi&f=1",
+      bookings: "1k",
+      prices: "$30 onwards",
+      timeline: " 10th to 11th December 2022",
+      description:
+        "Supermeet is back with it's Jaipur edition! This time for Builders, Creators, Operators and those that are web3 curious. Get access to the Superteam network & earning opportunities. We might have some special alpha for those that join us. You don’t want to miss this one! 🙂",
+      topic: "Event name",
       img: "https://pbs.twimg.com/media/DeYVmVqW4AEIjlk?format=jpg&name=medium",
       url: "",
     },
   ]);
   return (
-    <div className="w-full h-fit py-4 space-y-4 lg:rounded-xl bg-slate-100 dark:bg-slate-800 ">
-      <p className="font-bold mx-4 text-xl text-brand5 ">
-        Category name will come here
-      </p>
-      <div className=" w-full pl-4 overflow-x-auto">
-        <div className="flex space-x-4 w-fit">
-          {data.map((event) => (
-            <div className="relative h-fit w-64 py-1 px-2 rounded-lg bg-slate-200 dark:bg-slate-700">
-              <div className="absolute flex items-center gap-1  top-4 left-4 w-fit bg-slate-600/30 backdrop-blur-sm rounded-full px-1 text-slate-100 text-sm font-semibold">
-                <UserCircle size={16}></UserCircle> {event.bookings}
-              </div>
-              <div
-                className="my-1 h-36 w-full bg-cover rounded-md"
-                style={{
-                  backgroundImage: `url(${event.img}  )`,
-                }}
-              ></div>
-              <div className="flex w-full space-x-2 my-1 ">
-                <img
-                  className="h-10 rounded-full"
-                  src={event.channelProfile}
-                  alt="user profile"
-                />
-                <div className=" ">
-                  <p className="w-48 text-sm font-medium text-brand3 truncate">
-                    {event.topic}
-                  </p>
-                  <p className="text-sm font-normal text-brand5">
-                    {event.channelName}
-                  </p>
-                </div>
-              </div>
-              <p className="w-64 my-1 text-sm font-medium text-brand3 truncate">
-                {event.timeline}
-              </p>
-              <div onClick={() => window.unlockProtocol && window.unlockProtocol.loadCheckoutModal()} className="float-right w-full my-1 text-base font-semibold text-white truncate btn btn-accent" >
-                Join
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
+    <div className="w-full sm:w-fit h-fit  grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-4 gap-y-4 sm:gap-y-8 sm:mx-auto">
+      {data.map((event) => (
+        <EventCard
+          type={event.type}
+          Category={event.category}
+          isFreeEvent={event.isFreeEvent}
+          selectedPostImg={event.img}
+          name={event.topic}
+          userImg={event.channelProfile}
+          username={event.channelName}
+          description={event.description}
+        />
+      ))}
     </div>
   );
 }

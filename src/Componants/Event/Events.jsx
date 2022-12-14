@@ -17,7 +17,7 @@ function Event() {
 
     window.addEventListener("unlockProtocol.status", function (event) {
       console.log(
-        "this  is  from inside  take  a look " + " " + event.detail.state,
+        "this  is  from inside  take  a look " + " " + event.detail.state
       );
       setPayWallStatus(event.detail.state);
     });
@@ -33,29 +33,24 @@ function Event() {
   }, []);
 
   return (
-    <div className='lg:px-12  w-screen h-screen  bg-white dark:bg-slate-900 '>
+    <div className="lg:px-12  w-screen h-screen  bg-white dark:bg-slate-900 ">
       {/* <div className='hidden lg:flex flex-col h-full w-1/4 ml-12 pt-24  space-y-6 overflow-y-auto'>
         <Filter></Filter>
         <EventCategories></EventCategories>
       </div> */}
 
-      <div className='w-full    lg:mr-12 h-full pt-24 space-y-6 overflow-y-auto pb-12'>
-        <div className='p-2 w-full flex gap-2 lg:rounded-xl bg-slate-100 dark:bg-slate-800'>
-             <input
-              type="text"
-              placeholder="Search events"
-              className="input input-bordered w-full     flex-grow"
-             />
-               <Link
-          className="btn gap-2 btn-brand"
-           to={"../create-event"}
-        >
-          <Plus/>   
-        Create Event
-        </Link>
-            </div> 
-        <EventCardList></EventCardList>
-         <EventCardList></EventCardList>
+      <div className="w-full    lg:mr-12 h-full pt-24 space-y-6 overflow-y-auto pb-12">
+        <div className="p-2 w-full flex gap-2 lg:rounded-xl bg-slate-100 dark:bg-slate-800">
+          <input
+            type="text"
+            placeholder="Search events"
+            className="input input-bordered w-full     flex-grow"
+          />
+          <Link className="btn gap-2 btn-brand" to={"../create-event"}>
+            <Plus />
+            <span className="hidden sm:block">Create Event</span>
+          </Link>
+        </div>
         <EventCardList></EventCardList>
       </div>
     </div>
