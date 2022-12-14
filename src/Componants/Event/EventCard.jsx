@@ -26,7 +26,7 @@ function EventCard({
         </div>
       )}
       <img
-        className="aspect-video w-full bg-cover rounded-t-md"
+        className="aspect-video w-full object-cover sm:rounded-t-md"
         src={selectedPostImg}
         alt="banner"
       />
