@@ -34,6 +34,7 @@ import SpinGame from "./Componants/Games/SpinGame/SpinGame";
 import RollDice from "./Componants/Games/RollDice/RollDice";
 // import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import CreateEvent from "./Componants/Event/CreateEvent";
+import EventDetails from "./Componants/Event/EventDetails";
 function App() {
   const State = useContext(UserContext);
   const [login, logout] = useWeb3Auth();
@@ -122,7 +123,8 @@ function App() {
           <Route path="liveuser/:username" element={<UserLivestream />} />
 
           <Route path="marketPlace" element={<Events></Events>} />
-          <Route path="create-event" element={<CreateEvent/>} />
+          <Route path="create-event" element={<CreateEvent />} />
+          <Route path="event-details" element={<EventDetails />} />
 
           <Route path="explore" element={<Explore />} />
           <Route path="notifications" element={<MobileNotifications />} />

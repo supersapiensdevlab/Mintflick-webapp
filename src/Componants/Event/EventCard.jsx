@@ -1,4 +1,5 @@
 import React from "react";
+import { NavLink } from "react-router-dom";
 
 function EventCard({
   type,
@@ -11,7 +12,10 @@ function EventCard({
   description,
 }) {
   return (
-    <div className="mx-auto relative h-fit w-full sm:w-96  sm:rounded-lg bg-white dark:bg-slate-700 sm:hover:scale-105 cursor-pointer transition-all ease-in-out shadow-xl overflow-hidden">
+    <NavLink
+      to={"../event-details"}
+      className="mx-auto relative h-fit w-full sm:w-96  sm:rounded-lg bg-white dark:bg-slate-700 sm:hover:scale-105 cursor-pointer transition-all ease-in-out shadow-xl overflow-hidden"
+    >
       <div className=" absolute flex items-center gap-1  top-2 left-2 w-fit">
         <div className=" bg-slate-700/60 backdrop-blur-sm rounded-full px-2 text-slate-100 text-sm font-semibold">
           {type}
@@ -61,7 +65,7 @@ function EventCard({
               <div className="w-full relative bg-white/20 h-4">
                 <div className="w-1/3 absolute top-0 left-0 h-full bg-gradient-to-tr   from-[#A36CFC]  via-primary  to-brand px-1  "></div>
               </div> */}
-    </div>
+    </NavLink>
   );
 }
 
