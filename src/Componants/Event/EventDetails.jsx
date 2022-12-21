@@ -101,6 +101,10 @@ function EventDetails() {
         </p>
       </div>{" "}
       <div className="flex flex-col gap-2 bg-slate-100 dark:bg-slate-700 sm:rounded-xl p-2 sm:p-4 mx-auto w-full justify-start items-start max-w-2xl">
+        <span className="text-lg font-semibold text-brand1">Link</span>
+        <p className="text-base font-normal text-brand1">link.com</p>
+      </div>
+      <div className="flex flex-col gap-2 bg-slate-100 dark:bg-slate-700 sm:rounded-xl p-2 sm:p-4 mx-auto w-full justify-start items-start max-w-2xl">
         <span className="text-lg font-semibold text-brand1">Location</span>
         <img
           className="aspect-video w-full object-cover rounded-lg"

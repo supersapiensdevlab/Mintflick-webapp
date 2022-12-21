@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react";
 import moment from "moment";
 
 import {
+  AlertTriangle,
   ArrowNarrowLeft,
   ArrowNarrowRight,
   Camera,
@@ -53,6 +54,10 @@ function CreateEvent() {
   const [isUnlimited, setisUnlimited] = useState(false);
 
   const [selectedPost, setSelectedPost] = useState(null);
+  const [location, setlocation] = useState(false);
+  const [eventLink, seteventLink] = useState(false);
+
+  const [error, seterror] = useState(false);
 
   const handleImageChange = (event) => {
     // Update the state
@@ -85,7 +90,17 @@ function CreateEvent() {
             className="progress progress-success w-full"
             value={step * 20}
             max="100"
-          ></progress>
+          ></progress>{" "}
+          {error && (
+            <div className="alert alert-error shadow-lg text-white">
+              <div>
+                <AlertTriangle />
+                <span className="font-semibold">
+                  Please fill all the details.
+                </span>
+              </div>
+            </div>
+          )}
           {step === 1 && (
             <>
               <div className="mt-2 ">
@@ -173,6 +188,7 @@ function CreateEvent() {
               <button
                 onClick={() => {
                   name && type && Category && setstep(2);
+                  name && type && Category ? seterror(false) : seterror(true);
                 }}
                 className="mt-2 btn gap-2 btn-brand capitalize"
               >
@@ -313,6 +329,14 @@ function CreateEvent() {
                     timezone &&
                     selectedPost &&
                     setstep(3);
+
+                  description &&
+                  startDate &&
+                  endDate &&
+                  timezone &&
+                  selectedPost
+                    ? seterror(false)
+                    : seterror(true);
                 }}
                 className="mt-2 btn gap-2 btn-brand capitalize"
               >
@@ -353,6 +377,8 @@ function CreateEvent() {
                     Event Location
                   </label>
                   <textarea
+                    value={location}
+                    onChange={(e) => setlocation(e.target.value)}
                     type="text"
                     placeholder="Location of event"
                     className="textarea textarea-bordered w-full flex-grow"
@@ -362,6 +388,8 @@ function CreateEvent() {
                 <div className="mt-2 ">
                   <label className="ml-2 text-sm font-bold">Event Link</label>
                   <input
+                    value={eventLink}
+                    onChange={(e) => seteventLink(e.target.value)}
                     type="text"
                     placeholder="Link of event"
                     className="input input-bordered w-full flex-grow"
@@ -370,7 +398,17 @@ function CreateEvent() {
               )}
 
               <button
-                onClick={() => setstep(4)}
+                onClick={() => {
+                  type === "In-person" && location
+                    ? setstep(4)
+                    : seterror(true);
+                  type !== "In-person" && eventLink
+                    ? setstep(4)
+                    : seterror(true);
+
+                  type === "In-person" && location && seterror(false);
+                  type !== "In-person" && eventLink && seterror(false);
+                }}
                 className="mt-2 btn gap-2 btn-brand capitalize"
               >
                 Review Details <ArrowNarrowRight />
