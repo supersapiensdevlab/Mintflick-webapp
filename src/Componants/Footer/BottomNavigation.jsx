@@ -48,7 +48,7 @@ function BottomNavigation() {
             // navigateTo(`${item.link}`);
           }}
           className={({ isActive }) =>
-            isActive ? `btn   btn-brand` : `btn  btn-ghost dark:text-gray-100`
+            isActive ? `btn  btn-ghost opacity-100` : `btn  btn-ghost dark:text-gray-100 opacity-50`
           }
         >
           {item.icon}
