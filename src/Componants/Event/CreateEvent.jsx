@@ -1,5 +1,6 @@
 import React, { useContext, useState } from "react";
 import moment from "moment";
+import { ethers } from "ethers";
 
 import {
   AlertTriangle,
@@ -15,7 +16,7 @@ import {
 import { UserContext } from "../../Store";
 import coverImage from "../../Assets/backgrounds/cover.png";
 import EventCard from "./EventCard";
-
+const { ethereum } = window;
 function CreateEvent() {
   const State = useContext(UserContext);
 
@@ -66,6 +67,57 @@ function CreateEvent() {
       localurl: URL.createObjectURL(event.target.files[0]),
     });
   };
+
+
+ 
+const abis = require("@unlock-protocol/contracts");
+
+// Wrapping all calls in an async block
+const run = async () => {
+  // Here we use a Rinkeby provider. We will be able to read the state, but not send transactions.
+  // const provider = new ethers.providers.JsonRpcProvider(
+  //   "https://rpc.unlock-protocol.com/5"
+  // );
+
+  // This time, we also need a signer.
+  // Note: we sent some fake Eth to this address, but please replace with your own!
+   
+  //const instance = await State.database.web3Modal.connect();
+  const provider =   State.database.provider;
+  console.log("PROVIDER:",provider);
+  const signer = provider.getSigner();
+  console.log("SIGNER:",signer);
+  const Address = await signer.getAddress();
+  console.log("ADDRESS",Address);
+   // On goerli Unlock is at 0x627118a4fB747016911e5cDA82e2E77C531e8206
+  //Polygon Mainnet 0xE8E5cd156f89F7bdB267EabD5C43Af3d5AF2A78f
+  const address = "0xE8E5cd156f89F7bdB267EabD5C43Af3d5AF2A78f";
+  
+
+  // Instantiate the Unlock contract
+  const unlock = new ethers.Contract(address, abis.UnlockV11.abi, signer);
+  
+  // Lock params:
+  const lockInterface = new ethers.utils.Interface(abis.PublicLockV11.abi);
+  const params = lockInterface.encodeFunctionData(
+    "initialize(address,uint256,address,uint256,uint256,string)",
+    [
+      Address,
+      31 * 60 * 60 * 24, // 30 days in seconds
+      ethers.constants.AddressZero, // We use the base chain currency
+      ethers.utils.parseUnits(ticketPrice, 18), // 0.01 Eth
+      totalTickets,
+      name,
+    ]
+  );
+
+  const transaction = await unlock.createUpgradeableLockAtVersion(params, 11);
+  console.log(transaction.hash);
+  const receipt = await transaction.wait();
+  const lockAddress = receipt.logs[0].address;
+  console.log(lockAddress);
+};
+
   return (
     <div className=" flex-col lg:px-12 flex justify-start items-center w-screen h-screen  bg-white dark:bg-slate-900 text-white">
       <div className="h-20 lg:h-32 w-full bg-transparent"></div>
@@ -485,7 +537,8 @@ function CreateEvent() {
              
             </div>*/}
               <button
-                onClick={() => setstep(5)}
+                onClick={() => {
+                  run();}}
                 className="mt-2 btn gap-2 btn-brand capitalize"
               >
                 Publish event <Confetti />
