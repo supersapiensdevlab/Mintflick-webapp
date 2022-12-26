@@ -1,5 +1,5 @@
 import React, { useContext, useState, useRef, useEffect } from "react";
-import { AccessPoint, Bell, MessageDots, Search } from "tabler-icons-react";
+import { AccessPoint, Bell, DoorExit, MessageDots, Search, Moon, Sun, HomeCog, Settings, User } from "tabler-icons-react";
 import { UserContext } from "../../Store";
 import axios from "axios";
 import Main_logo from "../../Assets/logos/Main_logo";
@@ -15,6 +15,9 @@ import useWeb3Auth from "../../Hooks/useWeb3Auth";
 import ChatModal from "../ChatRoom/ChatModal";
 import SettingsModal from "../Profile/Modals/SettingsModal";
 import { SolanaWallet } from "@web3auth/solana-provider";
+
+import PolygonToken from "../../Assets/logos/PolygonToken";
+import SolanaToken from "../../Assets/logos/SolanaToken";
 import {
   clusterUrl,
   confirmTransactionFromFrontend,
@@ -541,12 +544,12 @@ function Header() {
                 }`}
                 className="  hover:dark:bg-slate-900"
               >
-                Profile
+                <User size={22}></User>Profile
               </NavLink>
             </li>
 
             <li onClick={() => setsettingsModalOpen(true)}>
-              <a className=" hover:dark:bg-slate-900">Settings</a>
+              <a className=" hover:dark:bg-slate-900"><Settings size={22}></Settings>Settings</a>
             </li>
 
             {/* <label className="swap swap-rotate dark:text-gray-100">
@@ -571,26 +574,37 @@ function Header() {
                   })
                 }
               >
-                Dark mode {State.database.dark ? "off" : "on"}
+               {State.database.dark ? <Moon size={22}></Moon> : <Sun size={22}></Sun>} Mode
               </a>
             </li>
+           
             <li>
+              <a className="truncate hover:dark:bg-slate-900 text-emerald-600">
+              {State.database.chainId===0? <SolanaToken
+            className={State.database.chainId === 1 ? "saturate-0" : null}
+          />:<PolygonToken
+          className={State.database.chainId === 0 ? "saturate-0" : null}
+        />}  <p className="h-1 w-1 bg-green-700 rounded-full animate-ping"></p>
+                
+                
+                {localStorage.getItem("walletAddress").slice(0, 6)}...{localStorage.getItem("walletAddress").slice(localStorage.getItem("walletAddress").length-4, localStorage.getItem("walletAddress").length)}
+               
+         
+          
+              </a>
+            </li> <li>
               <NavLink
                 onClick={() => {
                   logout();
                   localStorage.removeItem("authtoken");
-                  localStorage.removeItem("walletAddress");
+                  localStorage.removeItem("walletAddress"); 
+                  window.localStorage.clear();
                 }}
                 to={"/"}
                 className="hover:bg-rose-500 "
               >
-                Logout
+                <DoorExit size={22}></DoorExit> Logout
               </NavLink>
-            </li>
-            <li>
-              <a className="truncate hover:dark:bg-slate-900 text-emerald-600">
-                {localStorage.getItem("walletAddress") && "Wallet connected"}
-              </a>
             </li>
           </ul>
         </div>
