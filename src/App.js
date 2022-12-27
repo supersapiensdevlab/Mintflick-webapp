@@ -36,8 +36,7 @@ import RollDice from "./Componants/Games/RollDice/RollDice";
 import CreateEvent from "./Componants/Event/CreateEvent";
 import EventDetails from "./Componants/Event/EventDetails";
 function App() {
-  const State = useContext(UserContext);
-  const [login, logout] = useWeb3Auth();
+  const State = useContext(UserContext); 
 
   async function isUserAvaliable() {
     await axios({
