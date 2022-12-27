@@ -51,33 +51,41 @@ app.get("/homescreen/:username/:type/:id", (req, res, next) => {
     switch (type) {
       case "video":
         content = u.videos.filter((v) => {
-          title = v.videoName;
-          if (v.videoImage) image = v.videoImage;
-          description = v.description;
+          if (v.videoId === id) {
+            title = v.videoName;
+            if (v.videoImage) image = v.videoImage;
+            description = v.description;
+          }
           return v.videoId === id;
         });
         break;
       case "track":
         content = u.tracks.filter((v) => {
-          title = v.trackName;
-          if (v.trackImage) image = v.videoImage;
-          description = v.description;
+          if (v.trackId === id) {
+            title = v.trackName;
+            if (v.trackImage) image = v.videoImage;
+            description = v.description;
+          }
           return v.trackId === id;
         });
         break;
       case "post":
         content = u.posts.filter((v) => {
-          title = v.announcement;
-          if (v.post_image) image = v.post_image;
-          // description = v.description;
+          if (v.postId === id) {
+            title = v.announcement;
+            if (v.post_image) image = v.post_image;
+            // description = v.description;
+          }
           return v.postId === id;
         });
         break;
       case "poll":
         content = u.polls.filter((v) => {
-          title = v.question;
-          // if (v.trackImage) image = v.videoImage;
-          // description = v.description;
+          if (v.pollId === id) {
+            title = v.question;
+            // if (v.trackImage) image = v.videoImage;
+            // description = v.description;
+          }
           return v.pollId === id;
         });
         break;
