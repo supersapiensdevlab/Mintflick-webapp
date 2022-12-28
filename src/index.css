@@ -49,7 +49,7 @@
   font-weight: black;
 }
 
-*{
+* {
   font-family: "Gilroy";
 }
 
@@ -158,53 +158,47 @@
 .bg-gradient {
   @apply bg-gradient-to-tr   from-[#A36CFC]  via-primary  to-brand;
 }
- 
-.font-normal{
-  font-family: 'Gilroy';
 
+.font-normal {
+  font-family: "Gilroy";
 }
 
-
-.font-extralight{
-  font-family: 'Gilroy-ExtraLight';
-  }
-
-.font-light{
-font-family: 'Gilroy-Light';
+.font-extralight {
+  font-family: "Gilroy-ExtraLight";
 }
 
-.font-thin{
-  font-family: 'Gilroy-Thin';
-
+.font-light {
+  font-family: "Gilroy-Light";
 }
 
-
-.font-medium{
-  font-family: 'Gilroy-Medium';
+.font-thin {
+  font-family: "Gilroy-Thin";
 }
 
-.font-semibold{
-  font-family: 'Gilroy-SemiBold';
+.font-medium {
+  font-family: "Gilroy-Medium";
 }
 
-.font-bold{
-  font-family: 'Gilroy-Bold';
-
+.font-semibold {
+  font-family: "Gilroy-SemiBold";
 }
-.font-extrabold{
+
+.font-bold {
+  font-family: "Gilroy-Bold";
+}
+.font-extrabold {
   font-family: "Gilroy-ExtraBold";
 }
 
-.font-black{
-  font-family: 'Gilroy-Black';
-
+.font-black {
+  font-family: "Gilroy-Black";
 }
-.btn-accent{
-  @apply text-white
+.btn-accent {
+  @apply text-white;
 }
 
-p{
-font-family: 'Gilroy';  
+p {
+  font-family: "Gilroy";
 }
 
 .slideshow {
@@ -248,4 +242,7 @@ font-family: 'Gilroy';
 .slideshowDot.active {
   @apply bg-primary;
 }
- 
+
+.modal {
+  @apply backdrop-blur-sm;
+}

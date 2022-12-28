@@ -41,11 +41,11 @@ function TaskCard({ name, description, action, openScanner }) {
 
 function QuestDetails() {
   const State = useContext(UserContext);
+  const navigateTo = useNavigate();
 
   const [open, setopen] = useState(false);
   const [data, setData] = useState("No result");
 
-  const navigateTo = useNavigate();
   const [walletModalOpen, setwalletModalOpen] = useState(false);
   const [questStarted, setquestStarted] = useState(false);
   const [tasks, settasks] = useState([
@@ -70,6 +70,11 @@ function QuestDetails() {
       action: "scan",
     },
   ]);
+
+  function handleQrScan(qrId) {
+    alert(qrId);
+    setopen(false);
+  }
 
   return (
     <div className="flex flex-col items-center  md:gap-4     w-screen h-screen  bg-white dark:bg-slate-900 overflow-auto">
@@ -192,7 +197,7 @@ function QuestDetails() {
       <div
         className={`${
           open && "modal-open"
-        } modal  modal-bottom sm:modal-middle`}
+        } modal  modal-bottom sm:modal-middle `}
       >
         <div className="modal-box p-0 bg-slate-100 dark:bg-slate-800 ">
           <div className="w-full h-fit p-2 bg-slate-300 dark:bg-slate-700">
@@ -206,20 +211,19 @@ function QuestDetails() {
               ></X>
             </div>
           </div>
-          <div className="w-full  ">
+          <div className="w-full">
             <QrReader
               constraints={{ facingMode: "environment" }}
               onResult={(result, error) => {
                 if (!!result) {
                   setData(result?.text);
+                  handleQrScan(result?.text);
                 }
-
                 if (!!error) {
                   console.info(error);
                 }
               }}
             />
-            <p>{data}</p>
           </div>
         </div>
       </div>
