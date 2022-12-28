@@ -23,6 +23,11 @@ function Home() {
   const [prevScrollPostion, setPrevScrollPosition] = useState(0);
   const [scrollTopCalled, setScrollTopCalled] = useState(false);
 
+  useEffect(() => {
+    State.updateDatabase({ showHeader: true });
+    State.updateDatabase({ showBottomNav: true });
+  }, []);
+
   const scrollToTop = () => {
     timelineRef.current.scrollIntoView({
       behavior: "smooth",
@@ -59,7 +64,7 @@ function Home() {
       </div>
       <div
         id="scrollableDiv"
-        className="w-full lg:w-2/4 flex flex-col items-center  h-full pt-14 lg:pt-24 overflow-y-auto"
+        className="w-full lg:w-2/4 flex flex-col items-center  h-full pt-14 lg:pt-24 overflow-y-auto "
         ref={buttonRef}
         onScroll={handleScroll}
       >
@@ -67,6 +72,7 @@ function Home() {
         <div className="my-3"></div>
         <AddPost></AddPost>
         <div className="my-3"></div>
+
         <TimeLine></TimeLine>
       </div>
       <div className="hidden lg:flex flex-col items-end h-full w-1/4 pt-24 mr-12 ml-4">

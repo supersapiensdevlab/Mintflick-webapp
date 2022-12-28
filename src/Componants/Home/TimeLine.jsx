@@ -6,12 +6,16 @@ import { UserContext } from "../../Store";
 import Post from "./Post";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Loading from "../Loading/Loading";
+import { Link, useNavigate } from "react-router-dom";
+import image from "../../Assets/Gaming Posters/treasureHunt.webp";
 
 function TimeLine() {
   // for Playing only one at time
   const [currentPlay, setCurrentPlay] = useState(null);
   const State = useContext(UserContext);
   const [loadFeed] = useUserActions();
+
+  const navigateTo = useNavigate();
 
   // For NFT DATA
   const [nfts, setNfts] = useState([]);
@@ -72,7 +76,7 @@ function TimeLine() {
 
   return (
     <InfiniteScroll
-      className=" z-10 space-y-6 mb-4"
+      className=" z-10 space-y-6 mb-4 max-w-2xl"
       dataLength={State.database.feedData.length} //This is important field to render the next data
       next={() => loadMoreData(State.database.feedData.length)}
       hasMore={hasMore}
@@ -84,6 +88,16 @@ function TimeLine() {
       }
       scrollableTarget={"scrollableDiv"}
     >
+      <div
+        onClick={() => navigateTo("../quests")}
+        className="w-full bg-white lg:rounded-lg overflow-hidden cursor-pointer"
+      >
+        <img
+          className="aspect-[16/5] w-full object-cover  "
+          src={image}
+          alt="quest-banner"
+        />
+      </div>
       {State.database.feedData.map((post, i) => (
         <Post
           contentType={post.content_type}

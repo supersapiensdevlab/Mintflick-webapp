@@ -35,8 +35,10 @@ import RollDice from "./Componants/Games/RollDice/RollDice";
 // import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import CreateEvent from "./Componants/Event/CreateEvent";
 import EventDetails from "./Componants/Event/EventDetails";
+import Quests from "./Pages/Quests";
+import QuestDetails from "./Componants/Quests/QuestDetails";
 function App() {
-  const State = useContext(UserContext); 
+  const State = useContext(UserContext);
 
   async function isUserAvaliable() {
     await axios({
@@ -126,14 +128,20 @@ function App() {
           <Route path="event-details" element={<EventDetails />} />
 
           <Route path="explore" element={<Explore />} />
+
           <Route path="notifications" element={<MobileNotifications />} />
+
           <Route path="allgames" element={<AllGames />} />
           <Route path="game/spinwheel" element={<SpinWheel />} />
           <Route path="game/rolldice" element={<RollDice />} />
           <Route path="game/spingame" element={<SpinGame />} />
+
           <Route path="profile/:userName" element={<Profile></Profile>}></Route>
           <Route path="chat/:username" element={<ChatRoom></ChatRoom>}></Route>
           <Route path=":userName/:type/:id" element={<PostDetails />}></Route>
+
+          <Route path="quests" element={<Quests />} />
+          <Route path="quest-details" element={<QuestDetails />} />
         </Route>
       </Routes>
       <ShareModal />

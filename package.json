@@ -51,6 +51,7 @@
     "react-infinite-scroller": "^1.2.6",
     "react-mentions": "^4.4.7",
     "react-player": "^2.10.1",
+    "react-qr-reader": "^3.0.0-beta-1",
     "react-razorpay": "^1.1.5",
     "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.1",

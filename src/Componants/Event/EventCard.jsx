@@ -47,7 +47,7 @@ function EventCard({
           <p className="text-base font-normal text-brand3">{username}</p>
         </div>{" "}
         <span className="h-8 w-1 bg-slate-200 dark:bg-slate-600 rounded-full"></span>
-        <p className="flex flex-col items-end w-fit my-1 px-4 text-lg font-semibold text-success  ">
+        <p className="flex gap-1 items-end w-fit my-1 px-4 text-lg font-semibold text-success  ">
           <span className="font-bold text-2xl">14</span> Dec
         </p>
       </div>

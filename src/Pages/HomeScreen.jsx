@@ -36,8 +36,8 @@ function HomeScreen() {
       </div>
       <div
         className={`${
-          State.database.showHeader ? "" : "translate-y-20"
-        } transition-all ease-in-out lg:hidden w-full sticky z-40 bottom-0`}
+          State.database.showBottomNav ? "" : "h-0"
+        } transition-all ease-in-out lg:hidden w-full fixed z-40 bottom-0`}
       >
         {/* <button onClick={() => State.updateDatabase({ showBottomNav: false })}>
           show
