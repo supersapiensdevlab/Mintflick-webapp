@@ -66,6 +66,7 @@
     "web3": "^1.7.3",
     "web3.storage": "^4.4.0",
     "web3modal": "^1.9.8",
+    "webrtc-adapter": "^8.2.0",
     "workbox-precaching": "^6.5.4"
   },
   "scripts": {

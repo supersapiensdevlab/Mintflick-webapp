@@ -7,12 +7,14 @@ import {
   Share,
   Ticket,
   Wallet,
+  X,
 } from "tabler-icons-react";
 import { UserContext } from "../../Store";
 import MintWalletModal from "../Profile/Modals/MintWalletModal";
 import { QrReader } from "react-qr-reader";
+import adapter from "webrtc-adapter";
 
-function TaskCard({ name, description, action }) {
+function TaskCard({ name, description, action, openScanner }) {
   return (
     <div className="flex flex-col  items-start w-full  rounded-md bg-white dark:bg-slate-600 p-4 shadow-md hover:shadow-xl">
       <span className="text-lg font-semibold text-brand1">{name}</span>
@@ -23,7 +25,9 @@ function TaskCard({ name, description, action }) {
           <span className="text-sm text-brand3">Points</span>
         </span>
         <button
-          onClick={() => {}}
+          onClick={() => {
+            openScanner(true);
+          }}
           className="btn btn-sm gap-1 btn-brand rounded-full capitalize  ml-auto"
         >
           {action === "scan" && <Scan size={16} />}
@@ -38,6 +42,7 @@ function TaskCard({ name, description, action }) {
 function QuestDetails() {
   const State = useContext(UserContext);
 
+  const [open, setopen] = useState(false);
   const [data, setData] = useState("No result");
 
   const navigateTo = useNavigate();
@@ -118,7 +123,7 @@ function QuestDetails() {
           />
         </div>
         {questStarted && (
-          <div className="flex items-center bg-slate-100 dark:bg-slate-700 sm:rounded-xl p-4 sm:p-4 mx-auto w-full justify-start items-start max-w-2xl">
+          <div className="flex items-center bg-slate-100 dark:bg-slate-700 sm:rounded-xl p-4 sm:p-4 mx-auto w-full justify-start   max-w-2xl">
             <span className="flex-grow font-bold text-2xl flex items-baseline gap-1">
               <div className="flex items-center gap-2 text-success">0</div>
               <span className="text-sm text-brand3">Points</span>
@@ -131,19 +136,6 @@ function QuestDetails() {
             </button>
           </div>
         )}
-        <QrReader
-          onResult={(result, error) => {
-            if (!!result) {
-              setData(result?.text);
-            }
-
-            if (!!error) {
-              console.info(error);
-            }
-          }}
-          style={{ width: "100%" }}
-        />
-        <p>{data}</p>
 
         {!questStarted && (
           <div className="flex flex-col gap-2 bg-slate-100 dark:bg-slate-700 sm:rounded-xl p-4 sm:p-4 mx-auto w-full justify-start items-start max-w-2xl">
@@ -171,7 +163,7 @@ function QuestDetails() {
         </div>
         {questStarted && (
           <div
-            onClick={() => setquestStarted(false)}
+            // onClick={() => setquestStarted(false)}
             className="flex flex-col gap-2 bg-slate-100 dark:bg-slate-700 sm:rounded-xl p-4 sm:p-4 mx-auto w-full justify-start items-start max-w-2xl"
           >
             <span className="text-lg font-semibold text-brand1">Tasks</span>
@@ -180,6 +172,7 @@ function QuestDetails() {
                 name={task.name}
                 description={task.description}
                 action={task.action}
+                openScanner={setopen}
               />
             ))}
           </div>
@@ -196,6 +189,39 @@ function QuestDetails() {
         )}
       </div>
       <MintWalletModal open={walletModalOpen} setOpen={setwalletModalOpen} />
+      <div
+        className={`${
+          open && "modal-open"
+        } modal  modal-bottom sm:modal-middle`}
+      >
+        <div className="modal-box p-0 bg-slate-100 dark:bg-slate-800 ">
+          <div className="w-full h-fit p-2 bg-slate-300 dark:bg-slate-700">
+            <div className="flex justify-between items-center p-2">
+              <h3 className="flex items-center gap-2 font-bold text-lg text-brand2">
+                <Scan /> Scaner
+              </h3>
+              <X
+                onClick={() => setopen()}
+                className="text-brand2 cursor-pointer"
+              ></X>
+            </div>
+          </div>
+          <div className="w-full  ">
+            <QrReader
+              onResult={(result, error) => {
+                if (!!result) {
+                  setData(result?.text);
+                }
+
+                if (!!error) {
+                  console.info(error);
+                }
+              }}
+            />
+            <p>{data}</p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

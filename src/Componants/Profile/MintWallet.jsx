@@ -62,7 +62,9 @@ function MintWallet() {
         </div>
         <span className="flex justify-between items-center w-full p-2 px-4  rounded-md bg-slate-200 dark:bg-slate-700">
           <h3 className="flex items-center font-semibold text-3xl text-white">
-            {State.database.userData.data?.user?.gems?.balance ? State.database.userData.data?.user?.gems?.balance : 0}
+            {State.database.userData.data?.user?.gems?.balance
+              ? State.database.userData.data?.user?.gems?.balance
+              : 0}
             <Diamond className="text-white mx-1" size={32} />
           </h3>{" "}
           <button className="ml-auto btn btn-sm btn-primary btn-outline capitalize">
@@ -77,7 +79,7 @@ function MintWallet() {
         >
           <BuildingStore size={20} /> Buy Gems
         </button>
-        <div className="flex flex-col w-full h-72 overflow-auto gap-1">
+        {/* <div className="flex flex-col w-full h-72 overflow-auto gap-1">
           <span className="text-xs text-brand4">Jaunary 03 2022</span>
           <EachTransaction />
           <EachTransaction />
@@ -91,7 +93,7 @@ function MintWallet() {
         </div>{" "}
         <button className="btn gap-2 px-8 w-full max-w-lg rounded-full btn-brand btn-primary capitalize">
           <Diamond size={20} /> send gems
-        </button>
+        </button> */}
       </div>
       <div
         className={`${
