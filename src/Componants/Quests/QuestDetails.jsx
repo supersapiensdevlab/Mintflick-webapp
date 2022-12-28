@@ -198,7 +198,7 @@ function QuestDetails() {
           <div className="w-full h-fit p-2 bg-slate-300 dark:bg-slate-700">
             <div className="flex justify-between items-center p-2">
               <h3 className="flex items-center gap-2 font-bold text-lg text-brand2">
-                <Scan /> Scaner
+                <Scan /> Scan QR Code
               </h3>
               <X
                 onClick={() => setopen()}
@@ -208,6 +208,7 @@ function QuestDetails() {
           </div>
           <div className="w-full  ">
             <QrReader
+              constraints={{ facingMode: "environment" }}
               onResult={(result, error) => {
                 if (!!result) {
                   setData(result?.text);
