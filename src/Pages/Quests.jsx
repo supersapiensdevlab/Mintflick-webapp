@@ -13,20 +13,37 @@ function Quests() {
 
   const [walletModalOpen, setwalletModalOpen] = useState(false);
 
+  async function fetchData() {
+    try {
+      let quests = await axios.get(`${process.env.REACT_APP_SERVER_URL}/quest`);
+      setQuests(quests.data);
+      console.log("QUESTS:", quests);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const startQuest = (questId) => {
+    let data = {
+      walletId: State.database.walletAddress,
+      questId: questId,
+    };
+    axios
+      .post(`${process.env.REACT_APP_SERVER_URL}/user/questStart`, data, {
+        headers: {
+          "content-type": "application/json",
+          "auth-token": JSON.stringify(localStorage.getItem("authtoken")),
+        },
+      })
+      .then(async (res) => {})
+      .catch((err) => {});
+  };
+
   useEffect(() => {
     State.updateDatabase({ showHeader: false });
     State.updateDatabase({ showBottomNav: false });
-    async function fetchData() {
-      try {
-        let quests = await axios.get(
-          `${process.env.REACT_APP_SERVER_URL}/quest`
-        );
-        setQuests(quests.data);
-        console.log("QUESTS:", quests);
-      } catch (error) {
-        console.log(error);
-      }
-    }
+    let questId = localStorage.getItem("questId");
+    localStorage.getItem("questId") && startQuest(questId);
     fetchData();
   }, []);
 
@@ -45,12 +62,12 @@ function Quests() {
           Back
         </button>
         <span className="text-xl font-bold text-brand1 mx-auto">Quests</span>
-        <span
+        {/* <span
           onClick={() => setwalletModalOpen(true)}
           className="  text-brand1 "
         >
           <Wallet />
-        </span>
+        </span> */}
       </div>
       <div className="py-2 px-4 w-full max-w-3xl mx-auto flex gap-2 sm:rounded-xl bg-slate-100 dark:bg-slate-800">
         <input
@@ -60,7 +77,7 @@ function Quests() {
         />
       </div>
       <div className="flex-grow w-full py-4 overflow-y-auto">
-        <div className="w-full sm:w-fit h-fit  grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-4 sm:gap-y-8 sm:mx-auto">
+        <div className="w-full px-2 sm:w-fit h-fit  grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-4 sm:gap-y-8 sm:mx-auto">
           {quests?.map((quest) => (
             <QuestCard
               questId={quest.questId}

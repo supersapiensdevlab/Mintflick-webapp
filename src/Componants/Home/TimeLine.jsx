@@ -7,7 +7,7 @@ import Post from "./Post";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Loading from "../Loading/Loading";
 import { Link, useNavigate } from "react-router-dom";
-import image from "../../Assets/Gaming Posters/treasureHunt.webp";
+import image from "../../Assets/Gaming Posters/Mountain hunt.jpg";
 
 function TimeLine() {
   // for Playing only one at time
@@ -93,7 +93,7 @@ function TimeLine() {
         className="w-full bg-white lg:rounded-lg overflow-hidden cursor-pointer"
       >
         <img
-          className="aspect-[16/5] w-full object-cover  "
+          className="aspect-[16/9] w-full object-cover  "
           src={image}
           alt="quest-banner"
         />

@@ -6,6 +6,7 @@ import {
   Scan,
   Share,
   Ticket,
+  Trophy,
   Wallet,
   X,
 } from "tabler-icons-react";
@@ -18,14 +19,14 @@ import axios from "axios";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
-function TaskCard({ name, description, action, openScanner }) {
+function TaskCard({ name, description, action, points, openScanner }) {
   return (
     <div className="flex flex-col  items-start w-full  rounded-md bg-white dark:bg-slate-600 p-4 shadow-md hover:shadow-xl">
       <span className="text-lg font-semibold text-brand1">{name}</span>
       <p className="text-base font-normal text-brand3">{description}</p>
       <div className="w-full flex items-center justify-between mt-4">
         <span className="flex-grow font-bold text-2xl flex items-baseline gap-1">
-          <div className="flex items-center gap-2 text-success">0</div>
+          <div className="flex items-center gap-2 text-success">{points}</div>
           <span className="text-sm text-brand3">Points</span>
         </span>
         <button
@@ -48,7 +49,10 @@ function QuestDetails() {
   const navigateTo = useNavigate();
 
   const [open, setopen] = useState(false);
+  const [openRedeem, setopenRedeem] = useState(false);
   const [data, setData] = useState("No result");
+
+  const [points, setpoints] = useState(200);
 
   const [walletModalOpen, setwalletModalOpen] = useState(false);
   const [questStarted, setquestStarted] = useState(false);
@@ -89,7 +93,7 @@ function QuestDetails() {
           `${process.env.REACT_APP_SERVER_URL}/quest/` + questId
         );
         setQuestsDetails(questsDetails.data);
-        console.log("QUESTS:", questsDetails);
+        console.log("QUEST:", questsDetails);
       } catch (error) {
         console.log(error);
       }
@@ -128,7 +132,7 @@ function QuestDetails() {
   }, [questsDetails]);
 
   function handleQrScan(qrId) {
-    alert(qrId);
+    State.toast("success", qrId + "Hurreyy...Task Completed!!");
     setopen(false);
   }
 
@@ -150,7 +154,7 @@ function QuestDetails() {
         // await clearState();
       })
       .catch((err) => {
-        State.toast("error", "Oops!somthing went wrong uplaoding poll!");
+        State.toast("error", "Oops!somthing went wrong!");
         console.log(err);
         //clearState();
       });
@@ -176,12 +180,12 @@ function QuestDetails() {
             />
           )}
         </span>
-        <span
+        {/* <span
           onClick={() => setwalletModalOpen(true)}
           className="  text-brand1 "
         >
           <Wallet />
-        </span>
+        </span> */}
       </div>
       <div className="flex-grow flex flex-col gap-4 w-full  overflow-y-auto">
         {/* <div className="mx-auto w-full flex justify-between items-center max-w-2xl">
@@ -208,20 +212,20 @@ function QuestDetails() {
         <div className="flex flex-col gap-2 bg-slate-100 dark:bg-slate-700 sm:rounded-xl  mx-auto w-full justify-start     items-start max-w-2xl">
           <img
             className="aspect-video w-full object-cover sm:rounded-lg"
-            src={
-              "https://gameranx.com/wp-content/uploads/2022/06/DiabloImmortal-Tower.jpg"
-            }
+            src={questsDetails?.banner}
             alt="banner"
           />
         </div>
         {questStarted && (
           <div className="flex items-center bg-slate-100 dark:bg-slate-700 sm:rounded-xl p-4 sm:p-4 mx-auto w-full justify-start   max-w-2xl">
             <span className="flex-grow font-bold text-2xl flex items-baseline gap-1">
-              <div className="flex items-center gap-2 text-success">0</div>
+              <div className="flex items-center gap-2 text-success">
+                {points}
+              </div>
               <span className="text-sm text-brand3">Points</span>
             </span>
             <button
-              onClick={() => {}}
+              onClick={() => setopenRedeem(true)}
               className="btn btn-xs btn-primary rounded-full capitalize"
             >
               Redeem
@@ -263,6 +267,7 @@ function QuestDetails() {
               <TaskCard
                 name={task.name}
                 description={task.description}
+                points={task.points}
                 action={task.action}
                 openScanner={setopen}
               />
@@ -311,6 +316,140 @@ function QuestDetails() {
                 }
               }}
             />
+          </div>
+        </div>
+      </div>
+      <div
+        className={`${
+          openRedeem && "modal-open"
+        } modal  modal-bottom sm:modal-middle `}
+      >
+        <div className="modal-box p-0 bg-slate-100 dark:bg-slate-800 ">
+          <div className="w-full h-fit p-2 bg-slate-300 dark:bg-slate-700">
+            <div className="flex justify-between items-center p-2">
+              <h3 className="flex items-center gap-2 font-bold text-lg text-brand2">
+                {/* <Trophy />{" "} */}
+                <span className="flex-grow font-bold text-2xl flex items-baseline gap-1">
+                  <div className="flex items-center gap-2 text-success">
+                    {points}
+                  </div>
+                  <span className="text-sm text-brand3">Points</span>
+                </span>
+              </h3>
+              <X
+                onClick={() => setopenRedeem()}
+                className="text-brand2 cursor-pointer"
+              ></X>
+            </div>
+          </div>
+          <div className="w-full flex flex-col gap-2 p-2">
+            <div
+              className={`${
+                points < 100 && "grayscale"
+              } flex    items-center w-full  rounded-md bg-white dark:bg-slate-600  shadow-md hover:shadow-xl`}
+            >
+              <img
+                className="h-24 aspect-square object-cover  rounded-l-md"
+                src={
+                  "https://www.mydesignation.com/wp-content/uploads/2019/08/malayali-tshirt-mydesignation-mockup-image-latest-golden-.jpg"
+                }
+                alt="murch"
+              />
+              <div className="p-4">
+                <span className="text-lg font-semibold text-brand1">Kit</span>
+                {/* <p className="text-base font-normal text-brand3">
+                  
+                </p> */}
+                <div className="w-full  flex items-center justify-between ">
+                  <span className="flex-grow font-bold text-2xl flex items-baseline gap-1">
+                    <div className="flex items-center gap-2 text-success">
+                      100
+                    </div>
+                    <span className="text-sm text-brand3">Points</span>
+                  </span>
+                </div>
+              </div>
+              {points >= 100 && (
+                <button
+                  onClick={() => {}}
+                  className="btn btn-sm gap-1 btn-brand rounded-full capitalize  ml-auto mr-2"
+                >
+                  Redeem
+                </button>
+              )}
+            </div>
+            <div
+              className={`${
+                points < 200 && "grayscale"
+              } flex    items-center w-full  rounded-md bg-white dark:bg-slate-600  shadow-md hover:shadow-xl`}
+            >
+              <img
+                className="h-24 aspect-square object-cover  rounded-l-md"
+                src={
+                  "https://www.mydesignation.com/wp-content/uploads/2019/08/malayali-tshirt-mydesignation-mockup-image-latest-golden-.jpg"
+                }
+                alt="murch"
+              />
+              <div className="p-4">
+                <span className="text-lg font-semibold text-brand1">Cap</span>
+                {/* <p className="text-base font-normal text-brand3">
+                  
+                </p> */}
+                <div className="w-full  flex items-center justify-between ">
+                  <span className="flex-grow font-bold text-2xl flex items-baseline gap-1">
+                    <div className="flex items-center gap-2 text-success">
+                      200
+                    </div>
+                    <span className="text-sm text-brand3">Points</span>
+                  </span>
+                </div>
+              </div>
+              {points >= 200 && (
+                <button
+                  onClick={() => {}}
+                  className="btn btn-sm gap-1 btn-brand rounded-full capitalize  ml-auto mr-2"
+                >
+                  Redeem
+                </button>
+              )}
+            </div>{" "}
+            <div
+              className={`${
+                points < 300 && "grayscale"
+              } flex    items-center w-full  rounded-md bg-white dark:bg-slate-600  shadow-md hover:shadow-xl`}
+            >
+              <img
+                className="h-24 aspect-square object-cover  rounded-l-md"
+                src={
+                  "https://www.mydesignation.com/wp-content/uploads/2019/08/malayali-tshirt-mydesignation-mockup-image-latest-golden-.jpg"
+                }
+                alt="murch"
+              />
+              <div className="p-4">
+                <span className="text-lg font-semibold text-brand1">
+                  T-shirt
+                </span>
+                {/* <p className="text-base font-normal text-brand3">
+                  
+                </p> */}
+                <div className="w-full  flex items-center justify-between ">
+                  <span className="flex-grow font-bold text-2xl flex items-baseline gap-1">
+                    <div className="flex items-center gap-2 text-success">
+                      300
+                    </div>
+                    <span className="text-sm text-brand3">Points</span>
+                  </span>
+                </div>
+              </div>
+              {points >= 300 && (
+                <button
+                  onClick={() => {}}
+                  className="btn btn-sm gap-1 btn-brand rounded-full capitalize  ml-auto mr-2"
+                >
+                  Redeem
+                </button>
+              )}
+            </div>{" "}
           </div>
         </div>
       </div>
