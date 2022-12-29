@@ -6,7 +6,7 @@ import "react-loading-skeleton/dist/skeleton.css";
 function QuestCard({ questId, selectedPostImg, name, description, status }) {
   return (
     <NavLink
-      to={status && "../quest-details"}
+      to={status && "../quest-details/" + questId}
       className="mx-auto relative h-fit w-full sm:w-96   rounded-lg bg-white dark:bg-slate-700 sm:hover:scale-105 cursor-pointer transition-all ease-in-out shadow-xl overflow-hidden"
     >
       <img
