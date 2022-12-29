@@ -38,6 +38,8 @@ import EventDetails from "./Componants/Event/EventDetails";
 import Quests from "./Pages/Quests";
 import QuestDetails from "./Componants/Quests/QuestDetails";
 import QuestOnboarding from "./Componants/Quests/QuestOnboarding";
+import QuestAdmin from "./Componants/Quests/QuestAdmin";
+import QuestDetailsAdmin from "./Componants/Quests/QuestDetailsAdmin";
 function App() {
   const State = useContext(UserContext);
 
@@ -145,6 +147,11 @@ function App() {
           <Route path="quest-details" element={<QuestDetails />} />
         </Route>
         <Route path="/quest/:id/:qr" element={<QuestOnboarding />}></Route>
+        <Route path="/quest-admin" element={<QuestAdmin />}></Route>
+        <Route
+          path="/quest-details-admin"
+          element={<QuestDetailsAdmin />}
+        ></Route>
       </Routes>
       <ShareModal />
       <BuyNFTModal />

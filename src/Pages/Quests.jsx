@@ -19,6 +19,55 @@ function Quests() {
       img: "https://gameranx.com/wp-content/uploads/2022/06/DiabloImmortal-Tower.jpg",
       status: true,
     },
+    {
+      description:
+        "Supermeet is back with it's Jaipur edition! This time for Builders, Creators, Operators and those that are web3 curious. Get access to the Superteam network & earning opportunities. We might have some special alpha for those that join us. You don’t want to miss this one! 🙂",
+      topic: "Quest1",
+      img: "https://gameranx.com/wp-content/uploads/2022/06/DiabloImmortal-Tower.jpg",
+      status: true,
+    },
+    {
+      description:
+        "Supermeet is back with it's Jaipur edition! This time for Builders, Creators, Operators and those that are web3 curious. Get access to the Superteam network & earning opportunities. We might have some special alpha for those that join us. You don’t want to miss this one! 🙂",
+      topic: "Quest1",
+      img: "https://gameranx.com/wp-content/uploads/2022/06/DiabloImmortal-Tower.jpg",
+      status: true,
+    },
+    {
+      description:
+        "Supermeet is back with it's Jaipur edition! This time for Builders, Creators, Operators and those that are web3 curious. Get access to the Superteam network & earning opportunities. We might have some special alpha for those that join us. You don’t want to miss this one! 🙂",
+      topic: "Quest1",
+      img: "https://gameranx.com/wp-content/uploads/2022/06/DiabloImmortal-Tower.jpg",
+      status: true,
+    },
+    {
+      description:
+        "Supermeet is back with it's Jaipur edition! This time for Builders, Creators, Operators and those that are web3 curious. Get access to the Superteam network & earning opportunities. We might have some special alpha for those that join us. You don’t want to miss this one! 🙂",
+      topic: "Quest1",
+      img: "https://gameranx.com/wp-content/uploads/2022/06/DiabloImmortal-Tower.jpg",
+      status: true,
+    },
+    {
+      description:
+        "Supermeet is back with it's Jaipur edition! This time for Builders, Creators, Operators and those that are web3 curious. Get access to the Superteam network & earning opportunities. We might have some special alpha for those that join us. You don’t want to miss this one! 🙂",
+      topic: "Quest1",
+      img: "https://gameranx.com/wp-content/uploads/2022/06/DiabloImmortal-Tower.jpg",
+      status: true,
+    },
+    {
+      description:
+        "Supermeet is back with it's Jaipur edition! This time for Builders, Creators, Operators and those that are web3 curious. Get access to the Superteam network & earning opportunities. We might have some special alpha for those that join us. You don’t want to miss this one! 🙂",
+      topic: "Quest1",
+      img: "https://gameranx.com/wp-content/uploads/2022/06/DiabloImmortal-Tower.jpg",
+      status: true,
+    },
+    {
+      description:
+        "Supermeet is back with it's Jaipur edition! This time for Builders, Creators, Operators and those that are web3 curious. Get access to the Superteam network & earning opportunities. We might have some special alpha for those that join us. You don’t want to miss this one! 🙂",
+      topic: "Quest1",
+      img: "https://gameranx.com/wp-content/uploads/2022/06/DiabloImmortal-Tower.jpg",
+      status: false,
+    },
   ]);
 
   useEffect(() => {
@@ -56,7 +105,7 @@ function Quests() {
         />
       </div>
       <div className="flex-grow w-full py-4 overflow-y-auto">
-        <div className="w-full sm:w-fit h-fit  grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-4 sm:gap-y-8 sm:mx-auto">
+        <div className="w-full px-4 sm:w-fit h-fit  grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-4 sm:gap-y-8 sm:mx-auto">
           {data.map((event) => (
             <QuestCard
               selectedPostImg={event.img}

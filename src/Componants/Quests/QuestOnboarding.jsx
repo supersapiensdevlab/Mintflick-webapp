@@ -37,11 +37,14 @@ function QuestOnboarding() {
           />
         </div>
         <span className=" text-center text-lg font-bold text-brand1 mx-auto ">
-          Welcome! WE ARE SO HAPPY <br />
-          YOU ARE HEREEEE 🥰
+          Welcome! WE ARE SOOO <br />
+          HAPPY YOU ARE HERE 🥰
         </span>
         <p className="text-center px-4 text-lg text-brand2 font-normal  mx-auto  max-w-2xl">
-          {description}
+          This quest is designed so you can earn <br /> some rewards while
+          checking out our
+          <br /> New{" "}
+          <strong className="text-brand-gradient">social media platform</strong>
         </p>
         <div className="flex   gap-2   sm:rounded-xl p-4   mx-auto w-full justify-between items-center max-w-2xl">
           <button
@@ -50,7 +53,7 @@ function QuestOnboarding() {
             }}
             className="btn w-full btn-brand rounded-full capitalize "
           >
-            Start Quest
+            Login to Play
           </button>
         </div>
       </div>
