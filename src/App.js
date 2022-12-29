@@ -142,9 +142,10 @@ function App() {
           <Route path=":userName/:type/:id" element={<PostDetails />}></Route>
 
           <Route path="quests" element={<Quests />} />
-          <Route path="quest-details" element={<QuestDetails />} />
+          <Route path="quest-details/:questId" element={<QuestDetails />} />
         </Route>
-        <Route path="/quest/:id/:qr" element={<QuestOnboarding />}></Route>
+        <Route path="/quest/:questId/:taskId" element={<QuestOnboarding />}></Route>
+
       </Routes>
       <ShareModal />
       <BuyNFTModal />

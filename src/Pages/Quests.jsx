@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ChevronLeft, Wallet } from "tabler-icons-react";
@@ -8,22 +9,25 @@ import { UserContext } from "../Store";
 function Quests() {
   const State = useContext(UserContext);
   const navigateTo = useNavigate();
+  const [quests, setQuests] = useState([]);
 
   const [walletModalOpen, setwalletModalOpen] = useState(false);
-
-  const [data, setData] = useState([
-    {
-      description:
-        "Supermeet is back with it's Jaipur edition! This time for Builders, Creators, Operators and those that are web3 curious. Get access to the Superteam network & earning opportunities. We might have some special alpha for those that join us. You don’t want to miss this one! 🙂",
-      topic: "Quest1",
-      img: "https://gameranx.com/wp-content/uploads/2022/06/DiabloImmortal-Tower.jpg",
-      status: true,
-    },
-  ]);
 
   useEffect(() => {
     State.updateDatabase({ showHeader: false });
     State.updateDatabase({ showBottomNav: false });
+    async function fetchData() {
+      try {
+        let quests = await axios.get(
+          `${process.env.REACT_APP_SERVER_URL}/quest`
+        );
+        setQuests(quests.data);
+        console.log("QUESTS:", quests);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    fetchData();
   }, []);
 
   return (
@@ -57,12 +61,13 @@ function Quests() {
       </div>
       <div className="flex-grow w-full py-4 overflow-y-auto">
         <div className="w-full sm:w-fit h-fit  grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-4 sm:gap-y-8 sm:mx-auto">
-          {data.map((event) => (
+          {quests?.map((quest) => (
             <QuestCard
-              selectedPostImg={event.img}
-              name={event.topic}
-              description={event.description}
-              status={event.status}
+              questId={quest.questId}
+              selectedPostImg={quest.banner}
+              name={quest.name}
+              description={quest.description}
+              status={quest.status}
             />
           ))}
         </div>

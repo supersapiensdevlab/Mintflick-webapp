@@ -1,20 +1,30 @@
-import React, { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useContext, useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import Main_logo from "../../Assets/logos/Main_logo";
 import Main_logo_dark from "../../Assets/logos/Main_logo_dark";
 import { UserContext } from "../../Store";
 import gif from "../../Assets/backgrounds/welcome.gif";
-import useWebModal from "../Wallet/useWebModal";
+import useWebModal from "../Wallet/useWebModal"; 
 
 function QuestOnboarding() {
   const State = useContext(UserContext);
   const navigateTo = useNavigate();
 
   const modal = useWebModal();
-
+  const {questId, taskId} = useParams();
   const [description, setdescription] = useState(
     "This quest is designed so you can earn some rewards while checking out our new social media platform"
   );
+
+
+
+  useEffect(() => {
+   localStorage.setItem("questId",questId); 
+   localStorage.setItem("taskId",taskId);
+   localStorage.setItem("completedTasks",[taskId]);
+   localStorage.setItem("questFlow",true);
+  }, [questId, taskId])
+  
   return (
     <div className="flex flex-col items-center  md:gap-4     w-screen h-screen  bg-white dark:bg-slate-900 overflow-auto">
       <div className="w-full p-4 flex items-center  max-w-3xl mx-auto">

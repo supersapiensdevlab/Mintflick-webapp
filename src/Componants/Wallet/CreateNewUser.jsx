@@ -40,7 +40,18 @@ function CreateNewUser() {
           console.log("wallet address saved in storage");
           setloader(false);
           seterror("");
-          navigateTo("/homescreen/home");
+           let questId =localStorage.getItem("questId");
+
+           if(questId && localStorage.getItem("taskId")){
+            localStorage.setItem("questFlow",false);
+            navigateTo("/quest-details/"+questId);
+            
+           }
+           else{
+            navigateTo("/homescreen/home");
+           };
+          
+          
         }
       })
       .catch(function (error) {

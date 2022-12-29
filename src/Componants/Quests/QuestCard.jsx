@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
-function QuestCard({ selectedPostImg, name, description, status }) {
+function QuestCard({ questId, selectedPostImg, name, description, status }) {
   return (
     <NavLink
-      to={"../quest-details"}
+      to={"../quest-details/" + questId}
       className="mx-auto relative h-fit w-full sm:w-96  sm:rounded-lg bg-white dark:bg-slate-700 sm:hover:scale-105 cursor-pointer transition-all ease-in-out shadow-xl overflow-hidden"
     >
       <img
@@ -15,7 +17,7 @@ function QuestCard({ selectedPostImg, name, description, status }) {
       <div className="flex items-center w-full space-x-2 my-1  py-3 px-4">
         <div className="flex-grow ">
           <p className="w-48 text-lg font-semibold text-brand1 truncate">
-            {name}
+            {name || <Skeleton />}
           </p>
         </div>
         <span className="h-8 w-1 bg-slate-200 dark:bg-slate-600 rounded-full"></span>

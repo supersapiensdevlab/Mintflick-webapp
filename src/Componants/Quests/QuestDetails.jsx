@@ -1,5 +1,5 @@
-import React, { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useContext, useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   ChevronLeft,
   ChevronRight,
@@ -13,6 +13,10 @@ import { UserContext } from "../../Store";
 import MintWalletModal from "../Profile/Modals/MintWalletModal";
 import { QrReader } from "react-qr-reader";
 import adapter from "webrtc-adapter";
+import axios from "axios";
+
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 function TaskCard({ name, description, action, openScanner }) {
   return (
@@ -70,11 +74,87 @@ function QuestDetails() {
       action: "scan",
     },
   ]);
+  const [questsDetails, setQuestsDetails] = useState([]);
+  const [completedTasks, setCompletedTasks] = useState([]);
+
+  const { questId } = useParams();
+
+  useEffect(() => {
+    State.updateDatabase({ showHeader: false });
+    State.updateDatabase({ showBottomNav: false });
+    console.log(questId);
+    async function fetchData() {
+      try {
+        let questsDetails = await axios.get(
+          `${process.env.REACT_APP_SERVER_URL}/quest/` + questId
+        );
+        setQuestsDetails(questsDetails.data);
+        console.log("QUESTS:", questsDetails);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    fetchData();
+
+    async function fetchUserDetails() {
+      await axios({
+        method: "post",
+        url: `${process.env.REACT_APP_SERVER_URL}/user/getuser_by_wallet`,
+
+        data: {
+          walletId: localStorage.getItem("walletAddress"),
+        },
+      })
+        .then((response) => {
+          State.updateDatabase({
+            userData: response,
+            walletAddress: response.data.user.wallet_id,
+          });
+
+          // console.log(State?.database?.userData?.data?.user?.quests);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    }
+  }, []);
+
+  useEffect(() => {
+    let questsStarted = State?.database?.userData?.data?.user?.quests;
+    if (questsStarted?.includes(questsDetails.questId)) {
+      console.log(questsDetails.questId);
+      setquestStarted(true);
+    }
+  }, [questsDetails]);
 
   function handleQrScan(qrId) {
     alert(qrId);
     setopen(false);
   }
+
+  const startQuest = () => {
+    let data = {
+      walletId: State.database.walletAddress,
+      questId: questsDetails?.questId,
+    };
+    axios
+      .post(`${process.env.REACT_APP_SERVER_URL}/user/questStart`, data, {
+        headers: {
+          "content-type": "application/json",
+          "auth-token": JSON.stringify(localStorage.getItem("authtoken")),
+        },
+      })
+      .then(async (res) => {
+        State.toast("success", questsDetails.name + " Quest started");
+        setquestStarted(true);
+        // await clearState();
+      })
+      .catch((err) => {
+        State.toast("error", "Oops!somthing went wrong uplaoding poll!");
+        console.log(err);
+        //clearState();
+      });
+  };
 
   return (
     <div className="flex flex-col items-center  md:gap-4     w-screen h-screen  bg-white dark:bg-slate-900 overflow-auto">
@@ -87,7 +167,14 @@ function QuestDetails() {
           Back
         </button>
         <span className="text-xl font-bold text-brand1 mx-auto">
-          Quest Name
+          {questsDetails?.name || (
+            <Skeleton
+              width={100}
+              height={24}
+              baseColor="#0c2543"
+              highlightColor="#10172a"
+            />
+          )}
         </span>
         <span
           onClick={() => setwalletModalOpen(true)}
@@ -142,21 +229,21 @@ function QuestDetails() {
           </div>
         )}
 
-        {!questStarted && (
-          <div className="flex flex-col gap-2 bg-slate-100 dark:bg-slate-700 sm:rounded-xl p-4 sm:p-4 mx-auto w-full justify-start items-start max-w-2xl">
-            <span className="text-lg font-semibold text-brand1">Details</span>
-            <p className="text-base font-normal text-brand1">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
-              reprehenderit in voluptate velit esse cillum dolore eu fugiat
-              nulla pariatur. Excepteur sints
-            </p>
-          </div>
-        )}
-
         <div className="flex flex-col gap-2 bg-slate-100 dark:bg-slate-700 sm:rounded-xl p-4 sm:p-4 mx-auto w-full justify-start items-start max-w-2xl">
+          <span className="text-lg font-semibold text-brand1">Details</span>
+          <p className="text-base font-normal text-brand1">
+            {questsDetails?.description || (
+              <Skeleton
+                width={100}
+                height={24}
+                baseColor="#0c2543"
+                highlightColor="#10172a"
+              />
+            )}
+          </p>
+        </div>
+
+        <div className="hidden flex flex-col gap-2 bg-slate-100 dark:bg-slate-700 sm:rounded-xl p-4 sm:p-4 mx-auto w-full justify-start items-start max-w-2xl">
           <span className="text-lg font-semibold text-brand1">Map</span>
           <img
             className="aspect-video w-full object-cover rounded-lg"
@@ -172,7 +259,7 @@ function QuestDetails() {
             className="flex flex-col gap-2 bg-slate-100 dark:bg-slate-700 sm:rounded-xl p-4 sm:p-4 mx-auto w-full justify-start items-start max-w-2xl"
           >
             <span className="text-lg font-semibold text-brand1">Tasks</span>
-            {tasks.map((task) => (
+            {questsDetails?.tasks.map((task) => (
               <TaskCard
                 name={task.name}
                 description={task.description}
@@ -185,7 +272,7 @@ function QuestDetails() {
         {!questStarted && (
           <div className="flex   gap-2   sm:rounded-xl p-4   mx-auto w-full justify-between items-center max-w-2xl">
             <button
-              onClick={() => setquestStarted(true)}
+              onClick={() => startQuest()}
               className="btn w-full btn-brand rounded-full capitalize"
             >
               Start Quest

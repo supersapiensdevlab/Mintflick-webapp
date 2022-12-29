@@ -23,7 +23,7 @@ import {
 function useWebModal() {
   const State = useContext(UserContext);
   const navigateTo = useNavigate();
-
+   
   const getProvider = async () => {
     if ("solana" in window) {
       const provider = window.solana;
@@ -63,8 +63,14 @@ function useWebModal() {
         //   "v2provider",
         //   JSON.stringify(provider, getCircularReplacer())
         // );
-
+        let questFlow = localStorage.getItem("questFlow");
+        if (questFlow) {
+          localStorage.removeItem("questFlow");
+          response.status === 200 && navigateTo("/homescreen/quest-details/"+localStorage.getItem("questId"));
+        }
+        else{
         response.status === 200 && navigateTo("/homescreen/home");
+      }
       })
       .catch(function (error) {
         console.log(error);
