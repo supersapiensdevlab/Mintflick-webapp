@@ -146,17 +146,10 @@ function App() {
           <Route path="quests" element={<Quests />} />
           <Route path="quest-details/:questId" element={<QuestDetails />} />
         </Route>
-<<<<<<< HEAD
-        <Route path="/quest/:questId/:taskId" element={<QuestOnboarding />}></Route>
-
-=======
-        <Route path="/quest/:id/:qr" element={<QuestOnboarding />}></Route>
-        <Route path="/quest-admin" element={<QuestAdmin />}></Route>
         <Route
-          path="/quest-details-admin"
-          element={<QuestDetailsAdmin />}
+          path="/quest/:questId/:taskId"
+          element={<QuestOnboarding />}
         ></Route>
->>>>>>> b4c6c003c41156042c4a06584a2be92776b43741
       </Routes>
       <ShareModal />
       <BuyNFTModal />
