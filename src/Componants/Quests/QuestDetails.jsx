@@ -170,7 +170,7 @@ function QuestDetails() {
           <ChevronLeft />
           Back
         </button>
-        <span className="text-xl font-bold text-brand1 mx-auto">
+        <span className="text-xl font-bold text-brand1 mx-auto -translate-x-8">
           {questsDetails?.name || (
             <Skeleton
               width={100}

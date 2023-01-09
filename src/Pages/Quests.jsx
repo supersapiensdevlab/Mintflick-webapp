@@ -61,7 +61,9 @@ function Quests() {
           <ChevronLeft />
           Back
         </button>
-        <span className="text-xl font-bold text-brand1 mx-auto">Quests</span>
+        <span className="text-xl font-bold text-brand1 mx-auto -translate-x-8">
+          Quests
+        </span>
         {/* <span
           onClick={() => setwalletModalOpen(true)}
           className="  text-brand1 "
