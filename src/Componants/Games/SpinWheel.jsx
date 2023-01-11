@@ -30,7 +30,7 @@ const SpinWheel = () => {
   };
 
   return (
-    <div className="p-2 pt-20  h-screen w-acreen bg-slate-100 dark:bg-slate-800 overflow-y-hidden">
+    <div className="p-2 pt-20  h-screen w-screen bg-slate-100 dark:bg-slate-800 overflow-y-hidden">
       <div className="h-full w-full">
         <div className="flex justify-center ml-52 -mt-20  w-full">
           <WheelComponent

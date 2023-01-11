@@ -93,9 +93,9 @@ function AddPost() {
       </div>
       {/* FAB */}
       <div
-        className={`${
-          State.database.showHeader ? "" : "translate-y-20"
-        } bottom-24 transition-all ease-in-out lg:hidden fixed  right-2 z-40 dropdown dropdown-top dropdown-end `}
+        className={`
+        ${State.database.showHeader ? "" : "translate-y-20"}
+         bottom-24 transition-all ease-in-out lg:hidden fixed  right-2 z-40 dropdown dropdown-top dropdown-end `}
       >
         <label
           tabindex="0"

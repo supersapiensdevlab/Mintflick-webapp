@@ -18,46 +18,31 @@ const AllGames = () => {
       <div className=" pt-20 flex  h-screen w-screen bg-white dark:bg-slate-900">
         <div className="hidden lg:flex flex-col h-full w-1/4 ml-12 pt-24  space-y-6 overflow-y-auto"></div>
         <div className="p-4 h-full w-full lg:w-2/4 flex flex-col justify-start items-center space-x-5 overflow-auto">
-          <div class="grid grid-cols-3  gap-4 w-full   ">
+          <div class="grid grid-cols-2 xl:grid-cols-3  gap-4 w-full  ">
             {/* <div className="col-span-3 h-48 bg-white rounded-lg"></div> */}
-            <div className="row-span-2">
+            <div className=" ">
               <GameCard
                 image={spinwheelimg}
                 link={`/homescreen/game/spinwheel`}
+                name={"Spinwheel"}
               />
             </div>
-            <div className="col-span-2">
+            <div className=" ">
               <GameCard
                 image={dicerollimg}
                 link={`/homescreen/game/rolldice`}
+                name={"Dice"}
               />
             </div>
-            <div className="col-span-2">
+            <div className=" ">
               <GameCard
                 image={spingameimg}
                 link={`/homescreen/game/spingame`}
-              />
-            </div>{" "}
-            <div className="col-span-2">
-              <GameCard
-                image={dicerollimg}
-                link={`/homescreen/game/rolldice`}
-              />
-            </div>{" "}
-            <div className="row-span-2">
-              <GameCard
-                image={spinwheelimg}
-                link={`/homescreen/game/spinwheel`}
+                name={"Jackpot"}
               />
             </div>
-            <div className="col-span-2">
-              <GameCard
-                image={spingameimg}
-                link={`/homescreen/game/spingame`}
-              />
-            </div>{" "}
           </div>
-        </div>{" "}
+        </div>
         <div className="hidden lg:flex flex-col h-fit lg:h-full    lg:w-1/4 lg:ml-4 lg:mr-12 pt-4 lg:space-y-6 lg:overflow-y-auto">
           <MintWallet />
         </div>
