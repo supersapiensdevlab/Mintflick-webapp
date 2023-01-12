@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { MessageDots } from "tabler-icons-react";
+import { DeviceGamepad2, MessageDots } from "tabler-icons-react";
 import { UserContext } from "../../Store";
 import Main_logo from "../../Assets/logos/Main_logo";
 import Main_logo_dark from "../../Assets/logos/Main_logo_dark";
@@ -137,22 +137,38 @@ function MobileHeader() {
             <Main_logo></Main_logo>
           )}
         </NavLink>
-
-        <button class="btn btn-circle btn-ghost ">
-          <NavLink
-            to={`/homescreen/chat/${
-              State.database.userData.data
-                ? State.database.userData.data.user.username
-                : ""
-            }`}
-            state={{
-              isDM: false,
-              user2: {},
-            }}
-          >
-            <MessageDots size={28}></MessageDots>
-          </NavLink>
-        </button>
+        <div className="flex gap-1 justify-center items-center">
+          {/* <button class="btn btn-circle btn-ghost ">
+            <NavLink
+              to={`/homescreen/chat/${
+                State.database.userData.data
+                  ? State.database.userData.data.user.username
+                  : ""
+              }`}
+              state={{
+                isDM: false,
+                user2: {},
+              }}
+            >
+              <DeviceGamepad2 size={28}></DeviceGamepad2>
+            </NavLink>
+          </button> */}
+          <button class="btn btn-circle btn-ghost ">
+            <NavLink
+              to={`/homescreen/chat/${
+                State.database.userData.data
+                  ? State.database.userData.data.user.username
+                  : ""
+              }`}
+              state={{
+                isDM: false,
+                user2: {},
+              }}
+            >
+              <MessageDots size={28}></MessageDots>
+            </NavLink>
+          </button>
+        </div>
         {/* <button
           class="btn btn-circle btn-ghost "
           onClick={() => setchatModalOpen(true)}

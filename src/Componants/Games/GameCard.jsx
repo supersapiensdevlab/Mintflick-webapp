@@ -7,7 +7,7 @@ function GameCard({ link, image, name }) {
     <div className=" sm:hover:scale-105   transition-all ease-in-out shadow-xl w-full h-fit relative   rounded-lg">
       <Link to={link}>
         <img
-          className="h-64 w-full object-cover rounded-lg"
+          className="h-96 w-full object-cover rounded-lg"
           src={image}
           alt="game-banner"
         />

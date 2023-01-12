@@ -146,6 +146,8 @@ function App() {
           <Route path="quests" element={<Quests />} />
           <Route path="quest-details/:questId" element={<QuestDetails />} />
         </Route>
+        <Route path="quests-admin" element={<QuestAdmin />} />
+        <Route path="quest-details-admin" element={<QuestDetailsAdmin />} />
         <Route
           path="/quest/:questId/:taskId"
           element={<QuestOnboarding />}
