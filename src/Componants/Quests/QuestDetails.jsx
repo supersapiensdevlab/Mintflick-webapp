@@ -176,7 +176,7 @@ function QuestDetails() {
               width={100}
               height={24}
               baseColor="#0c2543"
-              highlightColor="#10172a"
+              highlightColor="#10172a" 
             />
           )}
         </span>
