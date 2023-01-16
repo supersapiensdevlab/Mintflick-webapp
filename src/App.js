@@ -128,7 +128,7 @@ function App() {
 
           <Route path="marketPlace" element={<Events></Events>} />
           <Route path="create-event" element={<CreateEvent />} />
-          <Route path="event-details" element={<EventDetails />} />
+          <Route path="event-details/:lockId" element={<EventDetails />} />
 
           <Route path="explore" element={<Explore />} />
 

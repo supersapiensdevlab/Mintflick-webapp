@@ -1,7 +1,64 @@
-import React from "react";
+import React, { useContext, useState } from "react";
+import { useParams } from "react-router-dom";
 import { Share, Ticket } from "tabler-icons-react";
+import { UserContext } from "../../Store";
 
-function EventDetails() {
+function EventDetails(lockAddress) {
+  const ethers = require("ethers");
+  const abis = require("@unlock-protocol/contracts");
+  const State = useContext(UserContext);
+  const params = useParams();
+  // Wrapping all calls in an async block
+  const run = async () => {
+    if (!State.database.provider)
+      alert("You need to connect to a web3 wallet to use this feature!");
+    const provider = State.database.provider;
+    console.log("PROVIDER:", provider);
+
+    const signer = provider.getSigner();
+    console.log("SIGNER:", signer);
+
+    const Address = await signer.getAddress();
+    console.log("ADDRESS", Address);
+
+    console.log(params.lockId);
+    // const lockAddress =
+    //   process.env.NODE_ENV === "development" ? Mumbai : PolygonMainnet;
+
+    // Let's go purchase the membership for this lock
+    const lock = new ethers.Contract(
+      params.lockId,
+      abis.PublicLockV11.abi,
+      signer
+    );
+
+    // If the lock was using an ERC20 as currency, we would need to send an approval transaction on the ERC20 contract first...
+
+    // Let's get the key price so we know how much we need to send (we could send more!)
+    const amount = await lock.keyPrice();
+
+    console.log(amount);
+    // Purchase params:
+    // The purchase function in v11 supports making multiple purchases... here we just pass a single one.
+    const purchaseParams = [
+      [amount],
+      [Address], // This is the recipient of the membership (us!)
+      [Address], // The is the referrer who will earn UDT tokens (we'd like this to be us!)
+      [ethers.constants.AddressZero], // The key manager. if 0x0, then it is the recipient by default
+      [[]], // empty data object (not used here)
+    ];
+
+    const options = {
+      value: amount, // This is a lock that uses Ether, so it means we need send value. If it was an ERC20 we could set this to 0 and just use the amount on purchase's first argument
+    };
+
+    // We can now send transactions to modify the state of the lock, like purchase a key!
+    const transaction = await lock.purchase(...purchaseParams, options);
+    console.log(transaction.hash);
+    const receipt = await transaction.wait();
+    console.log(receipt);
+  };
+
   return (
     <div className="flex flex-col gap-2 md:gap-4 py-24   w-screen h-screen  bg-white dark:bg-slate-900 overflow-auto">
       <div className="mx-auto w-full flex justify-between items-center max-w-2xl">
@@ -72,8 +129,11 @@ function EventDetails() {
             </p>
             <p className="text-base font-normal text-brand3">John Peter</p>
           </div>
-        </div>{" "}
-        <button className="btn btn-sm sm:btn-md btn-brand rounded-full capitalize">
+        </div>
+        <button
+          onClick={run}
+          className="btn btn-sm sm:btn-md btn-brand rounded-full capitalize"
+        >
           Register for free
         </button>
       </div>
