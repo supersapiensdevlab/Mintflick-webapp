@@ -172,7 +172,7 @@ function QuestAdmin() {
       </div> */}
       <div className="w-full p-4 flex items-center  max-w-3xl mx-auto">
         <button
-          onClick={() => navigateTo("../home/homescreen")}
+          onClick={() => navigateTo("/")}
           className="flex justify-center items-center text-brand3 font-semibold"
         >
           <ChevronLeft />
@@ -185,7 +185,7 @@ function QuestAdmin() {
       <div className="flex-grow w-full py-4 overflow-y-auto">
         {data.map((quest) => (
           <div
-            onClick={() => navigateTo("../quest-details-admin")}
+            onClick={() => navigateTo("/quest-details-admin")}
             className="p-4 m-2 h-fit w-full max-w-3xl mx-auto  sm:rounded-lg bg-white dark:bg-slate-700 sm:hover:scale-105 cursor-pointer transition-all ease-in-out shadow-xl overflow-hidden"
           >
             <p className="w-48 text-lg font-semibold text-brand1 truncate">

@@ -36,6 +36,7 @@ function Vouch() {
           //   onChange={(e) =>
           //   value={}
         />
+        <button className="btn btn-success w-full">Give Vouch</button>
       </div>
     </div>
   );

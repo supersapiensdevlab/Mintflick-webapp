@@ -1,11 +1,12 @@
 import React, { Component } from "react";
 import "./RollDice.css";
 import Die from "./Die";
-import { Dice } from "tabler-icons-react";
+import { ChevronLeft, Dice } from "tabler-icons-react";
 import Lottie from "lottie-react";
 import wheel from "../../../Assets/graphics/wheel.json";
 
 import fireworks from "../../../Assets/graphics/fireworks.json";
+import { Link } from "react-router-dom";
 
 class RollDice extends Component {
   // Face numbers passes as default props
@@ -43,22 +44,46 @@ class RollDice extends Component {
     const handleBtn = this.state.rolling ? "RollDice-rolling" : "";
     const { die1, die2, rolling } = this.state;
     return (
-      <div className="RollDice p-2 pt-20  h-screen bg-slate-100 dark:bg-slate-800">
-        <div className="RollDice-container">
-          <Die face={die1} rolling={rolling} />
-          <Die face={die2} rolling={rolling} />
-        </div>
-        <button
-          className="btn btn-brand btn-md flex justify-center items-center space-x-2 text-white z-20"
-          disabled={this.state.rolling}
-          onClick={this.roll}
+      <div className="lg:px-12  w-screen h-screen  bg-white dark:bg-slate-900 flex flex-col items-center justify-start">
+        {/* <div className='hidden lg:flex flex-col h-full w-1/4 ml-12 pt-24  space-y-6 overflow-y-auto'>
+        <Filter></Filter>
+        <EventCategories></EventCategories>
+      </div> */}
+        <div className="w-full p-4 flex items-center  max-w-3xl mx-auto">
+          <Link
+            to={`/homescreen/allgames`}
+            className="flex justify-center items-center text-brand3 font-semibold"
+          >
+            <ChevronLeft />
+            Back
+          </Link>
+          <span className="text-xl font-bold text-brand1 mx-auto -translate-x-8">
+            RollDice
+          </span>
+          {/* <span
+          onClick={() => setwalletModalOpen(true)}
+          className="  text-brand1 "
         >
-          <Dice size={20} className="-mt-2 text-white" />
-          <div className="-mt-2 text-white">
-            {this.state.rolling ? "Rolling" : "Roll Dice!"}
-          </div>
-        </button>
-        {/* <div>
+          <Wallet />
+        </span> */}
+        </div>
+        <div className="flex-grow flex justify-center items-center w-full max-w-3xl">
+          <div className="RollDice">
+            <div className="RollDice-container">
+              <Die face={die1} rolling={rolling} />
+              <Die face={die2} rolling={rolling} />
+            </div>
+            <button
+              className="btn btn-brand btn-md flex justify-center items-center space-x-2 text-white z-20"
+              disabled={this.state.rolling}
+              onClick={this.roll}
+            >
+              <Dice size={20} className="-mt-2 text-white" />
+              <div className="-mt-2 text-white">
+                {this.state.rolling ? "Rolling" : "Roll Dice!"}
+              </div>
+            </button>
+            {/* <div>
           <Lottie
             className="w-1/2 absolute bottom-0 sm:h-1/2 right-1/2 -z-1"
             autoplay={true}
@@ -72,6 +97,8 @@ class RollDice extends Component {
             animationData={wheel}
           />
         </div> */}
+          </div>{" "}
+        </div>
       </div>
     );
   }

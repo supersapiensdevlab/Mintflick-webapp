@@ -3,6 +3,7 @@ import {
   Bulb,
   Camera,
   ChartBar,
+  DeviceGamepad2,
   File,
   Music,
   PlayCard,
@@ -17,6 +18,7 @@ import AudioPostModal from "./Modals/AudioPostModal";
 import PhotoPostModal from "./Modals/PhotoPostModal";
 import PollModal from "./Modals/PollModal";
 import VideoPostModal from "./Modals/VideoPostModal";
+import { Link } from "react-router-dom";
 
 function AddPost() {
   //text post
@@ -93,63 +95,74 @@ function AddPost() {
       </div>
       {/* FAB */}
       <div
-        className={`${
-          State.database.showHeader ? "" : "translate-y-20"
-        } bottom-24 transition-all ease-in-out lg:hidden fixed  right-2 z-40 dropdown dropdown-top dropdown-end `}
+        className={`${State.database.showHeader ? "" : "translate-y-20"}
+         bottom-24 transition-all ease-in-out lg:hidden fixed  right-2 z-40 space-x-1`}
       >
-        <label
-          tabindex="0"
-          className={`${
-            State.database.showHeader ? "gap-2 " : "btn-circle"
-          } btn btn-md rounded-full btn-brand`}
+        <Link
+          to={`/homescreen/allgames`}
+          className="btn btn-circle btn-md rounded-full btn-brand"
         >
-          <Plus />
-          <span
+          <DeviceGamepad2 />
+        </Link>
+        <div
+          className={`
+         dropdown dropdown-top dropdown-end `}
+        >
+          <label
+            tabindex="0"
             className={`${
-              State.database.showHeader ? "w-fit opacity-100" : "w-0 opacity-0"
-            }`}
+              State.database.showHeader ? "gap-2 " : "btn-circle"
+            } btn btn-md rounded-full btn-brand`}
           >
-            Post
-          </span>
-        </label>
-        <ul
-          tabindex="0"
-          className="dropdown-content menu p-2 m-2 shadow-lg   bg-slate-100 dark:bg-slate-600 text-brand2 font-semibold rounded-lg w-fit "
-        >
-          <li>
-            <a
-              onClick={() => {
-                setthoughtPostModalOpen(true);
-              }}
-              className="dark:hover:bg-slate-800"
+            <Plus />
+            <span
+              className={`${
+                State.database.showHeader
+                  ? "w-fit opacity-100"
+                  : "w-0 opacity-0"
+              }`}
             >
-              <Bulb />
-              Thought
-            </a>
-          </li>
-          <li>
-            <a
-              onClick={() => {
-                setphotoPostModalOpen(true);
-              }}
-              className="dark:hover:bg-slate-800"
-            >
-              <Camera />
-              Photo
-            </a>
-          </li>
-          <li>
-            <a
-              onClick={() => {
-                setvideoPostModalOpen(true);
-              }}
-              className="dark:hover:bg-slate-800"
-            >
-              <Video />
-              Video
-            </a>
-          </li>
-          {/* <li>
+              Post
+            </span>
+          </label>
+          <ul
+            tabindex="0"
+            className="dropdown-content menu p-2 m-2 shadow-lg   bg-slate-100 dark:bg-slate-600 text-brand2 font-semibold rounded-lg w-fit "
+          >
+            <li>
+              <a
+                onClick={() => {
+                  setthoughtPostModalOpen(true);
+                }}
+                className="dark:hover:bg-slate-800"
+              >
+                <Bulb />
+                Thought
+              </a>
+            </li>
+            <li>
+              <a
+                onClick={() => {
+                  setphotoPostModalOpen(true);
+                }}
+                className="dark:hover:bg-slate-800"
+              >
+                <Camera />
+                Photo
+              </a>
+            </li>
+            <li>
+              <a
+                onClick={() => {
+                  setvideoPostModalOpen(true);
+                }}
+                className="dark:hover:bg-slate-800"
+              >
+                <Video />
+                Video
+              </a>
+            </li>
+            {/* <li>
             <a
               onClick={() => {
                 setaudioPostModalOpen(true);
@@ -160,18 +173,19 @@ function AddPost() {
               Audio
             </a>
           </li> */}
-          <li>
-            <a
-              onClick={() => {
-                setpollModalOpen(true);
-              }}
-              className="dark:hover:bg-slate-800"
-            >
-              <ChartBar />
-              Poll
-            </a>
-          </li>
-        </ul>
+            <li>
+              <a
+                onClick={() => {
+                  setpollModalOpen(true);
+                }}
+                className="dark:hover:bg-slate-800"
+              >
+                <ChartBar />
+                Poll
+              </a>
+            </li>
+          </ul>
+        </div>
       </div>
       {/*  post modal */}
       <div

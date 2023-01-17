@@ -170,13 +170,13 @@ function QuestDetails() {
           <ChevronLeft />
           Back
         </button>
-        <span className="text-xl font-bold text-brand1 mx-auto">
+        <span className="text-xl font-bold text-brand1 mx-auto -translate-x-8">
           {questsDetails?.name || (
             <Skeleton
               width={100}
               height={24}
               baseColor="#0c2543"
-              highlightColor="#10172a"
+              highlightColor="#10172a" 
             />
           )}
         </span>

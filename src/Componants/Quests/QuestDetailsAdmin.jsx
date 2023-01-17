@@ -36,7 +36,7 @@ function QuestDetailsAdmin() {
       </div> */}
       <div className="w-full p-4 flex items-center  max-w-3xl mx-auto">
         <button
-          onClick={() => navigateTo("../quest-admin")}
+          onClick={() => navigateTo("../quests-admin")}
           className="flex justify-center items-center text-brand3 font-semibold"
         >
           <ChevronLeft />

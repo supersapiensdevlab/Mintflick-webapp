@@ -8,6 +8,8 @@ import Lottie from "lottie-react";
 import wheel from "../../../Assets/graphics/wheel.json";
 
 import fireworks from "../../../Assets/graphics/fireworks.json";
+import { Link } from "react-router-dom";
+import { ChevronLeft } from "tabler-icons-react";
 
 function SpinGame() {
   const [isSpinning, setIsSpinning] = useState(false);
@@ -70,66 +72,92 @@ function SpinGame() {
       <Confetti spray={win} originX={1} originY={1} angle={120} />
 
       {/* <Confetti width={1920} height={1080} numberOfPieces={100} tweenDuration={10} recycle={true} /> */}
-      <div className="p-2 pt-20 h-screen text-center bg-slate-100 dark:bg-slate-800">
-        <h1 className="text-center text-4xl text-white py-6">Make a spin 🎰</h1>
-
-        <div className="SlotMachine">
-          <div className="spin__slot mx-1  ">
-            <section className="spin__section border bg-mintie   rounded-lg">
-              <div className=" spin__container   " ref={slotRef[0]}>
-                {fruits.map((fruit, i) => (
-                  <div key={i}>
-                    <span>{fruit}</span>
-                  </div>
-                ))}
-              </div>
-            </section>
-          </div>
-          <div className="spin__slot mx-1">
-            <section className="spin__section border bg-mintie   rounded-lg">
-              <div
-                className="spin__container bg-dbeats-dark-alt"
-                ref={slotRef[1]}
-              >
-                {fruits.map((fruit) => (
-                  <div key={Math.random()}>
-                    <span>{fruit}</span>
-                  </div>
-                ))}
-              </div>
-            </section>
-          </div>
-          <div className="spin__slot mx-1">
-            <section className="spin__section border bg-mintie   rounded-lg">
-              <div
-                className="spin__container bg-dbeats-dark-alt shadow-md"
-                ref={slotRef[2]}
-              >
-                {fruits.map((fruit) => (
-                  <div key={Math.random()}>
-                    <span>{fruit}</span>
-                  </div>
-                ))}
-              </div>
-            </section>
-          </div>
-
-          <button
-            onClick={!rolling && roll}
-            disabled={rolling}
-            className="  btn btn-brand btn-sm block mx-auto space-x-2 text-white w-32 mt-3"
+      <div className="lg:px-12  w-screen h-screen  bg-white dark:bg-slate-900 flex flex-col items-center justify-start">
+        {/* <div className='hidden lg:flex flex-col h-full w-1/4 ml-12 pt-24  space-y-6 overflow-y-auto'>
+        <Filter></Filter>
+        <EventCategories></EventCategories>
+      </div> */}
+        <div className="w-full p-4 flex items-center  max-w-3xl mx-auto">
+          <Link
+            to={`/homescreen/allgames`}
+            className="flex justify-center items-center text-brand3 font-semibold"
           >
-            <span className="text-white">
-              {rolling ? "Rolling..." : "Spin 🎲"}
-            </span>
-          </button>
-
-          {win && (
-            <div className="mt-5 text-center text-2xl text-white">
-              Hurray! You Won
-            </div>
-          )}
+            <ChevronLeft />
+            Back
+          </Link>
+          <span className="text-xl font-bold text-brand1 mx-auto -translate-x-8">
+            SpinGame
+          </span>
+          {/* <span
+          onClick={() => setwalletModalOpen(true)}
+          className="  text-brand1 "
+        >
+          <Wallet />
+        </span> */}
         </div>
+        <div className="flex-grow flex flex-col justify-center items-center w-full max-w-3xl">
+          <h1 className="text-center text-4xl text-white py-6">
+            Make a spin 🎰
+          </h1>
+
+          <div className="SlotMachine">
+            <div className="spin__slot mx-1  ">
+              <section className="spin__section border bg-mintie   rounded-lg">
+                <div className=" spin__container   " ref={slotRef[0]}>
+                  {fruits.map((fruit, i) => (
+                    <div key={i}>
+                      <span>{fruit}</span>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            </div>
+            <div className="spin__slot mx-1">
+              <section className="spin__section border bg-mintie   rounded-lg">
+                <div
+                  className="spin__container bg-dbeats-dark-alt"
+                  ref={slotRef[1]}
+                >
+                  {fruits.map((fruit) => (
+                    <div key={Math.random()}>
+                      <span>{fruit}</span>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            </div>
+            <div className="spin__slot mx-1">
+              <section className="spin__section border bg-mintie   rounded-lg">
+                <div
+                  className="spin__container bg-dbeats-dark-alt shadow-md"
+                  ref={slotRef[2]}
+                >
+                  {fruits.map((fruit) => (
+                    <div key={Math.random()}>
+                      <span>{fruit}</span>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            </div>
+
+            <button
+              onClick={!rolling && roll}
+              disabled={rolling}
+              className="  btn btn-brand btn-sm block mx-auto space-x-2 text-white w-32 mt-3"
+            >
+              <span className="text-white">
+                {rolling ? "Rolling..." : "Spin 🎲"}
+              </span>
+            </button>
+
+            {win && (
+              <div className="mt-5 text-center text-2xl text-white">
+                Hurray! You Won
+              </div>
+            )}
+          </div>
+        </div>{" "}
       </div>
       {/* <Lottie
         className="w-1/2 absolute bottom-0 sm:h-1/2 right-1/2 -z-1"

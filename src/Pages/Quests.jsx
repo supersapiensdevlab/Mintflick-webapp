@@ -54,14 +54,18 @@ function Quests() {
         <EventCategories></EventCategories>
       </div> */}
       <div className="w-full p-4 flex items-center  max-w-3xl mx-auto">
-        <button
+         <button
           onClick={() => navigateTo("../home")}
           className="flex justify-center items-center text-brand3 font-semibold"
         >
           <ChevronLeft />
           Back
         </button>
-        <span className="text-xl font-bold text-brand1 mx-auto">Quests</span>
+        <span className="text-xl font-bold text-brand1 mx-auto -translate-x-8">
+          Quests
+
+          
+        </span>
         {/* <span
           onClick={() => setwalletModalOpen(true)}
           className="  text-brand1 "

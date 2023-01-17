@@ -165,7 +165,6 @@ function VideoPostModal({ setVideoPostModalOpen }) {
     //   });
   };
 
-
   const mintOnSolana = (formData, file) => {
     console.log(selectedVideo.file);
     uploadFile(selectedVideo.file).then(async (cid) => {
@@ -595,7 +594,7 @@ function VideoPostModal({ setVideoPostModalOpen }) {
               required={true}
             />
             <select
-              className="select w-44"
+              className="select w-44 font-semibold"
               onChange={(e) =>
                 setVideoData({ ...videoData, category: e.target.value })
               }
@@ -623,7 +622,7 @@ function VideoPostModal({ setVideoPostModalOpen }) {
               setVideoData({ ...videoData, description: e.target.value })
             }
             style={defaultStyle}
-            className="textarea w-full h-24  pt-2 focus:outline-0 overflow-scroll mentionsinputoverflow"
+            className="textarea font-normal w-full h-24  pt-2 focus:outline-0 overflow-scroll mentionsinputoverflow"
             placeholder={"Enter caption."}
             a11ySuggestionsListLabel={"Suggested mentions"}
             inputRef={mentionsRef}
@@ -655,9 +654,9 @@ function VideoPostModal({ setVideoPostModalOpen }) {
             </label>
           </span>
           {advancedOptionsShow && (
-            <div className="flex gap-1 w-full ">
+            <div className="flex flex-col gap-1 w-full ">
               <select
-                className="select select-xs "
+                className="select font-semibold  "
                 onChange={(e) =>
                   setVideoData({
                     ...videoData,
@@ -673,7 +672,7 @@ function VideoPostModal({ setVideoPostModalOpen }) {
                 ))}
               </select>
               <select
-                className="select select-xs "
+                className="select font-semibold  "
                 onChange={(e) =>
                   setVideoData({ ...videoData, commercialUse: e.target.value })
                 }
@@ -686,7 +685,7 @@ function VideoPostModal({ setVideoPostModalOpen }) {
                 ))}
               </select>
               <select
-                className="select select-xs "
+                className="select font-semibold  "
                 onChange={(e) =>
                   setVideoData({
                     ...videoData,
