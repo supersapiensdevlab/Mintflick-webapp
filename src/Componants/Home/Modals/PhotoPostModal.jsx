@@ -81,41 +81,39 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
     uploadToServer(formData, mintId);
   };
 
-  const mintOnSolana = async (formData) => {
-    uploadFile(selectedPost.file[0]).then(async (cid) => {
-      console.log("stored files with cid:", cid);
-      let url = "https://ipfs.io/ipfs/" + cid + "/" + selectedPost.file[0].name;
-      let image = selectedPost.file[0];
-      await mintNFTOnSolana(
-        State.database.walletAddress,
-        caption,
-        caption,
-        url,
-        image
-      )
-        .then(async (data) => {
-          console.log("MintID", data.data.result.mint);
-          setTokenAddress(data.data.result.mint);
-          await signTransaction(
-            data.data.result.encoded_transaction,
-            `${process.env.REACT_APP_FEEPAYER_PRIVATEKEY}`
-          )
-            .then((res) => {
-              console.log(res);
-              partialSignWithWallet(res, State.database?.provider).then(() => {
-                nftMinted(formData, data.data.result.mint);
-              });
-            })
-            .catch((err) => {
-              console.log(err);
+  const mintOnSolana = async (formData, file, cid) => {
+    console.log("stored files with cid:", cid);
+    let url = "https://ipfs.io/ipfs/" + cid + "/" + selectedPost.file[0].name;
+    let image = selectedPost.file[0];
+    await mintNFTOnSolana(
+      State.database.walletAddress,
+      caption,
+      caption,
+      url,
+      image
+    )
+      .then(async (data) => {
+        console.log("MintID", data.data.result.mint);
+        setTokenAddress(data.data.result.mint);
+        await signTransaction(
+          data.data.result.encoded_transaction,
+          `${process.env.REACT_APP_SIGNER_PRIVATE_KEY}`
+        )
+          .then((res) => {
+            console.log(res);
+            partialSignWithWallet(res, State.database?.provider).then(() => {
+              nftMinted(formData, data.data.result.mint);
             });
-        })
-        .catch((err) => {
-          console.log(err);
-          State.toast("error", "Error minting NFT. Please try again!");
-          clearData();
-        });
-    });
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      })
+      .catch((err) => {
+        console.log(err);
+        State.toast("error", "Error minting NFT. Please try again!");
+        clearData();
+      });
   };
 
   const mintOnPolygon = (formData, file) => {
@@ -191,6 +189,12 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
           formData.append("tagged", filter);
           console.log(filter);
           if (isNFT) {
+            console.log("Minting...");
+            // Display the key/value pairs
+            for (var pair of formData.entries()) {
+              console.log(pair[0] + ", " + pair[1]);
+            }
+
             var ts = Math.round(new Date().getTime() / 1000);
             let metadata = {
               image:
@@ -227,9 +231,11 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
             console.log(file);
 
             if (State.database.chainId === 1) {
+              console.log("Polygon...");
               mintOnPolygon(formData, file);
             } else if (State.database.chainId === 0) {
-              mintOnSolana(formData, file);
+              console.log("Solana...");
+              mintOnSolana(formData, file, cid);
             }
           } else {
             uploadToServer(formData, null);

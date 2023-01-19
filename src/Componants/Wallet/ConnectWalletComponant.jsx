@@ -10,7 +10,6 @@ import useWeb3Auth from "../../Hooks/useWeb3Auth";
 import { Rocket } from "tabler-icons-react";
 import Emoji from "react-emojis";
 import useWebModal from "./useWebModal";
-
 function ConnectWalletComponant() {
   const wallets = [twitter, discord, instagram];
   const links = [

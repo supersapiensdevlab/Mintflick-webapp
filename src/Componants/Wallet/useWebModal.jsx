@@ -14,16 +14,16 @@ import googleLogo from "../../Assets/logos/icons/google.svg";
 
 import RPC from "./solanaRPC";
 
-import {
-  WALLET_ADAPTERS,
-  CHAIN_NAMESPACES,
-  SafeEventEmitterProvider,
-} from "@web3auth/base";
+// import {
+//   WALLET_ADAPTERS,
+//   CHAIN_NAMESPACES,
+//   SafeEventEmitterProvider,
+// } from "@web3auth/base";
 
 function useWebModal() {
   const State = useContext(UserContext);
   const navigateTo = useNavigate();
-   
+
   const getProvider = async () => {
     if ("solana" in window) {
       const provider = window.solana;
@@ -34,7 +34,7 @@ function useWebModal() {
   };
 
   async function isUserAvaliable(walletAddress, provider) {
-    console.log(walletAddress);
+    console.log("Checking for User with Wallet:", walletAddress);
     await axios({
       method: "post",
       url: `${process.env.REACT_APP_SERVER_URL}/user/getuser_by_wallet`,
@@ -66,11 +66,13 @@ function useWebModal() {
         let questFlow = localStorage.getItem("questFlow");
         if (questFlow) {
           localStorage.removeItem("questFlow");
-          response.status === 200 && navigateTo("/homescreen/quest-details/"+localStorage.getItem("questId"));
+          response.status === 200 &&
+            navigateTo(
+              "/homescreen/quest-details/" + localStorage.getItem("questId")
+            );
+        } else {
+          response.status === 200 && navigateTo("/homescreen/home");
         }
-        else{
-        response.status === 200 && navigateTo("/homescreen/home");
-      }
       })
       .catch(function (error) {
         console.log(error);
@@ -114,87 +116,73 @@ function useWebModal() {
     },
   };
 
-  // const newSolanaWalletProvider = {
-  //   torus: {
-  //     package: SolanaTorus, // required
-  //     options: {
-  //       networkParams: {
-  //         chainId: "0x2", // default: 1
-  //         networkName: "Solana Testnet",
-  //       },
-  //     },
-  //   },
-  // };
+  const newSolanaWalletProvider = {
+    torus: {
+      package: SolanaTorus, // required
+      options: {
+        networkParams: {
+          chainId: "0x3", // default: 1
+          networkName: "Solana Devnet",
+        },
+      },
+    },
+  };
 
   return async function loadWebModal(newWallet, chainName) {
-    if (State.database?.chainId == 0) {
-      // const providerOptions = newWallet
-      //   ? {
-      //       /* See Provider Options Section */ injected: {
-      //         display: {
-      //           name: "Default Wallet",
-      //           description: "Connect with the provider in your Browser",
-      //         },
-      //         options: {
-      //           networkParams: {
-      //             chainId: "0x2", // default: 1
-      //             networkName: "Solana Testnet",
-      //           },
-      //         },
-      //         package: null,
-      //       },
+    if (State.database?.chainId === 0) {
+      const providerOptions = newWallet
+        ? {
+            /* See Provider Options Section */ injected: {
+              display: {
+                name: "Default Wallet",
+                description: "Connect with the provider in your Browser",
+              },
+              options: {
+                networkParams: {
+                  chainId: "0x3", // default: 1
+                  networkName: "Solana Devnet",
+                },
+              },
+              package: null,
+            },
 
-      //       ...newSolanaWalletProvider,
-      //     }
-      //   : {
-      //       torus: {
-      //         package: SolanaTorus, // required
-      //         display: {
-      //           description: "Create your wallet with torus",
-      //         },
-      //         options: {
-      //           networkParams: {
-      //             chainId: "0x2", // default: 1
-      //             networkName: "Solana Testnet",
-      //           },
-      //         },
-      //       },
-      //     };
+            ...newSolanaWalletProvider,
+          }
+        : {
+            newSolanaWalletProvider,
+          };
 
-      // const web3Modal = new Web3Modal({
-      //   disableInjectedProvider: !newWallet,
-      //   network: "mainnet", // optional
-      //   cacheProvider: false, // optional
-      //   providerOptions, // required
-      //   theme: "dark",
-      // });
+      const web3Modal = new Web3Modal({
+        disableInjectedProvider: false,
+        network: "devnet", // optional
+        cacheProvider: true, // optional
+        providerOptions, // required
+        theme: "dark",
+      });
 
-      // const instance = await web3Modal.connect();
-      // const provider = new ethers.providers.Web3Provider(instance);
-      // console.log(provider);
+      let instance;
+      if (web3Modal.cachedProvider) instance = await web3Modal.connect();
+      else instance = await web3Modal.connect();
 
-      // const signer = provider.getSigner();
-      // const Address = await signer.getAddress();
-      // State.updateDatabase({
-      //   walletAddress: Address,
-      // });
+      localStorage.setItem("web3Modal", web3Modal);
+      State.updateDatabase({
+        web3Modal: web3Modal,
+      });
 
-      // console.log(Address);
-      const provider = await getProvider();
-      console.log(provider);
-      if (provider) {
-        try {
-          const response = await provider.connect();
-          const pubKey = await provider.publicKey;
-          console.log(pubKey);
-          const providers = provider;
-          const Address = response.publicKey.toString();
-          isUserAvaliable(Address, providers);
-        } catch (err) {
-          // { code: 4001, message: 'User rejected the request.' }
-        }
-      }
-    } else if (State.database?.chainId == 1) {
+      const provider = new ethers.providers.Web3Provider(instance);
+      console.log("PROVIDER:", provider);
+      const signer = provider.provider.selectedAddress;
+      console.log("SIGNER:", signer);
+      const Address = signer;
+      State.updateDatabase({
+        walletAddress: Address,
+      });
+      //console.log(Address);
+      provider.on("connect", (chainId) => {
+        console.log(chainId);
+      });
+      isUserAvaliable(Address, provider);
+    } else if (State.database?.chainId === 1) {
       const providerOptions = newWallet
         ? {
             /* See Provider Options Section */ injected: {
@@ -255,17 +243,14 @@ function useWebModal() {
       });
 
       let instance;
-      if(web3Modal.cachedProvider)
-      instance = await web3Modal.connect();
-      else 
-      instance = await web3Modal.connect();
+      if (web3Modal.cachedProvider) instance = await web3Modal.connect();
+      else instance = await web3Modal.connect();
 
       localStorage.setItem("web3Modal", web3Modal);
       State.updateDatabase({
         web3Modal: web3Modal,
       });
 
-      
       const provider = new ethers.providers.Web3Provider(instance);
       console.log("PROVIDER:", provider);
       const signer = provider.getSigner();

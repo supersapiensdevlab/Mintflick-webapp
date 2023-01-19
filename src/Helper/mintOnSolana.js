@@ -22,7 +22,7 @@ export const mintNFTOnSolana = async (
     description: description,
     external_url: external_url,
     max_supply: 1,
-    fee_payer: `${process.env.REACT_APP_FEEPAYER_WALLET}`,
+    fee_payer: `3NtakJUHcwJPCxx4qpJRnPK1sfhYk5oeDALp4T6QKD8Y`,
     royalty: 5,
     image: image,
   };
@@ -45,7 +45,7 @@ export const mintNFTOnSolana = async (
 };
 
 export async function signTransaction(transaction, key) {
-  console.log(transaction, key);
+  console.log(transaction, "KEY:", key);
   try {
     const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
     const feePayer = Keypair.fromSecretKey(decode(key));
@@ -60,8 +60,7 @@ export async function signTransaction(transaction, key) {
 }
 
 export async function partialSignWithWallet(encodedTransaction, provider) {
-  console.log(encodedTransaction);
-
+  console.log("PROVIDER:", provider);
   //we have to pass the recoveredTransaction received in the previous step in the encodedTransaction parameter
   const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
   const solanaWallet = new SolanaWallet(provider); // web3auth.provider

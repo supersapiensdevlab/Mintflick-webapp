@@ -1,5 +1,16 @@
 import React, { useContext, useState, useRef, useEffect } from "react";
-import { AccessPoint, Bell, DoorExit, MessageDots, Search, Moon, Sun, HomeCog, Settings, User } from "tabler-icons-react";
+import {
+  AccessPoint,
+  Bell,
+  DoorExit,
+  MessageDots,
+  Search,
+  Moon,
+  Sun,
+  HomeCog,
+  Settings,
+  User,
+} from "tabler-icons-react";
 import { UserContext } from "../../Store";
 import axios from "axios";
 import Main_logo from "../../Assets/logos/Main_logo";
@@ -27,7 +38,7 @@ import { clusterApiUrl, Connection, PublicKey } from "@solana/web3.js";
 function Header() {
   const State = useContext(UserContext);
 
-  const [login, logout] = useWeb3Auth();
+  //const [login, logout] = useWeb3Auth();
   const navigateTo = useNavigate();
   //get all users
   const [alluser, setAllUser] = useState([]);
@@ -547,11 +558,11 @@ function Header() {
                 <User size={22}></User>Profile
               </NavLink>
             </li>
-
             <li onClick={() => setsettingsModalOpen(true)}>
-              <a className=" hover:dark:bg-slate-900"><Settings size={22}></Settings>Settings</a>
+              <a className=" hover:dark:bg-slate-900">
+                <Settings size={22}></Settings>Settings
+              </a>
             </li>
-
             {/* <label className="swap swap-rotate dark:text-gray-100">
               <input
                 onChange={() =>
@@ -574,30 +585,45 @@ function Header() {
                   })
                 }
               >
-               {State.database.dark ? <Moon size={22}></Moon> : <Sun size={22}></Sun>} Mode
+                {State.database.dark ? (
+                  <Moon size={22}></Moon>
+                ) : (
+                  <Sun size={22}></Sun>
+                )}{" "}
+                Mode
               </a>
             </li>
-           
             <li>
               <a className="truncate hover:dark:bg-slate-900 text-emerald-600">
-              {State.database.chainId===0? <SolanaToken
-            className={State.database.chainId === 1 ? "saturate-0" : null}
-          />:<PolygonToken
-          className={State.database.chainId === 0 ? "saturate-0" : null}
-        />}  <p className="h-1 w-1 bg-green-700 rounded-full animate-ping"></p>
-                
-                
-                {localStorage.getItem("walletAddress").slice(0, 6)}...{localStorage.getItem("walletAddress").slice(localStorage.getItem("walletAddress").length-4, localStorage.getItem("walletAddress").length)}
-               
-         
-          
+                {State.database.chainId === 0 ? (
+                  <SolanaToken
+                    className={
+                      State.database.chainId === 1 ? "saturate-0" : null
+                    }
+                  />
+                ) : (
+                  <PolygonToken
+                    className={
+                      State.database.chainId === 0 ? "saturate-0" : null
+                    }
+                  />
+                )}{" "}
+                <p className="h-1 w-1 bg-green-700 rounded-full animate-ping"></p>
+                {localStorage.getItem("walletAddress").slice(0, 6)}...
+                {localStorage
+                  .getItem("walletAddress")
+                  .slice(
+                    localStorage.getItem("walletAddress").length - 4,
+                    localStorage.getItem("walletAddress").length
+                  )}
               </a>
-            </li> <li>
+            </li>{" "}
+            <li>
               <NavLink
                 onClick={() => {
-                  logout();
+                  //logout();
                   localStorage.removeItem("authtoken");
-                  localStorage.removeItem("walletAddress"); 
+                  localStorage.removeItem("walletAddress");
                   window.localStorage.clear();
                 }}
                 to={"/"}
