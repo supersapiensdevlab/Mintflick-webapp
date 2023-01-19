@@ -1,10 +1,11 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import moment from "moment";
 import { ethers } from "ethers";
 import axios from "axios";
 
 import {
   AlertTriangle,
+  ArrowLeft,
   ArrowNarrowLeft,
   ArrowNarrowRight,
   Camera,
@@ -17,9 +18,11 @@ import {
 import { UserContext } from "../../Store";
 import coverImage from "../../Assets/backgrounds/cover.png";
 import EventCard from "./EventCard";
+import { useNavigate } from "react-router-dom";
 const { ethereum } = window;
 function CreateEvent() {
   const State = useContext(UserContext);
+  const navigateTo = useNavigate();
 
   const [step, setstep] = useState(1);
 
@@ -537,376 +540,374 @@ function CreateEvent() {
     }
   };
 
+  useEffect(() => {
+    State.updateDatabase({ showHeader: false });
+    State.updateDatabase({ showBottomNav: false });
+  }, []);
+
   return (
-    <div className=" flex-col lg:px-12 flex justify-start items-center w-screen h-screen  bg-white dark:bg-slate-900 text-white">
-      <div className="h-20 lg:h-32 w-full bg-transparent"></div>
-      <div className="flex-grow w-full overflow-auto ">
-        <div className="h-fit mx-auto p-4 text-brand3 w-full  sm:max-w-lg flex flex-col gap-2 sm:rounded-xl bg-slate-100 dark:bg-slate-800">
-          {step !== 1 && (
-            <button
-              onClick={() => setstep(step - 1)}
-              className="flex justify-start items-center text-brand3 font-semibold"
-            >
-              <ChevronLeft />
-              Back
-            </button>
-          )}
-          <span className="mx-auto my-2 text-5xl font-bold text-brand-gradient flex">
-            {step === 1 && "Event Details"}
-            {step === 2 && "Some more Details"}
-            {step === 3 && "Almost Done"}
-            {step === 4 && "Review"}
-          </span>
-          <progress
-            className="progress progress-success w-full"
-            value={step * 20}
-            max="100"
-          ></progress>{" "}
-          {error && (
-            <div className="alert alert-error shadow-lg text-white">
-              <div>
-                <AlertTriangle />
-                <span className="font-semibold">
-                  Please fill all the details.
-                </span>
-              </div>
+    <div className="lg:px-12  w-screen h-screen  bg-white dark:bg-slate-900 flex flex-col items-center">
+      <div className="w-full p-4 flex items-center justify-end   max-w-3xl mx-auto">
+        <button
+          onClick={() => navigateTo("../marketPlace")}
+          className="flex w-fit justify-center items-center text-brand3 font-semibold"
+        >
+          {/* <ChevronLeft /> */}
+          Cancel
+        </button>
+      </div>{" "}
+      <div className="flex-grow flex flex-col w-full p-4 overflow-y-auto max-w-2xl md:rounded-lg gap-2 text-brand3 bg-slate-100 dark:bg-slate-800">
+        {step !== 1 && (
+          <button
+            onClick={() => setstep(step - 1)}
+            className="flex justify-start items-center gap-2 text-brand3 font-semibold"
+          >
+            <ArrowLeft />
+            Previous step
+          </button>
+        )}
+        <span className="mx-auto my-2 text-5xl font-bold text-brand-gradient flex">
+          {step === 1 && "Event Details"}
+          {step === 2 && "Some more Details"}
+          {step === 3 && "Almost Done"}
+          {step === 4 && "Review"}
+        </span>
+        <progress
+          className="progress progress-success w-full"
+          value={step * 20}
+          max="100"
+        ></progress>{" "}
+        {error && (
+          <div className="alert alert-error shadow-lg text-white">
+            <div>
+              <AlertTriangle />
+              <span className="font-semibold">
+                Please fill all the details.
+              </span>
             </div>
-          )}
-          {step === 1 && (
-            <>
-              <div className="mt-2 ">
-                <label className="ml-2 text-sm font-bold">Event Name</label>
+          </div>
+        )}
+        {step === 1 && (
+          <>
+            <div className="mt-2 ">
+              <label className="ml-2 text-sm font-bold">Event Name</label>
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setname(e.target.value)}
+                placeholder="Name of event"
+                className="input input-bordered w-full flex-grow"
+              />
+            </div>
+            <div className="mt-2 ">
+              <label className="ml-2 text-sm font-bold">Event Type</label>
+              <select
+                onChange={(e) => settype(e.target.value)}
+                className="select block w-full font-semibold"
+              >
+                <option disabled selected>
+                  Type of event
+                </option>
+                <option>Online</option>
+                <option>In-person</option>
+              </select>
+            </div>
+            <div className="mt-2 ">
+              <label className="ml-2 text-sm font-bold">Event Category</label>
+              <select
+                onChange={(e) => setCategory(e.target.value)}
+                className="select block w-full font-semibold"
+              >
+                <option disabled selected>
+                  Category of event
+                </option>
+                <option>Party</option>
+                <option>Meetup</option>
+              </select>
+            </div>
+            <label className="cursor-pointer label w-fit gap-2 ">
+              <span className="text-brand3">Is it a free event?</span>
+              <input
+                type="checkbox"
+                className="toggle toggle-primary"
+                checked={isFreeEvent}
+                onChange={() => setisFreeEvent(!isFreeEvent)}
+              />
+            </label>
+            {!isFreeEvent && (
+              <div className=" ">
+                <label className="ml-2 text-sm font-bold">Ticket Price</label>
                 <input
+                  value={ticketPrice}
+                  onChange={(e) => setticketPrice(e.target.value)}
                   type="text"
-                  value={name}
-                  onChange={(e) => setname(e.target.value)}
-                  placeholder="Name of event"
+                  placeholder="Price of a ticket"
                   className="input input-bordered w-full flex-grow"
                 />
               </div>
-              <div className="mt-2 ">
-                <label className="ml-2 text-sm font-bold">Event Type</label>
-                <select
-                  onChange={(e) => settype(e.target.value)}
-                  className="select block w-full font-semibold"
-                >
-                  <option disabled selected>
-                    Type of event
-                  </option>
-                  <option>Online</option>
-                  <option>In-person</option>
-                </select>
-              </div>
-              <div className="mt-2 ">
-                <label className="ml-2 text-sm font-bold">Event Category</label>
-                <select
-                  onChange={(e) => setCategory(e.target.value)}
-                  className="select block w-full font-semibold"
-                >
-                  <option disabled selected>
-                    Category of event
-                  </option>
-                  <option>Party</option>
-                  <option>Meetup</option>
-                </select>
-              </div>
-              <label className="cursor-pointer label w-fit gap-2 ">
-                <span className="text-brand3">Is it a free event?</span>
-                <input
-                  type="checkbox"
-                  className="toggle toggle-primary"
-                  checked={isFreeEvent}
-                  onChange={() => setisFreeEvent(!isFreeEvent)}
-                />
-              </label>
-              {!isFreeEvent && (
-                <div className=" ">
-                  <label className="ml-2 text-sm font-bold">Ticket Price</label>
-                  <input
-                    value={ticketPrice}
-                    onChange={(e) => setticketPrice(e.target.value)}
-                    type="text"
-                    placeholder="Price of a ticket"
-                    className="input input-bordered w-full flex-grow"
-                  />
-                </div>
-              )}
+            )}
 
-              <label className="cursor-pointer label w-fit gap-2 ">
-                <span className="text-brand3">Unlimited Tickets</span>
+            <label className="cursor-pointer label w-fit gap-2 ">
+              <span className="text-brand3">Unlimited Tickets</span>
+              <input
+                type="checkbox"
+                className="toggle toggle-primary"
+                checked={isUnlimited}
+                onChange={() => setisUnlimited(!isUnlimited)}
+              />
+            </label>
+            {!isUnlimited && (
+              <div className="">
+                <label className="ml-2 text-sm font-bold">Total tickets</label>
                 <input
-                  type="checkbox"
-                  className="toggle toggle-primary"
-                  checked={isUnlimited}
-                  onChange={() => setisUnlimited(!isUnlimited)}
-                />
-              </label>
-              {!isUnlimited && (
-                <div className="">
-                  <label className="ml-2 text-sm font-bold">
-                    Total tickets
-                  </label>
-                  <input
-                    value={totalTickets}
-                    onChange={(e) => settotalTickets(e.target.value)}
-                    type="text"
-                    placeholder="How many tickets you want to generate?"
-                    className="input input-bordered w-full flex-grow"
-                  />
-                </div>
-              )}
-
-              <button
-                onClick={() => {
-                  name && type && Category && setstep(2);
-                  name && type && Category ? seterror(false) : seterror(true);
-                }}
-                className="mt-2 btn gap-2 btn-brand capitalize"
-              >
-                Next <ArrowNarrowRight />
-              </button>
-            </>
-          )}
-          {step === 2 && (
-            <>
-              <div className="mt-2 ">
-                <label className="ml-2 text-sm font-bold">Description</label>
-                <textarea
-                  value={description}
-                  onChange={(e) => setdescription(e.target.value)}
+                  value={totalTickets}
+                  onChange={(e) => settotalTickets(e.target.value)}
                   type="text"
-                  placeholder="Description of event"
-                  className="textarea textarea-bordered w-full flex-grow"
+                  placeholder="How many tickets you want to generate?"
+                  className="input input-bordered w-full flex-grow"
                 />
               </div>
-              <div className="mt-2 ">
-                <label className="ml-2 text-sm font-bold">
-                  Event Start Time
-                </label>
-                <input
-                  value={startDate}
-                  onChange={(e) => handleStartDateChange(e)}
-                  className="w-full input"
-                  type={"datetime-local"}
-                  min={moment().format("YYYY-MM-DDThh:mm")}
-                  required={true}
-                />
-              </div>{" "}
-              <div className="mt-2 ">
-                <label className="ml-2 text-sm font-bold">Event End Time</label>
-                <input
-                  value={endDate}
-                  onChange={(e) => handleEndDateChange(e)}
-                  className="w-full input"
-                  type={"datetime-local"}
-                  min={startDate}
-                  required={true}
-                />
-              </div>{" "}
-              <div className="mt-2 ">
-                <label className="ml-2 text-sm font-bold">Event Timezone</label>
-                <select
-                  onChange={(e) => settimezone(e.target.value)}
-                  className="select block w-full font-semibold"
-                >
-                  <option disabled selected>
-                    Select timezone
-                  </option>
-                  {timezones.map((timezone) => (
-                    <option>{timezone}</option>
-                  ))}
-                </select>
-              </div>
-              <div className="mt-2 ">
-                <label className="ml-2 text-sm font-bold">Ticket Image</label>
-                <label
-                  htmlFor="post_announcement_image"
-                  className=" cursor-pointer flex justify-between items-center gap-2  w-full p-2 border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4"
-                >
-                  {selectedPost ? (
-                    selectedPost.file ? (
-                      <div className="flex items-center">
-                        <FileCheck className="text-emerald-700" />
-                        {selectedPost.file[0].name.substring(0, 16)}
-                      </div>
-                    ) : (
-                      "No file choosen!"
-                    )
-                  ) : (
-                    <div className="flex items-center gap-1">
-                      <Photo />
-                      Choose file *
+            )}
+
+            <button
+              onClick={() => {
+                name && type && Category && setstep(2);
+                name && type && Category ? seterror(false) : seterror(true);
+              }}
+              className="mt-2 btn gap-2 btn-brand capitalize"
+            >
+              Next <ArrowNarrowRight />
+            </button>
+          </>
+        )}
+        {step === 2 && (
+          <>
+            <div className="mt-2 ">
+              <label className="ml-2 text-sm font-bold">Description</label>
+              <textarea
+                value={description}
+                onChange={(e) => setdescription(e.target.value)}
+                type="text"
+                placeholder="Description of event"
+                className="textarea textarea-bordered w-full flex-grow"
+              />
+            </div>
+            <div className="mt-2 ">
+              <label className="ml-2 text-sm font-bold">Event Start Time</label>
+              <input
+                value={startDate}
+                onChange={(e) => handleStartDateChange(e)}
+                className="w-full input"
+                type={"datetime-local"}
+                min={moment().format("YYYY-MM-DDThh:mm")}
+                required={true}
+              />
+            </div>{" "}
+            <div className="mt-2 ">
+              <label className="ml-2 text-sm font-bold">Event End Time</label>
+              <input
+                value={endDate}
+                onChange={(e) => handleEndDateChange(e)}
+                className="w-full input"
+                type={"datetime-local"}
+                min={startDate}
+                required={true}
+              />
+            </div>{" "}
+            <div className="mt-2 ">
+              <label className="ml-2 text-sm font-bold">Event Timezone</label>
+              <select
+                onChange={(e) => settimezone(e.target.value)}
+                className="select block w-full font-semibold"
+              >
+                <option disabled selected>
+                  Select timezone
+                </option>
+                {timezones.map((timezone) => (
+                  <option>{timezone}</option>
+                ))}
+              </select>
+            </div>
+            <div className="mt-2 ">
+              <label className="ml-2 text-sm font-bold">Ticket Image</label>
+              <label
+                htmlFor="post_announcement_image"
+                className=" cursor-pointer flex justify-between items-center gap-2  w-full p-2 border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4"
+              >
+                {selectedPost ? (
+                  selectedPost.file ? (
+                    <div className="flex items-center">
+                      <FileCheck className="text-emerald-700" />
+                      {selectedPost.file[0].name.substring(0, 16)}
                     </div>
-                  )}
-                  <input
-                    id="post_announcement_image"
-                    type="file"
-                    accept="image/*"
-                    onChange={handleImageChange}
-                    className="sr-only"
-                    required={true}
-                    onClick={(event) => {
-                      event.target.value = null;
-                      setSelectedPost(null);
-                    }}
-                  />
-                  {selectedPost ? (
-                    selectedPost.file ? (
-                      <div className="h-24 w-24 rounded-lg overflow-clip">
-                        <img src={selectedPost.localurl}></img>
-                      </div>
-                    ) : null
                   ) : (
-                    <></>
-                  )}
-                </label>
-              </div>
-              <div className="mt-2 ">
-                <label className="ml-2 text-sm font-bold">Ticket Gallery</label>
-                <label
-                  htmlFor="post_announcement_image"
-                  className=" cursor-pointer flex flex-col justify-between items-start gap-2  w-full p-2 border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4"
-                >
-                  <div className="flex flex-wrap w-full gap-2">
-                    <div className="border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg h-12 aspect-video"></div>
-                    <div className="border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg h-12 aspect-video"></div>
-                    <div className="border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg h-12 aspect-video"></div>
-                    <div className="border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg h-12 aspect-video"></div>
-                  </div>
+                    "No file choosen!"
+                  )
+                ) : (
                   <div className="flex items-center gap-1">
-                    <Camera />
-                    Add Photo
+                    <Photo />
+                    Choose file *
                   </div>
+                )}
+                <input
+                  id="post_announcement_image"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  className="sr-only"
+                  required={true}
+                  onClick={(event) => {
+                    event.target.value = null;
+                    setSelectedPost(null);
+                  }}
+                />
+                {selectedPost ? (
+                  selectedPost.file ? (
+                    <div className="h-24 w-24 rounded-lg overflow-clip">
+                      <img src={selectedPost.localurl}></img>
+                    </div>
+                  ) : null
+                ) : (
+                  <></>
+                )}
+              </label>
+            </div>
+            <div className="mt-2 ">
+              <label className="ml-2 text-sm font-bold">Ticket Gallery</label>
+              <label
+                htmlFor="post_announcement_image"
+                className=" cursor-pointer flex flex-col justify-between items-start gap-2  w-full p-2 border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4"
+              >
+                <div className="flex flex-wrap w-full gap-2">
+                  <div className="border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg h-12 aspect-video"></div>
+                  <div className="border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg h-12 aspect-video"></div>
+                  <div className="border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg h-12 aspect-video"></div>
+                  <div className="border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg h-12 aspect-video"></div>
+                </div>
+                <div className="flex items-center gap-1">
+                  <Camera />
+                  Add Photo
+                </div>
 
-                  <input
-                    id="post_announcement_image"
-                    type="file"
-                    accept="image/*"
-                    onChange={handleImageChange}
-                    className="sr-only"
-                    required={true}
-                    onClick={(event) => {
-                      event.target.value = null;
-                      setSelectedPost(null);
-                    }}
-                  />
-                </label>
-              </div>
-              <button
-                onClick={() => {
-                  description &&
-                    startDate &&
-                    endDate &&
-                    timezone &&
-                    selectedPost &&
-                    setstep(3);
-
-                  description &&
+                <input
+                  id="post_announcement_image"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  className="sr-only"
+                  required={true}
+                  onClick={(event) => {
+                    event.target.value = null;
+                    setSelectedPost(null);
+                  }}
+                />
+              </label>
+            </div>
+            <button
+              onClick={() => {
+                description &&
                   startDate &&
                   endDate &&
                   timezone &&
-                  selectedPost
-                    ? seterror(false)
-                    : seterror(true);
-                }}
-                className="mt-2 btn gap-2 btn-brand capitalize"
-              >
-                Next <ArrowNarrowRight />
-              </button>
-            </>
-          )}
-          {step === 3 && (
-            <>
-              <div className="mt-2 ">
-                <label className="ml-2 text-sm font-bold">
-                  Who is hosting event?
-                </label>
-                <div className="h-10 my-2 flex justify-start items-center">
-                  <img
-                    className="h-10 w-10 rounded-full object-cover"
-                    src={
-                      State.database.userData.data?.user.profile_image
-                        ? State.database.userData.data.user.profile_image
-                        : coverImage
-                    }
-                  />
-                  <div className="flex flex-col">
-                    <span className="ml-2 text-lg font-semibold">
-                      {State.database.userData.data?.user.username
-                        ? State.database.userData.data.user.username
-                        : "loading..."}
-                    </span>
-                    <span className="ml-2 text-xs font-semibold">
-                      {`(${localStorage.getItem("walletAddress")})`}
-                    </span>
-                  </div>
+                  selectedPost &&
+                  setstep(3);
+
+                description && startDate && endDate && timezone && selectedPost
+                  ? seterror(false)
+                  : seterror(true);
+              }}
+              className="mt-2 btn gap-2 btn-brand capitalize"
+            >
+              Next <ArrowNarrowRight />
+            </button>
+          </>
+        )}
+        {step === 3 && (
+          <>
+            <div className="mt-2 ">
+              <label className="ml-2 text-sm font-bold">
+                Who is hosting event?
+              </label>
+              <div className="h-10 my-2 flex justify-start items-center">
+                <img
+                  className="h-10 w-10 rounded-full object-cover"
+                  src={
+                    State.database.userData.data?.user.profile_image
+                      ? State.database.userData.data.user.profile_image
+                      : coverImage
+                  }
+                />
+                <div className="flex flex-col">
+                  <span className="ml-2 text-lg font-semibold">
+                    {State.database.userData.data?.user.username
+                      ? State.database.userData.data.user.username
+                      : "loading..."}
+                  </span>
+                  <span className="ml-2 text-xs font-semibold">
+                    {`(${localStorage.getItem("walletAddress")})`}
+                  </span>
                 </div>
               </div>
-              {type === "In-person" ? (
-                <div className="mt-2 ">
-                  <label className="ml-2 text-sm font-bold">
-                    Event Location
-                  </label>
-                  <textarea
-                    value={location}
-                    onChange={(e) => setlocation(e.target.value)}
-                    type="text"
-                    placeholder="Location of event"
-                    className="textarea textarea-bordered w-full flex-grow"
-                  />
-                </div>
-              ) : (
-                <div className="mt-2 ">
-                  <label className="ml-2 text-sm font-bold">Event Link</label>
-                  <input
-                    value={eventLink}
-                    onChange={(e) => seteventLink(e.target.value)}
-                    type="text"
-                    placeholder="Link of event"
-                    className="input input-bordered w-full flex-grow"
-                  />
-                </div>
-              )}
+            </div>
+            {type === "In-person" ? (
+              <div className="mt-2 ">
+                <label className="ml-2 text-sm font-bold">Event Location</label>
+                <textarea
+                  value={location}
+                  onChange={(e) => setlocation(e.target.value)}
+                  type="text"
+                  placeholder="Location of event"
+                  className="textarea textarea-bordered w-full flex-grow"
+                />
+              </div>
+            ) : (
+              <div className="mt-2 ">
+                <label className="ml-2 text-sm font-bold">Event Link</label>
+                <input
+                  value={eventLink}
+                  onChange={(e) => seteventLink(e.target.value)}
+                  type="text"
+                  placeholder="Link of event"
+                  className="input input-bordered w-full flex-grow"
+                />
+              </div>
+            )}
 
-              <button
-                onClick={() => {
-                  type === "In-person" && location
-                    ? setstep(4)
-                    : seterror(true);
-                  type !== "In-person" && eventLink
-                    ? setstep(4)
-                    : seterror(true);
+            <button
+              onClick={() => {
+                type === "In-person" && location ? setstep(4) : seterror(true);
+                type !== "In-person" && eventLink ? setstep(4) : seterror(true);
 
-                  type === "In-person" && location && seterror(false);
-                  type !== "In-person" && eventLink && seterror(false);
-                }}
-                className="mt-2 btn gap-2 btn-brand capitalize"
-              >
-                Review Details <ArrowNarrowRight />
-              </button>
-            </>
-          )}
-          {step === 4 && (
-            <>
-              <EventCard
-                type={type}
-                Category={Category}
-                isFreeEvent={isFreeEvent}
-                selectedPostImg={selectedPost.localurl}
-                name={name}
-                userImg={
-                  State.database.userData.data?.user.profile_image
-                    ? State.database.userData.data.user.profile_image
-                    : coverImage
-                }
-                username={
-                  State.database.userData.data?.user.username
-                    ? State.database.userData.data.user.username
-                    : "loading..."
-                }
-                description={description}
-              />
-              {/* <div className="mx-auto relative h-fit w-96  rounded-lg bg-white dark:bg-slate-700 hover:scale-105 transition-all ease-in-out shadow-md overflow-hidden">
+                type === "In-person" && location && seterror(false);
+                type !== "In-person" && eventLink && seterror(false);
+              }}
+              className="mt-2 btn gap-2 btn-brand capitalize"
+            >
+              Review Details <ArrowNarrowRight />
+            </button>
+          </>
+        )}
+        {step === 4 && (
+          <>
+            <EventCard
+              type={type}
+              Category={Category}
+              isFreeEvent={isFreeEvent}
+              selectedPostImg={selectedPost.localurl}
+              name={name}
+              userImg={
+                State.database.userData.data?.user.profile_image
+                  ? State.database.userData.data.user.profile_image
+                  : coverImage
+              }
+              username={
+                State.database.userData.data?.user.username
+                  ? State.database.userData.data.user.username
+                  : "loading..."
+              }
+              description={description}
+            />
+            {/* <div className="mx-auto relative h-fit w-96  rounded-lg bg-white dark:bg-slate-700 hover:scale-105 transition-all ease-in-out shadow-md overflow-hidden">
               <div className=" absolute flex items-center gap-1  top-2 left-2 w-fit">
                 <div className=" bg-slate-700/60 backdrop-blur-sm rounded-full px-2 text-slate-100 text-sm font-semibold">
                   {type}
@@ -955,19 +956,17 @@ function CreateEvent() {
               </div>
              
             </div>*/}
-              <button
-                onClick={() => {
-                  run();
-                }}
-                className="mt-2 btn gap-2 btn-brand capitalize"
-              >
-                Publish event <Confetti />
-              </button>
-            </>
-          )}
-        </div>
+            <button
+              onClick={() => {
+                run();
+              }}
+              className="mt-2 btn gap-2 btn-brand capitalize"
+            >
+              Publish event <Confetti />
+            </button>
+          </>
+        )}
       </div>
-      <div className="h-24 lg:h-0 w-full bg-transparent"></div>
     </div>
   );
 }

@@ -4,7 +4,7 @@ import EventCategories from "./EventCategories";
 import Filter from "./Filter";
 import { useState, useEffect } from "react";
 import { ChevronLeft, Plus, Search } from "tabler-icons-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "../../Store";
 function Event() {
   const [payWallStatus, setPayWallStatus] = useState();

@@ -12,6 +12,7 @@ function EventCard({
   description,
   startDate,
   lockId,
+  id,
 }) {
   function formatAMPM(datee) {
     let date = new Date(datee);
@@ -48,8 +49,8 @@ function EventCard({
 
   return (
     <NavLink
-      to={"../event-details/" + lockId}
-      className="mx-auto relative h-fit w-full sm:w-96  sm:rounded-lg bg-white dark:bg-slate-700 sm:hover:scale-105 cursor-pointer transition-all ease-in-out shadow-xl overflow-hidden"
+      to={"../event-details/" + id}
+      className="mx-auto relative h-fit w-full sm:w-96  rounded-lg bg-white dark:bg-slate-700 sm:hover:scale-105 cursor-pointer transition-all ease-in-out shadow-xl overflow-hidden"
     >
       <div className=" absolute flex items-center gap-1  top-2 left-2 w-fit">
         <div className=" bg-slate-700/60 backdrop-blur-sm rounded-full px-2 text-slate-100 text-sm font-semibold">
