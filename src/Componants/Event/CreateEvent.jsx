@@ -391,8 +391,8 @@ function CreateEvent() {
   const [isUnlimited, setisUnlimited] = useState(false);
 
   const [selectedPost, setSelectedPost] = useState(null);
-  const [location, setlocation] = useState(false);
-  const [eventLink, seteventLink] = useState(false);
+  const [location, setlocation] = useState("");
+  const [eventLink, seteventLink] = useState("");
   const [uploadingEvent, setUploadingEvent] = useState(false);
   const [lockId, setLockId] = useState();
 
@@ -562,7 +562,7 @@ function CreateEvent() {
             onClick={() => setstep(step - 1)}
             className="flex justify-start items-center gap-2 text-brand3 font-semibold"
           >
-            <ArrowLeft />
+            <ChevronLeft />
             Previous step
           </button>
         )}
@@ -895,6 +895,7 @@ function CreateEvent() {
               isFreeEvent={isFreeEvent}
               selectedPostImg={selectedPost.localurl}
               name={name}
+              startDate={startDate}
               userImg={
                 State.database.userData.data?.user.profile_image
                   ? State.database.userData.data.user.profile_image

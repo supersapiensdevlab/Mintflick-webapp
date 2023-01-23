@@ -328,16 +328,15 @@ function EventDetails(lockAddress) {
             Register for {data ? data.ticketPrice : ""}
           </button>
         </div>
-        <div className="flex   gap-2 bg-slate-100 dark:bg-slate-700 sm:rounded-xl p-2 sm:p-4 mx-auto w-full justify-between items-center max-w-2xl">
+        <div className="flex   gap-1 bg-slate-100 dark:bg-slate-700 sm:rounded-xl p-2 sm:p-4 mx-auto w-full justify-around items-center max-w-2xl">
+          <Ticket className="text-success -rotate-45" />{" "}
           <progress
             className="progress progress-success progres w-2/3"
             value="10"
             max="100"
           ></progress>
-
           <span className="flex items-center gap-1 w-fit text-sm font-semibold text-brand1">
-            <Ticket className="text-success -rotate-45" />
-            34 Tickets left
+            {data ? data.ticketCount : ""} Tickets left
           </span>
         </div>
         <div className="flex flex-col gap-2 bg-slate-100 dark:bg-slate-700 sm:rounded-xl p-2 sm:p-4 mx-auto w-full justify-start items-start max-w-2xl">
@@ -350,7 +349,6 @@ function EventDetails(lockAddress) {
           <div className="flex flex-col gap-2 bg-slate-100 dark:bg-slate-700 sm:rounded-xl p-2 sm:p-4 mx-auto w-full justify-start items-start max-w-2xl">
             <span className="text-lg font-semibold text-brand1">Location</span>
             <p className="text-base font-normal text-brand1">
-              {" "}
               {data ? data.location : ""}
             </p>
           </div>
@@ -358,7 +356,6 @@ function EventDetails(lockAddress) {
           <div className="flex flex-col gap-2 bg-slate-100 dark:bg-slate-700 sm:rounded-xl p-2 sm:p-4 mx-auto w-full justify-start items-start max-w-2xl">
             <span className="text-lg font-semibold text-brand1">Link</span>
             <p className="text-base font-normal text-brand1">
-              {" "}
               {data ? data.eventUrl : ""}
             </p>
           </div>
