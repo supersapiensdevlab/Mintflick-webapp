@@ -1,8 +1,13 @@
 import axios from "axios";
 import { SolanaWallet } from "@web3auth/solana-provider";
-import { Keypair, Transaction } from "@solana/web3.js";
 import { decode } from "bs58";
-import { clusterApiUrl, Connection, PublicKey } from "@solana/web3.js";
+import {
+  clusterApiUrl,
+  Connection,
+  PublicKey,
+  Keypair,
+  Transaction,
+} from "@solana/web3.js";
 
 export const mintNFTOnSolana = async (
   creator_wallet,
@@ -49,11 +54,18 @@ export async function signTransaction(transaction, key) {
   try {
     const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
     const feePayer = Keypair.fromSecretKey(decode(key));
+    console.log(feePayer);
     const recoveredTransaction = Transaction.from(
       Buffer.from(transaction, "base64")
     );
-    recoveredTransaction.partialSign(feePayer); //partially signing transaction with privatekey of the fee_payer
-    return recoveredTransaction;
+    console.log(recoveredTransaction);
+    const signedTransaction = recoveredTransaction.partialSign(feePayer); //partially signing transaction with privatekey of the fee_payer
+    console.log(signedTransaction); // return recoveredTransaction;
+    const txnSignature = await connection.sendRawTransaction(
+      signedTransaction.serialize()
+    );
+    return txnSignature;
+    // return recoveredTransaction;
   } catch (error) {
     console.log(error);
   }
