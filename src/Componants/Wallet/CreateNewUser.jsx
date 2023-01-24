@@ -40,18 +40,14 @@ function CreateNewUser() {
           console.log("wallet address saved in storage");
           setloader(false);
           seterror("");
-           let questId =localStorage.getItem("questId");
+          let questId = localStorage.getItem("questId");
 
-           if(questId && localStorage.getItem("taskId")){
-            localStorage.setItem("questFlow",false);
-            navigateTo("/quest-details/"+questId);
-            
-           }
-           else{
+          if (questId && localStorage.getItem("taskId")) {
+            localStorage.setItem("questFlow", false);
+            navigateTo("/quest-details/" + questId);
+          } else {
             navigateTo("/homescreen/home");
-           };
-          
-          
+          }
         }
       })
       .catch(function (error) {
@@ -75,7 +71,7 @@ function CreateNewUser() {
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          name && email
+          name && email && State.database.walletAddress
             ? createNewUser(State.database.walletAddress)
             : seterror("Enter name and email!");
         }}

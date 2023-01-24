@@ -10,6 +10,8 @@ import useWeb3Auth from "../../Hooks/useWeb3Auth";
 import { Rocket } from "tabler-icons-react";
 import Emoji from "react-emojis";
 import useWebModal from "./useWebModal";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 function ConnectWalletComponant() {
   const wallets = [twitter, discord, instagram];
   const links = [
@@ -19,9 +21,72 @@ function ConnectWalletComponant() {
   ];
 
   const State = useContext(UserContext);
+  const navigateTo = useNavigate();
 
   // const [login, logout] = useWeb3Auth();
   const modal = useWebModal();
+
+  async function isUserAvaliable(walletAddress, provider) {
+    console.log("Checking for User with Wallet:", walletAddress);
+    await axios({
+      method: "post",
+      url: `${process.env.REACT_APP_SERVER_URL}/user/getuser_by_wallet`,
+      data: {
+        walletId: walletAddress,
+      },
+    })
+      .then((response) => {
+        console.log(response);
+
+        State.updateDatabase({
+          userData: response,
+        });
+        console.log("user data saved in state");
+        localStorage.setItem("authtoken", response.data.jwtToken);
+        console.log("auth token saved in storage");
+        localStorage.setItem("walletAddress", walletAddress);
+
+        console.log("wallet address saved in storage");
+
+        // localStorage.setItem("provider", provider);
+        State.updateDatabase({
+          provider: provider,
+        });
+        console.log("provider saved in state");
+        // localStorage.setItem(
+        //   "v2provider",
+        //   JSON.stringify(provider, getCircularReplacer())
+        // );
+        let questFlow = localStorage.getItem("questFlow");
+        if (questFlow) {
+          localStorage.removeItem("questFlow");
+          response.status === 200 &&
+            navigateTo(
+              "/homescreen/quest-details/" + localStorage.getItem("questId")
+            );
+        } else {
+          response.status === 200 && navigateTo("/homescreen/home");
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+        State.updateDatabase({
+          provider: provider,
+        });
+        navigateTo("/create_new_user");
+      });
+  }
+
+  const handlePhantomConnect = () => {
+    window.phantom.solana
+      .connect()
+      .then(console.log(window.phantom.solana.publicKey.toBase58()));
+    let address = window.phantom.solana.publicKey.toBase58();
+    State.updateDatabase({
+      walletAddress: address,
+    });
+    isUserAvaliable(address, window.phantom.solana);
+  };
 
   return (
     <div
@@ -52,14 +117,17 @@ function ConnectWalletComponant() {
         {/* <button onClick={getUserInfo} className="card">
           Get User Info
         </button> */}
-        {/* <button
-          onClick={async () => {
-            login();
+      </div>{" "}
+      {State.database.chainId === 0 && window.phantom && (
+        <button
+          onClick={() => {
+            handlePhantomConnect();
           }}
-          className='btn btn-outline btn-primary sm:w-1/2'>
-          Create new wallet
-        </button> */}
-      </div>
+          className="btn btn-brand w-full capitalize gap-1"
+        >
+          Connect Phantom wallet
+        </button>
+      )}
       {/* <div className="flex text-white align-middle text-center gap-x-2">
         Supports <SolanaToken size={24}></SolanaToken>
       </div> */}
