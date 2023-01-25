@@ -118,7 +118,7 @@ function ConnectWalletComponant() {
       {/* <button onClick={getUserInfo} className="card">
           Get User Info
         </button> */}
-      {State.database.chainId === 0 && window.phantom && (
+      {State.database.chainId === 0  && (
         <button
           onClick={async () => {
             modal(true);
