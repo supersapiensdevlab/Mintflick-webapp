@@ -145,8 +145,10 @@ function ConnectWalletComponant() {
         </div>{" "}
         <span
           className={`${
-            State.database.chainId === 0 ? "left-0 " : " translate-x-full   "
-          } absolute top-0 h-10 w-1/2 m-1 bg-slate-100/10 backdrop-blur-sm rounded-lg transform transition-all ease-in-out`}
+            State.database.chainId === 0
+              ? "left-0 ml-1"
+              : " translate-x-full -ml-1  "
+          } absolute top-0 h-10 w-1/2 mt-1 mb-1  bg-slate-100/10 backdrop-blur-sm rounded-lg transform transition-all ease-in-out`}
         />
       </div>
       {State.database.chainId === 1 && (
