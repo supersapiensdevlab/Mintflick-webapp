@@ -104,6 +104,51 @@ function ConnectWalletComponant() {
         Connect your crypto wallet to mint your NFTs on Mintflick. If you do not
         have a wallet then click below to create one or login into existing.
       </p>
+      <div className="relative w-full h-12 bg-slate-100/10 backdrop-blur-sm rounded-lg flex ">
+        <div
+          onClick={() =>
+            State.updateDatabase({
+              chainId: 0,
+            })
+          }
+          className="z-50 h-full w-1/2 flex items-center justify-center gap-2 cursor-pointer "
+        >
+          <SolanaToken
+            className={`${State.database.chainId === 1 ? "saturate-0" : null} `}
+          />
+          <sapn
+            className={`${
+              State.database.chainId === 1 ? "text-slate-400" : "text-white"
+            }  font-semibold`}
+          >
+            Solana
+          </sapn>
+        </div>
+        <div
+          onClick={() =>
+            State.updateDatabase({
+              chainId: 1,
+            })
+          }
+          className="z-50 h-full w-1/2 flex items-center justify-center gap-2 cursor-pointer"
+        >
+          <PolygonToken
+            className={State.database.chainId === 0 ? "saturate-0" : null}
+          />
+          <sapn
+            className={`${
+              State.database.chainId === 0 ? "text-slate-400" : "text-white"
+            }  font-semibold`}
+          >
+            Polygon
+          </sapn>
+        </div>{" "}
+        <span
+          className={`${
+            State.database.chainId === 0 ? "left-0 " : " translate-x-full   "
+          } absolute top-0 h-10 w-1/2 m-1 bg-slate-100/10 backdrop-blur-sm rounded-lg transform transition-all ease-in-out`}
+        />
+      </div>
       {State.database.chainId === 1 && (
         <button
           onClick={async () => {
@@ -118,7 +163,7 @@ function ConnectWalletComponant() {
       {/* <button onClick={getUserInfo} className="card">
           Get User Info
         </button> */}
-      {State.database.chainId === 0  && (
+      {State.database.chainId === 0 && (
         <button
           onClick={async () => {
             modal(true);
@@ -197,7 +242,8 @@ function ConnectWalletComponant() {
       {/* <div className="flex text-white align-middle text-center gap-x-2">
         Supports <SolanaToken size={24}></SolanaToken>
       </div> */}
-      <div className="form-control w-fit ">
+
+      {/* <div className="form-control w-fit ">
         <label className="label cursor-pointer gap-4">
           <span className="label-text text-white">Switch Chains</span>
           <SolanaToken
@@ -217,11 +263,9 @@ function ConnectWalletComponant() {
           <PolygonToken
             className={State.database.chainId === 0 ? "saturate-0" : null}
           />
-          {/* {switching ? ( */}
-          {/* <button class="btn btn-ghost btn-square loading"></button> */}
-          {/* ) : null} */}
+        
         </label>
-      </div>
+      </div> */}
       <div className="w-full md:w-fit border p-4 space-y-2 rounded-lg border-slate-800">
         <p className="text-lg font-medium text-brand4">
           Join the MintFlick community
