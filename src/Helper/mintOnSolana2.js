@@ -81,6 +81,7 @@ export const mintNFTOnSolana2 = async (
     .then((res) => {
       response = res;
       console.log(response);
+      const mintId = res.data.result.mint;
       console.log("NFT mint request generated successfully");
       const confirmTransaction = signTransactionKeyWallet(
         res.data.result.encoded_transaction,
@@ -88,7 +89,7 @@ export const mintNFTOnSolana2 = async (
         provider
       );
       console.log(confirmTransaction);
-      return confirmTransaction;
+      return mintId;
       //   const encodedTransaction = signTransaction(
       //     res.data.result.encoded_transaction,
       //     `${process.env.REACT_APP_SIGNER_PRIVATE_KEY}`

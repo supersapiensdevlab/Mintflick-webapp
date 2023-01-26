@@ -251,7 +251,7 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
               let url =
                 "https://ipfs.io/ipfs/" + cid + "/" + selectedPost.file[0].name;
               let image = selectedPost.file[0];
-              mintNFTOnSolana2(
+              const mintId = mintNFTOnSolana2(
                 State.database.walletAddress,
                 State.database?.provider,
                 caption,
@@ -259,7 +259,7 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
                 url,
                 image
               );
-              // uploadToServer(formData, mintId);
+              uploadToServer(formData, mintId);
             }
           } else {
             uploadToServer(formData, null);
