@@ -315,6 +315,7 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
       })
       .then(async (res) => {
         State.toast("success", "Your Photo uploded successfully!");
+        clearData();
         await loadFeed();
       })
       .catch((err) => {
@@ -333,10 +334,6 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
     setShowListingOption(false);
     setMintSuccess("");
   };
-
-  function Log() {
-    console.log("NFT Minted");
-  }
 
   // async function signTransaction(network, transaction, callback) {
   //   //const phantom = new PhantomWalletAdapter();
