@@ -251,15 +251,14 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
               let url =
                 "https://ipfs.io/ipfs/" + cid + "/" + selectedPost.file[0].name;
               let image = selectedPost.file[0];
-              const mintId = mintNFTOnSolana2(
+              mintNFTOnSolana2(
                 State.database.walletAddress,
                 State.database?.provider,
                 caption,
                 caption,
                 url,
                 image
-              );
-              uploadToServer(formData, mintId);
+              ).then((mintId) => uploadToServer(formData, mintId));
             }
           } else {
             uploadToServer(formData, null);
