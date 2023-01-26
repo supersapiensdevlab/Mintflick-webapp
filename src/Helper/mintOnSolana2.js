@@ -10,48 +10,6 @@ import { SolanaWallet } from "@web3auth/solana-provider";
 
 const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
 
-const signTransaction = async (encodedTransaction, fromPrivateKey) => {
-  try {
-    console.log(fromPrivateKey);
-    // const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
-    const feePayer = Keypair.fromSecretKey(decode(fromPrivateKey));
-    console.log(feePayer);
-    const recoveredTransaction = Transaction.from(
-      Buffer.from(encodedTransaction, "base64")
-    );
-    console.log(recoveredTransaction);
-    recoveredTransaction.partialSign(feePayer);
-
-    const serializedTransaction = recoveredTransaction.serialize({
-      requireAllSignatures: false,
-    });
-    // console.log(serializedTransaction);
-    const transactionBase64 = serializedTransaction.toString("base64");
-    console.log(transactionBase64);
-    return recoveredTransaction;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-async function partialSignWithWallet(recoveredTransaction, provider) {
-  console.log("PROVIDER:", provider);
-  //we have to pass the recoveredTransaction received in the previous step in the encodedTransaction parameter
-  const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
-  const solanaWallet = new SolanaWallet(provider); // web3auth.provider
-  console.log(solanaWallet);
-
-  const signedTx = await solanaWallet.signTransaction(recoveredTransaction);
-
-  console.log(signedTx);
-  //signing transaction with the creator_wallet
-  const confirmTransaction = await connection.sendRawTransaction(
-    signedTx.serialize({ requireAllSignatures: false })
-  );
-  console.log(confirmTransaction);
-  return confirmTransaction;
-}
-
 const signTransactionKeyWallet = async (
   encodedTransaction,
   fromPrivateKey,
@@ -70,11 +28,12 @@ const signTransactionKeyWallet = async (
     );
     console.log(recoveredTransaction);
     recoveredTransaction.partialSign(feePayer);
-    const serializedTransaction = recoveredTransaction.serialize({
-      requireAllSignatures: false,
-    });
-    const transactionBase64 = serializedTransaction.toString("base64");
-    console.log(transactionBase64); //partially signing using private key of fee_payer wallet
+    // const serializedTransaction = recoveredTransaction.serialize({
+    //   requireAllSignatures: false,
+    // });
+    // const transactionBase64 = serializedTransaction.toString("base64");
+    // console.log(transactionBase64);
+    //partially signing using private key of fee_payer wallet
 
     const signedTx = await provider.signTransaction(recoveredTransaction); // signing the recovered transaction using the creator_wall
     console.log(signedTx);
@@ -123,11 +82,13 @@ export const mintNFTOnSolana2 = async (
       response = res;
       console.log(response);
       console.log("NFT mint request generated successfully");
-      signTransactionKeyWallet(
+      const confirmTransaction = signTransactionKeyWallet(
         res.data.result.encoded_transaction,
         `${process.env.REACT_APP_SIGNER_PRIVATE_KEY}`,
         provider
       );
+      console.log(confirmTransaction);
+      return confirmTransaction;
       //   const encodedTransaction = signTransaction(
       //     res.data.result.encoded_transaction,
       //     `${process.env.REACT_APP_SIGNER_PRIVATE_KEY}`
@@ -137,5 +98,4 @@ export const mintNFTOnSolana2 = async (
     .catch((err) => {
       console.log(err);
     });
-  //   return response;
 };

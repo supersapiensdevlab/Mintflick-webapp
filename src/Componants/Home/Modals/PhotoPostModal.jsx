@@ -259,6 +259,7 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
                 url,
                 image
               );
+              // uploadToServer(formData, mintId);
             }
           } else {
             uploadToServer(formData, null);
