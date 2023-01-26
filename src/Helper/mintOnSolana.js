@@ -27,7 +27,7 @@ export const mintNFTOnSolana = async (
     description: description,
     external_url: external_url,
     max_supply: 1,
-    fee_payer: `3NtakJUHcwJPCxx4qpJRnPK1sfhYk5oeDALp4T6QKD8Y`,
+    // fee_payer: `3NtakJUHcwJPCxx4qpJRnPK1sfhYk5oeDALp4T6QKD8Y`,
     royalty: 5,
     image: image,
   };
@@ -42,6 +42,8 @@ export const mintNFTOnSolana = async (
     })
     .then((res) => {
       response = res;
+      console.log(response);
+      console.log("NFT mint request generated successfully");
     })
     .catch((err) => {
       console.log(err);
@@ -59,13 +61,12 @@ export async function signTransaction(transaction, key) {
       Buffer.from(transaction, "base64")
     );
     console.log(recoveredTransaction);
-    const signedTransaction = recoveredTransaction.partialSign(feePayer); //partially signing transaction with privatekey of the fee_payer
-    console.log(signedTransaction); // return recoveredTransaction;
-    const txnSignature = await connection.sendRawTransaction(
-      signedTransaction.serialize()
-    );
-    return txnSignature;
-    // return recoveredTransaction;
+    recoveredTransaction.partialSign(feePayer); //partially signing transaction with privatekey of the fee_payer
+    const serializedTransaction = recoveredTransaction.serialize({
+      requireAllSignatures: false,
+    });
+    const transactionBase64 = serializedTransaction.toString("base64");
+    return transactionBase64;
   } catch (error) {
     console.log(error);
   }
@@ -77,12 +78,27 @@ export async function partialSignWithWallet(encodedTransaction, provider) {
   const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
   const solanaWallet = new SolanaWallet(provider); // web3auth.provider
   console.log(solanaWallet);
-  const signedTx = await solanaWallet.signTransaction(encodedTransaction);
-  console.log(signedTx);
+  const signedTx = await solanaWallet.provider
+    .signTransaction(encodedTransaction)
+    .then((response) => console.log(response))
+    .catch((err) => console.log(err));
 
   //signing transaction with the creator_wallet
   const confirmTransaction = await connection.sendRawTransaction(
-    signedTx.serialize()
+    signedTx.serialize({ requireAllSignatures: false })
+  );
+  return confirmTransaction;
+}
+
+export async function confirmTransactionFromFrontend(encodedTransaction) {
+  const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
+  const wallet = new SolanaWallet(window.phantom.solana); // web3auth.provider
+  const recoveredTransaction = Transaction.from(
+    Buffer.from(encodedTransaction, "base64")
+  );
+  const signedTx = await wallet.signTransaction(recoveredTransaction);
+  const confirmTransaction = await connection.sendRawTransaction(
+    signedTx.serialize({ requireAllSignatures: false })
   );
   return confirmTransaction;
 }

@@ -102,6 +102,9 @@ function App() {
         State.updateDatabase({ price: repos.data });
       });
   }, []);
+  useEffect(() => {
+    console.log(State.database);
+  }, []);
 
   // useEffect(() => {
   //   if (State.database?.provider == null) {

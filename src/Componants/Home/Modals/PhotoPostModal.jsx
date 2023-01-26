@@ -19,7 +19,12 @@ import {
   signTransaction,
   partialSignWithWallet,
   listNFTOnSolana,
+  confirmTransactionFromFrontend,
 } from "../../../Helper/mintOnSolana";
+import {
+  mintNFTOnSolana2,
+  signTransaction2,
+} from "../../../Helper/mintOnSolana2";
 
 function PhotoPostModal({ setphotoPostModalOpen }) {
   const State = useContext(UserContext);
@@ -93,17 +98,23 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
       image
     )
       .then(async (data) => {
+        console.log(data);
         console.log("MintID", data.data.result.mint);
         setTokenAddress(data.data.result.mint);
+        partialSignWithWallet(
+          data.data.result.encoded_transaction,
+          State.database?.provider
+        ).then(() => {
+          nftMinted(formData, data.data.result.mint);
+          confirmTransactionFromFrontend(data.data.result.encoded_transaction);
+        });
+
         await signTransaction(
           data.data.result.encoded_transaction,
           `${process.env.REACT_APP_SIGNER_PRIVATE_KEY}`
         )
           .then((res) => {
             console.log(res);
-            partialSignWithWallet(res, State.database?.provider).then(() => {
-              nftMinted(formData, data.data.result.mint);
-            });
           })
           .catch((err) => {
             console.log(err);
@@ -130,6 +141,7 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
             chainId, // network id of blockchain
             State.database?.walletAddress, // wallet address of minter
             1, // amount of token to create
+
             itemUri, // tokenuri string
             [[State.database?.walletAddress, 10]] // royalties
           )
@@ -235,7 +247,18 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
               mintOnPolygon(formData, file);
             } else if (State.database.chainId === 0) {
               console.log("Solana...");
-              mintOnSolana(formData, file, cid);
+              // mintOnSolana(formData, file, cid);
+              let url =
+                "https://ipfs.io/ipfs/" + cid + "/" + selectedPost.file[0].name;
+              let image = selectedPost.file[0];
+              mintNFTOnSolana2(
+                State.database.walletAddress,
+                State.database?.provider,
+                caption,
+                caption,
+                url,
+                image
+              );
             }
           } else {
             uploadToServer(formData, null);
