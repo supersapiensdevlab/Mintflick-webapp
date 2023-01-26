@@ -251,7 +251,7 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
               let url =
                 "https://ipfs.io/ipfs/" + cid + "/" + selectedPost.file[0].name;
               let image = selectedPost.file[0];
-              mintNFTOnSolana2(
+              await mintNFTOnSolana2(
                 State.database.walletAddress,
                 State.database?.provider,
                 caption,
