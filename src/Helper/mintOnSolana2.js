@@ -49,7 +49,10 @@ const signTransactionKeyWallet = async (
   }
 };
 
-const signTransactionWithWallet = async (encodedTransaction, provider) => {
+export const signTransactionWithWallet = async (
+  encodedTransaction,
+  provider
+) => {
   try {
     const solanaWallet = new SolanaWallet(provider); // web3auth.provider
     console.log(solanaWallet);
@@ -77,7 +80,6 @@ const signTransactionWithWallet = async (encodedTransaction, provider) => {
 
 export const mintNFTOnSolana2 = async (
   creator_wallet,
-  provider,
   name,
   description,
   external_url,
@@ -105,9 +107,9 @@ export const mintNFTOnSolana2 = async (
         "content-type": "multipart/form-data",
       },
     })
-    .then(async (res) => {
-      mintResponse = res.data.result.mint;
-      console.log(res.data.result.mint);
+    .then((res) => {
+      mintResponse = res;
+      console.log(res);
       // const mintId = res.data.result.mint;
       console.log("NFT mint request generated successfully");
       // const confirmTransaction = signTransactionKeyWallet(
@@ -115,37 +117,6 @@ export const mintNFTOnSolana2 = async (
       //   `${process.env.REACT_APP_SIGNER_PRIVATE_KEY}`,
       //   provider
       // );
-      await signTransactionWithWallet(
-        res.data.result.encoded_transaction,
-        provider
-      ).then(async (signedTx) => {
-        console.log(signedTx);
-
-        var myHeaders = new Headers();
-        myHeaders.append("x-api-key", `${process.env.REACT_APP_SHYFT_API_KEY}`);
-        myHeaders.append("Content-Type", "application/json");
-
-        var raw = JSON.stringify({
-          network: "devnet",
-          encoded_transaction: signedTx,
-        });
-        var requestOptions = {
-          method: "POST",
-          headers: myHeaders,
-          body: raw,
-          redirect: "follow",
-        };
-        await fetch(
-          "https://api.shyft.to/sol/v1/txn_relayer/sign",
-          requestOptions
-        )
-          .then((response) => response.text())
-          .then((result) => {
-            console.log(result);
-          })
-          .catch((error) => console.log("error", error));
-        return mintResponse;
-      });
 
       //   const encodedTransaction = signTransaction(
       //     res.data.result.encoded_transaction,
@@ -156,4 +127,5 @@ export const mintNFTOnSolana2 = async (
     .catch((err) => {
       console.log(err);
     });
+  return mintResponse;
 };

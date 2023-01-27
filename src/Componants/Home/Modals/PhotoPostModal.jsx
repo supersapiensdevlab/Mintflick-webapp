@@ -24,6 +24,7 @@ import {
 import {
   mintNFTOnSolana2,
   signTransaction2,
+  signTransactionWithWallet,
 } from "../../../Helper/mintOnSolana2";
 
 function PhotoPostModal({ setphotoPostModalOpen }) {
@@ -253,14 +254,48 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
               let image = selectedPost.file[0];
               await mintNFTOnSolana2(
                 State.database.walletAddress,
-                State.database?.provider,
                 caption,
                 caption,
                 url,
                 image
-              ).then((mintId) => {
-                console.log(mintId);
-                typeof mintId === "string" && uploadToServer(formData, mintId);
+              ).then((response) => {
+                console.log(response);
+                const mintId = response.data.result.mint;
+                signTransactionWithWallet(
+                  response.data.result.encoded_transaction,
+                  State.database?.provider
+                ).then(async (signedTx) => {
+                  console.log(signedTx);
+
+                  var myHeaders = new Headers();
+                  myHeaders.append(
+                    "x-api-key",
+                    `${process.env.REACT_APP_SHYFT_API_KEY}`
+                  );
+                  myHeaders.append("Content-Type", "application/json");
+
+                  var raw = JSON.stringify({
+                    network: "devnet",
+                    encoded_transaction: signedTx,
+                  });
+                  var requestOptions = {
+                    method: "POST",
+                    headers: myHeaders,
+                    body: raw,
+                    redirect: "follow",
+                  };
+                  await fetch(
+                    "https://api.shyft.to/sol/v1/txn_relayer/sign",
+                    requestOptions
+                  )
+                    .then((response) => response.text())
+                    .then((result) => {
+                      console.log(result);
+                      typeof mintId === "string" &&
+                        uploadToServer(formData, mintId);
+                    })
+                    .catch((error) => console.log("error", error));
+                });
               });
             }
           } else {
