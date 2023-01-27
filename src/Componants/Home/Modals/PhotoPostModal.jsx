@@ -258,7 +258,10 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
                 caption,
                 url,
                 image
-              ).then((mintId) => uploadToServer(formData, mintId));
+              ).then((mintId) => {
+                console.log(mintId);
+                typeof mintId === "string" && uploadToServer(formData, mintId);
+              });
             }
           } else {
             uploadToServer(formData, null);

@@ -7,8 +7,11 @@ import {
 } from "@solana/web3.js";
 import { decode } from "bs58";
 import { SolanaWallet } from "@web3auth/solana-provider";
+import { useState } from "react";
 
 const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
+
+let mintResponse = "";
 
 const signTransactionKeyWallet = async (
   encodedTransaction,
@@ -46,6 +49,32 @@ const signTransactionKeyWallet = async (
   }
 };
 
+const signTransactionWithWallet = async (encodedTransaction, provider) => {
+  try {
+    const solanaWallet = new SolanaWallet(provider); // web3auth.provider
+    console.log(solanaWallet);
+
+    const recoveredTransaction = Transaction.from(
+      Buffer.from(encodedTransaction, "base64")
+    );
+    console.log(recoveredTransaction);
+    const signedTx = await (provider.isPhantom
+      ? provider
+      : solanaWallet
+    ).signTransaction(recoveredTransaction); // signing the recovered transaction using the creator_wall
+    console.log(signedTx);
+
+    const confirmTransaction = signedTx
+      .serialize({ requireAllSignatures: false })
+      .toString("base64");
+
+    // console.log(confirmTransaction);
+    return confirmTransaction;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const mintNFTOnSolana2 = async (
   creator_wallet,
   provider,
@@ -54,8 +83,6 @@ export const mintNFTOnSolana2 = async (
   external_url,
   image
 ) => {
-  let response;
-
   let nftSolanaData = {
     network: "devnet",
     creator_wallet: creator_wallet,
@@ -65,7 +92,7 @@ export const mintNFTOnSolana2 = async (
     description: description,
     external_url: external_url,
     max_supply: 1,
-    fee_payer: `3NtakJUHcwJPCxx4qpJRnPK1sfhYk5oeDALp4T6QKD8Y`,
+    fee_payer: `B6rhE5Zpu2gfe8YnJSa4jVoyWqDTqBcEJbDa5JawyYdG`,
     royalty: 5,
     image: image,
   };
@@ -78,18 +105,48 @@ export const mintNFTOnSolana2 = async (
         "content-type": "multipart/form-data",
       },
     })
-    .then((res) => {
-      response = res;
-      console.log(response);
-      const mintId = res.data.result.mint;
+    .then(async (res) => {
+      mintResponse = res.data.result.mint;
+      console.log(res.data.result.mint);
+      // const mintId = res.data.result.mint;
       console.log("NFT mint request generated successfully");
-      const confirmTransaction = signTransactionKeyWallet(
+      // const confirmTransaction = signTransactionKeyWallet(
+      //   res.data.result.encoded_transaction,
+      //   `${process.env.REACT_APP_SIGNER_PRIVATE_KEY}`,
+      //   provider
+      // );
+      await signTransactionWithWallet(
         res.data.result.encoded_transaction,
-        `${process.env.REACT_APP_SIGNER_PRIVATE_KEY}`,
         provider
-      );
-      console.log(confirmTransaction);
-      return mintId;
+      ).then(async (signedTx) => {
+        console.log(signedTx);
+
+        var myHeaders = new Headers();
+        myHeaders.append("x-api-key", `${process.env.REACT_APP_SHYFT_API_KEY}`);
+        myHeaders.append("Content-Type", "application/json");
+
+        var raw = JSON.stringify({
+          network: "devnet",
+          encoded_transaction: signedTx,
+        });
+        var requestOptions = {
+          method: "POST",
+          headers: myHeaders,
+          body: raw,
+          redirect: "follow",
+        };
+        await fetch(
+          "https://api.shyft.to/sol/v1/txn_relayer/sign",
+          requestOptions
+        )
+          .then((response) => response.text())
+          .then((result) => {
+            console.log(result);
+          })
+          .catch((error) => console.log("error", error));
+        return mintResponse;
+      });
+
       //   const encodedTransaction = signTransaction(
       //     res.data.result.encoded_transaction,
       //     `${process.env.REACT_APP_SIGNER_PRIVATE_KEY}`
