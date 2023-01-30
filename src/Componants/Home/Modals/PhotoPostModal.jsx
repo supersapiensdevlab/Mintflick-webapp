@@ -25,6 +25,7 @@ import {
   mintNFTOnSolana2,
   signTransaction2,
   signTransactionWithWallet,
+  signWithRelayer,
 } from "../../../Helper/mintOnSolana2";
 
 function PhotoPostModal({ setphotoPostModalOpen }) {
@@ -252,51 +253,29 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
               let url =
                 "https://ipfs.io/ipfs/" + cid + "/" + selectedPost.file[0].name;
               let image = selectedPost.file[0];
-              await mintNFTOnSolana2(
+              const mintRequest = await mintNFTOnSolana2(
                 State.database.walletAddress,
                 caption,
                 caption,
                 url,
                 image
-              ).then((response) => {
-                console.log(response);
-                const mintId = response.data.result.mint;
-                signTransactionWithWallet(
-                  response.data.result.encoded_transaction,
-                  State.database?.provider
-                ).then(async (signedTx) => {
-                  console.log(signedTx);
+              );
 
-                  var myHeaders = new Headers();
-                  myHeaders.append(
-                    "x-api-key",
-                    `${process.env.REACT_APP_SHYFT_API_KEY}`
-                  );
-                  myHeaders.append("Content-Type", "application/json");
+              const signedTx = await signTransactionWithWallet(
+                mintRequest.data.result.encoded_transaction,
+                State.database.provider
+              );
 
-                  var raw = JSON.stringify({
-                    network: "devnet",
-                    encoded_transaction: signedTx,
-                  });
-                  var requestOptions = {
-                    method: "POST",
-                    headers: myHeaders,
-                    body: raw,
-                    redirect: "follow",
-                  };
-                  await fetch(
-                    "https://api.shyft.to/sol/v1/txn_relayer/sign",
-                    requestOptions
-                  )
-                    .then((response) => response.text())
-                    .then((result) => {
-                      console.log(result);
-                      typeof mintId === "string" &&
-                        uploadToServer(formData, mintId);
-                    })
-                    .catch((error) => console.log("error", error));
-                });
-              });
+              await signWithRelayer(signedTx)
+                .then((response) => {
+                  response.success
+                    ? State.toast("success", "NFT Minted successfully")
+                    : State.toast("error", response.message);
+                })
+                .catch((error) => State.toast("error", error));
+              console.log(mintRequest);
+
+              uploadToServer(formData, mintRequest.data?.result.mint);
             }
           } else {
             uploadToServer(formData, null);

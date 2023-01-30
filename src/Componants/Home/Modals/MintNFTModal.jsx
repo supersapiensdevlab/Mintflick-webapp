@@ -9,6 +9,11 @@ import {
 } from "../../../Helper/mintOnSolana";
 import axios from "axios";
 import useUserActions from "../../../Hooks/useUserActions";
+import {
+  mintNFTOnSolana2,
+  signTransactionWithWallet,
+  signWithRelayer,
+} from "../../../Helper/mintOnSolana2";
 
 function MintNFTModal({
   mintModalOpen,
@@ -70,34 +75,30 @@ function MintNFTModal({
     const blob = await response.blob();
     const file = new File([blob], "image.jpg", { type: blob.type });
     console.log(file);
-    await mintNFTOnSolana(
+
+    const mintRequest = await mintNFTOnSolana2(
       State.database.walletAddress,
       name,
       name,
       videoImage ? videoImage : content,
       file
-    )
-      .then(async (data) => {
-        console.log("MintID", data.data.result.mint);
-        await signTransaction(
-          data.data.result.encoded_transaction,
-          `${process.env.REACT_APP_FEEPAYER_PRIVATEKEY}`
-        )
-          .then((res) => {
-            console.log(res);
-            partialSignWithWallet(res, State.database?.provider).then(() => {
-              nftMinted(data.data.result.mint);
-            });
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      })
-      .catch((err) => {
-        console.log(err);
-        State.toast("error", "Error minting NFT. Please try again!");
-        clearData();
-      });
+    );
+
+    const signedTx = await signTransactionWithWallet(
+      mintRequest.data.result.encoded_transaction,
+      State.database.provider
+    );
+
+    const finalTx = await signWithRelayer(signedTx).catch((error) =>
+      State.toast("error", error)
+    );
+    console.log(finalTx);
+    finalTx.success === true
+      ? State.toast("success", "NFT Minted successfully")
+      : State.toast("error", finalTx.message);
+    console.log(mintRequest);
+    setMintModalOpen(false);
+    loadFeed();
   };
   return (
     <div

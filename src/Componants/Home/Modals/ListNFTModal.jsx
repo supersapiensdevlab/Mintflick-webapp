@@ -2,16 +2,18 @@ import React, { useContext } from "react";
 import { useState } from "react";
 import { Award, CheckupList, Share, X } from "tabler-icons-react";
 import { UserContext } from "../../../Store";
-import {
-  signTransaction,
-  partialSignWithWallet,
-  listNFTOnSolana,
-} from "../../../Helper/mintOnSolana";
+
 import axios from "axios";
 import useUserActions from "../../../Hooks/useUserActions";
 import useLoadNfts from "../../../Hooks/useLoadNfts";
 import SolanaToken from "../../../Assets/logos/SolanaToken";
 import PolygonToken from "../../../Assets/logos/PolygonToken";
+import {
+  listNFTOnSolana2,
+  signTransactionWithWallet,
+  signWithRelayer,
+} from "../../../Helper/mintOnSolana2";
+import { signTransaction } from "../../../Helper/mintOnSolana";
 
 function ListNFTModal({ listModalOpen, setListModalOpen, content, tokenId }) {
   const State = useContext(UserContext);
@@ -36,31 +38,71 @@ function ListNFTModal({ listModalOpen, setListModalOpen, content, tokenId }) {
       setListing(true);
       setSuccessMessage("Please sign the transaction to list the NFT");
 
-      listNFTOnSolana(tokenId, price, State.database?.walletAddress)
-        .then(async (data) => {
-          console.log(data);
-          await signTransaction(
-            data.data.result.encoded_transaction,
-            `${process.env.REACT_APP_FEEPAYER_PRIVATEKEY}`
-          )
-            .then(async (res) => {
-              partialSignWithWallet(res, State.database?.provider).then(
-                async () => {
-                  setListing(false);
-                  setSuccessMessage("NFT listed successfully !");
-                  await loadNfts();
-                  await loadFeed();
-                }
-              );
-            })
-            .catch((err) => {
-              console.log(err);
-            });
+      const response = await listNFTOnSolana2(
+        tokenId,
+        price,
+        State.database?.walletAddress
+      );
+      console.log(response);
+      // .then(async (data) => {
+      //   console.log(data);
+      //   await signTransactionWithWallet(
+      //     data.data.result.encoded_transaction,
+      //     State.database?.provider
+      //     // `${process.env.REACT_APP_FEEPAYER_PRIVATEKEY}`
+      //   )
+      //     .then(async (signedTx) => {
+      //       console.log(signedTx);
+
+      //       var myHeaders = new Headers();
+      //       myHeaders.append(
+      //         "x-api-key",
+      //         `${process.env.REACT_APP_SHYFT_API_KEY}`
+      //       );
+      //       myHeaders.append("Content-Type", "application/json");
+
+      //       var raw = JSON.stringify({
+      //         network: "devnet",
+      //         encoded_transaction: signedTx,
+      //       });
+      //       var requestOptions = {
+      //         method: "POST",
+      //         headers: myHeaders,
+      //         body: raw,
+      //         redirect: "follow",
+      //       };
+      //       await fetch(
+      //         "https://api.shyft.to/sol/v1/txn_relayer/sign",
+      //         requestOptions
+      //       )
+      //         .then((response) => response.text())
+      //         .then((result) => {
+      //           console.log(result);
+      //         })
+      //         .catch((error) => console.log("error", error));
+      //     })
+      //     .catch((err) => {
+      //       console.log(err);
+      //     });
+      // })
+      // .catch((err) => {
+      //   console.log(err);
+      //   State.toast("error", "Error listing NFT. Please try again!");
+      // });
+      const signedTx = await signTransactionWithWallet(
+        response.data.result.encoded_transaction,
+        State.database.provider
+      );
+      console.log(signedTx);
+      await signWithRelayer(signedTx)
+        .then((response) => {
+          response.success
+            ? State.toast("success", "NFT listed successfully")
+            : State.toast("error", response.message);
+          loadFeed();
+          setListModalOpen(false);
         })
-        .catch((err) => {
-          console.log(err);
-          State.toast("error", "Error listing NFT. Please try again!");
-        });
+        .catch((error) => State.toast("error", error));
     } else {
       setSuccessMessage("Price should be greater than 0 !");
       return;

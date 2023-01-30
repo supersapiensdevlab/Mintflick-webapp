@@ -11,8 +11,6 @@ import { useState } from "react";
 
 const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
 
-let mintResponse = "";
-
 const signTransactionKeyWallet = async (
   encodedTransaction,
   fromPrivateKey,
@@ -53,6 +51,7 @@ export const signTransactionWithWallet = async (
   encodedTransaction,
   provider
 ) => {
+  let confirmTransaction;
   try {
     const solanaWallet = new SolanaWallet(provider); // web3auth.provider
     console.log(solanaWallet);
@@ -67,15 +66,40 @@ export const signTransactionWithWallet = async (
     ).signTransaction(recoveredTransaction); // signing the recovered transaction using the creator_wall
     console.log(signedTx);
 
-    const confirmTransaction = signedTx
+    confirmTransaction = signedTx
       .serialize({ requireAllSignatures: false })
       .toString("base64");
 
-    // console.log(confirmTransaction);
-    return confirmTransaction;
+    console.log(confirmTransaction);
   } catch (error) {
     console.log(error);
   }
+  return confirmTransaction;
+};
+
+export const signWithRelayer = async (signedTx) => {
+  var myHeaders = new Headers();
+  myHeaders.append("x-api-key", `${process.env.REACT_APP_SHYFT_API_KEY}`);
+  myHeaders.append("Content-Type", "application/json");
+  let response;
+  var raw = JSON.stringify({
+    network: "devnet",
+    encoded_transaction: signedTx,
+  });
+  var requestOptions = {
+    method: "POST",
+    headers: myHeaders,
+    body: raw,
+    redirect: "follow",
+  };
+  await fetch("https://api.shyft.to/sol/v1/txn_relayer/sign", requestOptions)
+    .then((response) => response.text())
+    .then((result) => {
+      console.log(result);
+      response = result;
+    })
+    .catch((error) => console.log("error", error));
+  return JSON.parse(response);
 };
 
 export const mintNFTOnSolana2 = async (
@@ -100,32 +124,46 @@ export const mintNFTOnSolana2 = async (
   };
   console.log(nftSolanaData);
 
-  await axios
+  const res = await axios
     .post(`https://api.shyft.to/sol/v2/nft/create`, nftSolanaData, {
       headers: {
         "x-api-key": `${process.env.REACT_APP_SHYFT_API_KEY}`,
         "content-type": "multipart/form-data",
       },
     })
-    .then((res) => {
-      mintResponse = res;
-      console.log(res);
-      // const mintId = res.data.result.mint;
-      console.log("NFT mint request generated successfully");
-      // const confirmTransaction = signTransactionKeyWallet(
-      //   res.data.result.encoded_transaction,
-      //   `${process.env.REACT_APP_SIGNER_PRIVATE_KEY}`,
-      //   provider
-      // );
 
-      //   const encodedTransaction = signTransaction(
-      //     res.data.result.encoded_transaction,
-      //     `${process.env.REACT_APP_SIGNER_PRIVATE_KEY}`
-      //   );
-      //   partialSignWithWallet(encodedTransaction, provider);
+    .catch((err) => {
+      console.log(err);
+    });
+  console.log(res);
+  return res;
+};
+
+export const listNFTOnSolana2 = async (nft_address, price, seller_wallet) => {
+  let response;
+  var raw = JSON.stringify({
+    network: "devnet",
+    marketplace_address: process.env.REACT_APP_SOLANA_MARKETPLACE_ADDRESS,
+    nft_address: nft_address,
+    price: parseInt(price),
+    // fee_payer: `B6rhE5Zpu2gfe8YnJSa4jVoyWqDTqBcEJbDa5JawyYdG`,
+    seller_wallet: seller_wallet,
+  });
+
+  console.log(raw);
+  await axios
+    .post(`https://api.shyft.to/sol/v1/marketplace/list_gasless`, raw, {
+      headers: {
+        "x-api-key": `${process.env.REACT_APP_SHYFT_API_KEY}`,
+        "content-type": "application/json",
+      },
+    })
+    .then((res) => {
+      response = res;
     })
     .catch((err) => {
       console.log(err);
     });
-  return mintResponse;
+
+  return response;
 };
