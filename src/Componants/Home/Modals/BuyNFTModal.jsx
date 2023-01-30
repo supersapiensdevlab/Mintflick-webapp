@@ -19,6 +19,7 @@ import {
 import { clusterApiUrl, Connection, PublicKey } from "@solana/web3.js";
 import SolanaToken from "../../../Assets/logos/SolanaToken";
 import useUserActions from "../../../Hooks/useUserActions";
+import { signTransactionWithWallet } from "../../../Helper/mintOnSolana2";
 
 function BuyNFTModal() {
   const State = useContext(UserContext);
@@ -72,16 +73,25 @@ function BuyNFTModal() {
       })
       .then(async (data) => {
         console.log(data);
-        await signTransaction(
-          "devnet",
+        // await signTransaction(
+        //   "devnet",
+        //   data.data.result.encoded_transaction,
+        //   async () => {
+        //     State.toast("success", "NFT bought successfully");
+        //     State.updateDatabase({ buyNFTModalOpen: false });
+        //     setBuying(false);
+        //     await loadFeed();
+        //   }
+        // );
+        await signTransactionWithWallet(
           data.data.result.encoded_transaction,
-          async () => {
-            State.toast("success", "NFT bought successfully");
-            State.updateDatabase({ buyNFTModalOpen: false });
-            setBuying(false);
-            await loadFeed();
-          }
-        );
+          State.database.provider
+        ).then(() => {
+          State.toast("success", "NFT bought successfully");
+          State.updateDatabase({ buyNFTModalOpen: false });
+          setBuying(false);
+          loadFeed();
+        });
       })
       .catch((err) => {
         console.log(err);
