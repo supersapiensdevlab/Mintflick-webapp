@@ -16,10 +16,20 @@ import {
   clusterUrl,
   confirmTransactionFromFrontend,
 } from "../Utility/utilityFunc";
-import { clusterApiUrl, Connection, PublicKey } from "@solana/web3.js";
+import {
+  clusterApiUrl,
+  Connection,
+  Keypair,
+  PublicKey,
+  Transaction,
+} from "@solana/web3.js";
 import SolanaToken from "../../../Assets/logos/SolanaToken";
 import useUserActions from "../../../Hooks/useUserActions";
-import { signTransactionWithWallet } from "../../../Helper/mintOnSolana2";
+import {
+  signTransactionWithWallet,
+  signWithRelayer,
+} from "../../../Helper/mintOnSolana2";
+import { decode } from "bs58";
 
 function BuyNFTModal() {
   const State = useContext(UserContext);
@@ -29,30 +39,26 @@ function BuyNFTModal() {
 
   const [loadFeed] = useUserActions();
 
-  async function signTransaction(network, transaction, callback) {
-    //const phantom = new PhantomWalletAdapter();
-    //await phantom.connect();
-    const solanaWallet = new SolanaWallet(State.database.provider); // web3auth.provider
-
-    const rpcUrl = clusterUrl(network);
-    console.log(rpcUrl);
-    const connection = new Connection(rpcUrl, "confirmed");
-    //console.log(connection.rpcEndpoint);
-    const ret = await confirmTransactionFromFrontend(
-      connection,
-      transaction,
-      solanaWallet
-    );
-    // const checks = await connection.confirmTransaction({signature:ret},'finalised');
-
-    // console.log(checks);
-    // await connection.confirmTransaction({
-    //     blockhash: transaction.blockhash,
-    //     signature: ret,
-    //   });
-    connection.onSignature(ret, callback, "finalized");
-    return ret;
-  }
+  const signTransaction = async (encodedTransaction, fromPrivateKey) => {
+    try {
+      const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
+      const feePayer = Keypair.fromSecretKey(decode(fromPrivateKey));
+      const recoveredTransaction = Transaction.from(
+        Buffer.from(encodedTransaction, "base64")
+      );
+      const signedTrasaction = recoveredTransaction.partialSign(feePayer);
+      const txnSignature = await connection.sendRawTransaction(
+        signedTrasaction.serialize()
+      );
+      State.toast("success", "NFT bought successfully");
+      State.updateDatabase({ buyNFTModalOpen: false });
+      setBuying(false);
+      await loadFeed();
+      return txnSignature;
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const buyNft = () => {
     setBuying(true);
@@ -74,14 +80,9 @@ function BuyNFTModal() {
       .then(async (data) => {
         console.log(data);
         // await signTransaction(
-        //   "devnet",
+        //   // "devnet",
         //   data.data.result.encoded_transaction,
-        //   async () => {
-        //     State.toast("success", "NFT bought successfully");
-        //     State.updateDatabase({ buyNFTModalOpen: false });
-        //     setBuying(false);
-        //     await loadFeed();
-        //   }
+        //   "vXJQfc7wgeY7gwyBrfkjQz5VKQd2Dy2E5Psoj5LusaJwxukC5tuLQgUxxZTnoN2fSjG1zHyF45XCA8nz8VK94Tg"
         // );
         await signTransactionWithWallet(
           data.data.result.encoded_transaction,

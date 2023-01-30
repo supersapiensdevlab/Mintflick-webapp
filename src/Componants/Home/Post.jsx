@@ -1155,10 +1155,15 @@ function Post(props) {
             <div className="flex items-center gap-1">
               <p className="font-medium text-sm ">Owned by</p>
               <At size={16}></At>
-              <p className="cursor-pointer font-semibold text-sm text-primary">
+
+              <a
+                href={`https://solscan.io/token/${props.tokenId}?cluster=devnet`}
+                target="_blank"
+                className="cursor-pointer font-semibold text-sm text-primary"
+              >
                 {/* {props.ownerId} */}
                 {owner?.slice(0, 6) + "..." + owner?.slice(-4)}
-              </p>
+              </a>
             </div>
             {price > 0 ? (
               <div
