@@ -1166,41 +1166,43 @@ function Post(props) {
               </a>
             </div>
             {price > 0 ? (
-              <div
-                onClick={() =>
-                  State.updateDatabase({
-                    buyNFTModalData: {
-                      ownedBy: owner,
-                      nftName: props.trackName
-                        ? props.trackName
-                        : props.videoName
-                        ? props.videoName
-                        : props.text
-                        ? props.text
-                        : null,
-                      nftImage: props.trackImage
-                        ? props.trackImage
-                        : props.videoImage
-                        ? props.videoImage
-                        : props.image
-                        ? props.image
-                        : "https://lh3.googleusercontent.com/yCbypC0JI61YbUFf_5ULkHJonhKZpLt63wY4ZAP5DZLYuMfcwr28zdq5TDSyhtl0Ifg2mNrtrJ3tbBOW_XKEWNctFdx1LEaLTaDExg=w600",
-                      nftDescription: props.content.description,
-                      nftPrice: price,
-                      tokenId: props.content.tokenId,
-                      sellerAddress: props.walletId,
-                    },
+              owner !== props.walletId && (
+                <div
+                  onClick={() =>
+                    State.updateDatabase({
+                      buyNFTModalData: {
+                        ownedBy: owner,
+                        nftName: props.trackName
+                          ? props.trackName
+                          : props.videoName
+                          ? props.videoName
+                          : props.text
+                          ? props.text
+                          : null,
+                        nftImage: props.trackImage
+                          ? props.trackImage
+                          : props.videoImage
+                          ? props.videoImage
+                          : props.image
+                          ? props.image
+                          : "https://lh3.googleusercontent.com/yCbypC0JI61YbUFf_5ULkHJonhKZpLt63wY4ZAP5DZLYuMfcwr28zdq5TDSyhtl0Ifg2mNrtrJ3tbBOW_XKEWNctFdx1LEaLTaDExg=w600",
+                        nftDescription: props.content.description,
+                        nftPrice: price,
+                        tokenId: props.content.tokenId,
+                        sellerAddress: props.walletId,
+                      },
 
-                    buyNFTModalOpen: true,
-                  })
-                }
-                className="cursor-pointer items-center  btn btn-xs btn-primary btn-outline gap-1 ml-auto rounded-md"
-              >
-                {/* <PolygonToken></PolygonToken> */}
-                {/* <p className="text-sm  mx-1">{props.price}</p> */}
-                <Wallet size={18} />
-                Buy
-              </div>
+                      buyNFTModalOpen: true,
+                    })
+                  }
+                  className="cursor-pointer items-center  btn btn-xs btn-primary btn-outline gap-1 ml-auto rounded-md"
+                >
+                  {/* <PolygonToken></PolygonToken> */}
+                  {/* <p className="text-sm  mx-1">{props.price}</p> */}
+                  <Wallet size={18} />
+                  Buy
+                </div>
+              )
             ) : (
               <>
                 {State.database.userData?.data?.user?.username ===
