@@ -25,10 +25,7 @@ import {
 } from "@solana/web3.js";
 import SolanaToken from "../../../Assets/logos/SolanaToken";
 import useUserActions from "../../../Hooks/useUserActions";
-import {
-  signTransactionWithWallet,
-  signWithRelayer,
-} from "../../../Helper/mintOnSolana2";
+import { signWithRelayer } from "../../../Helper/mintOnSolana2";
 import { decode } from "bs58";
 
 function BuyNFTModal() {
@@ -59,6 +56,28 @@ function BuyNFTModal() {
       console.log(error);
     }
   };
+  const signTransactionWithWallet = async (encodedTransaction, provider) => {
+    let confirmTransaction;
+    try {
+      const solanaWallet = new SolanaWallet(provider); // web3auth.provider
+      console.log(solanaWallet);
+
+      const recoveredTransaction = Transaction.from(
+        Buffer.from(encodedTransaction, "base64")
+      );
+      console.log(recoveredTransaction);
+      const signedTx = await (provider.isPhantom
+        ? provider
+        : solanaWallet
+      ).signTransaction(recoveredTransaction); // signing the recovered transaction using the creator_wall
+      console.log(signedTx);
+
+      confirmTransaction = signedTx;
+    } catch (error) {
+      console.log(error);
+    }
+    return confirmTransaction;
+  };
 
   const buyNft = () => {
     setBuying(true);
@@ -84,18 +103,21 @@ function BuyNFTModal() {
         //   data.data.result.encoded_transaction,
         //   "vXJQfc7wgeY7gwyBrfkjQz5VKQd2Dy2E5Psoj5LusaJwxukC5tuLQgUxxZTnoN2fSjG1zHyF45XCA8nz8VK94Tg"
         // );
-        await signTransactionWithWallet(
+        const signedTrasaction = await signTransactionWithWallet(
           data.data.result.encoded_transaction,
           State.database.provider
-        ).then(() => {
-          State.toast("success", "NFT bought successfully");
-          State.updateDatabase({ buyNFTModalOpen: false });
-          setBuying(false);
-          loadFeed();
-        });
+        );
+        console.log(signedTrasaction);
+        const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
+        await connection.sendRawTransaction(signedTrasaction.serialize());
+        State.toast("success", "NFT bought successfully");
+        State.updateDatabase({ buyNFTModalOpen: false });
+        setBuying(false);
+        loadFeed();
       })
       .catch((err) => {
         console.log(err);
+        State.updateDatabase({ buyNFTModalOpen: false });
         State.toast("error", "Error while buying NFT");
         setBuying(false);
       });
