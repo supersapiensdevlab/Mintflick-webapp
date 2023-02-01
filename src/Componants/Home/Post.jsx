@@ -1166,7 +1166,11 @@ function Post(props) {
               </a>
             </div>
             {price > 0 ? (
-              owner !== props.walletId && (
+              owner === State.database.walletAddress ? (
+                <div className="cursor-pointer items-center  btn btn-xs btn-primary btn-outline gap-1 ml-auto rounded-md">
+                  Listed
+                </div>
+              ) : (
                 <div
                   onClick={() =>
                     State.updateDatabase({
@@ -1205,8 +1209,7 @@ function Post(props) {
               )
             ) : (
               <>
-                {State.database.userData?.data?.user?.username ===
-                props.profileUsername ? (
+                {owner === State.database.walletAddress ? (
                   <div
                     className="cursor-pointer items-center  btn btn-xs btn-primary btn-outline gap-1 ml-auto rounded-md"
                     onClick={() => setListModalOpen(true)}
@@ -1224,9 +1227,8 @@ function Post(props) {
           </div>
         ) : (
           <>
-            {State.database.userData?.data?.user?.username ==
-              props.profileUsername &&
-            (props.contentType == "post" || props.contentType == "video") ? (
+            {owner === State.database.walletAddress &&
+            (props.contentType === "post" || props.contentType === "video") ? (
               <div className="w-full flex justify-end">
                 {console.log("in2")}
                 <div

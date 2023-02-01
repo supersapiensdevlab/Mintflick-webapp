@@ -99,7 +99,7 @@ function ListNFTModal({ listModalOpen, setListModalOpen, content, tokenId }) {
           response.success
             ? State.toast("success", "NFT listed successfully")
             : State.toast("error", response.message);
-          loadFeed();
+          response.success && loadFeed();
           setListModalOpen(false);
         })
         .catch((error) => State.toast("error", error));

@@ -25,7 +25,10 @@ import {
 } from "@solana/web3.js";
 import SolanaToken from "../../../Assets/logos/SolanaToken";
 import useUserActions from "../../../Hooks/useUserActions";
-import { signWithRelayer } from "../../../Helper/mintOnSolana2";
+import {
+  buyNFTOnSolana2,
+  signWithRelayer,
+} from "../../../Helper/mintOnSolana2";
 import { decode } from "bs58";
 
 function BuyNFTModal() {
@@ -79,7 +82,7 @@ function BuyNFTModal() {
     return confirmTransaction;
   };
 
-  const buyNft = () => {
+  const buyNft = async () => {
     setBuying(true);
     let buyNftData = {
       network: "devnet",
@@ -109,7 +112,10 @@ function BuyNFTModal() {
         );
         console.log(signedTrasaction);
         const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
-        await connection.sendRawTransaction(signedTrasaction.serialize());
+        const x = await connection.sendRawTransaction(
+          signedTrasaction.serialize()
+        );
+        console.log(x);
         State.toast("success", "NFT bought successfully");
         State.updateDatabase({ buyNFTModalOpen: false });
         setBuying(false);
@@ -121,6 +127,26 @@ function BuyNFTModal() {
         State.toast("error", "Error while buying NFT");
         setBuying(false);
       });
+
+    // const nftBought = await buyNFTOnSolana2(
+    //   buyNftData,
+    //   State.database.provider
+    // );
+    // const nftBoughtSuccessful = () => {
+    //   State.toast("success", "NFT bought successfully");
+    //   State.updateDatabase({ buyNFTModalOpen: false });
+    //   setBuying(false);
+    //   loadFeed();
+    // };
+
+    // const nftBoughtFailed = () => {
+    //   State.toast("success", "NFT bought successfully");
+    //   State.updateDatabase({ buyNFTModalOpen: false });
+    //   setBuying(false);
+    //   loadFeed();
+    // };
+
+    // nftBought ? nftBoughtSuccessful() : nftBoughtFailed();
   };
   return (
     <div

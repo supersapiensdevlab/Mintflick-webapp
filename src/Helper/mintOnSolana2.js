@@ -53,6 +53,7 @@ export const signTransactionWithWallet = async (
 ) => {
   let confirmTransaction;
   try {
+    const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
     const solanaWallet = new SolanaWallet(provider); // web3auth.provider
     console.log(solanaWallet);
 
@@ -60,11 +61,14 @@ export const signTransactionWithWallet = async (
       Buffer.from(encodedTransaction, "base64")
     );
     console.log(recoveredTransaction);
-    const signedTx = await (provider.isPhantom
-      ? provider
-      : solanaWallet
-    ).signTransaction(recoveredTransaction); // signing the recovered transaction using the creator_wall
+    const signedTx = provider.isPhantom
+      ? await provider.signTransaction(recoveredTransaction)
+      : await solanaWallet.signTransaction(recoveredTransaction); // signing the recovered transaction using the creator_wall
     console.log(signedTx);
+
+    // const confirmTransaction = await connection.sendRawTransaction(
+    //   signedTx.serialize({ requireAllSignatures: false })
+    // );
 
     confirmTransaction = signedTx
       .serialize({ requireAllSignatures: false })
@@ -166,4 +170,34 @@ export const listNFTOnSolana2 = async (nft_address, price, seller_wallet) => {
     });
 
   return response;
+};
+
+export const buyNFTOnSolana2 = (buyNftData, provider) => {
+  axios
+    .post(`https://api.shyft.to/sol/v1/marketplace/buy`, buyNftData, {
+      headers: {
+        "x-api-key": `${process.env.REACT_APP_SHYFT_API_KEY}`,
+        "content-type": "application/json",
+      },
+    })
+    .then(async (data) => {
+      console.log(data);
+      // await signTransaction(
+      //   // "devnet",
+      //   data.data.result.encoded_transaction,
+      //   "vXJQfc7wgeY7gwyBrfkjQz5VKQd2Dy2E5Psoj5LusaJwxukC5tuLQgUxxZTnoN2fSjG1zHyF45XCA8nz8VK94Tg"
+      // );
+      const signedTrasaction = await signTransactionWithWallet(
+        data.data.result.encoded_transaction,
+        provider
+      );
+      console.log(signedTrasaction);
+      const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
+      await connection.sendRawTransaction(signedTrasaction.serialize());
+      return true;
+    })
+    .catch((err) => {
+      console.log(err);
+      return false;
+    });
 };

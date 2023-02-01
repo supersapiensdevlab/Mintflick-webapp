@@ -73,18 +73,18 @@ function useWebModal() {
         navigateTo("/create_new_user");
       });
   }
-  const getCircularReplacer = () => {
-    const seen = new WeakSet();
-    return (key, value) => {
-      if (typeof value === "object" && value !== null) {
-        if (seen.has(value)) {
-          return;
-        }
-        seen.add(value);
-      }
-      return value;
-    };
-  };
+  // const getCircularReplacer = () => {
+  //   const seen = new WeakSet();
+  //   return (key, value) => {
+  //     if (typeof value === "object" && value !== null) {
+  //       if (seen.has(value)) {
+  //         return;
+  //       }
+  //       seen.add(value);
+  //     }
+  //     return value;
+  //   };
+  // };
 
   const newWalletProvider = {
     torus: {
@@ -161,7 +161,7 @@ function useWebModal() {
       provider.on("connect", (chainId) => {
         console.log(chainId);
       });
-      isUserAvaliable(Address, provider);
+      isUserAvaliable(Address, provider.provider);
     } else if (State.database?.chainId === 1) {
       const providerOptions = newWalletProvider;
 
