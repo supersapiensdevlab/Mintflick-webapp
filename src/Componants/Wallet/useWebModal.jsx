@@ -123,6 +123,7 @@ function useWebModal() {
         networkParams: {
           chainId: "0x3", // default: 1
           networkName: "Solana Devnet",
+          rpc: { 3: process.env.REACT_APP_SOLANA_RPC },
         },
       },
     },
@@ -134,26 +135,28 @@ function useWebModal() {
 
       const web3Modal = new Web3Modal({
         disableInjectedProvider: true,
-        network: "devnet", // optional
+        network: process.env.REACT_APP_SOLANA_RPC, // optional
         cacheProvider: true, // optional
         providerOptions, // required
         theme: "dark",
       });
 
-      let instance;
-      if (web3Modal.cachedProvider) instance = await web3Modal.connect();
-      else instance = await web3Modal.connect();
+      const instance = await web3Modal.connect();
 
       localStorage.setItem("web3Modal", web3Modal);
+      console.log("web3Modal", web3Modal);
       State.updateDatabase({
         web3Modal: web3Modal,
       });
 
       const provider = new ethers.providers.Web3Provider(instance);
       console.log("PROVIDER:", provider);
-      const signer = provider.provider.selectedAddress;
-      console.log("SIGNER:", signer);
-      const Address = signer;
+      const chasinID = await provider.getNetwork();
+      console.log("Chain id:", chasinID);
+      const signer = provider.getSigner();
+      console.log("signer", signer);
+
+      const Address = provider.provider.selectedAddress;
       State.updateDatabase({
         walletAddress: Address,
       });
@@ -161,7 +164,7 @@ function useWebModal() {
       provider.on("connect", (chainId) => {
         console.log(chainId);
       });
-      isUserAvaliable(Address, provider.provider);
+      isUserAvaliable(Address, signer);
     } else if (State.database?.chainId === 1) {
       const providerOptions = newWalletProvider;
 

@@ -1227,7 +1227,8 @@ function Post(props) {
           </div>
         ) : (
           <>
-            {owner === State.database.walletAddress &&
+            {State.database.userData.data?.user.username ===
+              props.profileName &&
             (props.contentType === "post" || props.contentType === "video") ? (
               <div className="w-full flex justify-end">
                 {console.log("in2")}

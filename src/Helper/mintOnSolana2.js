@@ -63,7 +63,7 @@ export const signTransactionWithWallet = async (
     console.log(recoveredTransaction);
     const signedTx = provider.isPhantom
       ? await provider.signTransaction(recoveredTransaction)
-      : await solanaWallet.signTransaction(recoveredTransaction); // signing the recovered transaction using the creator_wall
+      : await provider.signTransaction(recoveredTransaction); // signing the recovered transaction using the creator_wall
     console.log(signedTx);
 
     // const confirmTransaction = await connection.sendRawTransaction(

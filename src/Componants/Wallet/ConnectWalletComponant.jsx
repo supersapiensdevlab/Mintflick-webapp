@@ -6,6 +6,8 @@ import instagram from "../../Assets/logos/wallet/instagram.svg";
 import { UserContext } from "../../Store";
 import PolygonToken from "../../Assets/logos/PolygonToken";
 import SolanaToken from "../../Assets/logos/SolanaToken";
+import SolanaTorus from "@toruslabs/solana-embed";
+
 import useWeb3Auth from "../../Hooks/useWeb3Auth";
 import { Rocket } from "tabler-icons-react";
 import Emoji from "react-emojis";
@@ -87,6 +89,20 @@ function ConnectWalletComponant() {
     });
     isUserAvaliable(address, window.phantom.solana);
     console.log(window.phantom.solana);
+  };
+
+  const handleTorusConnect = async () => {
+    const torus = new SolanaTorus();
+    await torus.init();
+    await torus.login();
+
+    console.log("torus", torus);
+    const address = torus.provider.selectedAddress;
+    State.updateDatabase({
+      walletAddress: address,
+    });
+    isUserAvaliable(address, torus);
+    // console.log(window.phantom.solana);
   };
 
   return (
@@ -171,7 +187,7 @@ function ConnectWalletComponant() {
         <div className="flex gap-2">
           <button
             onClick={async () => {
-              modal(true);
+              handleTorusConnect();
             }}
             className="btn btn-brand flex-grow capitalize gap-2"
           >
