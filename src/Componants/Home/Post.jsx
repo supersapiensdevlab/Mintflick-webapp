@@ -383,10 +383,14 @@ function Post(props) {
 
   //Fetch NFT Details on SOlana
   useEffect(() => {
-    if (props.tokenId) {
+    if (
+      props.tokenId !== null &&
+      props.tokenId !== undefined &&
+      props.tokenId !== "null"
+    ) {
       var myHeaders = new Headers();
       myHeaders.append("x-api-key", `${process.env.REACT_APP_SHYFT_API_KEY}`);
-
+      //console.log(props.tokenId);
       var requestOptions = {
         method: "GET",
         headers: myHeaders,
@@ -399,6 +403,7 @@ function Post(props) {
       )
         .then((response) => response.json())
         .then((result) => {
+          console.log(result);
           setOwner(result.result?.owner);
         })
         .catch((error) => console.log("error", error));

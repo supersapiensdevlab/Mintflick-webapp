@@ -178,72 +178,74 @@ function BuyNFTModal() {
         </div>
         {step === 1 && (
           <div className="p-4 space-y-2">
-            <div className="w-full  flex flex-col sm:flex-row bg-white dark:bg-slate-700 rounded-lg overflow-clip">
+            <div className="w-full  flex  flex-col bg-white dark:bg-slate-700 rounded-lg overflow-clip">
               <img
                 src={State.database?.buyNFTModalData?.nftImage}
                 alt="NFT image"
-                className="h-full w-28  bg-red-100"
+                className="p-4 h-96 w-full object-cover rounded-lg"
               />
-              <div className="p-3 flex-grow space-y-1 ">
-                <div className="text-lg text-brand1 font-bold">
-                  {State.database?.buyNFTModalData?.nftName}
+              <div className="flex ">
+                <div className="p-3 flex-grow space-y-1 ">
+                  <div className="text-lg text-brand1 font-bold">
+                    {State.database?.buyNFTModalData?.nftName}
+                  </div>
+                  <div className="text-sm text-brand3 font-medium">
+                    {State.database?.buyNFTModalData?.nftDescription}
+                  </div>
+                  <div className="flex items-center gap-1 text-brand3">
+                    <p className="font-medium text-sm ">Owned by</p>
+                    <At size={16}></At>
+                    <p className="cursor-pointer font-semibold text-sm text-primary">
+                      {State.database?.buyNFTModalData?.ownedBy?.slice(0, 5) +
+                        "..." +
+                        State.database?.buyNFTModalData?.ownedBy?.slice(-5)}
+                    </p>
+                  </div>
+                  <span className="flex items-center gap-1 text-sm font-medium text-brand4 hidden">
+                    <Eye size={16} />
+                    12M
+                  </span>
+                  <span className="flex items-center gap-1 text-sm font-medium text-brand4">
+                    Platform fees{" "}
+                    <div className="tooltip" data-tip="1% of NFT price">
+                      <InfoCircle className="cursor-pointer" size={16} />
+                    </div>
+                  </span>
+                  <span className="flex items-center gap-1 text-sm font-medium text-brand4">
+                    Creator royalties{" "}
+                    <div
+                      className="tooltip"
+                      data-tip="5% on every secondary sale"
+                    >
+                      <InfoCircle className="cursor-pointer" size={16} />
+                    </div>
+                  </span>
+                  {/* <div className="h-[2px] rounded-full bg-slate-200 dark:bg-slate-600"></div> */}
                 </div>
-                <div className="text-sm text-brand3 font-medium">
-                  {State.database?.buyNFTModalData?.nftDescription}
-                </div>
-                <div className="flex items-center gap-1 text-brand3">
-                  <p className="font-medium text-sm ">Owned by</p>
-                  <At size={16}></At>
-                  <p className="cursor-pointer font-semibold text-sm text-primary">
-                    {State.database?.buyNFTModalData?.ownedBy?.slice(0, 5) +
-                      "..." +
-                      State.database?.buyNFTModalData?.ownedBy?.slice(-5)}
+                <div className="flex flex-col p-4 sm:items-end justify-center text-brand1">
+                  <p className="flex items-center gap-2 cursor-pointer font-semibold text-3xl text-brand-gradient">
+                    {State.database.chainId === 1 ? (
+                      <PolygonToken size={16}></PolygonToken>
+                    ) : State.database.chainId === 0 ? (
+                      <SolanaToken size={24}></SolanaToken>
+                    ) : null}
+                    {State.database?.buyNFTModalData?.nftPrice}
                   </p>
-                </div>
-                <span className="flex items-center gap-1 text-sm font-medium text-brand4 hidden">
-                  <Eye size={16} />
-                  12M
-                </span>
-                <span className="flex items-center gap-1 text-sm font-medium text-brand4">
-                  Platform fees{" "}
-                  <div className="tooltip" data-tip="1% of NFT price">
-                    <InfoCircle className="cursor-pointer" size={16} />
-                  </div>
-                </span>
-                <span className="flex items-center gap-1 text-sm font-medium text-brand4">
-                  Creator royalties{" "}
-                  <div
-                    className="tooltip"
-                    data-tip="5% on every secondary sale"
-                  >
-                    <InfoCircle className="cursor-pointer" size={16} />
-                  </div>
-                </span>
-                {/* <div className="h-[2px] rounded-full bg-slate-200 dark:bg-slate-600"></div> */}
-              </div>
-              <div className="flex flex-col p-4 sm:items-end justify-center text-brand1">
-                <p className="flex items-center gap-2 cursor-pointer font-semibold text-3xl text-brand-gradient">
-                  {State.database.chainId === 1 ? (
-                    <PolygonToken size={16}></PolygonToken>
-                  ) : State.database.chainId === 0 ? (
-                    <SolanaToken size={16}></SolanaToken>
-                  ) : null}
-                  {State.database?.buyNFTModalData?.nftPrice}
-                </p>
-                <span className="text-sm font-normal text-brand4">
-                  $
-                  {Math.round(
-                    State.database.chainId === 0
-                      ? State.database?.price?.solanaPrice *
+                  <span className="text-sm font-normal text-brand4">
+                    $
+                    {Math.round(
+                      State.database.chainId === 0
+                        ? State.database?.price?.solanaPrice *
+                            100 *
+                            State.database?.buyNFTModalData?.nftPrice
+                        : State.database.chainId === 1
+                        ? State.database?.price?.maticPrice *
                           100 *
                           State.database?.buyNFTModalData?.nftPrice
-                      : State.database.chainId === 1
-                      ? State.database?.price?.maticPrice *
-                        100 *
-                        State.database?.buyNFTModalData?.nftPrice
-                      : 0
-                  ) / 100}
-                </span>
+                        : 0
+                    ) / 100}
+                  </span>
+                </div>
               </div>
             </div>
             <div

@@ -89,7 +89,11 @@
       content="https://v2.mintflick.app/Mintflick-favicon.png"
     />
     <script>
-      navigator.serviceWorker.register("./pwabuilder-adv-sw.js");
+      "serviceWorker" in navigator &&
+        window.addEventListener(
+          "load",
+          navigator.serviceWorker.register("./service-worker.js")
+        );
     </script>
     <!-- Whatsapp meta tags -->
   </head>

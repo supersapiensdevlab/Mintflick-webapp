@@ -90,7 +90,7 @@ function TimeLine() {
     >
       <div
         onClick={() => navigateTo("../quests")}
-        className="w-full bg-white lg:rounded-lg overflow-hidden cursor-pointer"
+        className="hidden w-full bg-white lg:rounded-lg overflow-hidden cursor-pointer"
       >
         <img
           className="aspect-[16/9] w-full object-cover  "

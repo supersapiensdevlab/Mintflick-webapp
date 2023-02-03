@@ -146,9 +146,9 @@ function ListNFTModal({ listModalOpen, setListModalOpen, content, tokenId }) {
               />
               <span className="text-brand3 bg-slate-300 dark:bg-slate-600 ">
                 {State.database.chainId === 0 ? (
-                  <>
-                    <SolanaToken></SolanaToken>&nbsp; SOL
-                  </>
+                  <div className="flex">
+                    <SolanaToken></SolanaToken> &nbsp; SOL
+                  </div>
                 ) : (
                   <>
                     <PolygonToken></PolygonToken> &nbsp; Matic
