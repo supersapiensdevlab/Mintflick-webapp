@@ -35,7 +35,7 @@ function MintNFTModal({
     let data = {
       tokenId: mintId,
       contentId: id,
-      contentType: contentType,
+      contentType: contentType, //`post` or `video`
     };
     axios
       .post(`${process.env.REACT_APP_SERVER_URL}/user/add_tokenid`, data, {

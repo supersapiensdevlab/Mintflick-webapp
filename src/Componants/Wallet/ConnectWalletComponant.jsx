@@ -6,6 +6,8 @@ import instagram from "../../Assets/logos/wallet/instagram.svg";
 import { UserContext } from "../../Store";
 import PolygonToken from "../../Assets/logos/PolygonToken";
 import SolanaToken from "../../Assets/logos/SolanaToken";
+import googleLogo from "../../Assets/logos/icons/google.svg";
+
 import SolanaTorus from "@toruslabs/solana-embed";
 
 import useWeb3Auth from "../../Hooks/useWeb3Auth";
@@ -191,40 +193,8 @@ function ConnectWalletComponant() {
             }}
             className="btn btn-brand flex-grow capitalize gap-2"
           >
-            <svg
-              width="24"
-              height="24"
-              viewBox="0 0 399 400"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <rect width="399" height="400" rx="111" fill="#012BE7" />
-              <rect
-                x="154"
-                y="91"
-                width="65"
-                height="218"
-                rx="20"
-                fill="white"
-              />
-              <rect
-                x="98"
-                y="91"
-                width="121"
-                height="65"
-                rx="20"
-                fill="white"
-              />
-              <rect
-                x="235"
-                y="91"
-                width="65"
-                height="65"
-                rx="32.5"
-                fill="white"
-              />
-            </svg>
-            Connect Torus Wallet
+            <img src={googleLogo} className="h-6 w-6" />
+            Google Sign In
           </button>
           {window.phantom && (
             <button
