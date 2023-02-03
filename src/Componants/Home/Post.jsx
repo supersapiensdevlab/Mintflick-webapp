@@ -135,8 +135,8 @@ function Post(props) {
   }, [props.comments]);
 
   useEffect(() => {
-    if (props.nfts) {
-      props.nfts.forEach((value) => {
+    if (State.database.nftData) {
+      State.database.nftData.forEach((value) => {
         if (props.content.tokenId) {
           if (props.content.tokenId === value.nft_address) {
             setPrice(value.price);
@@ -144,7 +144,7 @@ function Post(props) {
         }
       });
     }
-  }, [props.nfts]);
+  }, [listModalOpen]);
 
   const handleUnfollowUser = async (toUnfollow) => {
     const unfollowData = {
@@ -408,7 +408,7 @@ function Post(props) {
         })
         .catch((error) => console.log("error", error));
     }
-  }, []);
+  }, [State.database.buyNFTModalOpen]);
 
   // like section
   useEffect(() => {
@@ -1198,7 +1198,7 @@ function Post(props) {
                         nftDescription: props.content.description,
                         nftPrice: price,
                         tokenId: props.content.tokenId,
-                        sellerAddress: props.walletId,
+                        sellerAddress: owner,
                       },
 
                       buyNFTModalOpen: true,

@@ -37,7 +37,7 @@ function BuyNFTModal() {
 
   const [buying, setBuying] = useState(false);
 
-  const [loadFeed] = useUserActions();
+  const [loadFeed, loadUser, loadProfileCard, loadNftsData] = useUserActions();
 
   const signTransaction = async (encodedTransaction, fromPrivateKey) => {
     try {
@@ -69,12 +69,9 @@ function BuyNFTModal() {
         Buffer.from(encodedTransaction, "base64")
       );
       console.log(recoveredTransaction);
-      const signedTx = await (provider.isPhantom
-        ? provider
-        : solanaWallet
-      ).signTransaction(recoveredTransaction); // signing the recovered transaction using the creator_wall
+      const signedTx = await provider.signTransaction(recoveredTransaction); // signing the recovered transaction using the creator_wall
       console.log(signedTx);
-
+      await loadFeed();
       confirmTransaction = signedTx;
     } catch (error) {
       console.log(error);

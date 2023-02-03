@@ -104,7 +104,6 @@ function ConnectWalletComponant() {
       walletAddress: address,
     });
     isUserAvaliable(address, torus);
-    // console.log(window.phantom.solana);
   };
 
   return (
@@ -191,10 +190,13 @@ function ConnectWalletComponant() {
             onClick={async () => {
               handleTorusConnect();
             }}
-            className="btn btn-brand flex-grow capitalize gap-2"
+            className="flex-grow mx-auto max-w-xl flex items-center justify-center p-2 rounded-lg bg-[#4688F1] text-white font-semibold  capitalize gap-2"
           >
-            <img src={googleLogo} className="h-6 w-6" />
-            Google Sign In
+            <img
+              src={googleLogo}
+              className="h-8 w-8 p-1 rounded-full bg-white"
+            />
+            Connect with Google Account
           </button>
           {window.phantom && (
             <button

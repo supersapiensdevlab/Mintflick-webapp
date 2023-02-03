@@ -21,7 +21,7 @@ function ListNFTModal({ listModalOpen, setListModalOpen, content, tokenId }) {
     "Please enter the price & confirm to list the NFT for sale"
   );
   const [listing, setListing] = useState(false);
-  const [loadFeed, loadUser] = useUserActions();
+  const [loadFeed, loadUser, loadProfileCard, loadNftsData] = useUserActions();
   const [loadNfts] = useLoadNfts();
   const [price, setPrice] = useState(0);
 
