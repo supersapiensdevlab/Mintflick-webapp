@@ -227,7 +227,7 @@ function BuyNFTModal() {
                     {State.database.chainId === 1 ? (
                       <PolygonToken size={16}></PolygonToken>
                     ) : State.database.chainId === 0 ? (
-                      <SolanaToken size={24}></SolanaToken>
+                      <SolanaToken></SolanaToken>
                     ) : null}
                     {State.database?.buyNFTModalData?.nftPrice}
                   </p>
