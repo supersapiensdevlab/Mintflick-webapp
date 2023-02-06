@@ -18,6 +18,8 @@ import {
 function MintNFTModal({
   mintModalOpen,
   setMintModalOpen,
+  setTokenId,
+  setOwner,
   content,
   videoImage,
   name,
@@ -45,7 +47,7 @@ function MintNFTModal({
         },
       })
       .then(async (res) => {
-        State.toast("success", "Your Photo uploded successfully!");
+        State.toast("success", "Nft Minted successfully!");
         await loadFeed();
         await loadUser();
       })
@@ -59,7 +61,7 @@ function MintNFTModal({
   const nftMinted = (mintId) => {
     uploadToServer(mintId);
     setMinting(false);
-    setSuccessMessage("NFT minted successfully!");
+    // setSuccessMessage("NFT minted successfully!");
   };
 
   const clearData = () => {
@@ -101,7 +103,9 @@ function MintNFTModal({
       ? State.toast("success", "NFT Minted successfully")
       : State.toast("error", finalTx.message);
     console.log(mintRequest);
-    finalTx.success && nftMinted(mintRequest);
+    finalTx.success && nftMinted(mintRequest.data.result.mint);
+    finalTx.success && setTokenId(mintRequest.data.result.mint);
+    finalTx.success && setOwner(State.database.walletAddress);
     setMintModalOpen(false);
     loadFeed();
   };

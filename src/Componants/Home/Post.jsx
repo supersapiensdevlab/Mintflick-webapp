@@ -68,6 +68,7 @@ function Post(props) {
   const [pollVoted, setPollVoted] = useState(null);
 
   const [price, setPrice] = useState(0);
+  const [tokenId, setTokenId] = useState(props.tokenId ? props.tokenId : null);
 
   //// Only Track Specific States and Functions
 
@@ -86,6 +87,7 @@ function Post(props) {
   const audioPlayer = useRef(); // reference our audio component
   const progressBar = useRef(); // reference our progress bar
   const animationRef = useRef(); // reference the animation
+
   //comment
   const [text, setText] = useState("");
   const [showCommentInput, setshowCommentInput] = useState(false);
@@ -383,14 +385,10 @@ function Post(props) {
 
   //Fetch NFT Details on SOlana
   useEffect(() => {
-    if (
-      props.tokenId !== null &&
-      props.tokenId !== undefined &&
-      props.tokenId !== "null"
-    ) {
+    if (tokenId !== null && tokenId !== undefined && tokenId !== "null") {
       var myHeaders = new Headers();
       myHeaders.append("x-api-key", `${process.env.REACT_APP_SHYFT_API_KEY}`);
-      //console.log(props.tokenId);
+      //console.log(tokenId);
       var requestOptions = {
         method: "GET",
         headers: myHeaders,
@@ -398,7 +396,7 @@ function Post(props) {
       };
 
       fetch(
-        `https://api.shyft.to/sol/v1/nft/read?network=devnet&token_address=${props.tokenId}`,
+        `https://api.shyft.to/sol/v1/nft/read?network=devnet&token_address=${tokenId}`,
         requestOptions
       )
         .then((response) => response.json())
@@ -762,7 +760,7 @@ function Post(props) {
   return (
     <>
       <div className="relative w-full h-fit lg:bg-slate-100 lg:dark:bg-slate-800 lg:rounded-xl p-4 lg:p-8 space-y-4 pb-4 border-b-2 lg:border-none  border-slate-200 dark:border-slate-900">
-        {props.tokenId && owner && (
+        {tokenId && owner && (
           <svg
             className="absolute -top-6 lg:top-0 left-4 "
             width="30"
@@ -1145,12 +1143,12 @@ function Post(props) {
             </div>
           </>
         )}
-        {/* {console.log(owner ? owner : "", props.tokenId)} */}
+        {/* {console.log(owner ? owner : "", tokenId)} */}
 
-        {props.tokenId && owner ? (
+        {tokenId && owner ? (
           <div
             className={
-              // props.tokenId && !props.gettingNFTData
+              // tokenId && !props.gettingNFTData
               // ?
               "w-full flex items-center justify-between rounded-lg space-x-1 text-brand2"
               // : "hidden"
@@ -1161,7 +1159,7 @@ function Post(props) {
               <At size={16}></At>
 
               <a
-                href={`https://solscan.io/token/${props.tokenId}?cluster=devnet`}
+                href={`https://solscan.io/token/${tokenId}?cluster=devnet`}
                 target="_blank"
                 className="cursor-pointer font-semibold text-sm text-primary"
               >
@@ -1427,6 +1425,8 @@ function Post(props) {
       <MintNFTModal
         mintModalOpen={mintModalOpen}
         setMintModalOpen={setMintModalOpen}
+        setTokenId={setTokenId}
+        setOwner={setOwner}
         content={props.contentType == "post" ? props.image : props.videoUrl}
         videoImage={props.videoImage ? props.videoImage : null}
         name={props.contentType == "post" ? props.text : props.videoName}
