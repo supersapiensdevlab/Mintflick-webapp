@@ -1,38 +1,38 @@
 {
-"shortcuts": [
-  {
-    "name": "Start Live Session",
-    "short_name": "Start Live",
-    "description": "Jump direction into starting or joining a live session",
-    "url": "/?startLive",
-    "icons": [
-      {
-        "src": "https://pwabuilder.com/assets/icons/icon_192.png",
-        "sizes": "192x192"
-      }
-    ]
-  }
-], 
-"screenshots": [
-  {
-    "src": "/screenshots/screenshot1.png",
-    "sizes": "2940x1624",
-    "type": "image/png",
-    "description": "PWABuilder Home Screen"
-  },
-  {
-    "src": "/screenshots/screenshot1.png",
-    "sizes": "2940/1624",
-    "type": "image/png",
-    "description": "PWABuilder Report Card"
-  },
-  {
-    "src": "/screenshots/screenshot1.png",
-    "sizes": "2940x1624",
-    "type": "image/png",
-    "description": "Manifest information on the Report Card"
-  }
-], 
+  "shortcuts": [
+    {
+      "name": "Start Live Session",
+      "short_name": "Start Live",
+      "description": "Jump direction into starting or joining a live session",
+      "url": "/?startLive",
+      "icons": [
+        {
+          "src": "https://pwabuilder.com/assets/icons/icon_192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshots/screenshot1.png",
+      "sizes": "2940x1624",
+      "type": "image/png",
+      "description": "PWABuilder Home Screen"
+    },
+    {
+      "src": "/screenshots/screenshot1.png",
+      "sizes": "2940/1624",
+      "type": "image/png",
+      "description": "PWABuilder Report Card"
+    },
+    {
+      "src": "/screenshots/screenshot1.png",
+      "sizes": "2940x1624",
+      "type": "image/png",
+      "description": "Manifest information on the Report Card"
+    }
+  ],
   "short_name": "Mintflick",
   "name": "Super App for Content",
   "icons": [
@@ -60,10 +60,7 @@
   "theme_color": "#1e293b",
   "background_color": "#1e293b",
   "purpose": "any maskable",
-  "description": "Build your community on Web3 with NFT Content &amp; own what you post.",
+  "description": "Build your community on Web3 with NFT Content &amp;amp; own what you post.",
   "orientation": "portrait",
-  "categories": [
-    "photo",
-    "social"
-  ]
+  "categories": ["photo", "social"]
 }
