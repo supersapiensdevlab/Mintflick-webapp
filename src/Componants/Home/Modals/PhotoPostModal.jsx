@@ -275,7 +275,9 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
                 .catch((error) => State.toast("error", error));
               console.log(mintRequest);
 
-              uploadToServer(formData, mintRequest.data?.result.mint);
+              mintRequest &&
+                uploadToServer(formData, mintRequest.data?.result.mint);
+              clearData();
             }
           } else {
             uploadToServer(formData, null);

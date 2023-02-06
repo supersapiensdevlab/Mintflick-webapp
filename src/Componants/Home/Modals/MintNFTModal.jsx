@@ -84,20 +84,24 @@ function MintNFTModal({
       file
     );
 
-    const signedTx = await signTransactionWithWallet(
-      mintRequest.data.result.encoded_transaction,
-      State.database.provider
-    );
+    const signedTx =
+      mintRequest &&
+      (await signTransactionWithWallet(
+        mintRequest.data.result.encoded_transaction,
+        State.database.provider
+      ));
 
-    const finalTx = await signWithRelayer(signedTx).catch((error) =>
-      State.toast("error", error)
-    );
+    const finalTx =
+      signedTx &&
+      (await signWithRelayer(signedTx).catch((error) =>
+        State.toast("error", error)
+      ));
     console.log(finalTx);
     finalTx.success === true
       ? State.toast("success", "NFT Minted successfully")
       : State.toast("error", finalTx.message);
     console.log(mintRequest);
-    nftMinted(mintRequest);
+    finalTx.success && nftMinted(mintRequest);
     setMintModalOpen(false);
     loadFeed();
   };
