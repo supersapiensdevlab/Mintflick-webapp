@@ -81,6 +81,7 @@ export default function useUserActions() {
         State.updateDatabase({
           nftData: data,
         });
+        console.log("nftData", result.result);
       })
       .catch((error) => console.log("error", error));
   }

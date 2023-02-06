@@ -15,7 +15,13 @@ import {
 } from "../../../Helper/mintOnSolana2";
 import { signTransaction } from "../../../Helper/mintOnSolana";
 
-function ListNFTModal({ listModalOpen, setListModalOpen, content, tokenId }) {
+function ListNFTModal({
+  listModalOpen,
+  setListModalOpen,
+  setNftPrice,
+  content,
+  tokenId,
+}) {
   const State = useContext(UserContext);
   const [successMessage, setSuccessMessage] = useState(
     "Please enter the price & confirm to list the NFT for sale"
@@ -99,7 +105,8 @@ function ListNFTModal({ listModalOpen, setListModalOpen, content, tokenId }) {
           response.success
             ? State.toast("success", "NFT listed successfully")
             : State.toast("error", response.message);
-          response.success && loadFeed();
+          response.success && setNftPrice(1);
+          loadNftsData();
           setListModalOpen(false);
         })
         .catch((error) => State.toast("error", error));

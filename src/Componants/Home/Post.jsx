@@ -144,7 +144,7 @@ function Post(props) {
         }
       });
     }
-  }, [listModalOpen]);
+  }, []);
 
   const handleUnfollowUser = async (toUnfollow) => {
     const unfollowData = {
@@ -403,12 +403,11 @@ function Post(props) {
       )
         .then((response) => response.json())
         .then((result) => {
-          console.log(result);
           setOwner(result.result?.owner);
         })
         .catch((error) => console.log("error", error));
     }
-  }, [State.database.buyNFTModalOpen]);
+  }, []);
 
   // like section
   useEffect(() => {
@@ -1148,7 +1147,7 @@ function Post(props) {
         )}
         {/* {console.log(owner ? owner : "", props.tokenId)} */}
 
-        {props.tokenId && owner ? (
+        {props.tokenId ? (
           <div
             className={
               // props.tokenId && !props.gettingNFTData
@@ -1173,7 +1172,7 @@ function Post(props) {
             {price > 0 ? (
               owner === State.database.walletAddress ? (
                 <div className="cursor-pointer items-center  btn btn-xs btn-primary btn-outline gap-1 ml-auto rounded-md">
-                  Listed
+                  Listed for Sale
                 </div>
               ) : (
                 <div
@@ -1199,6 +1198,8 @@ function Post(props) {
                         nftPrice: price,
                         tokenId: props.content.tokenId,
                         sellerAddress: owner,
+                        setPrice: setPrice,
+                        setOwner: setOwner,
                       },
 
                       buyNFTModalOpen: true,
@@ -1222,7 +1223,7 @@ function Post(props) {
                     {/* <PolygonToken></PolygonToken> */}
                     {/* <p className="text-sm  mx-1">{props.price}</p> */}
                     <CheckupList size={18} />
-                    List
+                    List or Sell
                   </div>
                 ) : (
                   <></>
@@ -1435,6 +1436,7 @@ function Post(props) {
       <ListNFTModal
         listModalOpen={listModalOpen}
         setListModalOpen={setListModalOpen}
+        setNftPrice={setPrice}
         content={props.contentType == "post" ? props.image : props.videoImage}
         tokenId={props.content?.tokenId}
       />

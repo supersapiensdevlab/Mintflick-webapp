@@ -116,7 +116,9 @@ function BuyNFTModal() {
         State.toast("success", "NFT bought successfully");
         State.updateDatabase({ buyNFTModalOpen: false });
         setBuying(false);
-        loadFeed();
+        State.database?.buyNFTModalData?.setPrice(0);
+        State.database?.buyNFTModalData?.setOwner(State.database.walletAddress);
+        loadNftsData();
       })
       .catch((err) => {
         console.log(err);
