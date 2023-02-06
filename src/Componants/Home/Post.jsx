@@ -1147,7 +1147,7 @@ function Post(props) {
         )}
         {/* {console.log(owner ? owner : "", props.tokenId)} */}
 
-        {props.tokenId ? (
+        {props.tokenId && owner ? (
           <div
             className={
               // props.tokenId && !props.gettingNFTData

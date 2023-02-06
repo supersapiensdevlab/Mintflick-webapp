@@ -97,6 +97,7 @@ function MintNFTModal({
       ? State.toast("success", "NFT Minted successfully")
       : State.toast("error", finalTx.message);
     console.log(mintRequest);
+    nftMinted(mintRequest);
     setMintModalOpen(false);
     loadFeed();
   };
