@@ -41,6 +41,10 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
   const [tokenId, setTokenId] = useState(null);
   const [solanaMintId, setSolanaMintId] = useState(null);
   const [mintSuccess, setMintSuccess] = useState("");
+
+  const [btnText, setbtnText] = useState("Flick Photo");
+  const [step, setstep] = useState(0);
+
   const [loadNfts] = useLoadNfts();
   //Instance of pandora
   const ExpressSDK = createPandoraExpressSDK();
@@ -194,6 +198,8 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
         }
       });
       setUploadingPost(true);
+      setbtnText("Uploading file");
+
       uploadFile(selectedPost.file)
         .then(async (cid) => {
           let formData = new FormData();
@@ -203,6 +209,7 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
           formData.append("tagged", filter);
           console.log(filter);
           if (isNFT) {
+            setbtnText("Minting NFT");
             console.log("Minting...");
             // Display the key/value pairs
             for (var pair of formData.entries()) {
@@ -274,10 +281,9 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
                 })
                 .catch((error) => State.toast("error", error));
               console.log(mintRequest);
-
+              mintRequest && setbtnText("NFT Minted");
               mintRequest &&
                 uploadToServer(formData, mintRequest.data?.result.mint);
-              clearData();
             }
           } else {
             uploadToServer(formData, null);
@@ -345,6 +351,7 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
 
   const clearData = (e) => {
     setUploadingPost(false);
+    setbtnText("Flick Photo");
     setSelectedPost(null);
     setCaption("");
     setTagged([]);
@@ -392,6 +399,31 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
           ></X>
         </div>
       </div>
+      {uploadingPost && (
+        <ul className="steps w-full my-4 text-brand3">
+          <li
+            className={`step ${
+              (btnText === "Uploading file" ||
+                btnText === "Minting NFT" ||
+                btnText === "NFT Minted") &&
+              "step-success"
+            }`}
+          >
+            Uploading File
+          </li>
+          <li
+            className={`step ${
+              (btnText === "NFT Minted" || btnText === "Minting NFT") &&
+              "step-success"
+            }`}
+          >
+            Minting NFT
+          </li>
+          <li className={`step ${btnText === "NFT Minted" && "step-success"}`}>
+            NFT Minted
+          </li>
+        </ul>
+      )}
       <form>
         <div className="w-full p-4 space-y-3">
           <label
@@ -512,11 +544,7 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
               )}
             </div>
           ) : null}
-          <progress
-            class="progress progress-success w-56 hidden"
-            value="50"
-            max="100"
-          ></progress>
+
           {showListingOption && mintSuccess == "NFT Minted Successfully" ? (
             <div className="w-full flex justify-around space-x-1">
               <button
@@ -567,7 +595,7 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
                     !selectedPost?.file[0] ? "btn-disabled" : "btn-brand"
                   } w-full capitalize ${uploadingPost ? "loading " : ""}`}
                 >
-                  Flick Photo
+                  {btnText}
                 </button>
               )}
             </>
