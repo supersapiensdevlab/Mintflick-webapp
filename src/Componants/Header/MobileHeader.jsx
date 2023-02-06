@@ -8,6 +8,8 @@ import coverImage from "../../Assets/backgrounds/cover.png";
 import axios from "axios";
 import ChatModal from "../ChatRoom/ChatModal";
 import MintWalletModal from "../Profile/Modals/MintWalletModal";
+import SolanaToken from "../../Assets/logos/SolanaToken";
+import PolygonToken from "../../Assets/logos/PolygonToken";
 
 function MobileHeader() {
   const State = useContext(UserContext);
@@ -124,9 +126,36 @@ function MobileHeader() {
               </NavLink>
             </li>
             <li>
-              <a className="truncate hover:dark:bg-slate-900 text-emerald-600">
-                {localStorage.getItem("walletAddress") && "Wallet connected"}
-              </a>
+              <span
+                onClick={() =>
+                  State.database.chainId === 0
+                    ? State.database.provider?.showWallet()
+                    : ""
+                }
+                className="truncate hover:dark:bg-slate-900 text-emerald-600"
+              >
+                {State.database.chainId === 0 ? (
+                  <SolanaToken
+                    className={
+                      State.database.chainId === 1 ? "saturate-0" : null
+                    }
+                  />
+                ) : (
+                  <PolygonToken
+                    className={
+                      State.database.chainId === 0 ? "saturate-0" : null
+                    }
+                  />
+                )}{" "}
+                <p className="h-1 w-1 bg-green-700 rounded-full animate-ping"></p>
+                {localStorage.getItem("walletAddress").slice(0, 6)}...
+                {localStorage
+                  .getItem("walletAddress")
+                  .slice(
+                    localStorage.getItem("walletAddress").length - 4,
+                    localStorage.getItem("walletAddress").length
+                  )}
+              </span>
             </li>
           </ul>
         </div>

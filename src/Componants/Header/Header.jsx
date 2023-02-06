@@ -594,7 +594,14 @@ function Header() {
               </a>
             </li>
             <li>
-              <a className="truncate hover:dark:bg-slate-900 text-emerald-600">
+              <span
+                onClick={() =>
+                  State.database.chainId === 0
+                    ? State.database.provider?.showWallet()
+                    : ""
+                }
+                className="truncate hover:dark:bg-slate-900 text-emerald-600"
+              >
                 {State.database.chainId === 0 ? (
                   <SolanaToken
                     className={
@@ -616,7 +623,7 @@ function Header() {
                     localStorage.getItem("walletAddress").length - 4,
                     localStorage.getItem("walletAddress").length
                   )}
-              </a>
+              </span>
             </li>{" "}
             <li>
               <NavLink
