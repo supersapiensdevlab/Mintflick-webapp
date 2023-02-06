@@ -113,12 +113,12 @@ function BuyNFTModal() {
           signedTrasaction.serialize()
         );
         console.log(x);
+        State.database?.buyNFTModalData?.setPrice(0);
+        State.database?.buyNFTModalData?.setOwner(State.database.walletAddress);
         State.toast("success", "NFT bought successfully");
         State.updateDatabase({ buyNFTModalOpen: false });
         setBuying(false);
-        State.database?.buyNFTModalData?.setPrice(0);
-        State.database?.buyNFTModalData?.setOwner(State.database.walletAddress);
-        loadNftsData();
+        // loadNftsData();
       })
       .catch((err) => {
         console.log(err);
