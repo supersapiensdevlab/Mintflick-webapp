@@ -46,7 +46,7 @@ app.get("/homescreen/:username/:type/:id", (req, res, next) => {
     let title = "MintFlick";
     let description =
       "Decentralized Live Streaming, Videos & NFT Marketplace. Ditch Patreon & Onlyfans and become a superfan on Mintflick to donate cryptos directly to your favourite creators.";
-    let image = "https://v2.mintflick.app/Mintflick-favicon.png";
+    let image = "https://mintflick.app/Mintflick-favicon.png";
     let content = null;
     switch (type) {
       case "video":
@@ -106,7 +106,7 @@ app.get("/homescreen/:username/:type/:id", (req, res, next) => {
         "Decentralized Live Streaming, Videos & NFT Marketplace. Ditch Patreon & Onlyfans and become a superfan on Mintflick to donate cryptos directly to your favourite creators.",
         description
       )
-      .replace("https://v2.mintflick.app/Mintflick-favicon.png", image);
+      .replace("https://mintflick.app/Mintflick-favicon.png", image);
     return res.send(htmlData);
   });
 });
