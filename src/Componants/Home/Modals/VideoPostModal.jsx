@@ -26,6 +26,11 @@ import {
   partialSignWithWallet,
   listNFTOnSolana,
 } from "../../../Helper/mintOnSolana";
+import {
+  mintNFTOnSolana2,
+  signTransactionWithWallet,
+  signWithRelayer,
+} from "../../../Helper/mintOnSolana2";
 
 function VideoPostModal({ setVideoPostModalOpen }) {
   const State = useContext(UserContext);
@@ -42,6 +47,8 @@ function VideoPostModal({ setVideoPostModalOpen }) {
 
   const [minting, setMinting] = useState(null);
   const [mintingProgress, setMintingProgress] = useState(0);
+
+  const [btnText, setbtnText] = useState("Flick Video");
 
   const renderData = [];
   State.database.userData?.data?.user?.followee_count.forEach((value, i) => {
@@ -165,69 +172,58 @@ function VideoPostModal({ setVideoPostModalOpen }) {
     //   });
   };
 
-  const mintOnSolana = (formData, file) => {
+  const mintOnSolana = async (formData, cid) => {
     console.log(selectedVideo.file);
-    uploadFile(selectedVideo.file).then(async (cid) => {
-      console.log("stored files with cid:", cid);
-      // let nftSolanaData = {
-      //   network: "devnet",
-      //   wallet: State.database.walletAddress,
-      //   name: selectedVideo.file.name,
-      //   symbol: "FLICK",
-      //   attributes: JSON.stringify([{ trait_type: "Power", value: "100" }]),
-      //   description: videoData.description,
-      //   external_url:
-      //     "https://ipfs.io/ipfs/" + cid + "/" + selectedVideo.file.name,
-      //   max_supply: 1,
-      //   royalty: 5,
-      //   file: selectedVideo.file,
-      // };
+    setbtnText("Uploading file");
 
-      // console.log(nftSolanaData);
-      // axios
-      //   .post(`https://api.shyft.to/sol/v1/nft/create_detach`, nftSolanaData, {
-      //     headers: {
-      //       "x-api-key": `${process.env.REACT_APP_SHYFT_API_KEY}`,
-      //       "content-type": "multipart/form-data",
-      //     },
-      //   })
-      let url = "https://ipfs.io/ipfs/" + cid + "/" + selectedVideo.file.name;
-      await mintNFTOnSolana(
-        State.database.walletAddress,
-        videoData.videoName,
-        videoData.description,
-        url,
-        selectedVideo.file
-      )
-        .then(async (data) => {
-          console.log("MintID", data.data.result.mint);
-          setTokenAddress(data.data.result.mint);
-          // await signTransaction(
-          //   "devnet",
-          //   data.data.result.encoded_transaction,
-          //   () => {
-          //     nftMinted(formData, data.data.result.mint);
-          //   }
-          // );
-          await signTransaction(
-            data.data.result.encoded_transaction,
-            `${process.env.REACT_APP_FEEPAYER_PRIVATEKEY}`
-          )
-            .then((res) => {
-              console.log(res);
-              partialSignWithWallet(res, State.database?.provider).then(() => {
-                nftMinted(formData, data.data.result.mint);
-              });
-            })
-            .catch((err) => {
-              console.log(err);
-            });
-        })
-        .catch((err) => {
-          console.log(err);
-          State.toast("error", "Error minting NFT. Please try again!");
-        });
-    });
+    console.log("stored files with cid:", cid);
+    // let nftSolanaData = {
+    //   network: "devnet",
+    //   wallet: State.database.walletAddress,
+    //   name: selectedVideo.file.name,
+    //   symbol: "FLICK",
+    //   attributes: JSON.stringify([{ trait_type: "Power", value: "100" }]),
+    //   description: videoData.description,
+    //   external_url:
+    //     "https://ipfs.io/ipfs/" + cid + "/" + selectedVideo.file.name,
+    //   max_supply: 1,
+    //   royalty: 5,
+    //   file: selectedVideo.file,
+    // };
+
+    // console.log(nftSolanaData);
+    // axios
+    //   .post(`https://api.shyft.to/sol/v1/nft/create_detach`, nftSolanaData, {
+    //     headers: {
+    //       "x-api-key": `${process.env.REACT_APP_SHYFT_API_KEY}`,
+    //       "content-type": "multipart/form-data",
+    //     },
+    //   })
+    let url = "https://ipfs.io/ipfs/" + cid + "/" + selectedVideo.file.name;
+
+    const mintRequest = await mintNFTOnSolana2(
+      State.database.walletAddress,
+      videoData.videoName,
+      videoData.description,
+      url,
+      selectedVideo.file
+    );
+    setbtnText("Minting NFT");
+    const signedTx = await signTransactionWithWallet(
+      mintRequest.data.result.encoded_transaction,
+      State.database.provider
+    );
+
+    await signWithRelayer(signedTx)
+      .then((response) => {
+        response.success
+          ? State.toast("success", "NFT Minted successfully")
+          : State.toast("error", response.message);
+      })
+      .catch((error) => State.toast("error", error));
+    console.log(mintRequest);
+    mintRequest && setbtnText("NFT Minted");
+    mintRequest && nftMinted(formData, mintRequest.data?.result.mint);
   };
 
   const listNFTForSale = async (e) => {
@@ -310,9 +306,12 @@ function VideoPostModal({ setVideoPostModalOpen }) {
   // }
 
   const nftMinted = (formData, mintId) => {
-    setSolanaMintId(mintId);
-    setShowListingOption(true);
-    setUploadingVideo(false);
+    // setSolanaMintId(mintId);
+    // setShowListingOption(true);
+    // setUploadingVideo(false);
+    setVideoPostModalOpen(false);
+    setbtnText("Uploading Video");
+
     setMintSuccess("NFT Minted Successfully");
     formData.append("tokenId", mintId);
     axios
@@ -323,10 +322,12 @@ function VideoPostModal({ setVideoPostModalOpen }) {
         },
       })
       .then(async (res) => {
+        clearState();
         State.toast("success", "Your Video uplaoded successfully!");
         await loadFeed();
       })
       .catch((err) => {
+        clearState();
         State.toast("error", "Oops!somthing went wrong uplaoding video!");
         console.log(err);
       });
@@ -417,7 +418,7 @@ function VideoPostModal({ setVideoPostModalOpen }) {
             if (State.database.chainId === 1) {
               mintOnPolygon(formData, file);
             } else if (State.database.chainId === 0) {
-              mintOnSolana(formData, file);
+              mintOnSolana(formData, cid);
             }
           } else {
             axios
@@ -815,7 +816,7 @@ function VideoPostModal({ setVideoPostModalOpen }) {
                       : "btn-disabled"
                   } ${uploadingVideo ? "loading" : ""}`}
                 >
-                  Flick Video
+                  {btnText}
                 </button>
               )}
             </>

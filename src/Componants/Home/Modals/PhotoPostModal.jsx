@@ -209,7 +209,7 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
           formData.append("tagged", filter);
           console.log(filter);
           if (isNFT) {
-            setbtnText("Minting NFT");
+            setbtnText("Minting Video NFT");
             console.log("Minting...");
             // Display the key/value pairs
             for (var pair of formData.entries()) {
