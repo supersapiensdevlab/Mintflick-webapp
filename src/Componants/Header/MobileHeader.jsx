@@ -1,5 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
-import { DeviceGamepad2, MessageDots } from "tabler-icons-react";
+import {
+  DeviceGamepad2,
+  DoorExit,
+  MessageDots,
+  Moon,
+  Settings,
+  Sun,
+  User,
+} from "tabler-icons-react";
 import { UserContext } from "../../Store";
 import Main_logo from "../../Assets/logos/Main_logo";
 import Main_logo_dark from "../../Assets/logos/Main_logo_dark";
@@ -11,6 +19,9 @@ import MintWalletModal from "../Profile/Modals/MintWalletModal";
 import SolanaToken from "../../Assets/logos/SolanaToken";
 import PolygonToken from "../../Assets/logos/PolygonToken";
 import CopyToClipboard from "../CopyButton/CopyToClipboard";
+import { Image } from "react-img-placeholder";
+import placeholderImage from "../../Assets/profile-pic.png";
+import SettingsModal from "../Profile/Modals/SettingsModal";
 
 function MobileHeader() {
   const State = useContext(UserContext);
@@ -18,6 +29,8 @@ function MobileHeader() {
 
   const [chatModalOpen, setchatModalOpen] = useState(false);
   const [walletModalOpen, setwalletModalOpen] = useState(false);
+
+  const [settingsModalOpen, setsettingsModalOpen] = useState(false);
 
   async function getUserData() {
     await axios({
@@ -52,43 +65,49 @@ function MobileHeader() {
       } transition-all ease-in-out lg:hidden fixed z-50  top-0 flex px-4 lg:px-12 justify-between items-center h-16 bg-white dark:bg-slate-900 w-full shadow-mintflick`}
     >
       <div className="flex justify-between items-center space-x-4 h-full w-full">
-        <div className="dropdown  mt-2">
-          <label tabindex="0" className="avatar">
-            <div className="w-10 h-10 rounded-full">
-              <img
+        <div class="dropdown dropdown-start">
+          <label tabindex="0" className=" avatar">
+            <div className="w-10 rounded-full cursor-pointer">
+              {/* <img
                 src={
                   State.database.userData.data?.user.profile_image
                     ? State.database.userData.data.user.profile_image
                     : coverImage
                 }
+              /> */}
+              <Image
+                width={50}
+                height={50}
+                src={
+                  State.database.userData.data?.user.profile_image
+                    ? State.database.userData.data.user.profile_image
+                    : coverImage
+                }
+                alt="profileImage"
+                placeholderSrc={placeholderImage}
               />
             </div>
           </label>
           <ul
             tabindex="0"
-            className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-slate-100 dark:bg-slate-800 text-brand1 text-base font-medium rounded-lg w-52"
+            className="menu menu-compact dropdown-content mt-3 p-2 shadow-xl   bg-slate-100 dark:bg-slate-800 text-brand1 text-base font-medium rounded-lg w-52"
           >
             <li>
               <NavLink
                 to={`/homescreen/profile/${
-                  State.database.userData.data &&
-                  State.database.userData.data.user.username
+                  State.database.userData.data
+                    ? State.database.userData.data.user.username
+                    : ""
                 }`}
                 className="  hover:dark:bg-slate-900"
               >
-                Profile
+                <User size={22}></User>Profile
               </NavLink>
             </li>
-            <li>
-              <a className=" hover:dark:bg-slate-900">Settings</a>
-            </li>
-            <li>
-              <span
-                onClick={() => setwalletModalOpen(true)}
-                className=" hover:dark:bg-slate-900"
-              >
-                Wallet
-              </span>
+            <li onClick={() => setsettingsModalOpen(true)}>
+              <a className=" hover:dark:bg-slate-900">
+                <Settings size={22}></Settings>Settings
+              </a>
             </li>
             {/* <label className="swap swap-rotate dark:text-gray-100">
               <input
@@ -112,31 +131,23 @@ function MobileHeader() {
                   })
                 }
               >
-                Dark mode {State.database.dark ? "off" : "on"}
+                {State.database.dark ? (
+                  <Moon size={22}></Moon>
+                ) : (
+                  <Sun size={22}></Sun>
+                )}{" "}
+                Mode
               </a>
             </li>
             <li>
-              <NavLink
-                onClick={() => {
-                  localStorage.clear();
-                }}
-                to={"/"}
-                className="hover:bg-rose-500 "
-              >
-                Logout
-              </NavLink>
-            </li>
-            <li>
-              <span
-                onClick={() =>
-                  State.database.chainId === 0
-                    ? State.database.provider?.showWallet()
-                    : ""
-                }
-                className="truncate hover:dark:bg-slate-900 text-emerald-600"
-              >
+              <span className="relative truncate hover:dark:bg-slate-900 text-emerald-600">
                 {State.database.chainId === 0 ? (
                   <SolanaToken
+                    onClick={() =>
+                      State.database.chainId === 0
+                        ? State.database.provider?.showWallet()
+                        : ""
+                    }
                     className={
                       State.database.chainId === 1 ? "saturate-0" : null
                     }
@@ -148,16 +159,30 @@ function MobileHeader() {
                     }
                   />
                 )}{" "}
-                <p className="h-1 w-1 bg-green-700 rounded-full animate-ping"></p>
+                <p className="absolute top-2 left-4 h-2 w-2 bg-green-700 rounded-full animate-ping"></p>
                 {localStorage.getItem("walletAddress").slice(0, 6)}...
                 {localStorage
                   .getItem("walletAddress")
                   .slice(
                     localStorage.getItem("walletAddress").length - 4,
                     localStorage.getItem("walletAddress").length
-                  )}
+                  )}{" "}
                 <CopyToClipboard text={localStorage.getItem("walletAddress")} />
               </span>
+            </li>
+            <li>
+              <NavLink
+                onClick={() => {
+                  //logout();
+                  localStorage.removeItem("authtoken");
+                  localStorage.removeItem("walletAddress");
+                  window.localStorage.clear();
+                }}
+                to={"/"}
+                className="hover:bg-rose-500 "
+              >
+                <DoorExit size={22}></DoorExit> Logout
+              </NavLink>
             </li>
           </ul>
         </div>
@@ -217,6 +242,7 @@ function MobileHeader() {
         }}
       /> */}
       <MintWalletModal open={walletModalOpen} setOpen={setwalletModalOpen} />
+      <SettingsModal open={settingsModalOpen} setOpen={setsettingsModalOpen} />
     </div>
   );
 }

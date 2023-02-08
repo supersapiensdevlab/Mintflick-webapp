@@ -595,16 +595,14 @@ function Header() {
               </a>
             </li>
             <li>
-              <span
-                onClick={() =>
-                  State.database.chainId === 0
-                    ? State.database.provider?.showWallet()
-                    : ""
-                }
-                className="truncate hover:dark:bg-slate-900 text-emerald-600"
-              >
+              <span className="relative truncate hover:dark:bg-slate-900 text-emerald-600">
                 {State.database.chainId === 0 ? (
                   <SolanaToken
+                    onClick={() =>
+                      State.database.chainId === 0
+                        ? State.database.provider?.showWallet()
+                        : ""
+                    }
                     className={
                       State.database.chainId === 1 ? "saturate-0" : null
                     }
@@ -616,17 +614,17 @@ function Header() {
                     }
                   />
                 )}{" "}
-                <p className="h-1 w-1 bg-green-700 rounded-full animate-ping"></p>
+                <p className="absolute top-2 left-4 h-2 w-2 bg-green-700 rounded-full animate-ping"></p>
                 {localStorage.getItem("walletAddress").slice(0, 6)}...
                 {localStorage
                   .getItem("walletAddress")
                   .slice(
                     localStorage.getItem("walletAddress").length - 4,
                     localStorage.getItem("walletAddress").length
-                  )}
+                  )}{" "}
+                <CopyToClipboard text={localStorage.getItem("walletAddress")} />
               </span>
-              <CopyToClipboard text={localStorage.getItem("walletAddress")} />
-            </li>{" "}
+            </li>
             <li>
               <NavLink
                 onClick={() => {
