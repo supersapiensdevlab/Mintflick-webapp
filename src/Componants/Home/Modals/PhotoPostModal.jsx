@@ -29,6 +29,8 @@ import {
   signTransactionWithWallet,
   signWithRelayer,
 } from "../../../Helper/mintOnSolana2";
+import Main_logo_dark from "../../../Assets/logos/Main_logo_dark";
+import Main_logo from "../../../Assets/logos/Main_logo";
 
 function PhotoPostModal({ setphotoPostModalOpen }) {
   const State = useContext(UserContext);
@@ -211,7 +213,7 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
           formData.append("tagged", filter);
           console.log(filter);
           if (isNFT) {
-            setbtnText("Minting Video NFT");
+            setbtnText("Minting Photo NFT");
             console.log("Minting...");
             // Display the key/value pairs
             for (var pair of formData.entries()) {
@@ -411,50 +413,16 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
           ></X>
         </div>
       </div>
-      {uploadingPost && (
-        <ul className="steps w-full my-4 text-brand3">
-          <li
-            className={`step ${
-              (btnText === "Uploading file" ||
-                btnText === "Minting NFT" ||
-                btnText === "NFT Minted") &&
-              "step-success"
-            }`}
-          >
-            Uploading File
-          </li>
-          <li
-            className={`step ${
-              (btnText === "NFT Minted" || btnText === "Minting NFT") &&
-              "step-success"
-            }`}
-          >
-            Minting NFT
-          </li>
-          <li className={`step ${btnText === "NFT Minted" && "step-success"}`}>
-            NFT Minted
-          </li>
-        </ul>
-      )}
+
       <form>
-        <div className="w-full p-4 space-y-3">
+        <div className=" w-full p-4 space-y-3">
           <label
             htmlFor="post_announcement_image"
-            className=" cursor-pointer flex justify-between items-center gap-2  w-full p-2 border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4"
+            className="relative cursor-pointer flex flex-col justify-between items-center gap-2  w-full p-2 border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4"
           >
-            {selectedPost ? (
-              selectedPost.file ? (
-                <div className="flex items-center">
-                  <FileCheck className="text-emerald-700" />
-                  {selectedPost.file[0].name.substring(0, 16)}
-                </div>
-              ) : (
-                "No file choosen!"
-              )
-            ) : (
-              <div className="flex items-center gap-1">
-                <File />
-                Choose file *
+            {uploadingPost && (
+              <div className="text-white gap-2 font-semibold absolute top-0 left-0 w-full h-full bg-white/10 backdrop-blur-sm rounded-lg flex flex-col items-center justify-center">
+                <Main_logo /> {btnText}
               </div>
             )}
             <input
@@ -471,15 +439,29 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
             />
             {selectedPost ? (
               selectedPost.file ? (
-                <div className="flex-grow rounded-lg overflow-clip">
+                <div className="w-72 flex items-center justify-center rounded-lg aspect-square  dark:bg-slate-900 bg-slate-300 overflow-clip">
                   <img src={selectedPost.localurl}></img>
                 </div>
               ) : null
             ) : (
               <></>
+            )}{" "}
+            {selectedPost ? (
+              selectedPost.file ? (
+                <div className="flex items-center">
+                  <FileCheck className="text-emerald-700" />
+                  {selectedPost.file[0].name.substring(0, 16)}
+                </div>
+              ) : (
+                "No file choosen!"
+              )
+            ) : (
+              <div className="w-full flex items-center gap-1">
+                <File />
+                Choose file *
+              </div>
             )}
           </label>
-
           {/* <textarea
             className="textarea  w-full"
             placeholder="Enter caption."
@@ -556,8 +538,7 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
               )}
             </div>
           ) : null}
-
-          {showListingOption && mintSuccess == "NFT Minted Successfully" ? (
+          {mintSuccess == "NFT Minted Successfully" ? (
             <div className="w-full flex justify-around space-x-1">
               <button
                 onClick={
@@ -592,7 +573,9 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
                     clearData();
                   }}
                   className={`btn  ${
-                    !selectedPost?.file[0] ? "btn-disabled" : "btn-brand"
+                    !selectedPost?.file[0]
+                      ? "btn-disabled"
+                      : "btn-outline btn-error"
                   } w-full `}
                 >
                   Close

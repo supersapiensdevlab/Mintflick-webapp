@@ -64,8 +64,8 @@ function MobileHeader() {
         State.database.showHeader ? "" : "-translate-y-16"
       } transition-all ease-in-out lg:hidden fixed z-50  top-0 flex px-4 lg:px-12 justify-between items-center h-16 bg-white dark:bg-slate-900 w-full shadow-mintflick`}
     >
-      <div className="flex justify-between items-center space-x-4 h-full w-full">
-        <div class="dropdown dropdown-start">
+      <div className="flex justify-between items-center  h-full w-full">
+        <div className="dropdown dropdown-start">
           <label tabindex="0" className=" avatar">
             <div className="w-10 rounded-full cursor-pointer">
               {/* <img
@@ -142,31 +142,26 @@ function MobileHeader() {
             <li>
               <span className="relative truncate hover:dark:bg-slate-900 text-emerald-600">
                 {State.database.chainId === 0 ? (
-                  <SolanaToken
-                    onClick={() =>
-                      State.database.chainId === 0
-                        ? State.database.provider?.showWallet()
-                        : ""
-                    }
-                    className={
-                      State.database.chainId === 1 ? "saturate-0" : null
-                    }
-                  />
+                  <SolanaToken />
                 ) : (
-                  <PolygonToken
-                    className={
-                      State.database.chainId === 0 ? "saturate-0" : null
-                    }
-                  />
+                  <PolygonToken />
                 )}{" "}
                 <p className="absolute top-2 left-4 h-2 w-2 bg-green-700 rounded-full animate-ping"></p>
-                {localStorage.getItem("walletAddress").slice(0, 6)}...
-                {localStorage
-                  .getItem("walletAddress")
-                  .slice(
-                    localStorage.getItem("walletAddress").length - 4,
-                    localStorage.getItem("walletAddress").length
-                  )}{" "}
+                <span
+                  onClick={() =>
+                    State.database.chainId === 0
+                      ? State.database.provider?.showWallet()
+                      : ""
+                  }
+                >
+                  {localStorage.getItem("walletAddress").slice(0, 6)}...
+                  {localStorage
+                    .getItem("walletAddress")
+                    .slice(
+                      localStorage.getItem("walletAddress").length - 4,
+                      localStorage.getItem("walletAddress").length
+                    )}
+                </span>
                 <CopyToClipboard text={localStorage.getItem("walletAddress")} />
               </span>
             </li>

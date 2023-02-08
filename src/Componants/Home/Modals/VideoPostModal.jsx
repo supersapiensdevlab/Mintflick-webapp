@@ -31,6 +31,7 @@ import {
   signTransactionWithWallet,
   signWithRelayer,
 } from "../../../Helper/mintOnSolana2";
+import Main_logo from "../../../Assets/logos/Main_logo";
 
 function VideoPostModal({ setVideoPostModalOpen }) {
   const State = useContext(UserContext);
@@ -174,7 +175,6 @@ function VideoPostModal({ setVideoPostModalOpen }) {
 
   const mintOnSolana = async (formData, cid) => {
     console.log(selectedVideo.file);
-    setbtnText("Uploading file");
 
     console.log("stored files with cid:", cid);
     // let nftSolanaData = {
@@ -200,7 +200,7 @@ function VideoPostModal({ setVideoPostModalOpen }) {
     //     },
     //   })
     let url = "https://ipfs.io/ipfs/" + cid + "/" + selectedVideo.file.name;
-
+    setbtnText("Minting Video NFT");
     const mintRequest = await mintNFTOnSolana2(
       State.database.walletAddress,
       videoData.videoName,
@@ -208,7 +208,7 @@ function VideoPostModal({ setVideoPostModalOpen }) {
       url,
       selectedVideo.file
     );
-    setbtnText("Minting NFT");
+
     const signedTx = await signTransactionWithWallet(
       mintRequest.data.result.encoded_transaction,
       State.database.provider
@@ -344,6 +344,8 @@ function VideoPostModal({ setVideoPostModalOpen }) {
       });
       setUploadingVideo(true);
       const files = [selectedThumbnail.file, selectedVideo.file];
+      setbtnText("Uploading file");
+
       storeWithProgress(files)
         .then((cid) => {
           let formData = new FormData(); // Currently empty
@@ -506,7 +508,12 @@ function VideoPostModal({ setVideoPostModalOpen }) {
       </div>
       <form onSubmit={handleSubmit}>
         <div className="w-full p-4 space-y-3">
-          <div className="flex flex-col sm:flex-row gap-1">
+          <div className="flex flex-col sm:flex-row gap-1 relative">
+            {uploadingVideo && (
+              <div className="text-white gap-2 font-semibold absolute top-0 left-0 w-full h-full bg-white/10 backdrop-blur-sm rounded-lg flex flex-col items-center justify-center">
+                <Main_logo /> {btnText}
+              </div>
+            )}
             <label
               htmlFor="videothumbnail"
               className="  max-h-52 cursor-pointer flex flex-col items-start gap-2  w-full p-2 border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4"
