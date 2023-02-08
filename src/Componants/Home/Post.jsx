@@ -15,6 +15,7 @@ import {
   PlayerPause,
   PlayerPlay,
   Share,
+  Eye,
   ShoppingCart,
   Trash,
   UserMinus,
@@ -38,6 +39,10 @@ import useIsInViewport from "../../Hooks/useIsInViewport";
 import { MentionsInput, Mention } from "react-mentions";
 import defaultStyle from "./defaultStyle";
 import placeholderImage from "../../Assets/profile-pic.png";
+import placeholderLogo from "../../Assets/logo1024.gif";
+
+import Main_logo from "../../Assets/logos/Main_logo";
+import Main_logo_dark from "../../Assets/logos/Main_logo_dark";
 import trackPlaceholder from "../../Assets/track-placeholder.jpg";
 import { Image } from "react-img-placeholder";
 import { Link } from "react-router-dom";
@@ -762,7 +767,7 @@ function Post(props) {
       <div className="relative w-full h-fit lg:bg-slate-100 lg:dark:bg-slate-800 lg:rounded-xl p-4 lg:p-8 space-y-4 pb-4 border-b-2 lg:border-none  border-slate-200 dark:border-slate-900">
         {tokenId && owner && (
           <svg
-            className="absolute -top-6 lg:top-0 left-4 "
+            className="absolute -top-6 lg:top-0 right-4  "
             width="30"
             height="36"
             viewBox="0 0 30 41"
@@ -932,11 +937,21 @@ function Post(props) {
           <div className=" w-full h-fit z-10 space-y-2">
             {props.image && (
               <>
-                <img
+                <div className="items-center  aspect-square  align-middle justify-center bg-black flex rounded">
+                  <Image
+                    className="h-full  aspect-auto w-full  object-contain"
+                    width="100%"
+                    height="100%"
+                    src={props.image ? props.image : placeholderLogo}
+                    alt={"Post Image"}
+                    placeholder={<Main_logo></Main_logo>}
+                  />
+                </div>
+                {/* <img
                   className="w-full rounded-lg"
                   src={props.image}
                   alt="User Post"
-                />
+                /> */}
               </>
             )}
             <div className="text-brand4 text-sm space-x-2">
@@ -1122,6 +1137,7 @@ function Post(props) {
                 volume={0.5}
                 light={props.videoImage}
                 url={props.videoUrl}
+                controlsList="nodownload"
                 controls={true}
                 onPlay={() => {
                   props.setCurrentPlay(props.myKey);
@@ -1131,15 +1147,14 @@ function Post(props) {
                 }}
               />
             </div>
-            <div className="text-brand4 text-sm space-x-2">
-              <span>
-                {props.videoViews ? props.videoViews.length : 0} views
-              </span>
+            <div className="text-brand4 text-sm space-x-2 flex align-middle items-center">
               {/* <span
               onClick={() => setshowComments(!showComments)}
               className='cursor-pointer'>
               {commentCount} Comments
             </span> */}
+              <Eye size={18} />
+              <span>{props.videoViews ? props.videoViews.length : 0} </span>
             </div>
           </>
         )}

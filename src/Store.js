@@ -25,7 +25,7 @@ function Store(props) {
     //Toast messages
     toasts: [],
     //chain id
-    chainId: 1,
+    chainId: 0,
     filteredData: [],
     filteredVideoData: [],
     //bottom nav

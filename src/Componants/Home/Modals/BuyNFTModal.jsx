@@ -206,7 +206,7 @@ function BuyNFTModal() {
                   </span>
                   <span className="flex items-center gap-1 text-sm font-medium text-brand4">
                     Platform fees{" "}
-                    <div className="tooltip" data-tip="1% of NFT price">
+                    <div className="tooltip" data-tip="5% of NFT price">
                       <InfoCircle className="cursor-pointer" size={16} />
                     </div>
                   </span>

@@ -1,6 +1,8 @@
 import axios from "axios";
 import React, { useRef } from "react";
 import { useState, useContext } from "react";
+import Compressor from "compressorjs";
+
 import { Camera, File, FileCheck, X } from "tabler-icons-react";
 import PolygonToken from "../../../Assets/logos/PolygonToken";
 import { uploadFile } from "../../../Helper/uploadHelper";
@@ -260,6 +262,16 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
               let url =
                 "https://ipfs.io/ipfs/" + cid + "/" + selectedPost.file[0].name;
               let image = selectedPost.file[0];
+              console.log("Compressed Image", image);
+              new Compressor(image, {
+                quality: 0.8, // 0.6 can also be used, but its not recommended to go below.
+                success: (compressedResult) => {
+                  // compressedResult has the compressed file.
+                  // Use the compressed file to upload the images to your server.
+                  image = compressedResult;
+                  console.log("Compressed Image", image);
+                },
+              });
               const mintRequest = await mintNFTOnSolana2(
                 State.database.walletAddress,
                 caption,
@@ -290,7 +302,7 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
           }
         })
         .catch((err) => {
-          State.toast("error", "Oops!somthing went wrong uplaoding photo!");
+          State.toast("error", "Oops!something went wrong uploading photo!");
           console.log(err);
           setUploadingPost(false);
           setSelectedPost(null);
@@ -338,12 +350,12 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
         },
       })
       .then(async (res) => {
-        State.toast("success", "Your Photo uploded successfully!");
+        State.toast("success", "Your Photo uploaded successfully!");
         clearData();
         await loadFeed();
       })
       .catch((err) => {
-        State.toast("error", "Oops!somthing went wrong uplaoding photo!");
+        State.toast("error", "Oops!something went wrong uploading photo!");
         console.log(err);
         clearData();
       });

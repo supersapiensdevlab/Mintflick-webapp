@@ -71,7 +71,6 @@ function Home() {
         <div ref={timelineRef} className="-mt-6"></div>
         <div className="my-3"></div>
         <AddPost></AddPost>
-        <div className="my-3"></div>
 
         <TimeLine></TimeLine>
       </div>
