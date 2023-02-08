@@ -77,7 +77,8 @@ function ConnectWalletComponant() {
         State.updateDatabase({
           provider: provider,
         });
-        navigateTo("/create_new_user");
+        error.response.status === 404 && navigateTo("/create_new_user");
+        error.response.status === 0 && State.toast(error.message);
       });
   }
 
@@ -122,7 +123,7 @@ function ConnectWalletComponant() {
         Connect your crypto wallet to mint your NFTs on Mintflick. If you do not
         have a wallet then click below to create one or login into existing.
       </p>
-      <div className="relative w-full h-12 bg-slate-100/10 backdrop-blur-sm rounded-lg flex ">
+      {/* <div className="relative w-full h-12 bg-slate-100/10 backdrop-blur-sm rounded-lg flex ">
         <div
           onClick={() =>
             State.updateDatabase({
@@ -168,6 +169,13 @@ function ConnectWalletComponant() {
               : " translate-x-full -ml-1  "
           } absolute top-0 h-10 w-1/2 mt-1 mb-1  bg-slate-100/10 backdrop-blur-sm rounded-lg transform transition-all ease-in-out`}
         />
+      </div> */}
+
+      <div className=" w-full flex items-center justify-center gap-2 h-12 bg-slate-100/10 backdrop-blur-sm rounded-lg">
+        <SolanaToken
+          className={`${State.database.chainId === 1 ? "saturate-0" : null} `}
+        />
+        <sapn className={`text-white font-semibold`}>Powered by Solana</sapn>
       </div>
       {State.database.chainId === 1 && (
         <button
@@ -185,18 +193,18 @@ function ConnectWalletComponant() {
         </button> */}
 
       {State.database.chainId === 0 && (
-        <div className="flex gap-2">
+        <div className="flex sm:flex-row flex-col  gap-2">
           <button
             onClick={async () => {
               handleTorusConnect();
             }}
-            className="flex-grow mx-auto max-w-xl flex items-center justify-center p-2 rounded-lg bg-[#4688F1] text-white font-semibold  capitalize gap-2"
+            className="btn btn-brand flex-grow capitalize gap-2"
           >
             <img
               src={googleLogo}
-              className="h-8 w-8 p-1 rounded-full bg-white"
+              className="h-6 w-6 p-0 rounded-full bg-white"
             />
-            Connect with Google Account
+            Continue with Google
           </button>
           {window.phantom && (
             <button

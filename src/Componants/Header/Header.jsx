@@ -34,6 +34,7 @@ import {
   confirmTransactionFromFrontend,
 } from "../Home/Utility/utilityFunc";
 import { clusterApiUrl, Connection, PublicKey } from "@solana/web3.js";
+import CopyToClipboard from "../CopyButton/CopyToClipboard";
 
 function Header() {
   const State = useContext(UserContext);
@@ -624,6 +625,7 @@ function Header() {
                     localStorage.getItem("walletAddress").length
                   )}
               </span>
+              <CopyToClipboard text={localStorage.getItem("walletAddress")} />
             </li>{" "}
             <li>
               <NavLink

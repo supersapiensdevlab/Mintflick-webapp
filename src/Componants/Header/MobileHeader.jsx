@@ -10,6 +10,7 @@ import ChatModal from "../ChatRoom/ChatModal";
 import MintWalletModal from "../Profile/Modals/MintWalletModal";
 import SolanaToken from "../../Assets/logos/SolanaToken";
 import PolygonToken from "../../Assets/logos/PolygonToken";
+import CopyToClipboard from "../CopyButton/CopyToClipboard";
 
 function MobileHeader() {
   const State = useContext(UserContext);
@@ -155,6 +156,7 @@ function MobileHeader() {
                     localStorage.getItem("walletAddress").length - 4,
                     localStorage.getItem("walletAddress").length
                   )}
+                <CopyToClipboard text={localStorage.getItem("walletAddress")} />
               </span>
             </li>
           </ul>

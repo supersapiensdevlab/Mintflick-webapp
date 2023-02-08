@@ -54,8 +54,7 @@ function CreateNewUser() {
         console.log(error);
         seterror("Server error");
         setloader(false);
-
-        seterror(error.status);
+        error.response.status === 400 && seterror("Invalid Email");
       });
   }
   return (
