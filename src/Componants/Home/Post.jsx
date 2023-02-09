@@ -50,6 +50,7 @@ import ReportModal from "./Modals/ReportModal";
 import { useNavigate } from "react-router-dom";
 import MintNFTModal from "./Modals/MintNFTModal";
 import ListNFTModal from "./Modals/ListNFTModal";
+import { toPng } from "html-to-image";
 function Post(props) {
   const nav = useNavigate();
   // Common State and Functions
@@ -1158,6 +1159,8 @@ function Post(props) {
             </div>
           </>
         )}
+
+        {/* html for thought post nft */}
         {/* {console.log(owner ? owner : "", tokenId)} */}
 
         {tokenId && owner ? (

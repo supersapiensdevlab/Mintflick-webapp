@@ -59,14 +59,14 @@ function Profile() {
           }
         />
         <TextChannels></TextChannels>
-        <Vouch />
+        {/* <Vouch /> */}
       </div>
       <div className="w-full lg:w-2/4 flex flex-col items-center  lg:h-full pt-14 lg:pt-24 lg:overflow-y-auto">
         <ProfileMedia className="z-10" userName={userName}></ProfileMedia>
         {/* <TimeLine></TimeLine> */}
       </div>
       <div className="hidden lg:flex flex-col h-fit lg:h-full w-full lg:w-1/4 lg:ml-4 lg:mr-12 pt-16 lg:pt-24 lg:space-y-6 lg:overflow-y-auto">
-        <MintWallet />
+        {/* <MintWallet /> */}
       </div>
     </div>
   ) : (
