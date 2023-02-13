@@ -86,7 +86,7 @@ function Profile() {
               >
                 NFT's
               </sapn>
-            </div>{" "}
+            </div>
             <span
               className={`${
                 activeTab === 1 ? "left-0 ml-1" : " translate-x-full -ml-1  "
