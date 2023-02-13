@@ -6,6 +6,7 @@ import {
   BrandTwitter,
   Check,
   CircleCheck,
+  Copy,
   DeviceFloppy,
   Edit,
   InfoCircle,
@@ -308,22 +309,25 @@ function SettingsModal(props) {
                   {localStorage.getItem("walletAddress")}
                 </span>
                 <div
-                  onClick={() => setunlinkWalletModal(true)}
+                  onClick={() => {
+                    navigator.clipboard.writeText(State.database.walletAddress);
+                    State.toast("success", "Wallet Address Copied!");
+                  }}
                   className="tooltip"
-                  data-tip="Unlink wallet"
+                  data-tip="Copy "
                 >
                   <button className="p-1 rounded-full bg-slate-200 dark:bg-slate-700 text-brand2 flex gap-1 cursor-pointer backdrop-blur-sm">
-                    <Unlink className="text-primary " size={16} />
+                    <Copy color="green" className="cursor-pointer" />
                   </button>
                 </div>
               </div>
-              <button
+              {/* <button
                 onClick={() => setlinkNewWalletModalopen(true)}
                 className="btn btn-outline btn-primary btn-xs gap-1 mx-auto w-fit rounded-full capitalize"
               >
                 <Link size={16} />
                 link other wallet
-              </button>
+              </button> */}
             </div>
             <button className="btn btn-brand gap-2 capitalize ">
               <DeviceFloppy /> Save Changes
@@ -341,11 +345,6 @@ function SettingsModal(props) {
                 className="input w-full"
                 value={localStorage.getItem("walletAddress")}
                 readOnly
-
-
-
-
-                
               />
             </div>
             {/* <div className="flex flex-col items-start gap-1">

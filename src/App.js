@@ -40,6 +40,7 @@ import QuestDetails from "./Componants/Quests/QuestDetails";
 import QuestOnboarding from "./Componants/Quests/QuestOnboarding";
 import QuestAdmin from "./Componants/Quests/QuestAdmin";
 import QuestDetailsAdmin from "./Componants/Quests/QuestDetailsAdmin";
+import ToastContainer from "./Componants/Toast/ToastContainer";
 function App() {
   const State = useContext(UserContext);
 
@@ -158,6 +159,7 @@ function App() {
       </Routes>
       <ShareModal />
       <BuyNFTModal />
+      <ToastContainer />
     </div>
   );
 }

@@ -44,7 +44,6 @@ function HomeScreen() {
         </button> */}
         <BottomNavigation></BottomNavigation>
       </div>
-      <ToastContainer />
     </div>
   );
 }

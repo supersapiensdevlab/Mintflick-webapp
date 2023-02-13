@@ -508,7 +508,7 @@ function VideoPostModal({ setVideoPostModalOpen }) {
       </div>
       <form onSubmit={handleSubmit}>
         <div className="w-full p-4 space-y-3">
-          <div className="flex flex-col sm:flex-row gap-1 relative">
+          <div className="flex flex-col  gap-1 relative">
             {uploadingVideo && (
               <div className="text-white gap-2 font-semibold absolute top-0 left-0 w-full h-full bg-white/10 backdrop-blur-sm rounded-lg flex flex-col items-center justify-center">
                 <Main_logo /> {btnText}
@@ -516,11 +516,11 @@ function VideoPostModal({ setVideoPostModalOpen }) {
             )}
             <label
               htmlFor="videothumbnail"
-              className="  max-h-52 cursor-pointer flex flex-col items-start gap-2  w-full p-2 border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4"
+              className="  cursor-pointer flex flex-col items-center gap-2  w-full p-2 border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4"
             >
               {selectedThumbnail ? (
                 selectedThumbnail.file ? (
-                  <div className="w-full  rounded-lg overflow-clip my-auto ">
+                  <div className="w-72 flex items-center justify-center rounded-lg aspect-square  dark:bg-slate-900 bg-slate-300 object-cover">
                     <img src={selectedThumbnail.localurl}></img>
                   </div>
                 ) : null
@@ -529,7 +529,7 @@ function VideoPostModal({ setVideoPostModalOpen }) {
               )}
               <div
                 htmlFor="videothumbnail"
-                className="flex cursor-pointer gap-1"
+                className="flex  cursor-pointer gap-1"
               >
                 <input
                   id="videothumbnail"
@@ -550,10 +550,10 @@ function VideoPostModal({ setVideoPostModalOpen }) {
                   : "Choose video thumbnail"}
               </div>
             </label>
-            <div className=" max-h-52 cursor-pointer flex flex-col items-start gap-2  w-full p-2 border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4">
+            <div className=" cursor-pointer flex items-center justify-center flex-col  gap-2  w-full p-2 border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4">
               {selectedVideo ? (
                 selectedVideo.localurl ? (
-                  <div className="rounded-lg overflow-clip ">
+                  <div className="w-full rounded-lg    overflow-hidden aspect-video  dark:bg-slate-900 bg-slate-300 object-cover">
                     <ReactPlayer
                       className="w-full"
                       width="100%"

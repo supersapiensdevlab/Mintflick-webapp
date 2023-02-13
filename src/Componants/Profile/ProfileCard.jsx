@@ -12,7 +12,7 @@ import MarketplaceModal from "../Home/Modals/MarketplaceModal";
 import SetupMarketplaceModal from "../Home/Modals/SetupMarketplaceModal";
 import FollowersModal from "./Modals/FollowersModal";
 import SettingsModal from "./Modals/SettingsModal";
-import {  NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 function ProfileCard(props) {
   //Join superfan modal
@@ -100,7 +100,7 @@ function ProfileCard(props) {
         <img
           src={props.coverImage ? props.coverImage : coverImage}
           alt="cover image"
-          className="w-full h-full aspect-{4/2} rounded-lg object-cover"
+          className="w-full h-full aspect-{4/2} rounded-t-lg object-cover"
         />
       </div>
       <img
@@ -114,25 +114,25 @@ function ProfileCard(props) {
           {"@" + `${props.userName}`}
           <p className="flex items-center gap-1 text-sm text-primary font-medium">
             {State.database.userProfileData &&
-              State.database.userData.data && (
-              State.database.userProfileData.data.username !=
-              props.userName) && State.database.userData.data.user.followee_count.includes(
-                  props.userName
-                ) ? (
-                  <button
-                    onClick={() => handleUnfollowUser(props.userName)}
-                    className="btn  btn-primary btn-outline btn-xs flex-grow"
-                  >
-                    Unfollow 
-                  </button>
-                ) : (
-                  <button
-                    onClick={() => handleFollowUser(props.userName)}
-                    className="btn  btn-primary btn-outline btn-xs flex-grow"
-                  >
-                    Follow 
-                  </button>
-                )}
+              State.database.userData.data &&
+              State.database.userData.data.user.username !== props.userName &&
+              (State.database.userData.data.user.followee_count.includes(
+                props.userName
+              ) ? (
+                <button
+                  onClick={() => handleUnfollowUser(props.userName)}
+                  className="btn  btn-primary btn-outline btn-xs flex-grow"
+                >
+                  Unfollow
+                </button>
+              ) : (
+                <button
+                  onClick={() => handleFollowUser(props.userName)}
+                  className="btn  btn-primary btn-outline btn-xs flex-grow"
+                >
+                  Follow
+                </button>
+              ))}
           </p>
         </span>
         <div className="w-full flex p-2 justify-around">
@@ -174,8 +174,6 @@ function ProfileCard(props) {
           </span>
         </div>
 
-        
-
         <div className="flex flex-col p-4 w-full gap-1">
           {State.database.userData.data &&
             (State.database.userData.data.user.username === props.userName ? (
@@ -196,28 +194,32 @@ function ProfileCard(props) {
                 </button>
               </>
             ) : (
-              <div className="flex gap-1">
-                <NavLink className="w-full"
-        to={`/homescreen/chat/${
-          State.database.userProfileData
-            ? State.database.userProfileData.data.username
-            : ""
-        }`}
-        state={{
-          isDM: true,
-          user2: State.database.userProfileData
-            ? State.database.userProfileData.data
-            : null,
-        }}
-      >
-        <button className="btn btn-primary btn-outline btn-sm w-full capitalize ">Message</button>
-      </NavLink>
-                
+              <div className="flex flex-col gap-1">
+                <NavLink
+                  className="w-full"
+                  to={`/homescreen/chat/${
+                    State.database.userProfileData
+                      ? State.database.userProfileData.data.username
+                      : ""
+                  }`}
+                  state={{
+                    isDM: true,
+                    user2: State.database.userProfileData
+                      ? State.database.userProfileData.data
+                      : null,
+                  }}
+                >
+                  <button className="btn btn-primary btn-outline btn-sm w-full capitalize ">
+                    Message
+                  </button>
+                </NavLink>
+
                 <button
                   className="btn btn-brand btn-sm "
                   onClick={() => setJoinsuperfanModalOpen(true)}
                 >
-                  <img className="w-5 mr-1" src={superfan_logo}/>Join Superfans
+                  <img className="w-5 mr-1" src={superfan_logo} />
+                  Join Superfans
                 </button>
               </div>
             ))}

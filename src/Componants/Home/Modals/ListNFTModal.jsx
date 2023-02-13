@@ -14,13 +14,18 @@ import {
   signWithRelayer,
 } from "../../../Helper/mintOnSolana2";
 import { signTransaction } from "../../../Helper/mintOnSolana";
+import ReactPlayer from "react-player";
+import NftCard from "../NftCard";
 
 function ListNFTModal({
+  text,
+  contentType,
   listModalOpen,
   setListModalOpen,
   setNftPrice,
   content,
   tokenId,
+  videoUrl,
 }) {
   const State = useContext(UserContext);
   const [successMessage, setSuccessMessage] = useState(
@@ -139,7 +144,37 @@ function ListNFTModal({
         </div>
 
         <div className="flex flex-col flex-wrap p-4 w-full space-y-4 justify-center text-white">
-          <img src={content} className="h-96 w-full object-cover rounded-lg" />
+          {contentType === "post" ? (
+            content ? (
+              <img
+                src={content}
+                className="h-96 w-full object-cover rounded-lg"
+              />
+            ) : (
+              <div className="mx-auto">
+                <NftCard
+                  name={State.database.userData.data.user.name}
+                  userName={State.database.userData.data.user.username}
+                  text={text}
+                />
+              </div>
+            )
+          ) : contentType === "video" ? (
+            <div className="w-full rounded-lg    overflow-hidden aspect-video  dark:bg-slate-900 bg-slate-300 object-cover">
+              <ReactPlayer
+                className="w-full"
+                width="100%"
+                height={"100%"}
+                playing={true}
+                muted={true}
+                volume={0.5}
+                url={videoUrl}
+                controls={true}
+              />
+            </div>
+          ) : (
+            <></>
+          )}
           <div className="form-control">
             <label className="input-group">
               <input
@@ -171,7 +206,7 @@ function ListNFTModal({
                     btn-brand
                   w-full ${listing ? "loading" : ""} `}
           >
-            confirm
+            {listing ? "Listing NFT for sale" : "confirm"}
           </button>
         </div>
       </div>

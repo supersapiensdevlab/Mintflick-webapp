@@ -168,7 +168,8 @@ function MobileHeader() {
             <li>
               <NavLink
                 onClick={() => {
-                  //logout();
+                  State.database.walletProvider === "torus" &&
+                    State.database.provider.logout();
                   localStorage.removeItem("authtoken");
                   localStorage.removeItem("walletAddress");
                   window.localStorage.clear();

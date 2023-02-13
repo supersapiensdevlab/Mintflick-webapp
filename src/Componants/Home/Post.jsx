@@ -1452,10 +1452,13 @@ function Post(props) {
         contentType={props.contentType}
       />
       <ListNFTModal
+        text={props.text}
+        contentType={props.contentType}
         listModalOpen={listModalOpen}
         setListModalOpen={setListModalOpen}
         setNftPrice={setPrice}
         content={props.contentType == "post" ? props.image : props.videoImage}
+        videoUrl={props.videoUrl}
         tokenId={props.content?.tokenId}
       />
     </>

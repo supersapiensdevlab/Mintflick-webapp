@@ -7,7 +7,7 @@ function ToastContainer() {
   const State = useContext(UserContext);
 
   return (
-    <div className="fixed bottom-2 w-full h-fit z-50 space-y-2 ">
+    <div className="fixed bottom-2 w-full h-fit z-[999] space-y-2 ">
       {State.database.toasts.map((item) => (
         <Toast msg={item.msg} type={item.type} />
       ))}

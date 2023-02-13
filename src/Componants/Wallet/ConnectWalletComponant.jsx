@@ -30,6 +30,46 @@ function ConnectWalletComponant() {
   // const [login, logout] = useWeb3Auth();
   const modal = useWebModal();
 
+  async function createNewUser(walletAddress, email, name) {
+    console.log(walletAddress);
+    await axios({
+      method: "post",
+      url: `${process.env.REACT_APP_SERVER_URL}/user/getuser_by_wallet`,
+      data: {
+        walletId: walletAddress,
+        email: email,
+        name: name,
+      },
+    })
+      .then((response) => {
+        console.log(response);
+
+        State.updateDatabase({
+          userData: response,
+        });
+        console.log("user data saved in state");
+        localStorage.setItem("authtoken", response.data.jwtToken);
+        console.log("auth token saved in storage");
+        localStorage.setItem("walletAddress", walletAddress);
+        console.log("wallet address saved in storage");
+        let questId = localStorage.getItem("questId");
+
+        if (questId && localStorage.getItem("taskId")) {
+          localStorage.setItem("questFlow", false);
+          navigateTo("/quest-details/" + questId);
+        } else {
+          navigateTo("/homescreen/home");
+        }
+      })
+      .catch(function (error) {
+        State.toast("error", error.message);
+        console.log(error);
+      });
+  }
+  async function getEmailAndName() {
+    const userInfo = await State.database.provider.getUserInfo();
+    return userInfo;
+  }
   async function isUserAvaliable(walletAddress, provider) {
     console.log("Checking for User with Wallet:", walletAddress);
     await axios({
@@ -57,6 +97,7 @@ function ConnectWalletComponant() {
           provider: provider,
         });
         console.log("provider saved in state");
+
         // localStorage.setItem(
         //   "v2provider",
         //   JSON.stringify(provider, getCircularReplacer())
@@ -72,7 +113,7 @@ function ConnectWalletComponant() {
           response.status === 200 && navigateTo("/homescreen/home");
         }
       })
-      .catch(function (error) {
+      .catch(async function (error) {
         console.log(error);
         State.updateDatabase({
           provider: provider,
@@ -89,6 +130,7 @@ function ConnectWalletComponant() {
     let address = window.phantom.solana.publicKey.toBase58();
     State.updateDatabase({
       walletAddress: address,
+      walletProvider: "phantom",
     });
     isUserAvaliable(address, window.phantom.solana);
     console.log(window.phantom.solana);
@@ -103,6 +145,7 @@ function ConnectWalletComponant() {
     const address = torus.provider.selectedAddress;
     State.updateDatabase({
       walletAddress: address,
+      walletProvider: "torus",
     });
     isUserAvaliable(address, torus);
   };

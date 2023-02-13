@@ -35,7 +35,7 @@ function MintNFTModal({
   );
   const [minting, setMinting] = useState(false);
   const [loadFeed, loadUser] = useUserActions();
-  console.log(content);
+  // console.log(content);
   const uploadToServer = (mintId) => {
     let data = {
       tokenId: mintId,

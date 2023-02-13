@@ -1,7 +1,13 @@
 import axios from "axios";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { AlertTriangle, X } from "tabler-icons-react";
+import {
+  AlertTriangle,
+  ChevronLeft,
+  ClipboardCopy,
+  Copy,
+  X,
+} from "tabler-icons-react";
 import { UserContext } from "../../Store";
 
 function CreateNewUser() {
@@ -57,16 +63,52 @@ function CreateNewUser() {
         error.response.status === 400 && seterror("Invalid Email");
       });
   }
+
+  async function getEmailAndName() {
+    const userInfo =
+      State.database.walletProvider === "torus" &&
+      (await State.database.provider.getUserInfo());
+    State.database.walletProvider === "torus" && setname(userInfo.name);
+    State.database.walletProvider === "torus" && setemail(userInfo.email);
+  }
+
+  useEffect(() => {
+    getEmailAndName();
+  }, []);
+
   return (
     <div className="flex flex-col justify-start w-fit lg:w-1/2 space-y-6 p-6 lg:p-12">
+      <div className="w-full flex items-center  max-w-3xl mx-auto">
+        <button
+          onClick={() => {
+            navigateTo("../");
+            State.database.walletProvider === "torus" &&
+              State.database.provider.logout();
+          }}
+          className="flex justify-center items-center text-brand3 font-semibold"
+        >
+          <ChevronLeft />
+          Back
+        </button>
+      </div>{" "}
       <p className="text-5xl font-bold text-brand-gradient">Create Account</p>
       <div className="text-brand4 text-lg font-medium">
-        <p className="text-xl font-semibold text-brand2">
-          Just enter your email!
+        <p className="text-xl font-semibold text-brand2 flex items-center gap-2">
+          {State.database.walletAddress?.slice(0, 6) +
+            "..." +
+            State.database.walletAddress?.slice(-4)}
+          <Copy
+            onClick={() => {
+              navigator.clipboard.writeText(State.database.walletAddress);
+              State.toast("success", "Wallet Address Copied!");
+            }}
+            color="green"
+            className="tooltip"
+            data-tip="Copy "
+          />
         </p>
-        MintFlick will send important notifications to this email.
+        This wallet address will link to your email id.
       </div>
-
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -96,6 +138,7 @@ function CreateNewUser() {
         />
         <input
           value={email}
+          readOnly={State.database.walletProvider === "torus"}
           onChange={(e) => setemail(e.target.value)}
           placeholder="Email"
           className="input w-full "

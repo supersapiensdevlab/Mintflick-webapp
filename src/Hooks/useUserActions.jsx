@@ -14,6 +14,7 @@ export default function useUserActions() {
     })
       .then((response) => {
         let data = response.data;
+        console.log(data);
         State.updateDatabase({
           feedData: data,
         });
