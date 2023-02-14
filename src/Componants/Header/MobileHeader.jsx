@@ -66,7 +66,7 @@ function MobileHeader() {
     >
       <div className="flex justify-between items-center  h-full w-full">
         <div className="dropdown dropdown-start">
-          <label tabindex="0" className=" avatar">
+          <label tabindex="0" className=" ">
             <div className="w-10 rounded-full cursor-pointer">
               {/* <img
                 src={
@@ -76,6 +76,7 @@ function MobileHeader() {
                 }
               /> */}
               <Image
+                className="rounded-full"
                 width={50}
                 height={50}
                 src={

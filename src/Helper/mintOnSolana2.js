@@ -135,7 +135,6 @@ export const mintNFTOnSolana2 = async (
         "content-type": "multipart/form-data",
       },
     })
-
     .catch((err) => {
       console.log(err);
     });

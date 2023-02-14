@@ -75,6 +75,7 @@ function BuyNFTModal() {
       confirmTransaction = signedTx;
     } catch (error) {
       console.log(error);
+      State.toast("error", error.message);
     }
     return confirmTransaction;
   };
@@ -120,10 +121,10 @@ function BuyNFTModal() {
         setBuying(false);
         // loadNftsData();
       })
-      .catch((err) => {
-        console.log(err);
+      .catch((error) => {
+        console.log(error);
+        // State.toast("error", error.message);
         State.updateDatabase({ buyNFTModalOpen: false });
-        State.toast("error", "Error while buying NFT");
         setBuying(false);
       });
 

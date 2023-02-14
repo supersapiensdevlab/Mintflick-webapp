@@ -95,15 +95,16 @@ function AddPost() {
       </div>
       {/* FAB */}
       <div
-        className={`${State.database.showHeader ? "" : "translate-y-20"}
-         bottom-24 transition-all ease-in-out lg:hidden fixed  right-2 z-40 space-x-1`}
+        // className={`${State.database.showHeader ? "" : "translate-y-20"}
+        className={`bottom-24 transition-all ease-in-out lg:hidden fixed  right-2 z-40 space-x-1`}
       >
-        <Link
+        {/* for games */}
+        {/* <Link
           to={`/homescreen/allgames`}
           className="btn btn-circle btn-md rounded-full btn-brand"
         >
           <DeviceGamepad2 />
-        </Link>
+        </Link> */}
         <div
           className={`
          dropdown dropdown-top dropdown-end `}
@@ -112,18 +113,10 @@ function AddPost() {
             tabindex="0"
             className={`${
               State.database.showHeader ? "gap-2 " : "btn-circle"
-            } btn btn-md rounded-full btn-brand`}
+            } btn btn-md rounded-full btn-brand transition-all ease-in-out`}
           >
             <Plus />
-            <span
-              className={`${
-                State.database.showHeader
-                  ? "w-fit opacity-100"
-                  : "w-0 opacity-0"
-              }`}
-            >
-              Post
-            </span>
+            {State.database.showHeader && <span>Post</span>}
           </label>
           <ul
             tabindex="0"

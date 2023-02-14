@@ -32,6 +32,7 @@ import {
   signWithRelayer,
 } from "../../../Helper/mintOnSolana2";
 import Main_logo from "../../../Assets/logos/Main_logo";
+import { sanitizeFilename } from "../../../functions/sanitizeFilename";
 
 function VideoPostModal({ setVideoPostModalOpen }) {
   const State = useContext(UserContext);
@@ -93,7 +94,9 @@ function VideoPostModal({ setVideoPostModalOpen }) {
 
   const [uploadingVideo, setUploadingVideo] = useState(false);
   const [selectedVideo, setSelectedVideo] = useState(null);
+
   const [selectedThumbnail, setSelectedThumbnail] = useState(null);
+
   const [videoData, setVideoData] = useState({
     videoName: "",
     videoImage: "",
@@ -109,14 +112,14 @@ function VideoPostModal({ setVideoPostModalOpen }) {
   const onVideoFileChange = (e) => {
     if (e.target.name === "videoFile") {
       setSelectedVideo({
-        file: e.target.files[0],
+        file: sanitizeFilename(e.target.files[0]),
         localurl: URL.createObjectURL(e.target.files[0]),
       });
       let videoName = e.target.files[0].name.replace(/\.[^/.]+$/, "");
       setVideoData({ ...videoData, videoName: videoName });
     } else if (e.target.name === "videoImage") {
       setSelectedThumbnail({
-        file: e.target.files[0],
+        file: sanitizeFilename(e.target.files[0]),
         localurl: URL.createObjectURL(e.target.files[0]),
       });
       let videoImage = e.target.files[0].name.replace(/\.[^/.]+$/, "");

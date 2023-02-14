@@ -347,224 +347,230 @@ function Header() {
   }
 
   return (
-    <div
-      className={`${""}
+    <>
+      <div
+        className={`${""}
         // State.database.showHeader ? "" : "-translate-y-24"
        transition-all ease-in-out hidden lg:flex fixed z-50  top-0  px-4 lg:px-12 justify-between items-center h-20 bg-white/25 dark:bg-slate-900/25 backdrop-blur-sm w-full shadow-mintflick`}
-    >
-      <div
-        className="flex items-center space-x-4 h-full w-1/3 -ml-2"
-        onClick={handleAuthorityUpdate}
       >
-        <Link to={`/homescreen/home`}>
-          {!State.database.dark ? (
-            <Main_logo_dark></Main_logo_dark>
-          ) : (
-            <Main_logo></Main_logo>
-          )}
-        </Link>
-        <div className="relative w-full">
-          <div className="hidden lg:flex items-center flex-grow">
-            <input
-              type="text"
-              placeholder="Search for anything..."
-              className="input input-bordered w-full max-w-xl "
-              onChange={handleFilter}
-              value={wordEntered}
-              onKeyDown={handleKeyDown}
-            ></input>
-            <Link to={`/homescreen/explore`}>
-              <Search className="-translate-x-8 dark:text-slate-100 cursor-pointer"></Search>
-            </Link>
-          </div>
-          <div
-            ref={wrapperRef}
-            className=" bg-white  dark:bg-slate-700 dark:text-white ml-1.5 mt-1 rounded-lg absolute self-center lg:w-11/12 w-3/5 h-max max-h-80 overflow-hidden overflow-y-auto"
-            hidden={filterResultDisplay}
-          >
-            {State.database.filteredVideoData.length !== 0 && (
-              <>
-                {State.database.filteredVideoData
-                  .slice(0, 15)
-                  .map((value, key) => {
-                    return (
-                      <div
-                        onClick={() => {
-                          setWordEntered(value.video.videoName.toLowerCase());
-                          setFilterResultDisplay(true);
-                        }}
-                      >
-                        <Link to={`/homescreen/explore`}>
-                          <div
-                            key={key}
-                            className="p-2 pl-3  flex items-center cursor-pointer hover:bg-slate-600"
-                          >
-                            <Search
-                              className=" dark:text-slate-100  opacity-60 mr-2"
-                              size={16}
-                            ></Search>
-                            {value.video.videoName.toLowerCase()}{" "}
-                          </div>
-                        </Link>
-                      </div>
-                    );
-                  })}
-              </>
+        <div
+          className="flex items-center space-x-4 h-full w-1/3 -ml-2"
+          onClick={handleAuthorityUpdate}
+        >
+          <Link to={`/homescreen/home`}>
+            {!State.database.dark ? (
+              <Main_logo_dark></Main_logo_dark>
+            ) : (
+              <Main_logo></Main_logo>
             )}
-            {State.database.filteredData.length !== 0 && (
-              <>
-                {State.database.filteredData.slice(0, 15).map((value, key) => {
-                  return (
-                    <div
-                      onClick={() => {
-                        setWordEntered(value.username.toLowerCase());
-                        setFilterResultDisplay(true);
-                      }}
-                    >
-                      <Link to={`/homescreen/explore`}>
+          </Link>
+          <div className="relative w-full">
+            <div className="hidden lg:flex items-center flex-grow">
+              <input
+                type="text"
+                placeholder="Search for anything..."
+                className="input input-bordered w-full max-w-xl "
+                onChange={handleFilter}
+                value={wordEntered}
+                onKeyDown={handleKeyDown}
+              ></input>
+              <Link to={`/homescreen/explore`}>
+                <Search className="-translate-x-8 dark:text-slate-100 cursor-pointer"></Search>
+              </Link>
+            </div>
+            <div
+              ref={wrapperRef}
+              className=" bg-white  dark:bg-slate-700 dark:text-white ml-1.5 mt-1 rounded-lg absolute self-center lg:w-11/12 w-3/5 h-max max-h-80 overflow-hidden overflow-y-auto"
+              hidden={filterResultDisplay}
+            >
+              {State.database.filteredVideoData.length !== 0 && (
+                <>
+                  {State.database.filteredVideoData
+                    .slice(0, 15)
+                    .map((value, key) => {
+                      return (
                         <div
-                          key={key}
-                          className="p-2 pl-3 hover:bg-slate-600 flex items-center cursor-pointer"
+                          onClick={() => {
+                            setWordEntered(value.video.videoName.toLowerCase());
+                            setFilterResultDisplay(true);
+                          }}
                         >
-                          <Search
-                            className=" dark:text-slate-100 opacity-60 mr-2"
-                            size={16}
-                          ></Search>
-                          {value.username.toLowerCase()}{" "}
+                          <Link to={`/homescreen/explore`}>
+                            <div
+                              key={key}
+                              className="p-2 pl-3  flex items-center cursor-pointer hover:bg-slate-600"
+                            >
+                              <Search
+                                className=" dark:text-slate-100  opacity-60 mr-2"
+                                size={16}
+                              ></Search>
+                              {value.video.videoName.toLowerCase()}{" "}
+                            </div>
+                          </Link>
                         </div>
-                      </Link>
-                    </div>
-                  );
-                })}
-              </>
-            )}
+                      );
+                    })}
+                </>
+              )}
+              {State.database.filteredData.length !== 0 && (
+                <>
+                  {State.database.filteredData
+                    .slice(0, 15)
+                    .map((value, key) => {
+                      return (
+                        <div
+                          onClick={() => {
+                            setWordEntered(value.username.toLowerCase());
+                            setFilterResultDisplay(true);
+                          }}
+                        >
+                          <Link to={`/homescreen/explore`}>
+                            <div
+                              key={key}
+                              className="p-2 pl-3 hover:bg-slate-600 flex items-center cursor-pointer"
+                            >
+                              <Search
+                                className=" dark:text-slate-100 opacity-60 mr-2"
+                                size={16}
+                              ></Search>
+                              {value.username.toLowerCase()}{" "}
+                            </div>
+                          </Link>
+                        </div>
+                      );
+                    })}
+                </>
+              )}
+            </div>
           </div>
         </div>
-      </div>
-      <div className="hidden lg:flex w-1/3 items-center justify-center h-full  ">
-        <TopNavigation></TopNavigation>
-      </div>
-      <div className="flex w-1/3 justify-end items-center space-x-4 h-full   ">
-        <NavLink
-          to={"/homescreen/golive"}
-          className="hidden lg:flex  btn btn-outline btn-primary gap-2 rounded-full"
-        >
-          <AccessPoint size={28}></AccessPoint>
-          GO LIVE
-        </NavLink>
-        {/* <button class="btn btn-circle btn-ghost">
+        <div className="hidden lg:flex w-1/3 items-center justify-center h-full  ">
+          <TopNavigation></TopNavigation>
+        </div>
+        <div className="flex w-1/3 justify-end items-center space-x-4 h-full   ">
+          <NavLink
+            to={"/homescreen/golive"}
+            className="hidden lg:flex  btn btn-outline btn-primary gap-2 rounded-full"
+          >
+            <AccessPoint size={28}></AccessPoint>
+            GO LIVE
+          </NavLink>
+          {/* <button class="btn btn-circle btn-ghost">
           <Bell size={28}></Bell>
         </button> */}
-        <div class="dropdown dropdown-end relative">
-          <label tabindex="0" className=" avatar">
-            <button
-              class="btn btn-circle btn-ghost"
-              onClick={handleNotification}
-            >
-              <Bell size={28}></Bell>
-            </button>
-            {newNotification > 0 ? (
-              <div
-                className="bg-rose-600 rounded-full shadow  
+          <div class="dropdown dropdown-end relative">
+            <label tabindex="0" className=" avatar">
+              <button
+                class="btn btn-circle btn-ghost"
+                onClick={handleNotification}
+              >
+                <Bell size={28}></Bell>
+              </button>
+              {newNotification > 0 ? (
+                <div
+                  className="bg-rose-600 rounded-full shadow  
                         h-4 w-4 text-xs self-center text-center font-semibold  
                         absolute top-1  right-2  
                          text-white"
-              >
-                {newNotification}
-              </div>
-            ) : null}
-          </label>
-          <div
-            tabindex="0"
-            className="menu menu-compact dropdown-content mt-3 shadow-xl bg-slate-100 dark:bg-slate-700  rounded-lg w-80 overflow-y-scroll	max-h-96"
-          >
-            {notification.length > 0 ? (
-              <div className="w-full p-2">
-                {notification.map((value, i) => {
-                  return (
-                    <div key={i} className="w-full ">
-                      <NotificationContent data={value} />
-                    </div>
-                  );
-                })}
-              </div>
-            ) : (
-              <div className="w-full p-2">
-                <EmptyNotification />
-              </div>
-            )}
+                >
+                  {newNotification}
+                </div>
+              ) : null}
+            </label>
+            <div
+              tabindex="0"
+              className="menu menu-compact dropdown-content mt-3 shadow-xl bg-slate-100 dark:bg-slate-700  rounded-lg w-80 overflow-y-scroll	max-h-96"
+            >
+              {notification.length > 0 ? (
+                <div className="w-full p-2">
+                  {notification.map((value, i) => {
+                    return (
+                      <div key={i} className="w-full ">
+                        <NotificationContent data={value} />
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : (
+                <div className="w-full p-2">
+                  <EmptyNotification />
+                </div>
+              )}
+            </div>
           </div>
-        </div>
 
-        <div>
-          <NavLink
-            to={`/homescreen/chat/${
-              State.database.userData.data
-                ? State.database.userData.data.user.username
-                : ""
-            }`}
-            state={{
-              isDM: false,
-              user2: {},
-            }}
-          >
-            <button class="btn btn-circle btn-ghost " onClick={showListedNFTs}>
-              <MessageDots size={28}></MessageDots>
-            </button>
-          </NavLink>
-        </div>
-        {/* <button
+          <div>
+            <NavLink
+              to={`/homescreen/chat/${
+                State.database.userData.data
+                  ? State.database.userData.data.user.username
+                  : ""
+              }`}
+              state={{
+                isDM: false,
+                user2: {},
+              }}
+            >
+              <button
+                class="btn btn-circle btn-ghost "
+                onClick={showListedNFTs}
+              >
+                <MessageDots size={28}></MessageDots>
+              </button>
+            </NavLink>
+          </div>
+          {/* <button
           class="btn btn-circle btn-ghost "
           onClick={() => setchatModalOpen(true)}
         >
           <MessageDots size={28}></MessageDots>
         </button> */}
 
-        <div class="dropdown dropdown-end">
-          <label tabindex="0" className=" avatar">
-            <div className="w-10 rounded-full cursor-pointer">
-              {/* <img
+          <div class="dropdown dropdown-end">
+            <label tabindex="0" className=" avatar">
+              <div className="w-10 rounded-full cursor-pointer">
+                {/* <img
                 src={
                   State.database.userData.data?.user.profile_image
                     ? State.database.userData.data.user.profile_image
                     : coverImage
                 }
               /> */}
-              <Image
-                width={50}
-                height={50}
-                src={
-                  State.database.userData.data?.user.profile_image
-                    ? State.database.userData.data.user.profile_image
-                    : coverImage
-                }
-                alt="profileImage"
-                placeholderSrc={placeholderImage}
-              />
-            </div>
-          </label>
-          <ul
-            tabindex="0"
-            className="menu menu-compact dropdown-content mt-3 p-2 shadow-xl   bg-slate-100 dark:bg-slate-800 text-brand1 text-base font-medium rounded-lg w-52"
-          >
-            <li>
-              <NavLink
-                to={`/homescreen/profile/${
-                  State.database.userData.data
-                    ? State.database.userData.data.user.username
-                    : ""
-                }`}
-                className="  hover:dark:bg-slate-900"
-              >
-                <User size={22}></User>Profile
-              </NavLink>
-            </li>
-            <li onClick={() => setsettingsModalOpen(true)}>
-              <a className=" hover:dark:bg-slate-900">
-                <Settings size={22}></Settings>Settings
-              </a>
-            </li>
-            {/* <label className="swap swap-rotate dark:text-gray-100">
+                <Image
+                  width={50}
+                  height={50}
+                  src={
+                    State.database.userData.data?.user.profile_image
+                      ? State.database.userData.data.user.profile_image
+                      : coverImage
+                  }
+                  alt="profileImage"
+                  placeholderSrc={placeholderImage}
+                />
+              </div>
+            </label>
+            <ul
+              tabindex="0"
+              className="menu menu-compact dropdown-content mt-3 p-2 shadow-xl   bg-slate-100 dark:bg-slate-800 text-brand1 text-base font-medium rounded-lg w-52"
+            >
+              <li>
+                <NavLink
+                  to={`/homescreen/profile/${
+                    State.database.userData.data
+                      ? State.database.userData.data.user.username
+                      : ""
+                  }`}
+                  className="  hover:dark:bg-slate-900"
+                >
+                  <User size={22}></User>Profile
+                </NavLink>
+              </li>
+              <li onClick={() => setsettingsModalOpen(true)}>
+                <a className=" hover:dark:bg-slate-900">
+                  <Settings size={22}></Settings>Settings
+                </a>
+              </li>
+              {/* <label className="swap swap-rotate dark:text-gray-100">
               <input
                 onChange={() =>
                   State.updateDatabase({
@@ -577,69 +583,71 @@ function Header() {
               <MoonStars className="swap-on"></MoonStars>
               <Sun className="swap-off"></Sun>
             </label> */}
-            <li>
-              <a
-                className=" hover:dark:bg-slate-900"
-                onClick={() =>
-                  State.updateDatabase({
-                    dark: !State.database.dark,
-                  })
-                }
-              >
-                {State.database.dark ? (
-                  <Moon size={22}></Moon>
-                ) : (
-                  <Sun size={22}></Sun>
-                )}{" "}
-                Mode
-              </a>
-            </li>
-            <li>
-              <span className="relative truncate hover:dark:bg-slate-900 text-emerald-600">
-                {State.database.chainId === 0 ? (
-                  <SolanaToken />
-                ) : (
-                  <PolygonToken />
-                )}{" "}
-                <p className="absolute top-2 left-4 h-2 w-2 bg-green-700 rounded-full animate-ping"></p>
-                <span
+              <li>
+                <a
+                  className=" hover:dark:bg-slate-900"
                   onClick={() =>
-                    State.database.chainId === 0
-                      ? State.database.provider?.showWallet()
-                      : ""
+                    State.updateDatabase({
+                      dark: !State.database.dark,
+                    })
                   }
                 >
-                  {localStorage.getItem("walletAddress").slice(0, 6)}...
-                  {localStorage
-                    .getItem("walletAddress")
-                    .slice(
-                      localStorage.getItem("walletAddress").length - 4,
-                      localStorage.getItem("walletAddress").length
-                    )}
+                  {State.database.dark ? (
+                    <Moon size={22}></Moon>
+                  ) : (
+                    <Sun size={22}></Sun>
+                  )}{" "}
+                  Mode
+                </a>
+              </li>
+              <li>
+                <span className="relative truncate hover:dark:bg-slate-900 text-emerald-600">
+                  {State.database.chainId === 0 ? (
+                    <SolanaToken />
+                  ) : (
+                    <PolygonToken />
+                  )}{" "}
+                  <p className="absolute top-2 left-4 h-2 w-2 bg-green-700 rounded-full animate-ping"></p>
+                  <span
+                    onClick={() =>
+                      State.database.chainId === 0
+                        ? State.database.provider?.showWallet()
+                        : ""
+                    }
+                  >
+                    {localStorage.getItem("walletAddress").slice(0, 6)}...
+                    {localStorage
+                      .getItem("walletAddress")
+                      .slice(
+                        localStorage.getItem("walletAddress").length - 4,
+                        localStorage.getItem("walletAddress").length
+                      )}
+                  </span>
+                  <CopyToClipboard
+                    text={localStorage.getItem("walletAddress")}
+                  />
                 </span>
-                <CopyToClipboard text={localStorage.getItem("walletAddress")} />
-              </span>
-            </li>
-            <li>
-              <NavLink
-                onClick={() => {
-                  //logout();
-                  State.database.walletProvider === "torus" &&
-                    State.database.provider.logout();
-                  localStorage.removeItem("authtoken");
-                  localStorage.removeItem("walletAddress");
-                  window.localStorage.clear();
-                }}
-                to={"/"}
-                className="hover:bg-rose-500 "
-              >
-                <DoorExit size={22}></DoorExit> Logout
-              </NavLink>
-            </li>
-          </ul>
+              </li>
+              <li>
+                <NavLink
+                  onClick={() => {
+                    //logout();
+                    State.database.walletProvider === "torus" &&
+                      State.database.provider.logout();
+                    localStorage.removeItem("authtoken");
+                    localStorage.removeItem("walletAddress");
+                    window.localStorage.clear();
+                  }}
+                  to={"/"}
+                  className="hover:bg-rose-500 "
+                >
+                  <DoorExit size={22}></DoorExit> Logout
+                </NavLink>
+              </li>
+            </ul>
+          </div>
         </div>
-      </div>
-      {/* <ChatModal
+        {/* <ChatModal
         open={chatModalOpen}
         setOpen={setchatModalOpen}
         userName={State.database.userData?.data?.user?.username}
@@ -648,8 +656,9 @@ function Header() {
           user2: {},
         }}
       /> */}
+      </div>
       <SettingsModal open={settingsModalOpen} setOpen={setsettingsModalOpen} />
-    </div>
+    </>
   );
 }
 

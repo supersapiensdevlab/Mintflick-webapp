@@ -76,7 +76,7 @@ function TimeLine() {
 
   return (
     <InfiniteScroll
-      className=" z-10 space-y-6 mb-4 max-w-2xl "
+      className=" z-10 space-y-6 mb-4 max-w-2xl w-full "
       dataLength={State.database.feedData.length} //This is important field to render the next data
       next={() => loadMoreData(State.database.feedData.length)}
       hasMore={hasMore}

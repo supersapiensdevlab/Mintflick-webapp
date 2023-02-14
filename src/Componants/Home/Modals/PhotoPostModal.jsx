@@ -31,11 +31,13 @@ import {
 } from "../../../Helper/mintOnSolana2";
 import Main_logo_dark from "../../../Assets/logos/Main_logo_dark";
 import Main_logo from "../../../Assets/logos/Main_logo";
+import { sanitizeFilename } from "../../../functions/sanitizeFilename";
 
 function PhotoPostModal({ setphotoPostModalOpen }) {
   const State = useContext(UserContext);
   const [uploadingPost, setUploadingPost] = useState(false);
   const [selectedPost, setSelectedPost] = useState(null);
+
   const [caption, setCaption] = useState("");
   const [isNFT, setIsNFT] = useState(false);
   const [nftPrice, setNFTPrice] = useState(1);
@@ -72,8 +74,11 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
 
   const handleImageChange = (event) => {
     // Update the state
+
+    const file = sanitizeFilename(event.target.files[0]);
+
     setSelectedPost({
-      file: event.target.files,
+      file: [file],
       localurl: URL.createObjectURL(event.target.files[0]),
     });
   };
@@ -208,7 +213,7 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
         .then(async (cid) => {
           let formData = new FormData();
           formData.append("announcement", caption);
-          formData.append("postImage", selectedPost.file[0]);
+          formData.append("postImage", sanitizeFilename(selectedPost.file[0]));
           formData.append("announcementHash", cid);
           formData.append("tagged", filter);
           console.log(filter);
@@ -222,10 +227,9 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
 
             var ts = Math.round(new Date().getTime() / 1000);
             let metadata = {
-              image:
-                "https://ipfs.io/ipfs/" + cid + "/" + selectedPost.file[0].name,
+              image: "https://ipfs.io/ipfs/" + cid + "/" + selectedPost.file[0],
               external_url:
-                "https://ipfs.io/ipfs/" + cid + "/" + selectedPost.file[0].name,
+                "https://ipfs.io/ipfs/" + cid + "/" + selectedPost.file[0],
               description: `Post description`,
               name: caption,
               attributes: [
@@ -245,7 +249,7 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
 
             function convertBlobToFile(blob, fileName) {
               blob.lastModifiedDate = new Date();
-              blob.name = fileName;
+              blob.name = fileName.replace(/[^a-zA-Z0-9]/g, "_");
               return blob;
             }
 
@@ -281,7 +285,7 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
                 url,
                 image
               );
-
+              console.log(mintRequest);
               const signedTx = await signTransactionWithWallet(
                 mintRequest.data.result.encoded_transaction,
                 State.database.provider
