@@ -1,12 +1,13 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { useState } from "react";
-import { Flag, X } from "tabler-icons-react";
+import { AlertOctagon, Flag, X } from "tabler-icons-react";
 import { UserContext } from "../../../Store";
 import axios from "axios";
 
 function ReportModal({ setAlreadyReported, setReportModal, reportData }) {
   const State = useContext(UserContext);
-
+  //reported value
+  const [report, setReport] = useState("");
   //report categories
   const categories = [
     {
@@ -27,16 +28,17 @@ function ReportModal({ setAlreadyReported, setReportModal, reportData }) {
     },
     {
       value: "Unauthorised sales",
-      subcategory: ["Animals", "Firearms", "Fake health documents"],
+      subcategory: [
+        "Animals Unauthorised sales",
+        "Firearms Unauthorised sales",
+        "Fake health documents Unauthorised sales",
+      ],
     },
   ];
 
-  //reported value
-  const [report, setReport] = useState(null);
-
   //submit report
   const handleReportSubmit = () => {
-    if (report != "" && report != null) {
+    if (report !== "") {
       const data = reportData;
       data.report = report;
       axios({
@@ -49,11 +51,13 @@ function ReportModal({ setAlreadyReported, setReportModal, reportData }) {
         data: data,
       })
         .then((response) => {
+          State.toast("success", "Post Reported.");
           setReportModal(false);
           setAlreadyReported(report);
         })
         .catch(function (error) {
           console.log(error);
+          State.toast("error", error.message);
         });
     }
   };
@@ -67,7 +71,7 @@ function ReportModal({ setAlreadyReported, setReportModal, reportData }) {
         <div className="w-full h-fit p-2 bg-slate-300 dark:bg-slate-700">
           <div className="flex justify-between items-center p-2">
             <h3 className="flex items-center gap-2 font-bold text-lg text-brand2">
-              <Flag />
+              <AlertOctagon className="text-error" />
               Report
             </h3>
             <X
@@ -80,6 +84,7 @@ function ReportModal({ setAlreadyReported, setReportModal, reportData }) {
           <h3 className=" font-semibold text-base text-brand2">
             Why are you reporting this post?
           </h3>
+          <span className=" font-semibold text-base text-error">{report}</span>
           <div className="space-y-2 w-full">
             {categories.map((value, key) => {
               return (
@@ -97,9 +102,9 @@ function ReportModal({ setAlreadyReported, setReportModal, reportData }) {
                         <span
                           key={i}
                           className={
-                            subcategory == report
+                            subcategory === report
                               ? "text-red-300"
-                              : "text-white"
+                              : "text-brand1"
                           }
                           onClick={() => {
                             setReport(subcategory);
@@ -121,7 +126,9 @@ function ReportModal({ setAlreadyReported, setReportModal, reportData }) {
           <button
             onClick={handleReportSubmit}
             className={`btn  w-full 
-  text-white  } ${(report !== null && report !== "") ? 'btn-error':'btn-disabled'}`}
+  text-white  } ${
+    report !== null && report !== "" ? "btn-error" : "btn-disabled"
+  }`}
           >
             submit report
           </button>

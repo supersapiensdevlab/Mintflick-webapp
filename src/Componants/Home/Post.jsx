@@ -129,6 +129,8 @@ function Post(props) {
 
   const [owner, setOwner] = useState(null);
 
+  const [nftLink, setnftLink] = useState(null);
+
   useEffect(() => {
     if (props.comments) {
       let count = 0;
@@ -407,7 +409,9 @@ function Post(props) {
       )
         .then((response) => response.json())
         .then((result) => {
+          console.log(result);
           setOwner(result.result?.owner);
+          setnftLink(result.result?.image_uri);
         })
         .catch((error) => console.log("error", error));
     }
@@ -934,6 +938,18 @@ function Post(props) {
           </div>
         </div>
         <p className="font-normal text-base text-brand2 w-full">{props.text}</p>
+        {props.contentType === "post" && tokenId && !props.image && (
+          <div className="items-center w-full     align-middle justify-center   flex rounded">
+            <Image
+              className="  w-full  object-contain"
+              width="100%"
+              height="100%"
+              src={nftLink ? nftLink : placeholderLogo}
+              alt={"Post Image"}
+              placeholder={<Main_logo></Main_logo>}
+            />
+          </div>
+        )}
         {props.contentType === "post" && (
           <div className=" w-full h-fit z-10 space-y-2">
             {props.image && (

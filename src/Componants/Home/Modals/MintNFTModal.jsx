@@ -17,6 +17,7 @@ import {
 import { toPng } from "html-to-image";
 import { uploadFile } from "../../../Helper/uploadHelper";
 import { upload } from "@testing-library/user-event/dist/upload";
+import ReactPlayer from "react-player";
 
 function MintNFTModal({
   mintModalOpen,
@@ -72,7 +73,12 @@ function MintNFTModal({
     setSuccessMessage("Please confirm to mint this post as an NFT");
   };
 
-  const postsNft = async (content, file) => {
+  const postsNft = async (content) => {
+    const response = await fetch(content);
+    const blob = await response.blob();
+    const file = new File([blob], videoImage ? "video.mp4" : "image.jpg", {
+      type: blob.type,
+    });
     {
       let name2 = State.database.userData?.data?.user?.name - name.slice(0, 5);
       const mintRequest = await mintNFTOnSolana2(
@@ -108,42 +114,50 @@ function MintNFTModal({
     }
   };
 
-  const thoughtNft = (file) => {
-    uploadFile([file])
-      .then(async (cid) => {
-        let name2 =
-          State.database.userData?.data?.user?.name - name.slice(0, 5);
-        let url = "https://ipfs.io/ipfs/" + cid + "/" + "meta.png";
-        const mintRequest = await mintNFTOnSolana2(
-          State.database.walletAddress,
-          name2,
-          name,
-          url,
-          file
-        );
+  const thoughtNft = () => {
+    toPng(document.getElementById("my-nft"), { cacheBust: true })
+      .then(async (dataUrl) => {
+        console.log(dataUrl);
+        const blob = await (await fetch(dataUrl)).blob();
+        const file = new File([blob], "meta.png", {
+          type: "image/jpeg",
+          lastModified: new Date(),
+        });
+        uploadFile([file]).then(async (cid) => {
+          let name2 =
+            State.database.userData?.data?.user?.name - name.slice(0, 5);
+          let url = "https://ipfs.io/ipfs/" + cid + "/" + "meta.png";
+          const mintRequest = await mintNFTOnSolana2(
+            State.database.walletAddress,
+            name2,
+            name,
+            url,
+            file
+          );
 
-        const signedTx =
-          mintRequest &&
-          (await signTransactionWithWallet(
-            mintRequest.data.result.encoded_transaction,
-            State.database.provider
-          ));
+          const signedTx =
+            mintRequest &&
+            (await signTransactionWithWallet(
+              mintRequest.data.result.encoded_transaction,
+              State.database.provider
+            ));
 
-        const finalTx =
-          signedTx &&
-          (await signWithRelayer(signedTx).catch((error) =>
-            State.toast("error", error)
-          ));
-        console.log(finalTx);
-        finalTx.success === true
-          ? State.toast("success", "NFT Minted successfully")
-          : State.toast("error", finalTx.message);
-        console.log(mintRequest);
-        finalTx.success && nftMinted(mintRequest.data.result.mint);
-        finalTx.success && setTokenId(mintRequest.data.result.mint);
-        finalTx.success && setOwner(State.database.walletAddress);
-        setMintModalOpen(false);
-        loadFeed();
+          const finalTx =
+            signedTx &&
+            (await signWithRelayer(signedTx).catch((error) =>
+              State.toast("error", error)
+            ));
+          console.log(finalTx);
+          finalTx.success === true
+            ? State.toast("success", "NFT Minted successfully")
+            : State.toast("error", finalTx.message);
+          console.log(mintRequest);
+          finalTx.success && nftMinted(mintRequest.data.result.mint);
+          finalTx.success && setTokenId(mintRequest.data.result.mint);
+          finalTx.success && setOwner(State.database.walletAddress);
+          setMintModalOpen(false);
+          loadFeed();
+        });
       })
       .catch((err) => {
         console.log(err);
@@ -154,27 +168,7 @@ function MintNFTModal({
   const handleMinting = async () => {
     setMinting(true);
 
-    const response = content && (await fetch(content));
-    // here image is url/location of image
-    const blob = content
-      ? await response.blob()
-      : await (
-          await fetch(
-            toPng(document.getElementById("my-nft"), { cacheBust: true }).then(
-              async (dataUrl) => {
-                return dataUrl;
-              }
-            )
-          )
-        ).blob();
-    const file = content
-      ? new File([blob], "image.jpg", { type: blob.type })
-      : new File([blob], "meta.png", {
-          type: "image/jpeg",
-          lastModified: new Date(),
-        });
-    console.log(file);
-    content ? postsNft(content, file) : thoughtNft(file);
+    content ? postsNft(content) : thoughtNft();
   };
   return (
     <div
@@ -200,11 +194,25 @@ function MintNFTModal({
         </div>
 
         <div className="flex flex-wrap p-4 w-full space-y-4 justify-center text-white">
-          {(videoImage || content) && (
+          {!videoImage && content && (
             <img
               src={videoImage ? videoImage : content}
               className="h-96 w-full object-cover rounded-lg"
             />
+          )}
+          {videoImage && (
+            <div className="w-full rounded-lg    overflow-hidden aspect-video  dark:bg-slate-900 bg-slate-300 object-cover">
+              <ReactPlayer
+                className="w-full"
+                width="100%"
+                height={"100%"}
+                playing={true}
+                muted={true}
+                volume={0.5}
+                url={content}
+                controls={true}
+              />
+            </div>
           )}
           {!videoImage && !content && (
             <div className="mx-auto w-fit m-4">

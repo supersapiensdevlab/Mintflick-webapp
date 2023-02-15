@@ -32,6 +32,7 @@ import {
 import Main_logo_dark from "../../../Assets/logos/Main_logo_dark";
 import Main_logo from "../../../Assets/logos/Main_logo";
 import { sanitizeFilename } from "../../../functions/sanitizeFilename";
+import { Walkthrough } from "../../Walkthrough/Walkthrough";
 
 function PhotoPostModal({ setphotoPostModalOpen }) {
   const State = useContext(UserContext);
@@ -50,6 +51,7 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
 
   const [btnText, setbtnText] = useState("Flick Photo");
   const [step, setstep] = useState(0);
+  const [showWalkthrough, setshowWalkthrough] = useState(true);
 
   const [loadNfts] = useLoadNfts();
   //Instance of pandora
@@ -404,204 +406,261 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
   // }
 
   return (
-    <div className="modal-box p-0 bg-slate-100 dark:bg-slate-800 ">
-      <div className="w-full h-fit p-2 bg-slate-300 dark:bg-slate-700">
-        <div className="flex justify-between items-center p-2">
-          <h3 className="flex items-center gap-2 font-bold text-lg text-brand2">
-            <Camera />
-            Upload Photo
-          </h3>
-          <X
-            onClick={() => clearData()}
-            className="text-brand2 cursor-pointer"
-          ></X>
+    <>
+      <div className="modal-box p-0 bg-slate-100 dark:bg-slate-800 ">
+        <div className="w-full h-fit p-2 bg-slate-300 dark:bg-slate-700">
+          <div className="flex justify-between items-center p-2">
+            <h3 className="flex items-center gap-2 font-bold text-lg text-brand2">
+              <Camera />
+              Upload Photo
+            </h3>
+            <X
+              onClick={() => clearData()}
+              className="text-brand2 cursor-pointer"
+            ></X>
+          </div>
         </div>
-      </div>
 
-      <form>
-        <div className=" w-full p-4 space-y-3">
-          <label
-            htmlFor="post_announcement_image"
-            className="relative cursor-pointer flex flex-col justify-between items-center gap-2  w-full p-2 border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4"
-          >
-            {uploadingPost && (
-              <div className="text-white gap-2 font-semibold absolute top-0 left-0 w-full h-full bg-white/10 backdrop-blur-sm rounded-lg flex flex-col items-center justify-center">
-                <Main_logo /> {btnText}
-              </div>
-            )}
-            <input
-              id="post_announcement_image"
-              type="file"
-              accept="image/*"
-              onChange={handleImageChange}
-              className="sr-only"
-              required={true}
-              onClick={(event) => {
-                event.target.value = null;
-                setSelectedPost(null);
-              }}
-            />
-            {selectedPost ? (
-              selectedPost.file ? (
-                <div className="w-72 flex items-center justify-center rounded-lg aspect-square  dark:bg-slate-900 bg-slate-300 overflow-clip">
-                  <img src={selectedPost.localurl}></img>
+        <form>
+          <div className=" w-full p-4 space-y-3">
+            <label
+              id="sahil1"
+              htmlFor="post_announcement_image"
+              className="relative cursor-pointer flex flex-col justify-between items-center gap-2  w-full p-2 border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4"
+            >
+              {uploadingPost && (
+                <div className="text-white gap-2 font-semibold absolute top-0 left-0 w-full h-full bg-white/10 backdrop-blur-sm rounded-lg flex flex-col items-center justify-center">
+                  <Main_logo /> {btnText}
                 </div>
-              ) : null
-            ) : (
-              <></>
-            )}{" "}
-            {selectedPost ? (
-              selectedPost.file ? (
-                <div className="flex items-center">
-                  <FileCheck className="text-emerald-700" />
-                  {selectedPost.file[0].name.substring(0, 16)}
-                </div>
+              )}
+              <input
+                id="post_announcement_image"
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+                className="sr-only"
+                required={true}
+                onClick={(event) => {
+                  event.target.value = null;
+                  setSelectedPost(null);
+                }}
+              />
+              {selectedPost ? (
+                selectedPost.file ? (
+                  <div className="w-72 flex items-center justify-center rounded-lg aspect-square  dark:bg-slate-900 bg-slate-300 overflow-clip">
+                    <img src={selectedPost.localurl}></img>
+                  </div>
+                ) : null
               ) : (
-                "No file choosen!"
-              )
-            ) : (
-              <div className="w-full flex items-center gap-1">
-                <File />
-                Choose file *
-              </div>
-            )}
-          </label>
-          {/* <textarea
+                <></>
+              )}{" "}
+              {selectedPost ? (
+                selectedPost.file ? (
+                  <div className="flex items-center">
+                    <FileCheck className="text-emerald-700" />
+                    {selectedPost.file[0].name.substring(0, 16)}
+                  </div>
+                ) : (
+                  "No file choosen!"
+                )
+              ) : (
+                <div className="w-full flex items-center gap-1">
+                  <File />
+                  Choose file *
+                </div>
+              )}
+            </label>
+            {/* <textarea
             className="textarea  w-full"
             placeholder="Enter caption."
             onChange={(e) => setCaption(e.target.value)}
             value={caption}
           ></textarea> */}
-          <MentionsInput
-            multiline
-            value={caption}
-            onChange={(e) => setCaption(e.target.value)}
-            style={defaultStyle}
-            className="textarea w-full h-24  pt-2 focus:outline-0 overflow-scroll mentionsinputoverflow"
-            placeholder={"Enter caption."}
-            a11ySuggestionsListLabel={"Suggested mentions"}
-            inputRef={mentionsRef}
-          >
-            <Mention
-              trigger="@"
-              data={renderData}
-              markup="@__display__"
-              appendSpaceOnAdd
-              onAdd={handleAdd}
-            />
-          </MentionsInput>
-          {showListingOption ? (
-            <div className="w-fit flex space-x-2 text-green-500">
-              {mintSuccess}
-            </div>
-          ) : (
-            <></>
-          )}
-          {mintSuccess == "" || mintSuccess == "NFT Minted Successfully" ? (
-            <div className="w-fit flex space-x-2">
-              {showListingOption ? (
-                <div className="flex items-center">
-                  <span className="label-text text-brand3">List NFT</span>
-                </div>
-              ) : (
-                <label className="flex items-center cursor-pointer gap-2">
-                  <input
-                    type="checkbox"
-                    value={isNFT}
-                    onChange={() => setIsNFT(!isNFT)}
-                    className="checkbox checkbox-primary"
-                  />
-                  <span className="label-text text-brand3">Mint as NFT</span>
-                </label>
-              )}
-              {showListingOption && (
-                <div className="form-control">
-                  <label className="input-group">
+            <MentionsInput
+              id="sahil2"
+              multiline
+              value={caption}
+              onChange={(e) => setCaption(e.target.value)}
+              style={defaultStyle}
+              className="textarea w-full h-24  pt-2 focus:outline-0 overflow-scroll mentionsinputoverflow"
+              placeholder={"Enter caption."}
+              a11ySuggestionsListLabel={"Suggested mentions"}
+              inputRef={mentionsRef}
+            >
+              <Mention
+                trigger="@"
+                data={renderData}
+                markup="@__display__"
+                appendSpaceOnAdd
+                onAdd={handleAdd}
+              />
+            </MentionsInput>
+            {showListingOption ? (
+              <div className="w-fit flex space-x-2 text-green-500">
+                {mintSuccess}
+              </div>
+            ) : (
+              <></>
+            )}
+            {mintSuccess == "" || mintSuccess == "NFT Minted Successfully" ? (
+              <div className="w-fit flex space-x-2">
+                {showListingOption ? (
+                  <div className="flex items-center">
+                    <span className="label-text text-brand3">List NFT</span>
+                  </div>
+                ) : (
+                  <label
+                    id="sahil3"
+                    className="flex items-center cursor-pointer gap-2"
+                  >
                     <input
-                      min={1}
-                      type="number"
-                      placeholder="1"
-                      className="input input-bordered input-sm w-24"
-                      value={nftPrice}
-                      onChange={(e) => setNFTPrice(e.target.value)}
-                      required={true}
+                      type="checkbox"
+                      value={isNFT}
+                      onChange={() => setIsNFT(!isNFT)}
+                      className="checkbox checkbox-primary"
                     />
-                    <span className="text-brand3 bg-slate-300 dark:bg-slate-600 ">
-                      {State.database.chainId === 0 ? (
-                        <>
-                          <SolanaToken></SolanaToken>&nbsp; SOL
-                        </>
-                      ) : (
-                        <>
-                          <PolygonToken></PolygonToken> &nbsp; Matic
-                        </>
-                      )}
-                    </span>
+                    <span className="label-text text-brand3">Mint as NFT</span>
                   </label>
-                </div>
-              )}
-            </div>
-          ) : null}
-          {mintSuccess == "NFT Minted Successfully" ? (
-            <div className="w-full flex justify-around space-x-1">
-              <button
-                onClick={
-                  State.database?.chainId == 1
-                    ? handleNFTListing
-                    : listNFTForSale
-                }
-                className={`btn  ${
-                  !selectedPost?.file[0] ? "btn-disabled" : "btn-brand"
-                } w-1/2 ${uploadingPost ? "loading " : ""}`}
-              >
-                List NFT
-              </button>
-              <button
-                onClick={(e) => {
-                  e.preventDefault();
-                  clearData();
-                }}
-                className={`btn  ${
-                  !selectedPost?.file[0] ? "btn-disabled" : "btn-brand"
-                } w-1/2`}
-              >
-                Close
-              </button>
-            </div>
-          ) : (
-            <>
-              {!mintSuccess == "" ? (
+                )}
+                {showListingOption && (
+                  <div className="form-control">
+                    <label className="input-group">
+                      <input
+                        min={1}
+                        type="number"
+                        placeholder="1"
+                        className="input input-bordered input-sm w-24"
+                        value={nftPrice}
+                        onChange={(e) => setNFTPrice(e.target.value)}
+                        required={true}
+                      />
+                      <span className="text-brand3 bg-slate-300 dark:bg-slate-600 ">
+                        {State.database.chainId === 0 ? (
+                          <>
+                            <SolanaToken></SolanaToken>&nbsp; SOL
+                          </>
+                        ) : (
+                          <>
+                            <PolygonToken></PolygonToken> &nbsp; Matic
+                          </>
+                        )}
+                      </span>
+                    </label>
+                  </div>
+                )}
+              </div>
+            ) : null}
+            {mintSuccess == "NFT Minted Successfully" ? (
+              <div className="w-full flex justify-around space-x-1">
+                <button
+                  onClick={
+                    State.database?.chainId == 1
+                      ? handleNFTListing
+                      : listNFTForSale
+                  }
+                  className={`btn  ${
+                    !selectedPost?.file[0] ? "btn-disabled" : "btn-brand"
+                  } w-1/2 ${uploadingPost ? "loading " : ""}`}
+                >
+                  List NFT
+                </button>
                 <button
                   onClick={(e) => {
                     e.preventDefault();
                     clearData();
                   }}
                   className={`btn  ${
-                    !selectedPost?.file[0]
-                      ? "btn-disabled"
-                      : "btn-outline btn-error"
-                  } w-full `}
+                    !selectedPost?.file[0] ? "btn-disabled" : "btn-brand"
+                  } w-1/2`}
                 >
                   Close
                 </button>
-              ) : (
-                <button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleSubmit();
-                  }}
-                  className={`btn  ${
-                    !selectedPost?.file[0] ? "btn-disabled" : "btn-brand"
-                  } w-full capitalize ${uploadingPost ? "loading " : ""}`}
-                >
-                  {btnText}
-                </button>
-              )}
-            </>
-          )}
-        </div>
-      </form>
-    </div>
+              </div>
+            ) : (
+              <>
+                {!mintSuccess == "" ? (
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      clearData();
+                    }}
+                    className={`btn  ${
+                      !selectedPost?.file[0]
+                        ? "btn-disabled"
+                        : "btn-outline btn-error"
+                    } w-full `}
+                  >
+                    Close
+                  </button>
+                ) : (
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleSubmit();
+                    }}
+                    className={`btn  ${
+                      selectedPost?.file[0] && caption !== ""
+                        ? "btn-brand"
+                        : "btn-disabled"
+                    } w-full capitalize ${uploadingPost ? "loading " : ""}`}
+                  >
+                    {btnText}
+                  </button>
+                )}
+              </>
+            )}
+          </div>
+        </form>
+      </div>
+      {/* {showWalkthrough && (
+        <Walkthrough
+          data={[
+            {
+              heading: "NFTfied Social Media",
+              text: (
+                <>
+                  💸 Marketplaces are place of business & Social Media is a
+                  place to connect & Interact.
+                  <br />
+                  🤑 We infused them together into an unique blend where
+                  creators can sell their Day-to-Day Posts & make a living out
+                  of.
+                </>
+              ),
+              id: "sahil1",
+            },
+            {
+              heading: "Livestreaming",
+              text: (
+                <>
+                  🎮 Connect with your Audience & Stream live concerts,
+                  Gameplays & Metaverse Events.
+                  <br />
+                  💰 Mint NFTs from Livestreams so you can monetise your Best
+                  moments.
+                </>
+              ),
+              id: "sahil2",
+            },
+            {
+              heading: "Events",
+              text: (
+                <>
+                  🎟️ Booking & Hosting Events has never been this easy. Book
+                  Token gated tickets for Local Events, Web3 Meetups - NFT
+                  Ticket will be added to your wallet.
+                  <br />
+                  🗓️ Host your Events & invite your audience with an easy to Go
+                  Experience.
+                </>
+              ),
+              id: "sahil3",
+            },
+          ]}
+          func={() => setshowWalkthrough(false)}
+        />
+      )} */}
+    </>
   );
 }
 

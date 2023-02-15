@@ -67,7 +67,7 @@ function MobileHeader() {
       <div className="flex justify-between items-center  h-full w-full">
         <div className="dropdown dropdown-start">
           <label tabindex="0" className=" ">
-            <div className="w-10 rounded-full cursor-pointer">
+            <div className="w-10 h-10 rounded-full cursor-pointer">
               {/* <img
                 src={
                   State.database.userData.data?.user.profile_image
@@ -76,7 +76,7 @@ function MobileHeader() {
                 }
               /> */}
               <Image
-                className="rounded-full"
+                className="rounded-full w-full h-full object-cover"
                 width={50}
                 height={50}
                 src={

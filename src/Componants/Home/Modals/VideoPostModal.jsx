@@ -122,7 +122,7 @@ function VideoPostModal({ setVideoPostModalOpen }) {
         file: sanitizeFilename(e.target.files[0]),
         localurl: URL.createObjectURL(e.target.files[0]),
       });
-      let videoImage = e.target.files[0].name.replace(/\.[^/.]+$/, "");
+      let videoImage = e.target.files[0].name.replace(/\.[^/]+$/, "");
       setVideoData({ ...videoData, videoImage: videoImage });
     }
   };
@@ -821,7 +821,9 @@ function VideoPostModal({ setVideoPostModalOpen }) {
                 <button
                   type={"submit"}
                   className={`btn capitalize w-full  ${
-                    selectedVideo?.file && selectedThumbnail?.file
+                    selectedVideo?.file &&
+                    selectedThumbnail?.file &&
+                    videoData.description !== ""
                       ? "btn-brand"
                       : "btn-disabled"
                   } ${uploadingVideo ? "loading" : ""}`}
