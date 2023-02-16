@@ -9,16 +9,13 @@ const FeedbackForm = () => {
   const [showFeedback, setShowFeedback] = useState(false);
   const handleShowFeedback = () => setShowFeedback(true);
 
-  const userFeedback = {
+  const [values, setValues] = useState({
     feedback: "",
     email: State.database.userData?.data?.user?.email,
-  };
-
-  const [values, setValues] = useState(userFeedback);
+  });
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setValues({ ...values, [name]: value });
+    setValues({ ...values, feedback: e.target.value });
   };
 
   const handleFeedbackSubmit = (e) => {
@@ -33,12 +30,12 @@ const FeedbackForm = () => {
       },
     })
       .then((response) => {
-        console.log("success");
+        console.log("feedback success");
         State.toast(
           "success",
           "Your feedback will help us improve. Thank you!"
         );
-        setValues(userFeedback);
+        setValues({});
         setShowFeedback(false);
       })
       .catch((err) => {

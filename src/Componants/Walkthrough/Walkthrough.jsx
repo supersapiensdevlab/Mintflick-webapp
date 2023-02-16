@@ -33,12 +33,15 @@ export function Walkthrough(props) {
     }
     return { top: _y, left: _x };
   }
-  function handleResize() {
-    setresized(resized + 1);
-  }
 
   useEffect(() => {
+    function handleResize() {
+      setresized(resized + 1);
+    }
     window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
   }, []);
 
   useEffect(() => {
