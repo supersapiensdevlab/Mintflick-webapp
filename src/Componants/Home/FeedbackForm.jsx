@@ -11,7 +11,7 @@ const FeedbackForm = () => {
 
   const userFeedback = {
     feedback: "",
-    email: "",
+    email: State.database.userData?.data?.user?.email,
   };
 
   const [values, setValues] = useState(userFeedback);
@@ -80,24 +80,24 @@ const FeedbackForm = () => {
           </div>
           <div className="w-full space-y-1">
             <p className="text-brand2 font-semibold">How is it going so far?</p>{" "}
-            <input
+            <textarea
               required
               type="text"
               name="feedback"
               value={values.feedback}
               onChange={handleChange}
-              className="input w-full"
+              className="textarea w-full"
               placeholder="Tell us more"
             />
-            <input
+            {/* <input
               type="email"
               name="email"
               value={values.email}
               required
               onChange={handleChange}
               className="input w-full"
-              placeholder="Your Email (optional)"
-            />
+              placeholder={State.database.userData?.data?.user?.email}
+            /> */}
             <button
               onClick={handleFeedbackSubmit}
               className="btn mx-auto mt-2  btn-success w-full capitalize"

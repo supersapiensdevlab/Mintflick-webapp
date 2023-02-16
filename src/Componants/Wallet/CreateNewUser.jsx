@@ -27,7 +27,7 @@ function SplashScreen(props) {
           {active !== 0 && (
             <button
               onClick={() => setactive(active - 1)}
-              className="flex items-center gap-2 absolute top-4  left-4 font-semibold text-lg text-white"
+              className="flex items-center gap-2 absolute top-4  left-4 font-semibold text-lg text-brand1"
             >
               <ChevronLeft />
               Back
@@ -36,7 +36,7 @@ function SplashScreen(props) {
           {active !== props.data.length - 1 && (
             <button
               onClick={() => setactive(props.data.length - 1)}
-              className="absolute top-4 right-4 font-semibold text-lg text-white"
+              className="absolute top-4 right-4 font-semibold text-lg text-brand1"
             >
               Skip
             </button>
@@ -47,7 +47,7 @@ function SplashScreen(props) {
             alt="wallet"
           />
           <div className="flex-grow p-8 flex flex-col items-start gap-4">
-            <span className="text-4xl font-bold text-white">
+            <span className="text-4xl font-bold text-brand1">
               {props.data[active].heading}
             </span>
             <p className="text-md font-semibold text-slate-400 flex-grow">
@@ -58,7 +58,7 @@ function SplashScreen(props) {
               onClick={handleClick}
               className={`w-full flex items-center justify-center gap-2 font-semibold text-lg  p-4 rounded-lg ${
                 active === props.data.length - 1
-                  ? `text-white bg-primary`
+                  ? `text-brand1 bg-primary`
                   : `text-primary border-2 border-primary`
               }`}
             >

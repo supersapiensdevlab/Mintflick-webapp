@@ -54,6 +54,49 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
   const [showWalkthrough, setshowWalkthrough] = useState(true);
 
   const [loadNfts] = useLoadNfts();
+
+  //walkthrough data
+  const walkthroughData = [
+    {
+      heading: "NFTfied Social Media",
+      text: (
+        <>
+          💸 Marketplaces are place of business & Social Media is a place to
+          connect & Interact.
+          <br />
+          🤑 We infused them together into an unique blend where creators can
+          sell their Day-to-Day Posts & make a living out of.
+        </>
+      ),
+      id: "walkthroughStep1",
+    },
+    {
+      heading: "Livestreaming",
+      text: (
+        <>
+          🎮 Connect with your Audience & Stream live concerts, Gameplays &
+          Metaverse Events.
+          <br />
+          💰 Mint NFTs from Livestreams so you can monetise your Best moments.
+        </>
+      ),
+      id: "walkthroughStep2",
+    },
+    {
+      heading: "Events",
+      text: (
+        <>
+          🎟️ Booking & Hosting Events has never been this easy. Book Token gated
+          tickets for Local Events, Web3 Meetups - NFT Ticket will be added to
+          your wallet.
+          <br />
+          🗓️ Host your Events & invite your audience with an easy to Go
+          Experience.
+        </>
+      ),
+      id: "walkthroughStep3",
+    },
+  ];
   //Instance of pandora
   const ExpressSDK = createPandoraExpressSDK();
 
@@ -424,7 +467,7 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
         <form>
           <div className=" w-full p-4 space-y-3">
             <label
-              id="sahil1"
+              id="walkthroughStep1"
               htmlFor="post_announcement_image"
               className="relative cursor-pointer flex flex-col justify-between items-center gap-2  w-full p-2 border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4"
             >
@@ -477,7 +520,7 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
             value={caption}
           ></textarea> */}
             <MentionsInput
-              id="sahil2"
+              id="walkthroughStep2"
               multiline
               value={caption}
               onChange={(e) => setCaption(e.target.value)}
@@ -510,7 +553,7 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
                   </div>
                 ) : (
                   <label
-                    id="sahil3"
+                    id="walkthroughStep3"
                     className="flex items-center cursor-pointer gap-2"
                   >
                     <input
@@ -612,54 +655,12 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
           </div>
         </form>
       </div>
-      {/* {showWalkthrough && (
+      {showWalkthrough && (
         <Walkthrough
-          data={[
-            {
-              heading: "NFTfied Social Media",
-              text: (
-                <>
-                  💸 Marketplaces are place of business & Social Media is a
-                  place to connect & Interact.
-                  <br />
-                  🤑 We infused them together into an unique blend where
-                  creators can sell their Day-to-Day Posts & make a living out
-                  of.
-                </>
-              ),
-              id: "sahil1",
-            },
-            {
-              heading: "Livestreaming",
-              text: (
-                <>
-                  🎮 Connect with your Audience & Stream live concerts,
-                  Gameplays & Metaverse Events.
-                  <br />
-                  💰 Mint NFTs from Livestreams so you can monetise your Best
-                  moments.
-                </>
-              ),
-              id: "sahil2",
-            },
-            {
-              heading: "Events",
-              text: (
-                <>
-                  🎟️ Booking & Hosting Events has never been this easy. Book
-                  Token gated tickets for Local Events, Web3 Meetups - NFT
-                  Ticket will be added to your wallet.
-                  <br />
-                  🗓️ Host your Events & invite your audience with an easy to Go
-                  Experience.
-                </>
-              ),
-              id: "sahil3",
-            },
-          ]}
+          data={walkthroughData}
           func={() => setshowWalkthrough(false)}
         />
-      )} */}
+      )}
     </>
   );
 }
