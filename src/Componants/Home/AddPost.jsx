@@ -181,41 +181,51 @@ function AddPost() {
         </div>
       </div>
       {/*  post modal */}
-      <div
-        className={`${
-          thoughtPostModalOpen && "modal-open"
-        } modal modal-bottom sm:modal-middle`}
-      >
-        <ThoughtPostModal setthoughtPostModalOpen={setthoughtPostModalOpen} />
-      </div>
-      <div
-        className={`${
-          photoPostModalOpen && "modal-open"
-        } modal modal-bottom sm:modal-middle`}
-      >
-        <PhotoPostModal setphotoPostModalOpen={setphotoPostModalOpen} />
-      </div>
-      <div
-        className={`${
-          videoPostModalOpen && "modal-open"
-        } modal  modal-bottom sm:modal-middle`}
-      >
-        <VideoPostModal setVideoPostModalOpen={setvideoPostModalOpen} />
-      </div>
-      <div
-        className={`${
-          audioPostModalOpen && "modal-open"
-        } modal  modal-bottom sm:modal-middle`}
-      >
-        <AudioPostModal setAudioPostModalOpen={setaudioPostModalOpen} />
-      </div>
-      <div
-        className={`${
-          pollModalOpen && "modal-open"
-        } modal  modal-bottom sm:modal-middle`}
-      >
-        <PollModal setPollModalOpen={setpollModalOpen} />
-      </div>
+      {thoughtPostModalOpen && (
+        <div
+          className={`${
+            thoughtPostModalOpen && "modal-open"
+          } modal modal-bottom sm:modal-middle`}
+        >
+          <ThoughtPostModal setthoughtPostModalOpen={setthoughtPostModalOpen} />
+        </div>
+      )}
+      {photoPostModalOpen && (
+        <div
+          className={`${
+            photoPostModalOpen && "modal-open"
+          } modal modal-bottom sm:modal-middle`}
+        >
+          <PhotoPostModal setphotoPostModalOpen={setphotoPostModalOpen} />
+        </div>
+      )}
+      {videoPostModalOpen && (
+        <div
+          className={`${
+            videoPostModalOpen && "modal-open"
+          } modal  modal-bottom sm:modal-middle`}
+        >
+          <VideoPostModal setVideoPostModalOpen={setvideoPostModalOpen} />
+        </div>
+      )}
+      {audioPostModalOpen && (
+        <div
+          className={`${
+            audioPostModalOpen && "modal-open"
+          } modal  modal-bottom sm:modal-middle`}
+        >
+          <AudioPostModal setAudioPostModalOpen={setaudioPostModalOpen} />
+        </div>
+      )}
+      {pollModalOpen && (
+        <div
+          className={`${
+            pollModalOpen && "modal-open"
+          } modal  modal-bottom sm:modal-middle`}
+        >
+          <PollModal setPollModalOpen={setpollModalOpen} />
+        </div>
+      )}
     </>
   );
 }

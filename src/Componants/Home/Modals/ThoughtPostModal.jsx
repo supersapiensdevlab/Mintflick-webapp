@@ -26,6 +26,7 @@ import {
   signWithRelayer,
 } from "../../../Helper/mintOnSolana2";
 import NftCard from "../NftCard";
+import { Walkthrough } from "../../Walkthrough/Walkthrough";
 
 function ThoughtPostModal({ setthoughtPostModalOpen }) {
   const mentionsRef = useRef();
@@ -42,6 +43,20 @@ function ThoughtPostModal({ setthoughtPostModalOpen }) {
   const [successMsg, setSuccessMsg] = useState("");
   const [btnText, setbtnText] = useState("Flick Thought");
 
+  const [showWalkthrough, setshowWalkthrough] = useState(true);
+  //walkthrough data
+  const walkthroughData = [
+    {
+      heading: "Let it out 📢",
+      text: "Let the world know what you think!",
+      id: "walkthroughThoughtStep1",
+    },
+    {
+      heading: "Make this an NFT🃏",
+      text: "Turn a thought into an NFT.",
+      id: "walkthroughThoughtStep2",
+    },
+  ];
   const textRef = useRef();
   const [loadNfts] = useLoadNfts();
 
@@ -277,171 +292,154 @@ function ThoughtPostModal({ setthoughtPostModalOpen }) {
   };
 
   return (
-    <div className="modal-box p-0 bg-slate-100 dark:bg-slate-800 ">
-      <div className="w-full h-fit p-2 bg-slate-300 dark:bg-slate-700">
-        <div className="flex justify-between items-center p-2">
-          <h3 className="flex items-center gap-2 font-bold text-lg text-brand2">
-            <Bulb />
-            Post a Thought
-          </h3>
-          <X
-            onClick={() => {
-              clearData();
-            }}
-            className="text-brand2 cursor-pointer"
-          ></X>
+    <>
+      <div className="modal-box p-0 bg-slate-100 dark:bg-slate-800 ">
+        <div className="w-full h-fit p-2 bg-slate-300 dark:bg-slate-700">
+          <div className="flex justify-between items-center p-2">
+            <h3 className="flex items-center gap-2 font-bold text-lg text-brand2">
+              <Bulb />
+              Post a Thought
+            </h3>
+            <X
+              onClick={() => {
+                clearData();
+              }}
+              className="text-brand2 cursor-pointer"
+            ></X>
+          </div>
         </div>
-      </div>
 
-      <form onSubmit={(e) => e.preventDefault()}>
-        <div className="w-full p-4 space-y-3">
-          {/* <textarea
+        <form onSubmit={(e) => e.preventDefault()}>
+          <div className="w-full p-4 space-y-3">
+            {/* <textarea
             className="textarea  w-full"
             placeholder="Whats on your mind!"
             onChange={(e) => setCaption(e.target.value)}
             value={caption}
           ></textarea> */}
-          <div ref={textRef}>
-            <MentionsInput
-              multiline
-              value={caption}
-              onChange={(e) => setCaption(e.target.value)}
-              style={defaultStyle}
-              className="textarea w-full h-24  pt-2 focus:outline-0 overflow-scroll mentionsinputoverflow"
-              placeholder={"Whats on your mind!"}
-              a11ySuggestionsListLabel={"Suggested mentions"}
-              inputRef={mentionsRef}
-            >
-              <Mention
-                trigger="@"
-                data={renderData}
-                markup="@__display__"
-                appendSpaceOnAdd
-                onAdd={handleAdd}
-              />
-            </MentionsInput>
-          </div>
-          {mintSuccess || (mintSuccess && listSuccess) ? (
-            <div className="w-fit flex space-x-2 text-green-500">
-              {successMsg}
+            <div id="walkthroughThoughtStep1" ref={textRef}>
+              <MentionsInput
+                multiline
+                value={caption}
+                onChange={(e) => setCaption(e.target.value)}
+                style={defaultStyle}
+                className="textarea w-full h-24  pt-2 focus:outline-0 overflow-scroll mentionsinputoverflow"
+                placeholder={"Whats on your mind!"}
+                a11ySuggestionsListLabel={"Suggested mentions"}
+                inputRef={mentionsRef}
+              >
+                <Mention
+                  trigger="@"
+                  data={renderData}
+                  markup="@__display__"
+                  appendSpaceOnAdd
+                  onAdd={handleAdd}
+                />
+              </MentionsInput>
             </div>
-          ) : (
-            <></>
-          )}
-          <div className="w-fit flex space-x-2">
-            {mintSuccess ? (
-              <div className="flex items-center">
-                {!listSuccess ? (
-                  <span className="label-text text-brand3">List NFT</span>
-                ) : (
-                  <></>
-                )}
+            {mintSuccess || (mintSuccess && listSuccess) ? (
+              <div className="w-fit flex space-x-2 text-green-500">
+                {successMsg}
               </div>
             ) : (
-              <label className="flex items-center cursor-pointer gap-2">
-                <input
-                  type="checkbox"
-                  value={isNFT}
-                  onChange={() => setIsNFT(!isNFT)}
-                  className="checkbox checkbox-primary"
-                />
-                <span className="label-text text-brand3">Mint as NFT</span>
-              </label>
+              <></>
             )}
-            {isNFT && mintSuccess && !listSuccess && (
-              <div className="form-control">
-                <label className="input-group">
+            <div className="w-fit flex space-x-2">
+              {mintSuccess ? (
+                <div className="flex items-center">
+                  {!listSuccess ? (
+                    <span className="label-text text-brand3">List NFT</span>
+                  ) : (
+                    <></>
+                  )}
+                </div>
+              ) : (
+                <label
+                  id="walkthroughThoughtStep2"
+                  className="flex items-center cursor-pointer gap-2"
+                >
                   <input
-                    min={1}
-                    type="number"
-                    placeholder="1"
-                    className="input input-bordered input-sm w-24"
-                    value={nftPrice}
-                    onChange={(e) => setNFTPrice(e.target.value)}
-                    required={true}
+                    type="checkbox"
+                    value={isNFT}
+                    onChange={() => setIsNFT(!isNFT)}
+                    className="checkbox checkbox-primary"
                   />
-                  <span className="text-brand3 bg-slate-300 dark:bg-slate-600 ">
-                    {State.database.chainId === 0 ? (
-                      <>
-                        <SolanaToken></SolanaToken>&nbsp; SOL
-                      </>
-                    ) : (
-                      <>
-                        <PolygonToken></PolygonToken> &nbsp; Matic
-                      </>
-                    )}
-                  </span>
+                  <span className="label-text text-brand3">Mint as NFT</span>
                 </label>
+              )}
+              {isNFT && mintSuccess && !listSuccess && (
+                <div className="form-control">
+                  <label className="input-group">
+                    <input
+                      min={1}
+                      type="number"
+                      placeholder="1"
+                      className="input input-bordered input-sm w-24"
+                      value={nftPrice}
+                      onChange={(e) => setNFTPrice(e.target.value)}
+                      required={true}
+                    />
+                    <span className="text-brand3 bg-slate-300 dark:bg-slate-600 ">
+                      {State.database.chainId === 0 ? (
+                        <>
+                          <SolanaToken></SolanaToken>&nbsp; SOL
+                        </>
+                      ) : (
+                        <>
+                          <PolygonToken></PolygonToken> &nbsp; Matic
+                        </>
+                      )}
+                    </span>
+                  </label>
+                </div>
+              )}
+            </div>
+            <progress
+              class="progress progress-success w-56 hidden"
+              value="50"
+              max="100"
+            ></progress>
+            {isNFT && caption && (
+              <div className="mx-auto w-fit m-4">
+                <NftCard
+                  id="my-nft"
+                  name={State.database.userData.data.user.name}
+                  userName={State.database.userData.data.user.username}
+                  text={caption}
+                />
+
+                <span
+                  onClick={() =>
+                    toPng(document.getElementById("my-nft"), {
+                      quality: 2,
+                    }).then(function (dataUrl) {
+                      var link = document.createElement("a");
+                      link.download = "my-thought-nft.png";
+                      link.href = dataUrl;
+                      link.click();
+                    })
+                  }
+                  className="link link-primary"
+                >
+                  Download as image
+                </span>
               </div>
             )}
-          </div>
-          <progress
-            class="progress progress-success w-56 hidden"
-            value="50"
-            max="100"
-          ></progress>
-          {isNFT && caption && (
-            <div className="mx-auto w-fit m-4">
-              <NftCard
-                id="my-nft"
-                name={State.database.userData.data.user.name}
-                userName={State.database.userData.data.user.username}
-                text={caption}
-              />
 
-              <span
-                onClick={() =>
-                  toPng(document.getElementById("my-nft"), {
-                    quality: 2,
-                  }).then(function (dataUrl) {
-                    var link = document.createElement("a");
-                    link.download = "my-thought-nft.png";
-                    link.href = dataUrl;
-                    link.click();
-                  })
-                }
-                className="link link-primary"
+            {!mintSuccess ? (
+              <button
+                type={"submit"}
+                onClick={handleThoughtPost}
+                // onClick={onButtonClick}
+                className={`btn capitalize w-full  ${
+                  caption ? "btn-brand" : "btn-disabled"
+                }  ${uploadingPost ? "loading" : ""}`}
               >
-                Download as image
-              </span>
-            </div>
-          )}
-
-          {!mintSuccess ? (
-            <button
-              type={"submit"}
-              onClick={handleThoughtPost}
-              // onClick={onButtonClick}
-              className={`btn capitalize w-full  ${
-                caption ? "btn-brand" : "btn-disabled"
-              }  ${uploadingPost ? "loading" : ""}`}
-            >
-              {btnText}
-            </button>
-          ) : (
-            <>
-              {listSuccess ? (
-                <button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    clearData();
-                  }}
-                  className={`btn  ${
-                    !caption ? "btn-disabled" : "btn-brand"
-                  } w-full `}
-                >
-                  Close
-                </button>
-              ) : (
-                <div className="w-full flex justify-around space-x-1">
-                  <button
-                    onClick={handleThoughtNFTListing}
-                    className={`btn  ${
-                      !caption ? "btn-disabled" : "btn-brand"
-                    } w-1/2 ${uploadingPost ? "loading " : ""}`}
-                  >
-                    List NFT
-                  </button>
+                {btnText}
+              </button>
+            ) : (
+              <>
+                {listSuccess ? (
                   <button
                     onClick={(e) => {
                       e.preventDefault();
@@ -449,17 +447,46 @@ function ThoughtPostModal({ setthoughtPostModalOpen }) {
                     }}
                     className={`btn  ${
                       !caption ? "btn-disabled" : "btn-brand"
-                    } w-1/2 `}
+                    } w-full `}
                   >
                     Close
                   </button>
-                </div>
-              )}
-            </>
-          )}
-        </div>
-      </form>
-    </div>
+                ) : (
+                  <div className="w-full flex justify-around space-x-1">
+                    <button
+                      onClick={handleThoughtNFTListing}
+                      className={`btn  ${
+                        !caption ? "btn-disabled" : "btn-brand"
+                      } w-1/2 ${uploadingPost ? "loading " : ""}`}
+                    >
+                      List NFT
+                    </button>
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        clearData();
+                      }}
+                      className={`btn  ${
+                        !caption ? "btn-disabled" : "btn-brand"
+                      } w-1/2 `}
+                    >
+                      Close
+                    </button>
+                  </div>
+                )}
+              </>
+            )}
+          </div>
+        </form>
+      </div>
+      {showWalkthrough && (
+        <Walkthrough
+          data={walkthroughData}
+          func={() => setshowWalkthrough(false)}
+          show={showWalkthrough}
+        />
+      )}
+    </>
   );
 }
 

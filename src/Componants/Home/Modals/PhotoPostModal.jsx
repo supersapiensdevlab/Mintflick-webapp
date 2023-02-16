@@ -58,42 +58,18 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
   //walkthrough data
   const walkthroughData = [
     {
-      heading: "NFTfied Social Media",
-      text: (
-        <>
-          💸 Marketplaces are place of business & Social Media is a place to
-          connect & Interact.
-          <br />
-          🤑 We infused them together into an unique blend where creators can
-          sell their Day-to-Day Posts & make a living out of.
-        </>
-      ),
+      heading: "Choose a Unique Photo🖼️",
+      text: "Transform this captivating photo into a one-of-a-kind NFT, making it a truly unique and valuable digital masterpiece!",
       id: "walkthroughStep1",
     },
     {
-      heading: "Livestreaming",
-      text: (
-        <>
-          🎮 Connect with your Audience & Stream live concerts, Gameplays &
-          Metaverse Events.
-          <br />
-          💰 Mint NFTs from Livestreams so you can monetise your Best moments.
-        </>
-      ),
+      heading: "Add an Interesting Caption💬",
+      text: "Share your unique story with the world and create a timeless masterpiece that will last a lifetime and beyond.",
       id: "walkthroughStep2",
     },
     {
-      heading: "Events",
-      text: (
-        <>
-          🎟️ Booking & Hosting Events has never been this easy. Book Token gated
-          tickets for Local Events, Web3 Meetups - NFT Ticket will be added to
-          your wallet.
-          <br />
-          🗓️ Host your Events & invite your audience with an easy to Go
-          Experience.
-        </>
-      ),
+      heading: "Make this an NFT🃏",
+      text: "Turn a Moment into a Masterpiece: Create an NFT of Your Favorite Photo",
       id: "walkthroughStep3",
     },
   ];
@@ -659,6 +635,7 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
         <Walkthrough
           data={walkthroughData}
           func={() => setshowWalkthrough(false)}
+          show={showWalkthrough}
         />
       )}
     </>

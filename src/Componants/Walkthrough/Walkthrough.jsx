@@ -13,13 +13,16 @@ export function Walkthrough(props) {
   const [offset, setoffset] = useState({ x: 0, y: 0 });
   const [divHeight, setdivHeight] = useState(0);
   const [resized, setresized] = useState(0);
-  console.log(props.data);
 
   function handleClick() {
     active < props.data.length - 1 ? setactive(active + 1) : props.func();
   }
 
   function getDivHeight(el) {
+    // let h = 0;
+    // while (el && !isNaN(el.offsetHeight)) {
+    //   h = el.offsetHeight;
+    // }
     return el.offsetHeight;
   }
 
@@ -35,12 +38,23 @@ export function Walkthrough(props) {
   }
 
   useEffect(() => {
-    function handleResize() {
-      setresized(resized + 1);
+    function debounce(fn, ms) {
+      let timer;
+      return (_) => {
+        clearTimeout(timer);
+        timer = setTimeout((_) => {
+          timer = null;
+          fn.apply(this, arguments);
+        }, ms);
+      };
     }
-    window.addEventListener("resize", handleResize);
+    function handleResize() {
+      setresized(window.innerWidth);
+      console.log("handleResize called");
+    }
+    window.addEventListener("resize", debounce(handleResize, 1000));
     return () => {
-      window.removeEventListener("resize", handleResize);
+      window.removeEventListener("resize", debounce(handleResize, 1000));
     };
   }, []);
 
@@ -49,13 +63,12 @@ export function Walkthrough(props) {
       x: getOffset(document.getElementById(props.data[active].id)).top,
       y: getOffset(document.getElementById(props.data[active].id)).left,
     });
-    setdivHeight(getDivHeight(document.getElementById("walkthrought")));
-    return () => {};
+    setdivHeight(getDivHeight(document.getElementById("walkthrough")));
   }, [active, resized]);
 
   return (
     <div
-      id="walkthrought"
+      id="walkthrough"
       className="transition-all ease-in-out duration-500 drop-shadow-md pr-4 sm:p-0"
       style={{
         position: "fixed",
@@ -64,9 +77,9 @@ export function Walkthrough(props) {
       }}
     >
       <div
-        className={`flex flex-col items-center bg-white dark:bg-slate-900 w-full sm:w-96    h-fit    rounded-lg overflow-hidden `}
+        className={`flex flex-col items-center bg-white dark:bg-slate-900 w-full sm:w-[500px]   h-fit    rounded-lg   overflow-hidden `}
       >
-        <div className="flex-grow p-6 flex flex-col items-start gap-4 ">
+        <div className="w-full flex-grow p-6 flex flex-col items-start gap-4 ">
           <span className="text-2xl  font-bold text-brand1 text-center w-full flex justify-between">
             {props.data[active].heading}
             {active !== props.data.length - 1 && (
@@ -78,7 +91,6 @@ export function Walkthrough(props) {
               </button>
             )}
           </span>
-          {resized}
           <p className="text-md font-semibold text-slate-400 flex-grow">
             {props.data[active].text}
           </p>
@@ -111,16 +123,17 @@ export function Walkthrough(props) {
           </div>
         </div>
       </div>
+
       <svg
-        className="text-primary ml-8"
+        className="ml-2"
         width="24"
         height="24"
-        viewBox="0 0 422 422"
+        viewBox="0 0 266 266"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
         <path
-          d="M0 0H422L211 422L0 0Z"
+          d="M0 0H266L0 266V0Z"
           fill={State.database.dark ? "#0f172a" : "#ffffff"}
         />
       </svg>
