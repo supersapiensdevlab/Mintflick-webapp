@@ -53,7 +53,7 @@ function ThoughtPostModal({ setthoughtPostModalOpen }) {
     },
     {
       heading: "Make this an NFT🃏",
-      text: "Turn a thought into an NFT.",
+      text: "Transform your thoughts into NFTs worthy of admiration and ownership.",
       id: "walkthroughThoughtStep2",
     },
   ];
