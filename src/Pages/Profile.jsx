@@ -60,7 +60,7 @@ function Profile() {
             State.database.userProfileData?.data?.superfan_to?.length
           }
         />
-        <TextChannels></TextChannels>
+        {/* <TextChannels></TextChannels> */}
         {/* <Vouch /> */}
       </div>
       <div className="relative w-full  lg:w-2/4 flex flex-col items-center  lg:h-full pt-14 lg:pt-24 lg:overflow-y-auto">

@@ -92,6 +92,8 @@
 .input {
   @apply dark:bg-slate-700;
   @apply dark:text-slate-300;
+
+  @apply focus:ring-1 focus:ring-slate-500;
 }
 .select {
   @apply dark:bg-slate-700;

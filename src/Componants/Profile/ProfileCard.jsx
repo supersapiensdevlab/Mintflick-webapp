@@ -188,7 +188,7 @@ function ProfileCard(props) {
                 </button> */}
                 <button
                   onClick={() => setsettingsModalOpen(true)}
-                  className="btn btn-primary btn-outline btn-sm w-full capitalize"
+                  className="btn btn-primary btn-outline btn-sm w-full capitalize font-medium"
                 >
                   Edit Profile
                 </button>
@@ -209,13 +209,13 @@ function ProfileCard(props) {
                       : null,
                   }}
                 >
-                  <button className="btn btn-primary btn-outline btn-sm w-full capitalize ">
+                  <button className="btn btn-primary btn-outline btn-sm w-full capitalize font-medium">
                     Message
                   </button>
                 </NavLink>
 
                 <button
-                  className="btn btn-brand btn-sm "
+                  className="btn btn-brand btn-sm capitalize font-medium"
                   onClick={() => setJoinsuperfanModalOpen(true)}
                 >
                   <img className="w-5 mr-1" src={superfan_logo} />

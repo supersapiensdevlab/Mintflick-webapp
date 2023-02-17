@@ -194,7 +194,8 @@ function SettingsModal(props) {
           >
             Manage Superfans
           </span>
-          <span
+          {/* Account tab */}
+          {/* <span
             onClick={() => setactiveTab("account")}
             className={`  flex justify-center font-semibold cursor-pointer text-sm text-brand2 p-2 ${
               activeTab === "account" &&
@@ -202,7 +203,7 @@ function SettingsModal(props) {
             }`}
           >
             Account
-          </span>
+          </span> */}
         </div>
         {activeTab === "editProfile" && (
           <div className=" flex-grow overflow-auto flex flex-col gap-2 p-4 w-full  justify-start  ">
@@ -257,33 +258,52 @@ function SettingsModal(props) {
               </button>
             </div>
 
-            <div className="flex gap-2 w-full">
-              <input
+            {/* <input
                 type="text"
                 className="input  w-full"
                 placeholder={State.database.userData?.data?.user?.username}
                 readOnly
                 //   onChange={(e) =>
                 //   value={}
-              />
+              /> */}
+            <div className="w-full flex items-center">
+              <span className="text-brand4 px-3 w-1/4">Username</span>
+              <span className="text-brand3 p-3 bg-slate-900/5 dark:bg-white/5  rounded-lg w-full flex justify-between items-center">
+                {State.database.userData?.data?.user?.username}
+                <div
+                  className="tooltip tooltip-left	"
+                  data-tip="Currently uneditable"
+                >
+                  <InfoCircle className="cursor-pointer" size={16} />
+                </div>
+              </span>
+            </div>
+            <div className="w-full flex items-center">
+              <span className="text-brand4 px-3 w-1/4">Name</span>
+
               <input
                 type="text"
-                className="input  w-full"
-                placeholder={State.database.userData?.data?.user?.name}
+                className="input text-brand1 w-full"
+                value={State.database.userData?.data?.user?.name}
                 //   onChange={(e) =>
                 //   value={}
               />
             </div>
+            <div className="w-full flex items-center">
+              <span className="text-brand4 px-3 w-1/4">Email</span>
 
-            <input
-              type="text"
-              className="input input-md w-full"
-              placeholder={State.database.userData?.data?.user?.email}
-              readOnly
-              //   onChange={(e) =>
-              //   value={}
-            />
-            <div className="form-control w-full">
+              <span className="text-brand3 p-3 bg-slate-900/5 dark:bg-white/5  rounded-lg w-full flex justify-between items-center">
+                {State.database.userData?.data?.user?.email}{" "}
+                <div
+                  className="tooltip tooltip-left	"
+                  data-tip="Currently uneditable"
+                >
+                  <InfoCircle className="cursor-pointer" size={16} />
+                </div>
+              </span>
+            </div>
+            {/* category dropdown*/}
+            {/* <div className="form-control w-full">
               <label className="label">
                 <span className="label-text text-brand4 font-semibold">
                   Category
@@ -299,7 +319,7 @@ function SettingsModal(props) {
                 <option>option4</option>
                 <option>option5</option>
               </select>
-            </div>
+            </div> */}
             <div className="flex flex-col gap-1 w-full p-4 bg-white dark:bg-slate-700 rounded-lg">
               <span className="text-md font-semibold text-brand4">
                 Connected Wallets
@@ -336,7 +356,7 @@ function SettingsModal(props) {
         )}
         {activeTab === "manageSuperfans" && (
           <div className="flex-grow overflow-auto flex flex-col gap-2 p-4 w-full  justify-start">
-            <div className="flex flex-col items-start gap-1">
+            {/* <div className="flex flex-col items-start gap-1">
               <span className=" text-brand4 font-semibold">
                 Your Wallet address
               </span>
@@ -346,7 +366,7 @@ function SettingsModal(props) {
                 value={localStorage.getItem("walletAddress")}
                 readOnly
               />
-            </div>
+            </div> */}
             {/* <div className="flex flex-col items-start gap-1">
               <span className=" text-brand4 font-semibold">
                 Superfan Description
@@ -365,7 +385,7 @@ function SettingsModal(props) {
                 className="w-full rounded-md textarea "
               ></textarea>
             </div> */}
-            <span className=" text-brand font-semibold ">
+            <span className=" text-brand2 font-semibold ">
               Choose plan to edit
             </span>
             <div
@@ -411,7 +431,7 @@ function SettingsModal(props) {
                     <span className="text-brand4 text-sm mt-2 flex space-x-1 items-center">
                       <p>Price per month</p>
                       <p
-                        class="tooltip"
+                        class="tooltip tooltip-right "
                         data-tip="5% platform fees will be deducted"
                       >
                         <InfoCircle size={18} strokeWidth={2} />
@@ -498,7 +518,7 @@ function SettingsModal(props) {
                     <span className="text-brand4 text-sm mt-2 flex space-x-1 items-center">
                       <p>Price per month</p>
                       <p
-                        class="tooltip"
+                        class="tooltip tooltip-right"
                         data-tip="5% platform fees will be deducted"
                       >
                         <InfoCircle size={18} strokeWidth={2} />
@@ -585,7 +605,7 @@ function SettingsModal(props) {
                     <span className="text-brand4 text-sm mt-2 flex space-x-1 items-center">
                       <p>Price per month</p>
                       <p
-                        class="tooltip"
+                        class="tooltip tooltip-right"
                         data-tip="5% platform fees will be deducted"
                       >
                         <InfoCircle size={18} strokeWidth={2} />
