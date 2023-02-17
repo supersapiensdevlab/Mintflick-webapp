@@ -144,22 +144,7 @@ function ListNFTModal({
         </div>
 
         <div className="flex flex-col flex-wrap p-4 w-full space-y-4 justify-center text-white">
-          {contentType === "post" ? (
-            content ? (
-              <img
-                src={content}
-                className="h-96 w-full object-cover rounded-lg"
-              />
-            ) : (
-              <div className="mx-auto">
-                <NftCard
-                  name={State.database.userData.data.user.name}
-                  userName={State.database.userData.data.user.username}
-                  text={text}
-                />
-              </div>
-            )
-          ) : contentType === "video" ? (
+          {contentType === "video" && (
             <div className="w-full rounded-lg    overflow-hidden aspect-video  dark:bg-slate-900 bg-slate-300 object-cover">
               <ReactPlayer
                 className="w-full"
@@ -172,8 +157,10 @@ function ListNFTModal({
                 controls={true}
               />
             </div>
-          ) : (
-            <></>
+          )}
+
+          {contentType === "post" && (
+            <img src={content} className="  w-full object-cover rounded-lg" />
           )}
           <div className="form-control">
             <label className="input-group">

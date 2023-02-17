@@ -80,7 +80,7 @@ function ConnectWalletComponant() {
       },
     })
       .then((response) => {
-        console.log(response);
+        console.log("user data", response);
 
         State.updateDatabase({
           userData: response,
@@ -157,7 +157,9 @@ function ConnectWalletComponant() {
     >
       <p className="text-5xl font-bold text-brand-gradient">Connect Wallet</p>
       <p className="text-brand4 text-lg font-medium">
-        <p className="text-xl font-semibold text-brand2">What is wallet?</p>
+        <span className="text-xl font-semibold text-brand2">
+          What is wallet?
+        </span>
         Crypto wallets store your private keys, keeping your crypto safe and
         accessible. They also allow you to send, receive, and spend
         cryptocurrencies like Bitcoin and Ethereum.
@@ -178,13 +180,13 @@ function ConnectWalletComponant() {
           <SolanaToken
             className={`${State.database.chainId === 1 ? "saturate-0" : null} `}
           />
-          <sapn
+          <span
             className={`${
               State.database.chainId === 1 ? "text-slate-400" : "text-white"
             }  font-semibold`}
           >
             Solana
-          </sapn>
+          </span>
         </div>
         <div
           onClick={() =>
@@ -197,13 +199,13 @@ function ConnectWalletComponant() {
           <PolygonToken
             className={State.database.chainId === 0 ? "saturate-0" : null}
           />
-          <sapn
+          <span
             className={`${
               State.database.chainId === 0 ? "text-slate-400" : "text-white"
             }  font-semibold`}
           >
             Polygon
-          </sapn>
+          </span>
         </div>{" "}
         <span
           className={`${
@@ -218,7 +220,7 @@ function ConnectWalletComponant() {
         <SolanaToken
           className={`${State.database.chainId === 1 ? "saturate-0" : null} `}
         />
-        <sapn className={`text-white font-semibold`}>Powered by Solana</sapn>
+        <span className={`text-white font-semibold`}>Powered by Solana</span>
       </div>
       {State.database.chainId === 1 && (
         <button
@@ -331,9 +333,8 @@ function ConnectWalletComponant() {
         </p>
         <div className="w-full flex flex-wrap justify-between md:space-x-2">
           {wallets.map((wallet, i) => (
-            <a href={links[i]} target="_blank" rel="noreferrer">
+            <a key={i} href={links[i]} target="_blank" rel="noreferrer">
               <img
-                key={i}
                 className="h-16 w-16 bg-slate-800 rounded-full p-3 text-white"
                 src={wallet}
                 alt="wallet"

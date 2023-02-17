@@ -53,7 +53,11 @@ function VideoPostModal({ setVideoPostModalOpen }) {
 
   const [btnText, setbtnText] = useState("Flick Video");
 
-  const [showWalkthrough, setshowWalkthrough] = useState(true);
+  const [showWalkthrough, setshowWalkthrough] = useState(
+    State.database.userData?.data.user.seenIntro?.videoWalkthrough
+      ? false
+      : true
+  );
   //walkthrough data
   const walkthroughData = [
     {
@@ -877,6 +881,7 @@ function VideoPostModal({ setVideoPostModalOpen }) {
       {showWalkthrough && (
         <Walkthrough
           data={walkthroughData}
+          type={"videoWalkthrough"}
           func={() => setshowWalkthrough(false)}
           show={showWalkthrough}
         />

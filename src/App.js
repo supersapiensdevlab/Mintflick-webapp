@@ -68,9 +68,10 @@ function App() {
     !State.database.userData.data &&
       localStorage.getItem("walletAddress") &&
       isUserAvaliable();
-    console.log(State.database.userData);
 
-    console.log(localStorage.getItem("authtoken"));
+    console.log("userdata", State.database.userData);
+
+    console.log("authtoken", localStorage.getItem("authtoken"));
   }, []);
 
   function fetchLiveUserData() {
@@ -104,7 +105,7 @@ function App() {
       });
   }, []);
   useEffect(() => {
-    console.log(State.database);
+    console.log("User cantext", State.database);
   }, []);
 
   // useEffect(() => {

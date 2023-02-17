@@ -1,6 +1,10 @@
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import livestream from "../../Assets/Onboarding/livestream.webp";
+import tickets from "../../Assets/Onboarding/tickets.webp";
+import social from "../../Assets/Onboarding/social.webp";
+
 import {
   AlertTriangle,
   ArrowBarToRight,
@@ -22,8 +26,8 @@ function SplashScreen(props) {
   }
   return (
     <>
-      <div className="fixed top-0 left-0 w-screen h-screen flex justify-center items-center  bg-black/30 backdrop-blur-sm">
-        <div className="relative flex flex-col items-center bg-white dark:bg-slate-900 w-full h-full sm:max-w-xl sm:h-5/6 sm:rounded-lg overflow-hidden">
+      <div className="fixed top-0 left-0 w-screen h-screen p-2 flex justify-center items-end sm:items-center  bg-black/30 backdrop-blur-sm">
+        <div className="relative flex flex-col items-center bg-white dark:bg-slate-900 w-full   sm:max-w-xl  h-fit  rounded-lg overflow-hidden">
           {active !== 0 && (
             <button
               onClick={() => setactive(active - 1)}
@@ -42,7 +46,7 @@ function SplashScreen(props) {
             </button>
           )}
           <img
-            className="w-full h-1/2 sm:aspect-video object-cover"
+            className="w-full    aspect-video object-cover"
             src={props.data[active].image}
             alt="wallet"
           />
@@ -56,7 +60,7 @@ function SplashScreen(props) {
 
             <button
               onClick={handleClick}
-              className={`w-full flex items-center justify-center gap-2 font-semibold text-lg  p-4 rounded-lg ${
+              className={`w-full flex items-center justify-center gap-2 font-semibold text-lg mt-4  p-4 rounded-lg ${
                 active === props.data.length - 1
                   ? `text-brand1 bg-primary`
                   : `text-primary border-2 border-primary`
@@ -83,7 +87,7 @@ function CreateNewUser() {
 
   const SlashScreenData = [
     {
-      image: "https://miro.medium.com/max/1400/1*nbk1cvZBk4xxOMLJJnc7Ow.png",
+      image: social,
       heading: "NFTfied Social Media",
       text: (
         <>
@@ -96,8 +100,7 @@ function CreateNewUser() {
       ),
     },
     {
-      image:
-        "https://www.shutterstock.com/image-vector/web-30-new-generation-internet-260nw-2160127645.jpg",
+      image: livestream,
       heading: "Livestreaming",
       text: (
         <>
@@ -109,8 +112,7 @@ function CreateNewUser() {
       ),
     },
     {
-      image:
-        "https://www.shutterstock.com/image-vector/web-30-text-on-hologram-260nw-2083690645.jpg",
+      image: tickets,
       heading: "Events",
       text: (
         <>

@@ -51,7 +51,11 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
 
   const [btnText, setbtnText] = useState("Flick Photo");
   const [step, setstep] = useState(0);
-  const [showWalkthrough, setshowWalkthrough] = useState(true);
+  const [showWalkthrough, setshowWalkthrough] = useState(
+    State.database.userData?.data.user.seenIntro?.photoWalkthrough
+      ? false
+      : true
+  );
 
   const [loadNfts] = useLoadNfts();
 
@@ -399,31 +403,6 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
     setMintSuccess("");
   };
 
-  // async function signTransaction(network, transaction, callback) {
-  //   //const phantom = new PhantomWalletAdapter();
-  //   //await phantom.connect();
-  //   const solanaWallet = new SolanaWallet(State.database.provider); // web3auth.provider
-
-  //   const rpcUrl = clusterUrl(network);
-  //   console.log(rpcUrl);
-  //   const connection = new Connection(rpcUrl, "confirmed");
-  //   //console.log(connection.rpcEndpoint);
-  //   const ret = await confirmTransactionFromFrontend(
-  //     connection,
-  //     transaction,
-  //     solanaWallet
-  //   );
-  //   // const checks = await connection.confirmTransaction({signature:ret},'finalised');
-
-  //   // console.log(checks);
-  //   // await connection.confirmTransaction({
-  //   //     blockhash: transaction.blockhash,
-  //   //     signature: ret,
-  //   //   });
-  //   connection.onSignature(ret, callback, "finalized");
-  //   return ret;
-  // }
-
   return (
     <>
       <div className="modal-box p-0 bg-slate-100 dark:bg-slate-800 ">
@@ -634,6 +613,7 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
       {showWalkthrough && (
         <Walkthrough
           data={walkthroughData}
+          type={"photoWalkthrough"}
           func={() => setshowWalkthrough(false)}
           show={showWalkthrough}
         />

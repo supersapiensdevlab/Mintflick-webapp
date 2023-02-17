@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import {
   Check,
@@ -5,6 +6,7 @@ import {
   ChevronRight,
   CircleCheck,
 } from "tabler-icons-react";
+import useUserActions from "../../Hooks/useUserActions";
 import { UserContext } from "../../Store";
 
 export function Walkthrough(props) {
@@ -13,9 +15,36 @@ export function Walkthrough(props) {
   const [offset, setoffset] = useState({ x: 0, y: 0 });
   const [divHeight, setdivHeight] = useState(0);
   const [resized, setresized] = useState(0);
+  const [loadFeed, loadUser, loadProfileCard, loadNftsData] = useUserActions();
+
+  function handleSeenIntro() {
+    props.func();
+    axios({
+      method: "post",
+      url: `${process.env.REACT_APP_SERVER_URL}/user/seen_intro`,
+      data: {
+        field: props.type,
+        username: State.database.userData?.data?.user?.username,
+      },
+    })
+      .then((response) => {
+        console.log(response);
+        let temp = {
+          data: {
+            user: response.data,
+          },
+        };
+        State.updateDatabase({
+          userData: temp,
+        });
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
 
   function handleClick() {
-    active < props.data.length - 1 ? setactive(active + 1) : props.func();
+    active < props.data.length - 1 ? setactive(active + 1) : handleSeenIntro();
   }
 
   function getDivHeight(el) {

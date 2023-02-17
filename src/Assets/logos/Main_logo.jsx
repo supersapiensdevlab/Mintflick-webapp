@@ -1304,8 +1304,8 @@ function Main_logo() {
     <div className="h-14 w-14">
       <Lottie
         animationData={animation}
-        onMouseEnter={() => Lottie.play()}
-        onMouseLeave={() => Lottie.pause()}
+        // onMouseEnter={() => Lottie.play()}
+        // onMouseLeave={() => Lottie.pause()}
         loop={true}
       />
       {/* <svg

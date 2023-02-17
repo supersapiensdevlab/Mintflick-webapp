@@ -103,7 +103,7 @@ const FeedbackForm = () => {
             </button>
           </div>
           <div className="text-brand1 w-full space-y-2">
-            {/* <sapn className=" text-brand2 font-semibold ">join us on</sapn> */}
+            {/* <span className=" text-brand2 font-semibold ">join us on</span> */}
             <div className="flex justify-center w-full items-center gap-2">
               <a
                 target="_blank"

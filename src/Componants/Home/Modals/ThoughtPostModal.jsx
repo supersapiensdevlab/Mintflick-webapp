@@ -43,7 +43,11 @@ function ThoughtPostModal({ setthoughtPostModalOpen }) {
   const [successMsg, setSuccessMsg] = useState("");
   const [btnText, setbtnText] = useState("Flick Thought");
 
-  const [showWalkthrough, setshowWalkthrough] = useState(true);
+  const [showWalkthrough, setshowWalkthrough] = useState(
+    State.database.userData?.data.user.seenIntro?.thoughtWalkthrough
+      ? false
+      : true
+  );
   //walkthrough data
   const walkthroughData = [
     {
@@ -482,6 +486,7 @@ function ThoughtPostModal({ setthoughtPostModalOpen }) {
       {showWalkthrough && (
         <Walkthrough
           data={walkthroughData}
+          type={"thoughtWalkthrough"}
           func={() => setshowWalkthrough(false)}
           show={showWalkthrough}
         />

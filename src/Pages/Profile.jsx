@@ -12,6 +12,7 @@ import TimeLine from "../Componants/Home/TimeLine";
 import ProfileMedia from "../Componants/Profile/ProfileMedia";
 import MintWallet from "../Componants/Profile/MintWallet";
 import Vouch from "../Componants/Profile/Vouch";
+import Nfts from "../Componants/Profile/Nfts";
 
 function Profile() {
   const State = useContext(UserContext);
@@ -64,28 +65,28 @@ function Profile() {
       </div>
       <div className="relative w-full  lg:w-2/4 flex flex-col items-center  lg:h-full pt-14 lg:pt-24 lg:overflow-y-auto">
         <div className="sticky     z-50 top-16 lg:top-0 left-0 w-full mb-3">
-          <div className="relative h-12 w-full bg-slate-100/10 backdrop-blur-sm lg:rounded-lg flex ">
+          <div className="relative h-12 w-full bg-slate-800/10 dark:bg-slate-100/10  backdrop-blur-sm lg:rounded-lg flex ">
             <div
               onClick={() => setactiveTab(1)}
               className="z-50 h-full w-1/2 flex items-center justify-center gap-2 cursor-pointer "
             >
-              <sapn
-                className={`text-white
+              <span
+                className={`text-brand1
                  font-semibold`}
               >
                 Posts
-              </sapn>
+              </span>
             </div>
             <div
               onClick={() => setactiveTab(2)}
               className="z-50 h-full w-1/2 flex items-center justify-center gap-2 cursor-pointer"
             >
-              <sapn
-                className={`text-white
+              <span
+                className={`text-brand1
                  font-semibold`}
               >
                 NFT's
-              </sapn>
+              </span>
             </div>
             <span
               className={`${
@@ -94,11 +95,10 @@ function Profile() {
             />
           </div>
         </div>
-        {activeTab === 1 ? (
+        {activeTab === 1 && (
           <ProfileMedia className="z-10" userName={userName}></ProfileMedia>
-        ) : (
-          ""
         )}
+        {activeTab === 2 && <Nfts className="z-10" />}
         {/* <TimeLine></TimeLine> */}
       </div>
       <div className="hidden lg:flex flex-col h-fit lg:h-full w-full lg:w-1/4 lg:ml-4 lg:mr-12 pt-16 lg:pt-24 lg:space-y-6 lg:overflow-y-auto">
