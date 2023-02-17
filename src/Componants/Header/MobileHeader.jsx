@@ -66,7 +66,7 @@ function MobileHeader() {
     >
       <div className="flex justify-between items-center  h-full w-full">
         <div className="dropdown dropdown-start">
-          <label tabindex="0" className=" ">
+          <label tabIndex="0" className=" ">
             <div className="w-10 h-10 rounded-full cursor-pointer">
               {/* <img
                 src={
@@ -90,7 +90,7 @@ function MobileHeader() {
             </div>
           </label>
           <ul
-            tabindex="0"
+            tabIndex="0"
             className="menu menu-compact dropdown-content mt-3 p-2 shadow-xl   bg-slate-100 dark:bg-slate-800 text-brand1 text-base font-medium rounded-lg w-52"
           >
             <li>

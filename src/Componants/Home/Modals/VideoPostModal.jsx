@@ -647,8 +647,8 @@ function VideoPostModal({ setVideoPostModalOpen }) {
                 <option disabled selected>
                   Pick Category
                 </option>
-                {category.map((c) => (
-                  <option>{c}</option>
+                {category.map((c, i) => (
+                  <option key={i}>{c}</option>
                 ))}
               </select>
             </div>
@@ -713,8 +713,8 @@ function VideoPostModal({ setVideoPostModalOpen }) {
                   <option disabled selected>
                     Allow Attribution?
                   </option>
-                  {attribution.map((c) => (
-                    <option>{c}</option>
+                  {attribution.map((c, i) => (
+                    <option key={i}>{c}</option>
                   ))}
                 </select>
                 <select
@@ -729,8 +729,8 @@ function VideoPostModal({ setVideoPostModalOpen }) {
                   <option disabled selected>
                     Commercial Use?
                   </option>
-                  {commercialUse.map((c) => (
-                    <option>{c}</option>
+                  {commercialUse.map((c, i) => (
+                    <option key={i}>{c}</option>
                   ))}
                 </select>
                 <select
@@ -745,8 +745,8 @@ function VideoPostModal({ setVideoPostModalOpen }) {
                   <option disabled selected>
                     Derivative Works?
                   </option>
-                  {derivativeWorks.map((c) => (
-                    <option>{c}</option>
+                  {derivativeWorks.map((c, i) => (
+                    <option key={i}>{c}</option>
                   ))}
                 </select>
               </div>

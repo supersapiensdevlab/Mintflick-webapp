@@ -18,7 +18,6 @@ export function Walkthrough(props) {
   const [loadFeed, loadUser, loadProfileCard, loadNftsData] = useUserActions();
 
   function handleSeenIntro() {
-    props.func();
     axios({
       method: "post",
       url: `${process.env.REACT_APP_SERVER_URL}/user/seen_intro`,
@@ -37,6 +36,7 @@ export function Walkthrough(props) {
         State.updateDatabase({
           userData: temp,
         });
+        props.func();
       })
       .catch(function (error) {
         console.log(error);

@@ -27,8 +27,9 @@ function TopNavigation() {
   ];
   return (
     <div className="flex items-center justify-center h-fit p-1 rounded-lg space-x-10 ">
-      {data.map((item) => (
+      {data.map((item, i) => (
         <NavLink
+          key={i}
           to={item.link}
           onClick={() => {
             setActive(item.isActive);
