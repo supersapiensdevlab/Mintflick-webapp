@@ -201,7 +201,7 @@ function ThoughtPostModal({ setthoughtPostModalOpen }) {
 
             const mintRequest = await mintNFTOnSolana2(
               State.database.walletAddress,
-              name,
+              "Mintflick Collection",
               caption,
               url,
               file

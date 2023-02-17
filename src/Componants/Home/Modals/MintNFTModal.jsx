@@ -26,9 +26,11 @@ function MintNFTModal({
   setOwner,
   content,
   videoImage,
+  description,
   name,
   id,
   contentType,
+  videoName,
 }) {
   const State = useContext(UserContext);
   const [successMessage, setSuccessMessage] = useState(
@@ -80,11 +82,10 @@ function MintNFTModal({
       type: blob.type,
     });
     {
-      let name2 = State.database.userData?.data?.user?.name - name.slice(0, 5);
       const mintRequest = await mintNFTOnSolana2(
         State.database.walletAddress,
-        name2,
         name,
+        description,
         content,
         file
       );
@@ -124,12 +125,10 @@ function MintNFTModal({
           lastModified: new Date(),
         });
         uploadFile([file]).then(async (cid) => {
-          let name2 =
-            State.database.userData?.data?.user?.name - name.slice(0, 5);
           let url = "https://ipfs.io/ipfs/" + cid + "/" + "meta.png";
           const mintRequest = await mintNFTOnSolana2(
             State.database.walletAddress,
-            name2,
+            "Mintflick Collection",
             name,
             url,
             file
@@ -273,6 +272,9 @@ function MintNFTModal({
             </div>
           )}
           <p>{successMessage}</p>
+          {/* <span>
+            {name},{description}
+          </span> */}
           <button
             onClick={handleMinting}
             className={`btn  

@@ -96,7 +96,7 @@ function AddPost() {
       {/* FAB */}
       <div
         // className={`${State.database.showHeader ? "" : "translate-y-20"}
-        className={`bottom-24 transition-all ease-in-out lg:hidden fixed  right-2 z-40 space-x-1`}
+        className={`bottom-[68px] transition-all ease-in-out lg:hidden fixed  right-2 z-40 space-x-1 `}
       >
         {/* for games */}
         {/* <Link
@@ -113,10 +113,10 @@ function AddPost() {
             tabindex="0"
             className={`${
               State.database.showHeader ? "gap-2 " : "btn-circle"
-            } btn btn-md rounded-full btn-brand transition-all ease-in-out`}
+            } btn btn-md rounded-full btn-brand transition-all ease-in-out capitalize font-medium`}
           >
             <Plus />
-            {State.database.showHeader && <span>Post</span>}
+            {State.database.showHeader && <span>New Post</span>}
           </label>
           <ul
             tabindex="0"

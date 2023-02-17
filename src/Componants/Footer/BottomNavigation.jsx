@@ -14,32 +14,37 @@ function BottomNavigation() {
   const data = [
     {
       icon: <SmartHome size={28}> </SmartHome>,
+      name: "Home",
       isActive: 1,
       link: "/homescreen/home",
     },
     {
       icon: <AccessPoint size={28}></AccessPoint>,
+      name: "Live",
       isActive: 2,
       link: "/homescreen/live",
     },
     {
       icon: <Confetti size={28}></Confetti>,
+      name: "Events",
       isActive: 3,
       link: "/homescreen/marketPlace",
     },
     {
       icon: <Search size={24}></Search>,
+      name: "Explore",
       isActive: 4,
       link: "/homescreen/explore",
     },
     {
       icon: <Bell size={24}></Bell>,
+      name: "Notifications",
       isActive: 5,
       link: "/homescreen/notifications",
     },
   ];
   return (
-    <div className="flex items-center justify-evenly h-fit pt-2 pb-6  bg-white dark:bg-slate-900">
+    <div className="flex text-white items-center   py-4 justify-around   bg-slate-900/25 backdrop-blur-xl">
       {data.map((item) => (
         <NavLink
           to={item.link}
@@ -48,7 +53,7 @@ function BottomNavigation() {
             // navigateTo(`${item.link}`);
           }}
           className={({ isActive }) =>
-            isActive ? `btn  btn-ghost opacity-100` : `btn  btn-ghost dark:text-gray-100 opacity-50`
+            isActive ? `  opacity-100 ` : `    opacity-50`
           }
         >
           {item.icon}

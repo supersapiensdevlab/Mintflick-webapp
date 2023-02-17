@@ -409,7 +409,7 @@ function Post(props) {
       )
         .then((response) => response.json())
         .then((result) => {
-          console.log(result);
+          // console.log(result);
           setOwner(result.result?.owner);
           setnftLink(result.result?.image_uri);
         })
@@ -1219,12 +1219,17 @@ function Post(props) {
                           : props.text
                           ? props.text
                           : null,
+                        content:
+                          props.contentType === "post"
+                            ? nftLink
+                            : props.videoUrl,
+                        videoImage: props.videoImage ? props.videoImage : null,
                         nftImage: props.trackImage
                           ? props.trackImage
                           : props.videoImage
                           ? props.videoImage
-                          : props.image
-                          ? props.image
+                          : nftLink
+                          ? nftLink
                           : "https://lh3.googleusercontent.com/yCbypC0JI61YbUFf_5ULkHJonhKZpLt63wY4ZAP5DZLYuMfcwr28zdq5TDSyhtl0Ifg2mNrtrJ3tbBOW_XKEWNctFdx1LEaLTaDExg=w600",
                         nftDescription: props.content.description,
                         nftPrice: price,
@@ -1461,10 +1466,17 @@ function Post(props) {
         setMintModalOpen={setMintModalOpen}
         setTokenId={setTokenId}
         setOwner={setOwner}
-        content={props.contentType == "post" ? props.image : props.videoUrl}
+        content={props.contentType === "post" ? props.image : props.videoUrl}
         videoImage={props.videoImage ? props.videoImage : null}
-        name={props.contentType == "post" ? props.text : props.videoName}
-        id={props.contentType == "post" ? props.postId : props.videoId}
+        name={
+          props.contentType === "post"
+            ? "Mintflick Collection"
+            : props.content.videoName
+        }
+        description={
+          props.contentType === "post" ? props.text : props.content.description
+        }
+        id={props.contentType === "post" ? props.postId : props.videoId}
         contentType={props.contentType}
       />
       <ListNFTModal

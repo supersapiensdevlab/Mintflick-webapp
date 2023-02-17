@@ -30,6 +30,8 @@ import {
   signWithRelayer,
 } from "../../../Helper/mintOnSolana2";
 import { decode } from "bs58";
+import ReactPlayer from "react-player";
+import { toPng } from "html-to-image";
 
 function BuyNFTModal() {
   const State = useContext(UserContext);
@@ -179,11 +181,31 @@ function BuyNFTModal() {
         {step === 1 && (
           <div className="p-4 space-y-2">
             <div className="w-full  flex  flex-col bg-white dark:bg-slate-700 rounded-lg overflow-clip">
-              <img
-                src={State.database?.buyNFTModalData?.nftImage}
-                alt="NFT image"
-                className="p-4 h-96 w-full object-cover rounded-lg"
-              />
+              {!State.database?.buyNFTModalData?.videoImage &&
+                State.database?.buyNFTModalData?.content && (
+                  <img
+                    src={
+                      State.database?.buyNFTModalData?.videoImage
+                        ? State.database?.buyNFTModalData?.videoImage
+                        : State.database?.buyNFTModalData?.content
+                    }
+                    className="  h-fit m-2 rounded-lg"
+                  />
+                )}
+              {State.database?.buyNFTModalData?.videoImage && (
+                <div className="  m-2 rounded-lg    overflow-hidden aspect-video  dark:bg-slate-900 bg-slate-300 object-cover">
+                  <ReactPlayer
+                    width="100%"
+                    height={"100%"}
+                    playing={true}
+                    muted={true}
+                    volume={0.5}
+                    url={State.database?.buyNFTModalData?.content}
+                    controls={true}
+                  />
+                </div>
+              )}
+
               <div className="flex ">
                 <div className="p-3 flex-grow space-y-1 ">
                   <div className="text-lg text-brand1 font-bold">
@@ -248,7 +270,7 @@ function BuyNFTModal() {
                 </div>
               </div>
             </div>
-            <div
+            {/* <div
               tabindex="0"
               className="collapse collapse-arrow border-2 cursor-pointer  dark:border-slate-600 text-brand3 rounded-lg"
             >
@@ -258,7 +280,7 @@ function BuyNFTModal() {
               <div className="collapse-content">
                 <p>No Offers</p>
               </div>
-            </div>
+            </div> */}
             <div className="w-full flex ">
               <div className="p-1 w-full">
                 <button

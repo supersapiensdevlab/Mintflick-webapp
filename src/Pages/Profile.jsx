@@ -63,8 +63,8 @@ function Profile() {
         {/* <Vouch /> */}
       </div>
       <div className="relative w-full  lg:w-2/4 flex flex-col items-center  lg:h-full pt-14 lg:pt-24 lg:overflow-y-auto">
-        <div className="sticky  z-50 top-0 left-0 w-full mb-3">
-          <div className="relative h-12 w-full bg-slate-100/10 backdrop-blur-sm rounded-lg flex">
+        <div className="sticky     z-50 top-16 lg:top-0 left-0 w-full mb-3">
+          <div className="relative h-12 w-full bg-slate-100/10 backdrop-blur-sm lg:rounded-lg flex ">
             <div
               onClick={() => setactiveTab(1)}
               className="z-50 h-full w-1/2 flex items-center justify-center gap-2 cursor-pointer "
