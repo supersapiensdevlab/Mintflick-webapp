@@ -28,14 +28,15 @@ export function Walkthrough(props) {
     })
       .then((response) => {
         console.log(response);
-        let temp = {
-          data: {
-            user: response.data,
-          },
-        };
-        State.updateDatabase({
-          userData: temp,
-        });
+        // let temp = {
+        //   data: {
+        //     user: response.data,
+        //   },
+        // };
+        // State.updateDatabase({
+        //   userData: temp,
+        // });
+        loadUser();
         props.func();
       })
       .catch(function (error) {
