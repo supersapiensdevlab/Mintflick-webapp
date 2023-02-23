@@ -11,7 +11,7 @@ import {
   X,
 } from "tabler-icons-react";
 import PolygonToken from "../../../Assets/logos/PolygonToken";
-import { uploadFile } from "../../../Helper/uploadHelper";
+import { storeWithProgress2, uploadFile } from "../../../Helper/uploadHelper";
 import { storeWithProgress, createToken } from "../../../Helper/nftMinter";
 import useUserActions from "../../../Hooks/useUserActions";
 import { UserContext } from "../../../Store";
@@ -246,23 +246,27 @@ function VideoPostModal({ setVideoPostModalOpen }) {
       videoData.description,
       url,
       selectedVideo.file
-    );
-
-    const signedTx = await signTransactionWithWallet(
-      mintRequest.data.result.encoded_transaction,
-      State.database.provider
-    );
-
-    await signWithRelayer(signedTx)
-      .then((response) => {
-        response.success
-          ? State.toast("success", "NFT Minted successfully")
-          : State.toast("error", response.message);
+    )
+      .then((mintRequest) => {
+        console.log(mintRequest);
+        signTransactionWithWallet(
+          mintRequest.data.result.encoded_transaction,
+          State.database.provider
+        )
+          .then((signedTx) => {
+            signWithRelayer(signedTx)
+              .then((response) => {
+                State.toast("success", "NFT Minted successfully");
+                setbtnText("NFT Minted");
+                nftMinted(formData, mintRequest.data?.result.mint);
+              })
+              .catch((error) => State.toast("error", error.message));
+          })
+          .catch((error) => State.toast("error", error.message));
       })
-      .catch((error) => State.toast("error", error));
+      .catch((error) => State.toast("error", error.message));
+
     console.log(mintRequest);
-    mintRequest && setbtnText("NFT Minted");
-    mintRequest && nftMinted(formData, mintRequest.data?.result.mint);
   };
 
   const listNFTForSale = async (e) => {
@@ -348,10 +352,10 @@ function VideoPostModal({ setVideoPostModalOpen }) {
     // setSolanaMintId(mintId);
     // setShowListingOption(true);
     // setUploadingVideo(false);
-    setVideoPostModalOpen(false);
+
     setbtnText("Uploading Video");
 
-    setMintSuccess("NFT Minted Successfully");
+    // setMintSuccess("NFT Minted Successfully");
     formData.append("tokenId", mintId);
     axios
       .post(`${process.env.REACT_APP_SERVER_URL}/upload_video`, formData, {
@@ -363,7 +367,8 @@ function VideoPostModal({ setVideoPostModalOpen }) {
       .then(async (res) => {
         clearState();
         State.toast("success", "Your Video uplaoded successfully!");
-        await loadFeed();
+        loadFeed();
+        setVideoPostModalOpen(false);
       })
       .catch((err) => {
         clearState();

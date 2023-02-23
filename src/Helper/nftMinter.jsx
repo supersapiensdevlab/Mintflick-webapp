@@ -20,7 +20,7 @@ export let storeWithProgress = (files) => {
 
   const onStoredChunk = (size) => {
     uploaded += size;
-    const pct = totalSize / uploaded;
+    const pct = uploaded / totalSize;
     //console.log(`Uploading... ${pct.toFixed(2)}% complete`);
     console.log(
       `Uploading... ${Math.min(pct * 100, 100).toFixed(2)}% complete`

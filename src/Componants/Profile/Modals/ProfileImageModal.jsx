@@ -1,7 +1,8 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useContext } from "react";
 import { X, Pencil, FileCheck, File } from "tabler-icons-react";
+import { sanitizeFilename } from "../../../functions/sanitizeFilename";
 import { uploadFile } from "../../../Helper/uploadHelper";
 import useUserActions from "../../../Hooks/useUserActions";
 import { UserContext } from "../../../Store";
@@ -15,8 +16,11 @@ const ProfileImageModal = ({ setShowProfileImageModal }) => {
 
   const handleImageChange = (event) => {
     // Update the state
+
+    const file = sanitizeFilename(event.target.files[0]);
+    console.log(file);
     setselectedProfileImage({
-      file: event.target.files,
+      file: [file],
       localurl: URL.createObjectURL(event.target.files[0]),
     });
   };
@@ -58,6 +62,10 @@ const ProfileImageModal = ({ setShowProfileImageModal }) => {
     }
   };
 
+  useEffect(() => {
+    console.log(selectedProfileImage);
+  }, [selectedProfileImage]);
+
   return (
     <div className="modal-box p-0 bg-slate-100 dark:bg-slate-800 ">
       <div className="w-full h-fit p-2 bg-slate-300 dark:bg-slate-700">
@@ -81,7 +89,7 @@ const ProfileImageModal = ({ setShowProfileImageModal }) => {
       </div>
       <div className="flex flex-col p-4 w-full">
         <label
-          htmlFor="profileimage"
+          htmlFor="select_profile_image"
           className=" cursor-pointer flex justify-between items-center gap-2  w-full p-2 border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4"
         >
           {selectedProfileImage ? (
@@ -100,7 +108,7 @@ const ProfileImageModal = ({ setShowProfileImageModal }) => {
             </div>
           )}
           <input
-            id="profileimage"
+            id="select_profile_image"
             type="file"
             accept="image/*"
             onChange={handleImageChange}
@@ -113,13 +121,13 @@ const ProfileImageModal = ({ setShowProfileImageModal }) => {
           />
           {selectedProfileImage ? (
             selectedProfileImage.file ? (
-              <div className="flex-grow rounded-lg overflow-clip">
+              <div className="w-72 flex items-center justify-center rounded-lg aspect-square  dark:bg-slate-900 bg-slate-300 overflow-clip">
                 <img src={selectedProfileImage.localurl}></img>
               </div>
             ) : null
           ) : (
             <></>
-          )}
+          )}{" "}
         </label>
         {uploadSucess && (
           <p className="text-green-500 text-center mt-4">{uploadSucess}</p>

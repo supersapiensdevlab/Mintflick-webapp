@@ -163,13 +163,13 @@ function ThoughtPostModal({ setthoughtPostModalOpen }) {
         },
       })
       .then(async () => {
-        setMintSuccess(true);
         setSuccessMsg("NFT Minted Successfully");
 
         await loadFeed();
         // setUploadingPost(false);
+        setbtnText("Uploading Thought");
         setthoughtPostModalOpen(false);
-
+        setMintSuccess(true);
         clearData();
       })
       .catch((err) => {
@@ -203,36 +203,40 @@ function ThoughtPostModal({ setthoughtPostModalOpen }) {
               State.database.userData?.data?.user?.name - caption.slice(0, 5);
             let url = "https://ipfs.io/ipfs/" + cid + "/" + "meta.png";
 
-            const mintRequest = await mintNFTOnSolana2(
+            mintNFTOnSolana2(
               State.database.walletAddress,
               "Mintflick Collection",
               caption,
               url,
               file
-            );
-            setbtnText("Minting NFT");
-            const signedTx = await signTransactionWithWallet(
-              mintRequest.data.result.encoded_transaction,
-              State.database.provider
-            );
-            await signWithRelayer(signedTx)
-              .then((response) => {
-                response.success
-                  ? State.toast("success", "NFT Minted successfully")
-                  : State.toast("error", response.message);
+            )
+              .then((mintRequest) => {
+                console.log(mintRequest);
+                signTransactionWithWallet(
+                  mintRequest.data.result.encoded_transaction,
+                  State.database.provider
+                )
+                  .then((signedTx) => {
+                    signWithRelayer(signedTx)
+                      .then((response) => {
+                        State.toast("success", "NFT Minted successfully");
+                        setbtnText("NFT Minted");
+                        nftMinted(myData, mintRequest.data?.result.mint);
+                      })
+                      .catch((error) => State.toast("error", error.message));
+                  })
+                  .catch((error) => State.toast("error", error.message));
               })
-              .catch((error) => State.toast("error", error));
-            console.log(mintRequest);
-            mintRequest && setbtnText("NFT Minted");
-            mintRequest && nftMinted(myData, mintRequest.data?.result.mint);
+              .catch((error) => State.toast("error", error.message));
           })
           .catch((err) => {
             console.log(err);
-            State.toast("error", "Error minting NFT. Please try again!");
+            State.toast("error", err.message);
           });
       })
       .catch((err) => {
         console.log(err);
+        State.toast("error", err.message);
       });
   };
 

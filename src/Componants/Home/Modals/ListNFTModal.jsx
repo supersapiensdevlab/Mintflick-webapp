@@ -49,72 +49,29 @@ function ListNFTModal({
       setListing(true);
       setSuccessMessage("Please sign the transaction to list the NFT");
 
-      const response = await listNFTOnSolana2(
-        tokenId,
-        price,
-        State.database?.walletAddress
-      );
-      console.log(response);
-      // .then(async (data) => {
-      //   console.log(data);
-      //   await signTransactionWithWallet(
-      //     data.data.result.encoded_transaction,
-      //     State.database?.provider
-      //     // `${process.env.REACT_APP_FEEPAYER_PRIVATEKEY}`
-      //   )
-      //     .then(async (signedTx) => {
-      //       console.log(signedTx);
-
-      //       var myHeaders = new Headers();
-      //       myHeaders.append(
-      //         "x-api-key",
-      //         `${process.env.REACT_APP_SHYFT_API_KEY}`
-      //       );
-      //       myHeaders.append("Content-Type", "application/json");
-
-      //       var raw = JSON.stringify({
-      //         network: "devnet",
-      //         encoded_transaction: signedTx,
-      //       });
-      //       var requestOptions = {
-      //         method: "POST",
-      //         headers: myHeaders,
-      //         body: raw,
-      //         redirect: "follow",
-      //       };
-      //       await fetch(
-      //         "https://api.shyft.to/sol/v1/txn_relayer/sign",
-      //         requestOptions
-      //       )
-      //         .then((response) => response.text())
-      //         .then((result) => {
-      //           console.log(result);
-      //         })
-      //         .catch((error) => console.log("error", error));
-      //     })
-      //     .catch((err) => {
-      //       console.log(err);
-      //     });
-      // })
-      // .catch((err) => {
-      //   console.log(err);
-      //   State.toast("error", "Error listing NFT. Please try again!");
-      // });
-      const signedTx = await signTransactionWithWallet(
-        response.data.result.encoded_transaction,
-        State.database.provider
-      );
-      console.log(signedTx);
-      await signWithRelayer(signedTx)
+      listNFTOnSolana2(tokenId, price, State.database?.walletAddress)
         .then((response) => {
-          response.success
-            ? State.toast("success", "NFT listed successfully")
-            : State.toast("error", response.message);
-          response.success && setNftPrice(1);
-          loadNftsData();
-          setListModalOpen(false);
+          console.log(response);
+
+          signTransactionWithWallet(
+            response.data.result.encoded_transaction,
+            State.database.provider
+          )
+            .then((signedTx) => {
+              console.log(signedTx);
+              signWithRelayer(signedTx)
+                .then((response) => {
+                  State.toast("success", "NFT listed successfully");
+
+                  response.success && setNftPrice(1);
+                  loadNftsData();
+                  setListModalOpen(false);
+                })
+                .catch((error) => State.toast("error", error.message));
+            })
+            .catch((error) => State.toast("error", error.message));
         })
-        .catch((error) => State.toast("error", error));
+        .catch((error) => State.toast("error", error.message));
     } else {
       setSuccessMessage("Price should be greater than 0 !");
       return;

@@ -946,7 +946,14 @@ function Post(props) {
               height="100%"
               src={nftLink ? nftLink : placeholderLogo}
               alt={"Post Image"}
-              placeholder={<Main_logo></Main_logo>}
+              placeholder={
+                <div className="flex flex-col justify-center items-center gap-1">
+                  <Main_logo></Main_logo>
+                  <span className="text-lg font-bold text-brand6">
+                    Loading...
+                  </span>
+                </div>
+              }
             />
           </div>
         )}
@@ -961,7 +968,14 @@ function Post(props) {
                     height="100%"
                     src={props.image ? props.image : placeholderLogo}
                     alt={"Post Image"}
-                    placeholder={<Main_logo></Main_logo>}
+                    placeholder={
+                      <div className="flex flex-col justify-center items-center gap-1">
+                        <Main_logo></Main_logo>
+                        <span className="text-lg font-bold text-brand6">
+                          Loading...
+                        </span>
+                      </div>
+                    }
                   />
                 </div>
                 {/* <img

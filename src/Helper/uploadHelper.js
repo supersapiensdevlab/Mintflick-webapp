@@ -1,3 +1,4 @@
+import { Await } from "react-router-dom";
 import { Web3Storage } from "web3.storage/dist/bundle.esm.min.js";
 
 export function makeStorageClient() {
@@ -56,7 +57,8 @@ export async function storeWithProgress2(files) {
 
   // client.put will invoke our callbacks during the upload
   // and return the root cid when the upload completes
-  return client.put(files, { onRootCidReady, onStoredChunk });
+  const cid = await client.put(files, { onRootCidReady, onStoredChunk });
+  return cid;
 }
 
 export async function storeWithProgress3(files) {

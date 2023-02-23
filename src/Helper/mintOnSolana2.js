@@ -53,7 +53,7 @@ export const signTransactionWithWallet = async (
 ) => {
   let confirmTransaction;
   try {
-    const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
+    // const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
     const solanaWallet = new SolanaWallet(provider); // web3auth.provider
     console.log(solanaWallet);
 
@@ -67,7 +67,7 @@ export const signTransactionWithWallet = async (
     console.log(signedTx);
 
     // const confirmTransaction = await connection.sendRawTransaction(
-    //   signedTx.serialize({ requireAllSignatures: false })
+    //   signedTx.serialize()
     // );
 
     confirmTransaction = signedTx

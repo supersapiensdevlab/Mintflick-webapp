@@ -5,7 +5,7 @@ import Compressor from "compressorjs";
 
 import { Camera, File, FileCheck, X } from "tabler-icons-react";
 import PolygonToken from "../../../Assets/logos/PolygonToken";
-import { uploadFile } from "../../../Helper/uploadHelper";
+import { storeWithProgress2, uploadFile } from "../../../Helper/uploadHelper";
 import { storeWithProgress, createToken } from "../../../Helper/nftMinter";
 import useUserActions from "../../../Hooks/useUserActions";
 import { MentionsInput, Mention } from "react-mentions";
@@ -303,30 +303,34 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
                   console.log("Compressed Image", image);
                 },
               });
-              const mintRequest = await mintNFTOnSolana2(
+              mintNFTOnSolana2(
                 State.database.walletAddress,
                 caption,
                 caption,
                 url,
                 image
-              );
-              console.log(mintRequest);
-              const signedTx = await signTransactionWithWallet(
-                mintRequest.data.result.encoded_transaction,
-                State.database.provider
-              );
-
-              await signWithRelayer(signedTx)
-                .then((response) => {
-                  response.success
-                    ? State.toast("success", "NFT Minted successfully")
-                    : State.toast("error", response.message);
+              )
+                .then((mintRequest) => {
+                  console.log(mintRequest);
+                  signTransactionWithWallet(
+                    mintRequest.data.result.encoded_transaction,
+                    State.database.provider
+                  )
+                    .then((signedTx) => {
+                      signWithRelayer(signedTx)
+                        .then((response) => {
+                          State.toast("success", "NFT Minted successfully");
+                          setbtnText("NFT Minted");
+                          uploadToServer(
+                            formData,
+                            mintRequest.data?.result.mint
+                          );
+                        })
+                        .catch((error) => State.toast("error", error.message));
+                    })
+                    .catch((error) => State.toast("error", error.message));
                 })
-                .catch((error) => State.toast("error", error));
-              console.log(mintRequest);
-              mintRequest && setbtnText("NFT Minted");
-              mintRequest &&
-                uploadToServer(formData, mintRequest.data?.result.mint);
+                .catch((error) => State.toast("error", error.message));
             }
           } else {
             uploadToServer(formData, null);
@@ -382,8 +386,9 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
       })
       .then(async (res) => {
         State.toast("success", "Your Photo uploaded successfully!");
-        clearData();
+        setbtnText("Uploading Photo");
         await loadFeed();
+        clearData();
       })
       .catch((err) => {
         State.toast("error", "Oops!something went wrong uploading photo!");

@@ -83,6 +83,7 @@ function BuyNFTModal() {
   };
 
   const buyNft = async () => {
+    const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
     setBuying(true);
     let buyNftData = {
       network: "devnet",
@@ -101,26 +102,48 @@ function BuyNFTModal() {
       })
       .then(async (data) => {
         console.log(data);
+
         // await signTransaction(
         //   // "devnet",
         //   data.data.result.encoded_transaction,
         //   "vXJQfc7wgeY7gwyBrfkjQz5VKQd2Dy2E5Psoj5LusaJwxukC5tuLQgUxxZTnoN2fSjG1zHyF45XCA8nz8VK94Tg"
         // );
-        const signedTrasaction = await signTransactionWithWallet(
+        signTransactionWithWallet(
           data.data.result.encoded_transaction,
           State.database.provider
-        );
-        console.log(signedTrasaction);
-        const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
-        const x = await connection.sendRawTransaction(
-          signedTrasaction.serialize()
-        );
-        console.log(x);
-        State.database?.buyNFTModalData?.setPrice(0);
-        State.database?.buyNFTModalData?.setOwner(State.database.walletAddress);
-        State.toast("success", "NFT bought successfully");
-        State.updateDatabase({ buyNFTModalOpen: false });
-        setBuying(false);
+        )
+          .then((signedTrasaction) => {
+            {
+              connection
+                .sendRawTransaction(signedTrasaction.serialize())
+                .then(() => {
+                  State.database?.buyNFTModalData?.setPrice(0);
+                  State.database?.buyNFTModalData?.setOwner(
+                    State.database.walletAddress
+                  );
+                  State.toast("success", "NFT bought successfully");
+                  setBuying(false);
+                  State.updateDatabase({ buyNFTModalOpen: false });
+                })
+                .catch((err) => {
+                  console.log(err);
+                  State.toast(
+                    "error",
+                    "Please check your wallet and retry again."
+                  );
+                  setBuying(false);
+                });
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+            State.toast(
+              "error",
+              "Please check your wallet balance and retry again."
+            );
+            setBuying(false);
+          });
+
         // loadNftsData();
       })
       .catch((error) => {
