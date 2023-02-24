@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useContext } from "react";
 import { X, Pencil, FileCheck, File } from "tabler-icons-react";
 import { sanitizeFilename } from "../../../functions/sanitizeFilename";
@@ -9,62 +9,81 @@ import { UserContext } from "../../../Store";
 
 const ProfileImageModal = ({ setShowProfileImageModal }) => {
   const State = useContext(UserContext);
-  const [selectedProfileImage, setselectedProfileImage] = useState(null);
-  const [uploadSucess, setUploadSuccess] = useState(null);
+  const hiddenFileInput = useRef(null);
+
+  const [selectedProfileImageChange, setselectedProfileImageChange] =
+    useState(null);
   const [uploadingImage, setUploadingImage] = useState(false);
   const [loadFeed, loadUser, loadProfileCard] = useUserActions();
+
+  const handleClick = (event) => {
+    hiddenFileInput.current.click();
+  };
 
   const handleImageChange = (event) => {
     // Update the state
 
     const file = sanitizeFilename(event.target.files[0]);
     console.log(file);
-    setselectedProfileImage({
+    setselectedProfileImageChange({
       file: [file],
       localurl: URL.createObjectURL(event.target.files[0]),
     });
   };
 
   const handleUpdateProfileImage = () => {
-    if (selectedProfileImage && selectedProfileImage.file[0]) {
+    if (selectedProfileImageChange && selectedProfileImageChange.file[0]) {
       setUploadingImage(true);
-      uploadFile(selectedProfileImage?.file[0]).then(async (cid) => {
-        const formData = new FormData();
-        formData.append(
-          "username",
-          State.database.userData?.data?.user?.username
-        );
-        formData.append("profileImage", selectedProfileImage.file[0]);
-        formData.append("imageHash", cid);
+      uploadFile(selectedProfileImageChange?.file)
+        .then(async (cid) => {
+          const formData = new FormData();
+          formData.append(
+            "username",
+            State.database.userData?.data?.user?.username
+          );
+          formData.append("profileImage", selectedProfileImageChange.file[0]);
+          formData.append("imageHash", cid);
 
-        axios
-          .post(
-            `${process.env.REACT_APP_SERVER_URL}/user/profileimage`,
-            formData,
-            {
-              headers: {
-                "content-type": "multipart/form-data",
-                "auth-token": JSON.stringify(localStorage.getItem("authtoken")),
-              },
-            }
-          )
-          .then(async (res) => {
-            await loadUser().then(() => {
+          axios
+            .post(
+              `${process.env.REACT_APP_SERVER_URL}/user/profileimage`,
+              formData,
+              {
+                headers: {
+                  "content-type": "multipart/form-data",
+                  "auth-token": JSON.stringify(
+                    localStorage.getItem("authtoken")
+                  ),
+                },
+              }
+            )
+            .then(async (res) => {
+              await loadUser().then(async () => {
+                State.toast("success", "Profile photo updated successfully!");
+
+                await loadProfileCard();
+                setUploadingImage(false);
+                setShowProfileImageModal(false);
+                setselectedProfileImageChange(null);
+              });
+            })
+            .catch((error) => {
+              console.log(error);
+              State.toast("error", error.message);
               setUploadingImage(false);
-              setUploadSuccess("Image Updated Successfully");
             });
-            await loadProfileCard();
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      });
+        })
+        .catch((error) => {
+          console.log(error);
+          State.toast("error", error.message);
+          setUploadingImage(false);
+        });
     }
   };
 
   useEffect(() => {
-    console.log(selectedProfileImage);
-  }, [selectedProfileImage]);
+    console.log(selectedProfileImageChange?.localurl);
+  }, [selectedProfileImageChange]);
 
   return (
     <div className="modal-box p-0 bg-slate-100 dark:bg-slate-800 ">
@@ -80,8 +99,7 @@ const ProfileImageModal = ({ setShowProfileImageModal }) => {
             className="text-brand2 cursor-pointer"
             onClick={() => {
               setShowProfileImageModal(false);
-              setselectedProfileImage(null);
-              setUploadSuccess(null);
+              setselectedProfileImageChange(null);
               setUploadingImage(false);
             }}
           ></X>
@@ -89,14 +107,22 @@ const ProfileImageModal = ({ setShowProfileImageModal }) => {
       </div>
       <div className="flex flex-col p-4 w-full">
         <label
-          htmlFor="select_profile_image"
-          className=" cursor-pointer flex justify-between items-center gap-2  w-full p-2 border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4"
+          onClick={handleClick}
+          className=" cursor-pointer flex flex-col   items-start   gap-2  w-full p-2 border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4"
         >
-          {selectedProfileImage ? (
-            selectedProfileImage.file ? (
-              <div className="flex items-center">
+          {selectedProfileImageChange &&
+            selectedProfileImageChange.localurl && (
+              <div className="w-full flex items-center justify-center rounded-lg aspect-square  dark:bg-slate-900 bg-slate-300 overflow-clip">
+                <img src={selectedProfileImageChange.localurl}></img>
+              </div>
+            )}
+          {selectedProfileImageChange ? (
+            selectedProfileImageChange.file ? (
+              <div className="flex items-center truncate ">
                 <FileCheck className="text-emerald-700" />
-                {selectedProfileImage.file[0].name.substring(0, 16)}
+                <span className="flex-grow truncate text-brand2">
+                  {selectedProfileImageChange.file[0].name}
+                </span>
               </div>
             ) : (
               "No file choosen!"
@@ -107,41 +133,30 @@ const ProfileImageModal = ({ setShowProfileImageModal }) => {
               Choose file *
             </div>
           )}
-          <input
-            id="select_profile_image"
-            type="file"
-            accept="image/*"
-            onChange={handleImageChange}
-            className="sr-only"
-            required={true}
-            onClick={(event) => {
-              event.target.value = null;
-              setselectedProfileImage(null);
-            }}
-          />
-          {selectedProfileImage ? (
-            selectedProfileImage.file ? (
-              <div className="w-72 flex items-center justify-center rounded-lg aspect-square  dark:bg-slate-900 bg-slate-300 overflow-clip">
-                <img src={selectedProfileImage.localurl}></img>
-              </div>
-            ) : null
-          ) : (
-            <></>
-          )}{" "}
         </label>
-        {uploadSucess && (
-          <p className="text-green-500 text-center mt-4">{uploadSucess}</p>
-        )}
+        <input
+          ref={hiddenFileInput}
+          type="file"
+          accept="image/*"
+          onChange={handleImageChange}
+          className="sr-only"
+          onClick={(event) => {
+            event.target.value = null;
+            setselectedProfileImageChange(null);
+            console.log("setting null");
+          }}
+        />
         <div className="my-4">
           <button
             onClick={handleUpdateProfileImage}
             className={`btn  ${
-              !selectedProfileImage?.file[0] ? "btn-disabled" : "btn-brand"
+              !selectedProfileImageChange?.file[0]
+                ? "btn-disabled"
+                : "btn-brand"
             } w-full ${
               uploadingImage ? "loading " : ""
             } flex space-x-1 capitalize`}
           >
-            <Pencil size={16} />
             <p>Update Image</p>
           </button>
         </div>

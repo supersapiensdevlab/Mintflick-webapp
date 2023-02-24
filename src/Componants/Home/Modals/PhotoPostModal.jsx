@@ -326,11 +326,20 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
                             mintRequest.data?.result.mint
                           );
                         })
-                        .catch((error) => State.toast("error", error.message));
+                        .catch((error) => {
+                          State.toast("error", error.message);
+                          setUploadingPost(false);
+                        });
                     })
-                    .catch((error) => State.toast("error", error.message));
+                    .catch((error) => {
+                      State.toast("error", error.message);
+                      setUploadingPost(false);
+                    });
                 })
-                .catch((error) => State.toast("error", error.message));
+                .catch((error) => {
+                  State.toast("error", error.message);
+                  setUploadingPost(false);
+                });
             }
           } else {
             uploadToServer(formData, null);

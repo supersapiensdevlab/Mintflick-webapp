@@ -29,6 +29,7 @@ import ConfirmationModal from "../../Home/Modals/ConfirmationModal";
 import LinkNewWalletModal from "../../Home/Modals/LinkNewWalletModal";
 import ListNavigation from "../ListNavigation";
 import Snippets from "../AccountSettings/Snippets";
+import { Image } from "react-img-placeholder";
 
 function SettingsModal(props) {
   const [activeTab, setactiveTab] = useState("editProfile");
@@ -208,16 +209,34 @@ function SettingsModal(props) {
           </div>
           {activeTab === "editProfile" && (
             <div className=" flex-grow overflow-auto flex flex-col gap-2 p-4 w-full  justify-start  ">
-              <div className="w-full relative h-32">
-                <img
+              <div className="w-full relative  ">
+                <Image
+                  className="w-full    aspect-[6/2] rounded-lg object-cover "
+                  width="100%"
+                  height="100%"
                   src={
                     State.database.userData?.data?.user?.cover_image
                       ? State.database.userData?.data?.user?.cover_image
                       : coverImage
                   }
-                  alt="cover image"
-                  className="w-full aspect-{4/2} rounded-lg object-cover h-full"
+                  alt={"Post Image"}
+                  placeholder={
+                    <div className="w-full h-full border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg flex flex-col justify-center items-center gap-1">
+                      <span className="text-lg font-bold text-brand6">
+                        Loading...
+                      </span>
+                    </div>
+                  }
                 />
+                {/* <img
+                  src={
+                    State.database.userData?.data?.user?.cover_image
+                      ? State.database.userData?.data?.user?.cover_image
+                      : coverImage
+                  }
+                  alt="cover_image"
+                  className="w-full aspect-[6/2] rounded-lg object-cover "
+                /> */}
                 <button
                   onClick={() => {
                     setShowCoverImageModal(true);

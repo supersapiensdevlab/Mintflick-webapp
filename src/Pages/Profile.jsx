@@ -13,6 +13,7 @@ import ProfileMedia from "../Componants/Profile/ProfileMedia";
 import MintWallet from "../Componants/Profile/MintWallet";
 import Vouch from "../Componants/Profile/Vouch";
 import Nfts from "../Componants/Profile/Nfts";
+import ProfileImageModal from "../Componants/Profile/Modals/ProfileImageModal";
 
 function Profile() {
   const State = useContext(UserContext);
@@ -60,6 +61,7 @@ function Profile() {
             State.database.userProfileData?.data?.superfan_to?.length
           }
         />
+
         {/* <TextChannels></TextChannels> */}
         {/* <Vouch /> */}
       </div>

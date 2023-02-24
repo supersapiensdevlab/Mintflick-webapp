@@ -13,6 +13,7 @@ import SetupMarketplaceModal from "../Home/Modals/SetupMarketplaceModal";
 import FollowersModal from "./Modals/FollowersModal";
 import SettingsModal from "./Modals/SettingsModal";
 import { NavLink } from "react-router-dom";
+import { Image } from "react-img-placeholder";
 
 function ProfileCard(props) {
   //Join superfan modal
@@ -96,16 +97,28 @@ function ProfileCard(props) {
 
   return (
     <div className="flex flex-col items-center  bg-slate-100 dark:bg-slate-800 w-full h-fit rounded-lg ">
-      <div className="w-full h-32">
-        <img
+      <div className="w-full  ">
+        <Image
+          className="w-full aspect-[6/2] rounded-lg object-cover "
+          width="100%"
+          height="100%"
           src={props.coverImage ? props.coverImage : coverImage}
-          alt="cover image"
-          className="w-full h-full aspect-{4/2} rounded-t-lg object-cover"
+          alt={"coverimage Image"}
+          placeholder={
+            <div className="w-full h-full border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg flex flex-col justify-center items-center gap-1">
+              <span className="text-lg font-bold text-brand6">Loading...</span>
+            </div>
+          }
         />
+        {/* <img
+          src={props.coverImage ? props.coverImage : coverImage}
+          alt="coverimage"
+          className="w-full h-full rounded-t-lg object-cover"
+        /> */}
       </div>
       <img
         src={props.profileImage ? props.profileImage : coverImage}
-        alt="Profile image"
+        alt="Profileimage"
         className="w-20 h-20 -mt-10 object-cover rounded-full"
       />
       <div className="flex flex-col items-center w-full h-fit space-y-1 m-2">

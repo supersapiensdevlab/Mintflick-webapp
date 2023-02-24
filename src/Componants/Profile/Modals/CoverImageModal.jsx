@@ -1,22 +1,29 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { useContext } from "react";
 import { X, Pencil, FileCheck, File } from "tabler-icons-react";
+import { sanitizeFilename } from "../../../functions/sanitizeFilename";
 import { uploadFile } from "../../../Helper/uploadHelper";
 import useUserActions from "../../../Hooks/useUserActions";
 import { UserContext } from "../../../Store";
 
 const CoverImageModal = ({ setShowCoverImageModal }) => {
   const State = useContext(UserContext);
+  const hiddenFileInput = useRef(null);
+
   const [selectedCoverImage, setSelectedCoverImage] = useState(null);
-  const [uploadSucess, setUploadSuccess] = useState(null);
   const [uploadingImage, setUploadingImage] = useState(false);
   const [loadFeed, loadUser, loadProfileCard] = useUserActions();
 
+  const handleClick = (event) => {
+    hiddenFileInput.current.click();
+  };
+
   const handleImageChange = (event) => {
     // Update the state
+    const file = sanitizeFilename(event.target.files[0]);
     setSelectedCoverImage({
-      file: event.target.files,
+      file: [file],
       localurl: URL.createObjectURL(event.target.files[0]),
     });
   };
@@ -24,37 +31,50 @@ const CoverImageModal = ({ setShowCoverImageModal }) => {
   const handleUpdateCoverImage = () => {
     if (selectedCoverImage && selectedCoverImage.file[0]) {
       setUploadingImage(true);
-      uploadFile(selectedCoverImage?.file[0]).then(async (cid) => {
-        const formData = new FormData();
-        formData.append(
-          "username",
-          State.database.userData?.data?.user?.username
-        );
-        formData.append("coverImage", selectedCoverImage.file[0]);
-        formData.append("imageHash", cid);
+      uploadFile(selectedCoverImage?.file)
+        .then(async (cid) => {
+          const formData = new FormData();
+          formData.append(
+            "username",
+            State.database.userData?.data?.user?.username
+          );
+          formData.append("coverImage", selectedCoverImage.file[0]);
+          formData.append("imageHash", cid);
 
-        axios
-          .post(
-            `${process.env.REACT_APP_SERVER_URL}/user/coverimage`,
-            formData,
-            {
-              headers: {
-                "content-type": "multipart/form-data",
-                "auth-token": JSON.stringify(localStorage.getItem("authtoken")),
-              },
-            }
-          )
-          .then(async (res) => {
-            await loadUser().then(() => {
+          axios
+            .post(
+              `${process.env.REACT_APP_SERVER_URL}/user/coverimage`,
+              formData,
+              {
+                headers: {
+                  "content-type": "multipart/form-data",
+                  "auth-token": JSON.stringify(
+                    localStorage.getItem("authtoken")
+                  ),
+                },
+              }
+            )
+            .then(async (res) => {
+              await loadUser().then(async () => {
+                setUploadingImage(false);
+                setShowCoverImageModal(false);
+                setSelectedCoverImage(null);
+
+                State.toast("success", "Cover photo updated successfully!");
+                await loadProfileCard();
+              });
+            })
+            .catch((error) => {
+              console.log(error);
+              State.toast("error", error.message);
               setUploadingImage(false);
-              setUploadSuccess("Image Updated Successfully");
             });
-            await loadProfileCard();
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      });
+        })
+        .catch((error) => {
+          console.log(error);
+          State.toast("error", error.message);
+          setUploadingImage(false);
+        });
     }
   };
 
@@ -73,22 +93,36 @@ const CoverImageModal = ({ setShowCoverImageModal }) => {
             onClick={() => {
               setShowCoverImageModal(false);
               setSelectedCoverImage(null);
-              setUploadSuccess(null);
               setUploadingImage(false);
             }}
           ></X>
         </div>
       </div>
       <div className="flex flex-col p-4 w-full">
+        {" "}
         <label
-          htmlFor="coverimage"
-          className=" cursor-pointer flex justify-between items-center gap-2  w-full p-2 border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4"
+          onClick={handleClick}
+          className=" cursor-pointer flex flex-col   items-start gap-2  w-full p-2 border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4"
         >
+          {" "}
           {selectedCoverImage ? (
             selectedCoverImage.file ? (
-              <div className="flex items-center">
+              <img
+                className={`w-full aspect-[6/2] rounded-lg object-cover`}
+                src={selectedCoverImage.localurl}
+                alt="cover_image"
+              ></img>
+            ) : null
+          ) : (
+            <></>
+          )}
+          {selectedCoverImage ? (
+            selectedCoverImage.file ? (
+              <div className="flex items-center truncate ">
                 <FileCheck className="text-emerald-700" />
-                {selectedCoverImage.file[0].name.substring(0, 16)}
+                <span className="flex-grow truncate text-brand2">
+                  {selectedCoverImage.file[0].name}
+                </span>
               </div>
             ) : (
               "No file choosen!"
@@ -99,31 +133,19 @@ const CoverImageModal = ({ setShowCoverImageModal }) => {
               Choose file *
             </div>
           )}
-          <input
-            id="coverimage"
-            type="file"
-            accept="image/*"
-            onChange={handleImageChange}
-            className="sr-only"
-            required={true}
-            onClick={(event) => {
-              event.target.value = null;
-              setSelectedCoverImage(null);
-            }}
-          />
-          {selectedCoverImage ? (
-            selectedCoverImage.file ? (
-              <div className="flex-grow rounded-lg overflow-clip">
-                <img src={selectedCoverImage.localurl}></img>
-              </div>
-            ) : null
-          ) : (
-            <></>
-          )}
-        </label>
-        {uploadSucess && (
-          <p className="text-green-500 text-center mt-4">{uploadSucess}</p>
-        )}
+        </label>{" "}
+        <input
+          ref={hiddenFileInput}
+          type="file"
+          accept="image/*"
+          onChange={handleImageChange}
+          style={{ display: "none" }}
+          required={true}
+          onClick={(event) => {
+            event.target.value = null;
+            setSelectedCoverImage(null);
+          }}
+        />
         <div className="my-4">
           <button
             onClick={handleUpdateCoverImage}
@@ -133,7 +155,6 @@ const CoverImageModal = ({ setShowCoverImageModal }) => {
               uploadingImage ? "loading " : ""
             } flex space-x-1 capitalize`}
           >
-            <Pencil size={16} />
             <p>Update Image</p>
           </button>
         </div>

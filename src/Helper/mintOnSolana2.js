@@ -52,32 +52,33 @@ export const signTransactionWithWallet = async (
   provider
 ) => {
   let confirmTransaction;
-  try {
-    // const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
-    const solanaWallet = new SolanaWallet(provider); // web3auth.provider
-    console.log(solanaWallet);
+  // try {
+  // const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
+  // const solanaWallet = new SolanaWallet(provider); // web3auth.provider
+  // console.log(solanaWallet);
 
-    const recoveredTransaction = Transaction.from(
-      Buffer.from(encodedTransaction, "base64")
-    );
-    console.log(recoveredTransaction);
-    const signedTx = provider.isPhantom
-      ? await provider.signTransaction(recoveredTransaction)
-      : await provider.signTransaction(recoveredTransaction); // signing the recovered transaction using the creator_wall
-    console.log(signedTx);
+  const recoveredTransaction = Transaction.from(
+    Buffer.from(encodedTransaction, "base64")
+  );
+  console.log(recoveredTransaction);
+  // const signedTx = provider.isPhantom
+  //   ? await provider.signTransaction(recoveredTransaction)
+  //   : await provider.signTransaction(recoveredTransaction); // signing the recovered transaction using the creator_wall
+  const signedTx = await provider.signTransaction(recoveredTransaction); // signing the recovered transaction using the creator_wall
+  console.log(signedTx);
 
-    // const confirmTransaction = await connection.sendRawTransaction(
-    //   signedTx.serialize()
-    // );
+  // const confirmTransaction = await connection.sendRawTransaction(
+  //   signedTx.serialize()
+  // );
 
-    confirmTransaction = signedTx
-      .serialize({ requireAllSignatures: false })
-      .toString("base64");
+  confirmTransaction = signedTx
+    .serialize({ requireAllSignatures: false })
+    .toString("base64");
 
-    console.log(confirmTransaction);
-  } catch (error) {
-    console.log(error);
-  }
+  console.log(confirmTransaction);
+  // } catch (error) {
+  //   console.log(error);
+  // }
   return confirmTransaction;
 };
 
@@ -101,8 +102,8 @@ export const signWithRelayer = async (signedTx) => {
     .then((result) => {
       console.log(result);
       response = result;
-    })
-    .catch((error) => console.log("error", error));
+    });
+
   return JSON.parse(response);
 };
 
