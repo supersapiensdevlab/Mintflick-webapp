@@ -124,7 +124,7 @@ export const mintNFTOnSolana2 = async (
     description: description,
     external_url: external_url,
     max_supply: 1,
-    fee_payer: `B6rhE5Zpu2gfe8YnJSa4jVoyWqDTqBcEJbDa5JawyYdG`,
+    // fee_payer: `${process.env.REACT_APP_FEEPAYER_WALLET}`,
     royalty: 5,
     image: image,
   };
@@ -151,7 +151,7 @@ export const listNFTOnSolana2 = async (nft_address, price, seller_wallet) => {
     marketplace_address: process.env.REACT_APP_SOLANA_MARKETPLACE_ADDRESS,
     nft_address: nft_address,
     price: parseInt(price),
-    // fee_payer: `B6rhE5Zpu2gfe8YnJSa4jVoyWqDTqBcEJbDa5JawyYdG`,
+    // fee_payer: process.,
     seller_wallet: seller_wallet,
   });
 
