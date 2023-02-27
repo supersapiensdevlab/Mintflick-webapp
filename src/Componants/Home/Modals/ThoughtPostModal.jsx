@@ -46,7 +46,7 @@ function ThoughtPostModal({ setthoughtPostModalOpen }) {
   const [showWalkthrough, setshowWalkthrough] = useState(
     State.database.userData?.data.user.seenIntro?.thoughtWalkthrough
       ? false
-      : true
+      : true,
   );
   //walkthrough data
   const walkthroughData = [
@@ -128,7 +128,7 @@ function ThoughtPostModal({ setthoughtPostModalOpen }) {
         // );
         await signTransaction(
           data.data.result.encoded_transaction,
-          `${process.env.REACT_APP_FEEPAYER_PRIVATEKEY}`
+          `${process.env.REACT_APP_FEEPAYER_PRIVATEKEY}`,
         )
           .then(async (res) => {
             partialSignWithWallet(res, State.database?.provider).then(
@@ -138,7 +138,7 @@ function ThoughtPostModal({ setthoughtPostModalOpen }) {
                 setUploadingPost(false);
                 await loadFeed();
                 await loadNfts();
-              }
+              },
             );
           })
           .catch((err) => {
@@ -208,13 +208,13 @@ function ThoughtPostModal({ setthoughtPostModalOpen }) {
               "Mintflick Collection",
               caption,
               url,
-              file
+              file,
             )
               .then((mintRequest) => {
                 console.log(mintRequest);
                 signTransactionWithWallet(
                   mintRequest.data.result.encoded_transaction,
-                  State.database.provider
+                  State.database.provider,
                 )
                   .then((signedTx) => {
                     signWithRelayer(signedTx)
@@ -245,7 +245,7 @@ function ThoughtPostModal({ setthoughtPostModalOpen }) {
   // const [mintingProgress, setMintingProgress] = useState(0);
 
   const renderData = [];
-  State.database.userData?.data?.user?.followee_count.forEach((value, i) => {
+  State.database.userData?.data?.user?.followee_count?.forEach((value, i) => {
     renderData.push({ id: value, display: value });
   });
 
@@ -301,10 +301,10 @@ function ThoughtPostModal({ setthoughtPostModalOpen }) {
 
   return (
     <>
-      <div className="modal-box p-0 bg-slate-100 dark:bg-slate-800 ">
-        <div className="w-full h-fit p-2 bg-slate-300 dark:bg-slate-700">
-          <div className="flex justify-between items-center p-2">
-            <h3 className="flex items-center gap-2 font-bold text-lg text-brand2">
+      <div className='modal-box p-0 bg-slate-100 dark:bg-slate-800 '>
+        <div className='w-full h-fit p-2 bg-slate-300 dark:bg-slate-700'>
+          <div className='flex justify-between items-center p-2'>
+            <h3 className='flex items-center gap-2 font-bold text-lg text-brand2'>
               <Bulb />
               Post a Thought
             </h3>
@@ -312,82 +312,79 @@ function ThoughtPostModal({ setthoughtPostModalOpen }) {
               onClick={() => {
                 clearData();
               }}
-              className="text-brand2 cursor-pointer"
-            ></X>
+              className='text-brand2 cursor-pointer'></X>
           </div>
         </div>
 
         <form onSubmit={(e) => e.preventDefault()}>
-          <div className="w-full p-4 space-y-3">
+          <div className='w-full p-4 space-y-3'>
             {/* <textarea
             className="textarea  w-full"
             placeholder="Whats on your mind!"
             onChange={(e) => setCaption(e.target.value)}
             value={caption}
           ></textarea> */}
-            <div id="walkthroughThoughtStep1" ref={textRef}>
+            <div id='walkthroughThoughtStep1' ref={textRef}>
               <MentionsInput
                 multiline
                 value={caption}
                 onChange={(e) => setCaption(e.target.value)}
                 style={defaultStyle}
-                className="textarea w-full h-24  pt-2 focus:outline-0 overflow-scroll mentionsinputoverflow"
+                className='textarea w-full h-24  pt-2 focus:outline-0 overflow-scroll mentionsinputoverflow'
                 placeholder={"Whats on your mind!"}
                 a11ySuggestionsListLabel={"Suggested mentions"}
-                inputRef={mentionsRef}
-              >
+                inputRef={mentionsRef}>
                 <Mention
-                  trigger="@"
+                  trigger='@'
                   data={renderData}
-                  markup="@__display__"
+                  markup='@__display__'
                   appendSpaceOnAdd
                   onAdd={handleAdd}
                 />
               </MentionsInput>
             </div>
             {mintSuccess || (mintSuccess && listSuccess) ? (
-              <div className="w-fit flex space-x-2 text-green-500">
+              <div className='w-fit flex space-x-2 text-green-500'>
                 {successMsg}
               </div>
             ) : (
               <></>
             )}
-            <div className="w-fit flex space-x-2">
+            <div className='w-fit flex space-x-2'>
               {mintSuccess ? (
-                <div className="flex items-center">
+                <div className='flex items-center'>
                   {!listSuccess ? (
-                    <span className="label-text text-brand3">List NFT</span>
+                    <span className='label-text text-brand3'>List NFT</span>
                   ) : (
                     <></>
                   )}
                 </div>
               ) : (
                 <label
-                  id="walkthroughThoughtStep2"
-                  className="flex items-center cursor-pointer gap-2"
-                >
+                  id='walkthroughThoughtStep2'
+                  className='flex items-center cursor-pointer gap-2'>
                   <input
-                    type="checkbox"
+                    type='checkbox'
                     value={isNFT}
                     onChange={() => setIsNFT(!isNFT)}
-                    className="checkbox checkbox-primary"
+                    className='checkbox checkbox-primary'
                   />
-                  <span className="label-text text-brand3">Mint as NFT</span>
+                  <span className='label-text text-brand3'>Mint as NFT</span>
                 </label>
               )}
               {isNFT && mintSuccess && !listSuccess && (
-                <div className="form-control">
-                  <label className="input-group">
+                <div className='form-control'>
+                  <label className='input-group'>
                     <input
                       min={1}
-                      type="number"
-                      placeholder="1"
-                      className="input input-bordered input-sm w-24"
+                      type='number'
+                      placeholder='1'
+                      className='input input-bordered input-sm w-24'
                       value={nftPrice}
                       onChange={(e) => setNFTPrice(e.target.value)}
                       required={true}
                     />
-                    <span className="text-brand3 bg-slate-300 dark:bg-slate-600 ">
+                    <span className='text-brand3 bg-slate-300 dark:bg-slate-600 '>
                       {State.database.chainId === 0 ? (
                         <>
                           <SolanaToken></SolanaToken>&nbsp; SOL
@@ -403,14 +400,13 @@ function ThoughtPostModal({ setthoughtPostModalOpen }) {
               )}
             </div>
             <progress
-              class="progress progress-success w-56 hidden"
-              value="50"
-              max="100"
-            ></progress>
+              class='progress progress-success w-56 hidden'
+              value='50'
+              max='100'></progress>
             {isNFT && caption && (
-              <div className="mx-auto w-fit m-4">
+              <div className='mx-auto w-fit m-4'>
                 <NftCard
-                  id="my-nft"
+                  id='my-nft'
                   name={State.database.userData.data.user.name}
                   userName={State.database.userData.data.user.username}
                   text={caption}
@@ -427,8 +423,7 @@ function ThoughtPostModal({ setthoughtPostModalOpen }) {
                       link.click();
                     })
                   }
-                  className="link link-primary"
-                >
+                  className='link link-primary'>
                   Download as image
                 </span>
               </div>
@@ -441,8 +436,7 @@ function ThoughtPostModal({ setthoughtPostModalOpen }) {
                 // onClick={onButtonClick}
                 className={`btn capitalize w-full  ${
                   caption ? "btn-brand" : "btn-disabled"
-                }  ${uploadingPost ? "loading" : ""}`}
-              >
+                }  ${uploadingPost ? "loading" : ""}`}>
                 {btnText}
               </button>
             ) : (
@@ -455,18 +449,16 @@ function ThoughtPostModal({ setthoughtPostModalOpen }) {
                     }}
                     className={`btn  ${
                       !caption ? "btn-disabled" : "btn-brand"
-                    } w-full `}
-                  >
+                    } w-full `}>
                     Close
                   </button>
                 ) : (
-                  <div className="w-full flex justify-around space-x-1">
+                  <div className='w-full flex justify-around space-x-1'>
                     <button
                       onClick={handleThoughtNFTListing}
                       className={`btn  ${
                         !caption ? "btn-disabled" : "btn-brand"
-                      } w-1/2 ${uploadingPost ? "loading " : ""}`}
-                    >
+                      } w-1/2 ${uploadingPost ? "loading " : ""}`}>
                       List NFT
                     </button>
                     <button
@@ -476,8 +468,7 @@ function ThoughtPostModal({ setthoughtPostModalOpen }) {
                       }}
                       className={`btn  ${
                         !caption ? "btn-disabled" : "btn-brand"
-                      } w-1/2 `}
-                    >
+                      } w-1/2 `}>
                       Close
                     </button>
                   </div>

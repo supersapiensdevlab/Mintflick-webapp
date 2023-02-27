@@ -18,6 +18,7 @@ export function Walkthrough(props) {
   const [loadFeed, loadUser, loadProfileCard, loadNftsData] = useUserActions();
 
   function handleSeenIntro() {
+    props.func();
     axios({
       method: "post",
       url: `${process.env.REACT_APP_SERVER_URL}/user/seen_intro`,
@@ -28,16 +29,17 @@ export function Walkthrough(props) {
     })
       .then((response) => {
         console.log(response);
-        // let temp = {
-        //   data: {
-        //     user: response.data,
-        //   },
-        // };
-        // State.updateDatabase({
-        //   userData: temp,
-        // });
-        loadUser();
-        props.func();
+        let temp = {
+          data: {
+            user: response.data,
+          },
+        };
+
+        State.updateDatabase({
+          userData: temp,
+          walletAddress: temp.data.user.wallet_id,
+        });
+        // loadUser();
       })
       .catch(function (error) {
         console.log(error);
@@ -98,38 +100,34 @@ export function Walkthrough(props) {
 
   return (
     <div
-      id="walkthrough"
-      className="transition-all ease-in-out duration-500 drop-shadow-md pr-4 sm:p-0"
+      id='walkthrough'
+      className='transition-all ease-in-out duration-500 drop-shadow-md pr-4 sm:p-0'
       style={{
         position: "fixed",
         top: offset.x - divHeight,
         left: offset.y,
-      }}
-    >
+      }}>
       <div
-        className={`flex flex-col items-center bg-white dark:bg-slate-900 w-full sm:w-[500px]   h-fit    rounded-lg   overflow-hidden `}
-      >
-        <div className="w-full flex-grow p-6 flex flex-col items-start gap-4 ">
-          <span className="text-2xl  font-bold text-brand1 text-center w-full flex justify-between">
+        className={`flex flex-col items-center bg-white dark:bg-slate-900 w-full sm:w-[500px]   h-fit    rounded-lg   overflow-hidden `}>
+        <div className='w-full flex-grow p-6 flex flex-col items-start gap-4 '>
+          <span className='text-2xl  font-bold text-brand1 text-center w-full flex justify-between'>
             {props.data[active].heading}
             {active !== props.data.length - 1 && (
               <button
                 onClick={() => setactive(props.data.length - 1)}
-                className="font-bold text-sm text-brand6"
-              >
+                className='font-bold text-sm text-brand6'>
                 Skip
               </button>
             )}
           </span>
-          <p className="text-md font-semibold text-slate-400 flex-grow">
+          <p className='text-md font-semibold text-slate-400 flex-grow'>
             {props.data[active].text}
           </p>
-          <div className="flex justify-between w-full">
+          <div className='flex justify-between w-full'>
             {active !== 0 && (
               <button
                 onClick={() => setactive(active - 1)}
-                className="flex items-center gap-2   font-semibold text-lg text-brand1"
-              >
+                className='flex items-center gap-2   font-semibold text-lg text-brand1'>
                 <ChevronLeft />
                 Back
               </button>
@@ -141,8 +139,7 @@ export function Walkthrough(props) {
    active === props.data.length - 1
      ? ` text-success hover:bg-success hover:text-white  `
      : ` text-primary`
- }`}
-            >
+ }`}>
               {active === props.data.length - 1 ? "Finish" : "Next"}
               {active !== props.data.length - 1 ? (
                 <ChevronRight />
@@ -155,15 +152,14 @@ export function Walkthrough(props) {
       </div>
 
       <svg
-        className="ml-2"
-        width="24"
-        height="24"
-        viewBox="0 0 266 266"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
+        className='ml-2'
+        width='24'
+        height='24'
+        viewBox='0 0 266 266'
+        fill='none'
+        xmlns='http://www.w3.org/2000/svg'>
         <path
-          d="M0 0H266L0 266V0Z"
+          d='M0 0H266L0 266V0Z'
           fill={State.database.dark ? "#0f172a" : "#ffffff"}
         />
       </svg>

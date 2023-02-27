@@ -14,7 +14,7 @@ const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
 const signTransactionKeyWallet = async (
   encodedTransaction,
   fromPrivateKey,
-  provider
+  provider,
 ) => {
   try {
     console.log(fromPrivateKey);
@@ -25,7 +25,7 @@ const signTransactionKeyWallet = async (
     console.log(solanaWallet);
 
     const recoveredTransaction = Transaction.from(
-      Buffer.from(encodedTransaction, "base64")
+      Buffer.from(encodedTransaction, "base64"),
     );
     console.log(recoveredTransaction);
     recoveredTransaction.partialSign(feePayer);
@@ -39,7 +39,7 @@ const signTransactionKeyWallet = async (
     const signedTx = await provider.signTransaction(recoveredTransaction); // signing the recovered transaction using the creator_wall
     console.log(signedTx);
     const confirmTransaction = await connection.sendRawTransaction(
-      signedTx.serialize()
+      signedTx.serialize(),
     );
     return confirmTransaction;
   } catch (error) {
@@ -49,16 +49,17 @@ const signTransactionKeyWallet = async (
 
 export const signTransactionWithWallet = async (
   encodedTransaction,
-  provider
+  provider,
 ) => {
   let confirmTransaction;
+  console.log(encodedTransaction);
   // try {
   // const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
   // const solanaWallet = new SolanaWallet(provider); // web3auth.provider
   // console.log(solanaWallet);
 
   const recoveredTransaction = Transaction.from(
-    Buffer.from(encodedTransaction, "base64")
+    Buffer.from(encodedTransaction, "base64"),
   );
   console.log(recoveredTransaction);
   // const signedTx = provider.isPhantom
@@ -112,7 +113,7 @@ export const mintNFTOnSolana2 = async (
   name,
   description,
   external_url,
-  image
+  image,
 ) => {
   let nftSolanaData = {
     network: "devnet",
@@ -189,7 +190,7 @@ export const buyNFTOnSolana2 = (buyNftData, provider) => {
       // );
       const signedTrasaction = await signTransactionWithWallet(
         data.data.result.encoded_transaction,
-        provider
+        provider,
       );
       console.log(signedTrasaction);
       const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
