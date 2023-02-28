@@ -33,7 +33,7 @@ import { Image } from "react-img-placeholder";
 
 function SettingsModal(props) {
   const [activeTab, setactiveTab] = useState("editProfile");
-  const [selectedPlan, setselectedPlan] = useState(0);
+  const [selectedPlan, setselectedPlan] = useState(1);
 
   const [showCoverImageModal, setShowCoverImageModal] = useState(false);
   const [showProfileImageModal, setShowProfileImageModal] = useState(false);

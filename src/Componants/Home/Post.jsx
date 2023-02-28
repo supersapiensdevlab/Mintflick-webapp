@@ -952,13 +952,15 @@ function Post(props) {
             {props.image && (
               <>
                 <div className='items-center  aspect-square  align-middle justify-center dark:bg-slate-900 bg-slate-300 flex rounded'>
+                 {/* <img  src={ nftLink ? nftLink: props.image ? props.image : placeholderLogo  }/> */}
                   <Image
                     className='h-full  aspect-auto w-full  object-contain'
                     width='100%'
                     height='100%'
-                    src={props.image ? props.image : placeholderLogo}
+                    src={ nftLink ? nftLink: props.image ? props.image : placeholderLogo  }
                     alt={"Post Image"}
                     placeholder={
+                     
                       <div className='flex flex-col justify-center items-center gap-1'>
                         <Main_logo></Main_logo>
                         <span className='text-lg font-bold text-brand6'>

@@ -124,7 +124,7 @@ export const mintNFTOnSolana2 = async (
     description: description,
     external_url: external_url,
     max_supply: 1,
-    // fee_payer: `${process.env.REACT_APP_FEEPAYER_WALLET}`,
+    fee_payer: process.env.REACT_APP_FEEPAYER_WALLET,
     royalty: 5,
     image: image,
   };
