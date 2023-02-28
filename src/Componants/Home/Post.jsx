@@ -951,8 +951,9 @@ function Post(props) {
           <div className=' w-full h-fit z-10 space-y-2'>
             {props.image && (
               <>
+               {/* <img  src={   props.image ? props.image : placeholderLogo  }/> */}
                 <div className='items-center  aspect-square  align-middle justify-center dark:bg-slate-900 bg-slate-300 flex rounded'>
-                 {/* <img  src={ nftLink ? nftLink: props.image ? props.image : placeholderLogo  }/> */}
+                
                   <Image
                     className='h-full  aspect-auto w-full  object-contain'
                     width='100%'

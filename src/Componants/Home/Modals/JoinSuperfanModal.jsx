@@ -73,6 +73,8 @@ const JoinSuperfanModal = ({
   const [isSuperfan, setIsSuperfan] = useState(null);
   const [buyingPlan, setBuyingPlan] = useState(false);
 
+  const [expiry, setexpiry] = useState(null)
+
   const handleJoinSuperfan = (plan) => {
     switch (plan) {
       case "Basic":
@@ -89,13 +91,17 @@ const JoinSuperfanModal = ({
 
   useEffect(() => {
     State.database.userData?.data?.user?.superfan_of?.map(
-      (value) => value.username === postUsername && setIsSuperfan(value.plan),
+      (value) => value.username === postUsername && setIsSuperfan(value),
     );
   }, [State.database.userData?.data?.user?.superfan_of]);
 
   const handleTransactionSucess = (receipt, plan) => {
     const link = `https://explorer.solana.com/tx/${receipt}?cluster=devnet`;
+    const date2 = new Date();
+    const timestamp= date2.getTime();
+    console.log("date",timestamp)
     const superfanData = {
+      timestamp:timestamp,
       txnHash: link,
       superfanof: postUsername,
       plan: plan,
@@ -190,6 +196,16 @@ const JoinSuperfanModal = ({
     //   });
   };
 
+  const getDaysLeft=()=>{
+   // retunn days left between superfan.boughtOn + 30 days and current date
+
+ const date1 = new Date(isSuperfan.boughtOn);
+     const date2 = new Date();
+    const Difference_In_Time = date2.getTime() - date1.getTime();
+    const Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
+     return Math.ceil(30-Difference_In_Days)
+  }
+
   return (
     <div className='modal-box p-0 bg-slate-100 dark:bg-slate-800 '>
       <div className='w-full h-fit p-2 bg-slate-300 dark:bg-slate-700'>
@@ -208,7 +224,7 @@ const JoinSuperfanModal = ({
         </div>
       </div>
 
-      {/* {isSuperfan ? (
+      {/* {isSuperfan? ? (
         <div className="w-full flex justify-center items-center p-4">
           <p className="text-brand">
             You are already {postUsername}'s superfan!
@@ -221,18 +237,20 @@ const JoinSuperfanModal = ({
           {superfan_data ? (
             <>
               {plans.map((plan) => (
+                
                 <>
-                  {isSuperfan === plan.name && (
-                    <h5 className='bg-success w-fit text-base font-medium text-slate-100 px-2 mr-2 ml-auto rounded-t-lg'>
-                      Subscribed
-                    </h5>
+                  {isSuperfan?.plan === plan.name && (
+                    <div className="flex justify-end"><span className="bg-primary w-fit text-base font-medium text-slate-100 px-2 mr-1   rounded-t-lg">{getDaysLeft()} days left</span>
+                    <h5 className='bg-success w-fit text-base font-semibold text-slate-100 px-2 mr-2   rounded-t-lg'>
+                      Subscribed 
+                    </h5></div>
                   )}
                   <div
                     onClick={() => {
                       handleJoinSuperfan(plan.name);
                     }}
                     className={`${
-                      isSuperfan === plan.name && "border-2 border-success mt-0"
+                      isSuperfan?.plan === plan.name && "border-2 border-success mt-0"
                     } my-2 flex w-full cursor-pointer bg-slate-200 dark:bg-slate-700 h-fit rounded-lg overflow-hidden hover:ring-2 ring-primary dark:ring-brand`}>
                     <img
                       src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYttbDyk8tE55gznNpc1ujtwlaNTtX4ahdrg&usqp=CAU'
@@ -367,7 +385,7 @@ const JoinSuperfanModal = ({
               </p>
             </div> */}
             <div className='w-full pr-4 pb-2'>
-              {isSuperfan === whatToShow?.name ? (
+              {isSuperfan?.plan === whatToShow?.name ? (
                 <div className='flex flex-col space-y-1'>
                   <div className='btn btn-success text-white capitalize text-lg'>
                     Already subscribed
@@ -382,7 +400,7 @@ const JoinSuperfanModal = ({
               ) : (
                 <button
                   onClick={() =>
-                    isSuperfan !== whatToShow?.name && handleBuySuperfanPlan()
+                    isSuperfan?.plan !== whatToShow?.name && handleBuySuperfanPlan()
                   }
                   className={`btn btn-brand w-full capitalize text-lg ${
                     buyingPlan ? "loading" : ""
