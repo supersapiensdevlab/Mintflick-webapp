@@ -73,7 +73,7 @@ const JoinSuperfanModal = ({
   const [isSuperfan, setIsSuperfan] = useState(null);
   const [buyingPlan, setBuyingPlan] = useState(false);
 
-  const [expiry, setexpiry] = useState(null)
+  const [expiry, setexpiry] = useState(null);
 
   const handleJoinSuperfan = (plan) => {
     switch (plan) {
@@ -91,17 +91,17 @@ const JoinSuperfanModal = ({
 
   useEffect(() => {
     State.database.userData?.data?.user?.superfan_of?.map(
-      (value) => value.username === postUsername && setIsSuperfan(value),
+      (value) => value.username === postUsername && setIsSuperfan(value)
     );
   }, [State.database.userData?.data?.user?.superfan_of]);
 
   const handleTransactionSucess = (receipt, plan) => {
     const link = `https://explorer.solana.com/tx/${receipt}?cluster=devnet`;
     const date2 = new Date();
-    const timestamp= date2.getTime();
-    console.log("date",timestamp)
+    const timestamp = date2.getTime();
+    console.log("date", timestamp);
     const superfanData = {
-      timestamp:timestamp,
+      timestamp: timestamp,
       txnHash: link,
       superfanof: postUsername,
       plan: plan,
@@ -132,9 +132,12 @@ const JoinSuperfanModal = ({
               userData: response,
               walletAddress: response.data.user.wallet_id,
             });
+            setWhatToShow(null);
+            // setJoinSuperfanModal(false);
           })
           .catch(function (error) {
             console.log(error);
+
             setBuyingPlan(false);
           });
       })
@@ -159,7 +162,7 @@ const JoinSuperfanModal = ({
       toPay,
       whatToShow?.price,
       0.05,
-      State.database.provider,
+      State.database.provider
     )
       .then((receipt) => {
         console.log(receipt);
@@ -196,22 +199,22 @@ const JoinSuperfanModal = ({
     //   });
   };
 
-  const getDaysLeft=()=>{
-   // retunn days left between superfan.boughtOn + 30 days and current date
+  const getDaysLeft = () => {
+    // retunn days left between superfan.boughtOn + 30 days and current date
 
- const date1 = new Date(isSuperfan.boughtOn);
-     const date2 = new Date();
+    const date1 = new Date(isSuperfan.boughtOn);
+    const date2 = new Date();
     const Difference_In_Time = date2.getTime() - date1.getTime();
     const Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
-     return Math.ceil(30-Difference_In_Days)
-  }
+    return Math.ceil(30 - Difference_In_Days);
+  };
 
   return (
-    <div className='modal-box p-0 bg-slate-100 dark:bg-slate-800 '>
-      <div className='w-full h-fit p-2 bg-slate-300 dark:bg-slate-700'>
-        <div className='flex justify-between items-center p-2'>
-          <h3 className='flex items-center gap-2 font-bold text-lg text-brand2'>
-            <Comet className='-rotate-90' />
+    <div className="modal-box p-0 bg-slate-100 dark:bg-slate-800 ">
+      <div className="w-full h-fit p-2 bg-slate-300 dark:bg-slate-700">
+        <div className="flex justify-between items-center p-2">
+          <h3 className="flex items-center gap-2 font-bold text-lg text-brand2">
+            <Comet className="-rotate-90" />
             Become a Superfan
           </h3>
           <X
@@ -220,7 +223,8 @@ const JoinSuperfanModal = ({
               setWhatToShow(null);
               setExplorerLink(null);
             }}
-            className='text-brand2 cursor-pointer'></X>
+            className="text-brand2 cursor-pointer"
+          ></X>
         </div>
       </div>
 
@@ -233,33 +237,38 @@ const JoinSuperfanModal = ({
       ) : ( */}
       {/* <> */}
       {whatToShow === null ? (
-        <div className='w-full p-4 '>
+        <div className="w-full p-4 ">
           {superfan_data ? (
             <>
               {plans.map((plan) => (
-                
                 <>
                   {isSuperfan?.plan === plan.name && (
-                    <div className="flex justify-end"><span className="bg-primary w-fit text-base font-medium text-slate-100 px-2 mr-1   rounded-t-lg">{getDaysLeft()} days left</span>
-                    <h5 className='bg-success w-fit text-base font-semibold text-slate-100 px-2 mr-2   rounded-t-lg'>
-                      Subscribed 
-                    </h5></div>
+                    <div className="flex justify-end">
+                      <span className="bg-primary w-fit text-base font-medium text-slate-100 px-2 mr-1   rounded-t-lg">
+                        {getDaysLeft()} days left
+                      </span>
+                      <h5 className="bg-success w-fit text-base font-semibold text-slate-100 px-2 mr-2   rounded-t-lg">
+                        Subscribed
+                      </h5>
+                    </div>
                   )}
                   <div
                     onClick={() => {
                       handleJoinSuperfan(plan.name);
                     }}
                     className={`${
-                      isSuperfan?.plan === plan.name && "border-2 border-success mt-0"
-                    } my-2 flex w-full cursor-pointer bg-slate-200 dark:bg-slate-700 h-fit rounded-lg overflow-hidden hover:ring-2 ring-primary dark:ring-brand`}>
+                      isSuperfan?.plan === plan.name &&
+                      "border-2 border-success mt-0"
+                    } my-2 flex w-full cursor-pointer bg-slate-200 dark:bg-slate-700 h-fit rounded-lg overflow-hidden hover:ring-2 ring-primary dark:ring-brand`}
+                  >
                     <img
-                      src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYttbDyk8tE55gznNpc1ujtwlaNTtX4ahdrg&usqp=CAU'
-                      className='h-full w-32 bg-red-600 object-cover'
+                      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYttbDyk8tE55gznNpc1ujtwlaNTtX4ahdrg&usqp=CAU"
+                      className="aspect-[4/3] w-32 bg-red-600 object-cover"
                     />
-                    <span className='p-2 h-full flex-grow '>
-                      <h3 className='text-xl font-semibold text-primary dark:text-brand1 flex gap-1'>
+                    <span className="p-2 h-full flex-grow ">
+                      <h3 className="text-xl font-semibold text-primary dark:text-brand1 flex gap-1">
                         <img
-                          className='w-5'
+                          className="w-5"
                           src={
                             plan.name === "Silver"
                               ? superfan_silver
@@ -268,18 +277,18 @@ const JoinSuperfanModal = ({
                         />
                         {plan.name}
                       </h3>
-                      <h5 className='w-full text-sm font-medium text-brand4'>
+                      <h5 className="w-full text-sm font-medium text-brand4">
                         {plan.description}
                       </h5>
                     </span>
                     <button>
-                      <span className='flex items-center justify-center w-28 gap-2 p-4 h-full  bg-slate-300 dark:bg-slate-600'>
+                      <span className="flex items-center justify-center w-28 gap-2 p-4 h-full  bg-slate-300 dark:bg-slate-600">
                         {State.database.chainId === 1 ? (
                           <PolygonToken size={24}></PolygonToken>
                         ) : State.database.chainId === 0 ? (
                           <SolanaToken size={24}></SolanaToken>
                         ) : null}
-                        <h3 className='text-xl font-semibold text-brand2'>
+                        <h3 className="text-xl font-semibold text-brand2">
                           {plan.price}
                         </h3>
                       </span>
@@ -289,44 +298,46 @@ const JoinSuperfanModal = ({
               ))}
             </>
           ) : (
-            <p className='w-full text-center text-brand1'>
+            <p className="w-full text-center text-brand1">
               {postUsername} haven't set up any plans yet &#128533;
             </p>
           )}
-          <div className='m-2 w-full flex justify-start items-center'>
-            <p className='text-brand1'>
+          <div className="m-2 w-full flex justify-start items-center">
+            <p className="text-brand1">
               Don't have SOL ?{" "}
               <a
                 href={`https://staging-global.transak.com/?apiKey=a0aac8e7-6e2c-43b4-9434-394165e36bd5&redirectURL=https://transak.com&cryptoCurrencyList=ETH,DAI,USDT&defaultCryptoCurrency=SOL&walletAddress=${State.database.walletAddress}&disableWalletAddressForm=true&exchangeScreenTitle=My%20dApp%20is%20the%20best&isFeeCalculationHidden=true&fiatCurrency=USD&defaultPaymentMethod=google_pay&countryCode=IN`}
-                className='text-primary'
-                target='_blank'>
+                className="text-primary"
+                target="_blank"
+              >
                 Buy here
               </a>
             </p>
           </div>
         </div>
       ) : (
-        <div className='flex-col space-y-3 text-brand1 p-2'>
-          <div className='flex space-x-2 items-center w-full'>
+        <div className="flex-col space-y-3 text-brand1 p-2">
+          <div className="flex space-x-2 items-center w-full">
             <button
-              className='  '
+              className="  "
               onClick={() => {
                 setWhatToShow(null);
-              }}>
+              }}
+            >
               <ChevronLeft size={24} />
             </button>
-            <h2 className='flex-grow text-center font-semibold text-lg'>
+            <h2 className="flex-grow text-center font-semibold text-lg">
               Summary
             </h2>
           </div>
-          <hr className='text-brand1 mx-2 opacity-10' />
-          <div className='space-x-2 w-full space-y-2'>
-            <div className='flex justify-between items-end w-full px-1'>
-              <div className='flex-col space-y-0 pl-1'>
-                <p className='text-brand font-semibold text-xl'>Plan</p>
+          <hr className="text-brand1 mx-2 opacity-10" />
+          <div className="space-x-2 w-full space-y-2">
+            <div className="flex justify-between items-end w-full px-1">
+              <div className="flex-col space-y-0 pl-1">
+                <p className="text-brand font-semibold text-xl">Plan</p>
                 <p>{whatToShow?.name}</p>
               </div>
-              <span className='flex justify-center items-center px-2 space-x-2'>
+              <span className="flex justify-center items-center px-2 space-x-2">
                 {State.database.chainId === 1 ? (
                   <PolygonToken size={16}></PolygonToken>
                 ) : State.database.chainId === 0 ? (
@@ -335,15 +346,15 @@ const JoinSuperfanModal = ({
                 <p>{whatToShow?.price}</p>
               </span>
             </div>
-            <hr className='text-brand1 mx-2 opacity-10' />
-            <div className='flex-col space-y-0'>
-              <p className='text-brand font-semibold text-xl'>Perks</p>
+            <hr className="text-brand1 mx-2 opacity-10" />
+            <div className="flex-col space-y-0">
+              <p className="text-brand font-semibold text-xl">Perks</p>
               <p>{whatToShow?.description}</p>
             </div>
-            <hr className='text-brand1 mx-2 opacity-10' />
-            <div className='flex-col space-y-0'>
-              <p className='text-brand font-semibold text-xl'>Duration</p>
-              <p className='flex space-x-1 items-center'>
+            <hr className="text-brand1 mx-2 opacity-10" />
+            <div className="flex-col space-y-0">
+              <p className="text-brand font-semibold text-xl">Duration</p>
+              <p className="flex space-x-1 items-center">
                 <p>{whatToShow?.price}</p>
                 <p>
                   {State.database.chainId === 1 ? (
@@ -384,29 +395,32 @@ const JoinSuperfanModal = ({
                 </span>
               </p>
             </div> */}
-            <div className='w-full pr-4 pb-2'>
+            <div className="w-full pr-4 pb-2">
               {isSuperfan?.plan === whatToShow?.name ? (
-                <div className='flex flex-col space-y-1'>
-                  <div className='btn btn-success text-white capitalize text-lg'>
+                <div className="flex flex-col space-y-1">
+                  <div className="btn btn-success text-white capitalize text-lg">
                     Already subscribed
                   </div>{" "}
                   <a
                     href={explorerLink}
-                    target='_blank'
-                    className='text-primary underline text-center flex items-center justify-center gap-1 '>
+                    target="_blank"
+                    className="text-primary underline text-center flex items-center justify-center gap-1 "
+                  >
                     View on Solana Explorer <ExternalLink size={16} />
                   </a>
                 </div>
               ) : (
                 <button
                   onClick={() =>
-                    isSuperfan?.plan !== whatToShow?.name && handleBuySuperfanPlan()
+                    isSuperfan?.plan !== whatToShow?.name &&
+                    handleBuySuperfanPlan()
                   }
                   className={`btn btn-brand w-full capitalize text-lg ${
                     buyingPlan ? "loading" : ""
-                  } `}>
+                  } `}
+                >
                   Subscribe for
-                  <span className='flex justify-center items-center px-2 space-x-2'>
+                  <span className="flex justify-center items-center px-2 space-x-2">
                     {State.database.chainId === 1 ? (
                       <PolygonToken size={16}></PolygonToken>
                     ) : State.database.chainId === 0 ? (

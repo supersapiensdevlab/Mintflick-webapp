@@ -137,21 +137,21 @@ function Post(props) {
   async function getNftData(mintId) {
     const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
     const keypair = Keypair.generate();
-    console.log("keypair", keypair);
+    // console.log("keypair", keypair);
     const metaplex = new Metaplex(connection);
     metaplex.use(keypairIdentity(keypair));
-    console.log("mintId", mintId);
+    // console.log("mintId", mintId);
     const mint = new PublicKey(mintId);
 
     const nft = await metaplex.nfts().findByMint({ mintAddress: mint });
 
-    console.log("nft", nft);
+    // console.log("nft", nft);
     nft.json.image && setnftLink(nft.json.image);
     const largestAccounts = await connection.getTokenLargestAccounts(mint);
     const largestAccountInfo = await connection.getParsedAccountInfo(
       largestAccounts.value[0].address
     );
-    console.log(largestAccountInfo.value.data.parsed.info.owner);
+    // console.log(largestAccountInfo.value.data.parsed.info.owner);
     largestAccountInfo.value.data.parsed.info.owner &&
       setOwner(largestAccountInfo.value.data.parsed.info.owner);
   }

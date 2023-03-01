@@ -40,7 +40,7 @@ function Nfts() {
     <div className="w-full max-w-2xl  space-y-6 p-2">
       {!loader ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 2xl:grid-cols-3  gap-4 w-full p-4 lg:p-0">
-          {nfts.map((nft) => (
+          {nfts?.map((nft) => (
             <NftPostCard nftDetails={nft} />
           ))}
           <span className="text-lg font-bold text-brand1"> </span>
