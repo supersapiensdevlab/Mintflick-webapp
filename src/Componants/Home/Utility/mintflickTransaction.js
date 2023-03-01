@@ -17,7 +17,7 @@ export async function transactionWithFee(
   provider,
 ) {
   let tx;
-  console.log(sender, receiver, ammount);
+  console.log(sender, receiver, ammount,fee);
   console.log(provider);
   const connection = new Connection("https://api.devnet.solana.com");
   const blockhash = (await connection.getRecentBlockhash("finalized"))
@@ -30,14 +30,14 @@ export async function transactionWithFee(
     SystemProgram.transfer({
       fromPubkey: new PublicKey(sender),
       toPubkey: new PublicKey(receiver),
-      lamports: ammount * (1 - fee) * LAMPORTS_PER_SOL,
+      lamports: Math.round(ammount * (1 - fee) * LAMPORTS_PER_SOL),
     }),
   );
   transaction.add(
     SystemProgram.transfer({
       fromPubkey: new PublicKey(sender),
       toPubkey: new PublicKey("8TvHtNUsieHsr1xDwDCVLFBxPPeSWQ3zm6aigXfMEBEE"),
-      lamports: ammount * fee * LAMPORTS_PER_SOL,
+      lamports: Math.round(ammount * fee * LAMPORTS_PER_SOL),
     }),
   );
   await provider
