@@ -18,7 +18,7 @@ export default function useUserActions() {
         State.updateDatabase({
           feedData: data,
         });
-        loadNftsData();
+        // loadNftsData();
       })
       .catch(function (error) {
         console.log(error);

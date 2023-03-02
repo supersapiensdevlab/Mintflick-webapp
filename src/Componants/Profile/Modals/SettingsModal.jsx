@@ -30,6 +30,9 @@ import LinkNewWalletModal from "../../Home/Modals/LinkNewWalletModal";
 import ListNavigation from "../ListNavigation";
 import Snippets from "../AccountSettings/Snippets";
 import { Image } from "react-img-placeholder";
+import superfanBasic from "../../../Assets/SuperfanPlans/basic.webp";
+import superfanSilver from "../../../Assets/SuperfanPlans/silver.webp";
+import superfanGold from "../../../Assets/SuperfanPlans/gold.webp";
 
 function SettingsModal(props) {
   const [activeTab, setactiveTab] = useState("editProfile");
@@ -425,7 +428,7 @@ function SettingsModal(props) {
               >
                 <div className="flex w-full bg-slate-200 dark:bg-slate-700 h-fit rounded-lg overflow-hidden ">
                   <img
-                    src={planImage}
+                    src={superfanBasic}
                     className=" w-32 bg-red-600 object-cover"
                     onClick={() => {
                       handlePlanImageUpdate("basic");
@@ -513,7 +516,7 @@ function SettingsModal(props) {
               >
                 <div className="flex w-full bg-slate-200 dark:bg-slate-700 h-fit rounded-lg overflow-hidden ">
                   <img
-                    src={planImage}
+                    src={superfanSilver}
                     className=" w-32 bg-red-600 object-cover"
                     onClick={() => {
                       handlePlanImageUpdate("silver");
@@ -601,7 +604,7 @@ function SettingsModal(props) {
               >
                 <div className="flex w-full bg-slate-200 dark:bg-slate-700 h-fit rounded-lg overflow-hidden ">
                   <img
-                    src={planImage}
+                    src={superfanGold}
                     className=" w-32 bg-red-600 object-cover"
                     onClick={() => {
                       handlePlanImageUpdate("gold");

@@ -29,7 +29,7 @@ function ListNFTModal({
 }) {
   const State = useContext(UserContext);
   const [successMessage, setSuccessMessage] = useState(
-    "Please enter the price & confirm to list the NFT for sale",
+    "Please enter the price & confirm to list the NFT for sale"
   );
   const [listing, setListing] = useState(false);
   const [loadFeed, loadUser, loadProfileCard, loadNftsData] = useUserActions();
@@ -39,7 +39,7 @@ function ListNFTModal({
   const clearData = () => {
     setListing(false);
     setSuccessMessage(
-      "Please enter the price & confirm to list the NFT for sale",
+      "Please enter the price & confirm to list the NFT for sale"
     );
   };
 
@@ -55,7 +55,7 @@ function ListNFTModal({
 
           signTransactionWithWallet(
             response.data.result.encoded_transaction,
-            State.database.provider,
+            State.database.provider
           )
             .then((signedTx) => {
               console.log(signedTx);
@@ -68,17 +68,23 @@ function ListNFTModal({
                   setListModalOpen(false);
                 })
                 .catch((error) => {
-                  State.toast("error", error.message);
+                  State.toast(
+                    "error",
+                    "Gas Station Signing teransaction failed!"
+                  );
                   setListing(false);
                 });
             })
             .catch((error) => {
-              State.toast("error", error.message);
+              State.toast("error", "Signing transaction with wallet failed!");
               setListing(false);
             });
         })
         .catch((error) => {
-          State.toast("error", error.message);
+          State.toast(
+            "error",
+            "Error while listing your NFT,please try again!"
+          );
           setListing(false);
         });
     } else {
@@ -90,11 +96,12 @@ function ListNFTModal({
     <div
       className={`${
         listModalOpen && "modal-open"
-      } modal  modal-bottom sm:modal-middle`}>
-      <div className='modal-box p-0 bg-slate-100 dark:bg-slate-800 '>
-        <div className='w-full h-fit p-2 bg-slate-300 dark:bg-slate-700'>
-          <div className='flex justify-between items-center p-2'>
-            <h3 className='flex items-center gap-2 font-bold text-lg text-brand2'>
+      } modal  modal-bottom sm:modal-middle`}
+    >
+      <div className="modal-box p-0 bg-slate-100 dark:bg-slate-800 ">
+        <div className="w-full h-fit p-2 bg-slate-300 dark:bg-slate-700">
+          <div className="flex justify-between items-center p-2">
+            <h3 className="flex items-center gap-2 font-bold text-lg text-brand2">
               <CheckupList />
               List NFT for sale
             </h3>
@@ -103,16 +110,17 @@ function ListNFTModal({
                 setListModalOpen(false);
                 clearData();
               }}
-              className='text-brand2 cursor-pointer'></X>
+              className="text-brand2 cursor-pointer"
+            ></X>
           </div>
         </div>
 
-        <div className='flex flex-col flex-wrap p-4 w-full space-y-4 justify-center text-white'>
+        <div className="flex flex-col flex-wrap p-4 w-full space-y-4 justify-center text-white">
           {contentType === "video" && (
-            <div className='w-full rounded-lg    overflow-hidden aspect-video  dark:bg-slate-900 bg-slate-300 object-cover'>
+            <div className="w-full rounded-lg    overflow-hidden aspect-video  dark:bg-slate-900 bg-slate-300 object-cover">
               <ReactPlayer
-                className='w-full'
-                width='100%'
+                className="w-full"
+                width="100%"
                 height={"100%"}
                 playing={true}
                 muted={true}
@@ -124,22 +132,22 @@ function ListNFTModal({
           )}
 
           {contentType === "post" && (
-            <img src={content} className='  w-full object-cover rounded-lg' />
+            <img src={content} className="  w-full object-cover rounded-lg" />
           )}
-          <div className='form-control'>
-            <label className='input-group'>
+          <div className="form-control">
+            <label className="input-group">
               <input
                 min={1}
-                type='number'
-                placeholder='1'
-                className='input input-bordered input-sm w-24'
+                type="number"
+                placeholder="1"
+                className="input input-bordered input-sm w-24"
                 value={price}
                 onChange={(e) => setPrice(e.target.value)}
                 required={true}
               />
-              <span className='text-brand3 bg-slate-300 dark:bg-slate-600 '>
+              <span className="text-brand3 bg-slate-300 dark:bg-slate-600 ">
                 {State.database.chainId === 0 ? (
-                  <div className='flex'>
+                  <div className="flex">
                     <SolanaToken></SolanaToken> &nbsp; SOL
                   </div>
                 ) : (
@@ -155,7 +163,8 @@ function ListNFTModal({
             onClick={handleListing}
             className={`btn  
                     btn-brand
-                  w-full ${listing ? "loading" : ""} `}>
+                  w-full ${listing ? "loading" : ""} `}
+          >
             {listing ? "Listing NFT for sale" : "confirm"}
           </button>
         </div>

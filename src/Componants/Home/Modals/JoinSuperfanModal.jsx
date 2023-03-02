@@ -13,6 +13,11 @@ import superfan_basic from "../../../Assets/logos/icons/superfans/superfan_basic
 import superfan_gold from "../../../Assets/logos/icons/superfans/superfan_gold.svg";
 
 import superfan_silver from "../../../Assets/logos/icons/superfans/superfan_silver.svg";
+
+import superfanBasic from "../../../Assets/SuperfanPlans/basic.webp";
+import superfanSilver from "../../../Assets/SuperfanPlans/silver.webp";
+import superfanGold from "../../../Assets/SuperfanPlans/gold.webp";
+
 import { transactionWithFee } from "../Utility/mintflickTransaction";
 
 const JoinSuperfanModal = ({
@@ -24,19 +29,19 @@ const JoinSuperfanModal = ({
 }) => {
   const [plans, setPlans] = useState([
     {
-      img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYttbDyk8tE55gznNpc1ujtwlaNTtX4ahdrg&usqp=CAU",
+      img: superfanBasic,
       name: "Basic",
       description: `${superfan_data?.perks}`,
       price: `${superfan_data?.price}`,
     },
     {
-      img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLL5-aWLswOM1S1pvyzl_K9pPV0WL2KDSjJA&usqp=CAU",
+      img: superfanSilver,
       name: "Silver",
       description: `${superfan_data?.perks2}`,
       price: `${superfan_data?.price2}`,
     },
     {
-      img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQASf34hYLt1x9akOACzs-0nCeYzmKP1zeeow&usqp=CAU",
+      img: superfanGold,
       name: "Gold",
       description: `${superfan_data?.perks3}`,
       price: `${superfan_data?.price3}`,
@@ -46,19 +51,19 @@ const JoinSuperfanModal = ({
   useEffect(() => {
     setPlans([
       {
-        img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYttbDyk8tE55gznNpc1ujtwlaNTtX4ahdrg&usqp=CAU",
+        img: superfanBasic,
         name: "Basic",
         description: `${superfan_data?.perks}`,
         price: `${superfan_data?.price}`,
       },
       {
-        img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLL5-aWLswOM1S1pvyzl_K9pPV0WL2KDSjJA&usqp=CAU",
+        img: superfanSilver,
         name: "Silver",
         description: `${superfan_data?.perks2}`,
         price: `${superfan_data?.price2}`,
       },
       {
-        img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQASf34hYLt1x9akOACzs-0nCeYzmKP1zeeow&usqp=CAU",
+        img: superfanGold,
         name: "Gold",
         description: `${superfan_data?.perks3}`,
         price: `${superfan_data?.price3}`,
@@ -262,7 +267,7 @@ const JoinSuperfanModal = ({
                     } my-2 flex w-full cursor-pointer bg-slate-200 dark:bg-slate-700 h-fit rounded-lg overflow-hidden hover:ring-2 ring-primary dark:ring-brand`}
                   >
                     <img
-                      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYttbDyk8tE55gznNpc1ujtwlaNTtX4ahdrg&usqp=CAU"
+                      src={plan.img}
                       className="aspect-[4/3] w-32 bg-red-600 object-cover"
                     />
                     <span className="p-2 h-full flex-grow ">

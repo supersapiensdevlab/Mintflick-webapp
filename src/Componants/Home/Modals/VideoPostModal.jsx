@@ -56,7 +56,7 @@ function VideoPostModal({ setVideoPostModalOpen }) {
   const [showWalkthrough, setshowWalkthrough] = useState(
     State.database.userData?.data.user.seenIntro?.videoWalkthrough
       ? false
-      : true,
+      : true
   );
   //walkthrough data
   const walkthroughData = [
@@ -245,13 +245,13 @@ function VideoPostModal({ setVideoPostModalOpen }) {
       videoData.videoName,
       videoData.description,
       url,
-      selectedVideo.file,
+      selectedVideo.file
     )
       .then((mintRequest) => {
         console.log(mintRequest);
         signTransactionWithWallet(
           mintRequest.data.result.encoded_transaction,
-          State.database.provider,
+          State.database.provider
         )
           .then((signedTx) => {
             signWithRelayer(signedTx)
@@ -260,11 +260,23 @@ function VideoPostModal({ setVideoPostModalOpen }) {
                 setbtnText("NFT Minted");
                 nftMinted(formData, mintRequest.data?.result.mint);
               })
-              .catch((error) => State.toast("error", error.message));
+              .catch((error) => {
+                State.toast(
+                  "error",
+                  "Gas Station Signing teransaction failed!"
+                );
+                setUploadingVideo(false);
+              });
           })
-          .catch((error) => State.toast("error", error.message));
+          .catch((error) => {
+            State.toast("error", "Signing transaction with wallet failed!");
+            setUploadingVideo(false);
+          });
       })
-      .catch((error) => State.toast("error", error.message));
+      .catch((error) => {
+        State.toast("error", "Error while minting your NFT,please try again!");
+        setUploadingVideo(false);
+      });
 
     console.log(mintRequest);
   };
@@ -302,7 +314,7 @@ function VideoPostModal({ setVideoPostModalOpen }) {
         // );
         await signTransaction(
           data.data.result.encoded_transaction,
-          `${process.env.REACT_APP_FEEPAYER_PRIVATEKEY}`,
+          `${process.env.REACT_APP_FEEPAYER_PRIVATEKEY}`
         )
           .then(async (res) => {
             partialSignWithWallet(res, State.database?.provider).then(
@@ -310,7 +322,7 @@ function VideoPostModal({ setVideoPostModalOpen }) {
                 setMintSuccess("NFT Listed Successfully");
                 setUploadingVideo(false);
                 await loadNfts();
-              },
+              }
             );
           })
           .catch((err) => {
@@ -395,11 +407,11 @@ function VideoPostModal({ setVideoPostModalOpen }) {
           let formData = new FormData(); // Currently empty
           formData.append(
             "userName",
-            State.database.userData.data?.user.username,
+            State.database.userData.data?.user.username
           );
           formData.append(
             "userImage",
-            State.database.userData.data?.user.profile_image,
+            State.database.userData.data?.user.profile_image
           );
 
           formData.append("videoName", videoData.videoName);
@@ -418,7 +430,7 @@ function VideoPostModal({ setVideoPostModalOpen }) {
           formData.append(
             "videoImage",
             selectedThumbnail.file,
-            selectedThumbnail.name,
+            selectedThumbnail.name
           );
           formData.append("videoHash", cid);
 
@@ -475,10 +487,10 @@ function VideoPostModal({ setVideoPostModalOpen }) {
                   headers: {
                     "content-type": "multipart/form-data",
                     "auth-token": JSON.stringify(
-                      localStorage.getItem("authtoken"),
+                      localStorage.getItem("authtoken")
                     ),
                   },
-                },
+                }
               )
               .then((res) => {
                 State.toast("success", "Your video uplaoded successfully!");
@@ -489,7 +501,7 @@ function VideoPostModal({ setVideoPostModalOpen }) {
               .catch((err) => {
                 State.toast(
                   "error",
-                  "Oops!somthing went wrong uplaoding video!",
+                  "Oops!somthing went wrong uplaoding video!"
                 );
                 console.log(err);
                 clearState();
@@ -535,10 +547,10 @@ function VideoPostModal({ setVideoPostModalOpen }) {
 
   return (
     <>
-      <div className='modal-box p-0 bg-slate-100 dark:bg-slate-800 '>
-        <div className='w-full h-fit p-2 bg-slate-300 dark:bg-slate-700'>
-          <div className='flex justify-between items-center p-2'>
-            <h3 className='flex items-center gap-2 font-bold text-lg text-brand2'>
+      <div className="modal-box p-0 bg-slate-100 dark:bg-slate-800 ">
+        <div className="w-full h-fit p-2 bg-slate-300 dark:bg-slate-700">
+          <div className="flex justify-between items-center p-2">
+            <h3 className="flex items-center gap-2 font-bold text-lg text-brand2">
               <Video />
               Upload Video
             </h3>
@@ -547,40 +559,43 @@ function VideoPostModal({ setVideoPostModalOpen }) {
                 clearState();
                 setTagged([]);
               }}
-              className='text-brand2 cursor-pointer'></X>
+              className="text-brand2 cursor-pointer"
+            ></X>
           </div>
         </div>
         <form onSubmit={handleSubmit}>
-          <div className='w-full p-4 space-y-3'>
-            <div className='flex flex-col  gap-1 relative'>
+          <div className="w-full p-4 space-y-3">
+            <div className="flex flex-col  gap-1 relative">
               {uploadingVideo && (
-                <div className='text-white gap-2 font-semibold absolute top-0 left-0 w-full h-full bg-white/10 backdrop-blur-sm rounded-lg flex flex-col items-center justify-center'>
+                <div className="text-white gap-2 font-semibold absolute top-0 left-0 w-full h-full bg-white/10 backdrop-blur-sm rounded-lg flex flex-col items-center justify-center">
                   <Main_logo /> {btnText}
                 </div>
               )}
               <label
-                id='walkthroughVideoNftStep1'
-                htmlFor='videothumbnail'
-                className='  cursor-pointer flex flex-col items-center gap-2  w-full p-2 border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4'>
+                id="walkthroughVideoNftStep1"
+                htmlFor="videothumbnail"
+                className="  cursor-pointer flex flex-col items-center gap-2  w-full p-2 border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4"
+              >
                 {selectedThumbnail && selectedThumbnail.file && (
-                  <div className='w-72 flex items-center justify-center rounded-lg aspect-square  dark:bg-slate-900 bg-slate-300 object-cover'>
+                  <div className="w-72 flex items-center justify-center rounded-lg aspect-square  dark:bg-slate-900 bg-slate-300 object-cover">
                     <img src={selectedThumbnail.localurl}></img>
                   </div>
                 )}
                 <div
-                  htmlFor='videothumbnail'
-                  className='flex  cursor-pointer gap-1'>
+                  htmlFor="videothumbnail"
+                  className="flex  cursor-pointer gap-1"
+                >
                   <input
-                    id='videothumbnail'
-                    type='file'
-                    name='videoImage'
-                    accept='.jpg,.png,.jpeg,.gif,.webp'
+                    id="videothumbnail"
+                    type="file"
+                    name="videoImage"
+                    accept=".jpg,.png,.jpeg,.gif,.webp"
                     onChange={onVideoFileChange}
-                    className='sr-only '
+                    className="sr-only "
                     required={true}
                   />
                   {selectedThumbnail && selectedThumbnail.file ? (
-                    <FileCheck className='text-emerald-700' />
+                    <FileCheck className="text-emerald-700" />
                   ) : (
                     <File />
                   )}
@@ -590,14 +605,15 @@ function VideoPostModal({ setVideoPostModalOpen }) {
                 </div>
               </label>
               <div
-                id='walkthroughVideoNftStep2'
-                htmlFor='videofile'
-                className=' cursor-pointer flex items-center justify-center flex-col  gap-2  w-full p-2 border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4'>
+                id="walkthroughVideoNftStep2"
+                htmlFor="videofile"
+                className=" cursor-pointer flex items-center justify-center flex-col  gap-2  w-full p-2 border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4"
+              >
                 {selectedVideo && selectedVideo.localurl && (
-                  <div className='w-full rounded-lg    overflow-hidden aspect-video  dark:bg-slate-900 bg-slate-300 object-cover'>
+                  <div className="w-full rounded-lg    overflow-hidden aspect-video  dark:bg-slate-900 bg-slate-300 object-cover">
                     <ReactPlayer
-                      className='w-full'
-                      width='100%'
+                      className="w-full"
+                      width="100%"
                       height={"100%"}
                       playing={true}
                       muted={true}
@@ -607,18 +623,18 @@ function VideoPostModal({ setVideoPostModalOpen }) {
                     />
                   </div>
                 )}
-                <label className='flex cursor-pointer gap-1'>
+                <label className="flex cursor-pointer gap-1">
                   <input
-                    id='videofile'
-                    type='file'
-                    accept='.mp4, .mkv, .mov, .avi'
-                    name='videoFile'
+                    id="videofile"
+                    type="file"
+                    accept=".mp4, .mkv, .mov, .avi"
+                    name="videoFile"
                     onChange={onVideoFileChange}
-                    className='sr-only '
+                    className="sr-only "
                     required={true}
                   />
                   {selectedVideo && selectedVideo.file ? (
-                    <FileCheck className='text-emerald-700' />
+                    <FileCheck className="text-emerald-700" />
                   ) : (
                     <File />
                   )}
@@ -628,11 +644,11 @@ function VideoPostModal({ setVideoPostModalOpen }) {
                 </label>
               </div>
             </div>
-            <div id='walkthroughVideoNftStep3' className='flex gap-2'>
+            <div id="walkthroughVideoNftStep3" className="flex gap-2">
               <input
-                type='text'
-                placeholder='Video title'
-                className='input w-full '
+                type="text"
+                placeholder="Video title"
+                className="input w-full "
                 value={videoData.videoName}
                 onChange={(e) =>
                   setVideoData({ ...videoData, videoName: e.target.value })
@@ -640,10 +656,11 @@ function VideoPostModal({ setVideoPostModalOpen }) {
                 required={true}
               />
               <select
-                className='select w-44 font-semibold'
+                className="select w-44 font-semibold"
                 onChange={(e) =>
                   setVideoData({ ...videoData, category: e.target.value })
-                }>
+                }
+              >
                 <option disabled selected>
                   Pick Category
                 </option>
@@ -662,50 +679,54 @@ function VideoPostModal({ setVideoPostModalOpen }) {
             value={videoData.description}
           ></textarea> */}
             <MentionsInput
-              id='walkthroughVideoNftStep4'
+              id="walkthroughVideoNftStep4"
               value={videoData.description}
               onChange={(e) =>
                 setVideoData({ ...videoData, description: e.target.value })
               }
               style={defaultStyle}
-              className='textarea font-normal w-full h-24  pt-2 focus:outline-0 overflow-scroll mentionsinputoverflow'
+              className="textarea font-normal w-full h-24  pt-2 focus:outline-0 overflow-scroll mentionsinputoverflow"
               placeholder={"Enter caption."}
               a11ySuggestionsListLabel={"Suggested mentions"}
-              inputRef={mentionsRef}>
+              inputRef={mentionsRef}
+            >
               <Mention
-                trigger='@'
+                trigger="@"
                 data={renderData}
-                markup='@__display__'
+                markup="@__display__"
                 appendSpaceOnAdd
                 onAdd={handleAdd}
               />
             </MentionsInput>
             <span
               onClick={() => setadvancedOptionsShow(!advancedOptionsShow)}
-              className='flex px-2 items-center gap-1 font-semibold text-brand3 cursor-pointer'>
+              className="flex px-2 items-center gap-1 font-semibold text-brand3 cursor-pointer"
+            >
               Advanced options
               <label
                 class={`swap ${
                   advancedOptionsShow && "swap-active"
-                } swap-rotate text-6xl`}>
-                <div class='swap-on'>
+                } swap-rotate text-6xl`}
+              >
+                <div class="swap-on">
                   <ChevronUp />
                 </div>
-                <div class='swap-off'>
+                <div class="swap-off">
                   <ChevronDown />
                 </div>
               </label>
             </span>
             {advancedOptionsShow && (
-              <div className='flex flex-col gap-1 w-full '>
+              <div className="flex flex-col gap-1 w-full ">
                 <select
-                  className='select font-semibold  '
+                  className="select font-semibold  "
                   onChange={(e) =>
                     setVideoData({
                       ...videoData,
                       allowAttribution: e.target.value,
                     })
-                  }>
+                  }
+                >
                   <option disabled selected>
                     Allow Attribution?
                   </option>
@@ -714,13 +735,14 @@ function VideoPostModal({ setVideoPostModalOpen }) {
                   ))}
                 </select>
                 <select
-                  className='select font-semibold  '
+                  className="select font-semibold  "
                   onChange={(e) =>
                     setVideoData({
                       ...videoData,
                       commercialUse: e.target.value,
                     })
-                  }>
+                  }
+                >
                   <option disabled selected>
                     Commercial Use?
                   </option>
@@ -729,13 +751,14 @@ function VideoPostModal({ setVideoPostModalOpen }) {
                   ))}
                 </select>
                 <select
-                  className='select font-semibold  '
+                  className="select font-semibold  "
                   onChange={(e) =>
                     setVideoData({
                       ...videoData,
                       derivativeWorks: e.target.value,
                     })
-                  }>
+                  }
+                >
                   <option disabled selected>
                     Derivative Works?
                   </option>
@@ -746,44 +769,45 @@ function VideoPostModal({ setVideoPostModalOpen }) {
               </div>
             )}
             {showListingOption ? (
-              <div className='w-fit flex space-x-2 text-green-500'>
+              <div className="w-fit flex space-x-2 text-green-500">
                 {mintSuccess}
               </div>
             ) : (
               <></>
             )}
             {mintSuccess == "" || mintSuccess == "NFT Minted Successfully" ? (
-              <div className='w-fit flex space-x-2'>
+              <div className="w-fit flex space-x-2">
                 {showListingOption ? (
-                  <div className='flex items-center'>
-                    <span className='label-text text-brand3'>List NFT</span>
+                  <div className="flex items-center">
+                    <span className="label-text text-brand3">List NFT</span>
                   </div>
                 ) : (
                   <label
-                    id='walkthroughVideoNftStep5'
-                    className='flex items-center cursor-pointer gap-2'>
+                    id="walkthroughVideoNftStep5"
+                    className="flex items-center cursor-pointer gap-2"
+                  >
                     <input
-                      type='checkbox'
+                      type="checkbox"
                       value={isNFT}
                       onChange={() => setIsNFT(!isNFT)}
-                      className='checkbox checkbox-primary'
+                      className="checkbox checkbox-primary"
                     />
-                    <span className='label-text text-brand3'>Mint as NFT</span>
+                    <span className="label-text text-brand3">Mint as NFT</span>
                   </label>
                 )}
                 {isNFT && showListingOption && (
-                  <div className='form-control'>
-                    <label className='input-group'>
+                  <div className="form-control">
+                    <label className="input-group">
                       <input
                         min={1}
-                        type='number'
-                        placeholder='1'
-                        className='input input-bordered input-sm w-24'
+                        type="number"
+                        placeholder="1"
+                        className="input input-bordered input-sm w-24"
                         value={nftPrice}
                         onChange={(e) => setNFTPrice(e.target.value)}
                         required={true}
                       />
-                      <span className='text-brand3 bg-slate-300 dark:bg-slate-600 '>
+                      <span className="text-brand3 bg-slate-300 dark:bg-slate-600 ">
                         {State.database.chainId === 0 ? (
                           <>
                             <SolanaToken></SolanaToken>&nbsp; SOL
@@ -810,14 +834,15 @@ function VideoPostModal({ setVideoPostModalOpen }) {
             Post Video
           </button> */}
             {showListingOption && mintSuccess == "NFT Minted Successfully" ? (
-              <div className='w-full flex justify-around space-x-1'>
+              <div className="w-full flex justify-around space-x-1">
                 <button
                   onClick={State.database?.chainId == 1 ? null : listNFTForSale}
                   className={`btn  ${
                     !selectedVideo?.file && selectedThumbnail?.file
                       ? "btn-disabled"
                       : "btn-brand"
-                  } w-1/2 ${uploadingVideo ? "loading " : ""}`}>
+                  } w-1/2 ${uploadingVideo ? "loading " : ""}`}
+                >
                   List NFT
                 </button>
                 <button
@@ -829,7 +854,8 @@ function VideoPostModal({ setVideoPostModalOpen }) {
                     !selectedVideo?.file && selectedThumbnail?.file
                       ? "btn-disabled"
                       : "btn-brand"
-                  } w-1/2`}>
+                  } w-1/2`}
+                >
                   Close
                 </button>
               </div>
@@ -845,7 +871,8 @@ function VideoPostModal({ setVideoPostModalOpen }) {
                       !selectedVideo?.file && selectedThumbnail?.file
                         ? "btn-disabled"
                         : "btn-brand"
-                    } w-full`}>
+                    } w-full`}
+                  >
                     Close
                   </button>
                 ) : (
@@ -857,7 +884,8 @@ function VideoPostModal({ setVideoPostModalOpen }) {
                       videoData.description !== ""
                         ? "btn-brand"
                         : "btn-disabled"
-                    } ${uploadingVideo ? "loading" : ""}`}>
+                    } ${uploadingVideo ? "loading" : ""}`}
+                  >
                     {btnText}
                   </button>
                 )}
