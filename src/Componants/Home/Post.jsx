@@ -135,7 +135,7 @@ function Post(props) {
   const [nftLink, setnftLink] = useState(null);
 
   async function getNftData(mintId) {
-    const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
+    const connection = new Connection(process.env.REACT_APP_SOLANA_RPC);
     const keypair = Keypair.generate();
     // console.log("keypair", keypair);
     const metaplex = new Metaplex(connection);
