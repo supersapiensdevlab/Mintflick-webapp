@@ -112,10 +112,10 @@ function AddPost() {
           <label
             tabindex="0"
             className={`${
-              State.database.showHeader ? "gap-2 " : "btn-circle"
-            } btn btn-md rounded-full btn-brand transition-all ease-in-out capitalize font-medium`}
+              State.database.showHeader ? "gap-1 " : "btn-circle"
+            } btn btn-md rounded-full btn-brand transition-all ease-in-out capitalize font-semibold`}
           >
-            <Plus />
+            <Plus size={State.database.showHeader ? 20 : 24} />
             {State.database.showHeader && <span>New Post</span>}
           </label>
           <ul

@@ -966,13 +966,13 @@ function Post(props) {
           </div>
         </div>
         <p className="font-normal text-base text-brand2 w-full">{props.text}</p>
-        {props.contentType === "post" && tokenId && !props.image && (
+        {props.contentType === "post" && tokenId && !props.image && nftLink && (
           <div className="items-center w-full     align-middle justify-center   flex rounded">
             <Image
               className="  w-full  object-contain"
               width="100%"
               height="100%"
-              src={nftLink ? nftLink : placeholderLogo}
+              src={nftLink}
               alt={"Post Image"}
               placeholder={
                 <div className="flex flex-col justify-center items-center gap-1">
@@ -995,13 +995,7 @@ function Post(props) {
                     className="h-full  aspect-auto w-full  object-contain"
                     width="100%"
                     height="100%"
-                    src={
-                      nftLink
-                        ? nftLink
-                        : props.image
-                        ? props.image
-                        : placeholderLogo
-                    }
+                    src={nftLink ? nftLink : props.image}
                     alt={"Post Image"}
                     placeholder={
                       <div className="flex flex-col justify-center items-center gap-1">

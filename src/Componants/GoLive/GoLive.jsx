@@ -7,6 +7,7 @@ import ReactPlayer from "react-player";
 import {
   AccessPointOff,
   CalendarTime,
+  Edit,
   PlayerPlay,
   PlayerRecord,
   X,
@@ -141,11 +142,11 @@ function GoLive() {
     derivativeWorks: "",
   });
 
-  const [streamDetails, setStreamDetails] = useState({
-    name: "",
-    description: "",
-    category: "other",
-  });
+  const [streamDetails, setStreamDetails] = useState(
+    user.database.userData.data.user.streamDetails
+  );
+  const [editOption, setEditOption] = useState(streamDetails ? false : true);
+
   const [streamLink, setStreamLink] = useState({
     image: "",
     url: "",
@@ -683,6 +684,7 @@ function GoLive() {
           )
           .then((data) => {
             user.toast("success", "Stream Details Updated Successfully!");
+            setEditOption(false);
             loadUser();
           });
       } catch (err) {
@@ -799,12 +801,11 @@ function GoLive() {
               />
             ) : (
               <img
-                className="border-2 border-slate-500 aspect-video w-full object-cover rounded-lg" 
+                className="border-2 border-slate-500 aspect-video w-full object-cover rounded-lg"
                 src={
                   user.database.userData.data?.user.thumbnail
                     ? user.database.userData.data.user.thumbnail
-                    :
-                  placeholder
+                    : placeholder
                 }
               />
             )}
@@ -882,15 +883,133 @@ function GoLive() {
             )}
           </div>
           <div className="w-full flex  gap-2">
+            <div
+              className={`${
+                editOption && "modal-open"
+              } modal  modal-bottom sm:modal-middle`}
+            >
+              <div className="modal-box p-0 bg-slate-100 dark:bg-slate-800 ">
+                <div className="w-full h-fit p-2 bg-slate-300 dark:bg-slate-700">
+                  <div className="flex justify-between items-center p-2">
+                    <h3 className="flex items-center gap-2 font-bold text-lg text-brand2">
+                      <Edit />
+                      Stream details
+                    </h3>
+                    <X
+                      onClick={() => {
+                        setEditOption(false);
+                      }}
+                      className="text-brand2 cursor-pointer"
+                    ></X>
+                  </div>
+                </div>
+                <form className="p-4" onSubmit={handleStreamDetails}>
+                  <div>
+                    <label className=" text-sm text-brand3">
+                      Stream Title
+                      <span className="mx-2 text-sm text-brand5 fonst-base ">
+                        reqired
+                      </span>
+                    </label>
+                    <input
+                      className="input w-full"
+                      required={true}
+                      value={streamDetails.name}
+                      onChange={(e) => {
+                        setStreamDetails({
+                          ...streamDetails,
+                          name: e.target.value,
+                        });
+                        setUndoButton(true);
+                      }}
+                      type="text"
+                    />
+                  </div>
+                  <div className="mt-2">
+                    <label className=" text-sm text-brand3">
+                      Stream Description{" "}
+                    </label>
+                    <textarea
+                      value={streamDetails.description}
+                      onChange={(e) => {
+                        setStreamDetails({
+                          ...streamDetails,
+                          description: e.target.value,
+                        });
+                        setUndoButton(true);
+                      }}
+                      rows={2}
+                      className="w-full textarea"
+                      type="text"
+                    />
+                  </div>
+                  <div className="mt-1">
+                    <label className=" text-sm text-brand3">
+                      Stream Category{" "}
+                      <span className="mx-2 text-sm text-brand5 fonst-base ">
+                        reqired
+                      </span>
+                    </label>
+                    <select
+                      required={true}
+                      className="select block w-full"
+                      onChange={(e) => {
+                        setStreamDetails({
+                          ...streamDetails,
+                          category: e.target.value,
+                        });
+                        setUndoButton(true);
+                      }}
+                      value={streamDetails.category}
+                    >
+                      <option disabled selected>
+                        Categories
+                      </option>
+                      {category.map((c) => (
+                        <option>{c}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="mt-4 flex gap-2 justify-end">
+                    {undoButton ? (
+                      <button
+                        onClick={cancelStreamDetails}
+                        className="btn btn-sm btn-ghost"
+                      >
+                        Undo
+                      </button>
+                    ) : (
+                      <></>
+                    )}
+                    <button className="btn w-full btn-success" type="submit">
+                      Update
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
             <div className="p-2 flex-grow flex flex-col gap-1 text-brand3 h-fit bg-slate-100 dark:bg-slate-800  rounded-xl ">
-              <div className="text-brand5 text-base font-semibold">
+              <div className="flex items-center gap-2 justify-between text-brand5 text-base font-semibold">
                 Stream Title
+                <span
+                  className="text-sm text-primary cursor-pointer"
+                  onClick={() => setEditOption(true)}
+                >
+                  edit
+                </span>
               </div>
               <div className="text-brand2 text-base ">{streamDetails.name}</div>
             </div>
             <div className="p-2 w-fit flex flex-col gap-1 text-brand3 h-fit bg-slate-100 dark:bg-slate-800  rounded-xl ">
-              <div className="text-brand5 text-base font-semibold">
-                Stream Category
+              <div className="flex items-center gap-2 justify-between text-brand5 text-base font-semibold">
+                Stream Category{" "}
+                <span
+                  className="text-sm text-primary cursor-pointer"
+                  onClick={() => setEditOption(true)}
+                >
+                  edit
+                </span>
               </div>
               <div className="text-brand2 w-fit text-base ">
                 {streamDetails.category}
@@ -899,8 +1018,14 @@ function GoLive() {
           </div>
           <div className="w-full flex flex-col gap-2">
             <div className="p-2 flex flex-col gap-1 text-brand3 h-fit bg-slate-100 dark:bg-slate-800  rounded-xl ">
-              <div className="text-brand5 text-base font-semibold">
-                Stream Description
+              <div className="flex items-center gap-2 justify-between text-brand5 text-base font-semibold">
+                Stream Description{" "}
+                <span
+                  className="text-sm text-primary cursor-pointer"
+                  onClick={() => setEditOption(true)}
+                >
+                  edit
+                </span>
               </div>
               <div className="text-brand2 text-base ">
                 {streamDetails.description}
@@ -987,7 +1112,7 @@ function GoLive() {
         </div>
 
         <div className="w-full lg:w-96 flex flex-col gap-2">
-          <div className="collapse collapse-arrow w-full text-brand3  bg-slate-100 dark:bg-slate-800  rounded-xl  ">
+          <div className="collapse collapse-open  w-full text-brand3  bg-slate-100 dark:bg-slate-800  rounded-xl  ">
             <input type="checkbox" />
             <div className="collapse-title text-xl font-medium">
               <span className="font-semibold text-base ">Sreaming Details</span>
@@ -1119,82 +1244,6 @@ function GoLive() {
               </button>
             </form>
           </div>{" "}
-          <div className="p-2 flex flex-col gap-1 text-brand3 h-fit bg-slate-100 dark:bg-slate-800  rounded-xl ">
-            <form onSubmit={handleStreamDetails}>
-              <div>
-                <label className=" text-sm text-brand3">Stream Title </label>
-                <input
-                  className="input w-full"
-                  required={true}
-                  value={streamDetails.name}
-                  onChange={(e) => {
-                    setStreamDetails({
-                      ...streamDetails,
-                      name: e.target.value,
-                    });
-                    setUndoButton(true);
-                  }}
-                  type="text"
-                />
-              </div>
-              <div className="mt-2">
-                <label className=" text-sm text-brand3">
-                  Stream Description
-                </label>
-                <textarea
-                  required={true}
-                  value={streamDetails.description}
-                  onChange={(e) => {
-                    setStreamDetails({
-                      ...streamDetails,
-                      description: e.target.value,
-                    });
-                    setUndoButton(true);
-                  }}
-                  rows={2}
-                  className="w-full textarea"
-                  type="text"
-                />
-              </div>
-              <div className="mt-2">
-                <label className=" text-sm text-brand3">Stream Category</label>
-                <select
-                  className="select block w-full"
-                  onChange={(e) => {
-                    setStreamDetails({
-                      ...streamDetails,
-                      category: e.target.value,
-                    });
-                    setUndoButton(true);
-                  }}
-                  value={streamDetails.category}
-                >
-                  <option disabled selected>
-                    Categories
-                  </option>
-                  {category.map((c) => (
-                    <option>{c}</option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="mt-4 flex gap-2 justify-end">
-                {undoButton ? (
-                  <button
-                    onClick={cancelStreamDetails}
-                    className="btn btn-sm btn-ghost"
-                  >
-                    Undo
-                  </button>
-                ) : (
-                  <></>
-                )}
-                <button className="btn btn-sm btn-success" type="submit">
-                  Update
-                </button>
-              </div>
-            </form>
-          </div>
         </div>
       </div>
 
@@ -1451,10 +1500,10 @@ function GoLive() {
               onChange={(e) => setStreamSchedule(e.target.value)}
               className="w-full input"
               type={"datetime-local"}
-              min={moment().format("YYYY-MM-DDThh:mm")}
+              step={1800}
+              min={moment().format("YYYY-MM-DDTh:mm")}
               required={true}
             />
-
             <input
               className="btn btn-brand w-full"
               value={"Schedule stream"}
