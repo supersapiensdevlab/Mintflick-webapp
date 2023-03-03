@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { UserContext } from "../../Store";
 import { io } from "socket.io-client";
 import axios from "axios";
@@ -6,10 +6,16 @@ import { makeStorageClient } from "../../Helper/uploadHelper";
 import ReactPlayer from "react-player";
 import {
   AccessPointOff,
+  CalendarEvent,
   CalendarTime,
+  Cardboards,
+  ChevronDown,
   Edit,
+  PlayCard,
   PlayerPlay,
   PlayerRecord,
+  VideoMinus,
+  VideoPlus,
   X,
 } from "tabler-icons-react";
 import moment from "moment";
@@ -56,6 +62,9 @@ function GoLive() {
   const [recording, setRecording] = useState(false);
   const [newRecord, setNewRecord] = useState(0);
   const [recordUrl, setRecordUrl] = useState("");
+
+  //livepeer record
+  const [livepeerRecording, setlivepeerRecording] = useState(false);
 
   // Thumbnail
   const [uploadingFile, setUploadingFile] = useState(false);
@@ -122,7 +131,24 @@ function GoLive() {
   const [undoButton, setUndoButton] = useState(false);
 
   // Schedule Date & Time
-  const [streamSchedule, setStreamSchedule] = useState(null);
+  const [streamSchedule, setStreamSchedule] = useState(new Date().getTime());
+  function countdown(targetDate) {
+    const targetTime = new Date(targetDate).getTime();
+    const now = new Date().getTime();
+    const difference = targetTime - now;
+
+    if (difference <= 0) {
+      return `${0}days ${0}hours ${0}minutes`;
+    }
+
+    const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+    const hours = Math.floor(
+      (difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+    );
+    const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+    return `${days}days ${hours}hours ${minutes}minutes`;
+  }
+  const dateTimePicker = useRef(null);
   useEffect(() => {
     console.log(streamSchedule);
   }, [streamSchedule]);
@@ -143,7 +169,7 @@ function GoLive() {
   });
 
   const [streamDetails, setStreamDetails] = useState(
-    user.database.userData.data.user.streamDetails
+    user.database.userData?.data?.user?.streamDetails
   );
   const [editOption, setEditOption] = useState(streamDetails ? false : true);
 
@@ -162,20 +188,24 @@ function GoLive() {
   };
 
   useEffect(() => {
-    if (user.database.userData.data) {
+    loadUser();
+  }, []);
+
+  useEffect(() => {
+    if (user.database.userData?.data) {
       if (
-        user.database.userData.data.user &&
-        user.database.userData.data.user.multistream_platform
+        user.database.userData?.data.user &&
+        user.database.userData?.data.user.multistream_platform
       ) {
-        ////console.log("hello",user.database.userData.data.user.multistream_platform)
+        ////console.log("hello",user.database.userData?.data.user.multistream_platform)
         let new_array = [];
         for (
           let i = 0;
-          i < user.database.userData.data.user.multistream_platform.length;
+          i < user.database.userData?.data.user.multistream_platform.length;
           i++
         ) {
           new_array.push(
-            user.database.userData.data.user.multistream_platform[i]
+            user.database.userData?.data.user.multistream_platform[i]
           );
         }
         setMultiStreamConnected(new_array);
@@ -184,56 +214,61 @@ function GoLive() {
         setMultiStreamConnected([]);
       }
       setPlaybackUrl(
-        `https://cdn.livepeer.com/hls/${user.database.userData.data.user.livepeer_data.playbackId}/index.m3u8`
+        `https://cdn.livepeer.com/hls/${user.database.userData?.data.user.livepeer_data.playbackId}/index.m3u8`
       );
-      //setName(user.database.userData.data.user.livepeer_data.name);
-      setUserStreams(user.database.userData.data.user.livepeer_data);
+      //setName(user.database.userData?.data.user.livepeer_data.name);
+      setUserStreams(user.database.userData?.data.user.livepeer_data);
+      setlivepeerRecording(
+        user.database.userData?.data.user.livepeer_data.record
+      );
     }
     // eslint-disable-next-line
-  }, [user.database.userData.data?.user]);
+  }, [user.database.userData?.data?.user]);
 
-  useEffect(() => {
-    if (user.database.userData.data) {
-      const socket = io(`${process.env.REACT_APP_VIEWS_URL}`, {
-        transports: ["websocket", "polling"],
-        upgrade: false,
-        secure: true,
-        withCredentials: true,
-        extraHeaders: {
-          "my-custom-header": "abcd",
-        },
-      });
-      socket.on("connection");
-      socket.emit("joinlivestream", user.database.userData.data.user.username);
-      socket.on("count", (details) => {
-        if (details.room === user.database.userData.data.user.username) {
-          setLivestreamViews(details.roomSize);
-        }
-      });
-      socket.on("livecount", (details) => {
-        setLivestreamViews(details.roomSize);
-        // console.log('emitted');
-        // console.log('inc', livestreamViews);
-        setViewColor("green-500");
-        setViewAnimate("animate-pulse");
-        setTimeout(() => {
-          setViewColor("white");
-          setViewAnimate("animate-none");
-        }, 3000);
-      });
-      socket.on("removecount", (roomSize) => {
-        setLivestreamViews(roomSize);
-        // console.log('removecount emitted');
-        // console.log('dec', livestreamViews);
-        setViewColor("red-500");
-        setViewAnimate("animate-pulse");
-        setTimeout(() => {
-          setViewColor("white");
-          setViewAnimate("animate-none");
-        }, 3000);
-      });
-    }
-  }, [user.database.userData.data?.user]);
+  // Todo:enable this when user live count will fix
+
+  // useEffect(() => {
+  //   if (user.database.userData?.data) {
+  //     const socket = io(`${process.env.REACT_APP_VIEWS_URL}`, {
+  //       transports: ["websocket", "polling"],
+  //       upgrade: false,
+  //       secure: true,
+  //       withCredentials: true,
+  //       extraHeaders: {
+  //         "my-custom-header": "abcd",
+  //       },
+  //     });
+  //     socket.on("connection");
+  //     socket.emit("joinlivestream", user.database.userData?.data.user.username);
+  //     socket.on("count", (details) => {
+  //       if (details.room === user.database.userData?.data.user.username) {
+  //         setLivestreamViews(details.roomSize);
+  //       }
+  //     });
+  //     socket.on("livecount", (details) => {
+  //       setLivestreamViews(details.roomSize);
+  //       // console.log('emitted');
+  //       // console.log('inc', livestreamViews);
+  //       setViewColor("green-500");
+  //       setViewAnimate("animate-pulse");
+  //       setTimeout(() => {
+  //         setViewColor("white");
+  //         setViewAnimate("animate-none");
+  //       }, 3000);
+  //     });
+  //     socket.on("removecount", (roomSize) => {
+  //       setLivestreamViews(roomSize);
+  //       // console.log('removecount emitted');
+  //       // console.log('dec', livestreamViews);
+  //       setViewColor("red-500");
+  //       setViewAnimate("animate-pulse");
+  //       setTimeout(() => {
+  //         setViewColor("white");
+  //         setViewAnimate("animate-none");
+  //       }, 3000);
+  //     });
+  //   }
+  // }, [user.database.userData?.data?.user]);
 
   //set Stream Key
   const handleChange = (e) => {
@@ -245,7 +280,7 @@ function GoLive() {
   const addStreamingPlatform = async (props) => {
     setLoader(false);
     let postData = {
-      username: user.database.userData.data.user.username,
+      username: user.database.userData?.data.user.username,
       platform: {
         title: multiStreamValue.title,
         logo: multiStreamValue.logo,
@@ -258,7 +293,7 @@ function GoLive() {
 
     await axios({
       method: "post",
-      url: `${process.env.REACT_APP_SERVER_URL}/user.database.userData.data.user/add_multistream_platform`,
+      url: `${process.env.REACT_APP_SERVER_URL}/user.database.userData?.data.user/add_multistream_platform`,
       data: postData,
       headers: {
         "content-type": "application/json",
@@ -438,7 +473,7 @@ function GoLive() {
           setMintingProgress(100);
           axios
             .get(
-              `${process.env.REACT_APP_SERVER_URL}/user.database.userData.data.user/getLoggedInUser`,
+              `${process.env.REACT_APP_SERVER_URL}/user.database.userData?.data.user/getLoggedInUser`,
               {
                 headers: {
                   "content-type": "application/json",
@@ -501,6 +536,27 @@ function GoLive() {
       localurl: URL.createObjectURL(event.target.files[0]),
     });
   };
+  async function handleRecord() {
+    console.log("recording", !livepeerRecording, userStreams.id);
+    axios({
+      method: "POST",
+      url: `${process.env.REACT_APP_SERVER_URL}/user/toggleRecording`,
+      data: {
+        username: user.database.userData?.data.user.username,
+        recording: !livepeerRecording,
+        id: userStreams.id,
+      },
+      headers: {
+        "content-type": "application/json",
+        "auth-token": JSON.stringify(localStorage.getItem("authtoken")),
+      },
+    })
+      .then(() => setlivepeerRecording(!livepeerRecording))
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
   async function uploadThumbnail(e) {
     e.preventDefault();
     if (selectedFile) {
@@ -514,7 +570,7 @@ function GoLive() {
           const data = {
             url:
               "https://ipfs.io/ipfs/" + cid + "/" + selectedFile.file[0].name,
-            username: user.database.userData.data.user.username,
+            username: user.database.userData?.data.user.username,
           };
           const res = await axios({
             method: "POST",
@@ -556,7 +612,7 @@ function GoLive() {
   //   return client.put(file, { onRootCidReady, onStoredChunk });
   // }
 
-  // console.log(user.database.userData.data.user);
+  // console.log(user.database.userData?.data.user);
 
   const saveStream = () => {
     const blobobject = new Blob([recordvideo?.videoFile]);
@@ -572,12 +628,12 @@ function GoLive() {
   };
 
   useEffect(() => {
-    if (user.database.userData.data) {
-      if (user.database.userData.data.user.streamDetails) {
-        setStreamDetails(user.database.userData.data.user.streamDetails);
+    if (user.database.userData?.data) {
+      if (user.database.userData?.data.user.streamDetails) {
+        setStreamDetails(user.database.userData?.data.user.streamDetails);
       }
     }
-  }, [user.database.userData.data?.user]);
+  }, [user.database.userData?.data?.user]);
 
   async function partialSignWithWallet(encodedTransaction) {
     //we have to pass the recoveredTransaction received in the previous step in the encodedTransaction parameter
@@ -698,8 +754,8 @@ function GoLive() {
   };
 
   const cancelStreamDetails = () => {
-    if (user.database.userData.data.user.streamDetails) {
-      setStreamDetails(user.database.userData.data.user.streamDetails);
+    if (user.database.userData?.data.user.streamDetails) {
+      setStreamDetails(user.database.userData?.data.user.streamDetails);
       setUndoButton(false);
     }
   };
@@ -767,44 +823,51 @@ function GoLive() {
   const handleStreamSchedule = (e) => {
     e.preventDefault();
     let s = new Date(streamSchedule).getTime();
-    axios({
-      method: "POST",
-      url: `${process.env.REACT_APP_SERVER_URL}/user/streamSchedule`,
-      data: { streamSchedule: s },
-      headers: {
-        "content-type": "application/json",
-        "auth-token": JSON.stringify(localStorage.getItem("authtoken")),
-      },
-    })
-      .then((res) => {
-        setScheduleStreamModal(false);
-        loadUser();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    const now = new Date().getTime();
+    const difference = s - now;
+    difference > 0
+      ? axios({
+          method: "POST",
+          url: `${process.env.REACT_APP_SERVER_URL}/user/streamSchedule`,
+          data: { streamSchedule: s },
+          headers: {
+            "content-type": "application/json",
+            "auth-token": JSON.stringify(localStorage.getItem("authtoken")),
+          },
+        })
+          .then((res) => {
+            setScheduleStreamModal(false);
+            loadUser();
+          })
+          .catch((err) => {
+            console.log(err);
+          })
+      : user.toast(
+          "error",
+          "Please select a future date. Note that you cannot select a date that has already passed."
+        );
   };
-  return user.database.userData.data ? (
+  return user.database.userData?.data ? (
     <div className=" bg-white dark:bg-slate-900 pt-20 ">
       <div className="flex flex-col lg:flex-row p-4 gap-2">
         <div className="flex-1 space-y-2">
           <div className="rounded-sm overflow-hidden">
-            {user.database.userData.data.user &&
-            user.database.userData.data.user.livepeer_data.isActive ? (
+            {user.database.userData?.data.user &&
+            user.database.userData?.data.user.livepeer_data.isActive ? (
               <ReactPlayer
                 controls={true}
                 width={"100%"}
                 height={"max-content"}
                 url={playbackUrl}
-                creatorData={user.database.userData.data.user}
+                creatorData={user.database.userData?.data.user}
                 footer={false}
               />
             ) : (
               <img
                 className="border-2 border-slate-500 aspect-video w-full object-cover rounded-lg"
                 src={
-                  user.database.userData.data?.user.thumbnail
-                    ? user.database.userData.data.user.thumbnail
+                  user.database.userData?.data?.user.thumbnail
+                    ? user.database.userData?.data.user.thumbnail
                     : placeholder
                 }
               />
@@ -813,40 +876,35 @@ function GoLive() {
           <div className="w-full flex items-center flex-wrap justify-start gap-2">
             <button
               onClick={() => setScheduleStreamModal(true)}
-              className="btn btn-sm capitalize btn-outline btn-primary rounded-full gap-1"
+              className="flex items-center gap-1 text-white font-semibold cursor-pointer hover:bg-primary-focus   w-fit bg-primary rounded-full py-2 px-3"
             >
-              <CalendarTime size={16} />
+              <CalendarTime size={24} />
               Schedule upcoming Stream
             </button>
+            {/* this is for making nft */}
+            {/* {recording ? (
+              <button
+                className="flex items-center gap-1 text-brand2 cursor-pointer hover:bg-slate-50 hover:dark:bg-slate-700   w-fit bg-slate-100 dark:bg-slate-800  rounded-full py-2 px-3"
+                onClick={stopRecording}
+              >
+                <PlayerRecord className="text-error" size={24} />
+                <p className="text-sm font-semibold">Stop Recording</p>
+              </button>
+            ) : (
+              <button
+                className="flex items-center gap-1 text-brand2 cursor-pointer hover:bg-slate-50 hover:dark:bg-slate-700   w-fit bg-slate-100 dark:bg-slate-800  rounded-full py-2 px-3"
+                onClick={startRecording}
+              >
+                <>
+                  <PlayCard className="text-success" size={24} />
+                  <p className="text-sm font-semibold">Create NFT</p>
+                </>
+              </button>
+            )} */}
 
-            <div className=" flex items-center  w-fit bg-slate-100 dark:bg-slate-800  rounded-full ">
-              <p className="text-sm font-semibold text-brand2 mx-2">
-                To create NFT
-              </p>
-              {!recording ? (
-                <button
-                  className="flex text-sm items-center text-success p-1 px-2 border-2 border-success rounded-full gap-1"
-                  onClick={startRecording}
-                >
-                  <PlayerPlay size={16} /> Start Recording
-                </button>
-              ) : (
-                <button
-                  className="flex items-center text-error p-1 text-sm px-2 border-2 border-error rounded-full gap-1"
-                  onClick={stopRecording}
-                >
-                  <span className="relative flex h-2 w-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span>
-                    <span className="absolute inline-flex rounded-full h-2 w-2 bg-red-600"></span>
-                  </span>
-                  Stop Recording
-                </button>
-              )}
-            </div>
-
-            {user.database.userData.data.user &&
-            user.database.userData.data.user.streamSchedule > Date.now() &&
-            !user.database.userData.data.user.livepeer_data.isActive ? (
+            {user.database.userData?.data.user &&
+            user.database.userData?.data.user.streamSchedule > Date.now() &&
+            !user.database.userData?.data.user.livepeer_data.isActive ? (
               <span className="flex items-center  w-fit bg-slate-100 dark:bg-slate-800  rounded-full p-2">
                 <span className="relative flex h-3 w-3">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-teal-500 opacity-75"></span>
@@ -856,7 +914,7 @@ function GoLive() {
                   Stream Starting on{" "}
                   <span className="text-teal-600">
                     {moment(
-                      user.database.userData.data.user.streamSchedule * 1
+                      user.database.userData?.data.user.streamSchedule * 1
                     ).format("MMMM Do YYYY, h:mm a")}
                   </span>
                 </p>
@@ -864,23 +922,37 @@ function GoLive() {
             ) : (
               <></>
             )}
-            {user.database.userData.data.user &&
-            user.database.userData.data.user.livepeer_data.isActive ? (
-              <span className="flex items-center  w-fit bg-slate-100 dark:bg-slate-800  rounded-full p-2">
+            {user.database.userData?.data.user &&
+            user.database.userData?.data.user.livepeer_data.isActive ? (
+              <span className="flex items-center gap-1 w-fit bg-slate-100 dark:bg-slate-800  rounded-full py-2 px-3">
                 <span className="relative flex h-3 w-3">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span>
                   <span className="absolute inline-flex rounded-full h-full w-full bg-red-600"></span>
                 </span>
-                <p className="text-sm font-semibold text-brand2 mx-2">
-                  Live now
-                </p>
+                <p className="text-sm font-semibold text-brand2  ">Live now</p>
               </span>
             ) : (
-              <span className="flex items-center text-brand2 w-fit bg-slate-100 dark:bg-slate-800  rounded-full p-2">
-                <AccessPointOff size={16} />
-                <p className="text-sm font-semibold  mx-2">Offline</p>
+              <span className="flex items-center text-brand2 gap-1 w-fit bg-slate-100 dark:bg-slate-800  rounded-full py-2 px-3">
+                <AccessPointOff className="text-error" size={24} />
+                <p className="text-sm font-semibold   ">Offline</p>
               </span>
             )}
+            <div
+              onClick={handleRecord}
+              className="flex items-center gap-1 text-brand2 cursor-pointer hover:bg-slate-50 hover:dark:bg-slate-700   w-fit bg-slate-100 dark:bg-slate-800  rounded-full py-2 px-3"
+            >
+              {!livepeerRecording ? (
+                <>
+                  <VideoPlus className="text-success" size={24} />
+                  <p className="text-sm font-semibold">Enable recording</p>
+                </>
+              ) : (
+                <>
+                  <VideoMinus className="text-error" size={24} />
+                  <p className="text-sm font-semibold">Disable Recording</p>
+                </>
+              )}
+            </div>
           </div>
           <div className="w-full flex  gap-2">
             <div
@@ -914,7 +986,7 @@ function GoLive() {
                     <input
                       className="input w-full"
                       required={true}
-                      value={streamDetails.name}
+                      value={streamDetails?.name}
                       onChange={(e) => {
                         setStreamDetails({
                           ...streamDetails,
@@ -930,7 +1002,7 @@ function GoLive() {
                       Stream Description{" "}
                     </label>
                     <textarea
-                      value={streamDetails.description}
+                      value={streamDetails?.description}
                       onChange={(e) => {
                         setStreamDetails({
                           ...streamDetails,
@@ -960,7 +1032,7 @@ function GoLive() {
                         });
                         setUndoButton(true);
                       }}
-                      value={streamDetails.category}
+                      value={streamDetails?.category}
                     >
                       <option disabled selected>
                         Categories
@@ -990,45 +1062,47 @@ function GoLive() {
               </div>
             </div>
             <div className="p-2 flex-grow flex flex-col gap-1 text-brand3 h-fit bg-slate-100 dark:bg-slate-800  rounded-xl ">
-              <div className="flex items-center gap-2 justify-between text-brand5 text-base font-semibold">
+              <div className="flex items-center gap-2 justify-start text-brand5 text-base font-semibold">
                 Stream Title
                 <span
-                  className="text-sm text-primary cursor-pointer"
-                  onClick={() => setEditOption(true)}
-                >
-                  edit
-                </span>
-              </div>
-              <div className="text-brand2 text-base ">{streamDetails.name}</div>
-            </div>
-            <div className="p-2 w-fit flex flex-col gap-1 text-brand3 h-fit bg-slate-100 dark:bg-slate-800  rounded-xl ">
-              <div className="flex items-center gap-2 justify-between text-brand5 text-base font-semibold">
-                Stream Category{" "}
-                <span
-                  className="text-sm text-primary cursor-pointer"
-                  onClick={() => setEditOption(true)}
-                >
-                  edit
-                </span>
-              </div>
-              <div className="text-brand2 w-fit text-base ">
-                {streamDetails.category}
-              </div>
-            </div>
-          </div>
-          <div className="w-full flex flex-col gap-2">
-            <div className="p-2 flex flex-col gap-1 text-brand3 h-fit bg-slate-100 dark:bg-slate-800  rounded-xl ">
-              <div className="flex items-center gap-2 justify-between text-brand5 text-base font-semibold">
-                Stream Description{" "}
-                <span
-                  className="text-sm text-primary cursor-pointer"
+                  className="text-xs text-primary cursor-pointer"
                   onClick={() => setEditOption(true)}
                 >
                   edit
                 </span>
               </div>
               <div className="text-brand2 text-base ">
-                {streamDetails.description}
+                {streamDetails?.name}
+              </div>
+            </div>
+            <div className="p-2 w-fit flex flex-col gap-1 text-brand3 h-fit bg-slate-100 dark:bg-slate-800  rounded-xl ">
+              <div className="flex items-center gap-2 justify-start text-brand5 text-base font-semibold">
+                Stream Category{" "}
+                <span
+                  className="text-xs text-primary cursor-pointer"
+                  onClick={() => setEditOption(true)}
+                >
+                  edit
+                </span>
+              </div>
+              <div className="text-brand2 w-fit text-base ">
+                {streamDetails?.category}
+              </div>
+            </div>
+          </div>
+          <div className="w-full flex flex-col gap-2">
+            <div className="p-2 flex flex-col gap-1 text-brand3 h-fit bg-slate-100 dark:bg-slate-800  rounded-xl ">
+              <div className="flex items-center gap-2 justify-start text-brand5 text-base font-semibold">
+                Stream Description{" "}
+                <span
+                  className="text-xs text-primary cursor-pointer"
+                  onClick={() => setEditOption(true)}
+                >
+                  edit
+                </span>
+              </div>
+              <div className="text-brand2 text-base ">
+                {streamDetails?.description}
               </div>
             </div>
           </div>
@@ -1038,8 +1112,8 @@ function GoLive() {
                 Add banners to live stream (Max 4)
               </div>
               <div className="w-full flex flex-wrap">
-                {user.database.userData.data.user.streamLinks &&
-                  user.database.userData.data.user.streamLinks.map(
+                {user.database.userData?.data.user.streamLinks &&
+                  user.database.userData?.data.user.streamLinks.map(
                     (link, index) => (
                       <div key={index} className="relative w-1/2 p-2">
                         <img
@@ -1055,7 +1129,7 @@ function GoLive() {
                     )
                   )}
               </div>
-              {user.database.userData.data.user.streamLinks.length < 4 && (
+              {user.database.userData?.data.user.streamLinks.length < 4 && (
                 <form onSubmit={uploadLink} className="space-y-1">
                   <progress
                     hidden={!uploadingLink}
@@ -1115,19 +1189,21 @@ function GoLive() {
           <div className="collapse collapse-open  w-full text-brand3  bg-slate-100 dark:bg-slate-800  rounded-xl  ">
             <input type="checkbox" />
             <div className="collapse-title text-xl font-medium">
-              <span className="font-semibold text-base ">Sreaming Details</span>
+              <span className="font-semibold text-base ">
+                Streaming Details
+              </span>
             </div>
             <div className="collapse-content w-full space-y-2">
               <div className="w-full p-2 flex gap-2 border-2 border-slate-200 dark:border-slate-700  rounded-md text-brand3">
                 <span className="font-semibold text-base">Name</span>
                 <p className="text-base text-brand4">
-                  {user.database.userData.data.user.name}
+                  {user.database.userData?.data.user.name}
                 </p>
               </div>
               <div className="w-full p-2 flex gap-2 border-2 border-slate-200 dark:border-slate-700  rounded-md text-brand3">
                 <span className="font-semibold text-base">Username</span>
                 <p className="text-base text-brand4">
-                  {user.database.userData.data.user.username}
+                  {user.database.userData?.data.user.username}
                 </p>
               </div>
               <div className="p-2 flex flex-col gap-1 border-2 border-slate-200 dark:border-slate-700  rounded-md text-brand3">
@@ -1152,15 +1228,20 @@ function GoLive() {
                 </p>
               </div>
               <div className="p-2 flex flex-col gap-1 border-2 border-slate-200 dark:border-slate-700  rounded-md text-brand3">
-                <span className="font-semibold text-base">Live URL</span>
+                <span className="font-semibold text-base">
+                  Live URL{" "}
+                  <span className="text-sm text-brand6 ml-2">
+                    Share this with viwers.
+                  </span>
+                </span>
                 <p className="text-base flex gap-1 text-brand4">
                   <a
                     className="w-5/6 truncate"
-                    href={`${process.env.REACT_APP_CLIENT_URL}/liveuser/${user.database.userData.data.user.username}`}
+                    href={liveUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    {`${process.env.REACT_APP_CLIENT_URL}/liveuser/${user.database.userData.data.user.username}`}
+                    {liveUrl}
                   </a>
                   <CopyToClipboard text={liveUrl} />
                 </p>
@@ -1211,9 +1292,9 @@ function GoLive() {
                 src={selectedFile.localurl}
                 className="aspect-video object-cover w-full rounded-md"
               ></img>
-            ) : user.database.userData.data.user.thumbnail ? (
+            ) : user.database.userData?.data.user.thumbnail ? (
               <img
-                src={user.database.userData.data.user.thumbnail}
+                src={user.database.userData?.data.user.thumbnail}
                 className="aspect-video object-cover w-full rounded-md"
               ></img>
             ) : null}
@@ -1485,7 +1566,7 @@ function GoLive() {
           <div className="w-full h-fit p-2 bg-slate-300 dark:bg-slate-700">
             <div className="flex justify-between items-center p-2">
               <h3 className="flex items-center gap-2 font-bold text-lg text-brand2">
-                Schedule upcoming Stream
+                <CalendarEvent /> Select Date and Time
               </h3>
               <X
                 onClick={() => setScheduleStreamModal(false)}
@@ -1493,19 +1574,41 @@ function GoLive() {
               ></X>
             </div>
           </div>
-          <form onSubmit={handleStreamSchedule} className="space-y-2 m-4">
-            <label className="text-sm  text-brand2">Select Date & Time</label>
+          <form onSubmit={handleStreamSchedule} className="space-y-2 m-4 ">
+            <div className=" flex flex-col items-center justify-center gap-4 w-full py-8">
+              <span
+                onClick={() => dateTimePicker.current.showPicker()}
+                className="text-4xl font-bold text-brand1   text-center   underline-offset-8 flex items-center gap-1 mx-auto"
+              >
+                {moment(streamSchedule).format("Do MMMM  YYYY h:mm a")}
+                <CalendarEvent
+                  className="hover:bg-slate-500 hover:dark:bg-slate-900 p-2 cursor-pointer rounded-full text-primary h-10 w-10"
+                  size={24}
+                />
+              </span>
+              <span
+                onClick={() => dateTimePicker.current.showPicker()}
+                className="text-2xl font-bold text-brand5 w-full text-center "
+              >
+                {countdown(streamSchedule)}{" "}
+                <span className="text-xl font-bold text-brand7 w-full text-center">
+                  From now
+                </span>
+              </span>
+              <input
+                ref={dateTimePicker}
+                className="sr-only"
+                value={streamSchedule}
+                onChange={(e) => {
+                  setStreamSchedule(e.target.value);
+                  console.log(e.target.value);
+                }}
+                type={"datetime-local"}
+                min={moment().format("Do MMMM  YYYY")}
+              />
+            </div>
             <input
-              value={streamSchedule}
-              onChange={(e) => setStreamSchedule(e.target.value)}
-              className="w-full input"
-              type={"datetime-local"}
-              step={1800}
-              min={moment().format("YYYY-MM-DDTh:mm")}
-              required={true}
-            />
-            <input
-              className="btn btn-brand w-full"
+              className="btn btn-brand w-full capitalize "
               value={"Schedule stream"}
               type={"submit"}
             />

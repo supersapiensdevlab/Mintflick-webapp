@@ -405,12 +405,13 @@ function LiveRoom({ username }) {
       <div className="  dark:bg-slate-800  bg-slate-200 border-t-2 border-slate-300 dark:border-slate-700">
         <div className="p-1 ">
           <div className="flex justify-between items-center ">
-            <div
+            {/* gift button */}
+            {/* <div
               className="cursor-pointer bg-slate-400 dark:bg-slate-900 text-brand2 p-2 rounded-full  flex justify-center "
               onClick={() => setShowGiftModal(true)}
             >
               <i class=" fa-solid fa-gift"></i>
-            </div>
+            </div> */}
 
             <form
               className="flex flex-grow"

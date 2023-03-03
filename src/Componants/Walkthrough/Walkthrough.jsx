@@ -72,6 +72,7 @@ export function Walkthrough(props) {
   useEffect(() => {
     function debounce(fn, ms) {
       let timer;
+
       return (_) => {
         clearTimeout(timer);
         timer = setTimeout((_) => {
@@ -85,8 +86,10 @@ export function Walkthrough(props) {
       console.log("handleResize called");
     }
     window.addEventListener("resize", debounce(handleResize, 1000));
-    return () => {
+    console.log("listner added");
+    return function cleanup() {
       window.removeEventListener("resize", debounce(handleResize, 1000));
+      console.log("listner removed");
     };
   }, []);
 

@@ -386,7 +386,7 @@ function Header() {
               {State.database.filteredVideoData.length !== 0 && (
                 <>
                   {State.database.filteredVideoData
-                    .slice(0, 15)
+                    ?.slice(0, 15)
                     .map((value, key) => {
                       return (
                         <div
@@ -415,7 +415,7 @@ function Header() {
               {State.database.filteredData.length !== 0 && (
                 <>
                   {State.database.filteredData
-                    .slice(0, 15)
+                    ?.slice(0, 15)
                     .map((value, key) => {
                       return (
                         <div
@@ -615,12 +615,12 @@ function Header() {
                         : ""
                     }
                   >
-                    {localStorage.getItem("walletAddress").slice(0, 6)}...
+                    {localStorage.getItem("walletAddress")?.slice(0, 6)}...
                     {localStorage
                       .getItem("walletAddress")
-                      .slice(
-                        localStorage.getItem("walletAddress").length - 4,
-                        localStorage.getItem("walletAddress").length
+                      ?.slice(
+                        localStorage.getItem("walletAddress")?.length - 4,
+                        localStorage.getItem("walletAddress")?.length
                       )}
                   </span>
                   <CopyToClipboard

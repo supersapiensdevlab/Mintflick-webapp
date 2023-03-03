@@ -155,12 +155,12 @@ function MobileHeader() {
                       : ""
                   }
                 >
-                  {localStorage.getItem("walletAddress").slice(0, 6)}...
+                  {localStorage.getItem("walletAddress")?.slice(0, 6)}...
                   {localStorage
                     .getItem("walletAddress")
-                    .slice(
-                      localStorage.getItem("walletAddress").length - 4,
-                      localStorage.getItem("walletAddress").length
+                    ?.slice(
+                      localStorage.getItem("walletAddress")?.length - 4,
+                      localStorage.getItem("walletAddress")?.length
                     )}
                 </span>
                 <CopyToClipboard text={localStorage.getItem("walletAddress")} />
@@ -206,7 +206,7 @@ function MobileHeader() {
               <DeviceGamepad2 size={28}></DeviceGamepad2>
             </NavLink>
           </button> */}
-          <button class="btn btn-circle btn-ghost ">
+          <button className="btn btn-circle btn-ghost ">
             <NavLink
               to={`/homescreen/chat/${
                 State.database.userData.data
