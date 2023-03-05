@@ -10,7 +10,7 @@ import { BrowserRouter } from "react-router-dom";
 
 const rootElement = document.getElementById("root");
 const root = createRoot(rootElement); // createRoot(container!) if you use TypeScript
-
+//
 // const rootElement = document.getElementById("root");
 if (rootElement) {
   //   hydrateRoot(<Store data={<App />}></Store>, root);
