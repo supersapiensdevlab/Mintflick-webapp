@@ -235,7 +235,7 @@ function UserLivestream() {
             State.updateDatabase({ showHeader: true, showBottomNav: true });
             navigateTo("../live");
           }}
-          className="fixed   z-50 top-2 left-2 flex justify-center items-center text-brand3 font-semibold"
+          className="fixed drop-shadow-lg shadow-slate-900  z-50 top-2 left-2 flex justify-center items-center text-brand3 font-semibold"
         >
           <ChevronLeft />
           Back

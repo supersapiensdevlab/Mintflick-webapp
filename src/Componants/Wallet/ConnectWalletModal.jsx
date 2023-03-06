@@ -41,16 +41,6 @@ function ConnectWalletModal() {
         //   "v2provider",
         //   JSON.stringify(provider, getCircularReplacer())
         // );
-        let questFlow = localStorage.getItem("questFlow");
-        if (questFlow) {
-          localStorage.removeItem("questFlow");
-          response.status === 200 &&
-            navigateTo(
-              "/homescreen/quest-details/" + localStorage.getItem("questId")
-            );
-        } else {
-          response.status === 200 && navigateTo("/homescreen/home");
-        }
       })
       .catch(async function (error) {
         console.log(error);
