@@ -684,35 +684,17 @@ function VideoPostModal({ setVideoPostModalOpen }) {
             }
             value={videoData.description}
           ></textarea> */}
-            <CustomInput
-              id="walkthroughThoughtStep1"
-              placeholder={"Enter caption."}
-              className=" textarea w-full"
-              value={caption}
-              setValue={setCaption}
-              mentions={tagged}
-              setMentions={setTagged}
-            />
-            {/* <MentionsInput
-              id="walkthroughVideoNftStep4"
-              value={videoData.description}
-              onChange={(e) =>
-                setVideoData({ ...videoData, description: e.target.value })
-              }
-              style={defaultStyle}
-              className="textarea font-normal w-full h-24  pt-2 focus:outline-0 overflow-scroll mentionsinputoverflow"
-              placeholder={"Enter caption."}
-              a11ySuggestionsListLabel={"Suggested mentions"}
-              inputRef={mentionsRef}
-            >
-              <Mention
-                trigger="@"
-                data={renderData}
-                markup="@__display__"
-                appendSpaceOnAdd
-                onAdd={handleAdd}
+            <div id="walkthroughVideoNftStep4">
+              <CustomInput
+                placeholder={"Enter caption."}
+                className=" textarea w-full"
+                value={caption}
+                setValue={setCaption}
+                mentions={tagged}
+                setMentions={setTagged}
               />
-            </MentionsInput> */}
+            </div>
+
             <span
               onClick={() => setadvancedOptionsShow(!advancedOptionsShow)}
               className="flex px-2 items-center gap-1 font-semibold text-brand3 cursor-pointer"

@@ -337,23 +337,22 @@ function ThoughtPostModal({ setthoughtPostModalOpen }) {
 
         <form onSubmit={(e) => e.preventDefault()}>
           <div className="w-full p-4 space-y-3">
-            <CustomInput
-              id="walkthroughThoughtStep1"
-              placeholder={"Whats on your mind!"}
-              className=" textarea w-full"
-              value={caption}
-              setValue={setCaption}
-              mentions={tagged}
-              setMentions={setTagged}
-            />
             {/* <textarea
             className="textarea  w-full"
             placeholder="Whats on your mind!"
             onChange={(e) => setCaption(e.target.value)}
             value={caption}
           ></textarea> */}
-            {/* <div id="walkthroughThoughtStep1" ref={textRef}>
-              <MentionsInput
+            <div id="walkthroughThoughtStep1">
+              <CustomInput
+                placeholder={"Whats on your mind!"}
+                className=" textarea w-full"
+                value={caption}
+                setValue={setCaption}
+                mentions={tagged}
+                setMentions={setTagged}
+              />
+              {/* <MentionsInput
                 multiline
                 value={caption}
                 onChange={(e) => caption(e.target.value)}
@@ -370,8 +369,8 @@ function ThoughtPostModal({ setthoughtPostModalOpen }) {
                   appendSpaceOnAdd
                   onAdd={handleAdd}
                 />
-              </MentionsInput>
-            </div> */}
+              </MentionsInput> */}
+            </div>
             {mintSuccess || (mintSuccess && listSuccess) ? (
               <div className="w-fit flex space-x-2 text-green-500">
                 {successMsg}

@@ -496,15 +496,17 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
             onChange={(e) => setCaption(e.target.value)}
             value={caption}
           ></textarea> */}
-            <CustomInput
-              id="walkthroughThoughtStep1"
-              placeholder={"Enter caption."}
-              className=" textarea w-full"
-              value={caption}
-              setValue={setCaption}
-              mentions={tagged}
-              setMentions={setTagged}
-            />
+            <div id="walkthroughStep2">
+              <CustomInput
+                placeholder={"Enter caption."}
+                className=" textarea w-full"
+                value={caption}
+                setValue={setCaption}
+                mentions={tagged}
+                setMentions={setTagged}
+              />
+            </div>
+
             {/* <MentionsInput
               id="walkthroughStep2"
               multiline
