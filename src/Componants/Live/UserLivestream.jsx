@@ -16,9 +16,9 @@ import LiveRoom from "./LiveRoom";
 import UserLiveFullScreen from "./UserLiveFullScreen";
 import superfan_logo from "../../Assets/logos/icons/superfans/superfan.svg";
 
-// const socket = io(`${process.env.REACT_APP_VIEWS_URL}`, {
-//   autoConnect: false,
-// });
+const socket = io(`http://192.168.1.5:4000/`, {
+  autoConnect: false,
+});
 
 function UserLivestream() {
   const navigateTo = useNavigate();
@@ -183,32 +183,32 @@ function UserLivestream() {
   // }, []);
 
   // enable this for viewer count
-  // useEffect(() => {
-  //   socket.connect();
-  //   socket.on("connect", () => {
-  //     console.log("connected to socket");
-  //     socket.emit("joinlivestream", username);
-  //   });
+  useEffect(() => {
+    socket.connect();
+    socket.on("connect", () => {
+      console.log("connected to socket");
+      socket.emit("joinlivestream", username);
+    });
 
-  //   socket.on("disconnect", () => {
-  //     console.log("disconnected socket");
-  //   });
+    socket.on("disconnect", () => {
+      console.log("disconnected socket");
+    });
 
-  //   socket.io.on("error", (error) => {
-  //     console.log("socket went wrong ", error);
-  //   });
+    socket.io.on("error", (error) => {
+      console.log("socket went wrong ", error);
+    });
 
-  //   socket.on("count", (c) => {
-  //     setLivestreamViews(c);
-  //   });
+    socket.on("count", (c) => {
+      setLivestreamViews(c);
+    });
 
-  //   return () => {
-  //     socket.disconnect();
-  //     socket.off("count");
-  //     socket.off("connect");
-  //     socket.off("disconnect");
-  //   };
-  // }, []);
+    return () => {
+      socket.disconnect();
+      socket.off("count");
+      socket.off("connect");
+      socket.off("disconnect");
+    };
+  }, []);
 
   useEffect(() => {
     if (State.database.userData.data && streamUser) {
@@ -226,16 +226,16 @@ function UserLivestream() {
   }, []);
 
   return streamUser && State.database.userData.data ? (
-    <>
+    <div className="flex  items-start justify-center h-screen w-screen">
       <div
-        className={`  flex flex-col  lg:pt-24  h-screen w-screen max-w-3xl mx-auto    overflow-auto bg-white dark:bg-slate-900`}
+        className={`  flex flex-col   h-full flex-grow  mx-auto    overflow-auto bg-white dark:bg-slate-900`}
       >
         <button
           onClick={() => {
             State.updateDatabase({ showHeader: true, showBottomNav: true });
             navigateTo("../live");
           }}
-          className="fixed lg:hidden top-2 left-2 flex justify-center items-center text-brand3 font-semibold"
+          className="fixed   z-50 top-2 left-2 flex justify-center items-center text-brand3 font-semibold"
         >
           <ChevronLeft />
           Back
@@ -261,11 +261,7 @@ function UserLivestream() {
             </div>
           )
         ) : null}
-        <div
-          className={`relative flex-grow ${
-            showChat ? "overflow-clip" : "overflow-auto"
-          } `}
-        >
+        <div className={`relative `}>
           <div className="text-base md:text-lg text-brand2 p-2  font-semibold tracking-wider">
             {streamUser && streamUser.streamDetails
               ? streamUser.streamDetails.name
@@ -386,7 +382,7 @@ function UserLivestream() {
             </span>
             <span
               onClick={() => setshowChat(true)}
-              className="flex items-center gap-1 h-8 w-fit bg-slate-100 dark:bg-slate-800 cursor-pointer rounded-full px-3"
+              className="flex xl:hidden  items-center gap-1 h-8 w-fit bg-slate-100 dark:bg-slate-800 cursor-pointer rounded-full px-3"
             >
               <span className="text-teal-600">
                 <Message size={16} />
@@ -480,7 +476,16 @@ function UserLivestream() {
           </div>
         </div>
       </div>
-    </>
+      <div className="hidden w-[1200px] xl:block h-full">
+        <div className={`   w-full h-full pb-10`}>
+          <div className="  flex-grow flex justify-between p-2 font-semibold text-brand3 bg-slate-200 dark:bg-slate-700">
+            live chat
+            {/* <X className="cursor-pointer" onClick={() => setshowChat(false)} /> */}
+          </div>
+          <LiveRoom username={streamUser?.username}></LiveRoom>
+        </div>
+      </div>
+    </div>
   ) : (
     <div className="h-screen w-screen bg-slate-100 dark:bg-slate-800 ">
       <Loading />

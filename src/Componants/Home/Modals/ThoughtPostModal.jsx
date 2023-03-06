@@ -27,9 +27,9 @@ import {
 } from "../../../Helper/mintOnSolana2";
 import NftCard from "../NftCard";
 import { Walkthrough } from "../../Walkthrough/Walkthrough";
+import CustomInput from "../../CustomInputs/CustomInput";
 
 function ThoughtPostModal({ setthoughtPostModalOpen }) {
-  const mentionsRef = useRef();
   const State = useContext(UserContext);
   const [uploadingPost, setUploadingPost] = useState(false);
   const [caption, setCaption] = useState("");
@@ -44,7 +44,7 @@ function ThoughtPostModal({ setthoughtPostModalOpen }) {
   const [btnText, setbtnText] = useState("Flick Thought");
 
   const [showWalkthrough, setshowWalkthrough] = useState(
-    State.database.userData?.data.user.seenIntro?.thoughtWalkthrough
+    State.database.userData?.data.user?.seenIntro?.thoughtWalkthrough
       ? false
       : true
   );
@@ -64,9 +64,9 @@ function ThoughtPostModal({ setthoughtPostModalOpen }) {
   const textRef = useRef();
   const [loadNfts] = useLoadNfts();
 
-  useEffect(() => {
-    mentionsRef.current.style.overflow = "scroll";
-  }, []);
+  // useEffect(() => {
+  //   mentionsRef.current.style.overflow = "scroll";
+  // }, []);
   // async function signTransaction(network, transaction, callback) {
   //   //const phantom = new PhantomWalletAdapter();
   //   //await phantom.connect();
@@ -275,16 +275,16 @@ function ThoughtPostModal({ setthoughtPostModalOpen }) {
   //handle thought submit
   const handleThoughtPost = () => {
     setUploadingPost(true);
-    let filter = [];
-    tagged.forEach((value) => {
-      if (caption.includes(value)) {
-        filter.push(value);
-      }
-    });
-    console.log(filter);
+    // let filter = [];
+    // tagged.forEach((value) => {
+    //   if (caption.includes(value)) {
+    //     filter.push(value);
+    //   }
+    // });
+    console.log(tagged);
     const data = {
       announcement: caption,
-      tagged: filter,
+      tagged: tagged,
     };
 
     if (isNFT) {
@@ -337,17 +337,26 @@ function ThoughtPostModal({ setthoughtPostModalOpen }) {
 
         <form onSubmit={(e) => e.preventDefault()}>
           <div className="w-full p-4 space-y-3">
+            <CustomInput
+              id="walkthroughThoughtStep1"
+              placeholder={"Whats on your mind!"}
+              className=" textarea w-full"
+              value={caption}
+              setValue={setCaption}
+              mentions={tagged}
+              setMentions={setTagged}
+            />
             {/* <textarea
             className="textarea  w-full"
             placeholder="Whats on your mind!"
             onChange={(e) => setCaption(e.target.value)}
             value={caption}
           ></textarea> */}
-            <div id="walkthroughThoughtStep1" ref={textRef}>
+            {/* <div id="walkthroughThoughtStep1" ref={textRef}>
               <MentionsInput
                 multiline
                 value={caption}
-                onChange={(e) => setCaption(e.target.value)}
+                onChange={(e) => caption(e.target.value)}
                 style={defaultStyle}
                 className="textarea w-full h-24  pt-2 focus:outline-0 overflow-scroll mentionsinputoverflow"
                 placeholder={"Whats on your mind!"}
@@ -362,7 +371,7 @@ function ThoughtPostModal({ setthoughtPostModalOpen }) {
                   onAdd={handleAdd}
                 />
               </MentionsInput>
-            </div>
+            </div> */}
             {mintSuccess || (mintSuccess && listSuccess) ? (
               <div className="w-fit flex space-x-2 text-green-500">
                 {successMsg}
@@ -451,7 +460,6 @@ function ThoughtPostModal({ setthoughtPostModalOpen }) {
                 </span>
               </div>
             )}
-
             {!mintSuccess ? (
               <button
                 type={"submit"}

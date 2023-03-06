@@ -32,7 +32,7 @@ import ProfileVisitCard from "../Profile/ProfileVisitCard";
 import ChatsListMobile from "./ChatListMobile";
 
 // https://mintflickchats.herokuapp.com
-const socket = io(`${process.env.REACT_APP_CHAT_URL}`, {
+const socket = io(`http://192.168.1.5:4001`, {
   autoConnect: false,
 });
 

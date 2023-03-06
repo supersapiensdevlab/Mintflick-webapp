@@ -1,28 +1,105 @@
-import React, { useState } from "react";
-import MDEditor from "@uiw/react-md-editor";
+import React, { useContext, useEffect, useState } from "react";
+import { UserContext } from "../../Store";
 
-function CustomInput() {
-  const [testMentions, settestMentions] = useState("");
-  function handleMentions(e) {
-    settestMentions(e.target.value);
-    e.target.value.charAt(e.target.value.length - 1) === "@" &&
-      settestMentions(`${e.target.value} Sahil`);
+function CustomInput({
+  type,
+  placeholder,
+  className,
+  value,
+  setValue,
+  mentions,
+  setMentions,
+}) {
+  const State = useContext(UserContext);
+
+  const [showMentions, setshowMentions] = useState(false);
+  const [following, setfollowing] = useState(
+    State.database.userData?.data.user?.followee_count
+  );
+  const [showSlashTriggers, setshowSlashTriggers] = useState(false);
+  const [slashTriggers, setslashTriggers] = useState([
+    {
+      label: "Email",
+      value: State.database.userData?.data.user?.email,
+    },
+    {
+      label: "Name",
+      value: State.database.userData?.data.user?.name,
+    },
+    {
+      label: "Username",
+      value: State.database.userData?.data.user?.username,
+    },
+    {
+      label: "Wallet",
+      value: State.database.userData?.data.user?.wallet_id,
+    },
+  ]);
+  function handleChange(e) {
+    setValue(e.target.value);
+    e.target.value.charAt(e.target.value.length - 1) === "@"
+      ? setshowMentions(true)
+      : setshowMentions(false);
+    e.target.value.charAt(e.target.value.length - 1) === "/"
+      ? setshowSlashTriggers(true)
+      : setshowSlashTriggers(false);
   }
+
   return (
-    <div className="container">
-      <input
+    <div className="relative ">
+      <textarea
         type="text"
-        placeholder="Video title"
-        className="input w-full "
-        value={testMentions}
-        onChange={handleMentions}
+        placeholder={placeholder}
+        className={className}
+        value={value}
+        onChange={handleChange}
         required={true}
       />
-      <MDEditor value={testMentions} onChange={settestMentions} />
-      <MDEditor.Markdown
-        source={testMentions}
-        style={{ whiteSpace: "pre-wrap" }}
-      />
+      {showMentions && (
+        <div
+          className={`absolute translate-y-full
+        bottom-0 left-0  w-full rounded-md  shadow-lg bg-slate-100/20 backdrop-blur-md text-brand1 text-base font-medium z-50 flex flex-col h-40 overflow-auto`}
+        >
+          <span className="text-lg font-bold py-2 px-4">Following</span>
+          {following.map((x, index) => {
+            return (
+              <div
+                key={index}
+                onClick={() => {
+                  setValue(`${value}${x}`);
+                  setMentions([...mentions, x]);
+                  setshowMentions(false);
+                }}
+                className="w-full text-brand1 py-2 px-4 hover:bg-slate-100/20 hover:backdrop-blur-md cursor-pointer"
+              >
+                {x}
+              </div>
+            );
+          })}
+        </div>
+      )}
+      {showSlashTriggers && (
+        <div
+          className={`absolute translate-y-full
+        bottom-0 left-0  w-full rounded-md  shadow-lg bg-slate-100/20 backdrop-blur-md text-brand1 text-base font-medium z-50 flex flex-col h-40 overflow-auto`}
+        >
+          {slashTriggers.map((x, index) => {
+            return (
+              <div
+                key={index}
+                onClick={() => {
+                  setValue(`${value.slice(0, -1)}${x.value}`);
+
+                  setshowSlashTriggers(false);
+                }}
+                className="w-full text-brand1 py-2 px-4 hover:bg-slate-100/20 hover:backdrop-blur-md cursor-pointer"
+              >
+                {x.label}
+              </div>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }

@@ -33,6 +33,7 @@ import Main_logo_dark from "../../../Assets/logos/Main_logo_dark";
 import Main_logo from "../../../Assets/logos/Main_logo";
 import { sanitizeFilename } from "../../../functions/sanitizeFilename";
 import { Walkthrough } from "../../Walkthrough/Walkthrough";
+import CustomInput from "../../CustomInputs/CustomInput";
 
 function PhotoPostModal({ setphotoPostModalOpen }) {
   const State = useContext(UserContext);
@@ -80,11 +81,11 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
   //Instance of pandora
   const ExpressSDK = createPandoraExpressSDK();
 
-  const mentionsRef = useRef();
+  // const mentionsRef = useRef();
 
-  useEffect(() => {
-    mentionsRef.current.style.overflow = "scroll";
-  }, []);
+  // useEffect(() => {
+  //   mentionsRef.current.style.overflow = "scroll";
+  // }, []);
 
   // Minting
   const [minting, setMinting] = useState(null);
@@ -107,13 +108,11 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
       localurl: URL.createObjectURL(event.target.files[0]),
     });
   };
-
+  const [tagged, setTagged] = useState([]);
   const handleAdd = (e) => {
     tagged.push(e);
     console.log(tagged);
   };
-
-  const [tagged, setTagged] = useState([]);
 
   // console.log(window?.ethereum);
   // console.log(State.database?.provider);
@@ -225,12 +224,12 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
 
   const handleSubmit = () => {
     if (!uploadingPost) {
-      let filter = [];
-      tagged.forEach((value) => {
-        if (caption.includes(value)) {
-          filter.push(value);
-        }
-      });
+      // let filter = [];
+      // tagged.forEach((value) => {
+      //   if (caption.includes(value)) {
+      //     filter.push(value);
+      //   }
+      // });
       setUploadingPost(true);
       setbtnText("Uploading file");
 
@@ -240,8 +239,8 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
           formData.append("announcement", caption);
           formData.append("postImage", sanitizeFilename(selectedPost.file[0]));
           formData.append("announcementHash", cid);
-          formData.append("tagged", filter);
-          console.log(filter);
+          formData.append("tagged", tagged);
+          console.log(tagged);
           if (isNFT) {
             setbtnText("Minting Photo NFT");
             console.log("Minting...");
@@ -497,7 +496,16 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
             onChange={(e) => setCaption(e.target.value)}
             value={caption}
           ></textarea> */}
-            <MentionsInput
+            <CustomInput
+              id="walkthroughThoughtStep1"
+              placeholder={"Enter caption."}
+              className=" textarea w-full"
+              value={caption}
+              setValue={setCaption}
+              mentions={tagged}
+              setMentions={setTagged}
+            />
+            {/* <MentionsInput
               id="walkthroughStep2"
               multiline
               value={caption}
@@ -515,7 +523,7 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
                 appendSpaceOnAdd
                 onAdd={handleAdd}
               />
-            </MentionsInput>
+            </MentionsInput> */}
             {showListingOption ? (
               <div className="w-fit flex space-x-2 text-green-500">
                 {mintSuccess}

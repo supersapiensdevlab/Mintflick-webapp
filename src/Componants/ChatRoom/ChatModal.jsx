@@ -32,7 +32,7 @@ import ReactPlayer from "react-player";
 import { Image } from "react-img-placeholder";
 
 // https://mintflickchats.herokuapp.com
-const socket = io(`${process.env.REACT_APP_CHAT_URL}`, {
+const socket = io(`http://192.168.1.5:4001`, {
   autoConnect: false,
 });
 
@@ -109,7 +109,7 @@ function ChatModal(props) {
           room_id: username,
         });
       } else {
-        console.log('joining room')
+        console.log("joining room");
         socket.emit("joindm", {
           user_id: user.database.userData.data.user.id,
           room_id: user2.id,
@@ -390,7 +390,6 @@ function ChatModal(props) {
                 }
               }}
               hasMore={currentPage > 0}
-              
               loader={
                 <Loading /> // <div className="flex justify-center">
                 //   <div className="text-center animate-spin rounded-full h-7 w-7 ml-3 border-t-2 border-b-2 bg-gradient-to-r from-green-400 to-blue-500 "></div>

@@ -34,6 +34,7 @@ import {
 import Main_logo from "../../../Assets/logos/Main_logo";
 import { sanitizeFilename } from "../../../functions/sanitizeFilename";
 import { Walkthrough } from "../../Walkthrough/Walkthrough";
+import CustomInput from "../../CustomInputs/CustomInput";
 
 function VideoPostModal({ setVideoPostModalOpen }) {
   const State = useContext(UserContext);
@@ -121,12 +122,16 @@ function VideoPostModal({ setVideoPostModalOpen }) {
   ];
 
   const [tagged, setTagged] = useState([]);
-
-  const mentionsRef = useRef();
+  const [caption, setCaption] = useState("");
 
   useEffect(() => {
-    mentionsRef.current.style.overflow = "scroll";
-  }, []);
+    setVideoData({ ...videoData, description: caption });
+  }, [caption]);
+  // const mentionsRef = useRef();
+
+  // useEffect(() => {
+  //   mentionsRef.current.style.overflow = "scroll";
+  // }, []);
 
   const [uploadingVideo, setUploadingVideo] = useState(false);
   const [selectedVideo, setSelectedVideo] = useState(null);
@@ -392,12 +397,13 @@ function VideoPostModal({ setVideoPostModalOpen }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!uploadingVideo) {
-      let filter = [];
-      tagged.forEach((value) => {
-        if (videoData.description.includes(value)) {
-          filter.push(value);
-        }
-      });
+      // let filter = [];
+      // tagged.forEach((value) => {
+      //   if (videoData.description.includes(value)) {
+      //     filter.push(value);
+      //   }
+      // });
+      console.log(tagged);
       setUploadingVideo(true);
       const files = [selectedThumbnail.file, selectedVideo.file];
       setbtnText("Uploading file");
@@ -425,7 +431,7 @@ function VideoPostModal({ setVideoPostModalOpen }) {
           formData.append("allowAttribution", videoData.allowAttribution);
           formData.append("commercialUse", videoData.commercialUse);
           formData.append("derivativeWorks", videoData.commercialUse);
-          formData.append("tagged", filter);
+          formData.append("tagged", tagged);
           formData.append("videoFile", selectedVideo.file, selectedVideo.name);
           formData.append(
             "videoImage",
@@ -678,7 +684,16 @@ function VideoPostModal({ setVideoPostModalOpen }) {
             }
             value={videoData.description}
           ></textarea> */}
-            <MentionsInput
+            <CustomInput
+              id="walkthroughThoughtStep1"
+              placeholder={"Enter caption."}
+              className=" textarea w-full"
+              value={caption}
+              setValue={setCaption}
+              mentions={tagged}
+              setMentions={setTagged}
+            />
+            {/* <MentionsInput
               id="walkthroughVideoNftStep4"
               value={videoData.description}
               onChange={(e) =>
@@ -697,7 +712,7 @@ function VideoPostModal({ setVideoPostModalOpen }) {
                 appendSpaceOnAdd
                 onAdd={handleAdd}
               />
-            </MentionsInput>
+            </MentionsInput> */}
             <span
               onClick={() => setadvancedOptionsShow(!advancedOptionsShow)}
               className="flex px-2 items-center gap-1 font-semibold text-brand3 cursor-pointer"

@@ -7,6 +7,7 @@ import MobileHeader from "../Componants/Header/MobileHeader";
 import { UserContext } from "../Store";
 import { Helmet } from "react-helmet";
 import ToastContainer from "../Componants/Toast/ToastContainer";
+import ConnectWalletModal from "../Componants/Wallet/ConnectWalletModal";
 
 function HomeScreen() {
   const State = useContext(UserContext);
@@ -44,6 +45,7 @@ function HomeScreen() {
         </button> */}
         <BottomNavigation></BottomNavigation>
       </div>
+      {!State.database.provider && <ConnectWalletModal />}
     </div>
   );
 }

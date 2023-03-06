@@ -551,7 +551,10 @@ function GoLive() {
         "auth-token": JSON.stringify(localStorage.getItem("authtoken")),
       },
     })
-      .then(() => setlivepeerRecording(!livepeerRecording))
+      .then((res) => {
+        console.log(res);
+        setlivepeerRecording(!livepeerRecording);
+      })
       .catch((err) => {
         console.log(err);
       });
