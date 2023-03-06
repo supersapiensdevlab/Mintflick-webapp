@@ -16,7 +16,7 @@ import LiveRoom from "./LiveRoom";
 import UserLiveFullScreen from "./UserLiveFullScreen";
 import superfan_logo from "../../Assets/logos/icons/superfans/superfan.svg";
 
-const socket = io(`http://192.168.1.5:4000/`, {
+const socket = io(`${process.env.REACT_APP_VIEWS_URL}`, {
   autoConnect: false,
 });
 

@@ -32,7 +32,7 @@ import ReactPlayer from "react-player";
 import { Image } from "react-img-placeholder";
 
 // https://mintflickchats.herokuapp.com
-const socket = io(`http://192.168.1.5:4001`, {
+const socket = io(`${process.env.REACT_APP_CHAT_URL}`, {
   autoConnect: false,
 });
 
