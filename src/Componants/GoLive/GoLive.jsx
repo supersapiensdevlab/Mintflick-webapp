@@ -30,6 +30,7 @@ import { clusterApiUrl, Connection } from "@solana/web3.js";
 import { SolanaWallet } from "@web3auth/solana-provider";
 import { Keypair, Transaction } from "@solana/web3.js";
 import placeholder from "../../Assets/Gaming Posters/liveplaceholder.jpg";
+import { Player } from "@livepeer/react";
 
 function GoLive() {
   const user = useContext(UserContext);
@@ -869,15 +870,43 @@ function GoLive() {
           <div className="rounded-sm overflow-hidden">
             {user.database.userData?.data.user &&
             user.database.userData?.data.user.livepeer_data.isActive ? (
-              <ReactPlayer
-                controls={true}
-                width={"100%"}
-                height={"max-content"}
-                url={playbackUrl}
-                creatorData={user.database.userData?.data.user}
-                footer={false}
+              <Player
+                title={
+                  user.database.userData?.data.user &&
+                  user.database.userData?.data.user.streamDetails
+                    ? user.database.userData?.data.user.streamDetails.name
+                    : "Mintflick Stream"
+                }
+                playbackId={
+                  user.database.userData?.data.user.livepeer_data.playbackId
+                }
+                showPipButton
+                autoPlay
+                priority
+                showTitle={false}
+                poster={
+                  user.database.userData?.data?.user.thumbnail
+                    ? user.database.userData?.data.user.thumbnail
+                    : placeholder
+                }
+                aspectRatio="16to9"
+                controls={{
+                  autohide: 3000,
+                }}
+                theme={{
+                  borderStyles: { containerBorderStyle: "hidden" },
+                  radii: { containerBorderRadius: "0px" },
+                }}
               />
             ) : (
+              // <ReactPlayer
+              //   controls={true}
+              //   width={"100%"}
+              //   height={"max-content"}
+              //   url={playbackUrl}
+              //   creatorData={user.database.userData?.data.user}
+              //   footer={false}
+              // />
               <img
                 className="border-2 border-slate-500 aspect-video w-full object-cover rounded-lg"
                 src={
@@ -994,8 +1023,8 @@ function GoLive() {
                   <div>
                     <label className=" text-sm text-brand3">
                       Stream Title
-                      <span className="mx-2 text-sm text-brand5 fonst-base ">
-                        reqired
+                      <span className="mx-2 text-sm text-brand5 font-base ">
+                        required
                       </span>
                     </label>
                     <input
@@ -1033,8 +1062,8 @@ function GoLive() {
                   <div className="mt-1">
                     <label className=" text-sm text-brand3">
                       Stream Category{" "}
-                      <span className="mx-2 text-sm text-brand5 fonst-base ">
-                        reqired
+                      <span className="mx-2 text-sm text-brand5 font-base ">
+                        required
                       </span>
                     </label>
                     <select

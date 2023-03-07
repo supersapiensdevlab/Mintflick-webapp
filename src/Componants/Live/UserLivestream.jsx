@@ -15,7 +15,14 @@ import livePlaceholder from "../../Assets/Gaming Posters/liveplaceholder.jpg";
 import LiveRoom from "./LiveRoom";
 import UserLiveFullScreen from "./UserLiveFullScreen";
 import superfan_logo from "../../Assets/logos/icons/superfans/superfan.svg";
+import { Player } from "@livepeer/react";
 
+import {
+  LivepeerConfig,
+  ThemeConfig,
+  createReactClient,
+  studioProvider,
+} from "@livepeer/react";
 const socket = io(`${process.env.REACT_APP_VIEWS_URL}`, {
   autoConnect: false,
 });
@@ -224,7 +231,21 @@ function UserLivestream() {
   useEffect(() => {
     State.updateDatabase({ showHeader: false, showBottomNav: false });
   }, []);
+  const livepeerClient = createReactClient({
+    provider: studioProvider({
+      apiKey: process.env.NEXT_PUBLIC_STUDIO_API_KEY,
+    }),
+  });
 
+  const theme = {
+    colors: {
+      accent: "rgb(0, 145, 255)",
+      containerBorderColor: "rgba(0, 145, 255, 0.9)",
+    },
+    fonts: {
+      display: "Inter",
+    },
+  };
   return streamUser && State.database.userData.data ? (
     <div className="flex  items-start justify-center h-screen w-screen">
       <div
@@ -244,20 +265,43 @@ function UserLivestream() {
           !streamUser.livepeer_data.isActive &&
           new Date(streamUser.streamSchedule * 1) > new Date() ? (
             <img
-              className=" w-full aspect-video object-cover lg:rounded-xl"
+              className=" w-full aspect-video object-cover  "
               src={
                 streamUser.thumbnail ? streamUser.thumbnail : livePlaceholder
               }
             />
           ) : (
             <div className="w-full aspect-video">
-              <ReactPlayer
-                controls={true}
-                width={"100%"}
-                height={"max-content"}
-                url={`https://cdn.livepeer.com/hls/${streamUser.livepeer_data.playbackId}/index.m3u8`}
-                footer={false}
+              <Player
+                title={
+                  streamUser && streamUser.streamDetails
+                    ? streamUser.streamDetails.name
+                    : "Mintflick Stream"
+                }
+                playbackId={streamUser.livepeer_data.playbackId}
+                showPipButton
+                autoPlay
+                priority
+                showTitle={false}
+                poster={
+                  streamUser.thumbnail ? streamUser.thumbnail : livePlaceholder
+                }
+                aspectRatio="16to9"
+                controls={{
+                  autohide: 3000,
+                }}
+                theme={{
+                  borderStyles: { containerBorderStyle: "hidden" },
+                  radii: { containerBorderRadius: "0px" },
+                }}
               />
+              {/* <ReactPlayer
+                  controls={true}
+                  width={"100%"}
+                  height={"max-content"}
+                  url={`https://cdn.livepeer.com/hls/${streamUser.livepeer_data.playbackId}/index.m3u8`}
+                  footer={false}
+                /> */}
             </div>
           )
         ) : null}
@@ -266,7 +310,7 @@ function UserLivestream() {
             {streamUser && streamUser.streamDetails
               ? streamUser.streamDetails.name
               : null}
-          </div>{" "}
+          </div>
           {!privateUser ? (
             State.database.userData.data && streamUser ? (
               <div className="flex justify-start items-center gap-2 m-2">

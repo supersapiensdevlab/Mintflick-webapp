@@ -41,6 +41,13 @@ import QuestOnboarding from "./Componants/Quests/QuestOnboarding";
 import QuestAdmin from "./Componants/Quests/QuestAdmin";
 import QuestDetailsAdmin from "./Componants/Quests/QuestDetailsAdmin";
 import ToastContainer from "./Componants/Toast/ToastContainer";
+
+import {
+  LivepeerConfig,
+  ThemeConfig,
+  createReactClient,
+  studioProvider,
+} from "@livepeer/react";
 function App() {
   const State = useContext(UserContext);
 
@@ -114,7 +121,21 @@ function App() {
   //     console.log("login useEffect called");
   //   }
   // }, [State.database.userData?.data]);
+  const livepeerClient = createReactClient({
+    provider: studioProvider({
+      apiKey: process.env.NEXT_PUBLIC_STUDIO_API_KEY,
+    }),
+  });
 
+  const theme = {
+    colors: {
+      accent: "rgb(0, 145, 255)",
+      containerBorderColor: "rgba(0, 145, 255, 0.9)",
+    },
+    fonts: {
+      display: "Inter",
+    },
+  };
   return (
     <div className={State.database.dark ? `dark` : " "}>
       <Routes>
@@ -127,10 +148,30 @@ function App() {
         <Route path="/homescreen" element={<HomeScreen />}>
           <Route path="home" element={<Home />} />
 
-          <Route path="live" element={<Live />} />
-          <Route path="golive" element={<GoLive />} />
-          <Route path="liveuser/:username" element={<UserLivestream />} />
-
+          <Route
+            path="live"
+            element={
+              <LivepeerConfig client={livepeerClient} theme={theme}>
+                <Live />
+              </LivepeerConfig>
+            }
+          />
+          <Route
+            path="golive"
+            element={
+              <LivepeerConfig client={livepeerClient} theme={theme}>
+                <GoLive />
+              </LivepeerConfig>
+            }
+          />
+          <Route
+            path="liveuser/:username"
+            element={
+              <LivepeerConfig client={livepeerClient} theme={theme}>
+                <UserLivestream />
+              </LivepeerConfig>
+            }
+          />
           <Route path="marketPlace" element={<Events></Events>} />
           <Route path="create-event" element={<CreateEvent />} />
           <Route path="event-details/:id" element={<EventDetails />} />

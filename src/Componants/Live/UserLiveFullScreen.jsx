@@ -13,6 +13,7 @@ import Loading from "../Loading/Loading";
 import { Eye, Message, Share, X } from "tabler-icons-react";
 import livePlaceholder from "../../Assets/Gaming Posters/liveplaceholder.jpg";
 import LiveRoom from "./LiveRoom";
+import { Player } from "@livepeer/react";
 
 const socket = io(`${process.env.REACT_APP_VIEWS_URL}`, {
   autoConnect: false,
@@ -40,7 +41,6 @@ function UserLiveFullScreen() {
 
   const [viewColor, setViewColor] = useState("white");
   const [viewAnimate, setViewAnimate] = useState("animate-none");
-
   // Description Read More
   const [readMore, setReadMore] = useState(false);
 
@@ -232,13 +232,36 @@ function UserLiveFullScreen() {
           />
         ) : (
           <div className="w-full aspect-video">
-            <ReactPlayer
+            <Player
+              title={
+                streamUser && streamUser.streamDetails
+                  ? streamUser.streamDetails.name
+                  : "Mintflick Stream"
+              }
+              playbackId={streamUser.livepeer_data.playbackId}
+              showPipButton
+              showTitle={false}
+              aspectRatio="16to9"
+              controls={{
+                autohide: 3000,
+              }}
+              autoPlay
+              priority
+              poster={
+                streamUser.thumbnail ? streamUser.thumbnail : livePlaceholder
+              }
+              theme={{
+                borderStyles: { containerBorderStyle: "hidden" },
+                radii: { containerBorderRadius: "10px" },
+              }}
+            />
+            {/* <ReactPlayer
               controls={true}
               width={"100%"}
               height={"max-content"}
               url={`https://cdn.livepeer.com/hls/${streamUser.livepeer_data.playbackId}/index.m3u8`}
               footer={false}
-            />
+            /> */}
           </div>
         )
       ) : null}
