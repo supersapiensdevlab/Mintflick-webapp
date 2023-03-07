@@ -127,7 +127,8 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
 
   const mintOnSolana = async (formData, file, cid) => {
     console.log("stored files with cid:", cid);
-    let url = "https://ipfs.io/ipfs/" + cid + "/" + selectedPost.file[0].name;
+    let url =
+      "https://nftstorage.link/ipfs/" + cid + "/" + selectedPost.file[0].name;
     let image = selectedPost.file[0];
     await mintNFTOnSolana(
       State.database.walletAddress,
@@ -169,7 +170,7 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
   const mintOnPolygon = (formData, file) => {
     uploadFile(file)
       .then(async (cid) => {
-        let itemUri = "https://ipfs.io/ipfs/" + cid + "/meta.json";
+        let itemUri = "https://nftstorage.link/ipfs/" + cid + "/meta.json";
         console.log("web3", web3);
         //Get ChainID of current account
         const chainId = await web3.eth.net.getId();
@@ -251,9 +252,16 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
 
             var ts = Math.round(new Date().getTime() / 1000);
             let metadata = {
-              image: "https://ipfs.io/ipfs/" + cid + "/" + selectedPost.file[0],
+              image:
+                "https://nftstorage.link/ipfs/" +
+                cid +
+                "/" +
+                selectedPost.file[0],
               external_url:
-                "https://ipfs.io/ipfs/" + cid + "/" + selectedPost.file[0],
+                "https://nftstorage.link/ipfs/" +
+                cid +
+                "/" +
+                selectedPost.file[0],
               description: `Post description`,
               name: caption,
               attributes: [
@@ -268,7 +276,10 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
                 },
               ],
               animation_url:
-                "https://ipfs.io/ipfs/" + cid + "/" + selectedPost.file[0].name,
+                "https://nftstorage.link/ipfs/" +
+                cid +
+                "/" +
+                selectedPost.file[0].name,
             };
 
             function convertBlobToFile(blob, fileName) {
@@ -290,7 +301,10 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
               console.log("Solana...");
               // mintOnSolana(formData, file, cid);
               let url =
-                "https://ipfs.io/ipfs/" + cid + "/" + selectedPost.file[0].name;
+                "https://nftstorage.link/ipfs/" +
+                cid +
+                "/" +
+                selectedPost.file[0].name;
               let image = selectedPost.file[0];
               console.log("Compressed Image", image);
               new Compressor(image, {

@@ -162,7 +162,7 @@ function MintNFTModal({
           lastModified: new Date(),
         });
         uploadFile([file]).then(async (cid) => {
-          let url = "https://ipfs.io/ipfs/" + cid + "/" + "meta.png";
+          let url = "https://nftstorage.link/ipfs/" + cid + "/" + "meta.png";
           const mintRequest = await mintNFTOnSolana2(
             State.database.walletAddress,
             "Mintflick Collection",

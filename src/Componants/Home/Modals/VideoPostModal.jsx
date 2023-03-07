@@ -178,7 +178,7 @@ function VideoPostModal({ setVideoPostModalOpen }) {
     //   .then(async (cid) => {
     //     console.log("stored files with cid:", cid);
     //     await createToken(
-    //       "https://ipfs.io/ipfs/" + cid + "meta.json",
+    //       "https://nftstorage.link/ipfs/" + cid + "meta.json",
     //       nftPrice,
     //       window.ethereum,
     //       setMinting,
@@ -229,7 +229,7 @@ function VideoPostModal({ setVideoPostModalOpen }) {
     //   attributes: JSON.stringify([{ trait_type: "Power", value: "100" }]),
     //   description: videoData.description,
     //   external_url:
-    //     "https://ipfs.io/ipfs/" + cid + "/" + selectedVideo.file.name,
+    //     "https://nftstorage.link/ipfs/" + cid + "/" + selectedVideo.file.name,
     //   max_supply: 1,
     //   royalty: 5,
     //   file: selectedVideo.file,
@@ -243,7 +243,8 @@ function VideoPostModal({ setVideoPostModalOpen }) {
     //       "content-type": "multipart/form-data",
     //     },
     //   })
-    let url = "https://ipfs.io/ipfs/" + cid + "/" + selectedVideo.file.name;
+    let url =
+      "https://nftstorage.link/ipfs/" + cid + "/" + selectedVideo.file.name;
     setbtnText("Minting Video NFT");
     const mintRequest = await mintNFTOnSolana2(
       State.database.walletAddress,
@@ -444,12 +445,15 @@ function VideoPostModal({ setVideoPostModalOpen }) {
             var ts = Math.round(new Date().getTime() / 1000);
             let metadata = {
               image:
-                "https://ipfs.io/ipfs/" +
+                "https://nftstorage.link/ipfs/" +
                 cid +
                 "/" +
                 selectedThumbnail.file.name,
               external_url:
-                "https://ipfs.io/ipfs/" + cid + "/" + selectedVideo.file.name,
+                "https://nftstorage.link/ipfs/" +
+                cid +
+                "/" +
+                selectedVideo.file.name,
               description: videoData.description,
               name: videoData.videoName,
               attributes: [
@@ -464,7 +468,10 @@ function VideoPostModal({ setVideoPostModalOpen }) {
                 },
               ],
               animation_url:
-                "https://ipfs.io/ipfs/" + cid + "/" + selectedVideo.file.name,
+                "https://nftstorage.link/ipfs/" +
+                cid +
+                "/" +
+                selectedVideo.file.name,
             };
 
             function convertBlobToFile(blob, fileName) {

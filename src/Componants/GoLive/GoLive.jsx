@@ -568,11 +568,17 @@ function GoLive() {
         .then(async (cid) => {
           setUploadingFile(false);
           console.log(
-            "https://ipfs.io/ipfs/" + cid + "/" + selectedFile.file[0].name
+            "https://nftstorage.link/ipfs/" +
+              cid +
+              "/" +
+              selectedFile.file[0].name
           );
           const data = {
             url:
-              "https://ipfs.io/ipfs/" + cid + "/" + selectedFile.file[0].name,
+              "https://nftstorage.link/ipfs/" +
+              cid +
+              "/" +
+              selectedFile.file[0].name,
             username: user.database.userData?.data.user.username,
           };
           const res = await axios({
@@ -679,7 +685,10 @@ function GoLive() {
           attributes: JSON.stringify([{ trait_type: "Power", value: "100" }]),
           description: recordvideo?.description,
           external_url:
-            "https://ipfs.io/ipfs/" + cid + "/" + recordvideo.videoFile.name,
+            "https://nftstorage.link/ipfs/" +
+            cid +
+            "/" +
+            recordvideo.videoFile.name,
           max_supply: 1,
           fee_payer: `${process.env.REACT_APP_FEEPAYER_WALLET}`,
           royalty: 5,
@@ -771,11 +780,14 @@ function GoLive() {
         .then(async (cid) => {
           setUploadingLink(false);
           console.log(
-            "https://ipfs.io/ipfs/" + cid + "/" + selectedLinkFile.file[0].name
+            "https://nftstorage.link/ipfs/" +
+              cid +
+              "/" +
+              selectedLinkFile.file[0].name
           );
           const data = {
             image:
-              "https://ipfs.io/ipfs/" +
+              "https://nftstorage.link/ipfs/" +
               cid +
               "/" +
               selectedLinkFile.file[0].name,

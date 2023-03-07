@@ -183,7 +183,7 @@ function AudioPostModal({ setAudioPostModalOpen }) {
     //   .then(async (cid) => {
     //     console.log("stored files with cid:", cid);
     //     await createToken(
-    //       "https://ipfs.io/ipfs/" + cid + "meta.json",
+    //       "https://nftstorage.link/ipfs/" + cid + "meta.json",
     //       nftPrice,
     //       window.ethereum,
     //       setMinting,
@@ -234,7 +234,7 @@ function AudioPostModal({ setAudioPostModalOpen }) {
         attributes: JSON.stringify([{ trait_type: "Power", value: "100" }]),
         description: track.description,
         external_url:
-          "https://ipfs.io/ipfs/" + cid + "/" + selectedTrack.file.name,
+          "https://nftstorage.link/ipfs/" + cid + "/" + selectedTrack.file.name,
         max_supply: 1,
         royalty: 5,
         file: selectedTrack.file,
@@ -403,12 +403,15 @@ function AudioPostModal({ setAudioPostModalOpen }) {
             var ts = Math.round(new Date().getTime() / 1000);
             let metadata = {
               image:
-                "https://ipfs.io/ipfs/" +
+                "https://nftstorage.link/ipfs/" +
                 cid +
                 "/" +
                 selectedThumbnail.file.name,
               external_url:
-                "https://ipfs.io/ipfs/" + cid + "/" + selectedTrack.file.name,
+                "https://nftstorage.link/ipfs/" +
+                cid +
+                "/" +
+                selectedTrack.file.name,
               description: track.description,
               name: track.trackName,
               attributes: [
@@ -423,7 +426,10 @@ function AudioPostModal({ setAudioPostModalOpen }) {
                 },
               ],
               animation_url:
-                "https://ipfs.io/ipfs/" + cid + "/" + selectedTrack.file.name,
+                "https://nftstorage.link/ipfs/" +
+                cid +
+                "/" +
+                selectedTrack.file.name,
             };
 
             function convertBlobToFile(blob, fileName) {
@@ -442,7 +448,7 @@ function AudioPostModal({ setAudioPostModalOpen }) {
             //   .then(async (cid) => {
             //     console.log("stored files with cid:", cid);
             //     await createToken(
-            //       "https://ipfs.io/ipfs/" + cid + "meta.json",
+            //       "https://nftstorage.link/ipfs/" + cid + "meta.json",
             //       nftPrice,
             //       window.ethereum,
             //       setMinting,

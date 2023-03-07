@@ -29,14 +29,14 @@ const ProfileImageModal = ({ setShowPlanImageModal }) => {
         if (!State.database.userData?.data?.user?.superfan_data) {
           superfanData = {};
           superfanData.image1 =
-            "https://ipfs.io/ipfs/" +
+            "https://nftstorage.link/ipfs/" +
             cid +
             "/" +
             selectedProfileImage.file[0].name;
         }
         superfanData = State.database.userData?.data?.user?.superfan_data;
         superfanData.image1 =
-          "https://ipfs.io/ipfs/" +
+          "https://nftstorage.link/ipfs/" +
           cid +
           "/" +
           selectedProfileImage.file[0].name;
