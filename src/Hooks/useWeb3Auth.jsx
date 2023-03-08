@@ -48,7 +48,7 @@ export default function useWeb3Auth() {
       theme: "dark",
       loginMethodsOrder: ["facebook", "google"],
       appLogo:
-        "https://ipfs.io/ipfs/bafybeihshcxswtnebaobbgjdvqgam6ynr676gcmbq3ambsg4aznytv3dwi/Mintflick%20icon-12%20%281%29.png", // Your App Logo Here
+        "https://nftstorage.link/ipfs/bafybeihshcxswtnebaobbgjdvqgam6ynr676gcmbq3ambsg4aznytv3dwi/Mintflick%20icon-12%20%281%29.png", // Your App Logo Here
     },
   });
   const init = async () => {
@@ -79,7 +79,7 @@ export default function useWeb3Auth() {
           theme: "dark",
           loginMethodsOrder: ["facebook", "google"],
           appLogo:
-            "https://ipfs.io/ipfs/bafybeihshcxswtnebaobbgjdvqgam6ynr676gcmbq3ambsg4aznytv3dwi/Mintflick%20icon-12%20%281%29.png", // Your App Logo Here
+            "https://nftstorage.link/ipfs/bafybeihshcxswtnebaobbgjdvqgam6ynr676gcmbq3ambsg4aznytv3dwi/Mintflick%20icon-12%20%281%29.png", // Your App Logo Here
         },
       });
       const openloginAdapter = new OpenloginAdapter({

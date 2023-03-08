@@ -192,7 +192,10 @@ function ChatRoom(props) {
         .then((cid) => {
           setUploadingFile(false);
           console.log(
-            "https://ipfs.io/ipfs/" + cid + "/" + selectedFile.file[0].name
+            "https://nftstorage.link/ipfs/" +
+              cid +
+              "/" +
+              selectedFile.file[0].name
           );
           let room = {
             room_admin: username,
@@ -202,7 +205,10 @@ function ChatRoom(props) {
               message: formState.message,
               createdAt: Date.now(),
               url:
-                "https://ipfs.io/ipfs/" + cid + "/" + selectedFile.file[0].name,
+                "https://nftstorage.link/ipfs/" +
+                cid +
+                "/" +
+                selectedFile.file[0].name,
               size: selectedFile.size,
             },
           };

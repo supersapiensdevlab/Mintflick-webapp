@@ -120,10 +120,10 @@ function QuestAdmin() {
     storeFile(event.target.files).then(async (cid) => {
       setuploadingFile(false);
       setSelectedPostUrl(
-        "https://ipfs.io/ipfs/" + cid + "/" + event.target.files[0].name
+        "https://nftstorage.link/ipfs/" + cid + "/" + event.target.files[0].name
       );
       console.log(
-        "https://ipfs.io/ipfs/" + cid + "/" + event.target.files[0].name
+        "https://nftstorage.link/ipfs/" + cid + "/" + event.target.files[0].name
       );
     });
 

@@ -201,7 +201,7 @@ function ThoughtPostModal({ setthoughtPostModalOpen }) {
           .then(async (cid) => {
             let name =
               State.database.userData?.data?.user?.name - caption.slice(0, 5);
-            let url = "https://ipfs.io/ipfs/" + cid + "/" + "meta.png";
+            let url = "https://nftstorage.link/ipfs/" + cid + "/" + "meta.png";
 
             mintNFTOnSolana2(
               State.database.walletAddress,
