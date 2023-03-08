@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../Store";
 import SolanaTorus from "@toruslabs/solana-embed";
 import googleLogo from "../../Assets/logos/icons/google.svg";
+import connectwallet from "../../Assets/connect-wallet.webp";
 
 function ConnectWalletModal() {
   const State = useContext(UserContext);
@@ -84,7 +85,7 @@ function ConnectWalletModal() {
       <div className="relative flex flex-col items-center bg-white dark:bg-slate-900 w-full   sm:max-w-xl  h-fit  rounded-lg overflow-hidden">
         <img
           className="w-full aspect-video object-cover"
-          src="https://www.swapin.com/wp-content/uploads/2022/11/web3_wallet_landscape-1024x576.png"
+          src={connectwallet}
           alt="wallet"
         />
         <div className="flex-grow p-8 flex flex-col items-center gap-4">

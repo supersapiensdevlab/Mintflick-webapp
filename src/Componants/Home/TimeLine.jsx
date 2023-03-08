@@ -13,7 +13,7 @@ function TimeLine() {
   // for Playing only one at time
   const [currentPlay, setCurrentPlay] = useState(null);
   const State = useContext(UserContext);
-  const [loadFeed] = useUserActions();
+  const [loadFeed, loadUser, loadProfileCard, loadNftsData] = useUserActions();
 
   const navigateTo = useNavigate();
 
@@ -23,6 +23,7 @@ function TimeLine() {
 
   useEffect(() => {
     loadFeed();
+    loadNftsData();
   }, []);
 
   // Infinite Pagination

@@ -48,6 +48,7 @@ import {
   createReactClient,
   studioProvider,
 } from "@livepeer/react";
+import NftDetails from "./Pages/NftDetails";
 function App() {
   const State = useContext(UserContext);
 
@@ -191,6 +192,7 @@ function App() {
 
           <Route path="quests" element={<Quests />} />
           <Route path="quest-details/:questId" element={<QuestDetails />} />
+          <Route path="nft-details/:tokenId" element={<NftDetails />} />
         </Route>
         <Route path="quests-admin" element={<QuestAdmin />} />
         <Route path="quest-details-admin" element={<QuestDetailsAdmin />} />

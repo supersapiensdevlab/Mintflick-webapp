@@ -53,9 +53,10 @@ import ListNFTModal from "./Modals/ListNFTModal";
 import { toPng } from "html-to-image";
 import { clusterApiUrl, Connection, Keypair, PublicKey } from "@solana/web3.js";
 import { Metaplex, keypairIdentity } from "@metaplex-foundation/js";
+import CustomInput from "../CustomInputs/CustomInput";
 
 function Post(props) {
-  const nav = useNavigate();
+  const navigateTo = useNavigate();
   // Common State and Functions
   const State = useContext(UserContext);
   const [loadFeed, loadUser, loadProfileCard] = useUserActions();
@@ -99,7 +100,6 @@ function Post(props) {
 
   //comment
   const [text, setText] = useState("");
-  const [showCommentInput, setshowCommentInput] = useState(false);
   const [commentCount, setCommentCount] = useState(0);
   // local comments
   const [myComments, setMyComments] = useState([]);
@@ -224,47 +224,6 @@ function Post(props) {
         console.log(error);
       });
   };
-
-  const onEmojiClick = (event, emojiObject) => {
-    setText(text + emojiObject.emoji);
-  };
-  async function handleOnEnter() {
-    if (State.database.userData.data.user && text !== "") {
-      let data = {
-        user_data_id: props.profileuser_id,
-        content: props.content,
-        comment: text,
-      };
-      axios({
-        method: "post",
-        url: `${process.env.REACT_APP_SERVER_URL}/user/addcomment`,
-        data: data,
-        headers: {
-          "content-type": "application/json",
-          "auth-token": JSON.stringify(localStorage.getItem("authtoken")),
-        },
-      })
-        .then((res) => {
-          setText("");
-          setMyComments((m) => [
-            {
-              comment: text,
-              _id: res.data.id,
-              user_id: State.database.userData.data.user._id,
-              likes: [],
-              profile_image: State.database.userData.data.user.profile_image,
-              username: State.database.userData.data.user.username,
-              name: State.database.userData.data.user.name,
-            },
-            ...m,
-          ]);
-          setCommentCount((commentsNumber) => commentsNumber + 1);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  }
 
   useEffect(() => {
     if (props?.content?.options) {
@@ -1221,11 +1180,14 @@ function Post(props) {
 
         {/* html for thought post nft */}
         {/* {console.log(owner ? owner : "", tokenId)} */}
-        {tokenId && (
-          <div className="w-full bg-primary text-white p-4 font-bold text-lg">
+        {/* {tokenId && (
+          <div
+            onClick={() => navigateTo(`../nft-details/${tokenId}`)}
+            className="w-full bg-primary text-white p-4 font-bold text-lg"
+          >
             This is a nft
           </div>
-        )}
+        )} */}
         {tokenId && owner ? (
           <div
             className={
@@ -1396,8 +1358,8 @@ function Post(props) {
 
             <div
               onClick={() => {
-                setshowCommentInput(!showCommentInput);
-                setshowComments(!showComments);
+                // setshowCommentInput(!showCommentInput);
+                setshowComments(true);
               }}
               className="cursor-pointer flex items-center space-x-2 text-brand1"
             >
@@ -1417,63 +1379,16 @@ function Post(props) {
             </div>
           </div>
         </div>
-        {showCommentInput && (
-          <div className="flex gap-2 items-center">
-            {/* <textarea
-              onChange={(e) => setText(e.target.value)}
-              placeholder="Type here..."
-              className="input w-full pt-2"
-              value={text}
-            ></textarea> */}
-            <MentionsInput
-              value={text}
-              onChange={(e) => {
-                setText(e.target.value);
-              }}
-              className="input w-full"
-              style={defaultStyle}
-              placeholder={"Type here..."}
-              a11ySuggestionsListLabel={"Suggested mentions"}
-            >
-              <Mention
-                trigger="@"
-                data={renderData}
-                markup="@__display__"
-                appendSpaceOnAdd
-              />
-            </MentionsInput>
-            <div className="dropdown dropdown-top dropdown-end">
-              <label tabindex={0} className="btn m-1 btn-primary btn-outline">
-                😃
-              </label>
-              <ul
-                tabindex={0}
-                className="dropdown-content menu  bg-base-100 rounded-md w-fit"
-              >
-                <Picker onEmojiClick={onEmojiClick} />
-              </ul>
-            </div>
-            <button
-              onClick={() => text && handleOnEnter()}
-              className={`btn    ${
-                text !== "" ? "btn-primary btn-outline" : "btn-disabled"
-              }`}
-            >
-              <ArrowNarrowRight />
-            </button>
-          </div>
-        )}
 
-        {showComments && (props.comments || myComments.length > 0) ? (
+        {showComments && (
           <AllComments
             myComments={myComments}
             setMyComments={setMyComments}
             user_id={props.profileuser_id}
             contentData={props.content}
             setCommentCount={setCommentCount}
+            setshowComments={setshowComments}
           />
-        ) : (
-          <></>
         )}
         {reportModal && (
           <ReportModal

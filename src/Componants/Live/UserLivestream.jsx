@@ -247,16 +247,16 @@ function UserLivestream() {
     },
   };
   return streamUser && State.database.userData.data ? (
-    <div className="flex  items-start justify-center h-screen w-screen">
+    <div className="flex lg:pt-24 items-start justify-center h-screen w-screen">
       <div
-        className={`  flex flex-col   h-full flex-grow  mx-auto    overflow-auto bg-white dark:bg-slate-900`}
+        className={`flex flex-col h-full flex-grow  mx-auto overflow-auto bg-white dark:bg-slate-900`}
       >
         <button
           onClick={() => {
             State.updateDatabase({ showHeader: true, showBottomNav: true });
             navigateTo("../live");
           }}
-          className="fixed drop-shadow-lg shadow-slate-900  z-50 top-2 left-2 flex justify-center items-center text-brand3 font-semibold"
+          className="sticky w-full bg-white dark:bg-slate-900 z-50 top-0  p-2 left-0 flex justify-start items-center text-brand3 font-semibold"
         >
           <ChevronLeft />
           Back
@@ -451,12 +451,15 @@ function UserLivestream() {
           </div>
           {streamUser && streamUser.streamDetails && (
             <div className="p-3 m-2 text-lg text-brand3  h-fit bg-slate-100 dark:bg-slate-800  rounded-lg ">
-              {streamUser.streamDetails.description.length > 100 ? (
+              {streamUser.streamDetails?.description?.length > 100 ? (
                 <div className="w-full">
                   <div className="whitespace-pre-line truncate text-sm">
                     {readMore
-                      ? streamUser.streamDetails.description
-                      : streamUser.streamDetails.description.substring(0, 100)}
+                      ? streamUser.streamDetails?.description
+                      : streamUser.streamDetails?.description?.substring(
+                          0,
+                          100
+                        )}
                   </div>
                   {readMore ? (
                     <span

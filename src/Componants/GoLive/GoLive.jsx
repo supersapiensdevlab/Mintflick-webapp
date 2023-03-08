@@ -582,7 +582,7 @@ function GoLive() {
               selectedFile.file[0].name,
             username: user.database.userData?.data.user.username,
           };
-          const res = await axios({
+          axios({
             method: "POST",
             url: `${process.env.REACT_APP_SERVER_URL}/user/uploadThumbnail`,
             data: data,
@@ -590,8 +590,14 @@ function GoLive() {
               "content-type": "application/json",
               "auth-token": JSON.stringify(localStorage.getItem("authtoken")),
             },
-          });
-          user.toast("success", "Thumbnail Uploaded Successfully!");
+          })
+            .then((res) => {
+              console.log(res);
+              user.toast("success", "Thumbnail Uploaded Successfully!");
+            })
+            .catch((err) =>
+              user.toast("error", "Something went wrong please try again")
+            );
         })
         .catch((err) => {
           setUploadingFile(false);
@@ -734,11 +740,7 @@ function GoLive() {
   // on Stream Details Submit
   const handleStreamDetails = async (e) => {
     e.preventDefault();
-    if (
-      streamDetails.name != "" &&
-      streamDetails.description != "" &&
-      streamDetails.category != ""
-    ) {
+    if (streamDetails.name !== "" && streamDetails.category !== "") {
       try {
         await axios
           .post(

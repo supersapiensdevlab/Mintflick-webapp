@@ -191,7 +191,7 @@ function ShowComment({
     setMyReplyComments((cmts) => cmts.filter((c) => c._id !== com._id));
   };
 
-  const editMyReplyComments = (com,editText2) => {
+  const editMyReplyComments = (com, editText2) => {
     let allcomments = myReplyComments;
     for (var i = 0; i < allcomments.length; i++) {
       if (allcomments[i]._id == com._id) {
@@ -248,7 +248,7 @@ function ShowComment({
 
   return (
     <div
-      className="w-full flex items-start space-x-1"
+      className="w-full flex items-start space-x-1 m-1"
       style={{ whiteSpace: "pre-line" }}
     >
       {/* <img
@@ -268,7 +268,7 @@ function ShowComment({
             ? comment.profile_image
             : "https://cdn-icons-png.flaticon.com/512/149/149071.png"
         }
-        className="h-10 w-10 object-cover rounded-full "
+        className="h-6 w-6 object-cover rounded-full "
         width={50}
         height={50}
         alt="profile pic"
@@ -329,7 +329,7 @@ function ShowComment({
           {original && (
             <>
               <span>|</span>
-              <span onClick={() => setIsReply(true)}>Reply</span>
+              <span onClick={() => setIsReply(true)}>reply</span>
             </>
           )}
           {comment.username === State.database.userData?.data?.user.username ? (
@@ -340,7 +340,7 @@ function ShowComment({
                   setConfirmModal(true);
                 }}
                 size={16}
-                className={`${"text-red-500 hover:text-white fill-rose-500"} `}
+                className={`${"text-red-500 hover:text-white "} `}
               ></Trash>
               <span>|</span>
               <Edit
@@ -361,7 +361,7 @@ function ShowComment({
                     setConfirmModal(true);
                   }}
                   size={16}
-                  className={`${"text-red-500 hover:text-white fill-rose-500"} `}
+                  className={`${"text-red-500 hover:text-white "} `}
                 ></Trash>
                 <span>|</span>
                 <Edit

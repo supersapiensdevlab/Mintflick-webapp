@@ -19,7 +19,7 @@ function NftPostCard({ nftDetails }) {
 
   return (
     <a
-      href={`https://solscan.io/token/${nftDetails.mint}?cluster=devnet`}
+      href={`https://solscan.io/token/${nftDetails?.mint}?cluster=devnet`}
       target="_blank"
       className="w-full h-fit  bg-slate-50  lg:bg-slate-100  dark:bg-slate-700 lg:dark:bg-slate-800  rounded-lg drop-shadow-md lg:hover:scale-[1.01] transition-all ease-in-out overflow-clip"
     >
@@ -30,7 +30,7 @@ function NftPostCard({ nftDetails }) {
               className="  w-full aspect-square object-contain "
               width="100%"
               height="100%"
-              src={nftDetails.cached_image_uri}
+              src={nftDetails?.cached_image_uri}
               alt={"Post Image"}
               placeholder={
                 <div className="flex flex-col justify-center items-center gap-1">
@@ -42,12 +42,8 @@ function NftPostCard({ nftDetails }) {
               }
             />
           ) : (
-            <video
-              className="  w-full aspect-square object-contain "
-              autoPlay
-              controls
-            >
-              <source src={nftDetails.cached_image_uri} />
+            <video className="  w-full aspect-square object-contain " controls>
+              <source src={nftDetails?.cached_image_uri} />
             </video>
           )
         ) : (
@@ -58,9 +54,11 @@ function NftPostCard({ nftDetails }) {
         )}
       </div>
       <div className="flex flex-col p-4 w-full">
-        <span className="text-lg font-bold text-brand1">{nftDetails.name}</span>
+        <span className="text-lg font-bold text-brand1">
+          {nftDetails?.name}
+        </span>
         <span className="text-base font-semibold text-brand5 truncate">
-          {nftDetails.description}
+          {nftDetails?.description}
         </span>
       </div>
     </a>

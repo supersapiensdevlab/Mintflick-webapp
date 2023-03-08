@@ -194,7 +194,7 @@ function AddPost() {
         <div
           className={`${
             photoPostModalOpen && "modal-open"
-          } modal modal-bottom sm:modal-middle`}
+          } modal  modal-bottom sm:modal-middle`}
         >
           <PhotoPostModal setphotoPostModalOpen={setphotoPostModalOpen} />
         </div>
