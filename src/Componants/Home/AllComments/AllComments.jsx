@@ -12,6 +12,7 @@ function AllComments({
   myComments,
   setCommentCount,
   setMyComments,
+  ShowComments,
   setshowComments,
 }) {
   const State = useContext(UserContext);
@@ -195,7 +196,9 @@ function AllComments({
     setMyComments((cmts) => cmts.filter((c) => c._id !== com._id));
   };
   return (
-    <div className="fixed bottom-0 left-0  z-[999] bg-slate-100/20 backdrop-blur-lg w-full h-screen flex flex-col justify-end md:justify-center items-start p-2">
+    <div
+      className={`  fixed bottom-0 left-0  z-[999] bg-slate-100/20 backdrop-blur-lg w-full h-screen flex flex-col justify-end md:justify-center items-start p-2`}
+    >
       <span className="flex gap-1 items-center justify-between text-xl font-bold text-brand1  w-full max-w-xl mx-auto p-3">
         Comments{" "}
         <X onClick={() => setshowComments(false)} className="cursor-pointer" />
@@ -218,25 +221,31 @@ function AllComments({
         ) : (
           <></>
         )}
-        {comments && comments.length > 0 ? (
-          comments.map((comment, index) => (
-            <ShowComment
-              original={true}
-              id={comment._id}
-              key={index}
-              comment={comment}
-              user_id={user_id}
-              contentData={contentData}
-              setCommentCount={setCommentCount}
-              removeComment={removeComment2}
-              editComment={editComment}
-            />
-          ))
+        {comments ? (
+          comments.length > 0 ? (
+            comments.map((comment, index) => (
+              <ShowComment
+                original={true}
+                id={comment._id}
+                key={index}
+                comment={comment}
+                user_id={user_id}
+                contentData={contentData}
+                setCommentCount={setCommentCount}
+                removeComment={removeComment2}
+                editComment={editComment}
+              />
+            ))
+          ) : (
+            <div className="text-brand5 text-center text-lg font-semibold w-full">
+              Loading...
+            </div>
+          )
         ) : (
-          // <div className="text-white">No comments</div>
-          <></>
+          <div className="text-brand5 text-center text-lg font-bold w-full">
+            No comments yet!
+          </div>
         )}
-
         {comments &&
         comments.length > 0 &&
         comments.length < contentData.comments.length ? (

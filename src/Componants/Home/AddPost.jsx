@@ -96,7 +96,7 @@ function AddPost() {
       {/* FAB */}
       <div
         // className={`${State.database.showHeader ? "" : "translate-y-20"}
-        className={`bottom-[68px] transition-all ease-in-out lg:hidden fixed  right-2 z-40 space-x-1 `}
+        className={`bottom-20 transition-all ease-in-out lg:hidden fixed  right-2 z-40 space-x-1 `}
       >
         {/* for games */}
         {/* <Link

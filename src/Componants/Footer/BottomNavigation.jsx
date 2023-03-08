@@ -44,7 +44,7 @@ function BottomNavigation() {
     },
   ];
   return (
-    <div className="flex text-white items-center   py-4 justify-around   bg-slate-900/25 backdrop-blur-xl">
+    <div className="flex text-white items-center   py-4 pb-8 justify-around   bg-slate-900/25 backdrop-blur-xl">
       {data.map((item) => (
         <NavLink
           to={item.link}

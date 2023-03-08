@@ -129,7 +129,6 @@ function UserLivestream() {
 
   useEffect(() => {
     get_User();
-
     if (State.database.userData?.data?.user.username) {
       setPrivate(false);
     } else {
@@ -249,14 +248,14 @@ function UserLivestream() {
   return streamUser && State.database.userData.data ? (
     <div className="flex lg:pt-24 items-start justify-center h-screen w-screen">
       <div
-        className={`flex flex-col h-full flex-grow  mx-auto overflow-auto bg-white dark:bg-slate-900`}
+        className={`flex flex-col h-full flex-grow max-w-5xl mx-auto overflow-auto bg-white dark:bg-slate-900`}
       >
         <button
           onClick={() => {
             State.updateDatabase({ showHeader: true, showBottomNav: true });
             navigateTo("../live");
           }}
-          className="sticky w-full bg-white dark:bg-slate-900 z-50 top-0  p-2 left-0 flex justify-start items-center text-brand3 font-semibold"
+          className="sticky lg:hidden w-full bg-white dark:bg-slate-900 z-50 top-0  p-2 left-0 flex justify-start items-center text-brand3 font-semibold"
         >
           <ChevronLeft />
           Back
@@ -305,8 +304,8 @@ function UserLivestream() {
             </div>
           )
         ) : null}
-        <div className={`relative `}>
-          <div className="text-base md:text-lg text-brand2 p-2  font-semibold tracking-wider">
+        <div className={`relative flex-grow p-2`}>
+          <div className="text-base md:text-lg text-brand2 py-2 px-4  font-semibold tracking-wider">
             {streamUser && streamUser.streamDetails
               ? streamUser.streamDetails.name
               : null}
@@ -466,7 +465,6 @@ function UserLivestream() {
                       className="text-sm font-semibold text-blue-700 cursor-pointer"
                       onClick={() => setReadMore(false)}
                     >
-                      {" "}
                       Show Less
                     </span>
                   ) : (
@@ -523,7 +521,7 @@ function UserLivestream() {
           </div>
         </div>
       </div>
-      <div className="hidden w-[1200px] xl:block h-full">
+      <div className="hidden w-1/3 xl:block h-full">
         <div className={`   w-full h-full pb-10`}>
           <div className="  flex-grow flex justify-between p-2 font-semibold text-brand3 bg-slate-200 dark:bg-slate-700">
             live chat

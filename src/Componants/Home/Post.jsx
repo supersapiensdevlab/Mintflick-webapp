@@ -1387,6 +1387,7 @@ function Post(props) {
             user_id={props.profileuser_id}
             contentData={props.content}
             setCommentCount={setCommentCount}
+            showComments={showComments}
             setshowComments={setshowComments}
           />
         )}

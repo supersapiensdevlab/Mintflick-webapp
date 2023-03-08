@@ -79,7 +79,7 @@ function Home() {
         <FeedbackForm></FeedbackForm>
       </div>
       {showButton && (
-        <div className="absolute bottom-16 lg:bottom-5 w-screen flex justify-center lg:justify-end p-1">
+        <div className="absolute bottom-20 lg:bottom-5 w-screen flex justify-center lg:justify-end lg:right-4">
           <button onClick={scrollToTop} className="  btn btn-xs glass gap-1">
             <ChevronUp size={16} />
             scroll to top
