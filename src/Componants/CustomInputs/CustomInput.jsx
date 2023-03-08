@@ -58,7 +58,7 @@ function CustomInput({
       {showMentions && (
         <div
           className={`absolute translate-y-full
-        bottom-0 left-0  w-full rounded-md  shadow-lg bg-slate-100/20 backdrop-blur-md text-brand1 text-base font-medium z-50 flex flex-col h-40 overflow-auto`}
+        bottom-0 left-0  w-full rounded-md  shadow-lg bg-slate-100/20 backdrop-blur-md text-brand1 text-base font-medium z-[9999] flex flex-col h-40 overflow-auto`}
         >
           <span className="text-lg font-bold py-2 px-4">Following</span>
           {following.map((x, index) => {
@@ -80,8 +80,7 @@ function CustomInput({
       )}
       {showSlashTriggers && (
         <div
-          className={`absolute translate-y-full
-        bottom-0 left-0  w-full rounded-md  shadow-lg bg-slate-100/20 backdrop-blur-md text-brand1 text-base font-medium z-50 flex flex-col h-40 overflow-auto`}
+          className={`fixed bottom-0 left-0  w-full rounded-md  shadow-lg bg-slate-100/20 backdrop-blur-md text-brand1 text-base font-medium z-[9999] flex flex-col h-40 overflow-auto`}
         >
           {slashTriggers.map((x, index) => {
             return (

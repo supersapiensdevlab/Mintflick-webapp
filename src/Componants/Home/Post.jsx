@@ -1221,7 +1221,11 @@ function Post(props) {
 
         {/* html for thought post nft */}
         {/* {console.log(owner ? owner : "", tokenId)} */}
-
+        {tokenId && (
+          <div className="w-full bg-primary text-white p-4 font-bold text-lg">
+            This is a nft
+          </div>
+        )}
         {tokenId && owner ? (
           <div
             className={
