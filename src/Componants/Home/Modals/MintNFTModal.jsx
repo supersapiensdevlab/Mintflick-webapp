@@ -182,8 +182,9 @@ function MintNFTModal({
                       State.toast("success", "NFT Minted successfully");
                       finalTx.success &&
                         nftMinted(mintRequest.data.result.mint);
-                      finalTx.success &&
-                        setTokenId(mintRequest.data.result.mint);
+                      finalTx.success
+                        ? setTokenId(mintRequest.data.result.mint)
+                        : setMinting(false);
                       finalTx.success && setOwner(State.database.walletAddress);
                       finalTx.success && setMintModalOpen(false);
                       finalTx.success && loadFeed();
@@ -191,7 +192,7 @@ function MintNFTModal({
                     .catch((error) => {
                       State.toast(
                         "error",
-                        "Gas Station Signing teransaction failed!"
+                        "Gas Station Signing transaction failed!"
                       );
                       setMinting(false);
                     });

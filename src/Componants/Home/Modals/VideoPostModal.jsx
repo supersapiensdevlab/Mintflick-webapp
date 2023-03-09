@@ -267,6 +267,7 @@ function VideoPostModal({ setVideoPostModalOpen }) {
                 nftMinted(formData, mintRequest.data?.result.mint);
               })
               .catch((error) => {
+                setbtnText("Flick Video");
                 State.toast(
                   "error",
                   "Gas Station Signing teransaction failed!"
@@ -276,11 +277,13 @@ function VideoPostModal({ setVideoPostModalOpen }) {
           })
           .catch((error) => {
             State.toast("error", "Signing transaction with wallet failed!");
+            setbtnText("Flick Video");
             setUploadingVideo(false);
           });
       })
       .catch((error) => {
         State.toast("error", "Error while minting your NFT,please try again!");
+        setbtnText("Flick Video");
         setUploadingVideo(false);
       });
 

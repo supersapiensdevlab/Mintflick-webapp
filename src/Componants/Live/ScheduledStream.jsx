@@ -23,9 +23,11 @@ function ScheduledStream(props) {
   }, []);
 
   return (
-    <div className="w-full h-fit p-4 space-y-2 lg:rounded-xl bg-slate-100 dark:bg-slate-800 ">
-      <p className="font-bold text-base text-brand5 ">{props.section_name}</p>
-      <div className=" w-full overflow-x-auto">
+    <div className="w-full h-fit  space-y-2 lg:rounded-xl bg-slate-100 dark:bg-slate-800 ">
+      <p className="font-bold text-base text-brand5 px-4 pt-4">
+        {props.section_name}
+      </p>
+      <div className=" w-full overflow-x-auto px-4 pb-4">
         <div className="flex space-x-4 w-fit">
           {scheduledStream.length > 0 ? (
             <>

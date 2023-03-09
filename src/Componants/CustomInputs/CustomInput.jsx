@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../Store";
 
 function CustomInput({
+  rows,
   type,
   placeholder,
   className,
@@ -48,6 +49,7 @@ function CustomInput({
   return (
     <div className="relative ">
       <textarea
+        rows={rows ? rows : 2}
         type="text"
         placeholder={placeholder}
         className={className}

@@ -140,32 +140,7 @@ function MobileHeader() {
                 Mode
               </a>
             </li>
-            <li>
-              <span className="relative truncate hover:dark:bg-slate-900 text-emerald-600">
-                {State.database.chainId === 0 ? (
-                  <SolanaToken />
-                ) : (
-                  <PolygonToken />
-                )}{" "}
-                <p className="absolute top-2 left-4 h-2 w-2 bg-green-700 rounded-full animate-ping"></p>
-                <span
-                  onClick={() =>
-                    State.database.chainId === 0
-                      ? State.database.provider?.showWallet()
-                      : ""
-                  }
-                >
-                  {localStorage.getItem("walletAddress")?.slice(0, 6)}...
-                  {localStorage
-                    .getItem("walletAddress")
-                    ?.slice(
-                      localStorage.getItem("walletAddress")?.length - 4,
-                      localStorage.getItem("walletAddress")?.length
-                    )}
-                </span>
-                <CopyToClipboard text={localStorage.getItem("walletAddress")} />
-              </span>
-            </li>
+
             <li>
               <NavLink
                 onClick={() => {
@@ -180,6 +155,38 @@ function MobileHeader() {
               >
                 <DoorExit size={22}></DoorExit> Logout
               </NavLink>
+            </li>
+            <li>
+              <span className=" flex flex-col   gap-0 items-start truncate bg-slate-200 dark:bg-slate-900 p-0 mt-1">
+                <span className="text-lg text-primary font-semibold p-2 w-full text-center">
+                  {localStorage.getItem("walletAddress")?.slice(0, 6)}...
+                  {localStorage
+                    .getItem("walletAddress")
+                    ?.slice(
+                      localStorage.getItem("walletAddress")?.length - 4,
+                      localStorage.getItem("walletAddress")?.length
+                    )}
+                </span>
+                <div
+                  onClick={() =>
+                    State.database.chainId === 0
+                      ? State.database.provider?.showWallet()
+                      : ""
+                  }
+                  className="border-t-[1px] border-slate-300 dark:border-slate-700 text-center p-2  w-full capitalize text-brand2 font-bold "
+                >
+                  Open Wallet
+                </div>
+                <div
+                  onClick={() => {
+                    navigator.clipboard.writeText(State.database.walletAddress);
+                    State.toast("success", "Wallet Address Copied!");
+                  }}
+                  className="bg-emerald-600 text-center p-2  w-full capitalize text-white font-bold "
+                >
+                  Copy Address
+                </div>
+              </span>
             </li>
           </ul>
         </div>

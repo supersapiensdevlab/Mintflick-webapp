@@ -268,6 +268,7 @@ function AllComments({
             ></textarea> */}
         <div className="flex-grow">
           <CustomInput
+            rows={1}
             placeholder={"Type here..."}
             className=" textarea w-full"
             value={text}

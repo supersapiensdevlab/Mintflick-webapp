@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useContext } from "react";
 import { UserContext } from "../../Store";
-import placeholderImage from "../../Assets/profile-pic.png";
+import placeholder from "../../Assets/Gaming Posters/liveplaceholder.jpg";
 import { Image } from "react-img-placeholder";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -35,9 +35,11 @@ function LiveChannelCategories(props) {
   }, []);
 
   return (
-    <div className="w-full h-fit p-4 space-y-2 lg:rounded-xl bg-slate-100 dark:bg-slate-800 ">
-      <p className="font-bold text-base text-brand5 ">{props.section_name}</p>
-      <div className=" w-full overflow-x-auto">
+    <div className="w-full h-fit   space-y-2 lg:rounded-xl bg-slate-100 dark:bg-slate-800 ">
+      <p className="font-bold text-base text-brand5 px-4 pt-4">
+        {props.section_name}
+      </p>
+      <div className=" w-full overflow-x-auto px-4 pb-4">
         <div className="flex space-x-4 w-fit">
           {State.database.liveUsers.length > 0 ? (
             <>
@@ -61,12 +63,10 @@ function LiveChannelCategories(props) {
                       height={40}
                       className="h-10 rounded-full"
                       src={
-                        live.profile_image
-                          ? live.profile_image
-                          : placeholderImage
+                        live.profile_image ? live.profile_image : placeholder
                       }
                       alt="profileImage"
-                      placeholderSrc={placeholderImage}
+                      placeholderSrc={placeholder}
                     />
                     <div className=" ">
                       <p className="w-48 text-sm font-medium text-brand3 truncate">

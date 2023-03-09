@@ -318,7 +318,7 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
               });
               mintNFTOnSolana2(
                 State.database.walletAddress,
-                caption,
+                "Mintflick Collection",
                 caption,
                 url,
                 image

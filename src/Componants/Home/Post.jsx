@@ -22,6 +22,7 @@ import {
   UserOff,
   UserPlus,
   Wallet,
+  ChevronRight,
 } from "tabler-icons-react";
 import PolygonToken from "../../Assets/logos/PolygonToken";
 import coverImage from "../../Assets/backgrounds/cover.png";
@@ -49,11 +50,7 @@ import { Link } from "react-router-dom";
 import ReportModal from "./Modals/ReportModal";
 import { useNavigate } from "react-router-dom";
 import MintNFTModal from "./Modals/MintNFTModal";
-import ListNFTModal from "./Modals/ListNFTModal";
-import { toPng } from "html-to-image";
-import { clusterApiUrl, Connection, Keypair, PublicKey } from "@solana/web3.js";
-import { Metaplex, keypairIdentity } from "@metaplex-foundation/js";
-import CustomInput from "../CustomInputs/CustomInput";
+import nftCoin from "../../Assets/nftCoin.png";
 
 function Post(props) {
   const navigateTo = useNavigate();
@@ -134,27 +131,27 @@ function Post(props) {
 
   const [nftLink, setnftLink] = useState(null);
 
-  async function getNftData(mintId) {
-    const connection = new Connection(process.env.REACT_APP_SOLANA_RPC);
-    const keypair = Keypair.generate();
-    // console.log("keypair", keypair);
-    const metaplex = new Metaplex(connection);
-    metaplex.use(keypairIdentity(keypair));
-    // console.log("mintId", mintId);
-    const mint = new PublicKey(mintId);
+  // async function getNftData(mintId) {
+  //   const connection = new Connection(process.env.REACT_APP_SOLANA_RPC);
+  //   const keypair = Keypair.generate();
+  //   // console.log("keypair", keypair);
+  //   const metaplex = new Metaplex(connection);
+  //   metaplex.use(keypairIdentity(keypair));
+  //   // console.log("mintId", mintId);
+  //   const mint = new PublicKey(mintId);
 
-    const nft = await metaplex.nfts().findByMint({ mintAddress: mint });
+  //   const nft = await metaplex.nfts().findByMint({ mintAddress: mint });
 
-    // console.log("nft", nft);
-    nft.json.image && setnftLink(nft.json.image);
-    const largestAccounts = await connection.getTokenLargestAccounts(mint);
-    const largestAccountInfo = await connection.getParsedAccountInfo(
-      largestAccounts.value[0].address
-    );
-    // console.log(largestAccountInfo.value.data.parsed.info.owner);
-    largestAccountInfo.value.data.parsed.info.owner &&
-      setOwner(largestAccountInfo.value.data.parsed.info.owner);
-  }
+  //   // console.log("nft", nft);
+  //   nft.json.image && setnftLink(nft.json.image);
+  //   const largestAccounts = await connection.getTokenLargestAccounts(mint);
+  //   const largestAccountInfo = await connection.getParsedAccountInfo(
+  //     largestAccounts.value[0].address
+  //   );
+  //   // console.log(largestAccountInfo.value.data.parsed.info.owner);
+  //   largestAccountInfo.value.data.parsed.info.owner &&
+  //     setOwner(largestAccountInfo.value.data.parsed.info.owner);
+  // }
 
   useEffect(() => {
     if (props.comments) {
@@ -168,18 +165,6 @@ function Post(props) {
       setCommentCount(count);
     }
   }, [props.comments]);
-
-  useEffect(() => {
-    if (State.database.nftData) {
-      State.database.nftData.forEach((value) => {
-        if (props.content.tokenId) {
-          if (props.content.tokenId === value.nft_address) {
-            setPrice(value.price);
-          }
-        }
-      });
-    }
-  }, []);
 
   const handleUnfollowUser = async (toUnfollow) => {
     const unfollowData = {
@@ -376,33 +361,6 @@ function Post(props) {
   //// Video End
 
   //Fetch NFT Details on SOlana
-  useEffect(() => {
-    // if (tokenId !== null && tokenId !== undefined && tokenId !== "null") {
-    //   var myHeaders = new Headers();
-    //   myHeaders.append("x-api-key", `${process.env.REACT_APP_SHYFT_API_KEY}`);
-    //   //console.log(tokenId);
-    //   var requestOptions = {
-    //     method: "GET",
-    //     headers: myHeaders,
-    //     redirect: "follow",
-    //   };
-
-    //   fetch(
-    //     `https://api.shyft.to/sol/v1/nft/read?network=devnet&token_address=${tokenId}`,
-    //     requestOptions
-    //   )
-    //     .then((response) => response.json())
-    //     .then((result) => {
-    //       // console.log(result);
-    //       setOwner(result.result?.owner);
-    //       setnftLink(result.result?.image_uri);
-    //     })
-    //     .catch((error) => console.log("error", error));
-    // }
-    if (props.content.tokenId) {
-      getNftData(props.content.tokenId);
-    }
-  }, []);
 
   // like section
   useEffect(() => {
@@ -756,8 +714,10 @@ function Post(props) {
 
   return (
     <>
-      <div className="relative w-full h-fit lg:bg-slate-100 lg:dark:bg-slate-800 lg:rounded-xl p-4 lg:p-8 space-y-4 pb-4 border-b-2 lg:border-none  border-slate-200 dark:border-slate-900">
-        {tokenId && owner && (
+      <div
+        className={`relative w-full h-fit  lg:bg-slate-100 lg:dark:bg-slate-800 lg:rounded-xl p-4 lg:p-8 space-y-4 pb-4 border-b-2 lg:border-none  border-slate-200 dark:border-slate-900 `}
+      >
+        {/* {tokenId && owner && (
           <svg
             className="absolute -top-6 lg:top-0 right-4  "
             width="30"
@@ -775,7 +735,7 @@ function Post(props) {
               fill="white"
             />
           </svg>
-        )}
+        )} */}
         <div className="flex w-full justify-between items-center">
           <Link to={`/homescreen/profile/${props.profileName}`}>
             <div
@@ -925,7 +885,7 @@ function Post(props) {
           </div>
         </div>
         <p className="font-normal text-base text-brand2 w-full">{props.text}</p>
-        {props.contentType === "post" && tokenId && !props.image && nftLink && (
+        {/* {props.contentType === "post" && tokenId && !props.image && nftLink && (
           <div className="items-center w-full     align-middle justify-center   flex rounded">
             <Image
               className="  w-full  object-contain"
@@ -943,7 +903,7 @@ function Post(props) {
               }
             />
           </div>
-        )}
+        )} */}
         {props.contentType === "post" && (
           <div className=" w-full h-fit z-10 space-y-2">
             {props.image && (
@@ -1177,131 +1137,7 @@ function Post(props) {
             </div>
           </>
         )}
-
-        {/* html for thought post nft */}
-        {/* {console.log(owner ? owner : "", tokenId)} */}
-        {/* {tokenId && (
-          <div
-            onClick={() => navigateTo(`../nft-details/${tokenId}`)}
-            className="w-full bg-primary text-white p-4 font-bold text-lg"
-          >
-            This is a nft
-          </div>
-        )} */}
-        {tokenId && owner ? (
-          <div
-            className={
-              // tokenId && !props.gettingNFTData
-              // ?
-              "w-full flex items-center justify-between rounded-lg space-x-1 text-brand2"
-              // : "hidden"
-            }
-          >
-            <div className="flex items-center gap-1">
-              <p className="font-medium text-sm ">Owned by</p>
-              <At size={16}></At>
-
-              <a
-                href={`https://solscan.io/token/${tokenId}?cluster=devnet`}
-                target="_blank"
-                className="cursor-pointer font-semibold text-sm text-primary"
-              >
-                {/* {props.ownerId} */}
-                {owner?.slice(0, 6) + "..." + owner?.slice(-4)}
-              </a>
-            </div>
-            {price > 0 ? (
-              owner === State.database.walletAddress ? (
-                <div className="cursor-pointer items-center  btn btn-xs btn-primary btn-outline gap-1 ml-auto rounded-md">
-                  Listed for Sale
-                </div>
-              ) : (
-                <div
-                  onClick={() =>
-                    State.updateDatabase({
-                      buyNFTModalData: {
-                        ownedBy: owner,
-                        nftName: props.trackName
-                          ? props.trackName
-                          : props.videoName
-                          ? props.videoName
-                          : props.text
-                          ? props.text
-                          : null,
-                        content:
-                          props.contentType === "post"
-                            ? nftLink
-                            : props.videoUrl,
-                        videoImage: props.videoImage ? props.videoImage : null,
-                        nftImage: props.trackImage
-                          ? props.trackImage
-                          : props.videoImage
-                          ? props.videoImage
-                          : nftLink
-                          ? nftLink
-                          : "https://lh3.googleusercontent.com/yCbypC0JI61YbUFf_5ULkHJonhKZpLt63wY4ZAP5DZLYuMfcwr28zdq5TDSyhtl0Ifg2mNrtrJ3tbBOW_XKEWNctFdx1LEaLTaDExg=w600",
-                        nftDescription: props.content.description,
-                        nftPrice: price,
-                        tokenId: props.content.tokenId,
-                        sellerAddress: owner,
-                        setPrice: setPrice,
-                        setOwner: setOwner,
-                      },
-
-                      buyNFTModalOpen: true,
-                    })
-                  }
-                  className="cursor-pointer items-center  btn btn-xs btn-primary btn-outline gap-1 ml-auto rounded-md"
-                >
-                  {/* <PolygonToken></PolygonToken> */}
-                  {/* <p className="text-sm  mx-1">{props.price}</p> */}
-                  <Wallet size={18} />
-                  Buy
-                </div>
-              )
-            ) : (
-              <>
-                {owner === State.database.walletAddress ? (
-                  <div
-                    className="cursor-pointer items-center  btn btn-xs btn-primary btn-outline gap-1 ml-auto rounded-md"
-                    onClick={() => setListModalOpen(true)}
-                  >
-                    {/* <PolygonToken></PolygonToken> */}
-                    {/* <p className="text-sm  mx-1">{props.price}</p> */}
-                    <CheckupList size={18} />
-                    List or Sell
-                  </div>
-                ) : (
-                  <></>
-                )}
-              </>
-            )}
-          </div>
-        ) : (
-          <>
-            {State.database.userData.data?.user.username ===
-              props.profileName &&
-            (props.contentType === "post" || props.contentType === "video") ? (
-              <div className="w-full flex justify-end">
-                {console.log("in2")}
-                <div
-                  className="cursor-pointer items-center btn btn-xs btn-primary btn-outline gap-1 ml-auto rounded-md"
-                  onClick={() => {
-                    setMintModalOpen(true);
-                  }}
-                >
-                  {/* <PolygonToken></PolygonToken> */}
-                  {/* <p className="text-sm  mx-1">{props.price}</p> */}
-                  <Award size={18} />
-                  Mint
-                </div>
-              </div>
-            ) : (
-              <></>
-            )}
-          </>
-        )}
-        <div className="flex justify-between">
+        <div className="flex items-center  justify-between">
           <div className="flex items-center space-x-4">
             {props.contentType === "post" && (
               <div className=" cursor-pointer flex items-center text-brand1  space-x-2">
@@ -1378,7 +1214,42 @@ function Post(props) {
               <Share></Share>
             </div>
           </div>
+          {props.content?.tokenId !== "null" && props.content?.tokenId && (
+            <div
+              onClick={() =>
+                navigateTo(`../nft-details/${props.content?.tokenId}`)
+              }
+              className="w-fit flex items-center gap-2 cursor-pointer ml-auto bg-gradient backdrop-blur-sm text-white p-2  font-medium  text-xs rounded-full"
+            >
+              <img className="h-4 w-4" src={nftCoin} alt="nftCoin" />
+              View NFT
+              <ChevronRight size={18} />
+            </div>
+          )}
+
+          {State.database.userData.data?.user.username === props.profileName &&
+          (props.content?.tokenId === "null" || !props.content?.tokenId) &&
+          (props.contentType === "post" || props.contentType === "video") ? (
+            <div className="w-full flex justify-end">
+              {console.log("in2")}
+              <div
+                className="flex gap-1 items-center w-fit bg-primary cursor-pointer backdrop-blur-sm text-white  py-2 px-4 font-semibold  text-sm rounded-full"
+                onClick={() => {
+                  setMintModalOpen(true);
+                }}
+              >
+                {/* <PolygonToken></PolygonToken> */}
+                {/* <p className="text-sm  mx-1">{props.price}</p> */}
+                Mint as NFT
+                <ChevronRight size={18} />
+              </div>
+            </div>
+          ) : (
+            <></>
+          )}
         </div>
+        {/* html for thought post nft */}
+        {/* {console.log(owner ? owner : "", tokenId)} */}
 
         {showComments && (
           <AllComments
@@ -1441,16 +1312,6 @@ function Post(props) {
         }
         id={props.contentType === "post" ? props.postId : props.videoId}
         contentType={props.contentType}
-      />
-      <ListNFTModal
-        text={props.text}
-        contentType={props.contentType}
-        listModalOpen={listModalOpen}
-        setListModalOpen={setListModalOpen}
-        setNftPrice={setPrice}
-        content={props.contentType === "post" ? nftLink : props.videoImage}
-        videoUrl={props.videoUrl}
-        tokenId={props.content?.tokenId}
       />
     </>
   );

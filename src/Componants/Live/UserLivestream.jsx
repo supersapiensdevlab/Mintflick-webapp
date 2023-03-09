@@ -248,7 +248,9 @@ function UserLivestream() {
   return streamUser && State.database.userData.data ? (
     <div className="flex lg:pt-24 items-start justify-center h-screen w-screen">
       <div
-        className={`flex flex-col h-full flex-grow max-w-5xl mx-auto overflow-auto bg-white dark:bg-slate-900`}
+        className={`flex flex-col h-full flex-grow max-w-5xl mx-auto  bg-white dark:bg-slate-900 ${
+          showChat ? "overflow-hidden" : "overflow-auto"
+        }`}
       >
         <button
           onClick={() => {
@@ -304,7 +306,13 @@ function UserLivestream() {
             </div>
           )
         ) : null}
-        <div className={`relative flex-grow p-2`}>
+        <div
+          className={`relative   p-2 ${
+            showChat
+              ? "overflow-hidden flex-grow"
+              : "overflow-auto md:overflow-visible"
+          }`}
+        >
           <div className="text-base md:text-lg text-brand2 py-2 px-4  font-semibold tracking-wider">
             {streamUser && streamUser.streamDetails
               ? streamUser.streamDetails.name
@@ -337,29 +345,16 @@ function UserLivestream() {
                   <div className="flex items-center gap-2">
                     {streamUser.username !=
                     State.database.userData.data?.user.username ? (
-                      subscribeButtonText === "Follow" ? (
-                        <button
-                          id="subscribeButton"
-                          className="btn btn-outline btn-primary btn-xs rounded-full capitalize  "
-                          onClick={
-                            State.database.userData.data.user != null &&
-                            trackFollowers
-                          }
-                        >
-                          <span>{subscribeButtonText}</span>
-                        </button>
-                      ) : (
-                        <button
-                          id="subscribeButton"
-                          className="btn btn-outline btn-primary btn-xs rounded-full capitalize"
-                          onClick={
-                            State.database.userData.data?.user != null &&
-                            trackFollowers
-                          }
-                        >
-                          <span>{subscribeButtonText}</span>
-                        </button>
-                      )
+                      <button
+                        id="subscribeButton"
+                        className="text-primary text-xs  font-semibold border-[1px] border-primary px-2 py-1 rounded-full  "
+                        onClick={
+                          State.database.userData.data.user != null &&
+                          trackFollowers
+                        }
+                      >
+                        <span>{subscribeButtonText}</span>
+                      </button>
                     ) : null}
                   </div>
                 </div>
@@ -529,6 +524,19 @@ function UserLivestream() {
           </div>
           <LiveRoom username={streamUser?.username}></LiveRoom>
         </div>
+      </div>
+      <div
+        className={`${
+          joinsuperfanModalOpen && "modal-open"
+        } modal modal-bottom sm:modal-middle`}
+      >
+        <JoinSuperfanModal
+          setJoinSuperfanModal={setJoinsuperfanModalOpen}
+          // content={props.content}
+          superfan_data={streamUser?.superfan_data}
+          toPay={streamUser?.wallet_id}
+          postUsername={streamUser?.username}
+        />
       </div>
     </div>
   ) : (
