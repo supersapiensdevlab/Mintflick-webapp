@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useContext } from "react";
 import { UserContext } from "../../Store";
-import placeholder from "../../Assets/Gaming Posters/liveplaceholder.jpg";
+import placeholderImage from "../../Assets/profile-pic.png";
 import { Image } from "react-img-placeholder";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import placeholder from "../../Assets/Gaming Posters/liveplaceholder.jpg";
 
 function LiveChannelCategories(props) {
   const State = useContext(UserContext);
@@ -51,22 +52,28 @@ function LiveChannelCategories(props) {
                   <div className="absolute top-4 left-2 w-fit bg-rose-600 rounded-full px-2 text-slate-100 text-sm font-semibold">
                     {props.event_status}
                   </div>
-                  <div
+                  <img
+                    className=" aspect-video w-full object-cover rounded-lg"
+                    src={live.thumbnail ? live.thumbnail : placeholder}
+                  />
+                  {/* <div
                     className=" h-36 w-full bg-cover rounded-lg"
                     style={{
                       backgroundImage: `url(${live.thumbnail}  )`,
                     }}
-                  ></div>
+                  ></div> */}
                   <div className="flex w-full space-x-2 ">
                     <Image
                       width={40}
                       height={40}
                       className="h-10 rounded-full"
                       src={
-                        live.profile_image ? live.profile_image : placeholder
+                        live.profile_image
+                          ? live.profile_image
+                          : placeholderImage
                       }
                       alt="profileImage"
-                      placeholderSrc={placeholder}
+                      placeholderSrc={placeholderImage}
                     />
                     <div className=" ">
                       <p className="w-48 text-sm font-medium text-brand3 truncate">
