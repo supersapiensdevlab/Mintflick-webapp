@@ -8,8 +8,8 @@ function ToastContainer() {
 
   return (
     <div className="fixed bottom-2 w-full h-fit z-[999] space-y-2 ">
-      {State.database.toasts.map((item) => (
-        <Toast msg={item.msg} type={item.type} />
+      {State.database.toasts.map((item, index) => (
+        <Toast key={index} msg={item.msg} type={item.type} />
       ))}
     </div>
   );

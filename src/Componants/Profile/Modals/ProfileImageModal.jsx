@@ -58,14 +58,24 @@ const ProfileImageModal = ({ setShowProfileImageModal }) => {
               }
             )
             .then(async (res) => {
-              await loadUser().then(async () => {
-                State.toast("success", "Profile photo updated successfully!");
+              console.log(res);
+              let temp = {
+                data: {
+                  user: res.data,
+                },
+              };
 
-                await loadProfileCard();
-                setUploadingImage(false);
-                setShowProfileImageModal(false);
-                setselectedProfileImageChange(null);
+              State.updateDatabase({
+                userData: temp,
+                walletAddress: temp.data.user.wallet_id,
               });
+              State.updateDatabase({ userProfileData: res });
+
+              State.toast("success", "Profile photo updated successfully!");
+
+              setUploadingImage(false);
+              setShowProfileImageModal(false);
+              setselectedProfileImageChange(null);
             })
             .catch((error) => {
               console.log(error);

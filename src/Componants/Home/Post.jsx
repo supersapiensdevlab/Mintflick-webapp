@@ -1240,7 +1240,7 @@ function Post(props) {
               >
                 {/* <PolygonToken></PolygonToken> */}
                 {/* <p className="text-sm  mx-1">{props.price}</p> */}
-                Mint as NFT
+                Make NFT
                 <ChevronRight size={18} />
               </div>
             </div>

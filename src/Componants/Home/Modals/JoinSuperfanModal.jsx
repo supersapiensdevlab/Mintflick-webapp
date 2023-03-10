@@ -118,33 +118,23 @@ const JoinSuperfanModal = ({
           "auth-token": JSON.stringify(localStorage.getItem("authtoken")),
         },
       })
-      .then(async (data) => {
+      .then(async (res) => {
+        console.log(res);
+        let temp = {
+          data: {
+            user: res.data,
+          },
+        };
+
+        State.updateDatabase({
+          userData: temp,
+          walletAddress: temp.data.user.wallet_id,
+        });
         setExplorerLink(link);
         State.toast("success", "Yay! You are now a superfan");
         setBuyingPlan(false);
-        await axios({
-          method: "post",
-          url: `${process.env.REACT_APP_SERVER_URL}/user/getuser_by_wallet`,
 
-          data: {
-            walletId: localStorage.getItem("walletAddress"),
-          },
-        })
-          .then((response) => {
-            console.log(response);
-
-            State.updateDatabase({
-              userData: response,
-              walletAddress: response.data.user.wallet_id,
-            });
-            setWhatToShow(null);
-            // setJoinSuperfanModal(false);
-          })
-          .catch(function (error) {
-            console.log(error);
-
-            setBuyingPlan(false);
-          });
+        setWhatToShow(null);
       })
       .catch((err) => {
         console.log(err);

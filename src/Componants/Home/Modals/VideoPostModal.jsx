@@ -156,14 +156,14 @@ function VideoPostModal({ setVideoPostModalOpen }) {
         file: sanitizeFilename(e.target.files[0]),
         localurl: URL.createObjectURL(e.target.files[0]),
       });
-      let videoName = e.target.files[0].name.replace(/\.[^/.]+$/, "");
-      setVideoData({ ...videoData, videoName: videoName });
+      // let videoName = e.target.files[0].name.replace(/[^a-zA-Z0-9\.]/g, "_");
+      // setVideoData({ ...videoData, videoName: videoName });
     } else if (e.target.name === "videoImage") {
       setSelectedThumbnail({
         file: sanitizeFilename(e.target.files[0]),
         localurl: URL.createObjectURL(e.target.files[0]),
       });
-      let videoImage = e.target.files[0].name.replace(/\.[^/]+$/, "");
+      let videoImage = e.target.files[0].name.replace(/[^a-zA-Z0-9\.]/g, "_");
       setVideoData({ ...videoData, videoImage: videoImage });
     }
   };
@@ -509,10 +509,10 @@ function VideoPostModal({ setVideoPostModalOpen }) {
                 }
               )
               .then((res) => {
-                State.toast("success", "Your video uplaoded successfully!");
-
                 clearState();
-                setTagged([]);
+                State.toast("success", "Your Video uplaoded successfully!");
+                loadFeed();
+                setVideoPostModalOpen(false);
               })
               .catch((err) => {
                 State.toast(
@@ -888,7 +888,8 @@ function VideoPostModal({ setVideoPostModalOpen }) {
                     className={`btn capitalize w-full  ${
                       selectedVideo?.file &&
                       selectedThumbnail?.file &&
-                      videoData.description !== ""
+                      videoData.description !== "" &&
+                      videoData.videoName !== ""
                         ? "btn-brand"
                         : "btn-disabled"
                     } ${uploadingVideo ? "loading" : ""}`}

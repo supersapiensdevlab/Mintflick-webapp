@@ -1,6 +1,6 @@
 import axios from "axios";
 import moment from "moment";
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { useContext } from "react";
 import { useState } from "react";
 import ReactPlayer from "react-player";
@@ -31,6 +31,26 @@ function UserLivestream() {
   const navigateTo = useNavigate();
   const { username } = useParams();
   const [streamUser, setStreamUser] = useState(null);
+  // const streamUserInfo = useMemo(() => {
+  //   axios
+  //     .get(`${process.env.REACT_APP_SERVER_URL}/user/${username}`)
+  //     .then((value) => {
+  //       console.log("memo called");
+  //       //  setStreamUser(value.data);
+  //       // for (let i = 0; i < value.data.follower_count.length; i++) {
+  //       //   if (
+  //       //     State.database.userData?.data
+  //       //       ? value.data.follower_count[i] ===
+  //       //         State.database.userData.data?.user.username
+  //       //       : false
+  //       //   ) {
+  //       //     setSubscribeButtonText("Unfollow");
+  //       //   }
+  //       // }
+  //       return value.data;
+  //     });
+  // }, []);
+
   const State = useContext(UserContext);
 
   const [joinsuperfanModalOpen, setJoinsuperfanModalOpen] = useState(false);
@@ -58,7 +78,7 @@ function UserLivestream() {
 
   const trackFollowers = async () => {
     const followData = {
-      following: `${streamUser.username}`,
+      following: `${streamUser?.username}`,
       follower: `${State.database.userData.data?.user.username}`,
     };
 
@@ -129,6 +149,7 @@ function UserLivestream() {
 
   useEffect(() => {
     get_User();
+    // console.log(streamUserInfo);
     if (State.database.userData?.data?.user.username) {
       setPrivate(false);
     } else {
@@ -263,29 +284,31 @@ function UserLivestream() {
           Back
         </button>
         {streamUser ? (
-          !streamUser.livepeer_data.isActive &&
-          new Date(streamUser.streamSchedule * 1) > new Date() ? (
+          !streamUser?.livepeer_data.isActive &&
+          new Date(streamUser?.streamSchedule * 1) > new Date() ? (
             <img
               className=" w-full aspect-video object-cover  "
               src={
-                streamUser.thumbnail ? streamUser.thumbnail : livePlaceholder
+                streamUser?.thumbnail ? streamUser?.thumbnail : livePlaceholder
               }
             />
           ) : (
             <div className="w-full aspect-video">
               <Player
                 title={
-                  streamUser && streamUser.streamDetails
-                    ? streamUser.streamDetails.name
+                  streamUser && streamUser?.streamDetails
+                    ? streamUser?.streamDetails.name
                     : "Mintflick Stream"
                 }
-                playbackId={streamUser.livepeer_data.playbackId}
+                playbackId={streamUser?.livepeer_data.playbackId}
                 showPipButton
                 autoPlay
                 priority
                 showTitle={false}
                 poster={
-                  streamUser.thumbnail ? streamUser.thumbnail : livePlaceholder
+                  streamUser?.thumbnail
+                    ? streamUser?.thumbnail
+                    : livePlaceholder
                 }
                 aspectRatio="16to9"
                 controls={{
@@ -314,8 +337,8 @@ function UserLivestream() {
           }`}
         >
           <div className="text-base md:text-lg text-brand2 py-2 px-4  font-semibold tracking-wider">
-            {streamUser && streamUser.streamDetails
-              ? streamUser.streamDetails.name
+            {streamUser && streamUser?.streamDetails
+              ? streamUser?.streamDetails.name
               : null}
           </div>
           {!privateUser ? (
@@ -323,12 +346,12 @@ function UserLivestream() {
               <div className="flex justify-start items-center gap-2 m-2">
                 <Link
                   className="w-12    aspect-square"
-                  to={`../profile/${streamUser.username}`}
+                  to={`../profile/${streamUser?.username}`}
                 >
                   <img
                     src={
-                      streamUser.profile_image
-                        ? streamUser.profile_image
+                      streamUser?.profile_image
+                        ? streamUser?.profile_image
                         : placeholderImage
                     }
                     alt="profile picture"
@@ -337,13 +360,13 @@ function UserLivestream() {
                 </Link>
                 <div className="flex flex-col gap-1  items-start">
                   <Link
-                    to={`../profile/${streamUser.username}`}
+                    to={`../profile/${streamUser?.username}`}
                     className="w-fit text-base font-bold md:text-lg text-brand1  tracking-wider hover:underline"
                   >
-                    {streamUser.name}
+                    {streamUser?.name}
                   </Link>
                   <div className="flex items-center gap-2">
-                    {streamUser.username !=
+                    {streamUser?.username !=
                     State.database.userData.data?.user.username ? (
                       <button
                         id="subscribeButton"
@@ -358,10 +381,10 @@ function UserLivestream() {
                     ) : null}
                   </div>
                 </div>
-                {streamUser.superfan_data &&
-                  streamUser.username !=
+                {streamUser?.superfan_data &&
+                  streamUser?.username !=
                     State.database.userData.data?.user.username &&
-                  streamUser.superfan_to.find(
+                  streamUser?.superfan_to.find(
                     (o) =>
                       o.username == State.database.userData.data?.user.username
                   ) == undefined && (
@@ -382,8 +405,8 @@ function UserLivestream() {
           ) : null}
           <div className=" w-full flex flex-wrap gap-2 p-2">
             {streamUser &&
-            new Date(streamUser.streamSchedule * 1) > new Date() &&
-            !streamUser.livepeer_data.isActive ? (
+            new Date(streamUser?.streamSchedule * 1) > new Date() &&
+            !streamUser?.livepeer_data.isActive ? (
               <span className="flex items-center h-8 w-fit bg-slate-100 dark:bg-slate-800  rounded-full px-3">
                 <span className="relative flex h-3 w-3">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-teal-500 opacity-75"></span>
@@ -392,7 +415,7 @@ function UserLivestream() {
                 <p className="text-xs sm:text-sm font-semibold text-brand2 ml-2">
                   Streaming on{" "}
                   <span className="text-teal-600">
-                    {moment(streamUser.streamSchedule * 1).format(
+                    {moment(streamUser?.streamSchedule * 1).format(
                       "MMMM Do YYYY, h:mm a"
                     )}
                   </span>
@@ -434,7 +457,7 @@ function UserLivestream() {
               onClick={() =>
                 State.updateDatabase({
                   shareModalOpen: true,
-                  sharePostUrl: `https://mintflick.app/homescreen/liveuser/${streamUser.username}`,
+                  sharePostUrl: `https://mintflick.app/homescreen/liveuser/${streamUser?.username}`,
                 })
               }
               className="btn btn-outline btn-primary btn-sm rounded-full gap-2  md:ml-auto flex"
@@ -443,14 +466,14 @@ function UserLivestream() {
               <p className=" ">SHARE</p>
             </div>
           </div>
-          {streamUser && streamUser.streamDetails && (
+          {streamUser && streamUser?.streamDetails && (
             <div className="p-3 m-2 text-lg text-brand3  h-fit bg-slate-100 dark:bg-slate-800  rounded-lg ">
-              {streamUser.streamDetails?.description?.length > 100 ? (
+              {streamUser?.streamDetails?.description?.length > 100 ? (
                 <div className="w-full">
                   <div className="whitespace-pre-line truncate text-sm">
                     {readMore
-                      ? streamUser.streamDetails?.description
-                      : streamUser.streamDetails?.description?.substring(
+                      ? streamUser?.streamDetails?.description
+                      : streamUser?.streamDetails?.description?.substring(
                           0,
                           100
                         )}
@@ -480,7 +503,7 @@ function UserLivestream() {
           )}
           <div className="grid grid-cols-2 gap-4 grid-flow-row  p-2 ">
             {streamUser?.streamLinks ? (
-              streamUser.streamLinks.map((link, index) => {
+              streamUser?.streamLinks.map((link, index) => {
                 return (
                   <div key={index} className="h-full w-full">
                     <a

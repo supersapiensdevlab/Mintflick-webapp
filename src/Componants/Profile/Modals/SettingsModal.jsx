@@ -8,6 +8,7 @@ import {
   CircleCheck,
   Copy,
   DeviceFloppy,
+  Disabled,
   Edit,
   InfoCircle,
   Link,
@@ -42,6 +43,9 @@ function SettingsModal(props) {
   const [showProfileImageModal, setShowProfileImageModal] = useState(false);
   const [unlinkWalletModal, setunlinkWalletModal] = useState(false);
   const [linkNewWalletModalopen, setlinkNewWalletModalopen] = useState(false);
+
+  //profile details
+  const [name, setName] = useState("");
 
   //verify account form fields
   const [ensDomain, setensDomain] = useState("");
@@ -167,6 +171,40 @@ function SettingsModal(props) {
     // }
   };
 
+  function updateDetails() {
+    console.log("called");
+    axios({
+      method: "POST",
+      url: `${process.env.REACT_APP_SERVER_URL}/user/updateUser`,
+      data: {
+        id: State.database.userData.data?.user?._id,
+
+        name: name,
+      },
+      headers: {
+        "content-type": "application/json",
+        "auth-token": JSON.stringify(localStorage.getItem("authtoken")),
+      },
+    })
+      .then(async (res) => {
+        let temp = {
+          data: {
+            user: res.data,
+          },
+        };
+
+        State.updateDatabase({
+          userData: temp,
+          walletAddress: temp.data.user.wallet_id,
+        });
+        State.updateDatabase({ userProfileData: res });
+        State.toast("success", "Profile updated successfully!");
+        setName("");
+      })
+      .catch((err) => {
+        State.toast("error", "Something went wrong! please try again.");
+      });
+  }
   return (
     <>
       <div
@@ -287,7 +325,6 @@ function SettingsModal(props) {
                   <Pencil className=" " size={16} />
                 </button>
               </div>
-
               {/* <input
                 type="text"
                 className="input  w-full"
@@ -314,9 +351,11 @@ function SettingsModal(props) {
                 <input
                   type="text"
                   className="input text-brand1 w-full"
-                  value={State.database.userData?.data?.user?.name}
-                  //   onChange={(e) =>
-                  //   value={}
+                  placeholder={State.database.userData?.data?.user?.name}
+                  onChange={(e) => {
+                    setName(e.target.value);
+                  }}
+                  value={name}
                 />
               </div>
               <div className="w-full flex items-center">
@@ -381,9 +420,14 @@ function SettingsModal(props) {
                 link other wallet
               </button> */}
               </div>
-              <button className="btn btn-brand gap-2 capitalize ">
-                <DeviceFloppy /> Save Changes
-              </button>
+              {name !== "" && (
+                <button
+                  onClick={updateDetails}
+                  className={`btn btn-brand gap-2 capitalize `}
+                >
+                  <DeviceFloppy /> Save Changes
+                </button>
+              )}
             </div>
           )}
           {activeTab === "manageSuperfans" && (

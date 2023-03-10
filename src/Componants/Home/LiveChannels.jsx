@@ -51,7 +51,7 @@ function LiveChannels() {
               <Image
                 width={33}
                 height={33}
-                className="h-full rounded-full border-2 border-rose-600"
+                className="h-full aspect-square object-cover rounded-full border-2 border-rose-600"
                 src={
                   channel.profile_image
                     ? channel.profile_image

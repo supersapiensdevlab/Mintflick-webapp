@@ -55,14 +55,23 @@ const CoverImageModal = ({ setShowCoverImageModal }) => {
               }
             )
             .then(async (res) => {
-              await loadUser().then(async () => {
-                setUploadingImage(false);
-                setShowCoverImageModal(false);
-                setSelectedCoverImage(null);
+              let temp = {
+                data: {
+                  user: res.data,
+                },
+              };
 
-                State.toast("success", "Cover photo updated successfully!");
-                await loadProfileCard();
+              State.updateDatabase({
+                userData: temp,
+                walletAddress: temp.data.user.wallet_id,
               });
+              State.updateDatabase({ userProfileData: res });
+
+              setUploadingImage(false);
+              setShowCoverImageModal(false);
+              setSelectedCoverImage(null);
+
+              State.toast("success", "Cover photo updated successfully!");
             })
             .catch((error) => {
               console.log(error);

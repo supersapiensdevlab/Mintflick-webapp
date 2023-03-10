@@ -44,6 +44,9 @@ function Store(props) {
     updateStore({ toasts: [...store.toasts, { type: type, msg: msg }] });
   };
   const deleteToast = () => {
+    // const arr = store.toasts;
+    // console.log(arr.shift());
+    // updateStore({ toasts: arr });
     updateStore({ toasts: [] });
   };
   const addLiveUsers = (data) => {
