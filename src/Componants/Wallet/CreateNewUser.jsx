@@ -84,7 +84,7 @@ function CreateNewUser() {
   const [loader, setloader] = useState(false);
   const [error, seterror] = useState(false);
   const [showSplash, setshowSplash] = useState(false);
-
+  const [acceptPolicy, setAcceptedPolicy] = useState(false);
   const SlashScreenData = [
     {
       image: social,
@@ -254,9 +254,34 @@ function CreateNewUser() {
             placeholder="Email"
             className="input w-full "
           />
+          <label className="flex items-center cursor-pointer gap-2">
+            <input
+              type="checkbox"
+              value={acceptPolicy}
+              onChange={() => setAcceptedPolicy(!acceptPolicy)}
+              className="checkbox checkbox-primary"
+            />
+            <span className="label-text text-brand3">
+              I have read & agree to the &nbsp;
+              <a
+                className="underline"
+                target={"_blank"}
+                href="https://mintflick.app/privacy-policy.html"
+              >
+                Privacy Policy
+              </a>
+            </span>
+          </label>
           <button
             type="submit"
-            className={`btn  w-full ${loader ? "loading" : "btn-brand"}`}
+            disabled={!acceptPolicy}
+            className={`btn  w-full ${
+              loader
+                ? "loading"
+                : "" || acceptPolicy
+                ? "btn-brand"
+                : "btn-ghost "
+            } `}
           >
             Create Account
           </button>
