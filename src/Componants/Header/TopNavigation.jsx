@@ -10,7 +10,7 @@ function TopNavigation() {
       icon: <SmartHome size={22}> </SmartHome>,
       isActive: 1,
       link: "/homescreen/home",
-      name: "Home",
+      name: "Feed",
     },
     {
       icon: <AccessPoint size={22}></AccessPoint>,
@@ -18,12 +18,12 @@ function TopNavigation() {
       link: "/homescreen/live",
       name: "Live",
     },
-    {
-      icon: <Confetti size={22}></Confetti>,
-      isActive: 3,
-      link: "/homescreen/marketPlace",
-      name: "Event",
-    },
+    // {
+    //   icon: <Confetti size={22}></Confetti>,
+    //   isActive: 3,
+    //   link: "/homescreen/marketPlace",
+    //   name: "Event",
+    // },
   ];
   return (
     <div className="flex items-center justify-center h-fit p-1 rounded-lg space-x-10 ">
@@ -37,8 +37,8 @@ function TopNavigation() {
           }}
           className={({ isActive }) =>
             isActive
-              ? `btn   btn-brand flex flex-col items-center justify-center space-y-1 `
-              : `btn  btn-ghost dark:text-gray-100 flex flex-col items-center justify-center space-y-1`
+              ? `btn   btn-brand flex  gap-2 items-center justify-center  `
+              : `btn  btn-ghost dark:text-gray-100 flex  gap-2 items-center justify-center `
           }
         >
           {item.icon}

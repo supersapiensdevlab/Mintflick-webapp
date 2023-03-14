@@ -19,7 +19,7 @@ export const mintNFTOnSolana = async (
   let response;
 
   let nftSolanaData = {
-    network: "devnet",
+    network: process.env.REACT_APP_SOLANA_NETWORK,
     creator_wallet: creator_wallet,
     name: name,
     symbol: "FLICK",
@@ -54,7 +54,10 @@ export const mintNFTOnSolana = async (
 export async function signTransaction(transaction, key) {
   console.log(transaction, "KEY:", key);
   try {
-    const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
+    const connection = new Connection(
+      clusterApiUrl(process.env.REACT_APP_SOLANA_NETWORK),
+      "confirmed"
+    );
     const feePayer = Keypair.fromSecretKey(decode(key));
     console.log(feePayer);
     const recoveredTransaction = Transaction.from(
@@ -75,7 +78,10 @@ export async function signTransaction(transaction, key) {
 export async function partialSignWithWallet(encodedTransaction, provider) {
   console.log("PROVIDER:", provider);
   //we have to pass the recoveredTransaction received in the previous step in the encodedTransaction parameter
-  const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
+  const connection = new Connection(
+    clusterApiUrl(process.env.REACT_APP_SOLANA_NETWORK),
+    "confirmed"
+  );
   const solanaWallet = new SolanaWallet(provider); // web3auth.provider
   console.log(solanaWallet);
   const signedTx = await solanaWallet.provider
@@ -91,7 +97,10 @@ export async function partialSignWithWallet(encodedTransaction, provider) {
 }
 
 export async function confirmTransactionFromFrontend(encodedTransaction) {
-  const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
+  const connection = new Connection(
+    clusterApiUrl(process.env.REACT_APP_SOLANA_NETWORK),
+    "confirmed"
+  );
   const wallet = new SolanaWallet(window.phantom.solana); // web3auth.provider
   const recoveredTransaction = Transaction.from(
     Buffer.from(encodedTransaction, "base64")
@@ -106,7 +115,7 @@ export async function confirmTransactionFromFrontend(encodedTransaction) {
 export const listNFTOnSolana = async (nft_address, price, seller_wallet) => {
   let response;
   var raw = JSON.stringify({
-    network: "devnet",
+    network: process.env.REACT_APP_SOLANA_NETWORK,
     marketplace_address: process.env.REACT_APP_SOLANA_MARKETPLACE_ADDRESS,
     nft_address: nft_address,
     price: parseInt(price),

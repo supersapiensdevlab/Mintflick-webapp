@@ -10,6 +10,8 @@ import {
   HomeCog,
   Settings,
   User,
+  Wallet,
+  Copy,
 } from "tabler-icons-react";
 import { UserContext } from "../../Store";
 import axios from "axios";
@@ -244,7 +246,7 @@ function Header() {
     //   redirect: "follow",
     // };
     // fetch(
-    //   `https://api.shyft.to/sol/v1/marketplace/active_listings?network=devnet&marketplace_address=${process.env.REACT_APP_SOLANA_MARKETPLACE_ADDRESS}`,
+    //   `https://api.shyft.to/sol/v1/marketplace/active_listings?network=${process.env.REACT_APP_SOLANA_NETWORK}&marketplace_address=${process.env.REACT_APP_SOLANA_MARKETPLACE_ADDRESS}`,
     //   requestOptions
     // )
     //   .then((response) => response.text())
@@ -271,7 +273,7 @@ function Header() {
 
   const handleAuthorityUpdate = async () => {
     // let data = {
-    //   network: "devnet",
+    //   network: process.env.REACT_APP_SOLANA_NETWORK,
     //   marketplace_address: "48y3xy4e4YbYKYfbGUjojdqDxJ59HwLXpqCyoTckuQhR",
     //   authority_wallet: "4uHdbP7FkB4BSx6QAL15wgaphNn33jtpRq9ohMoMC8U2",
     //   new_authority_address: "8RLBjB2P1ttf5tvn1CimRfrzDg1eThn7dvADXUsbTnPK",
@@ -290,7 +292,7 @@ function Header() {
     //     console.log(err);
     //   });
     let data = {
-      network: "devnet",
+      network: process.env.REACT_APP_SOLANA_NETWORK,
       creator_wallet: `${process.env.REACT_APP_FEEPAYER_WALLET}`,
       transaction_fee: 10,
     };
@@ -303,7 +305,7 @@ function Header() {
       })
       .then(async (res) => {
         await signTransaction(
-          "devnet",
+          process.env.REACT_APP_SOLANA_NETWORK,
           res.data.result.encoded_transaction,
           () => {
             console.log("callback");
@@ -350,7 +352,7 @@ function Header() {
     <>
       <div
         // className={`${State.database.showHeader ? "" : "-translate-y-24"}
-        className={`transition-all ease-in-out hidden lg:flex fixed z-50  top-0  px-4 lg:px-12 justify-between items-center h-20 bg-white/25 dark:bg-slate-900/25 backdrop-blur-sm w-full shadow-mintflick`}
+        className={`transition-all ease-in-out hidden lg:flex fixed z-50  top-0  px-4 lg:px-12 justify-between items-center h-20 bg-white/25 dark:bg-slate-900/25 backdrop-blur-sm w-full border-b-[1px] border-gray-300/20 shadow-mintflick`}
       >
         <div
           className="flex items-center space-x-4 h-full w-1/3 -ml-2"
@@ -550,7 +552,7 @@ function Header() {
             </label>
             <ul
               tabindex="0"
-              className="menu menu-compact dropdown-content mt-3 p-2 shadow-xl   bg-slate-100 dark:bg-slate-800 text-brand1 text-base font-medium rounded-lg w-52"
+              className="menu menu-compact dropdown-content mt-3 p-2 shadow-xl  border-2 border-slate-300  dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-brand1 text-base font-medium rounded-lg w-52"
             >
               <li>
                 <NavLink
@@ -600,6 +602,18 @@ function Header() {
                 </a>
               </li>
               <li>
+                {" "}
+                <div
+                  onClick={() =>
+                    State.database.chainId === 0
+                      ? State.database.provider?.showWallet()
+                      : ""
+                  }
+                >
+                  <Wallet size={22} /> My Wallet
+                </div>
+              </li>
+              <li>
                 <NavLink
                   onClick={() => {
                     //logout();
@@ -617,25 +631,6 @@ function Header() {
               </li>
               <li>
                 <span className=" flex flex-col   gap-0 items-start truncate bg-slate-200 dark:bg-slate-900 p-0 mt-1">
-                  <span className="text-lg text-primary font-semibold p-2 w-full text-center">
-                    {localStorage.getItem("walletAddress")?.slice(0, 6)}...
-                    {localStorage
-                      .getItem("walletAddress")
-                      ?.slice(
-                        localStorage.getItem("walletAddress")?.length - 4,
-                        localStorage.getItem("walletAddress")?.length
-                      )}
-                  </span>
-                  <div
-                    onClick={() =>
-                      State.database.chainId === 0
-                        ? State.database.provider?.showWallet()
-                        : ""
-                    }
-                    className="border-t-[1px] border-slate-300 dark:border-slate-700 text-center p-2  w-full capitalize text-brand2 font-bold "
-                  >
-                    Open Wallet
-                  </div>
                   <div
                     onClick={() => {
                       navigator.clipboard.writeText(
@@ -643,9 +638,18 @@ function Header() {
                       );
                       State.toast("success", "Wallet Address Copied!");
                     }}
-                    className="bg-emerald-600 text-center p-2  w-full capitalize text-white font-bold "
+                    className="bg-emerald-600 hover:bg-emerald-700 text-center p-2  w-full capitalize text-white font-bold flex items-center justify-center gap-2"
                   >
-                    Copy Address
+                    <span className="   text-center">
+                      {localStorage.getItem("walletAddress")?.slice(0, 6)}...
+                      {localStorage
+                        .getItem("walletAddress")
+                        ?.slice(
+                          localStorage.getItem("walletAddress")?.length - 4,
+                          localStorage.getItem("walletAddress")?.length
+                        )}
+                    </span>
+                    <Copy size={18} />
                   </div>
                 </span>
               </li>

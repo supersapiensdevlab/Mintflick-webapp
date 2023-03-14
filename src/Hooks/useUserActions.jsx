@@ -73,7 +73,7 @@ export default function useUserActions() {
       redirect: "follow",
     };
     fetch(
-      `https://api.shyft.to/sol/v1/marketplace/active_listings?network=devnet&marketplace_address=${process.env.REACT_APP_SOLANA_MARKETPLACE_ADDRESS}`,
+      `https://api.shyft.to/sol/v1/marketplace/active_listings?network=${process.env.REACT_APP_SOLANA_NETWORK}&marketplace_address=${process.env.REACT_APP_SOLANA_MARKETPLACE_ADDRESS}`,
       requestOptions
     )
       .then((response) => response.json())

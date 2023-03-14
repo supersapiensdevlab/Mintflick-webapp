@@ -16,6 +16,8 @@ import {
 import { signTransaction } from "../../../Helper/mintOnSolana";
 import ReactPlayer from "react-player";
 import NftCard from "../NftCard";
+import { clusterApiUrl, Connection, Transaction } from "@solana/web3.js";
+import { SolanaWallet } from "@web3auth/solana-provider";
 
 function ListNFTModal({
   text,
@@ -52,7 +54,6 @@ function ListNFTModal({
       listNFTOnSolana2(tokenId, price, State.database?.walletAddress)
         .then((response) => {
           console.log(response);
-
           signTransactionWithWallet(
             response.data.result.encoded_transaction,
             State.database.provider
@@ -61,21 +62,29 @@ function ListNFTModal({
               console.log(signedTx);
               signWithRelayer(signedTx)
                 .then((response) => {
-                  State.toast("success", "NFT listed successfully");
+                  response.success
+                    ? State.toast("success", "NFT listed successfully")
+                    : State.toast(
+                        "error",
+                        "Error while listing your NFT,please try again!"
+                      );
 
                   response.success && setNftPrice(1);
-                  loadNftsData();
-                  setListModalOpen(false);
+                  response.success && loadNftsData();
+                  response.success
+                    ? setListModalOpen(false)
+                    : setListing(false);
                 })
                 .catch((error) => {
                   State.toast(
                     "error",
-                    "Gas Station Signing teransaction failed!"
+                    "Gas Station Signing transaction failed!"
                   );
                   setListing(false);
                 });
             })
             .catch((error) => {
+              console.log(error);
               State.toast("error", "Signing transaction with wallet failed!");
               setListing(false);
             });

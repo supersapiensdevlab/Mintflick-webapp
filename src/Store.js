@@ -32,6 +32,7 @@ function Store(props) {
     showBottomNav: true,
     //header
     showHeader: true,
+    newNotifications: 0,
   });
   const updateStore = (data) => {
     setstore((prev) => ({

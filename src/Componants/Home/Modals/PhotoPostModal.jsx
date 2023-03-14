@@ -26,6 +26,7 @@ import {
 import {
   mintNFTOnSolana2,
   signTransaction2,
+  signTransactionKeyWallet,
   signTransactionWithWallet,
   signWithRelayer,
 } from "../../../Helper/mintOnSolana2";
@@ -321,39 +322,63 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
                 "Mintflick Collection",
                 caption,
                 url,
-                image
+                image,
+                [
+                  {
+                    trait_type: "Creator",
+                    value: State.database.userData?.data?.user?.username,
+                  },
+                ]
               )
                 .then((mintRequest) => {
                   console.log(mintRequest);
-                  signTransactionWithWallet(
+                  signTransactionKeyWallet(
                     mintRequest.data.result.encoded_transaction,
+                    process.env.REACT_APP_FEEPAYER_PRIVATEKEY,
                     State.database.provider
                   )
-                    .then((signedTx) => {
-                      signWithRelayer(signedTx)
-                        .then((response) => {
-                          State.toast("success", "NFT Minted successfully");
-                          setbtnText("NFT Minted");
-                          uploadToServer(
-                            formData,
-                            mintRequest.data?.result.mint
-                          );
-                        })
-                        .catch((error) => {
-                          State.toast(
-                            "error",
-                            "Gas Station Signing teransaction failed!"
-                          );
-                          setUploadingPost(false);
-                        });
+                    .then((response) => {
+                      State.toast("success", "NFT Minted successfully");
+                      setbtnText("NFT Minted");
+                      uploadToServer(formData, mintRequest.data?.result.mint);
                     })
                     .catch((error) => {
+                      console.log(error);
                       State.toast(
                         "error",
-                        "Signing transaction with wallet failed!"
+                        "Error while signing transaction,please try again!"
                       );
                       setUploadingPost(false);
                     });
+                  // signTransactionWithWallet(
+                  //   mintRequest.data.result.encoded_transaction,
+                  //   State.database.provider
+                  // )
+                  //   .then((signedTx) => {
+                  //     signWithRelayer(signedTx)
+                  //       .then((response) => {
+                  //         State.toast("success", "NFT Minted successfully");
+                  //         setbtnText("NFT Minted");
+                  //         uploadToServer(
+                  //           formData,
+                  //           mintRequest.data?.result.mint
+                  //         );
+                  //       })
+                  //       .catch((error) => {
+                  //         State.toast(
+                  //           "error",
+                  //           "Gas Station Signing teransaction failed!"
+                  //         );
+                  //         setUploadingPost(false);
+                  //       });
+                  //   })
+                  //   .catch((error) => {
+                  //     State.toast(
+                  //       "error",
+                  //       "Signing transaction with wallet failed!"
+                  //     );
+                  //     setUploadingPost(false);
+                  //   });
                 })
                 .catch((error) => {
                   State.toast(
@@ -418,7 +443,7 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
       .then(async (res) => {
         State.toast("success", "Your Photo uploaded successfully!");
         setbtnText("Uploading Photo");
-        await loadFeed();
+        loadFeed();
         clearData();
       })
       .catch((err) => {

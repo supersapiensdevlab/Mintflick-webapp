@@ -216,19 +216,19 @@ function ChatsList({ userName, dms, rooms, socket }) {
                           "border-r-4 border-green-700 bg-slate-200 dark:bg-slate-900/60"
                         } group w-full flex cursor-pointer items-center gap-2 p-2 hover:bg-slate-200 dark:hover:bg-slate-700/60`}
                       >
-                        <Image
+                        {/* <Image
                           width={46}
                           height={46}
                           className="h-full rounded-full border-2"
                           src={placeholderImage}
                           alt="profileImage"
                           placeholderSrc={placeholderImage}
-                        />
+                        /> */}
                         <div className="flex flex-col">
                           <p className="cursor-pointer text-base font-semibold text-brand3">
                             {username}
 
-                            <span className=" text-xs font-normal rounded mx-2 px-1 py-0.5 bg-green-500">
+                            <span className=" text-xs font-bold text-white rounded mx-2 px-1 py-0.5 bg-green-500">
                               DM
                             </span>
                           </p>
@@ -257,19 +257,19 @@ function ChatsList({ userName, dms, rooms, socket }) {
                           "border-r-4 border-green-700 bg-slate-200 dark:bg-slate-900/60"
                         } group w-full flex cursor-pointer items-center gap-2 p-2 hover:bg-slate-200 dark:hover:bg-slate-700/60`}
                       >
-                        <Image
+                        {/* <Image
                           width={46}
                           height={46}
                           className="h-full rounded-full border-2"
                           src={placeholderImage}
                           alt="profileImage"
                           placeholderSrc={placeholderImage}
-                        />
+                        /> */}
                         <div className="flex flex-col">
                           <p className="cursor-pointer text-base font-semibold text-brand3">
                             {username}
 
-                            <span className=" text-xs font-normal rounded mx-2 px-1 py-0.5 bg-green-500">
+                            <span className=" text-xs font-bold text-white rounded mx-2 px-1 py-0.5 bg-green-500">
                               DM
                             </span>
                           </p>
@@ -296,19 +296,19 @@ function ChatsList({ userName, dms, rooms, socket }) {
                     "border-r-4 border-green-700 bg-slate-200 dark:bg-slate-900/60"
                   } group w-full flex cursor-pointer items-center gap-2 p-2 hover:bg-slate-200 dark:hover:bg-slate-700/60`}
                 >
-                  <Image
+                  {/* <Image
                     width={46}
                     height={46}
                     className="h-full rounded-full border-2"
                     src={placeholderImage}
                     alt="profileImage"
                     placeholderSrc={placeholderImage}
-                  />
+                  /> */}
                   <div className="flex flex-col">
                     <p className="cursor-pointer text-base font-semibold text-brand3">
                       {room.room_admin}
-                      <span className=" text-xs font-normal rounded mx-2 px-1 py-0.5 bg-orange-500">
-                        Group
+                      <span className=" text-xs font-bold text-white rounded mx-2 px-1 py-0.5 bg-orange-500">
+                        Channel
                       </span>
                     </p>
                     <p className="cursor-pointer text-base w-2/3 truncate text-brand5">

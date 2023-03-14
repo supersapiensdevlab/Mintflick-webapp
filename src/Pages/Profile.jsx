@@ -14,6 +14,7 @@ import MintWallet from "../Componants/Profile/MintWallet";
 import Vouch from "../Componants/Profile/Vouch";
 import Nfts from "../Componants/Profile/Nfts";
 import ProfileImageModal from "../Componants/Profile/Modals/ProfileImageModal";
+import FeedbackForm from "../Componants/Home/FeedbackForm";
 
 function Profile() {
   const State = useContext(UserContext);
@@ -61,6 +62,9 @@ function Profile() {
             State.database.userProfileData?.data?.superfan_to?.length
           }
         />
+        {State.database.userData?.data?.user?.username === userName && (
+          <FeedbackForm />
+        )}
 
         {/* <TextChannels></TextChannels> */}
         {/* <Vouch /> */}

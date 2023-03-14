@@ -22,6 +22,7 @@ import {
 } from "../../../Helper/mintOnSolana";
 import {
   mintNFTOnSolana2,
+  signTransactionKeyWallet,
   signTransactionWithWallet,
   signWithRelayer,
 } from "../../../Helper/mintOnSolana2";
@@ -97,7 +98,7 @@ function ThoughtPostModal({ setthoughtPostModalOpen }) {
     e.preventDefault();
     setUploadingPost(true);
     // var raw = JSON.stringify({
-    //   network: "devnet",
+    //   network: process.env.REACT_APP_SOLANA_NETWORK,
     //   marketplace_address: process.env.REACT_APP_SOLANA_MARKETPLACE_ADDRESS,
     //   nft_address: solanaMintId,
     //   price: parseInt(nftPrice),
@@ -116,7 +117,7 @@ function ThoughtPostModal({ setthoughtPostModalOpen }) {
       .then(async (data) => {
         console.log(data.data);
         // await signTransaction(
-        //   "devnet",
+        //   process.env.REACT_APP_SOLANA_NETWORK,
         //   data.data.result.encoded_transaction,
         //   async () => {
         //     setListSuccess(true);
@@ -208,36 +209,61 @@ function ThoughtPostModal({ setthoughtPostModalOpen }) {
               "Mintflick Collection",
               caption,
               url,
-              file
+              file,
+              [
+                {
+                  trait_type: "Creator",
+                  value: State.database.userData?.data?.user?.username,
+                },
+              ]
             )
               .then((mintRequest) => {
                 console.log(mintRequest);
-                signTransactionWithWallet(
+                signTransactionKeyWallet(
                   mintRequest.data.result.encoded_transaction,
+                  process.env.REACT_APP_FEEPAYER_PRIVATEKEY,
                   State.database.provider
                 )
-                  .then((signedTx) => {
-                    signWithRelayer(signedTx)
-                      .then((response) => {
-                        State.toast("success", "NFT Minted successfully");
-                        setbtnText("NFT Minted");
-                        nftMinted(myData, mintRequest.data?.result.mint);
-                      })
-                      .catch((error) => {
-                        State.toast(
-                          "error",
-                          "Gas Station Signing teransaction failed!"
-                        );
-                        setUploadingPost(false);
-                      });
+                  .then((response) => {
+                    State.toast("success", "NFT Minted successfully");
+                    setbtnText("NFT Minted");
+                    nftMinted(myData, mintRequest.data?.result.mint);
                   })
                   .catch((error) => {
+                    console.log(error);
                     State.toast(
                       "error",
-                      "Signing transaction with wallet failed!"
+                      "Error while signing transaction,please try again!"
                     );
                     setUploadingPost(false);
+                    setbtnText("Flick thought");
                   });
+                // signTransactionWithWallet(
+                //   mintRequest.data.result.encoded_transaction,
+                //   State.database.provider
+                // )
+                //   .then((signedTx) => {
+                //     signWithRelayer(signedTx)
+                //       .then((response) => {
+                //         State.toast("success", "NFT Minted successfully");
+                //         setbtnText("NFT Minted");
+                //         nftMinted(myData, mintRequest.data?.result.mint);
+                //       })
+                //       .catch((error) => {
+                //         State.toast(
+                //           "error",
+                //           "Gas Station Signing transaction failed!"
+                //         );
+                //         setUploadingPost(false);
+                //       });
+                //   })
+                //   .catch((error) => {
+                //     State.toast(
+                //       "error",
+                //       "Signing transaction with wallet failed!"
+                //     );
+                //     setUploadingPost(false);
+                //   });
               })
               .catch((error) => {
                 State.toast(
@@ -250,11 +276,13 @@ function ThoughtPostModal({ setthoughtPostModalOpen }) {
           .catch((err) => {
             console.log(err);
             State.toast("error", err.message);
+            setbtnText("Flick thought");
           });
       })
       .catch((err) => {
         console.log(err);
         State.toast("error", err.message);
+        setbtnText("Flick thought");
       });
   };
 

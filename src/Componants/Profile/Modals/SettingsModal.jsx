@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useContext } from "react";
 import {
   AlertTriangle,
@@ -81,6 +81,8 @@ function SettingsModal(props) {
   const [warning, setWarning] = useState(null);
   const [success, setSuccess] = useState(null);
   const [description, setDescription] = useState(null);
+
+  const [userData, setuserData] = useState({});
 
   const handleUpdateSuperfanPlans = async () => {
     if (superfanPlans === State.database.userData.data?.user?.superfan_data)
@@ -205,6 +207,32 @@ function SettingsModal(props) {
         State.toast("error", "Something went wrong! please try again.");
       });
   }
+  async function getUserData() {
+    await axios({
+      method: "post",
+      url: `${process.env.REACT_APP_SERVER_URL}/user/getuser_by_wallet`,
+
+      data: {
+        walletId: localStorage.getItem("walletAddress"),
+      },
+    })
+      .then((response) => {
+        console.log(response);
+        setuserData(response.data);
+        State.updateDatabase({
+          userData: response,
+          walletAddress: response.data.user.wallet_id,
+        });
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+  useEffect(() => {
+    !State.database.userData.data
+      ? getUserData()
+      : setuserData(State.database.userData.data);
+  }, [State.database.userData.data]);
   return (
     <>
       <div
@@ -263,8 +291,8 @@ function SettingsModal(props) {
                   width="100%"
                   height="100%"
                   src={
-                    State.database.userData?.data?.user?.cover_image
-                      ? State.database.userData?.data?.user?.cover_image
+                    userData.user?.cover_image
+                      ? userData.user?.cover_image
                       : coverImage
                   }
                   alt={"Post Image"}
@@ -309,8 +337,8 @@ function SettingsModal(props) {
               <div className="mx-auto relative">
                 <img
                   src={
-                    State.database.userData?.data?.user?.profile_image
-                      ? State.database.userData?.data?.user?.profile_image
+                    userData.user?.profile_image
+                      ? userData.user?.profile_image
                       : coverImage
                   }
                   alt="Profile image"
@@ -350,8 +378,8 @@ function SettingsModal(props) {
 
                 <input
                   type="text"
-                  className="input text-brand1 w-full"
-                  placeholder={State.database.userData?.data?.user?.name}
+                  className="input text-brand1 w-full placeholder:text-slate-900 dark:placeholder:text-slate-100"
+                  placeholder={userData.user?.name}
                   onChange={(e) => {
                     setName(e.target.value);
                   }}
@@ -362,7 +390,7 @@ function SettingsModal(props) {
                 <span className="text-brand4 px-3 w-1/4">Email</span>
 
                 <span className="text-brand3 p-3 bg-slate-900/5 dark:bg-white/5  rounded-lg w-full flex justify-between items-center">
-                  {State.database.userData?.data?.user?.email}{" "}
+                  {userData.user?.email}{" "}
                   <div
                     className="tooltip tooltip-left	"
                     data-tip="Currently uneditable"
@@ -420,6 +448,7 @@ function SettingsModal(props) {
                 link other wallet
               </button> */}
               </div>
+
               {name !== "" && (
                 <button
                   onClick={updateDetails}

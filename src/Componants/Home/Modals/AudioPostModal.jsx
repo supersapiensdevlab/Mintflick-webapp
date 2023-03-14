@@ -227,7 +227,7 @@ function AudioPostModal({ setAudioPostModalOpen }) {
       console.log("stored files with cid:", cid);
       console.log(State.database);
       let nftSolanaData = {
-        network: "devnet",
+        network: process.env.REACT_APP_SOLANA_NETWORK,
         wallet: State.database.walletAddress,
         name: selectedTrack.file.name,
         symbol: "FLICK",
@@ -252,7 +252,7 @@ function AudioPostModal({ setAudioPostModalOpen }) {
           console.log("MintID", data.data.result.mint);
           setTokenAddress(data.data.result.mint);
           await signTransaction(
-            "devnet",
+            process.env.REACT_APP_SOLANA_NETWORK,
             data.data.result.encoded_transaction,
             () => {
               nftMinted(formData, data.data.result.mint);
@@ -270,7 +270,7 @@ function AudioPostModal({ setAudioPostModalOpen }) {
     e.preventDefault();
     setUploadingTrack(true);
     var raw = JSON.stringify({
-      network: "devnet",
+      network: process.env.REACT_APP_SOLANA_NETWORK,
       marketplace_address: process.env.REACT_APP_SOLANA_MARKETPLACE_ADDRESS,
       nft_address: solanaMintId,
       price: parseInt(nftPrice),
@@ -288,7 +288,7 @@ function AudioPostModal({ setAudioPostModalOpen }) {
       .then(async (data) => {
         console.log(data.data);
         await signTransaction(
-          "devnet",
+          process.env.REACT_APP_SOLANA_NETWORK,
           data.data.result.encoded_transaction,
           async () => {
             setMintSuccess("NFT Listed Successfully");

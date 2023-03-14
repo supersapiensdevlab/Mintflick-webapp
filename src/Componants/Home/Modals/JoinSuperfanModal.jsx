@@ -101,7 +101,7 @@ const JoinSuperfanModal = ({
   }, [State.database.userData?.data?.user?.superfan_of]);
 
   const handleTransactionSucess = (receipt, plan) => {
-    const link = `https://explorer.solana.com/tx/${receipt}?cluster=devnet`;
+    const link = `https://explorer.solana.com/tx/${receipt}?cluster=${process.env.REACT_APP_SOLANA_NETWORK}`;
     const date2 = new Date();
     const timestamp = date2.getTime();
     console.log("date", timestamp);
@@ -170,6 +170,7 @@ const JoinSuperfanModal = ({
       })
       .catch((err) => {
         console.log(err);
+        State.toast("error", "Transaction failed. Please try again");
         setBuyingPlan(false);
       });
 

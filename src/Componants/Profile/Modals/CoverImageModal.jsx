@@ -55,18 +55,19 @@ const CoverImageModal = ({ setShowCoverImageModal }) => {
               }
             )
             .then(async (res) => {
-              let temp = {
-                data: {
-                  user: res.data,
-                },
-              };
+              // let temp = {
+              //   data: {
+              //     user: res.data,
+              //   },
+              // };
 
-              State.updateDatabase({
-                userData: temp,
-                walletAddress: temp.data.user.wallet_id,
-              });
-              State.updateDatabase({ userProfileData: res });
-
+              // State.updateDatabase({
+              //   userData: temp,
+              //   walletAddress: temp.data.user.wallet_id,
+              // });
+              // State.updateDatabase({ userProfileData: res });
+              loadUser();
+              loadProfileCard();
               setUploadingImage(false);
               setShowCoverImageModal(false);
               setSelectedCoverImage(null);

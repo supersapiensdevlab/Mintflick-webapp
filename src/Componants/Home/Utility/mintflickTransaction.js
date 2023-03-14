@@ -14,12 +14,12 @@ export async function transactionWithFee(
   receiver,
   ammount,
   fee,
-  provider,
+  provider
 ) {
   let tx;
-  console.log(sender, receiver, ammount,fee);
+  console.log(sender, receiver, ammount, fee);
   console.log(provider);
-  const connection = new Connection("https://api.devnet.solana.com");
+  const connection = new Connection(process.env.REACT_APP_SOLANA_RPC);
   const blockhash = (await connection.getRecentBlockhash("finalized"))
     .blockhash;
 
@@ -31,30 +31,23 @@ export async function transactionWithFee(
       fromPubkey: new PublicKey(sender),
       toPubkey: new PublicKey(receiver),
       lamports: Math.round(ammount * (1 - fee) * LAMPORTS_PER_SOL),
-    }),
+    })
   );
   transaction.add(
     SystemProgram.transfer({
       fromPubkey: new PublicKey(sender),
       toPubkey: new PublicKey("8TvHtNUsieHsr1xDwDCVLFBxPPeSWQ3zm6aigXfMEBEE"),
       lamports: Math.round(ammount * fee * LAMPORTS_PER_SOL),
-    }),
-  );
-  await provider
-    .signTransaction(transaction)
-    .then(async (signedTrasaction) => {
-      await connection
-        .sendRawTransaction(signedTrasaction.serialize())
-        .then((response) => {
-          console.log(response);
-          tx = response;
-        })
-        .catch((err) => {
-          console.log(err);
-        });
     })
-    .catch((err) => {
-      console.log(err);
-    });
+  );
+  await provider.signTransaction(transaction).then(async (signedTrasaction) => {
+    await connection
+      .sendRawTransaction(signedTrasaction.serialize())
+      .then((response) => {
+        console.log(response);
+        tx = response;
+      });
+  });
+
   return tx;
 }

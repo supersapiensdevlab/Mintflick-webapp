@@ -19,7 +19,7 @@ function NftPostCard({ nftDetails }) {
 
   return (
     <a
-      href={`https://solscan.io/token/${nftDetails?.mint}?cluster=devnet`}
+      href={`https://solscan.io/token/${nftDetails?.mint}?cluster=${process.env.REACT_APP_SOLANA_NETWORK}`}
       target="_blank"
       className="w-full h-fit  bg-slate-50  lg:bg-slate-100  dark:bg-slate-700 lg:dark:bg-slate-800  rounded-lg drop-shadow-md lg:hover:scale-[1.01] transition-all ease-in-out overflow-clip"
     >

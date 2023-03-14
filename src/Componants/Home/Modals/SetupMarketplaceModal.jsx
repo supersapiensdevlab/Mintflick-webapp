@@ -25,11 +25,11 @@ function SetupMarketplaceModal({ setMarketPlaceModalOpen }) {
   const [selectedToken, setSelectedToken] = useState(null);
 
   const [tokenAddress, setTokenAddress] = useState("");
-  const [network, setNetwork] = useState("devnet");
+  const [network, setNetwork] = useState(process.env.REACT_APP_SOLANA_NETWORK);
   const [feePayer, setFeePayer] = useState(null);
   const [txFees, setTxFees] = useState(5);
   const [feeRecipient, setFeeRecipient] = useState(
-    process.env.REACT_APP_TREASURY_WALLET,
+    process.env.REACT_APP_TREASURY_WALLET
   );
 
   const [loadFeed] = useUserActions();
@@ -54,7 +54,11 @@ function SetupMarketplaceModal({ setMarketPlaceModalOpen }) {
     });
   };
 
-  const networkArray = ["mainnet-beta", "testnet", "devnet"];
+  const networkArray = [
+    "mainnet-beta",
+    "testnet",
+    process.env.REACT_APP_SOLANA_NETWORK,
+  ];
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -64,14 +68,14 @@ function SetupMarketplaceModal({ setMarketPlaceModalOpen }) {
 
         console.log(State.database);
         // let formdata = new FormData();
-        // formdata.append("network", "devnet");
+        // formdata.append("network", process.env.REACT_APP_SOLANA_NETWORK);
         // formdata.append(
         //   "creator_wallet",
         //   State.database.walletAddress.toString(),
         // );
 
         let raw = JSON.stringify({
-          network: "devnet",
+          network: process.env.REACT_APP_SOLANA_NETWORK,
           transaction_fee: 5,
 
           creator_wallet: State.database.walletAddress,
@@ -91,7 +95,7 @@ function SetupMarketplaceModal({ setMarketPlaceModalOpen }) {
             await signTransaction(
               network,
               data.data.result.encoded_transaction,
-              Log,
+              Log
             );
           })
           .catch((err) => {
@@ -130,7 +134,7 @@ function SetupMarketplaceModal({ setMarketPlaceModalOpen }) {
     const ret = await confirmTransactionFromFrontend(
       connection,
       transaction,
-      solanaWallet,
+      solanaWallet
     );
     // const checks = await connection.confirmTransaction({signature:ret},'finalised');
 
@@ -144,28 +148,30 @@ function SetupMarketplaceModal({ setMarketPlaceModalOpen }) {
   }
 
   return (
-    <div className='modal-box p-0 bg-slate-100 dark:bg-slate-800 '>
-      <div className='w-full h-fit p-2 bg-slate-300 dark:bg-slate-700'>
-        <div className='flex justify-between items-center p-2'>
-          <h3 className='flex items-center gap-2 font-bold text-lg text-brand2'>
+    <div className="modal-box p-0 bg-slate-100 dark:bg-slate-800 ">
+      <div className="w-full h-fit p-2 bg-slate-300 dark:bg-slate-700">
+        <div className="flex justify-between items-center p-2">
+          <h3 className="flex items-center gap-2 font-bold text-lg text-brand2">
             <Camera />
             Create new Marketplace
           </h3>
           <X
             onClick={() => clearData()}
-            className='text-brand2 cursor-pointer'></X>
+            className="text-brand2 cursor-pointer"
+          ></X>
         </div>
       </div>
       <form onSubmit={handleSubmit}>
-        <div className='w-full p-4   grid  gap-4'>
-          <div className='form-control w-full  '>
-            <label className='label  '>
-              <span className='label-text text-slate-400'>Network</span>
+        <div className="w-full p-4   grid  gap-4">
+          <div className="form-control w-full  ">
+            <label className="label  ">
+              <span className="label-text text-slate-400">Network</span>
             </label>
             <select
-              className='select block w-full'
+              className="select block w-full"
               onChange={(e) => setNetwork(e.target.value)}
-              value={network}>
+              value={network}
+            >
               <option disabled selected>
                 Network
               </option>
@@ -175,86 +181,88 @@ function SetupMarketplaceModal({ setMarketPlaceModalOpen }) {
             </select>
           </div>
 
-          <div className='form-control w-full hidden '>
-            <label className='label  '>
-              <span className='label-text text-slate-400'>Creator Address</span>
+          <div className="form-control w-full hidden ">
+            <label className="label  ">
+              <span className="label-text text-slate-400">Creator Address</span>
             </label>
             <input
-              type='text'
-              className='textarea  w-full'
-              placeholder='Creator Address'
+              type="text"
+              className="textarea  w-full"
+              placeholder="Creator Address"
               readOnly={true}
               //onChange={(e) => setCreatorAddress(e.target.value)}
               value={State.database.walletAddress}
             />
           </div>
 
-          <div className='form-control w-full  '>
-            <label className='label  '>
-              <span className='label-text text-slate-400'>Market Currency</span>
+          <div className="form-control w-full  ">
+            <label className="label  ">
+              <span className="label-text text-slate-400">Market Currency</span>
             </label>
             <input
-              type='text'
-              className='textarea  w-full'
-              placeholder='Token Address'
+              type="text"
+              className="textarea  w-full"
+              placeholder="Token Address"
               onChange={(e) => setTokenAddress(e.target.value)}
               value={tokenAddress}
             />
           </div>
 
-          <div className='form-control w-full hidden '>
-            <label className='label  '>
-              <span className='label-text text-slate-400'>Fee Payer</span>
+          <div className="form-control w-full hidden ">
+            <label className="label  ">
+              <span className="label-text text-slate-400">Fee Payer</span>
             </label>
             <input
-              type='text'
-              className='textarea  w-full'
-              placeholder='Fee Payer Address'
+              type="text"
+              className="textarea  w-full"
+              placeholder="Fee Payer Address"
               onChange={(e) => setFeePayer(e.target.value)}
               value={feePayer}
             />
           </div>
 
-          <div className='form-control w-full  hidden'>
-            <label className='label  '>
-              <span className='label-text text-slate-400'>
+          <div className="form-control w-full  hidden">
+            <label className="label  ">
+              <span className="label-text text-slate-400">
                 Fee Recipient Address
               </span>
             </label>
             <input
-              type='text'
-              className='textarea  w-full'
-              placeholder='Fee Recipient Address'
+              type="text"
+              className="textarea  w-full"
+              placeholder="Fee Recipient Address"
               onChange={(e) => setFeeRecipient(e.target.value)}
               value={feeRecipient}
             />
           </div>
 
-          <div className='form-control w-full  '>
-            <label className='label  '>
-              <span className='label-text text-slate-400'>
+          <div className="form-control w-full  ">
+            <label className="label  ">
+              <span className="label-text text-slate-400">
                 Tx Fees (in lamports)
               </span>
             </label>
             <input
-              type='text'
-              className='textarea  w-full'
-              placeholder='Tx Fees (in lamports)'
+              type="text"
+              className="textarea  w-full"
+              placeholder="Tx Fees (in lamports)"
               onChange={(e) => setTxFees(e.target.value)}
               value={txFees}
             />
           </div>
 
-          <div className='w-fit flex space-x-2'></div>
+          <div className="w-fit flex space-x-2"></div>
           <progress
-            class='progress progress-success w-56 hidden'
-            value='50'
-            max='100'></progress>
+            class="progress progress-success w-56 hidden"
+            value="50"
+            max="100"
+          ></progress>
           <button
             type={"submit"}
             className={`btn  ${
               !tokenAddress ? "btn-disabled" : "btn-brand"
-            } w-full ${creatingMarketplace ? "loading " : ""}`}>
+            } w-full ${creatingMarketplace ? "loading " : ""}`}
+          >
             Create MarketPlace
           </button>
         </div>

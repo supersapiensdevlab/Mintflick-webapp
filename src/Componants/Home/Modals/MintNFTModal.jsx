@@ -11,6 +11,7 @@ import axios from "axios";
 import useUserActions from "../../../Hooks/useUserActions";
 import {
   mintNFTOnSolana2,
+  signTransactionKeyWallet,
   signTransactionWithWallet,
   signWithRelayer,
 } from "../../../Helper/mintOnSolana2";
@@ -87,36 +88,66 @@ function MintNFTModal({
       name,
       description,
       content,
-      file
+      file,
+      [
+        {
+          trait_type: "Creator",
+          value: State.database.userData?.data?.user?.username,
+        },
+      ]
     )
       .then((mintRequest) => {
         console.log(mintRequest);
-        signTransactionWithWallet(
+        signTransactionKeyWallet(
           mintRequest.data.result.encoded_transaction,
+          process.env.REACT_APP_FEEPAYER_PRIVATEKEY,
           State.database.provider
         )
-          .then((signedTx) => {
-            signWithRelayer(signedTx)
-              .then((finalTx) => {
-                State.toast("success", "NFT Minted successfully");
-                finalTx.success && nftMinted(mintRequest.data.result.mint);
-                finalTx.success && setTokenId(mintRequest.data.result.mint);
-                finalTx.success && setOwner(State.database.walletAddress);
-                finalTx.success && setMintModalOpen(false);
-                finalTx.success && loadFeed();
-              })
-              .catch((error) => {
-                State.toast(
-                  "error",
-                  "Gas Station Signing teransaction failed!"
-                );
-                setMinting(false);
-              });
+          .then((response) => {
+            State.toast("success", "NFT Minted successfully");
+
+            nftMinted(mintRequest.data.result.mint);
+            setTokenId(mintRequest.data.result.mint);
+            setOwner(State.database.walletAddress);
+            setMintModalOpen(false);
+            loadFeed();
           })
           .catch((error) => {
-            State.toast("error", "Signing transaction with wallet failed!");
+            console.log(error);
+            State.toast(
+              "error",
+              "Error while signing transaction,please try again!"
+            );
             setMinting(false);
           });
+        // signTransactionWithWallet(
+        //   mintRequest.data.result.encoded_transaction,
+        //   State.database.provider
+        // )
+        //   .then((signedTx) => {
+        //     signWithRelayer(signedTx)
+        //       .then((finalTx) => {
+        //         finalTx.success
+        //           ? State.toast("success", "NFT Minted successfully")
+        //           : State.toast(
+        //               "error",
+        //               "Error while minting your NFT,please try again!"
+        //             );
+        //         finalTx.success && nftMinted(mintRequest.data.result.mint);
+        //         finalTx.success && setTokenId(mintRequest.data.result.mint);
+        //         finalTx.success && setOwner(State.database.walletAddress);
+        //         finalTx.success ? setMintModalOpen(false) : setMinting(false);
+        //         finalTx.success && loadFeed();
+        //       })
+        //       .catch((error) => {
+        //         State.toast("error", "Gas Station Signing transaction failed!");
+        //         setMinting(false);
+        //       });
+        //   })
+        //   .catch((error) => {
+        //     State.toast("error", "Signing transaction with wallet failed!");
+        //     setMinting(false);
+        //   });
       })
       .catch((error) => {
         State.toast("error", "Error while minting your NFT,please try again!");
@@ -320,10 +351,10 @@ function MintNFTModal({
           <button
             onClick={handleMinting}
             className={`btn  
-                    btn-brand
+                    btn-brand capitalize
                   w-full ${minting ? "loading" : ""} `}
           >
-            confirm
+            {minting ? "" : "Confirm"}
           </button>
         </div>
       </div>

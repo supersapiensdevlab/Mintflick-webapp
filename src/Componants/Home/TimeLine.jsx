@@ -61,7 +61,7 @@ function TimeLine() {
       redirect: "follow",
     };
     fetch(
-      `https://api.shyft.to/sol/v1/marketplace/active_listings?network=devnet&marketplace_address=${process.env.REACT_APP_SOLANA_MARKETPLACE_ADDRESS}`,
+      `https://api.shyft.to/sol/v1/marketplace/active_listings?network=${process.env.REACT_APP_SOLANA_NETWORK}&marketplace_address=${process.env.REACT_APP_SOLANA_MARKETPLACE_ADDRESS}`,
       requestOptions
     )
       .then((response) => response.json())
@@ -76,7 +76,7 @@ function TimeLine() {
 
   return (
     <InfiniteScroll
-      className=" z-10 space-y-6 mb-24 max-w-2xl w-full "
+      className="mt-4 z-10 space-y-6 mb-24 max-w-2xl w-full "
       dataLength={State.database.feedData.length} //This is important field to render the next data
       next={() => loadMoreData(State.database.feedData.length)}
       hasMore={hasMore}
@@ -88,16 +88,6 @@ function TimeLine() {
       }
       scrollableTarget={"scrollableDiv"}
     >
-      <div
-        onClick={() => navigateTo("../quests")}
-        className="hidden w-full bg-white lg:rounded-lg overflow-hidden cursor-pointer"
-      >
-        <img
-          className="aspect-[16/9] w-full object-cover  "
-          src={image}
-          alt="quest-banner"
-        />
-      </div>
       {State.database.feedData.map((post, i) => (
         <Post
           contentType={post.content_type}

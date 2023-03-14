@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import {
+  Copy,
   DeviceGamepad2,
   DoorExit,
   MessageDots,
@@ -7,6 +8,7 @@ import {
   Settings,
   Sun,
   User,
+  Wallet,
 } from "tabler-icons-react";
 import { UserContext } from "../../Store";
 import Main_logo from "../../Assets/logos/Main_logo";
@@ -65,7 +67,7 @@ function MobileHeader() {
       } transition-all ease-in-out lg:hidden fixed z-50  top-0 flex px-4 lg:px-12 justify-between items-center h-16 bg-white dark:bg-slate-900 w-full shadow-mintflick`}
     >
       <div className="flex justify-between items-center  h-full w-full">
-        <div className="dropdown dropdown-start">
+        <div className="dropdown dropdown-start ">
           <label tabIndex="0" className=" ">
             <div className="w-10 h-10 rounded-full cursor-pointer">
               {/* <img
@@ -80,8 +82,8 @@ function MobileHeader() {
                 width={50}
                 height={50}
                 src={
-                  State.database.userData.data?.user.profile_image
-                    ? State.database.userData.data.user.profile_image
+                  State.database.userData?.data?.user?.profile_image
+                    ? State.database.userData?.data?.user?.profile_image
                     : coverImage
                 }
                 alt="profileImage"
@@ -91,7 +93,7 @@ function MobileHeader() {
           </label>
           <ul
             tabIndex="0"
-            className="menu menu-compact dropdown-content mt-3 p-2 shadow-xl   bg-slate-100 dark:bg-slate-800 text-brand1 text-base font-medium rounded-lg w-52"
+            className="menu menu-compact dropdown-content -ml-1 mt-5 p-2 shadow-xl border-2 border-slate-300  dark:border-slate-700  bg-slate-100 dark:bg-slate-900 text-brand1 text-base font-medium rounded-lg w-52"
           >
             <li>
               <NavLink
@@ -142,8 +144,21 @@ function MobileHeader() {
             </li>
 
             <li>
+              {" "}
+              <div
+                onClick={() =>
+                  State.database.chainId === 0
+                    ? State.database.provider?.showWallet()
+                    : ""
+                }
+              >
+                <Wallet size={22} /> My Wallet
+              </div>
+            </li>
+            <li>
               <NavLink
                 onClick={() => {
+                  //logout();
                   State.database.walletProvider === "torus" &&
                     State.database.provider.logout();
                   localStorage.removeItem("authtoken");
@@ -158,33 +173,23 @@ function MobileHeader() {
             </li>
             <li>
               <span className=" flex flex-col   gap-0 items-start truncate bg-slate-200 dark:bg-slate-900 p-0 mt-1">
-                <span className="text-lg text-primary font-semibold p-2 w-full text-center">
-                  {localStorage.getItem("walletAddress")?.slice(0, 6)}...
-                  {localStorage
-                    .getItem("walletAddress")
-                    ?.slice(
-                      localStorage.getItem("walletAddress")?.length - 4,
-                      localStorage.getItem("walletAddress")?.length
-                    )}
-                </span>
-                <div
-                  onClick={() =>
-                    State.database.chainId === 0
-                      ? State.database.provider?.showWallet()
-                      : ""
-                  }
-                  className="border-t-[1px] border-slate-300 dark:border-slate-700 text-center p-2  w-full capitalize text-brand2 font-bold "
-                >
-                  Open Wallet
-                </div>
                 <div
                   onClick={() => {
                     navigator.clipboard.writeText(State.database.walletAddress);
                     State.toast("success", "Wallet Address Copied!");
                   }}
-                  className="bg-emerald-600 text-center p-2  w-full capitalize text-white font-bold "
+                  className="bg-emerald-600 hover:bg-emerald-700 text-center p-2  w-full capitalize text-white font-bold flex items-center justify-center gap-2"
                 >
-                  Copy Address
+                  <span className="   text-center">
+                    {localStorage.getItem("walletAddress")?.slice(0, 6)}...
+                    {localStorage
+                      .getItem("walletAddress")
+                      ?.slice(
+                        localStorage.getItem("walletAddress")?.length - 4,
+                        localStorage.getItem("walletAddress")?.length
+                      )}
+                  </span>
+                  <Copy size={18} />
                 </div>
               </span>
             </li>

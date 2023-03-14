@@ -51,6 +51,7 @@ import ReportModal from "./Modals/ReportModal";
 import { useNavigate } from "react-router-dom";
 import MintNFTModal from "./Modals/MintNFTModal";
 import nftCoin from "../../Assets/nftCoin.png";
+import ListNFTModal from "./Modals/ListNFTModal";
 
 function Post(props) {
   const navigateTo = useNavigate();
@@ -1312,7 +1313,19 @@ function Post(props) {
         }
         id={props.contentType === "post" ? props.postId : props.videoId}
         contentType={props.contentType}
-      />
+      />{" "}
+      {listModalOpen && (
+        <ListNFTModal
+          text={"sfdsdfsfsdf"}
+          contentType={props.type !== "video/mp4" ? "post" : "video"}
+          listModalOpen={listModalOpen}
+          setListModalOpen={setListModalOpen}
+          setNftPrice={setPrice}
+          content={props.content?.post_image}
+          videoUrl={props.content?.post_video}
+          tokenId={props?.tokenId}
+        />
+      )}
     </>
   );
 }

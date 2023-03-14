@@ -653,7 +653,10 @@ function GoLive() {
 
   async function partialSignWithWallet(encodedTransaction) {
     //we have to pass the recoveredTransaction received in the previous step in the encodedTransaction parameter
-    const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
+    const connection = new Connection(
+      clusterApiUrl(process.env.REACT_APP_SOLANA_NETWORK),
+      "confirmed"
+    );
     const solanaWallet = new SolanaWallet(user.database?.provider); // web3auth.provider
     const signedTx = await solanaWallet.signTransaction(encodedTransaction);
 
@@ -667,7 +670,10 @@ function GoLive() {
   async function signTransaction(transaction, key) {
     console.log(transaction, key);
     try {
-      const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
+      const connection = new Connection(
+        clusterApiUrl(process.env.REACT_APP_SOLANA_NETWORK),
+        "confirmed"
+      );
       const feePayer = Keypair.fromSecretKey(decode(key));
       const recoveredTransaction = Transaction.from(
         Buffer.from(transaction, "base64")
@@ -685,7 +691,7 @@ function GoLive() {
       uploadFile(recordvideo.videoFile).then(async (cid) => {
         console.log("stored files with cid:", cid);
         let nftSolanaData = {
-          network: "devnet",
+          network: process.env.REACT_APP_SOLANA_NETWORK,
           creator_wallet: user.database.walletAddress,
           name: recordvideo?.videoName,
           symbol: "FLICK",

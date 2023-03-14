@@ -45,7 +45,7 @@ const FeedbackForm = () => {
   };
 
   return (
-    <div className="flex flex-col items-center  w-full h-fit bg-slate-100 dark:bg-slate-800 rounded-xl p-5   mt-5">
+    <div className="flex flex-col items-center  w-full h-fit bg-slate-100 dark:bg-slate-800 rounded-xl px-5 py-0 lg:py-5  mt-5">
       {!showFeedback ? (
         <div className="w-full">
           <p className=" text-brand2 text-lg font-bold">

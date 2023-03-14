@@ -342,31 +342,29 @@ function ChatModal(props) {
       }  top-0 left-0 h-screen w-screen z-50`}
     >
       <div className=" flex flex-col w-full h-full  p-0 bg-slate-100 dark:bg-slate-800 ">
-        <div className="w-full h-fit py-2 bg-slate-300 dark:bg-slate-700">
-          <div className="flex justify-between items-center  ">
-            <div
-              onClick={() => props.setOpen(false)}
-              className="  btn btn-square btn-sm btn-ghost "
-            >
-              <ArrowNarrowLeft size={24}></ArrowNarrowLeft>
-            </div>
-            <Link
-              to={`../profile/${username}`}
-              className=" w-full flex cursor-pointer items-center gap-2   p-1"
-            >
-              <Image
+        <div className="flex w-full justify-between items-center  h-fit p-2 bg-slate-300 dark:bg-slate-700">
+          <div
+            onClick={() => props.setOpen(false)}
+            className="  btn btn-square btn-sm btn-ghost "
+          >
+            <ChevronLeft size={24}></ChevronLeft>
+          </div>
+          <Link
+            to={`../profile/${username}`}
+            className=" w-full flex cursor-pointer items-center gap-2   p-1"
+          >
+            {/* <Image
                 width={42}
                 height={42}
                 className="h-full rounded-full border-2"
                 src={placeholderImage}
                 alt="profileImage"
                 placeholderSrc={placeholderImage}
-              />
-              <p className="cursor-pointer text-lg font-semibold text-brand2">
-                {username}
-              </p>
-            </Link>
-          </div>
+              /> */}
+            <p className="cursor-pointer text-lg font-semibold text-brand2">
+              {username}
+            </p>
+          </Link>
         </div>
 
         <div className=" relative flex-grow flex flex-col lg:w-2/4 w-full overflow-clip bg-slate-100 dark:bg-slate-800 ">

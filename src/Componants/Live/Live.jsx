@@ -23,7 +23,7 @@ function Live() {
           section_name="Live Now"
           event_status="Live"
         ></LiveChannelCategories>
-        <LiveCategories></LiveCategories>
+        {/* <LiveCategories></LiveCategories> */}
         <ScheduledStream section_name="Scheduled Streams"></ScheduledStream>
       </div>
     </div>

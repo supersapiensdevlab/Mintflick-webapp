@@ -28,6 +28,7 @@ import {
 } from "../../../Helper/mintOnSolana";
 import {
   mintNFTOnSolana2,
+  signTransactionKeyWallet,
   signTransactionWithWallet,
   signWithRelayer,
 } from "../../../Helper/mintOnSolana2";
@@ -35,6 +36,7 @@ import Main_logo from "../../../Assets/logos/Main_logo";
 import { sanitizeFilename } from "../../../functions/sanitizeFilename";
 import { Walkthrough } from "../../Walkthrough/Walkthrough";
 import CustomInput from "../../CustomInputs/CustomInput";
+import ThoughtPostModal from "./ThoughtPostModal";
 
 function VideoPostModal({ setVideoPostModalOpen }) {
   const State = useContext(UserContext);
@@ -222,7 +224,7 @@ function VideoPostModal({ setVideoPostModalOpen }) {
 
     console.log("stored files with cid:", cid);
     // let nftSolanaData = {
-    //   network: "devnet",
+    //   network: process.env.REACT_APP_SOLANA_NETWORK,
     //   wallet: State.database.walletAddress,
     //   name: selectedVideo.file.name,
     //   symbol: "FLICK",
@@ -251,35 +253,72 @@ function VideoPostModal({ setVideoPostModalOpen }) {
       videoData.videoName,
       videoData.description,
       url,
-      selectedVideo.file
+      selectedVideo.file,
+      [
+        {
+          trait_type: "Creator",
+          value: State.database.userData?.data?.user?.username,
+        },
+        {
+          trait_type: "Allow Attribution",
+          value: videoData.allowAttribution,
+        },
+        {
+          trait_type: "Commercial Use",
+          value: videoData.commercialUse,
+        },
+        {
+          trait_type: "Derivative Works",
+          value: videoData.derivativeWorks,
+        },
+      ]
     )
       .then((mintRequest) => {
         console.log(mintRequest);
-        signTransactionWithWallet(
+        signTransactionKeyWallet(
           mintRequest.data.result.encoded_transaction,
+          process.env.REACT_APP_FEEPAYER_PRIVATEKEY,
           State.database.provider
         )
-          .then((signedTx) => {
-            signWithRelayer(signedTx)
-              .then((response) => {
-                State.toast("success", "NFT Minted successfully");
-                setbtnText("NFT Minted");
-                nftMinted(formData, mintRequest.data?.result.mint);
-              })
-              .catch((error) => {
-                setbtnText("Flick Video");
-                State.toast(
-                  "error",
-                  "Gas Station Signing teransaction failed!"
-                );
-                setUploadingVideo(false);
-              });
+          .then((response) => {
+            State.toast("success", "NFT Minted successfully");
+            setbtnText("NFT Minted");
+            nftMinted(formData, mintRequest.data?.result.mint);
           })
           .catch((error) => {
-            State.toast("error", "Signing transaction with wallet failed!");
-            setbtnText("Flick Video");
+            console.log(error);
+            State.toast(
+              "error",
+              "Error while signing transaction,please try again!"
+            );
             setUploadingVideo(false);
+            setbtnText("Flick Video");
           });
+        // signTransactionWithWallet(
+        //   mintRequest.data.result.encoded_transaction,
+        //   State.database.provider
+        // )
+        //   .then((signedTx) => {
+        //     signWithRelayer(signedTx)
+        //       .then((response) => {
+        //         State.toast("success", "NFT Minted successfully");
+        //         setbtnText("NFT Minted");
+        //         nftMinted(formData, mintRequest.data?.result.mint);
+        //       })
+        //       .catch((error) => {
+        //         setbtnText("Flick Video");
+        //         State.toast(
+        //           "error",
+        //           "Gas Station Signing transaction failed!"
+        //         );
+        //         setUploadingVideo(false);
+        //       });
+        //   })
+        //   .catch((error) => {
+        //     State.toast("error", "Signing transaction with wallet failed!");
+        //     setbtnText("Flick Video");
+        //     setUploadingVideo(false);
+        //   });
       })
       .catch((error) => {
         State.toast("error", "Error while minting your NFT,please try again!");
@@ -294,7 +333,7 @@ function VideoPostModal({ setVideoPostModalOpen }) {
     e.preventDefault();
     setUploadingVideo(true);
     // var raw = JSON.stringify({
-    //   network: "devnet",
+    //   network: process.env.REACT_APP_SOLANA_NETWORK,
     //   marketplace_address: process.env.REACT_APP_SOLANA_MARKETPLACE_ADDRESS,
     //   nft_address: solanaMintId,
     //   price: parseInt(nftPrice),
@@ -313,7 +352,7 @@ function VideoPostModal({ setVideoPostModalOpen }) {
       .then(async (data) => {
         console.log(data.data);
         // await signTransaction(
-        //   "devnet",
+        //   process.env.REACT_APP_SOLANA_NETWORK,
         //   data.data.result.encoded_transaction,
         //   async () => {
         //     setMintSuccess("NFT Listed Successfully");

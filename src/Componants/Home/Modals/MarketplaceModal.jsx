@@ -83,7 +83,7 @@ function PhotoPostModal({ setMarketPlaceModalOpen }) {
 
         console.log(State.database);
         let formdata = new FormData();
-        formdata.append("network", "devnet");
+        formdata.append("network", process.env.REACT_APP_SOLANA_NETWORK);
         formdata.append("wallet", State.database.walletAddress);
         formdata.append("name", tokenName);
         formdata.append("symbol", tokenSymbol);
@@ -93,7 +93,7 @@ function PhotoPostModal({ setMarketPlaceModalOpen }) {
         formdata.append(
           "file",
           selectedToken.file[0],
-          selectedToken.file[0].name,
+          selectedToken.file[0].name
         );
 
         axios
@@ -108,9 +108,9 @@ function PhotoPostModal({ setMarketPlaceModalOpen }) {
             console.log("MintID", data.data.result);
             setTokenAddress(data.data.result.mint);
             await signTransaction(
-              "devnet",
+              process.env.REACT_APP_SOLANA_NETWORK,
               data.data.result.encoded_transaction,
-              createMarketplace,
+              createMarketplace
             );
           })
           .catch((err) => {
@@ -126,14 +126,14 @@ function PhotoPostModal({ setMarketPlaceModalOpen }) {
 
   const createMarketplace = async () => {
     let formdata = new FormData();
-    formdata.append("network", "devnet");
+    formdata.append("network", process.env.REACT_APP_SOLANA_NETWORK);
     formdata.append("creator_wallet", State.database.walletAddress);
     // formdata.append("transaction_fee", 5); //MintFlick Treasury Wallet Address
     // formdata.append("currency_address", tokenAddress);
     // formdata.append("fee_recipient", process.env.REACT_APP_TREASURY_WALLET);
 
     let raw = JSON.stringify({
-      network: "devnet",
+      network: process.env.REACT_APP_SOLANA_NETWORK,
       transaction_fee: 10,
       currency_address: tokenAddress,
       fee_payer: process.env.REACT_APP_TREASURY_WALLET,
@@ -152,9 +152,9 @@ function PhotoPostModal({ setMarketPlaceModalOpen }) {
       .then(async (data) => {
         console.log("Result:", data.data);
         await signTransaction(
-          "devnet",
+          process.env.REACT_APP_SOLANA_NETWORK,
           data.data.result.encoded_transaction,
-          clearData,
+          clearData
         );
       })
       .catch((err) => {
@@ -207,7 +207,7 @@ function PhotoPostModal({ setMarketPlaceModalOpen }) {
     const ret = await confirmTransactionFromFrontend(
       connection,
       transaction,
-      solanaWallet,
+      solanaWallet
     );
     // const checks = await connection.confirmTransaction({signature:ret},'finalised');
 
@@ -221,44 +221,46 @@ function PhotoPostModal({ setMarketPlaceModalOpen }) {
   }
 
   return (
-    <div className='modal-box p-0 bg-slate-100 dark:bg-slate-800 '>
-      <div className='w-full h-fit p-2 bg-slate-300 dark:bg-slate-700'>
-        <div className='flex justify-between items-center p-2'>
-          <h3 className='flex items-center gap-2 font-bold text-lg text-brand2'>
+    <div className="modal-box p-0 bg-slate-100 dark:bg-slate-800 ">
+      <div className="w-full h-fit p-2 bg-slate-300 dark:bg-slate-700">
+        <div className="flex justify-between items-center p-2">
+          <h3 className="flex items-center gap-2 font-bold text-lg text-brand2">
             <Camera />
             Upload Photo
           </h3>
           <X
             onClick={() => clearData()}
-            className='text-brand2 cursor-pointer'></X>
+            className="text-brand2 cursor-pointer"
+          ></X>
         </div>
       </div>
       <form onSubmit={handleSubmit}>
-        <div className='w-full p-4 space-y-3'>
+        <div className="w-full p-4 space-y-3">
           <label
-            htmlFor='post_announcement_image'
-            className=' cursor-pointer flex justify-between items-center gap-2  w-full p-2 border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4'>
+            htmlFor="post_announcement_image"
+            className=" cursor-pointer flex justify-between items-center gap-2  w-full p-2 border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4"
+          >
             {selectedToken ? (
               selectedToken.file ? (
-                <div className='flex items-center'>
-                  <FileCheck className='text-emerald-700' />
+                <div className="flex items-center">
+                  <FileCheck className="text-emerald-700" />
                   {selectedToken.file[0].name.substring(0, 16)}
                 </div>
               ) : (
                 "No file choosen!"
               )
             ) : (
-              <div className='flex items-center gap-1'>
+              <div className="flex items-center gap-1">
                 <File />
                 Choose file *
               </div>
             )}
             <input
-              id='post_announcement_image'
-              type='file'
-              accept='image/*'
+              id="post_announcement_image"
+              type="file"
+              accept="image/*"
               onChange={handleImageChange}
-              className='sr-only'
+              className="sr-only"
               required={true}
               onClick={(event) => {
                 event.target.value = null;
@@ -267,7 +269,7 @@ function PhotoPostModal({ setMarketPlaceModalOpen }) {
             />
             {selectedToken ? (
               selectedToken.file ? (
-                <div className='flex-grow rounded-lg overflow-clip'>
+                <div className="flex-grow rounded-lg overflow-clip">
                   <img src={selectedToken.localurl}></img>
                 </div>
               ) : null
@@ -277,56 +279,58 @@ function PhotoPostModal({ setMarketPlaceModalOpen }) {
           </label>
 
           <input
-            type='text'
-            className='textarea  w-full'
-            placeholder='Token Name eg:Lucky Token'
+            type="text"
+            className="textarea  w-full"
+            placeholder="Token Name eg:Lucky Token"
             onChange={(e) => settokenName(e.target.value)}
             value={tokenName}
           />
 
           <input
-            type='text'
-            className='textarea  w-full'
-            placeholder='Token Symbol eg:ETH, BTC '
+            type="text"
+            className="textarea  w-full"
+            placeholder="Token Symbol eg:ETH, BTC "
             onChange={(e) => setTokenSymbol(e.target.value)}
             value={tokenSymbol}
           />
 
-          <div className='form-control w-full  '>
-            <label className='label  '>
-              <span className='label-text text-slate-400'>
+          <div className="form-control w-full  ">
+            <label className="label  ">
+              <span className="label-text text-slate-400">
                 Ex: 9 decimals, 1000000000 = 1 token
               </span>
             </label>
             <input
               max={10}
               min={1}
-              type='number'
-              className='textarea  w-full input '
-              placeholder='Decimals '
+              type="number"
+              className="textarea  w-full input "
+              placeholder="Decimals "
               onChange={(e) => setTokenDecimal(e.target.value)}
               value={tokenDecimal}
             />
           </div>
 
           <input
-            type='text'
-            className='textarea  w-full'
-            placeholder='Token Description'
+            type="text"
+            className="textarea  w-full"
+            placeholder="Token Description"
             onChange={(e) => setTokenDescription(e.target.value)}
             value={tokenDescription}
           />
 
-          <div className='w-fit flex space-x-2'></div>
+          <div className="w-fit flex space-x-2"></div>
           <progress
-            class='progress progress-success w-56 hidden'
-            value='50'
-            max='100'></progress>
+            class="progress progress-success w-56 hidden"
+            value="50"
+            max="100"
+          ></progress>
           <button
             type={"submit"}
             className={`btn  ${
               !selectedToken?.file[0] ? "btn-disabled" : "btn-brand"
-            } w-full ${creatingMarketplace ? "loading " : ""}`}>
+            } w-full ${creatingMarketplace ? "loading " : ""}`}
+          >
             Create Token
           </button>
         </div>

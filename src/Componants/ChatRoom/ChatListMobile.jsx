@@ -196,7 +196,7 @@ function ChatsListMobile({ userName, dms, rooms, socket }) {
           <input
             type={"search"}
             placeholder="Search here"
-            className="input input-bordered w-full max-w-xs"
+            className="input input-bordered w-full "
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
@@ -231,16 +231,16 @@ function ChatsListMobile({ userName, dms, rooms, socket }) {
                       //   user2: { id: conv.user_id },
                       // }}
                       className={`
-                  group w-full flex cursor-pointer items-center gap-2 p-2 hover:bg-slate-200 dark:hover:bg-slate-700/60`}
+                  group w-full flex cursor-pointer items-center gap-2 p-4 hover:bg-slate-200 dark:hover:bg-slate-700/60`}
                     >
-                      <Image
+                      {/* <Image
                         width={46}
                         height={46}
                         className="h-full rounded-full border-2"
                         src={placeholderImage}
                         alt="profileImage"
                         placeholderSrc={placeholderImage}
-                      />
+                      /> */}
                       <div className="flex flex-col">
                         <p className="cursor-pointer text-base font-semibold text-brand3">
                           {username}
@@ -277,16 +277,16 @@ function ChatsListMobile({ userName, dms, rooms, socket }) {
                       //   user2: { id: conv.user_id },
                       // }}
                       className={`
-                  group w-full flex cursor-pointer items-center gap-2 p-2 hover:bg-slate-200 dark:hover:bg-slate-700/60`}
+                  group w-full flex cursor-pointer items-center gap-2 p-4 hover:bg-slate-200 dark:hover:bg-slate-700/60`}
                     >
-                      <Image
+                      {/* <Image
                         width={46}
                         height={46}
                         className="h-full rounded-full border-2"
                         src={placeholderImage}
                         alt="profileImage"
                         placeholderSrc={placeholderImage}
-                      />
+                      /> */}
                       <div className="flex flex-col">
                         <p className="cursor-pointer text-base font-semibold text-brand3">
                           {username}
@@ -321,22 +321,22 @@ function ChatsListMobile({ userName, dms, rooms, socket }) {
                 //   user2: { id: conv.user_id },
                 // }}
                 className={`
-          group w-full flex cursor-pointer items-center gap-2 p-2 hover:bg-slate-200 dark:hover:bg-slate-700/60`}
+          group w-full flex cursor-pointer items-center gap-2 p-4 hover:bg-slate-200 dark:hover:bg-slate-700/60`}
               >
-                <Image
+                {/* <Image
                   width={46}
                   height={46}
                   className="h-full rounded-full border-2"
                   src={placeholderImage}
                   alt="profileImage"
                   placeholderSrc={placeholderImage}
-                />
+                /> */}
                 <div className="flex flex-col">
                   <p className="cursor-pointer text-base font-semibold text-brand3">
                     {room.room_admin}
 
                     <span className=" text-xs font-normal rounded mx-2 px-1 py-0.5 bg-green-500">
-                      Group
+                      Channel
                     </span>
                   </p>
                   <p className="cursor-pointer text-base w-2/3 truncate text-brand5">

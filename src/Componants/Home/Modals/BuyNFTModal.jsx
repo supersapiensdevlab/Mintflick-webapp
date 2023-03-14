@@ -43,7 +43,10 @@ function BuyNFTModal() {
 
   const signTransaction = async (encodedTransaction, fromPrivateKey) => {
     try {
-      const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
+      const connection = new Connection(
+        clusterApiUrl(process.env.REACT_APP_SOLANA_NETWORK),
+        "confirmed"
+      );
       const feePayer = Keypair.fromSecretKey(decode(fromPrivateKey));
       const recoveredTransaction = Transaction.from(
         Buffer.from(encodedTransaction, "base64")
@@ -83,10 +86,13 @@ function BuyNFTModal() {
   };
 
   const buyNft = async () => {
-    const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
+    const connection = new Connection(
+      clusterApiUrl(process.env.REACT_APP_SOLANA_NETWORK),
+      "confirmed"
+    );
     setBuying(true);
     let buyNftData = {
-      network: "devnet",
+      network: process.env.REACT_APP_SOLANA_NETWORK,
       marketplace_address: `${process.env.REACT_APP_SOLANA_MARKETPLACE_ADDRESS}`,
       nft_address: State.database?.buyNFTModalData?.tokenId,
       price: State.database?.buyNFTModalData?.nftPrice,
@@ -104,7 +110,7 @@ function BuyNFTModal() {
         console.log(data);
 
         // await signTransaction(
-        //   // "devnet",
+        //   // process.env.REACT_APP_SOLANA_NETWORK,
         //   data.data.result.encoded_transaction,
         //   "vXJQfc7wgeY7gwyBrfkjQz5VKQd2Dy2E5Psoj5LusaJwxukC5tuLQgUxxZTnoN2fSjG1zHyF45XCA8nz8VK94Tg"
         // );

@@ -7,44 +7,36 @@ import {
 } from "@solana/web3.js";
 import { decode } from "bs58";
 import { SolanaWallet } from "@web3auth/solana-provider";
-import { useState } from "react";
 
-const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
+const connection = new Connection(process.env.REACT_APP_SOLANA_RPC);
 
-const signTransactionKeyWallet = async (
+export const signTransactionKeyWallet = async (
   encodedTransaction,
   fromPrivateKey,
   provider
 ) => {
-  try {
-    console.log(fromPrivateKey);
+  const feePayer = Keypair.fromSecretKey(decode(fromPrivateKey));
+  const recoveredTransaction = Transaction.from(
+    Buffer.from(encodedTransaction, "base64")
+  );
+  console.log(recoveredTransaction);
+  recoveredTransaction.partialSign(feePayer);
+  // const serializedTransaction = recoveredTransaction.serialize({
+  //   requireAllSignatures: false,
+  // });
+  // const transactionBase64 = serializedTransaction.toString("base64");
+  // console.log(transactionBase64);
+  //partially signing using private key of fee_payer wallet
 
-    const feePayer = Keypair.fromSecretKey(decode(fromPrivateKey));
-    console.log(feePayer);
-    const solanaWallet = new SolanaWallet(provider); // web3auth.provider
-    console.log(solanaWallet);
+  const signedTx = await provider.signTransaction(recoveredTransaction); // signing the recovered transaction using the creator_wall
+  console.log(
+    signedTx.serialize({ requireAllSignatures: false }).toString("base64")
+  );
+  const confirmTransaction = await connection.sendRawTransaction(
+    signedTx.serialize()
+  );
 
-    const recoveredTransaction = Transaction.from(
-      Buffer.from(encodedTransaction, "base64")
-    );
-    console.log(recoveredTransaction);
-    recoveredTransaction.partialSign(feePayer);
-    // const serializedTransaction = recoveredTransaction.serialize({
-    //   requireAllSignatures: false,
-    // });
-    // const transactionBase64 = serializedTransaction.toString("base64");
-    // console.log(transactionBase64);
-    //partially signing using private key of fee_payer wallet
-
-    const signedTx = await provider.signTransaction(recoveredTransaction); // signing the recovered transaction using the creator_wall
-    console.log(signedTx);
-    const confirmTransaction = await connection.sendRawTransaction(
-      signedTx.serialize()
-    );
-    return confirmTransaction;
-  } catch (error) {
-    console.log(error);
-  }
+  return confirmTransaction;
 };
 
 export const signTransactionWithWallet = async (
@@ -53,7 +45,7 @@ export const signTransactionWithWallet = async (
 ) => {
   let confirmTransaction;
   // try {
-  // const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
+  // const connection = new Connection(clusterApiUrl(process.env.REACT_APP_SOLANA_NETWORK), "confirmed");
   // const solanaWallet = new SolanaWallet(provider); // web3auth.provider
   // console.log(solanaWallet);
 
@@ -88,7 +80,7 @@ export const signWithRelayer = async (signedTx) => {
   myHeaders.append("Content-Type", "application/json");
   let response;
   var raw = JSON.stringify({
-    network: "devnet",
+    network: process.env.REACT_APP_SOLANA_NETWORK,
     encoded_transaction: signedTx,
   });
   var requestOptions = {
@@ -112,14 +104,15 @@ export const mintNFTOnSolana2 = async (
   name,
   description,
   external_url,
-  image
+  image,
+  attributes
 ) => {
   let nftSolanaData = {
-    network: "devnet",
+    network: process.env.REACT_APP_SOLANA_NETWORK,
     creator_wallet: creator_wallet,
     name: name,
     symbol: "FLICK",
-    attributes: JSON.stringify([{ trait_type: "Power", value: "100" }]),
+    attributes: JSON.stringify(attributes),
     description: description,
     external_url: external_url,
     max_supply: 1,
@@ -146,7 +139,7 @@ export const mintNFTOnSolana2 = async (
 export const listNFTOnSolana2 = async (nft_address, price, seller_wallet) => {
   let response;
   var raw = JSON.stringify({
-    network: "devnet",
+    network: process.env.REACT_APP_SOLANA_NETWORK,
     marketplace_address: process.env.REACT_APP_SOLANA_MARKETPLACE_ADDRESS,
     nft_address: nft_address,
     price: parseInt(price),
@@ -183,7 +176,7 @@ export const buyNFTOnSolana2 = (buyNftData, provider) => {
     .then(async (data) => {
       console.log(data);
       // await signTransaction(
-      //   // "devnet",
+      //   // process.env.REACT_APP_SOLANA_NETWORK,
       //   data.data.result.encoded_transaction,
       //   "vXJQfc7wgeY7gwyBrfkjQz5VKQd2Dy2E5Psoj5LusaJwxukC5tuLQgUxxZTnoN2fSjG1zHyF45XCA8nz8VK94Tg"
       // );
@@ -192,7 +185,10 @@ export const buyNFTOnSolana2 = (buyNftData, provider) => {
         provider
       );
       console.log(signedTrasaction);
-      const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
+      const connection = new Connection(
+        clusterApiUrl(process.env.REACT_APP_SOLANA_NETWORK),
+        "confirmed"
+      );
       await connection.sendRawTransaction(signedTrasaction.serialize());
       return true;
     })

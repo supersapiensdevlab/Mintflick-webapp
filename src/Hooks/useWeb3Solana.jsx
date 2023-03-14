@@ -12,7 +12,10 @@ import { SolanaWallet } from "@web3auth/solana-provider";
 const signTransactionWithWallet = async (encodedTransaction, provider) => {
   let confirmTransaction;
   try {
-    const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
+    const connection = new Connection(
+      clusterApiUrl(process.env.REACT_APP_SOLANA_NETWORK),
+      "confirmed"
+    );
     const solanaWallet = new SolanaWallet(provider); // web3auth.provider
     console.log(solanaWallet);
 
@@ -46,7 +49,7 @@ const signWithRelayer = async (signedTx) => {
   myHeaders.append("Content-Type", "application/json");
   let response;
   var raw = JSON.stringify({
-    network: "devnet",
+    network: process.env.REACT_APP_SOLANA_NETWORK,
     encoded_transaction: signedTx,
   });
   var requestOptions = {
@@ -73,7 +76,7 @@ const mintNFTOnSolana2 = async (
   image
 ) => {
   let nftSolanaData = {
-    network: "devnet",
+    network: process.env.REACT_APP_SOLANA_NETWORK,
     creator_wallet: creator_wallet,
     name: name,
     symbol: "FLICK",
@@ -104,7 +107,7 @@ const mintNFTOnSolana2 = async (
 const listNFTOnSolana2 = async (nft_address, price, seller_wallet) => {
   let response;
   var raw = JSON.stringify({
-    network: "devnet",
+    network: process.env.REACT_APP_SOLANA_NETWORK,
     marketplace_address: process.env.REACT_APP_SOLANA_MARKETPLACE_ADDRESS,
     nft_address: nft_address,
     price: parseInt(price),
@@ -141,7 +144,7 @@ const buyNft = (buyNftData, provider) => {
     .then(async (data) => {
       console.log(data);
       // await signTransaction(
-      //   // "devnet",
+      //   // process.env.REACT_APP_SOLANA_NETWORK,
       //   data.data.result.encoded_transaction,
       //   "vXJQfc7wgeY7gwyBrfkjQz5VKQd2Dy2E5Psoj5LusaJwxukC5tuLQgUxxZTnoN2fSjG1zHyF45XCA8nz8VK94Tg"
       // );
@@ -150,7 +153,10 @@ const buyNft = (buyNftData, provider) => {
         provider
       );
       console.log(signedTrasaction);
-      const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
+      const connection = new Connection(
+        clusterApiUrl(process.env.REACT_APP_SOLANA_NETWORK),
+        "confirmed"
+      );
       await connection.sendRawTransaction(signedTrasaction.serialize());
       return true;
     })

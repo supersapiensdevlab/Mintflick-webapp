@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
+import { AlertTriangle } from "tabler-icons-react";
 import EmptyNotification from "../Componants/Header/EmptyNotification";
 import NotificationContent from "../Componants/Header/NotificationContent";
 import { UserContext } from "../Store";
@@ -10,21 +11,18 @@ function MobileNotifications() {
   //new notification
   const [newNotification, setNewNotification] = useState(0);
 
-  const [onlyOnce, setOnlyOnce] = useState(false);
+  // const [onlyOnce, setOnlyOnce] = useState(false);
 
   const [notification, setNotification] = useState([]);
 
   useEffect(() => {
+    State.updateDatabase({ showHeader: true });
     if (
       State.database.userData.data?.user &&
-      State.database.userData.data?.user.notification &&
-      !onlyOnce
+      State.database.userData.data?.user.notification
     ) {
-      setOnlyOnce(true);
+      // setOnlyOnce(true);
       if (State.database.userData.data?.user.notification.length > 0) {
-        setNewNotification(
-          State.database.userData.data?.user.notification.length
-        );
         let data = [];
         for (
           let i = 0;
@@ -79,7 +77,7 @@ function MobileNotifications() {
     }
   };
   return (
-    <div className="p-2 pt-20  h-screen bg-slate-100 dark:bg-slate-800">
+    <div className="p-2 py-20  w-screen h-screen bg-slate-100 dark:bg-slate-800">
       {/* <label tabindex="0" className=" avatar">
         <button class="btn btn-circle btn-ghost" onClick={handleNotification}>
           <Bell size={28}></Bell>
@@ -97,7 +95,7 @@ function MobileNotifications() {
       </label> */}
 
       {notification.length > 0 ? (
-        <div className="w-full p-2">
+        <div className="w-full p-2   divide-solid dark:divide-slate-700 divide-y-2">
           {notification.map((value, i) => {
             return (
               <div key={i} className="w-full ">
@@ -108,8 +106,11 @@ function MobileNotifications() {
           })}
         </div>
       ) : (
-        <div className="mx-auto p-2 ">
-          <EmptyNotification />
+        <div className="h-full w-full flex justify-center items-center">
+          <div className="flex flex-col items-center gap-4 text-brand6">
+            <AlertTriangle size={64} />
+            <span className="text-2xl font-bold">No new notifications</span>
+          </div>
         </div>
       )}
     </div>

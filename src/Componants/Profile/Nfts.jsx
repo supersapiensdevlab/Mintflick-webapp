@@ -20,7 +20,7 @@ function Nfts() {
     };
 
     fetch(
-      `https://api.shyft.to/sol/v1/nft/read_all?network=devnet&address=${State.database.userProfileData?.data.wallet_id}`,
+      `https://api.shyft.to/sol/v1/nft/read_all?network=${process.env.REACT_APP_SOLANA_NETWORK}&address=${State.database.userProfileData?.data.wallet_id}`,
       requestOptions
     )
       .then((response) => response.json())

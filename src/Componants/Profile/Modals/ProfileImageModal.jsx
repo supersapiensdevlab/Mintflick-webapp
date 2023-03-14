@@ -59,17 +59,19 @@ const ProfileImageModal = ({ setShowProfileImageModal }) => {
             )
             .then(async (res) => {
               console.log(res);
-              let temp = {
-                data: {
-                  user: res.data,
-                },
-              };
+              loadUser();
+              loadProfileCard();
+              // let temp = {
+              //   data: {
+              //     user: res.data,
+              //   },
+              // };
 
-              State.updateDatabase({
-                userData: temp,
-                walletAddress: temp.data.user.wallet_id,
-              });
-              State.updateDatabase({ userProfileData: res });
+              // State.updateDatabase({
+              //   userData: temp,
+              //   walletAddress: temp.data.user.wallet_id,
+              // });
+              // State.updateDatabase({ userProfileData: res });
 
               State.toast("success", "Profile photo updated successfully!");
 

@@ -19,6 +19,7 @@ import PhotoPostModal from "./Modals/PhotoPostModal";
 import PollModal from "./Modals/PollModal";
 import VideoPostModal from "./Modals/VideoPostModal";
 import { Link } from "react-router-dom";
+import producthuntImage from "../../Assets/productHunt.webp";
 
 function AddPost() {
   //text post
@@ -41,6 +42,17 @@ function AddPost() {
 
   return (
     <>
+      <a
+        href="https://airtable.com/shrF2lZX7vSV844Oe"
+        target={"_blank"}
+        className=" w-full my-2 bg-white lg:rounded-lg  cursor-pointer"
+      >
+        <img
+          className=" w-full lg:rounded-md"
+          src={producthuntImage}
+          alt="quest-banner"
+        />
+      </a>
       <div className="hidden lg:flex flex-col items-center w-full max-w-2xl h-fit bg-slate-100 dark:bg-slate-800  rounded-xl lg:py-8  space-y-4">
         <div className="flex items-center w-full px-2 lg:px-8 space-x-4 rounded-3xl">
           <textarea
