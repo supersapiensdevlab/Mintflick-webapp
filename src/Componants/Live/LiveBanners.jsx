@@ -1,14 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
-import banner1 from "../../Assets/Gaming Posters/Banner4.png";
-import banner2 from "../../Assets/Gaming Posters/Banner5.jpg";
-import banner3 from "../../Assets/Gaming Posters/Banner3.jpg";
-import banner4 from "../../Assets/Gaming Posters/Banner6.jfif";
-import banner5 from "../../Assets/Gaming Posters/Banner7.jpg";
-import banner6 from "../../Assets/Gaming Posters/Banner8.jpg";
+
+import livestream from "../../Assets/Onboarding/livestream.webp";
+import tickets from "../../Assets/Onboarding/tickets.webp";
+import social from "../../Assets/Onboarding/social.webp";
+import Marquee from "react-fast-marquee";
 
 function LiveBanners() {
   const colors = ["#0088FE", "#00C49F", "#FFBB28"];
-  const banners = [banner1, banner2, banner3, banner4, banner5, banner6];
+  const banners = [livestream, tickets, social];
   const delay = 2500;
 
   const [index, setIndex] = useState(0);
@@ -36,34 +35,25 @@ function LiveBanners() {
   }, [index]);
 
   return (
-    <div className="p-2 w-full h-52 rounded-xl bg-slate-100 dark:bg-slate-800">
-      <div className="slideshow relative">
-        <div
-          className="slideshowSlider"
-          style={{ transform: `translate3d(${-index * 102}%, 0, 0)` }}
-        >
+    <div className="p-2 w-full   rounded-xl  relative">
+      <div className="absolute top-0 left-2 h-full w-12 bg-gradient-to-r from-white dark:from-slate-900 z-10"></div>
+      <div className="absolute top-0 right-2 h-full w-12 bg-gradient-to-r from-white dark:from-slate-900 z-10 rotate-180"></div>
+      <Marquee gradient={false} speed={70} className="w-full">
+        <div className="flex w-full items-center justify-center  ">
           {banners.map((backgroundColor, index) => (
-            <div className="slide" key={index}>
+            <div
+              className="mx-2 aspect-video h-24 md:h-36 rounded-md overflow-clip"
+              key={index}
+            >
               <img
                 src={backgroundColor}
-                className="w-full h-full object-cover"
+                alt=""
+                className="h-full w-full object-cover"
               ></img>
             </div>
-          ))}
+          ))}{" "}
         </div>
-
-        <div className="slideshowDots absolute bottom-0 left-1/2 -translate-x-1/2">
-          {colors.map((_, idx) => (
-            <div
-              key={idx}
-              className={`slideshowDot${index === idx ? " active" : ""}`}
-              onClick={() => {
-                setIndex(idx);
-              }}
-            ></div>
-          ))}
-        </div>
-      </div>
+      </Marquee>
     </div>
   );
 }

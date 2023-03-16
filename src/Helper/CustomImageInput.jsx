@@ -161,7 +161,7 @@ function CustomImageInput({
     });
   };
   return (
-    <div className="flex flex-col   items-start   gap-2  w-full  border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4">
+    <div className=" flex flex-col   items-start   gap-2  w-full  border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4">
       {selectedFile?.localurl && (
         <div className="relative w-full h-96">
           <Cropper
@@ -176,6 +176,9 @@ function CustomImageInput({
             onRotationChange={setRotation}
             onCropComplete={onCropComplete}
             onZoomChange={setZoom}
+            style={{
+              containerStyle: { width: "100%" },
+            }}
           />
         </div>
       )}

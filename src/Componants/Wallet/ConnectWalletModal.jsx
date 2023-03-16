@@ -81,7 +81,7 @@ function ConnectWalletModal() {
   };
 
   return (
-    <div className="fixed bottom-0 left-0 z-[999] w-screen h-screen p-2 flex justify-center items-end sm:items-center  bg-black/30 backdrop-blur-sm">
+    <div className="absolute bottom-0 left-0 z-[999] w-screen h-screen p-2 flex justify-center items-end sm:items-center  bg-black/30 backdrop-blur-sm">
       <div className="relative flex flex-col items-center bg-white dark:bg-slate-900 w-full   sm:max-w-xl  h-fit  rounded-lg overflow-hidden">
         <img
           className="w-full aspect-video object-cover"

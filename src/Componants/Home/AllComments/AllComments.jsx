@@ -1,6 +1,12 @@
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
-import { ArrowNarrowRight, ChevronLeft, Rss, X } from "tabler-icons-react";
+import {
+  ArrowNarrowRight,
+  ChevronLeft,
+  Rss,
+  Send,
+  X,
+} from "tabler-icons-react";
 import { UserContext } from "../../../Store";
 import CustomInput from "../../CustomInputs/CustomInput";
 import ShowComment from "./ShowComment";
@@ -68,6 +74,7 @@ function AllComments({
     async function eff() {
       if (contentData.comments) {
         setTotalComments(contentData.comments.length);
+        setComments([]);
         for (var i = 0; i < 2; i++) {
           if (contentData.comments[i]) {
             let x = counter + 1;
@@ -308,11 +315,9 @@ function AllComments({
         </div>
         <button
           onClick={() => text && handleOnEnter()}
-          className={`btn    ${
-            text !== "" ? "btn-primary btn-outline" : "btn-disabled"
-          }`}
+          className={`btn    ${text !== "" ? "btn-primary " : "btn-disabled"}`}
         >
-          <ArrowNarrowRight />
+          <Send />
         </button>
       </div>
     </div>

@@ -29,6 +29,7 @@ import {
 import NftCard from "../NftCard";
 import { Walkthrough } from "../../Walkthrough/Walkthrough";
 import CustomInput from "../../CustomInputs/CustomInput";
+import { TypeAnimation } from "react-type-animation";
 
 function ThoughtPostModal({ setthoughtPostModalOpen }) {
   const State = useContext(UserContext);
@@ -370,7 +371,33 @@ function ThoughtPostModal({ setthoughtPostModalOpen }) {
             placeholder="Whats on your mind!"
             onChange={(e) => setCaption(e.target.value)}
             value={caption}
-          ></textarea> */}
+          ></textarea> */}{" "}
+            {isNFT && caption && (
+              <div className="mx-auto w-fit m-4">
+                <NftCard
+                  id="my-nft"
+                  name={State.database.userData.data.user.name}
+                  userName={State.database.userData.data.user.username}
+                  text={caption}
+                />
+
+                <span
+                  onClick={() =>
+                    toPng(document.getElementById("my-nft"), {
+                      quality: 2,
+                    }).then(function (dataUrl) {
+                      var link = document.createElement("a");
+                      link.download = "my-thought-nft.png";
+                      link.href = dataUrl;
+                      link.click();
+                    })
+                  }
+                  className="link link-primary"
+                >
+                  Download as image
+                </span>
+              </div>
+            )}
             <div id="walkthroughThoughtStep1">
               <CustomInput
                 placeholder={"Whats on your mind!"}
@@ -418,13 +445,13 @@ function ThoughtPostModal({ setthoughtPostModalOpen }) {
               ) : (
                 <label
                   id="walkthroughThoughtStep2"
-                  className="flex items-center cursor-pointer gap-2"
+                  className="flex items-center cursor-pointer gap-2 bg-slate-200 dark:bg-slate-700 p-2 rounded-full pr-4"
                 >
                   <input
                     type="checkbox"
                     value={isNFT}
                     onChange={() => setIsNFT(!isNFT)}
-                    className="checkbox checkbox-primary"
+                    className="checkbox checkbox-primary rounded-full"
                   />
                   <span className="label-text text-brand3">Mint as NFT</span>
                 </label>
@@ -461,30 +488,28 @@ function ThoughtPostModal({ setthoughtPostModalOpen }) {
               value="50"
               max="100"
             ></progress>
-            {isNFT && caption && (
-              <div className="mx-auto w-fit m-4">
-                <NftCard
-                  id="my-nft"
-                  name={State.database.userData.data.user.name}
-                  userName={State.database.userData.data.user.username}
-                  text={caption}
+            {isNFT && (
+              <div className="  bg-emerald-600 p-2 rounded-md pr-4 text-sm font-semibold tracking-wide text-white">
+                <TypeAnimation
+                  sequence={[
+                    "✨Exciting! A Non Fungible Token (NFT) will be created on the Blockchain to preserve your content for all eternity and make it publicly accessible to everyone. Your connected wallet will be the proud owner of this unique digital asset, ensuring that your creation is forever enshrined in the blockchain's immutable ledger.",
+                    () => {
+                      // console.log("Done typing!"); // Place optional callbacks anywhere in the array
+                    },
+                  ]}
+                  wrapper="div"
+                  cursor={true}
+                  repeat={0}
+                  speed={60}
                 />
-
-                <span
-                  onClick={() =>
-                    toPng(document.getElementById("my-nft"), {
-                      quality: 2,
-                    }).then(function (dataUrl) {
-                      var link = document.createElement("a");
-                      link.download = "my-thought-nft.png";
-                      link.href = dataUrl;
-                      link.click();
-                    })
-                  }
-                  className="link link-primary"
-                >
-                  Download as image
-                </span>
+                {/* <span>
+                  ✨Exciting! A Non Fungible Token (NFT) will be created on the
+                  Blockchain to preserve your content for all eternity and make
+                  it publicly accessible to everyone. Your connected wallet will
+                  be the proud owner of this unique digital asset, ensuring that
+                  your creation is forever enshrined in the blockchain's
+                  immutable ledger.
+                </span> */}
               </div>
             )}
             {!mintSuccess ? (

@@ -5,6 +5,7 @@ import {
   ArrowNarrowRight,
   Edit,
   Heart,
+  Send,
   Trash,
 } from "tabler-icons-react";
 import { UserContext } from "../../../Store";
@@ -13,6 +14,7 @@ import placeholderImage from "../../../Assets/profile-pic.png";
 import { Image } from "react-img-placeholder";
 import useUserActions from "../../../Hooks/useUserActions";
 import ConfirmationModal from "../Modals/ConfirmationModal";
+import CustomInput from "../../CustomInputs/CustomInput";
 
 function ShowComment({
   comment,
@@ -31,6 +33,7 @@ function ShowComment({
   // for reply
   const [isReply, setIsReply] = useState(false);
   const [replyText, setReplyText] = useState("");
+  const [tagged, settagged] = useState([]);
   const [myReplyComments, setMyReplyComments] = useState([]);
   const onEmojiClick = (event, emojiObject) => {
     setReplyText(replyText + emojiObject.emoji);
@@ -268,7 +271,7 @@ function ShowComment({
             ? comment.profile_image
             : "https://cdn-icons-png.flaticon.com/512/149/149071.png"
         }
-        className="h-6 w-6 object-cover rounded-full "
+        className="  w-6 aspect-square object-cover rounded-full "
         width={50}
         height={50}
         alt="profile pic"
@@ -283,12 +286,23 @@ function ShowComment({
             comment.comment
           ) : (
             <div className="flex gap-2 items-center">
-              <textarea
+              <div className="flex-grow">
+                <CustomInput
+                  rows={1}
+                  placeholder={"Type here..."}
+                  className=" textarea w-full"
+                  value={editText}
+                  setValue={setEditText}
+                  mentions={tagged}
+                  setMentions={settagged}
+                />
+              </div>
+              {/* <textarea
                 onChange={(e) => setEditText(e.target.value)}
                 placeholder="Type here..."
                 className="input w-full pt-2"
                 value={editText}
-              ></textarea>
+              ></textarea> */}
               <div className="dropdown dropdown-top dropdown-end">
                 <label tabindex={0} className="btn m-1 btn-primary btn-outline">
                   😃
@@ -303,12 +317,12 @@ function ShowComment({
               <button
                 onClick={() => handleCOmmentEdit()}
                 className={`btn    ${
-                  editText !== "" && editText != comment.comment
-                    ? "btn-primary btn-outline"
+                  editText !== "" && editText !== comment.comment
+                    ? "btn-primary  "
                     : "btn-disabled"
                 }`}
               >
-                <ArrowNarrowRight />
+                <Send />
               </button>
             </div>
           )}
@@ -414,12 +428,23 @@ function ShowComment({
 
         {isReply && (
           <div className="flex gap-2 items-center">
-            <textarea
+            <div className="flex-grow">
+              <CustomInput
+                rows={1}
+                placeholder={"Type here..."}
+                className=" textarea w-full"
+                value={replyText}
+                setValue={setReplyText}
+                mentions={tagged}
+                setMentions={settagged}
+              />
+            </div>
+            {/* <textarea
               onChange={(e) => setReplyText(e.target.value)}
               placeholder="Type here..."
               className="input w-full pt-2"
               value={replyText}
-            ></textarea>
+            ></textarea> */}
             <div className="dropdown dropdown-top dropdown-end">
               <label tabindex={0} className="btn m-1 btn-primary btn-outline">
                 😃
@@ -434,10 +459,10 @@ function ShowComment({
             <button
               onClick={() => replyText && handleOnEnter()}
               className={`btn    ${
-                replyText !== "" ? "btn-primary btn-outline" : "btn-disabled"
+                replyText !== "" ? "btn-primary" : "btn-disabled"
               }`}
             >
-              <ArrowNarrowRight />
+              <Send />
             </button>
           </div>
         )}

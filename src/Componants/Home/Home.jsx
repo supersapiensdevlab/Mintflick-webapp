@@ -64,12 +64,12 @@ function Home() {
       </div>
       <div
         id="scrollableDiv"
-        className="w-full lg:w-2/4 flex flex-col items-center  h-full pt-14 lg:pt-24 overflow-y-auto "
+        className="  w-full lg:w-2/4 flex flex-col items-center  h-full pt-14 lg:pt-24 pb-24 overflow-y-auto "
         ref={buttonRef}
         onScroll={handleScroll}
       >
-        <div ref={timelineRef} className="-mt-6"></div>
-        <div className="my-3"></div>
+        <div ref={timelineRef}></div>
+        {/* <div className="my-3"></div> */}
 
         <AddPost></AddPost>
 

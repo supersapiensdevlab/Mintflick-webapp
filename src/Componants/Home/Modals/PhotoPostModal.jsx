@@ -35,6 +35,7 @@ import Main_logo from "../../../Assets/logos/Main_logo";
 import { sanitizeFilename } from "../../../functions/sanitizeFilename";
 import { Walkthrough } from "../../Walkthrough/Walkthrough";
 import CustomInput from "../../CustomInputs/CustomInput";
+import { TypeAnimation } from "react-type-animation";
 
 function PhotoPostModal({ setphotoPostModalOpen }) {
   const State = useContext(UserContext);
@@ -581,17 +582,20 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
                 ) : (
                   <label
                     id="walkthroughStep3"
-                    className="flex items-center cursor-pointer gap-2"
+                    className="flex items-center cursor-pointer gap-2 bg-slate-200 dark:bg-slate-700 p-2 rounded-full pr-4"
                   >
                     <input
                       type="checkbox"
                       value={isNFT}
                       onChange={() => setIsNFT(!isNFT)}
-                      className="checkbox checkbox-primary"
+                      className="checkbox checkbox-primary rounded-full"
                     />
-                    <span className="label-text text-brand3">Mint as NFT</span>
+                    <span className="label-text font-bold text-brand3">
+                      Mint as NFT
+                    </span>
                   </label>
                 )}
+
                 {showListingOption && (
                   <div className="form-control">
                     <label className="input-group">
@@ -620,6 +624,30 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
                 )}
               </div>
             ) : null}
+            {isNFT && (
+              <div className="  bg-emerald-600 p-2 rounded-md pr-4 text-sm font-semibold tracking-wide text-white">
+                <TypeAnimation
+                  sequence={[
+                    "✨Exciting! A Non Fungible Token (NFT) will be created on the Blockchain to preserve your content for all eternity and make it publicly accessible to everyone. Your connected wallet will be the proud owner of this unique digital asset, ensuring that your creation is forever enshrined in the blockchain's immutable ledger.",
+                    () => {
+                      // console.log("Done typing!"); // Place optional callbacks anywhere in the array
+                    },
+                  ]}
+                  wrapper="div"
+                  cursor={true}
+                  repeat={0}
+                  speed={60}
+                />
+                {/* <span>
+                  ✨Exciting! A Non Fungible Token (NFT) will be created on the
+                  Blockchain to preserve your content for all eternity and make
+                  it publicly accessible to everyone. Your connected wallet will
+                  be the proud owner of this unique digital asset, ensuring that
+                  your creation is forever enshrined in the blockchain's
+                  immutable ledger.
+                </span> */}
+              </div>
+            )}
             {mintSuccess == "NFT Minted Successfully" ? (
               <div className="w-full flex justify-around space-x-1">
                 <button

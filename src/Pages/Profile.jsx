@@ -70,7 +70,7 @@ function Profile() {
         {/* <Vouch /> */}
       </div>
       <div className="relative w-full  lg:w-2/4 flex flex-col items-center  lg:h-full pt-14 lg:pt-24 lg:overflow-y-auto">
-        <div className="sticky     z-50 top-16 lg:top-0 left-0 w-full mb-3">
+        <div className="sticky     z-40 top-16 lg:top-0 left-0 w-full mb-3">
           <div className="relative h-12 w-full bg-slate-800/10 dark:bg-slate-100/10  backdrop-blur-sm lg:rounded-lg flex ">
             <div
               onClick={() => setactiveTab(1)}

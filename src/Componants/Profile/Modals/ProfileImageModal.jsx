@@ -18,20 +18,20 @@ const ProfileImageModal = ({ setShowProfileImageModal }) => {
   const [uploadingImage, setUploadingImage] = useState(false);
   const [loadFeed, loadUser, loadProfileCard] = useUserActions();
 
-  const handleClick = (event) => {
-    hiddenFileInput.current.click();
-  };
+  // const handleClick = (event) => {
+  //   hiddenFileInput.current.click();
+  // };
 
-  const handleImageChange = (event) => {
-    // Update the state
+  // const handleImageChange = (event) => {
+  //   // Update the state
 
-    const file = sanitizeFilename(event.target.files[0]);
-    console.log(file);
-    setselectedProfileImageChange({
-      file: [file],
-      localurl: URL.createObjectURL(event.target.files[0]),
-    });
-  };
+  //   const file = sanitizeFilename(event.target.files[0]);
+  //   console.log(file);
+  //   setselectedProfileImageChange({
+  //     file: [file],
+  //     localurl: URL.createObjectURL(event.target.files[0]),
+  //   });
+  // };
 
   const handleUpdateProfileImage = () => {
     if (croppedImage) {
@@ -77,10 +77,10 @@ const ProfileImageModal = ({ setShowProfileImageModal }) => {
               // State.updateDatabase({ userProfileData: res });
 
               State.toast("success", "Profile photo updated successfully!");
-
+              setcroppedImage(null);
+              setselectedProfileImageChange(null);
               setUploadingImage(false);
               setShowProfileImageModal(false);
-              setselectedProfileImageChange(null);
             })
             .catch((error) => {
               console.log(error);
@@ -170,7 +170,6 @@ const ProfileImageModal = ({ setShowProfileImageModal }) => {
           showGrid={false}
           compression={0.5}
         />
-
         <div className="my-4">
           <button
             onClick={handleUpdateProfileImage}

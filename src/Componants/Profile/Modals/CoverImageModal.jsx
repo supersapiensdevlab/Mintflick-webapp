@@ -18,18 +18,18 @@ const CoverImageModal = ({ setShowCoverImageModal }) => {
   const [loadFeed, loadUser, loadProfileCard] = useUserActions();
   const [croppedImage, setcroppedImage] = useState(null);
 
-  const handleClick = (event) => {
-    hiddenFileInput.current.click();
-  };
+  // const handleClick = (event) => {
+  //   hiddenFileInput.current.click();
+  // };
 
-  const handleImageChange = (event) => {
-    // Update the state
-    const file = sanitizeFilename(event.target.files[0]);
-    setSelectedCoverImage({
-      file: [file],
-      localurl: URL.createObjectURL(event.target.files[0]),
-    });
-  };
+  // const handleImageChange = (event) => {
+  //   // Update the state
+  //   const file = sanitizeFilename(event.target.files[0]);
+  //   setSelectedCoverImage({
+  //     file: [file],
+  //     localurl: URL.createObjectURL(event.target.files[0]),
+  //   });
+  // };
 
   const handleUpdateCoverImage = () => {
     if (croppedImage) {
@@ -83,9 +83,10 @@ const CoverImageModal = ({ setShowCoverImageModal }) => {
               // State.updateDatabase({ userProfileData: res });
               loadUser();
               loadProfileCard();
+              setcroppedImage(null);
+              setSelectedCoverImage(null);
               setUploadingImage(false);
               setShowCoverImageModal(false);
-              setSelectedCoverImage(null);
 
               State.toast("success", "Cover photo updated successfully!");
             })
@@ -174,7 +175,7 @@ const CoverImageModal = ({ setShowCoverImageModal }) => {
           setImage={setcroppedImage}
           label="Choose cover image"
           aspect={6 / 2}
-          cropShape="rectangle"
+          cropShape="rect"
           showGrid={false}
           compression={0.5}
         />
