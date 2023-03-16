@@ -23,7 +23,10 @@ function HomeScreen() {
   const navigateTo = useNavigate();
   const location = useLocation();
   const [loadFeed, loadUser, loadProfileCard, loadNftsData] = useUserActions();
-  const SOLANA_CONNECTION = new Connection(process.env.REACT_APP_SOLANA_RPC);
+  const SOLANA_CONNECTION = new Connection(
+    clusterApiUrl(process.env.REACT_APP_SOLANA_NETWORK),
+    "confirmed"
+  );
   const WALLET_ADDRESS = process.env.REACT_APP_FEEPAYER_WALLET; //👈 Replace with your wallet address
 
   async function loadBalance() {
