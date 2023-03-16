@@ -1,8 +1,10 @@
 import axios from "axios";
+import Compressor from "compressorjs";
 import { useEffect, useRef, useState } from "react";
 import { useContext } from "react";
 import { X, Pencil, FileCheck, File } from "tabler-icons-react";
 import { sanitizeFilename } from "../../../functions/sanitizeFilename";
+import CustomImageInput from "../../../Helper/CustomImageInput";
 import { uploadFile } from "../../../Helper/uploadHelper";
 import useUserActions from "../../../Hooks/useUserActions";
 import { UserContext } from "../../../Store";
@@ -10,9 +12,9 @@ import { UserContext } from "../../../Store";
 const ProfileImageModal = ({ setShowProfileImageModal }) => {
   const State = useContext(UserContext);
   const hiddenFileInput = useRef(null);
-
   const [selectedProfileImageChange, setselectedProfileImageChange] =
     useState(null);
+  const [croppedImage, setcroppedImage] = useState(null);
   const [uploadingImage, setUploadingImage] = useState(false);
   const [loadFeed, loadUser, loadProfileCard] = useUserActions();
 
@@ -32,16 +34,17 @@ const ProfileImageModal = ({ setShowProfileImageModal }) => {
   };
 
   const handleUpdateProfileImage = () => {
-    if (selectedProfileImageChange && selectedProfileImageChange.file[0]) {
+    if (croppedImage) {
       setUploadingImage(true);
-      uploadFile(selectedProfileImageChange?.file)
+
+      uploadFile([croppedImage])
         .then(async (cid) => {
           const formData = new FormData();
           formData.append(
             "username",
             State.database.userData?.data?.user?.username
           );
-          formData.append("profileImage", selectedProfileImageChange.file[0]);
+          formData.append("profileImage", croppedImage);
           formData.append("imageHash", cid);
 
           axios
@@ -118,7 +121,7 @@ const ProfileImageModal = ({ setShowProfileImageModal }) => {
         </div>
       </div>
       <div className="flex flex-col p-4 w-full">
-        <label
+        {/* <label
           onClick={handleClick}
           className=" cursor-pointer flex flex-col   items-start   gap-2  w-full p-2 border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4"
         >
@@ -157,14 +160,22 @@ const ProfileImageModal = ({ setShowProfileImageModal }) => {
             setselectedProfileImageChange(null);
             console.log("setting null");
           }}
+        /> */}
+
+        <CustomImageInput
+          setImage={setcroppedImage}
+          label="Choose profile image"
+          aspect={1}
+          cropShape="round"
+          showGrid={false}
+          compression={0.5}
         />
+
         <div className="my-4">
           <button
             onClick={handleUpdateProfileImage}
             className={`btn  ${
-              !selectedProfileImageChange?.file[0]
-                ? "btn-disabled"
-                : "btn-brand"
+              !croppedImage ? "btn-disabled" : "btn-brand"
             } w-full ${
               uploadingImage ? "loading " : ""
             } flex space-x-1 capitalize`}

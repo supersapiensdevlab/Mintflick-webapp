@@ -9,7 +9,7 @@ import {
   CircleCheck,
   Comet,
   DotsVertical,
-  Heart,
+  // Heart,
   InfoCircle,
   MessageCircle,
   PlayerPause,
@@ -52,7 +52,7 @@ import { useNavigate } from "react-router-dom";
 import MintNFTModal from "./Modals/MintNFTModal";
 import nftCoin from "../../Assets/nftCoin.png";
 import ListNFTModal from "./Modals/ListNFTModal";
-
+import AnimatedHeart from "./AnimatedHeart";
 function Post(props) {
   const navigateTo = useNavigate();
   // Common State and Functions
@@ -1141,54 +1141,65 @@ function Post(props) {
         <div className="flex items-center  justify-between">
           <div className="flex items-center space-x-4">
             {props.contentType === "post" && (
-              <div className=" cursor-pointer flex items-center text-brand1  space-x-2">
-                <Heart
+              <div className="  cursor-pointer flex items-center text-brand1  space-x-2">
+                <AnimatedHeart isClick={postLiked} onClick={handlePostLikes} />
+                {/* <Heart
                   className={`${
                     postLiked
                       ? "text-red-600 hover:text-white fill-rose-600"
                       : "text-brand1 hover:text-red-600"
                   }`}
                   onClick={handlePostLikes}
-                ></Heart>
+                ></Heart> */}
                 <p className="font-medium text-sm ">{postLikes}</p>
               </div>
             )}
             {props.contentType === "video" && (
               <div className=" cursor-pointer flex items-center text-brand1  space-x-2">
-                <Heart
+                <AnimatedHeart
+                  isClick={videoLiked}
+                  onClick={handleVideoLikes}
+                />
+                {/* <Heart
                   className={`${
                     videoLiked
                       ? "text-red-600 hover:text-white fill-rose-600"
                       : "text-brand1 hover:text-red-600"
                   }`}
                   onClick={handleVideoLikes}
-                ></Heart>
+                ></Heart> */}
                 <p className="font-medium text-sm ">{videoLikes}</p>
               </div>
             )}
             {props.contentType === "track" && (
               <div className=" cursor-pointer flex items-center text-brand1  space-x-2">
-                <Heart
+                <AnimatedHeart
+                  className="h-12 w-12"
+                  isClick={trackLiked}
+                  onClick={handleTrackLikes}
+                />{" "}
+                {/* <Heart
                   className={`${
                     trackLiked
                       ? "text-red-600 hover:text-white fill-rose-600"
                       : "text-brand1 hover:text-red-600"
                   }`}
                   onClick={handleTrackLikes}
-                ></Heart>
+                ></Heart> */}
                 <p className="font-medium text-sm ">{trackLikes}</p>
               </div>
             )}
             {props.contentType === "poll" && (
               <div className=" cursor-pointer flex items-center text-brand1  space-x-2">
-                <Heart
+                <AnimatedHeart isClick={pollLiked} onClick={handlePollLikes} />{" "}
+                {/* <Heart
                   className={`${
                     pollLiked
                       ? "text-red-600 hover:text-white fill-rose-600"
                       : "text-brand1 hover:text-red-600"
                   }`}
                   onClick={handlePollLikes}
-                ></Heart>
+                ></Heart> */}
                 <p className="font-medium text-sm ">{pollLikes}</p>
               </div>
             )}

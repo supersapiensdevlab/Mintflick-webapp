@@ -1,8 +1,10 @@
 import axios from "axios";
+import Compressor from "compressorjs";
 import React, { useRef, useState } from "react";
 import { useContext } from "react";
 import { X, Pencil, FileCheck, File } from "tabler-icons-react";
 import { sanitizeFilename } from "../../../functions/sanitizeFilename";
+import CustomImageInput from "../../../Helper/CustomImageInput";
 import { uploadFile } from "../../../Helper/uploadHelper";
 import useUserActions from "../../../Hooks/useUserActions";
 import { UserContext } from "../../../Store";
@@ -14,6 +16,7 @@ const CoverImageModal = ({ setShowCoverImageModal }) => {
   const [selectedCoverImage, setSelectedCoverImage] = useState(null);
   const [uploadingImage, setUploadingImage] = useState(false);
   const [loadFeed, loadUser, loadProfileCard] = useUserActions();
+  const [croppedImage, setcroppedImage] = useState(null);
 
   const handleClick = (event) => {
     hiddenFileInput.current.click();
@@ -29,16 +32,28 @@ const CoverImageModal = ({ setShowCoverImageModal }) => {
   };
 
   const handleUpdateCoverImage = () => {
-    if (selectedCoverImage && selectedCoverImage.file[0]) {
+    if (croppedImage) {
       setUploadingImage(true);
-      uploadFile(selectedCoverImage?.file)
+      // let image = selectedCoverImage?.file[0];
+      // console.log("Image", image);
+      // new Compressor(image, {
+      //   quality: 0.5, // 0.6 can also be used, but its not recommended to go below.
+      //   success: (compressedResult) => {
+      //     // compressedResult has the compressed file.
+      //     // Use the compressed file to upload the images to your server.
+
+      //     image = new Blob([compressedResult], { type: "image/webp" });
+      //     console.log("Compressed Image", image);
+      //   },
+      // });
+      uploadFile([croppedImage])
         .then(async (cid) => {
           const formData = new FormData();
           formData.append(
             "username",
             State.database.userData?.data?.user?.username
           );
-          formData.append("coverImage", selectedCoverImage.file[0]);
+          formData.append("coverImage", croppedImage);
           formData.append("imageHash", cid);
 
           axios
@@ -109,8 +124,7 @@ const CoverImageModal = ({ setShowCoverImageModal }) => {
         </div>
       </div>
       <div className="flex flex-col p-4 w-full">
-        {" "}
-        <label
+        {/* <label
           onClick={handleClick}
           className=" cursor-pointer flex flex-col   items-start gap-2  w-full p-2 border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4"
         >
@@ -155,12 +169,20 @@ const CoverImageModal = ({ setShowCoverImageModal }) => {
             event.target.value = null;
             setSelectedCoverImage(null);
           }}
+        /> */}
+        <CustomImageInput
+          setImage={setcroppedImage}
+          label="Choose cover image"
+          aspect={6 / 2}
+          cropShape="rectangle"
+          showGrid={false}
+          compression={0.5}
         />
         <div className="my-4">
           <button
             onClick={handleUpdateCoverImage}
             className={`btn  ${
-              !selectedCoverImage?.file[0] ? "btn-disabled" : "btn-brand"
+              !croppedImage ? "btn-disabled" : "btn-brand"
             } w-full ${
               uploadingImage ? "loading " : ""
             } flex space-x-1 capitalize`}

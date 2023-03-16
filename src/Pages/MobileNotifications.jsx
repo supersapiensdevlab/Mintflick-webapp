@@ -77,7 +77,7 @@ function MobileNotifications() {
     }
   };
   return (
-    <div className="p-2 py-20  w-screen h-screen bg-slate-100 dark:bg-slate-800">
+    <div className="p-2 py-20 overflow-y-auto w-screen h-screen bg-slate-100 dark:bg-slate-800">
       {/* <label tabindex="0" className=" avatar">
         <button class="btn btn-circle btn-ghost" onClick={handleNotification}>
           <Bell size={28}></Bell>
