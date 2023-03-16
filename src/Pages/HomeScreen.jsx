@@ -9,17 +9,39 @@ import { Helmet } from "react-helmet";
 import ToastContainer from "../Componants/Toast/ToastContainer";
 import ConnectWalletModal from "../Componants/Wallet/ConnectWalletModal";
 import useUserActions from "../Hooks/useUserActions";
+import {
+  clusterApiUrl,
+  Connection,
+  Keypair,
+  PublicKey,
+  Transaction,
+  LAMPORTS_PER_SOL,
+} from "@solana/web3.js";
 
 function HomeScreen() {
   const State = useContext(UserContext);
   const navigateTo = useNavigate();
   const location = useLocation();
   const [loadFeed, loadUser, loadProfileCard, loadNftsData] = useUserActions();
+  const SOLANA_CONNECTION = new Connection(process.env.REACT_APP_SOLANA_RPC);
+  const WALLET_ADDRESS = process.env.REACT_APP_FEEPAYER_WALLET; //👈 Replace with your wallet address
+
+  async function loadBalance() {
+    let balance = await SOLANA_CONNECTION.getBalance(
+      new PublicKey(WALLET_ADDRESS)
+    );
+    console.log(`Gas Station Balance: ${balance / LAMPORTS_PER_SOL}`);
+  }
 
   useEffect(() => {
     // console.log(localStorage.getItem("walletAddress"));
     // console.log(JSON.parse(localStorage.getItem("provider")));
     loadNftsData();
+    try {
+      loadBalance();
+    } catch (error) {
+      console.log(error);
+    }
   }, []);
 
   return (

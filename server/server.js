@@ -110,6 +110,12 @@ app.get("/homescreen/:username/:type/:id", (req, res, next) => {
     return res.send(htmlData);
   });
 });
+
+app.get("/service-worker.js", (req, res) => {
+  console.log("sending Service Worker ");
+  res.sendFile(path.resolve(__dirname, "build", "service-worker.js"));
+});
+
 app.get("/*", (req, res, next) => {
   console.log("req is here ");
   fs.readFile(indexPath, "utf8", (err, htmlData) => {
