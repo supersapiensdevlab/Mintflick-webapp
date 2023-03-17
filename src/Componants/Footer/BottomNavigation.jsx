@@ -27,7 +27,7 @@ function BottomNavigation() {
       name: "Live",
       isActive: 2,
       link: "/homescreen/live",
-      notification: 0,
+      notification: State.database.liveUsers?.length,
     },
     // {
     //   icon: <Confetti size={28}></Confetti>,
@@ -52,7 +52,7 @@ function BottomNavigation() {
     },
   ];
   return (
-    <div className="flex text-white items-center   py-4 pb-6 justify-evenly   bg-slate-900/25 backdrop-blur-xl border-t-[1px] border-gray-300/20">
+    <div className="flex  items-center   py-4 pb-6 justify-evenly   bg-slate-900/25 backdrop-blur-xl border-t-[1px] border-gray-300/20">
       {data.map((item) => (
         <NavLink
           to={item.link}
@@ -61,17 +61,12 @@ function BottomNavigation() {
             // navigateTo(`${item.link}`);
           }}
           className={({ isActive }) =>
-            isActive ? `relative  opacity-100 ` : ` relative   opacity-50`
+            isActive ? `relative  text-white ` : ` relative   text-white/50`
           }
         >
           {item.icon}
           {item.notification !== 0 && (
-            <div
-              className="bg-rose-600 rounded-full shadow  
-                        h-4 w-4 text-xs self-center text-center font-semibold  
-                        absolute -top-2  -right-2
-                         text-white"
-            >
+            <div className="bg-rose-600 rounded-full shadow h-4 px-1 w-fit text-xs self-center text-center font-semibold absolute -top-2  left-4  text-white">
               {item.notification}
             </div>
           )}

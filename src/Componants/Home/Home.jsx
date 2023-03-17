@@ -12,6 +12,7 @@ import TimeLine from "./TimeLine";
 import { useRef } from "react";
 import { ArrowUpCircle, ChevronUp } from "tabler-icons-react";
 import FeedbackForm from "./FeedbackForm";
+import producthuntImage from "../../Assets/productHunt.webp";
 
 function Home() {
   const State = useContext(UserContext);
@@ -51,6 +52,7 @@ function Home() {
         } else {
           setShowButton(false);
           setScrollTopCalled(false);
+          State.updateDatabase({ showHeader: true });
         }
       }
     }
@@ -64,13 +66,22 @@ function Home() {
       </div>
       <div
         id="scrollableDiv"
-        className="  w-full lg:w-2/4 flex flex-col items-center  h-full pt-14 lg:pt-24 pb-24 overflow-y-auto "
+        className="w-full lg:w-2/4 flex flex-col items-center  h-full pt-14 lg:pt-24 overflow-y-auto "
         ref={buttonRef}
         onScroll={handleScroll}
       >
         <div ref={timelineRef}></div>
-        {/* <div className="my-3"></div> */}
-
+        <a
+          href="https://airtable.com/shrF2lZX7vSV844Oe"
+          target={"_blank"}
+          className="  w-full max-w-2xl my-2 bg-white lg:rounded-lg  cursor-pointer"
+        >
+          <img
+            className=" w-full lg:rounded-md"
+            src={producthuntImage}
+            alt="quest-banner"
+          />
+        </a>
         <AddPost></AddPost>
 
         <TimeLine></TimeLine>
@@ -80,7 +91,7 @@ function Home() {
         <FeedbackForm></FeedbackForm>
       </div>
       {showButton && (
-        <div className="absolute bottom-20 lg:bottom-5 w-screen flex justify-center lg:justify-end lg:right-4">
+        <div className="fixed bottom-20 lg:bottom-5 w-screen flex justify-center lg:justify-end lg:right-4">
           <button onClick={scrollToTop} className="  btn btn-xs glass gap-1">
             <ChevronUp size={16} />
             scroll to top

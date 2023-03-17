@@ -70,8 +70,8 @@ function Profile() {
         {/* <Vouch /> */}
       </div>
       <div className="relative w-full  lg:w-2/4 flex flex-col items-center  lg:h-full pt-14 lg:pt-24 lg:overflow-y-auto">
-        <div className="sticky     z-40 top-16 lg:top-0 left-0 w-full mb-3">
-          <div className="relative h-12 w-full bg-slate-800/10 dark:bg-slate-100/10  backdrop-blur-sm lg:rounded-lg flex ">
+        <div className="sticky z-40 top-16 lg:top-0 left-0 w-full mb-3 max-w-2xl">
+          <div className="relative h-12 w-full bg-slate-200 dark:bg-slate-900 lg:dark:bg-slate-800  lg:rounded-lg flex ">
             <div
               onClick={() => setactiveTab(1)}
               className="z-50 h-full w-1/2 flex items-center justify-center gap-2 cursor-pointer "
@@ -91,13 +91,13 @@ function Profile() {
                 className={`text-brand1
                  font-semibold`}
               >
-                NFT's
+                NFTs
               </span>
             </div>
             <span
               className={`${
                 activeTab === 1 ? "left-0 ml-1" : " translate-x-full -ml-1  "
-              } absolute top-0 h-10 w-1/2 mt-1 mb-1  bg-slate-100/10 backdrop-blur-sm rounded-lg transform transition-all ease-in-out`}
+              } absolute top-0 h-10 w-1/2 mt-1 mb-1  bg-slate-300 dark:bg-slate-700 rounded-lg transform transition-all ease-in-out`}
             />
           </div>
         </div>
