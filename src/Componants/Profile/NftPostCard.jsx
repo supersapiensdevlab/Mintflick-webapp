@@ -30,7 +30,11 @@ function NftPostCard({ nftDetails }) {
               className="  w-full aspect-square object-contain "
               width="100%"
               height="100%"
-              src={nftDetails?.cached_image_uri}
+              src={
+                nftDetails?.cached_image_uri === ""
+                  ? "https://img.freepik.com/free-photo/two-tickets-blue-front-view-isolated-white_1101-3055.jpg"
+                  : nftDetails?.cached_image_uri
+              }
               alt={"Post Image"}
               placeholder={
                 <div className="flex flex-col justify-center items-center gap-1">
