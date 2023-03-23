@@ -10,15 +10,26 @@ import {
   ArrowNarrowRight,
   Camera,
   ChevronLeft,
+  CircleCheck,
   Confetti,
   File,
   FileCheck,
+  Loader,
   Photo,
 } from "tabler-icons-react";
 import { UserContext } from "../../Store";
 import coverImage from "../../Assets/backgrounds/cover.png";
 import EventCard from "./EventCard";
 import { useNavigate } from "react-router-dom";
+import {
+  mintNFTOnSolana2,
+  signTransactionKeyWallet,
+  signTransactionWithWalletAndSend,
+  signWithRelayer,
+} from "../../Helper/mintOnSolana2";
+import { uploadFile } from "../../Helper/uploadHelper";
+import { sanitizeFilename } from "../../functions/sanitizeFilename";
+import { clusterApiUrl, Connection, Transaction } from "@solana/web3.js";
 const { ethereum } = window;
 function CreateEvent() {
   const State = useContext(UserContext);
@@ -29,379 +40,89 @@ function CreateEvent() {
   const [type, settype] = useState("");
   const [name, setname] = useState("");
   const [Category, setCategory] = useState("");
-  const [ticketPrice, setticketPrice] = useState("");
+  const [ticketPrice, setticketPrice] = useState(0);
   const [totalTickets, settotalTickets] = useState("");
 
   const [description, setdescription] = useState("");
   const [startDate, setstartDate] = useState("");
   const [endDate, setendDate] = useState("");
   const [timezone, settimezone] = useState("");
+
   const timezones = [
-    "Africa/Abidjan",
-    "Africa/Accra",
-    "Africa/Algiers",
-    "Africa/Bissau",
-    "Africa/Cairo",
-    "Africa/Casablanca",
-    "Africa/Ceuta",
-    "Africa/El_Aaiun",
-    "Africa/Johannesburg",
-    "Africa/Juba",
-    "Africa/Khartoum",
-    "Africa/Lagos",
-    "Africa/Maputo",
-    "Africa/Monrovia",
-    "Africa/Nairobi",
-    "Africa/Ndjamena",
-    "Africa/Sao_Tome",
-    "Africa/Tripoli",
-    "Africa/Tunis",
-    "Africa/Windhoek",
-    "America/Adak",
-    "America/Anchorage",
-    "America/Araguaina",
-    "America/Argentina/Buenos_Aires",
-    "America/Argentina/Catamarca",
-    "America/Argentina/Cordoba",
-    "America/Argentina/Jujuy",
-    "America/Argentina/La_Rioja",
-    "America/Argentina/Mendoza",
-    "America/Argentina/Rio_Gallegos",
-    "America/Argentina/Salta",
-    "America/Argentina/San_Juan",
-    "America/Argentina/San_Luis",
-    "America/Argentina/Tucuman",
-    "America/Argentina/Ushuaia",
-    "America/Asuncion",
-    "America/Atikokan",
-    "America/Bahia",
-    "America/Bahia_Banderas",
-    "America/Barbados",
-    "America/Belem",
-    "America/Belize",
-    "America/Blanc-Sablon",
-    "America/Boa_Vista",
-    "America/Bogota",
-    "America/Boise",
-    "America/Cambridge_Bay",
-    "America/Campo_Grande",
-    "America/Cancun",
-    "America/Caracas",
-    "America/Cayenne",
-    "America/Chicago",
-    "America/Chihuahua",
-    "America/Costa_Rica",
-    "America/Creston",
-    "America/Cuiaba",
-    "America/Curacao",
-    "America/Danmarkshavn",
-    "America/Dawson",
-    "America/Dawson_Creek",
-    "America/Denver",
-    "America/Detroit",
-    "America/Edmonton",
-    "America/Eirunepe",
-    "America/El_Salvador",
-    "America/Fort_Nelson",
-    "America/Fortaleza",
-    "America/Glace_Bay",
-    "America/Godthab",
-    "America/Goose_Bay",
-    "America/Grand_Turk",
-    "America/Guatemala",
-    "America/Guayaquil",
-    "America/Guyana",
-    "America/Halifax",
-    "America/Havana",
-    "America/Hermosillo",
-    "America/Indiana/Indianapolis",
-    "America/Indiana/Knox",
-    "America/Indiana/Marengo",
-    "America/Indiana/Petersburg",
-    "America/Indiana/Tell_City",
-    "America/Indiana/Vevay",
-    "America/Indiana/Vincennes",
-    "America/Indiana/Winamac",
-    "America/Inuvik",
-    "America/Iqaluit",
-    "America/Jamaica",
-    "America/Juneau",
-    "America/Kentucky/Louisville",
-    "America/Kentucky/Monticello",
-    "America/La_Paz",
-    "America/Lima",
-    "America/Los_Angeles",
-    "America/Maceio",
-    "America/Managua",
-    "America/Manaus",
-    "America/Martinique",
-    "America/Matamoros",
-    "America/Mazatlan",
-    "America/Menominee",
-    "America/Merida",
-    "America/Metlakatla",
-    "America/Mexico_City",
-    "America/Miquelon",
-    "America/Moncton",
-    "America/Monterrey",
-    "America/Montevideo",
-    "America/Nassau",
-    "America/New_York",
-    "America/Nipigon",
-    "America/Nome",
-    "America/Noronha",
-    "America/North_Dakota/Beulah",
-    "America/North_Dakota/Center",
-    "America/North_Dakota/New_Salem",
-    "America/Ojinaga",
-    "America/Panama",
-    "America/Pangnirtung",
-    "America/Paramaribo",
-    "America/Phoenix",
-    "America/Port-au-Prince",
-    "America/Port_of_Spain",
-    "America/Porto_Velho",
-    "America/Puerto_Rico",
-    "America/Punta_Arenas",
-    "America/Rainy_River",
-    "America/Rankin_Inlet",
-    "America/Recife",
-    "America/Regina",
-    "America/Resolute",
-    "America/Rio_Branco",
-    "America/Santarem",
-    "America/Santiago",
-    "America/Santo_Domingo",
-    "America/Sao_Paulo",
-    "America/Scoresbysund",
-    "America/Sitka",
-    "America/St_Johns",
-    "America/Swift_Current",
-    "America/Tegucigalpa",
-    "America/Thule",
-    "America/Thunder_Bay",
-    "America/Tijuana",
-    "America/Toronto",
-    "America/Vancouver",
-    "America/Whitehorse",
-    "America/Winnipeg",
-    "America/Yakutat",
-    "America/Yellowknife",
-    "Antarctica/Casey",
-    "Antarctica/Davis",
-    "Antarctica/DumontDUrville",
-    "Antarctica/Macquarie",
-    "Antarctica/Mawson",
-    "Antarctica/Palmer",
-    "Antarctica/Rothera",
-    "Antarctica/Syowa",
-    "Antarctica/Troll",
-    "Antarctica/Vostok",
-    "Asia/Almaty",
-    "Asia/Amman",
-    "Asia/Anadyr",
-    "Asia/Aqtau",
-    "Asia/Aqtobe",
-    "Asia/Ashgabat",
-    "Asia/Atyrau",
-    "Asia/Baghdad",
-    "Asia/Baku",
-    "Asia/Bangkok",
-    "Asia/Barnaul",
-    "Asia/Beirut",
-    "Asia/Bishkek",
-    "Asia/Brunei",
-    "Asia/Chita",
-    "Asia/Choibalsan",
-    "Asia/Colombo",
-    "Asia/Damascus",
-    "Asia/Dhaka",
-    "Asia/Dili",
-    "Asia/Dubai",
-    "Asia/Dushanbe",
-    "Asia/Famagusta",
-    "Asia/Gaza",
-    "Asia/Hebron",
-    "Asia/Ho_Chi_Minh",
-    "Asia/Hong_Kong",
-    "Asia/Hovd",
-    "Asia/Irkutsk",
-    "Asia/Jakarta",
-    "Asia/Jayapura",
-    "Asia/Jerusalem",
-    "Asia/Kabul",
-    "Asia/Kamchatka",
-    "Asia/Karachi",
-    "Asia/Kathmandu",
-    "Asia/Khandyga",
-    "Asia/Kolkata",
-    "Asia/Krasnoyarsk",
-    "Asia/Kuala_Lumpur",
-    "Asia/Kuching",
-    "Asia/Macau",
-    "Asia/Magadan",
-    "Asia/Makassar",
-    "Asia/Manila",
-    "Asia/Nicosia",
-    "Asia/Novokuznetsk",
-    "Asia/Novosibirsk",
-    "Asia/Omsk",
-    "Asia/Oral",
-    "Asia/Pontianak",
-    "Asia/Pyongyang",
-    "Asia/Qatar",
-    "Asia/Qostanay",
-    "Asia/Qyzylorda",
-    "Asia/Riyadh",
-    "Asia/Sakhalin",
-    "Asia/Samarkand",
-    "Asia/Seoul",
-    "Asia/Shanghai",
-    "Asia/Singapore",
-    "Asia/Srednekolymsk",
-    "Asia/Taipei",
-    "Asia/Tashkent",
-    "Asia/Tbilisi",
-    "Asia/Tehran",
-    "Asia/Thimphu",
-    "Asia/Tokyo",
-    "Asia/Tomsk",
-    "Asia/Ulaanbaatar",
-    "Asia/Urumqi",
-    "Asia/Ust-Nera",
-    "Asia/Vladivostok",
-    "Asia/Yakutsk",
-    "Asia/Yangon",
-    "Asia/Yekaterinburg",
-    "Asia/Yerevan",
-    "Atlantic/Azores",
-    "Atlantic/Bermuda",
-    "Atlantic/Canary",
-    "Atlantic/Cape_Verde",
-    "Atlantic/Faroe",
-    "Atlantic/Madeira",
-    "Atlantic/Reykjavik",
-    "Atlantic/South_Georgia",
-    "Atlantic/Stanley",
-    "Australia/Adelaide",
-    "Australia/Brisbane",
-    "Australia/Broken_Hill",
-    "Australia/Currie",
-    "Australia/Darwin",
-    "Australia/Eucla",
-    "Australia/Hobart",
-    "Australia/Lindeman",
-    "Australia/Lord_Howe",
-    "Australia/Melbourne",
-    "Australia/Perth",
-    "Australia/Sydney",
-    "Europe/Amsterdam",
-    "Europe/Andorra",
-    "Europe/Astrakhan",
-    "Europe/Athens",
-    "Europe/Belgrade",
-    "Europe/Berlin",
-    "Europe/Brussels",
-    "Europe/Bucharest",
-    "Europe/Budapest",
-    "Europe/Chisinau",
-    "Europe/Copenhagen",
-    "Europe/Dublin",
-    "Europe/Gibraltar",
-    "Europe/Helsinki",
-    "Europe/Istanbul",
-    "Europe/Kaliningrad",
-    "Europe/Kiev",
-    "Europe/Kirov",
-    "Europe/Lisbon",
-    "Europe/London",
-    "Europe/Luxembourg",
-    "Europe/Madrid",
-    "Europe/Malta",
-    "Europe/Minsk",
-    "Europe/Monaco",
-    "Europe/Moscow",
-    "Europe/Oslo",
-    "Europe/Paris",
-    "Europe/Prague",
-    "Europe/Riga",
-    "Europe/Rome",
-    "Europe/Samara",
-    "Europe/Saratov",
-    "Europe/Simferopol",
-    "Europe/Sofia",
-    "Europe/Stockholm",
-    "Europe/Tallinn",
-    "Europe/Tirane",
-    "Europe/Ulyanovsk",
-    "Europe/Uzhgorod",
-    "Europe/Vienna",
-    "Europe/Vilnius",
-    "Europe/Volgograd",
-    "Europe/Warsaw",
-    "Europe/Zaporozhye",
-    "Europe/Zurich",
-    "Indian/Chagos",
-    "Indian/Christmas",
-    "Indian/Cocos",
-    "Indian/Kerguelen",
-    "Indian/Mahe",
-    "Indian/Maldives",
-    "Indian/Mauritius",
-    "Indian/Reunion",
-    "Pacific/Apia",
-    "Pacific/Auckland",
-    "Pacific/Bougainville",
-    "Pacific/Chatham",
-    "Pacific/Chuuk",
-    "Pacific/Easter",
-    "Pacific/Efate",
-    "Pacific/Enderbury",
-    "Pacific/Fakaofo",
-    "Pacific/Fiji",
-    "Pacific/Funafuti",
-    "Pacific/Galapagos",
-    "Pacific/Gambier",
-    "Pacific/Guadalcanal",
-    "Pacific/Guam",
-    "Pacific/Honolulu",
-    "Pacific/Kiritimati",
-    "Pacific/Kosrae",
-    "Pacific/Kwajalein",
-    "Pacific/Majuro",
-    "Pacific/Marquesas",
-    "Pacific/Nauru",
-    "Pacific/Niue",
-    "Pacific/Norfolk",
-    "Pacific/Noumea",
-    "Pacific/Pago_Pago",
-    "Pacific/Palau",
-    "Pacific/Pitcairn",
-    "Pacific/Pohnpei",
-    "Pacific/Port_Moresby",
-    "Pacific/Rarotonga",
-    "Pacific/Tahiti",
-    "Pacific/Tarawa",
-    "Pacific/Tongatapu",
-    "Pacific/Wake",
-    "Pacific/Wallis",
+    "Baker Island, Howland Island",
+    "Samoa, Midway Atoll",
+    "Hawaii, Aleutian Islands",
+    "Alaska",
+    "Pacific Time (US and Canada)",
+    "Mountain Time (US and Canada)",
+    "Central Time (US and Canada), Mexico City",
+    "Eastern Time (US and Canada), Bogota, Lima",
+    "Atlantic Time (Canada), Caracas, La Paz",
+    "Newfoundland",
+    "Brasilia, Buenos Aires, Greenland",
+    "Mid-Atlantic",
+    "Azores, Cape Verde Islands",
+    "Western Europe Time, London, Lisbon, Casablanca",
+    "Central European Time, Brussels, Copenhagen, Madrid",
+    "Eastern European Time, Athens, Istanbul, Jerusalem",
+    "Moscow, Baghdad, Nairobi",
+    "Tehran",
+    "Abu Dhabi, Muscat, Baku, Tbilisi",
+    "Kabul",
+    "Islamabad, Karachi, Yekaterinburg",
+    "New Delhi, Mumbai, Kolkata",
+    "Kathmandu",
+    "Almaty, Dhaka, Novosibirsk",
+    "Yangon",
+    "Bangkok, Hanoi, Jakarta",
+    "Beijing, Perth, Singapore, Taipei",
+    "Eucla",
+    "Tokyo, Seoul, Yakutsk",
+    "Adelaide, Darwin",
+    "Eastern Australia, Guam, Vladivostok",
+    "Lord Howe Island",
+    "Magadan, Solomon Islands, Vanuatu",
+    "Norfolk Island",
+    "Auckland, Fiji, Kamchatka",
+    "Chatham Islands",
+    "Samoa, Tonga",
+    "Kiritimati",
   ];
 
   const [isFreeEvent, setisFreeEvent] = useState(false);
   const [isUnlimited, setisUnlimited] = useState(false);
 
   const [selectedPost, setSelectedPost] = useState(null);
+  const [thumbnail, setThumbnail] = useState(null);
   const [location, setlocation] = useState("");
   const [eventLink, seteventLink] = useState("");
   const [uploadingEvent, setUploadingEvent] = useState(false);
   const [lockId, setLockId] = useState();
-
+  const [cid, setCid] = useState(null);
+  const [collectionId, setCollectionId] = useState(null);
   const [error, seterror] = useState(false);
+
+  const [stepper, setstepper] = useState({
+    uploadingFile: false,
+    creatingEvent: false,
+    signingTransaction1: false,
+    creartingMachine: false,
+    signingTransaction2: false,
+  });
 
   const handleImageChange = (event) => {
     // Update the state
+    const file = sanitizeFilename(event.target.files[0]);
     setSelectedPost({
-      file: event.target.files,
+      file: [file],
+      localurl: URL.createObjectURL(event.target.files[0]),
+    });
+  };
+  const handleThumbnailChange = (event) => {
+    // Update the state
+    const file = sanitizeFilename(event.target.files[0]);
+    setThumbnail({
+      file: [file],
       localurl: URL.createObjectURL(event.target.files[0]),
     });
   };
@@ -494,7 +215,7 @@ function CreateEvent() {
     handleSubmit(lockAddress);
   };
 
-  const handleSubmit = (lockId) => {
+  const handleSubmit = (lockId, cid) => {
     //e.preventDefault();
     setUploadingEvent(true);
     console.log(name);
@@ -511,13 +232,17 @@ function CreateEvent() {
         startTime: startDate,
         endTime: endDate,
         timeZone: timezone,
-        eventImage: selectedPost,
+        eventImage:
+          "https://nftstorage.link/ipfs/" +
+          cid +
+          "/" +
+          selectedPost.file[0].name,
         eventGallery: "",
         eventHost: State.database.walletAddress,
         eventUrl: eventLink,
         location: location,
         lockId: lockId,
-        chainId: "80001",
+        // chainId: "80001",
       };
       console.log(data);
 
@@ -529,16 +254,254 @@ function CreateEvent() {
           },
         })
         .then(async (res) => {
-          State.toast("success", "Your event uploaded successfully!");
+          State.toast("success", "Your event created successfully!");
           //await clearState();
+          navigateTo("../marketPlace");
         })
         .catch((err) => {
-          State.toast("error", "Oops!somthing went wrong uploading event!");
+          State.toast("error", "Oops!something went wrong uploading event!");
           console.log(err);
           //clearState();
         });
     }
   };
+  const createCandyMachine = async (collection) => {
+    let nftSolanaData = {
+      network: process.env.REACT_APP_SOLANA_NETWORK,
+      wallet: State.database.walletAddress,
+      // fee_payer: process.env.REACT_APP_FEEPAYER_WALLET,
+      symbol: "FLICK",
+      max_supply: 0,
+      royalty: 0,
+      collection: collection,
+      // collection: "7KnYuwbcG3EDLBnpUTovGN1WjpB1WvvyNuMgjRezG33s",
+      items_available: isUnlimited ? 8000000000 : totalTickets,
+      bulk_item_settings: {
+        name: "ticket #$ID+1$",
+        uri: "https://mintflick.app",
+      },
+      // amount: isUnlimited ? 0 : ticketPrice,
+      groups: [
+        {
+          label: "ticket",
+          guards: {
+            solPayment: {
+              amount: isUnlimited ? 0 : ticketPrice,
+              destination: State.database.walletAddress,
+            },
+            mintLimit: {
+              limit: 1,
+            },
+          },
+        },
+      ],
+    };
+
+    console.log(nftSolanaData);
+
+    const res = await axios
+      .post(`https://api.shyft.to/sol/v1/candy_machine/create`, nftSolanaData, {
+        headers: {
+          "x-api-key": `${process.env.REACT_APP_SHYFT_API_KEY}`,
+          "content-type": "application/json",
+        },
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    console.log(res);
+    return res;
+  };
+
+  function candyMachine(mint, cid) {
+    createCandyMachine(mint)
+      .then((response) => {
+        console.log(response);
+        response.data.success &&
+          setstepper({
+            uploadingFile: true,
+            creatingEvent: true,
+            signingTransaction1: true,
+            creartingMachine: true,
+            signingTransaction2: false,
+          });
+
+        response.data.success &&
+          signTransactionWithWalletAndSend(
+            response.data.result.encoded_transaction,
+            State.database.provider
+          )
+            .then((res) => {
+              setstepper({
+                uploadingFile: true,
+                creatingEvent: true,
+                signingTransaction1: true,
+                creartingMachine: true,
+                signingTransaction2: true,
+              });
+              handleSubmit(response.data?.result?.candy_machine, cid);
+            })
+            .catch((error) => {
+              console.log(error);
+              uploadingEvent(false);
+
+              State.toast(
+                "error",
+                "Error while signing transaction,please try again!"
+              );
+            });
+      })
+      .catch((error) => {
+        console.log(error);
+        uploadingEvent(false);
+        State.toast(
+          "error",
+          "Error while setting up ticket counter,please try again!"
+        );
+      });
+  }
+
+  function createOnSolana() {
+    setstep(5);
+    setUploadingEvent(true);
+
+    uploadFile(thumbnail.file)
+      .then(async (cid) => {
+        setCid(cid);
+        setstepper({
+          uploadingFile: true,
+          creatingEvent: false,
+          signingTransaction1: false,
+          creartingMachine: false,
+          signingTransaction2: false,
+        });
+
+        mintNFTOnSolana2(
+          State.database.walletAddress,
+          name,
+          description,
+          "https://nftstorage.link/ipfs/" +
+            cid +
+            "/" +
+            selectedPost.file[0].name,
+          selectedPost.file[0],
+          [
+            {
+              trait_type: "Organizer",
+              value: State.database.walletAddress,
+            },
+            {
+              trait_type: "Category",
+              value: Category,
+            },
+            {
+              trait_type: "Type",
+              value: type,
+            },
+          ]
+        )
+          .then((mintRequest) => {
+            setstepper({
+              uploadingFile: true,
+              creatingEvent: true,
+              signingTransaction1: false,
+              creartingMachine: false,
+              signingTransaction2: false,
+            });
+
+            console.log(mintRequest);
+            signTransactionKeyWallet(
+              mintRequest.data.result.encoded_transaction,
+              process.env.REACT_APP_FEEPAYER_PRIVATEKEY,
+              State.database.provider
+            )
+              .then((response) => {
+                setstepper({
+                  uploadingFile: true,
+                  creatingEvent: true,
+                  signingTransaction1: true,
+                  creartingMachine: false,
+                  signingTransaction2: false,
+                });
+
+                console.log(response);
+
+                setCollectionId(mintRequest.data.result.mint);
+                candyMachine(mintRequest.data.result.mint, cid);
+              })
+              .catch((error) => {
+                console.log(error);
+                setstep(4);
+
+                State.toast(
+                  "error",
+                  "Error while signing transaction,please try again!"
+                );
+                setUploadingEvent(false);
+                setstep(4);
+
+                setstepper({
+                  uploadingFile: false,
+                  creatingEvent: false,
+                  signingTransaction1: false,
+                  creartingMachine: false,
+                  signingTransaction2: false,
+                });
+              });
+            // signTransactionWithWallet(
+            //   mintRequest.data.result.encoded_transaction,
+            //   State.database.provider
+            // )
+            //   .then((signedTx) => {
+            //     signWithRelayer(signedTx)
+            //       .then((response) => {
+            //         State.toast("success", "Event created successfully");
+            //         handleSubmit(mintRequest.data.result.mint, cid);
+            //       })
+            //       .catch((error) => {
+            //         State.toast(
+            //           "error",
+            //           "Gas Station Signing transaction failed!"
+            //         );
+            //         setUploadingEvent(false);
+            //       });
+            //   })
+            //   .catch((error) => {
+            //     State.toast("error", "Signing transaction with wallet failed!");
+            //     setUploadingEvent(false);
+            //   });
+          })
+          .catch((error) => {
+            State.toast(
+              "error",
+              "Error while creating mint request,please try again!"
+            );
+            setUploadingEvent(false);
+            setstep(4);
+
+            setstepper({
+              uploadingFile: false,
+              creatingEvent: false,
+              signingTransaction1: false,
+              creartingMachine: false,
+              signingTransaction2: false,
+            });
+          });
+      })
+      .catch((error) => {
+        State.toast("error", "Error while uploading image,please try again!");
+        setUploadingEvent(false);
+        setstep(4);
+
+        setstepper({
+          uploadingFile: false,
+          creatingEvent: false,
+          signingTransaction1: false,
+          creartingMachine: false,
+          signingTransaction2: false,
+        });
+      });
+  }
 
   useEffect(() => {
     State.updateDatabase({ showHeader: false });
@@ -546,17 +509,8 @@ function CreateEvent() {
   }, []);
 
   return (
-    <div className="lg:px-12  w-screen h-screen  bg-white dark:bg-slate-900 flex flex-col items-center">
-      <div className="w-full p-4 flex items-center justify-end   max-w-3xl mx-auto">
-        <button
-          onClick={() => navigateTo("../marketPlace")}
-          className="flex w-fit justify-center items-center text-brand3 font-semibold"
-        >
-          {/* <ChevronLeft /> */}
-          Cancel
-        </button>
-      </div>{" "}
-      <div className="flex-grow flex flex-col w-full p-4 overflow-y-auto max-w-2xl md:rounded-lg gap-2 text-brand3 bg-slate-100 dark:bg-slate-800">
+    <div className="lg:px-12 lg:pt-24  w-screen h-screen  bg-white dark:bg-slate-900 flex flex-col items-center">
+      <div className="w-full p-4 flex items-center justify-start   max-w-2xl mx-auto">
         {step !== 1 && (
           <button
             onClick={() => setstep(step - 1)}
@@ -565,18 +519,28 @@ function CreateEvent() {
             <ChevronLeft />
             Previous step
           </button>
-        )}
+        )}{" "}
+        <button
+          onClick={() => navigateTo("../marketPlace")}
+          className="flex w-fit justify-center items-center text-brand3 font-semibold ml-auto"
+        >
+          {/* <ChevronLeft /> */}
+          Cancel
+        </button>
+      </div>{" "}
+      <div className="flex-grow flex flex-col w-full p-4 overflow-y-auto max-w-2xl md:rounded-lg gap-2 text-brand3 bg-slate-100 dark:bg-slate-800">
         <span className="mx-auto my-2 text-5xl font-bold text-brand-gradient flex">
           {step === 1 && "Event Details"}
           {step === 2 && "Some more Details"}
           {step === 3 && "Almost Done"}
           {step === 4 && "Review"}
+          {step === 5 && "Creating event"}
         </span>
         <progress
-          className="progress progress-success w-full"
-          value={step * 20}
+          className="progress progress-success w-full "
+          value={step * 25}
           max="100"
-        ></progress>{" "}
+        ></progress>
         {error && (
           <div className="alert alert-error shadow-lg text-white">
             <div>
@@ -639,8 +603,8 @@ function CreateEvent() {
                 <label className="ml-2 text-sm font-bold">Ticket Price</label>
                 <input
                   value={ticketPrice}
-                  onChange={(e) => setticketPrice(e.target.value)}
-                  type="text"
+                  onChange={(e) => setticketPrice(parseFloat(e.target.value))}
+                  type="number"
                   placeholder="Price of a ticket"
                   className="input input-bordered w-full flex-grow"
                 />
@@ -729,10 +693,10 @@ function CreateEvent() {
               </select>
             </div>
             <div className="mt-2 ">
-              <label className="ml-2 text-sm font-bold">Ticket Image</label>
+              <label className="ml-2 text-sm font-bold">NFT Ticket Image</label>
               <label
-                htmlFor="post_announcement_image"
-                className=" cursor-pointer flex justify-between items-center gap-2  w-full p-2 border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4"
+                htmlFor="nft-image"
+                className="cursor-pointer flex justify-between items-center gap-2  w-full p-2 border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4"
               >
                 {selectedPost ? (
                   selectedPost.file ? (
@@ -750,7 +714,7 @@ function CreateEvent() {
                   </div>
                 )}
                 <input
-                  id="post_announcement_image"
+                  id="nft-image"
                   type="file"
                   accept="image/*"
                   onChange={handleImageChange}
@@ -773,34 +737,49 @@ function CreateEvent() {
               </label>
             </div>
             <div className="mt-2 ">
-              <label className="ml-2 text-sm font-bold">Ticket Gallery</label>
+              <label className="ml-2 text-sm font-bold">
+                Event Thumbnail Image
+              </label>
               <label
-                htmlFor="post_announcement_image"
-                className=" cursor-pointer flex flex-col justify-between items-start gap-2  w-full p-2 border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4"
+                htmlFor="event-image"
+                className=" cursor-pointer flex justify-between items-center gap-2  w-full p-2 border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4"
               >
-                <div className="flex flex-wrap w-full gap-2">
-                  <div className="border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg h-12 aspect-video"></div>
-                  <div className="border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg h-12 aspect-video"></div>
-                  <div className="border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg h-12 aspect-video"></div>
-                  <div className="border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg h-12 aspect-video"></div>
-                </div>
-                <div className="flex items-center gap-1">
-                  <Camera />
-                  Add Photo
-                </div>
-
+                {thumbnail ? (
+                  thumbnail.file ? (
+                    <div className="flex items-center">
+                      <FileCheck className="text-emerald-700" />
+                      {thumbnail.file[0].name.substring(0, 16)}
+                    </div>
+                  ) : (
+                    "No file choosen!"
+                  )
+                ) : (
+                  <div className="flex items-center gap-1">
+                    <Photo />
+                    Choose file *
+                  </div>
+                )}
                 <input
-                  id="post_announcement_image"
+                  id="event-image"
                   type="file"
                   accept="image/*"
-                  onChange={handleImageChange}
+                  onChange={handleThumbnailChange}
                   className="sr-only"
                   required={true}
                   onClick={(event) => {
                     event.target.value = null;
-                    setSelectedPost(null);
+                    setThumbnail(null);
                   }}
                 />
+                {thumbnail ? (
+                  thumbnail.file ? (
+                    <div className="h-24 w-24 rounded-lg overflow-clip">
+                      <img src={thumbnail.localurl}></img>
+                    </div>
+                  ) : null
+                ) : (
+                  <></>
+                )}
               </label>
             </div>
             <button
@@ -908,6 +887,7 @@ function CreateEvent() {
               }
               description={description}
             />
+
             {/* <div className="mx-auto relative h-fit w-96  rounded-lg bg-white dark:bg-slate-700 hover:scale-105 transition-all ease-in-out shadow-md overflow-hidden">
               <div className=" absolute flex items-center gap-1  top-2 left-2 w-fit">
                 <div className=" bg-slate-700/60 backdrop-blur-sm rounded-full px-2 text-slate-100 text-sm font-semibold">
@@ -959,13 +939,83 @@ function CreateEvent() {
             </div>*/}
             <button
               onClick={() => {
-                run();
+                // run();
+                createOnSolana();
               }}
-              className="mt-2 btn gap-2 btn-brand capitalize"
+              className={`${
+                uploadingEvent ? "loading" : ""
+              } mt-2 btn gap-2 btn-brand capitalize`}
             >
               Publish event <Confetti />
             </button>
           </>
+        )}
+        {step === 5 && (
+          <div className="flex flex-col justify-start items-center gap-2">
+            <div
+              className={`flex items-center gap-2 w-full bg-slate-300 dark:bg-slate-700 p-4 rounded-lg text-lg font-semibold ${
+                stepper.uploadingFile && "text-success"
+              }`}
+            >
+              {stepper.uploadingFile ? (
+                <CircleCheck />
+              ) : (
+                <Loader className="animate-spin" />
+              )}
+              Uploading file{" "}
+            </div>
+            <div
+              className={`flex items-center gap-2 w-full bg-slate-300 dark:bg-slate-700 p-4 rounded-lg text-lg font-semibold ${
+                stepper.creatingEvent && "text-success"
+              }`}
+            >
+              {stepper.creatingEvent ? (
+                <CircleCheck />
+              ) : (
+                <Loader className="animate-spin" />
+              )}{" "}
+              Creating event
+            </div>
+            <div
+              className={`flex items-center gap-2 w-full bg-slate-300 dark:bg-slate-700 p-4 rounded-lg text-lg font-semibold ${
+                stepper.signingTransaction1 && "text-success"
+              }`}
+            >
+              {stepper.signingTransaction1 ? (
+                <CircleCheck />
+              ) : (
+                <Loader className="animate-spin" />
+              )}{" "}
+              Signing transaction
+            </div>{" "}
+            <div
+              className={`flex items-center gap-2 w-full bg-slate-300 dark:bg-slate-700 p-4 rounded-lg text-lg font-semibold ${
+                stepper.creartingMachine && "text-success"
+              }`}
+            >
+              {stepper.creartingMachine ? (
+                <CircleCheck />
+              ) : (
+                <Loader className="animate-spin" />
+              )}{" "}
+              Creating ticket counter
+              {!stepper.creartingMachine && (
+                <div onClick={() => candyMachine(collectionId, cid)}>Retry</div>
+              )}
+            </div>{" "}
+            <div
+              className={`flex items-center gap-2 w-full bg-slate-300 dark:bg-slate-700 p-4 rounded-lg text-lg font-semibold ${
+                stepper.signingTransaction2 && "text-success"
+              }`}
+            >
+              {stepper.signingTransaction2 ? (
+                <CircleCheck />
+              ) : (
+                <Loader className="animate-spin" />
+              )}{" "}
+              Signing transaction
+            </div>
+          </div>
         )}
       </div>
     </div>

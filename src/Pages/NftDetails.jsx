@@ -134,7 +134,7 @@ function NftDetails() {
                 <span className="text-sm md:text-base font-semibold text-brand3 truncate w-fit border-2   border-slate-100 dark:border-slate-700 p-1 md:p-2 px-2 md:px-3 rounded-full">
                   Owner
                   <a
-                    href={`https://solscan.io/token/${nftDetails?.owner}?cluster=${process.env.REACT_APP_SOLANA_NETWORK}`}
+                    href={`https://translator.shyft.to/address/${nftDetails?.owner}?cluster=${process.env.REACT_APP_SOLANA_NETWORK}`}
                     target="_blank"
                     className="text-primary mx-2"
                   >
@@ -148,7 +148,7 @@ function NftDetails() {
                 <span className="text-sm md:text-base font-semibold text-brand3 truncate w-fit border-2   border-slate-100 dark:border-slate-700 p-1 md:p-2 px-2 md:px-3 rounded-full">
                   Mint id
                   <a
-                    href={`https://solscan.io/token/${nftDetails?.mint}?cluster=${process.env.REACT_APP_SOLANA_NETWORK}`}
+                    href={`https://translator.shyft.to/address/${nftDetails?.mint}?cluster=${process.env.REACT_APP_SOLANA_NETWORK}`}
                     target="_blank"
                     className="text-primary mx-2"
                   >

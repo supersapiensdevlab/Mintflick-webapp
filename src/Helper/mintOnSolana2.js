@@ -35,7 +35,6 @@ export const signTransactionKeyWallet = async (
   const confirmTransaction = await connection.sendRawTransaction(
     signedTx.serialize()
   );
-
   return confirmTransaction;
 };
 
@@ -105,21 +104,40 @@ export const mintNFTOnSolana2 = async (
   description,
   external_url,
   image,
-  attributes
+  attributes,
+  collection_address,
+  service_charge
 ) => {
-  let nftSolanaData = {
-    network: process.env.REACT_APP_SOLANA_NETWORK,
-    creator_wallet: creator_wallet,
-    name: name,
-    symbol: "FLICK",
-    attributes: JSON.stringify(attributes),
-    description: description,
-    external_url: external_url,
-    max_supply: 1,
-    fee_payer: process.env.REACT_APP_FEEPAYER_WALLET,
-    royalty: 5,
-    image: image,
-  };
+  let nftSolanaData = collection_address
+    ? {
+        network: process.env.REACT_APP_SOLANA_NETWORK,
+        creator_wallet: creator_wallet,
+        max_supply: 0,
+        name: name,
+        symbol: "FLICK",
+        attributes: JSON.stringify(attributes),
+        description: description,
+        external_url: external_url,
+        fee_payer: process.env.REACT_APP_FEEPAYER_WALLET,
+        royalty: 5,
+        image: image,
+        collection_address: collection_address,
+        service_charge: service_charge,
+      }
+    : {
+        network: process.env.REACT_APP_SOLANA_NETWORK,
+        creator_wallet: creator_wallet,
+        name: name,
+        symbol: "FLICK",
+        max_supply: 0,
+        attributes: JSON.stringify(attributes),
+        description: description,
+        external_url: external_url,
+        fee_payer: process.env.REACT_APP_FEEPAYER_WALLET,
+        royalty: 5,
+        image: image,
+      };
+
   console.log(nftSolanaData);
 
   const res = await axios
@@ -196,4 +214,79 @@ export const buyNFTOnSolana2 = (buyNftData, provider) => {
       console.log(err);
       return false;
     });
+};
+export const buyTicket = async (address, creator_wallet, receiver, amount) => {
+  let nftSolanaData = {
+    network: process.env.REACT_APP_SOLANA_NETWORK,
+    collection_address: address,
+    creator_wallet: creator_wallet,
+    fee_payer: process.env.REACT_APP_FEEPAYER_WALLET,
+    royalty: 5,
+    service_charge: {
+      receiver: receiver,
+      amount: amount,
+    },
+  };
+  console.log(nftSolanaData);
+
+  const res = await axios
+    .post(`https://api.shyft.to/sol/v2/nft/create`, nftSolanaData, {
+      headers: {
+        "x-api-key": `${process.env.REACT_APP_SHYFT_API_KEY}`,
+        "content-type": "multipart/form-data",
+      },
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  console.log(res);
+  return res;
+};
+
+export const signTransactionWithWalletAndSend = async (
+  encodedTransaction,
+  provider
+) => {
+  try {
+    const recoveredTransaction = Transaction.from(
+      Buffer.from(encodedTransaction, "base64")
+    );
+    console.log(recoveredTransaction);
+    const signedTx = await provider.signTransaction(recoveredTransaction); // signing the recovered transaction using the creator_wall
+    console.log(signedTx);
+    const confirmTransaction = signedTx
+      .serialize({ requireAllSignatures: false })
+      .toString("base64");
+
+    console.log(confirmTransaction);
+    await sendTransaction(confirmTransaction);
+    // const connection = new Connection(
+    //   clusterApiUrl(process.env.REACT_APP_SOLANA_NETWORK)
+    // );
+    // await connection.sendEncodedTransaction(confirmTransaction);
+  } catch (error) {
+    console.log(error);
+  }
+  return true;
+};
+
+export const sendTransaction = async (encodedTransaction) => {
+  let data = {
+    network: process.env.REACT_APP_SOLANA_NETWORK,
+    encoded_transaction: encodedTransaction,
+  };
+  console.log(data);
+
+  const res = await axios
+    .post(`https://api.shyft.to/sol/v1/transaction/send_txn`, data, {
+      headers: {
+        "x-api-key": `${process.env.REACT_APP_SHYFT_API_KEY}`,
+        "content-type": "application/json",
+      },
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  console.log(res);
+  return res;
 };

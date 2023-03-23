@@ -2,6 +2,14 @@ import axios from "axios";
 import React, { useContext, useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ChevronLeft, Share, Ticket } from "tabler-icons-react";
+import {
+  buyTicket,
+  mintNFTOnSolana2,
+  signTransactionKeyWallet,
+  signTransactionWithWallet,
+  signTransactionWithWalletAndSend,
+  signWithRelayer,
+} from "../../Helper/mintOnSolana2";
 import { UserContext } from "../../Store";
 
 function EventDetails(lockAddress) {
@@ -10,6 +18,7 @@ function EventDetails(lockAddress) {
   const State = useContext(UserContext);
   const navigateTo = useNavigate();
   const [data, setData] = useState({});
+  const [buying, setbuying] = useState(false);
 
   const params = useParams();
   // Wrapping all calls in an async block
@@ -62,7 +71,86 @@ function EventDetails(lockAddress) {
     const receipt = await transaction.wait();
     console.log(receipt);
   };
+  const mintTicket = async (collection, host) => {
+    let nftSolanaData = {
+      network: process.env.REACT_APP_SOLANA_NETWORK,
+      wallet: State.database.walletAddress,
+      authority: host,
+      candy_machine: collection,
+      mint_group: "ticket",
+    };
 
+    console.log(nftSolanaData);
+
+    const res = await axios
+      .post(`https://api.shyft.to/sol/v1/candy_machine/mint`, nftSolanaData, {
+        headers: {
+          "x-api-key": `${process.env.REACT_APP_SHYFT_API_KEY}`,
+          "content-type": "application/json",
+        },
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    console.log(res);
+    return res;
+  };
+  async function buyOnSolana() {
+    setbuying(true);
+    // const response = await fetch(data?.eventImage);
+    // const blob = await response.blob();
+    // const file = new File([blob], "image.jpg", {
+    //   type: blob.type,
+    // });
+    mintTicket(data.lockId, data.eventHost)
+      .then((mintRequest) => {
+        console.log(mintRequest);
+        console.log(mintRequest.data.result.encoded_transaction);
+        mintRequest.data.success &&
+          signTransactionWithWalletAndSend(
+            mintRequest.data.result.encoded_transaction,
+            State.database.provider
+          )
+            .then((response) => {
+              console.log(response);
+              State.toast("success", "Ticket brought successfully!");
+              setbuying(false);
+            })
+            .catch((error) => {
+              console.log(error);
+              State.toast(
+                "error",
+                "Error while signing transaction,please try again!"
+              );
+              setbuying(false);
+            });
+        // signTransactionWithWallet(
+        //   mintRequest.data.result.encoded_transaction,
+        //   State.database.provider
+        // )
+        //   .then((signedTx) => {
+        //     signWithRelayer(signedTx)
+        //       .then((response) => {
+        //         State.toast("success", "NFT Minted successfully");
+        //       })
+        //       .catch((error) => {
+        //         State.toast("error", "Gas Station Signing transaction failed!");
+        //         setbuying(false);
+        //       });
+        //   })
+        //   .catch((error) => {
+        //     State.toast("error", "Signing transaction with wallet failed!");
+        //     setbuying(false);
+        //   });
+      })
+      .catch((error) => {
+        State.toast(
+          "error",
+          "Error while creating mint request,please try again!"
+        );
+        setbuying(false);
+      });
+  }
   async function fetchData(id) {
     try {
       let response = await axios.get(
@@ -217,7 +305,7 @@ function EventDetails(lockAddress) {
   // );
 
   return (
-    <div className="lg:px-12  w-screen h-screen  bg-white dark:bg-slate-900 flex flex-col items-center">
+    <div className="lg:px-12 lg:pt-24  w-screen h-screen  bg-white dark:bg-slate-900 flex flex-col items-center">
       <div className="w-full p-4 flex items-center  max-w-3xl mx-auto">
         <button
           onClick={() => navigateTo("../marketPlace")}
@@ -266,11 +354,13 @@ function EventDetails(lockAddress) {
           <img
             className="aspect-video w-full object-cover rounded-lg"
             src={
-              "https://pbs.twimg.com/media/DeYVmVqW4AEIjlk?format=jpg&name=medium"
+              data.eventImage
+                ? data.eventImage
+                : "https://pbs.twimg.com/media/DeYVmVqW4AEIjlk?format=jpg&name=medium"
             }
             alt="banner"
           />
-          <div className="flex gap-2 overflow-auto">
+          {/* <div className="flex gap-2 overflow-auto">
             <img
               className="aspect-video h-16 object-cover rounded-lg"
               src={
@@ -292,7 +382,7 @@ function EventDetails(lockAddress) {
               }
               alt="banner"
             />
-          </div>
+          </div> */}
         </div>
         <div className="flex   gap-2 bg-slate-100 dark:bg-slate-700 sm:rounded-xl p-2 sm:p-4 mx-auto w-full justify-between items-center max-w-2xl">
           <div className="flex items-center gap-2">
@@ -322,10 +412,12 @@ function EventDetails(lockAddress) {
             </div>
           </div>{" "}
           <button
-            onClick={run}
-            className="btn btn-sm sm:btn-md btn-brand rounded-full capitalize"
+            onClick={buyOnSolana}
+            className={`btn btn-sm sm:btn-md btn-brand rounded-full capitalize ${
+              buying && "loading"
+            }`}
           >
-            Register for {data ? data.ticketPrice : ""}
+            Register for {data ? data.ticketPrice : ""} SOL
           </button>
         </div>
         <div className="flex   gap-1 bg-slate-100 dark:bg-slate-700 sm:rounded-xl p-2 sm:p-4 mx-auto w-full justify-around items-center max-w-2xl">
