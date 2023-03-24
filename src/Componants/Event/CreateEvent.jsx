@@ -30,6 +30,7 @@ import {
 import { uploadFile } from "../../Helper/uploadHelper";
 import { sanitizeFilename } from "../../functions/sanitizeFilename";
 import { clusterApiUrl, Connection, Transaction } from "@solana/web3.js";
+import CustomImageInput from "../../Helper/CustomImageInput";
 const { ethereum } = window;
 function CreateEvent() {
   const State = useContext(UserContext);
@@ -110,22 +111,22 @@ function CreateEvent() {
     signingTransaction2: false,
   });
 
-  const handleImageChange = (event) => {
-    // Update the state
-    const file = sanitizeFilename(event.target.files[0]);
-    setSelectedPost({
-      file: [file],
-      localurl: URL.createObjectURL(event.target.files[0]),
-    });
-  };
-  const handleThumbnailChange = (event) => {
-    // Update the state
-    const file = sanitizeFilename(event.target.files[0]);
-    setThumbnail({
-      file: [file],
-      localurl: URL.createObjectURL(event.target.files[0]),
-    });
-  };
+  // const handleImageChange = (event) => {
+  //   // Update the state
+  //   const file = sanitizeFilename(event.target.files[0]);
+  //   setSelectedPost({
+  //     file: [file],
+  //     localurl: URL.createObjectURL(event.target.files[0]),
+  //   });
+  // };
+  // const handleThumbnailChange = (event) => {
+  //   // Update the state
+  //   const file = sanitizeFilename(event.target.files[0]);
+  //   setThumbnail({
+  //     file: [file],
+  //     localurl: URL.createObjectURL(event.target.files[0]),
+  //   });
+  // };
 
   // Set the minimum end date to the start date
   const handleStartDateChange = (event) => {
@@ -233,10 +234,7 @@ function CreateEvent() {
         endTime: endDate,
         timeZone: timezone,
         eventImage:
-          "https://nftstorage.link/ipfs/" +
-          cid +
-          "/" +
-          selectedPost.file[0].name,
+          "https://nftstorage.link/ipfs/" + cid + "/" + selectedPost.name,
         eventGallery: "",
         eventHost: State.database.walletAddress,
         eventUrl: eventLink,
@@ -365,7 +363,7 @@ function CreateEvent() {
     setstep(5);
     setUploadingEvent(true);
 
-    uploadFile(thumbnail.file)
+    uploadFile([thumbnail])
       .then(async (cid) => {
         setCid(cid);
         setstepper({
@@ -380,11 +378,8 @@ function CreateEvent() {
           State.database.walletAddress,
           name,
           description,
-          "https://nftstorage.link/ipfs/" +
-            cid +
-            "/" +
-            selectedPost.file[0].name,
-          selectedPost.file[0],
+          "https://nftstorage.link/ipfs/" + cid + "/" + selectedPost.name,
+          selectedPost,
           [
             {
               trait_type: "Organizer",
@@ -529,7 +524,7 @@ function CreateEvent() {
         </button>
       </div>{" "}
       <div className="flex-grow flex flex-col w-full p-4 overflow-y-auto max-w-2xl md:rounded-lg gap-2 text-brand3 bg-slate-100 dark:bg-slate-800">
-        <span className="mx-auto my-2 text-5xl font-bold text-brand-gradient flex">
+        <span className=" my-2 text-3xl font-bold text-brand-gradient flex">
           {step === 1 && "Event Details"}
           {step === 2 && "Some more Details"}
           {step === 3 && "Almost Done"}
@@ -694,93 +689,27 @@ function CreateEvent() {
             </div>
             <div className="mt-2 ">
               <label className="ml-2 text-sm font-bold">NFT Ticket Image</label>
-              <label
-                htmlFor="nft-image"
-                className="cursor-pointer flex justify-between items-center gap-2  w-full p-2 border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4"
-              >
-                {selectedPost ? (
-                  selectedPost.file ? (
-                    <div className="flex items-center">
-                      <FileCheck className="text-emerald-700" />
-                      {selectedPost.file[0].name.substring(0, 16)}
-                    </div>
-                  ) : (
-                    "No file choosen!"
-                  )
-                ) : (
-                  <div className="flex items-center gap-1">
-                    <Photo />
-                    Choose file *
-                  </div>
-                )}
-                <input
-                  id="nft-image"
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageChange}
-                  className="sr-only"
-                  required={true}
-                  onClick={(event) => {
-                    event.target.value = null;
-                    setSelectedPost(null);
-                  }}
-                />
-                {selectedPost ? (
-                  selectedPost.file ? (
-                    <div className="h-24 w-24 rounded-lg overflow-clip">
-                      <img src={selectedPost.localurl}></img>
-                    </div>
-                  ) : null
-                ) : (
-                  <></>
-                )}
-              </label>
+              <CustomImageInput
+                setImage={setSelectedPost}
+                label="Choose NFT image"
+                aspect={16 / 9}
+                cropShape="rect"
+                showGrid={false}
+                compression={0.5}
+              />
             </div>
             <div className="mt-2 ">
               <label className="ml-2 text-sm font-bold">
                 Event Thumbnail Image
               </label>
-              <label
-                htmlFor="event-image"
-                className=" cursor-pointer flex justify-between items-center gap-2  w-full p-2 border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4"
-              >
-                {thumbnail ? (
-                  thumbnail.file ? (
-                    <div className="flex items-center">
-                      <FileCheck className="text-emerald-700" />
-                      {thumbnail.file[0].name.substring(0, 16)}
-                    </div>
-                  ) : (
-                    "No file choosen!"
-                  )
-                ) : (
-                  <div className="flex items-center gap-1">
-                    <Photo />
-                    Choose file *
-                  </div>
-                )}
-                <input
-                  id="event-image"
-                  type="file"
-                  accept="image/*"
-                  onChange={handleThumbnailChange}
-                  className="sr-only"
-                  required={true}
-                  onClick={(event) => {
-                    event.target.value = null;
-                    setThumbnail(null);
-                  }}
-                />
-                {thumbnail ? (
-                  thumbnail.file ? (
-                    <div className="h-24 w-24 rounded-lg overflow-clip">
-                      <img src={thumbnail.localurl}></img>
-                    </div>
-                  ) : null
-                ) : (
-                  <></>
-                )}
-              </label>
+              <CustomImageInput
+                setImage={setThumbnail}
+                label="Choose Thumbnail image"
+                aspect={16 / 9}
+                cropShape="rect"
+                showGrid={false}
+                compression={0.5}
+              />
             </div>
             <button
               onClick={() => {
@@ -872,7 +801,7 @@ function CreateEvent() {
               type={type}
               Category={Category}
               isFreeEvent={isFreeEvent}
-              selectedPostImg={selectedPost.localurl}
+              selectedPostImg={URL.createObjectURL(selectedPost)}
               name={name}
               startDate={startDate}
               userImg={
