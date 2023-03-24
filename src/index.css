@@ -3,64 +3,248 @@
 @tailwind utilities;
 
 @font-face {
-  font-family: 'Gilroy';
-  src: local('Gilroy-Regular'), url(./assets/fonts/Gilroy-Font/Gilroy-Regular.woff) format('woff');
-  /* other formats include: 'woff2', 'truetype, 'opentype',
-                            'embedded-opentype', and 'svg' */
+  font-family: "Gilroy";
+  src: url("./Assets/fonts/Gilroy-Font/Gilroy-Regular.woff");
+  font-weight: regular;
+}
+@font-face {
+  font-family: "Gilroy-Medium";
+  src: url("./Assets/fonts/Gilroy-Font/Gilroy-Medium.woff");
+  font-weight: medium;
+}
+@font-face {
+  font-family: "Gilroy-ExtraLight";
+  src: url("./Assets/fonts/Gilroy-Font/Gilroy-UltraLight.woff");
+  font-weight: light;
+}
+@font-face {
+  font-family: "Gilroy-Light";
+  src: url("./Assets/fonts/Gilroy-Font/Gilroy-Light.woff");
+  font-weight: light;
+}
+@font-face {
+  font-family: "Gilroy";
+  src: url("./Assets/fonts/Gilroy-Font/Gilroy-Heavy.woff");
+  font-weight: heavy;
 }
 
 @font-face {
-  font-family: 'Gilroy-Bold';
-  src: local('Gilroy-Bold'), url(./assets/fonts/Gilroy-Font/Gilroy-Bold.woff) format('woff');
-  /* other formats include: 'woff2', 'truetype, 'opentype',
-                            'embedded-opentype', and 'svg' */
+  font-family: "Gilroy-Medium";
+  src: url("./Assets/fonts/Gilroy-Font/Gilroy-Medium.woff");
+  font-weight: heavy;
+}
+@font-face {
+  font-family: "Gilroy-ExtraBold";
+  src: url("./Assets/fonts/Gilroy-Font/Gilroy-ExtraBold.woff");
+  font-weight: extraBold;
+}
+@font-face {
+  font-family: "Gilroy-Bold";
+  src: url("./Assets/fonts/Gilroy-Font/Gilroy-Bold.woff");
+  font-weight: bold;
+}
+@font-face {
+  font-family: "Gilroy-Black";
+  src: url("./Assets/fonts/Gilroy-Font/Gilroy-Black.woff");
+  font-weight: black;
 }
 
-html {
-  overflow-x: hidden;
-  font-family: 'Gilroy', Arial, serif;
+* {
+  font-family: "Gilroy";
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f100;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #2c6ee8;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.btn-primary {
+  @apply text-brand;
+}
+.btn-ghost {
+  @apply hover:dark:bg-slate-900;
+}
+
+.btn-circle {
+  @apply dark:text-slate-100;
+  @apply hover:dark:bg-slate-800;
+}
+.btn-square {
+  @apply dark:text-slate-100;
+  @apply hover:dark:bg-slate-800;
+}
+.input {
+  @apply dark:bg-slate-700;
+  @apply dark:text-slate-300;
+
+  @apply focus:ring-1 focus:ring-slate-500;
+}
+.select {
+  @apply dark:bg-slate-700;
+  @apply dark:text-slate-300;
+  @apply text-sm font-thin;
+}
+.textarea {
+  @apply dark:bg-slate-700;
+  @apply dark:text-slate-300;
+}
+.btn-disabled {
+  @apply dark:bg-slate-700 text-slate-500;
+}
+.btn-brand {
+  @apply bg-gradient-to-tr   from-[#A36CFC]  via-primary  to-brand
+  text-white
+  bg-brand hover:bg-brand  border-none hover:ring-1 hover:ring-primary dark:hover:ring-slate-100;
+}
+.btn-outline {
+  @apply hover:bg-gradient-to-tr  from-[#A36CFC]  via-primary  to-brand;
+}
+.btn-ghost {
+  @apply dark:text-white;
+}
+.btn-primary {
+  @apply hover:text-white;
+}
+.text-brand1 {
+  @apply text-slate-900 dark:text-slate-100;
+}
+.text-brand2 {
+  @apply text-slate-800 dark:text-slate-200;
+}
+.text-brand3 {
+  @apply text-slate-700 dark:text-slate-300;
+}
+.text-brand4 {
+  @apply text-slate-600 dark:text-slate-400;
+}
+.text-brand5 {
+  @apply text-slate-500;
+}
+.text-brand6 {
+  @apply text-slate-400 dark:text-slate-600;
+}
+.text-brand7 {
+  @apply text-slate-300 dark:text-slate-700;
+}
+.text-brand8 {
+  @apply text-slate-200 dark:text-slate-800;
+}
+.text-brand9 {
+  @apply text-slate-100 dark:text-slate-900;
+}
+.text-brand-gradient {
+  @apply bg-gradient-to-tr   from-[#A36CFC]  via-primary  to-brand
+  text-transparent
+   bg-clip-text;
+}
+.bg-texture {
+  background-image: radial-gradient(#130657 1px, #000024 1px);
+  background-size: 20px 20px;
+}
+.bg-gradient {
+  @apply bg-gradient-to-tr   from-[#A36CFC]  via-primary  to-brand;
+}
+
+.font-normal {
+  font-family: "Gilroy";
+}
+
+.font-extralight {
+  font-family: "Gilroy-ExtraLight";
+}
+
+.font-light {
+  font-family: "Gilroy-Light";
+}
+
+.font-thin {
+  font-family: "Gilroy-Thin";
+}
+
+.font-medium {
+  font-family: "Gilroy-Medium";
+}
+
+.font-semibold {
+  font-family: "Gilroy-SemiBold";
+}
+
+.font-bold {
+  font-family: "Gilroy-Bold";
+}
+.font-extrabold {
+  font-family: "Gilroy-ExtraBold";
+}
+
+.font-black {
+  font-family: "Gilroy-Black";
+}
+.btn-accent {
+  @apply text-white;
 }
 
 p {
-  font-family: 'Gilroy', Arial, serif;
+  font-family: "Gilroy";
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-family: 'Gilroy-Bold', Arial, serif;
+.slideshow {
+  margin: 0 auto;
+  overflow: hidden;
+  height: 100%;
 }
 
-@media only screen and (max-width: 640px) {
-  body {
-    overflow-x: hidden;
-  }
+.slideshowSlider {
+  height: 100%;
+  white-space: nowrap;
+  transition: ease 1000ms;
+  @apply space-x-2;
 }
 
-.MuiContainer-root {
-  padding: 0 !important;
+.slide {
+  display: inline-block;
+
+  height: 100%;
+  @apply w-full sm:w-1/2 rounded-md;
 }
 
-.sc-bwzfXH .bhRnqO {
-  top: calc(30% - 17.5px) !important;
+/* Buttons */
+
+.slideshowDots {
+  text-align: center;
 }
 
-.close-thik:after {
-  content: '✖'; /* UTF-8 symbol */
+.slideshowDot {
+  display: inline-block;
+  height: 12px;
+  width: 12px;
+  border-radius: 50%;
+
+  cursor: pointer;
+  margin: 15px 7px 0px;
+
+  background-color: #c4c4c4;
 }
 
-/* Toggle B */
-input:checked ~ .dot {
-  transform: translateX(100%);
-  background-color: #00d3ff;
+.slideshowDot.active {
+  @apply bg-primary;
 }
 
-.rdrDefinedRangesWrapper {
-  font-size: 12px;
-  width: 226px;
-  border-right: solid 1px #eff2f7;
-  background: #f00;
+.modal {
+  @apply backdrop-blur-sm;
 }

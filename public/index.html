@@ -1,101 +1,132 @@
 <!DOCTYPE html>
-<html lang="en-US">
+<html lang="en">
   <head>
-    <!-- For Smart Link  -->
-
     <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/Mintflick-favicon.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+
+    <title>Mintflick</title>
+
+    <meta
+      name="description"
+      content="The Super App for Digital Creators of the Future"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#101222" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="google" content="notranslate" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@mintflick.app" />
+    <meta name="twitter:url" content="https://mintflick.app" />
+    <meta name="twitter:title" content="Mintflick" />
+    <meta
+      name="twitter:description"
+      content="The Super App for Digital Creators of the Future"
+    />
+    <meta name="twitter:image" content="" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
     <meta property="og:title" content="Mintflick" />
     <meta
       property="og:description"
-      content=" Live Streaming Videos 🎥, Social Media & NFT Marketplace on Web3🚀 "
+      content="The Super App for Digital Creators of the Future"
     />
-    <meta
-      property="og:image"
-      content="https://user-images.githubusercontent.com/61380295/144381168-6cc06e33-bd03-403b-aa6e-06402297f3b6.png"
-    />
+    <meta property="og:site_name" content="Mintflick - Fun in creation" />
+    <meta property="og:url" content="https://mintflick.app" />
+    <meta property="og:image" content="" />
+
+    <link rel="preload" href="manifest.json" />
+    <link rel="manifest" href="manifest.json" />
+    <link rel="stylesheet" href="css/native-like-experience.css" />
+    <script
+      async
+      src="https://unpkg.com/pwacompat"
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- Apple touch icon -->
+    <link rel="apple-touch-icon" sizes="120x120" href="logo512.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="logo512.png" />
+
     <link
       rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
-      integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg=="
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+      integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
-    <link
-      rel="stylesheet"
-      href=" https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/1.8.10/tailwind.min.css"
-    />
+  </head>
+  <body style="margin: 0">
+    <!-- <header
+      style="
+        display: flex;
+        align-items: center;
+        padding: 16px;
+        background-color: #101222;
+        box-shadow: 0px 4px 5px rgba(0, 0, 0, 0.14),
+          0px 1px 10px rgba(0, 0, 0, 0.12), 0px 2px 4px rgba(0, 0, 0, 0.2);
+      "
+    >
+      <svg
+        style="margin-right: 12px"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+      >
+        <path
+          d="M3 8V6H21V8H3ZM3 13H21V11H3V13ZM3 18H21V16H3V18Z"
+          fill="white"
+        />
+      </svg>
+      <h4 style="margin: 0; font-weight: 500; color: white">MintFlick</h4>
+    </header> -->
 
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/Mintflick-favicon.png" />
-    <!--
-      manifest.json provides metadata used when your web app is installed on a
-      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
-    -->
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <noscript>You need to enable JavaScript to run this app.</noscript>
 
-    <!-- Unlock snippet -->
+    <div id="root"></div>
+
+    <script>
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", function () {
+          navigator.serviceWorker
+            .register("service-worker.js")
+            .then((registration) => {
+              console.log("SW registration successful");
+            });
+        });
+      }
+    </script>
     <script>
       (function (d, s) {
         var js = d.createElement(s),
           sc = d.getElementsByTagName(s)[0];
-        js.src = 'https://paywall.unlock-protocol.com/static/unlock.1.0.min.js';
+        js.src =
+          "https://paywall.unlock-protocol.com/static/unlock.latest.min.js";
         sc.parentNode.insertBefore(js, sc);
-      })(document, 'script');
+      })(document, "script");
     </script>
 
-    <!-- Unlock Configuration -->
     <script>
       var unlockProtocolConfig = {
-        network: 4,
+        network: 137, // Network ID (1 is for mainnet, 4 for rinkeby, 100 for xDai, etc)
         locks: {
-          '0xA93AF06edF3A57BFEDB3e72107e9308aC4C7B72d': {
-            name: 'A rinkeby lock',
+          "0xa41038e1a7cc20ca58e6cdb6ed525a2a87175620": {
+            name: "MintFlick",
           },
         },
-        icon: 'https://unlock-protocol.com/static/images/svg/unlock-word-mark.svg',
+        icon: "https://unlock-protocol.com/static/images/svg/unlock-word-mark.svg",
         callToAction: {
-          default: 'Please Unlock things!',
+          default: "Please buy  this  nft  to get access",
         },
       };
     </script>
-
-    <title>MintFlick</title>
-
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-H8XD37BBFG"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        dataLayer.push(arguments);
-      }
-      gtag('js', new Date());
-
-      gtag('config', 'G-H8XD37BBFG');
-    </script>
     <script
-      src="https://cdn.jsdelivr.net/npm/jdenticon@3.1.1/dist/jdenticon.min.js"
-      integrity="sha384-l0/0sn63N3mskDgRYJZA6Mogihu0VY3CusdLMiwpJ9LFPklOARUcOiWEIGGmFELx"
+      src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/js/all.min.js"
+      integrity="sha512-6PM0qYu5KExuNcKt5bURAoT6KCThUmHRewN3zUFNaoI6Di7XJPTMoT6K0nsagZKk2OB4L7E3q1uQKHNHd4stIQ=="
       crossorigin="anonymous"
+      referrerpolicy="no-referrer"
     ></script>
-    <script type="text/javascript" src="https://unpkg.com/default-passive-events"></script>
-  </head>
-  <body className="font-proxima-reg   ">
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-
-    <div
-      className="bg-dbeats-white  dark:bg-gradient-to-l dark:from-dbeats-dark-primary  dark:to-dbeats-dark-primary"
-      id="root"
-    ></div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
-
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
-
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
   </body>
 </html>

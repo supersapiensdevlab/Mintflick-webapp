@@ -1,0 +1,954 @@
+import React, { useContext, useEffect, useState } from "react";
+import moment from "moment";
+import { ethers } from "ethers";
+import axios from "axios";
+
+import {
+  AlertTriangle,
+  ArrowLeft,
+  ArrowNarrowLeft,
+  ArrowNarrowRight,
+  Camera,
+  ChevronLeft,
+  CircleCheck,
+  Confetti,
+  File,
+  FileCheck,
+  Loader,
+  Photo,
+} from "tabler-icons-react";
+import { UserContext } from "../../Store";
+import coverImage from "../../Assets/backgrounds/cover.png";
+import EventCard from "./EventCard";
+import { useNavigate } from "react-router-dom";
+import {
+  mintNFTOnSolana2,
+  signTransactionKeyWallet,
+  signTransactionWithWalletAndSend,
+  signWithRelayer,
+} from "../../Helper/mintOnSolana2";
+import { uploadFile } from "../../Helper/uploadHelper";
+import { sanitizeFilename } from "../../functions/sanitizeFilename";
+import { clusterApiUrl, Connection, Transaction } from "@solana/web3.js";
+import CustomImageInput from "../../Helper/CustomImageInput";
+const { ethereum } = window;
+function CreateEvent() {
+  const State = useContext(UserContext);
+  const navigateTo = useNavigate();
+
+  const [step, setstep] = useState(1);
+
+  const [type, settype] = useState("");
+  const [name, setname] = useState("");
+  const [Category, setCategory] = useState("");
+  const [ticketPrice, setticketPrice] = useState(0);
+  const [totalTickets, settotalTickets] = useState("");
+
+  const [description, setdescription] = useState("");
+  const [startDate, setstartDate] = useState("");
+  const [endDate, setendDate] = useState("");
+  const [timezone, settimezone] = useState("");
+
+  const timezones = [
+    "Baker Island, Howland Island",
+    "Samoa, Midway Atoll",
+    "Hawaii, Aleutian Islands",
+    "Alaska",
+    "Pacific Time (US and Canada)",
+    "Mountain Time (US and Canada)",
+    "Central Time (US and Canada), Mexico City",
+    "Eastern Time (US and Canada), Bogota, Lima",
+    "Atlantic Time (Canada), Caracas, La Paz",
+    "Newfoundland",
+    "Brasilia, Buenos Aires, Greenland",
+    "Mid-Atlantic",
+    "Azores, Cape Verde Islands",
+    "Western Europe Time, London, Lisbon, Casablanca",
+    "Central European Time, Brussels, Copenhagen, Madrid",
+    "Eastern European Time, Athens, Istanbul, Jerusalem",
+    "Moscow, Baghdad, Nairobi",
+    "Tehran",
+    "Abu Dhabi, Muscat, Baku, Tbilisi",
+    "Kabul",
+    "Islamabad, Karachi, Yekaterinburg",
+    "New Delhi, Mumbai, Kolkata",
+    "Kathmandu",
+    "Almaty, Dhaka, Novosibirsk",
+    "Yangon",
+    "Bangkok, Hanoi, Jakarta",
+    "Beijing, Perth, Singapore, Taipei",
+    "Eucla",
+    "Tokyo, Seoul, Yakutsk",
+    "Adelaide, Darwin",
+    "Eastern Australia, Guam, Vladivostok",
+    "Lord Howe Island",
+    "Magadan, Solomon Islands, Vanuatu",
+    "Norfolk Island",
+    "Auckland, Fiji, Kamchatka",
+    "Chatham Islands",
+    "Samoa, Tonga",
+    "Kiritimati",
+  ];
+
+  const [isFreeEvent, setisFreeEvent] = useState(false);
+  const [isUnlimited, setisUnlimited] = useState(false);
+
+  const [selectedPost, setSelectedPost] = useState(null);
+  const [thumbnail, setThumbnail] = useState(null);
+  const [location, setlocation] = useState("");
+  const [eventLink, seteventLink] = useState("");
+  const [uploadingEvent, setUploadingEvent] = useState(false);
+  const [lockId, setLockId] = useState();
+  const [cid, setCid] = useState(null);
+  const [collectionId, setCollectionId] = useState(null);
+  const [error, seterror] = useState(false);
+
+  const [stepper, setstepper] = useState({
+    uploadingFile: false,
+    creatingEvent: false,
+    signingTransaction1: false,
+    creartingMachine: false,
+    signingTransaction2: false,
+  });
+
+  // const handleImageChange = (event) => {
+  //   // Update the state
+  //   const file = sanitizeFilename(event.target.files[0]);
+  //   setSelectedPost({
+  //     file: [file],
+  //     localurl: URL.createObjectURL(event.target.files[0]),
+  //   });
+  // };
+  // const handleThumbnailChange = (event) => {
+  //   // Update the state
+  //   const file = sanitizeFilename(event.target.files[0]);
+  //   setThumbnail({
+  //     file: [file],
+  //     localurl: URL.createObjectURL(event.target.files[0]),
+  //   });
+  // };
+
+  // Set the minimum end date to the start date
+  const handleStartDateChange = (event) => {
+    setstartDate(event.target.value);
+    setendDate((prevEndDate) => {
+      if (
+        prevEndDate === "" ||
+        new Date(prevEndDate) > new Date(event.target.value)
+      ) {
+        return prevEndDate;
+      }
+      return event.target.value + 10;
+    });
+  };
+
+  // Validate the end date
+  const handleEndDateChange = (event) => {
+    const newEndDate = event.target.value;
+    if (new Date(newEndDate) <= new Date(startDate)) {
+      alert("End date must be later than start date");
+      return;
+    }
+    setendDate(newEndDate);
+  };
+
+  const abis = require("@unlock-protocol/contracts");
+
+  // Wrapping all calls in an async block
+  const run = async () => {
+    handleSubmit();
+    console.log(startDate, endDate, timezone, ticketPrice, totalTickets);
+
+    // Set the start and end dates
+    const _startDate = new Date(startDate);
+    const _endDate = new Date(endDate);
+    const diffInMilliseconds = _endDate - _startDate;
+    const diffInDays = diffInMilliseconds / (1000 * 3600 * 24);
+    console.log(diffInMilliseconds, diffInDays); // Output: 3
+    console.log(diffInDays * 60 * 60 * 24);
+    // Here we use a Rinkeby provider. We will be able to read the state, but not send transactions.
+    // const provider = new ethers.providers.JsonRpcProvider(
+    //   "https://rpc.unlock-protocol.com/5"
+    // );
+
+    // This time, we also need a signer.
+    // Note: we sent some fake Eth to this address, but please replace with your own!
+
+    //const instance = await State.database.web3Modal.connect();
+    if (!State.database.provider)
+      alert("You need to connect to a web3 wallet to use this feature!");
+    const provider = State.database.provider;
+    console.log("PROVIDER:", provider);
+    const signer = provider.getSigner();
+    console.log("SIGNER:", signer);
+    const Address = await signer.getAddress();
+    console.log("ADDRESS", Address);
+    // On goerli Unlock is at 0x627118a4fB747016911e5cDA82e2E77C531e8206
+    const PolygonMainnet = "0xE8E5cd156f89F7bdB267EabD5C43Af3d5AF2A78f";
+    const Mumbai = "0x1FF7e338d5E582138C46044dc238543Ce555C963";
+    const address =
+      process.env.NODE_ENV === "development" ? Mumbai : PolygonMainnet;
+
+    // Instantiate the Unlock contract
+    const unlock = new ethers.Contract(address, abis.UnlockV11.abi, signer);
+
+    // Lock params:
+    const lockInterface = new ethers.utils.Interface(abis.PublicLockV11.abi);
+
+    const params = lockInterface.encodeFunctionData(
+      "initialize(address,uint256,address,uint256,uint256,string)",
+      [
+        Address,
+        diffInMilliseconds, // 30 days in seconds
+        ethers.constants.AddressZero, // We use the base chain currency
+        ethers.utils.parseUnits(ticketPrice.length > 0 ? ticketPrice : "0", 18), // 0.01 Eth
+        totalTickets,
+        name,
+      ]
+    );
+
+    const transaction = await unlock.createUpgradeableLockAtVersion(params, 11);
+    console.log(transaction.hash);
+    const receipt = await transaction.wait();
+    const lockAddress = receipt.logs[0].address;
+    console.log(lockAddress);
+    setLockId(lockAddress);
+    handleSubmit(lockAddress);
+  };
+
+  const handleSubmit = (lockId, cid) => {
+    //e.preventDefault();
+    setUploadingEvent(true);
+    console.log(name);
+    if (name.length > 1 && lockId) {
+      let data = {
+        title: name,
+        type: type,
+        category: Category,
+        freeEvent: isFreeEvent,
+        ticketPrice: ticketPrice,
+        unlimitedTickets: isUnlimited,
+        ticketCount: totalTickets,
+        description: description,
+        startTime: startDate,
+        endTime: endDate,
+        timeZone: timezone,
+        eventImage:
+          "https://nftstorage.link/ipfs/" + cid + "/" + selectedPost.name,
+        eventGallery: "",
+        eventHost: State.database.walletAddress,
+        eventUrl: eventLink,
+        location: location,
+        lockId: lockId,
+        // chainId: "80001",
+      };
+      console.log(data);
+
+      axios
+        .post(`${process.env.REACT_APP_SERVER_URL}/user/addevent`, data, {
+          headers: {
+            "content-type": "application/json",
+            "auth-token": JSON.stringify(localStorage.getItem("authtoken")),
+          },
+        })
+        .then(async (res) => {
+          State.toast("success", "Your event created successfully!");
+          //await clearState();
+          navigateTo("../marketPlace");
+        })
+        .catch((err) => {
+          State.toast("error", "Oops!something went wrong uploading event!");
+          console.log(err);
+          //clearState();
+        });
+    }
+  };
+  const createCandyMachine = async (collection) => {
+    let nftSolanaData = {
+      network: process.env.REACT_APP_SOLANA_NETWORK,
+      wallet: State.database.walletAddress,
+      // fee_payer: process.env.REACT_APP_FEEPAYER_WALLET,
+      symbol: "FLICK",
+      max_supply: 0,
+      royalty: 0,
+      collection: collection,
+      // collection: "7KnYuwbcG3EDLBnpUTovGN1WjpB1WvvyNuMgjRezG33s",
+      items_available: isUnlimited ? 8000000000 : totalTickets,
+      bulk_item_settings: {
+        name: "ticket #$ID+1$",
+        uri: "https://mintflick.app",
+      },
+      // amount: isUnlimited ? 0 : ticketPrice,
+      groups: [
+        {
+          label: "ticket",
+          guards: {
+            solPayment: {
+              amount: isUnlimited ? 0 : ticketPrice,
+              destination: State.database.walletAddress,
+            },
+            mintLimit: {
+              limit: 1,
+            },
+          },
+        },
+      ],
+    };
+
+    console.log(nftSolanaData);
+
+    const res = await axios
+      .post(`https://api.shyft.to/sol/v1/candy_machine/create`, nftSolanaData, {
+        headers: {
+          "x-api-key": `${process.env.REACT_APP_SHYFT_API_KEY}`,
+          "content-type": "application/json",
+        },
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    console.log(res);
+    return res;
+  };
+
+  function candyMachine(mint, cid) {
+    createCandyMachine(mint)
+      .then((response) => {
+        console.log(response);
+        response.data.success &&
+          setstepper({
+            uploadingFile: true,
+            creatingEvent: true,
+            signingTransaction1: true,
+            creartingMachine: true,
+            signingTransaction2: false,
+          });
+
+        response.data.success &&
+          signTransactionWithWalletAndSend(
+            response.data.result.encoded_transaction,
+            State.database.provider
+          )
+            .then((res) => {
+              setstepper({
+                uploadingFile: true,
+                creatingEvent: true,
+                signingTransaction1: true,
+                creartingMachine: true,
+                signingTransaction2: true,
+              });
+              handleSubmit(response.data?.result?.candy_machine, cid);
+            })
+            .catch((error) => {
+              console.log(error);
+              uploadingEvent(false);
+
+              State.toast(
+                "error",
+                "Error while signing transaction,please try again!"
+              );
+            });
+      })
+      .catch((error) => {
+        console.log(error);
+        uploadingEvent(false);
+        State.toast(
+          "error",
+          "Error while setting up ticket counter,please try again!"
+        );
+      });
+  }
+
+  function createOnSolana() {
+    setstep(5);
+    setUploadingEvent(true);
+
+    uploadFile([thumbnail])
+      .then(async (cid) => {
+        setCid(cid);
+        setstepper({
+          uploadingFile: true,
+          creatingEvent: false,
+          signingTransaction1: false,
+          creartingMachine: false,
+          signingTransaction2: false,
+        });
+
+        mintNFTOnSolana2(
+          State.database.walletAddress,
+          name,
+          description,
+          "https://nftstorage.link/ipfs/" + cid + "/" + selectedPost.name,
+          selectedPost,
+          [
+            {
+              trait_type: "Organizer",
+              value: State.database.walletAddress,
+            },
+            {
+              trait_type: "Category",
+              value: Category,
+            },
+            {
+              trait_type: "Type",
+              value: type,
+            },
+          ]
+        )
+          .then((mintRequest) => {
+            setstepper({
+              uploadingFile: true,
+              creatingEvent: true,
+              signingTransaction1: false,
+              creartingMachine: false,
+              signingTransaction2: false,
+            });
+
+            console.log(mintRequest);
+            signTransactionKeyWallet(
+              mintRequest.data.result.encoded_transaction,
+              process.env.REACT_APP_FEEPAYER_PRIVATEKEY,
+              State.database.provider
+            )
+              .then((response) => {
+                setstepper({
+                  uploadingFile: true,
+                  creatingEvent: true,
+                  signingTransaction1: true,
+                  creartingMachine: false,
+                  signingTransaction2: false,
+                });
+
+                console.log(response);
+
+                setCollectionId(mintRequest.data.result.mint);
+                candyMachine(mintRequest.data.result.mint, cid);
+              })
+              .catch((error) => {
+                console.log(error);
+                setstep(4);
+
+                State.toast(
+                  "error",
+                  "Error while signing transaction,please try again!"
+                );
+                setUploadingEvent(false);
+                setstep(4);
+
+                setstepper({
+                  uploadingFile: false,
+                  creatingEvent: false,
+                  signingTransaction1: false,
+                  creartingMachine: false,
+                  signingTransaction2: false,
+                });
+              });
+            // signTransactionWithWallet(
+            //   mintRequest.data.result.encoded_transaction,
+            //   State.database.provider
+            // )
+            //   .then((signedTx) => {
+            //     signWithRelayer(signedTx)
+            //       .then((response) => {
+            //         State.toast("success", "Event created successfully");
+            //         handleSubmit(mintRequest.data.result.mint, cid);
+            //       })
+            //       .catch((error) => {
+            //         State.toast(
+            //           "error",
+            //           "Gas Station Signing transaction failed!"
+            //         );
+            //         setUploadingEvent(false);
+            //       });
+            //   })
+            //   .catch((error) => {
+            //     State.toast("error", "Signing transaction with wallet failed!");
+            //     setUploadingEvent(false);
+            //   });
+          })
+          .catch((error) => {
+            State.toast(
+              "error",
+              "Error while creating mint request,please try again!"
+            );
+            setUploadingEvent(false);
+            setstep(4);
+
+            setstepper({
+              uploadingFile: false,
+              creatingEvent: false,
+              signingTransaction1: false,
+              creartingMachine: false,
+              signingTransaction2: false,
+            });
+          });
+      })
+      .catch((error) => {
+        State.toast("error", "Error while uploading image,please try again!");
+        setUploadingEvent(false);
+        setstep(4);
+
+        setstepper({
+          uploadingFile: false,
+          creatingEvent: false,
+          signingTransaction1: false,
+          creartingMachine: false,
+          signingTransaction2: false,
+        });
+      });
+  }
+
+  useEffect(() => {
+    State.updateDatabase({ showHeader: false });
+    State.updateDatabase({ showBottomNav: false });
+  }, []);
+
+  return (
+    <div className="lg:px-12 lg:pt-24  w-screen h-screen  bg-white dark:bg-slate-900 flex flex-col items-center">
+      <div className="w-full p-4 flex items-center justify-start   max-w-2xl mx-auto">
+        {step !== 1 && (
+          <button
+            onClick={() => setstep(step - 1)}
+            className="flex justify-start items-center gap-2 text-brand3 font-semibold"
+          >
+            <ChevronLeft />
+            Previous step
+          </button>
+        )}{" "}
+        <button
+          onClick={() => navigateTo("../marketPlace")}
+          className="flex w-fit justify-center items-center text-brand3 font-semibold ml-auto"
+        >
+          {/* <ChevronLeft /> */}
+          Cancel
+        </button>
+      </div>{" "}
+      <div className="flex-grow flex flex-col w-full p-4 overflow-y-auto max-w-2xl md:rounded-lg gap-2 text-brand3 bg-slate-100 dark:bg-slate-800">
+        <span className=" my-2 text-3xl font-bold text-brand-gradient flex">
+          {step === 1 && "Event Details"}
+          {step === 2 && "Some more Details"}
+          {step === 3 && "Almost Done"}
+          {step === 4 && "Review"}
+          {step === 5 && "Creating event"}
+        </span>
+        <progress
+          className="progress progress-success w-full "
+          value={step * 25}
+          max="100"
+        ></progress>
+        {error && (
+          <div className="alert alert-error shadow-lg text-white">
+            <div>
+              <AlertTriangle />
+              <span className="font-semibold">
+                Please fill all the details.
+              </span>
+            </div>
+          </div>
+        )}
+        {step === 1 && (
+          <>
+            <div className="mt-2 ">
+              <label className="ml-2 text-sm font-bold">Event Name</label>
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setname(e.target.value)}
+                placeholder="Name of event"
+                className="input input-bordered w-full flex-grow"
+              />
+            </div>
+            <div className="mt-2 ">
+              <label className="ml-2 text-sm font-bold">Event Type</label>
+              <select
+                onChange={(e) => settype(e.target.value)}
+                className="select block w-full font-semibold"
+              >
+                <option disabled selected>
+                  Type of event
+                </option>
+                <option>Online</option>
+                <option>In-person</option>
+              </select>
+            </div>
+            <div className="mt-2 ">
+              <label className="ml-2 text-sm font-bold">Event Category</label>
+              <select
+                onChange={(e) => setCategory(e.target.value)}
+                className="select block w-full font-semibold"
+              >
+                <option disabled selected>
+                  Category of event
+                </option>
+                <option>Party</option>
+                <option>Meetup</option>
+              </select>
+            </div>
+            <label className="cursor-pointer label w-fit gap-2 ">
+              <span className="text-brand3">Is it a free event?</span>
+              <input
+                type="checkbox"
+                className="toggle toggle-primary"
+                checked={isFreeEvent}
+                onChange={() => setisFreeEvent(!isFreeEvent)}
+              />
+            </label>
+            {!isFreeEvent && (
+              <div className=" ">
+                <label className="ml-2 text-sm font-bold">Ticket Price</label>
+                <input
+                  value={ticketPrice}
+                  onChange={(e) => setticketPrice(parseFloat(e.target.value))}
+                  type="number"
+                  placeholder="Price of a ticket"
+                  className="input input-bordered w-full flex-grow"
+                />
+              </div>
+            )}
+
+            <label className="cursor-pointer label w-fit gap-2 ">
+              <span className="text-brand3">Unlimited Tickets</span>
+              <input
+                type="checkbox"
+                className="toggle toggle-primary"
+                checked={isUnlimited}
+                onChange={() => setisUnlimited(!isUnlimited)}
+              />
+            </label>
+            {!isUnlimited && (
+              <div className="">
+                <label className="ml-2 text-sm font-bold">Total tickets</label>
+                <input
+                  value={totalTickets}
+                  onChange={(e) => settotalTickets(e.target.value)}
+                  type="text"
+                  placeholder="How many tickets you want to generate?"
+                  className="input input-bordered w-full flex-grow"
+                />
+              </div>
+            )}
+
+            <button
+              onClick={() => {
+                name && type && Category && setstep(2);
+                name && type && Category ? seterror(false) : seterror(true);
+              }}
+              className="mt-2 btn gap-2 btn-brand capitalize"
+            >
+              Next <ArrowNarrowRight />
+            </button>
+          </>
+        )}
+        {step === 2 && (
+          <>
+            <div className="mt-2 ">
+              <label className="ml-2 text-sm font-bold">Description</label>
+              <textarea
+                value={description}
+                onChange={(e) => setdescription(e.target.value)}
+                type="text"
+                placeholder="Description of event"
+                className="textarea textarea-bordered w-full flex-grow"
+              />
+            </div>
+            <div className="mt-2 ">
+              <label className="ml-2 text-sm font-bold">Event Start Time</label>
+              <input
+                value={startDate}
+                onChange={(e) => handleStartDateChange(e)}
+                className="w-full input"
+                type={"datetime-local"}
+                min={moment().format("YYYY-MM-DDThh:mm")}
+                required={true}
+              />
+            </div>{" "}
+            <div className="mt-2 ">
+              <label className="ml-2 text-sm font-bold">Event End Time</label>
+              <input
+                value={endDate}
+                onChange={(e) => handleEndDateChange(e)}
+                className="w-full input"
+                type={"datetime-local"}
+                min={startDate}
+                required={true}
+              />
+            </div>{" "}
+            <div className="mt-2 ">
+              <label className="ml-2 text-sm font-bold">Event Timezone</label>
+              <select
+                onChange={(e) => settimezone(e.target.value)}
+                className="select block w-full font-semibold"
+              >
+                <option disabled selected>
+                  Select timezone
+                </option>
+                {timezones.map((timezone) => (
+                  <option>{timezone}</option>
+                ))}
+              </select>
+            </div>
+            <div className="mt-2 ">
+              <label className="ml-2 text-sm font-bold">NFT Ticket Image</label>
+              <CustomImageInput
+                setImage={setSelectedPost}
+                label="Choose NFT image"
+                aspect={16 / 9}
+                cropShape="rect"
+                showGrid={false}
+                compression={0.5}
+              />
+            </div>
+            <div className="mt-2 ">
+              <label className="ml-2 text-sm font-bold">
+                Event Thumbnail Image
+              </label>
+              <CustomImageInput
+                setImage={setThumbnail}
+                label="Choose Thumbnail image"
+                aspect={16 / 9}
+                cropShape="rect"
+                showGrid={false}
+                compression={0.5}
+              />
+            </div>
+            <button
+              onClick={() => {
+                description &&
+                  startDate &&
+                  endDate &&
+                  timezone &&
+                  selectedPost &&
+                  setstep(3);
+
+                description && startDate && endDate && timezone && selectedPost
+                  ? seterror(false)
+                  : seterror(true);
+              }}
+              className="mt-2 btn gap-2 btn-brand capitalize"
+            >
+              Next <ArrowNarrowRight />
+            </button>
+          </>
+        )}
+        {step === 3 && (
+          <>
+            <div className="mt-2 ">
+              <label className="ml-2 text-sm font-bold">
+                Who is hosting event?
+              </label>
+              <div className="h-10 my-2 flex justify-start items-center">
+                <img
+                  className="h-10 w-10 rounded-full object-cover"
+                  src={
+                    State.database.userData.data?.user.profile_image
+                      ? State.database.userData.data.user.profile_image
+                      : coverImage
+                  }
+                />
+                <div className="flex flex-col">
+                  <span className="ml-2 text-lg font-semibold">
+                    {State.database.userData.data?.user.username
+                      ? State.database.userData.data.user.username
+                      : "loading..."}
+                  </span>
+                  <span className="ml-2 text-xs font-semibold">
+                    {`(${localStorage.getItem("walletAddress")})`}
+                  </span>
+                </div>
+              </div>
+            </div>
+            {type === "In-person" ? (
+              <div className="mt-2 ">
+                <label className="ml-2 text-sm font-bold">Event Location</label>
+                <textarea
+                  value={location}
+                  onChange={(e) => setlocation(e.target.value)}
+                  type="text"
+                  placeholder="Location of event"
+                  className="textarea textarea-bordered w-full flex-grow"
+                />
+              </div>
+            ) : (
+              <div className="mt-2 ">
+                <label className="ml-2 text-sm font-bold">Event Link</label>
+                <input
+                  value={eventLink}
+                  onChange={(e) => seteventLink(e.target.value)}
+                  type="text"
+                  placeholder="Link of event"
+                  className="input input-bordered w-full flex-grow"
+                />
+              </div>
+            )}
+
+            <button
+              onClick={() => {
+                type === "In-person" && location ? setstep(4) : seterror(true);
+                type !== "In-person" && eventLink ? setstep(4) : seterror(true);
+
+                type === "In-person" && location && seterror(false);
+                type !== "In-person" && eventLink && seterror(false);
+              }}
+              className="mt-2 btn gap-2 btn-brand capitalize"
+            >
+              Review Details <ArrowNarrowRight />
+            </button>
+          </>
+        )}
+        {step === 4 && (
+          <>
+            <EventCard
+              type={type}
+              Category={Category}
+              isFreeEvent={isFreeEvent}
+              selectedPostImg={URL.createObjectURL(selectedPost)}
+              name={name}
+              startDate={startDate}
+              userImg={
+                State.database.userData.data?.user.profile_image
+                  ? State.database.userData.data.user.profile_image
+                  : coverImage
+              }
+              username={
+                State.database.userData.data?.user.username
+                  ? State.database.userData.data.user.username
+                  : "loading..."
+              }
+              description={description}
+            />
+
+            {/* <div className="mx-auto relative h-fit w-96  rounded-lg bg-white dark:bg-slate-700 hover:scale-105 transition-all ease-in-out shadow-md overflow-hidden">
+              <div className=" absolute flex items-center gap-1  top-2 left-2 w-fit">
+                <div className=" bg-slate-700/60 backdrop-blur-sm rounded-full px-2 text-slate-100 text-sm font-semibold">
+                  {type}
+                </div>
+                <div className=" bg-slate-700/60 backdrop-blur-sm rounded-full px-2 text-slate-100 text-sm font-semibold">
+                  {Category}
+                </div>
+              </div>
+              {isFreeEvent && (
+                <div className="absolute right-2 top-2 w-fit bg-teal-700/60 backdrop-blur-sm rounded-full px-2 text-slate-100 text-sm font-semibold">
+                  free
+                </div>
+              )}
+              <img
+                className="aspect-video w-full object-cover rounded-t-md"
+                src={`${selectedPost.localurl}`}
+                alt="banner"
+              />
+             
+              <div className="flex items-center w-full space-x-2 my-1  py-3 px-4">
+                <img
+                  className="h-10 w-10 rounded-full"
+                  src={selectedPost.localurl}
+                  alt="user profile"
+                />
+                <div className=" ">
+                  <p className="w-48 text-lg font-semibold text-brand1 truncate">
+                    {name}
+                  </p>
+                  <p className="text-base font-normal text-brand3">
+                    {State.database.userData.data?.user.username
+                      ? State.database.userData.data.user.username
+                      : "loading..."}
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center w-full space-x-2 mb-1  pb-1 px-4">
+                <p className="flex flex-col items-center w-fit my-1 px-4 text-lg font-semibold text-success  ">
+                  <span className="font-bold text-2xl">14</span> Dec
+                </p>
+                <span className="h-8 w-1 bg-slate-200 dark:bg-slate-600 rounded-full"></span>
+                <p className="flex-grow px-4  h-12  text-ellipsis  overflow-hidden text-base font-normal text-brand4">
+                  {description}
+                </p>
+              
+              </div>
+             
+            </div>*/}
+            <button
+              onClick={() => {
+                // run();
+                createOnSolana();
+              }}
+              className={`${
+                uploadingEvent ? "loading" : ""
+              } mt-2 btn gap-2 btn-brand capitalize`}
+            >
+              Publish event <Confetti />
+            </button>
+          </>
+        )}
+        {step === 5 && (
+          <div className="flex flex-col justify-start items-center gap-2">
+            <div
+              className={`flex items-center gap-2 w-full bg-slate-300 dark:bg-slate-700 p-4 rounded-lg text-lg font-semibold ${
+                stepper.uploadingFile && "text-success"
+              }`}
+            >
+              {stepper.uploadingFile ? (
+                <CircleCheck />
+              ) : (
+                <Loader className="animate-spin" />
+              )}
+              Uploading file{" "}
+            </div>
+            <div
+              className={`flex items-center gap-2 w-full bg-slate-300 dark:bg-slate-700 p-4 rounded-lg text-lg font-semibold ${
+                stepper.creatingEvent && "text-success"
+              }`}
+            >
+              {stepper.creatingEvent ? (
+                <CircleCheck />
+              ) : (
+                <Loader className="animate-spin" />
+              )}{" "}
+              Creating event
+            </div>
+            <div
+              className={`flex items-center gap-2 w-full bg-slate-300 dark:bg-slate-700 p-4 rounded-lg text-lg font-semibold ${
+                stepper.signingTransaction1 && "text-success"
+              }`}
+            >
+              {stepper.signingTransaction1 ? (
+                <CircleCheck />
+              ) : (
+                <Loader className="animate-spin" />
+              )}{" "}
+              Signing transaction
+            </div>{" "}
+            <div
+              className={`flex items-center gap-2 w-full bg-slate-300 dark:bg-slate-700 p-4 rounded-lg text-lg font-semibold ${
+                stepper.creartingMachine && "text-success"
+              }`}
+            >
+              {stepper.creartingMachine ? (
+                <CircleCheck />
+              ) : (
+                <Loader className="animate-spin" />
+              )}{" "}
+              Creating ticket counter
+              {!stepper.creartingMachine && (
+                <div onClick={() => candyMachine(collectionId, cid)}>Retry</div>
+              )}
+            </div>{" "}
+            <div
+              className={`flex items-center gap-2 w-full bg-slate-300 dark:bg-slate-700 p-4 rounded-lg text-lg font-semibold ${
+                stepper.signingTransaction2 && "text-success"
+              }`}
+            >
+              {stepper.signingTransaction2 ? (
+                <CircleCheck />
+              ) : (
+                <Loader className="animate-spin" />
+              )}{" "}
+              Signing transaction
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+export default CreateEvent;
