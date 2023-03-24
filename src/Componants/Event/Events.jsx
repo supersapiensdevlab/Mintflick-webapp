@@ -47,19 +47,21 @@ function Event() {
         <EventCategories></EventCategories>
       </div> */}
 
-      <div className="w-full lg:mr-12 h-full  space-y-6 overflow-y-auto pb-24">
-        <div className="p-2 w-full max-w-2xl mx-auto flex gap-2 lg:rounded-xl bg-slate-100 dark:bg-slate-800 ">
+      <div className="w-full lg:mr-12 h-full    flex flex-col justify-start items-center">
+        <div className="p-2 w-full max-w-2xl mx-auto flex  gap-1  lg:rounded-xl bg-slate-100 dark:bg-slate-800 ">
           <input
             type="text"
             placeholder="Search events"
             className="input input-bordered w-full flex-grow"
-          />
+          />{" "}
           <Link className="btn gap-2 btn-brand" to={"../create-event"}>
             <Plus />
             <span className="hidden sm:block">Create Event</span>
           </Link>
+        </div>{" "}
+        <div className="flex-grow pb-24 overflow-auto p-2">
+          <EventCardList></EventCardList>
         </div>
-        <EventCardList></EventCardList>
       </div>
     </div>
   );
