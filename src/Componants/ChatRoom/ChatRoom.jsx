@@ -462,12 +462,13 @@ function ChatRoom(props) {
               type="text"
               className="input-bordered"
             />
+            <p className="text-white">{customRoom}</p>
             <button
               className="btn-square btn btn-primary"
               onClick={() => {
                 send("INIT");
-                let roomId = "xun-vosw-vqo";
-                send({ type: "JOIN_LOBBY", customRoom });
+                let roomId = customRoom;
+                send({ type: "JOIN_LOBBY", roomId });
               }}
             >
               Join Lobby
