@@ -30,6 +30,7 @@ import { Image } from "react-img-placeholder";
 import axios from "axios";
 import ProfileVisitCard from "../Profile/ProfileVisitCard";
 import ChatsListMobile from "./ChatListMobile";
+import { useHuddle01Web } from "@huddle01/react/hooks";
 
 // https://mintflickchats.herokuapp.com
 const socket = io(`${process.env.REACT_APP_CHAT_URL}`, {
@@ -37,6 +38,10 @@ const socket = io(`${process.env.REACT_APP_CHAT_URL}`, {
 });
 
 function ChatRoom(props) {
+  const { state, send } = useHuddle01Web();
+  const [huddleRoom, setHuddleRoom] = useState();
+  const [customRoom, setCustomRoom] = useState();
+
   // to get loggedin user from   localstorage
   const user = useContext(UserContext);
   const [showButton, setShowButton] = useState(false);
@@ -55,6 +60,10 @@ function ChatRoom(props) {
     replyto: null,
   });
 
+  useEffect(() => {
+    send("INIT");
+  }, [send]);
+
   const imageInput = useRef();
   const soundInput = useRef();
   const videoInput = useRef();
@@ -69,6 +78,31 @@ function ChatRoom(props) {
   }
 
   const [messages, setMessages] = useState([]);
+
+  const createRoom = async () => {
+    console.log("Create Room");
+    await axios({
+      method: "post",
+      url: `https://server-devnet.mintflick.app/user/createHuddleRoom`,
+      data: {
+        title: `${username}'s Voice Room`,
+        hostWallets: [`${user.database.userData.data.user.wallet_id}`],
+      },
+      headers: {
+        "content-type": "application/json",
+        "auth-token": localStorage.getItem("authtoken"),
+      },
+    })
+      .then((response) => {
+        console.log(response);
+        let roomId = response.data.roomId;
+        setHuddleRoom(roomId);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    // console.log(response);
+  };
 
   useEffect(() => {
     if (goToMessage) {
@@ -405,6 +439,57 @@ function ChatRoom(props) {
               {username}
             </p>
           </Link>
+          {!huddleRoom ? (
+            <button
+              className="btn btn-primary"
+              onClick={() => {
+                createRoom();
+              }}
+            >
+              Create Room
+            </button>
+          ) : (
+            <></>
+          )}
+          <div className="flex items-center gap-x-4">
+            <p className="text-white" oncClick={() => {}}>
+              {huddleRoom}
+            </p>
+            <input
+              onChange={(e) => {
+                setCustomRoom(e.target.value);
+              }}
+              type="text"
+              className="input-bordered"
+            />
+            <button
+              className="btn-square btn btn-primary"
+              onClick={() => {
+                send("INIT");
+                let roomId = "xun-vosw-vqo";
+                send({ type: "JOIN_LOBBY", customRoom });
+              }}
+            >
+              Join Lobby
+            </button>
+            <button
+              className="btn-square btn btn-primary"
+              onClick={() => {
+                send("ENABLE_MIC");
+                send("JOIN_ROOM");
+              }}
+            >
+              Join Room
+            </button>
+            <button
+              className="btn-square btn btn-primary"
+              onClick={() => {
+                send("PRODUCE_MIC");
+              }}
+            >
+              Mic
+            </button>
+          </div>
         </div>
 
         <LoadingBar ref={loadingRef} color="#00d3ff" shadow={true} />
