@@ -59,14 +59,14 @@ function Home() {
   };
 
   return (
-    <div className=" flex h-screen w-screen bg-slate-100 dark:bg-slate-800 lg:bg-white lg:dark:bg-slate-900">
-      <div className="hidden lg:flex flex-col h-full w-1/4 ml-12 mr-4 pt-24 space-y-6 overflow-y-auto">
+    <div className="flex w-screen h-screen bg-slate-100 dark:bg-slate-800 lg:bg-white lg:dark:bg-slate-900">
+      <div className="flex-col hidden w-1/4 h-full pt-24 ml-12 mr-4 space-y-6 overflow-y-auto lg:flex">
         <Channels></Channels>
         <LiveChannels></LiveChannels>
       </div>
       <div
         id="scrollableDiv"
-        className="w-full lg:w-2/4 flex flex-col items-center  h-full pt-14 lg:pt-24 overflow-y-auto "
+        className="flex flex-col items-center w-full h-full overflow-y-auto lg:w-2/4 pt-14 lg:pt-24 "
         ref={buttonRef}
         onScroll={handleScroll}
       >
@@ -74,10 +74,10 @@ function Home() {
         <a
           href="https://airtable.com/shrF2lZX7vSV844Oe"
           target={"_blank"}
-          className="  w-full max-w-2xl my-2 bg-white lg:rounded-lg  cursor-pointer"
+          className="w-full max-w-2xl my-2 bg-white cursor-pointer lg:rounded-lg"
         >
           <img
-            className=" w-full lg:rounded-md"
+            className="w-full lg:rounded-md"
             src={producthuntImage}
             alt="quest-banner"
           />
@@ -86,13 +86,16 @@ function Home() {
 
         <TimeLine></TimeLine>
       </div>
-      <div className="hidden lg:flex flex-col items-end h-full w-1/4 pt-24 mr-12 ml-4">
+      <div className="flex-col items-end hidden w-1/4 h-full pt-24 ml-4 mr-12 lg:flex">
         <GameOfLuck></GameOfLuck>
         <FeedbackForm></FeedbackForm>
       </div>
       {showButton && (
-        <div className="fixed bottom-20 lg:bottom-5 w-screen flex justify-center lg:justify-end lg:right-4">
-          <button onClick={scrollToTop} className="  btn btn-xs glass gap-1">
+        <div className="fixed flex justify-center w-screen bottom-20 lg:bottom-5 ">
+          <button
+            onClick={scrollToTop}
+            className="gap-1 capitalize btn btn-xs glass"
+          >
             <ChevronUp size={16} />
             scroll to top
           </button>

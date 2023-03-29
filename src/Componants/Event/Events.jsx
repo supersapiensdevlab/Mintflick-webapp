@@ -41,28 +41,13 @@ function Event() {
   }, []);
 
   return (
-    <div className="lg:px-12 pt-20 w-screen h-screen  bg-white dark:bg-slate-900 ">
-      {/* <div className='hidden lg:flex flex-col h-full w-1/4 ml-12 pt-24  space-y-6 overflow-y-auto'>
+    <div className="w-screen h-screen pt-20 bg-white lg:px-12 dark:bg-slate-900 ">
+      {/* <div className='flex-col hidden w-1/4 h-full pt-24 ml-12 space-y-6 overflow-y-auto lg:flex'>
         <Filter></Filter>
         <EventCategories></EventCategories>
       </div> */}
 
-      <div className="w-full lg:mr-12 h-full    flex flex-col justify-start items-center">
-        <div className="p-2 w-full max-w-2xl mx-auto flex  gap-1  lg:rounded-xl bg-slate-100 dark:bg-slate-800 ">
-          <input
-            type="text"
-            placeholder="Search events"
-            className="input input-bordered w-full flex-grow"
-          />{" "}
-          <Link className="btn gap-2 btn-brand" to={"../create-event"}>
-            <Plus />
-            <span className="hidden sm:block">Create Event</span>
-          </Link>
-        </div>{" "}
-        <div className="flex-grow pb-24 overflow-auto p-2">
-          <EventCardList></EventCardList>
-        </div>
-      </div>
+      <EventCardList></EventCardList>
     </div>
   );
 }

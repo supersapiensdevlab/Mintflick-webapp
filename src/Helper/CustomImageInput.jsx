@@ -161,7 +161,7 @@ function CustomImageInput({
     });
   };
   return (
-    <div className=" flex flex-col   items-start   gap-2  w-full  border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4">
+    <div className="flex flex-col items-start w-full gap-2 border-2 border-dashed rounded-lg  border-slate-400 dark:border-slate-600 text-brand4">
       {selectedFile?.localurl && (
         <div className="relative w-full h-96">
           <Cropper
@@ -184,7 +184,7 @@ function CustomImageInput({
       )}
       <label
         onClick={handleClick}
-        className="w-full flex items-center gap-2 p-2  cursor-pointer "
+        className="flex items-center w-full gap-2 p-2 cursor-pointer "
       >
         <Photo />
         {selectedFile ? (

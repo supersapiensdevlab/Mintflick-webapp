@@ -29,13 +29,13 @@ function BottomNavigation() {
       link: "/homescreen/live",
       notification: State.database.liveUsers?.length,
     },
-    // {
-    //   icon: <Confetti size={28}></Confetti>,
-    //   name: "Events",
-    //   isActive: 3,
-    //   link: "/homescreen/marketPlace",
-    //   notification: 0,
-    // },
+    {
+      icon: <Confetti size={28}></Confetti>,
+      name: "Events",
+      isActive: 3,
+      link: "/homescreen/marketPlace",
+      notification: 0,
+    },
     {
       icon: <Search size={24}></Search>,
       name: "Explore",
@@ -66,7 +66,7 @@ function BottomNavigation() {
         >
           {item.icon}
           {item.notification !== 0 && (
-            <div className="bg-rose-600 rounded-full shadow h-4 px-1 w-fit text-xs self-center text-center font-semibold absolute -top-2  left-4  text-white">
+            <div className="absolute self-center h-4 px-1 text-xs font-semibold text-center text-white rounded-full shadow bg-rose-600 w-fit -top-2 left-4">
               {item.notification}
             </div>
           )}

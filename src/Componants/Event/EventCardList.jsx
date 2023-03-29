@@ -1,13 +1,17 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { ChevronLeft, UserCircle } from "tabler-icons-react";
+import { Link, useNavigate } from "react-router-dom";
+import { ChevronLeft, Filter, Plus, UserCircle } from "tabler-icons-react";
 import Loading from "../Loading/Loading";
 import EventCard from "./EventCard";
 
 function EventCardList() {
   const [data, setData] = useState([]);
   const [loading, setloading] = useState(false);
+  const [filteredData, setfilteredData] = useState([]);
+  const [price, setprice] = useState(null);
+  const [type, settype] = useState(null);
+
   async function fetchData() {
     setloading(true);
     try {
@@ -15,20 +19,128 @@ function EventCardList() {
         `${process.env.REACT_APP_SERVER_URL}/event`
       );
       console.log("EVENTS:", response);
+      setfilteredData(response.data);
       setData(response.data);
       setloading(false);
     } catch (error) {}
   }
+  function filterData(text) {
+    let filtered = [];
+    data.map((event) => {
+      JSON.stringify(event).includes(text) && filtered.push(event);
+    });
+    setfilteredData(filtered);
+  }
   useEffect(() => {
     fetchData();
   }, []);
+  useEffect(() => {
+    let filtered = [];
+    type &&
+      data.map((event) => {
+        event.type === type &&
+          (price
+            ? event.freeEvent === (price === "free" ? true : false)
+            : true) &&
+          filtered.push(event);
+      });
+    type ? setfilteredData(filtered) : setfilteredData(data);
+  }, [type]);
 
-  return (
-    <div className="w-full sm:w-fit h-fit px-4  grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-4 gap-y-4 sm:gap-y-8 sm:mx-auto">
-      {loading ? (
-        <Loading />
-      ) : (
-        data.map((event) => (
+  useEffect(() => {
+    let filtered = [];
+    price &&
+      data.map((event) => {
+        event.freeEvent === (price === "free" ? true : false) &&
+          (type ? event.type === type : true) &&
+          filtered.push(event);
+      });
+    price ? setfilteredData(filtered) : setfilteredData(data);
+  }, [price]);
+
+  return loading ? (
+    <Loading />
+  ) : (
+    <div className="relative flex flex-col items-center justify-start w-full h-full overflow-auto lg:mr-12">
+      <div className="sticky top-0 z-40 flex items-center w-full max-w-2xl gap-2 p-2 lg:rounded-xl bg-slate-100 dark:bg-slate-800 ">
+        <input
+          type="text"
+          onChange={(e) => filterData(e.target.value)}
+          placeholder="Search events"
+          className="flex-grow w-full input input-bordered"
+        />{" "}
+        <div className=" dropdown dropdown-end">
+          <label tabIndex={0} className=" text-brand3">
+            <Filter />
+          </label>
+          <div
+            tabIndex={0}
+            className="p-2 mt-3 text-base font-medium border-2 rounded-lg shadow-xl menu menu-compact dropdown-content border-slate-300 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-brand1 w-52"
+          >
+            <div className="flex items-center w-full gap-2 text-sm font-semibold text-brand2">
+              <div className="flex-grow h-[2px] bg-slate-400 rounded-full"></div>
+              Price
+              <div className="flex-grow h-[2px] bg-slate-400 rounded-full"></div>
+            </div>
+            <span className="flex items-center justify-between w-full p-2">
+              Free
+              <input
+                type="checkbox"
+                onChange={(e) =>
+                  e.target.checked ? setprice("free") : setprice(null)
+                }
+                checked={price === "free"}
+                className="checkbox checkbox-primary"
+              />
+            </span>
+            <span className="flex items-center justify-between w-full p-2">
+              Paid
+              <input
+                type="checkbox"
+                onChange={(e) =>
+                  e.target.checked ? setprice("paid") : setprice(null)
+                }
+                checked={price === "paid"}
+                className="checkbox checkbox-primary"
+              />
+            </span>
+            <div className="flex items-center w-full gap-2 text-sm font-semibold text-brand2">
+              <div className="flex-grow h-[2px] bg-slate-400 rounded-full"></div>
+              Type
+              <div className="flex-grow h-[2px] bg-slate-400 rounded-full"></div>
+            </div>
+
+            <span className="flex items-center justify-between w-full p-2">
+              Online
+              <input
+                type="checkbox"
+                onChange={(e) =>
+                  e.target.checked ? settype("Online") : settype(null)
+                }
+                checked={type === "Online"}
+                className="checkbox checkbox-primary"
+              />
+            </span>
+            <span className="flex items-center justify-between w-full p-2">
+              In-person
+              <input
+                type="checkbox"
+                onChange={(e) =>
+                  e.target.checked ? settype("In-person") : settype(null)
+                }
+                checked={type === "In-person"}
+                className="checkbox checkbox-primary"
+              />
+            </span>
+          </div>
+        </div>
+        <Link className="gap-2 btn btn-brand" to={"../create-event"}>
+          <Plus />
+          <span className="hidden sm:block">Create Event</span>
+        </Link>
+      </div>{" "}
+      <div className="grid w-full grid-cols-1 px-4 sm:w-fit h-fit md:grid-cols-2 xl:grid-cols-3 gap-x-4 gap-y-4 sm:gap-y-8 sm:mx-auto">
+        {filteredData.map((event) => (
           <EventCard
             type={event.type}
             Category={event.category}
@@ -43,8 +155,8 @@ function EventCardList() {
             lockId={event.lockId}
             id={event.eventId}
           />
-        ))
-      )}
+        ))}
+      </div>
     </div>
   );
 }
