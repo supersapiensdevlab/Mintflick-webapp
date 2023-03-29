@@ -275,8 +275,8 @@ function CreateEvent() {
       // collection: "7KnYuwbcG3EDLBnpUTovGN1WjpB1WvvyNuMgjRezG33s",
       items_available: isUnlimited ? 8000000000 : totalTickets,
       bulk_item_settings: {
-        name: "ticket #$ID+1$",
-        uri: "https://mintflick.app",
+        name: `${name} ticket #$ID+1$`,
+        uri: "https://bafkreihm3fvzml2lu2bxcym7unulfsfotegcahy5wlohxbsabvhlvzagwa.ipfs.nftstorage.link",
       },
       // amount: isUnlimited ? 0 : ticketPrice,
       groups: [
@@ -293,6 +293,10 @@ function CreateEvent() {
           },
         },
       ],
+      // creators: [
+      //   { address: State.database.walletAddress, share: 90 },
+      //   { address: "BeRmvLjhKRu11j7U2bB1stiuxZWbFfBMKkxcau7ACJqz", share: 10 },
+      // ],
     };
 
     console.log(nftSolanaData);
@@ -330,14 +334,22 @@ function CreateEvent() {
             State.database.provider
           )
             .then((res) => {
-              setstepper({
-                uploadingFile: true,
-                creatingEvent: true,
-                signingTransaction1: true,
-                creartingMachine: true,
-                signingTransaction2: true,
-              });
-              handleSubmit(response.data?.result?.candy_machine, cid);
+              res
+                ? setstepper({
+                    uploadingFile: true,
+                    creatingEvent: true,
+                    signingTransaction1: true,
+                    creartingMachine: true,
+                    signingTransaction2: true,
+                  })
+                : setstepper({
+                    uploadingFile: true,
+                    creatingEvent: true,
+                    signingTransaction1: true,
+                    creartingMachine: false,
+                    signingTransaction2: false,
+                  });
+              res && handleSubmit(response.data?.result?.candy_machine, cid);
             })
             .catch((error) => {
               console.log(error);
@@ -918,7 +930,7 @@ function CreateEvent() {
               Signing transaction
             </div>{" "}
             <div
-              className={`flex items-center gap-2 w-full bg-slate-300 dark:bg-slate-700 p-4 rounded-lg text-lg font-semibold ${
+              className={`flex items-center justify-between gap-2 w-full bg-slate-300 dark:bg-slate-700 p-4 rounded-lg text-lg font-semibold ${
                 stepper.creartingMachine && "text-success"
               }`}
             >

@@ -75,11 +75,11 @@ function EventCard({
         alt="banner"
       />
       <div className="flex items-center w-full space-x-2 my-1  py-3 px-4">
-        <img
+        {/* <img
           className="h-10 w-10 rounded-full"
           src={userImg ? userImg : imgPlaceHolder}
           alt="user profile"
-        />
+        /> */}
         <div className="flex-grow ">
           <p className="w-48 text-lg font-semibold text-brand1 truncate">
             {name}
@@ -103,7 +103,7 @@ function EventCard({
           </span>
         </p>
       </div>
-      <div className="flex items-center w-full space-x-2  pb-4 px-2">
+      <div className="flex items-center w-full   pb-4 ">
         <p className="flex-grow px-4  h-12  text-ellipsis  overflow-hidden text-base font-normal text-brand4">
           {description}
         </p>

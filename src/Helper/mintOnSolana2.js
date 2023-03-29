@@ -255,7 +255,7 @@ export const signTransactionWithWalletAndSend = async (
     const signedTx = await provider.signTransaction(recoveredTransaction); // signing the recovered transaction using the creator_wall
     console.log(signedTx);
     const confirmTransaction = signedTx
-      .serialize({ requireAllSignatures: false })
+      .serialize({ requireAllSignatures: true })
       .toString("base64");
 
     console.log(confirmTransaction);

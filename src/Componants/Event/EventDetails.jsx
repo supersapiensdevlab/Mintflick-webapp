@@ -95,6 +95,7 @@ function EventDetails(lockAddress) {
           "content-type": "application/json",
         },
       })
+
       .catch((err) => {
         console.log(err);
       });
@@ -112,6 +113,7 @@ function EventDetails(lockAddress) {
       .then((mintRequest) => {
         console.log(mintRequest);
         console.log(mintRequest.data.result.encoded_transaction);
+
         mintRequest.data.success &&
           signTransactionWithWalletAndSend(
             mintRequest.data.result.encoded_transaction,
@@ -119,6 +121,7 @@ function EventDetails(lockAddress) {
           )
             .then((response) => {
               console.log(response);
+              response && fetchData(params.id);
               response
                 ? State.toast("success", "Ticket bought successfully!")
                 : State.toast("error", "Error while buying ticket!");
@@ -173,8 +176,7 @@ function EventDetails(lockAddress) {
       console.log("EVENT details:", response);
       setData(response.data);
       getMintedNfts(response.data.lockId);
-      response.data.eventHost === State.database.walletAddress &&
-        getBookings(response.data.lockId, 1);
+      getBookings(response.data.lockId, 1);
     } catch (error) {}
   }
   async function getMintedNfts(address) {
@@ -211,6 +213,7 @@ function EventDetails(lockAddress) {
       )
       .then((res) => {
         console.log(res);
+
         res.data.success && setbookings([...bookings, ...res.data.result.nfts]);
       })
       .catch((err) => {
@@ -474,12 +477,7 @@ function EventDetails(lockAddress) {
               </div>
             </div>{" "}
             {data?.eventHost === State.database.walletAddress ? (
-              <div
-                onClick={() => setviewBookings(true)}
-                className="btn btn-success rounded-full"
-              >
-                view bookings
-              </div>
+              <></>
             ) : data?.unlimitedTickets ? (
               <button
                 onClick={buyOnSolana}
@@ -562,6 +560,19 @@ function EventDetails(lockAddress) {
               </span>
             </div>
           )}
+          <div className="flex flex-col gap-2 bg-slate-100 dark:bg-slate-700 sm:rounded-xl p-2 sm:p-4 mx-auto w-full justify-start items-start max-w-2xl">
+            <div className="flex justify-between items-center w-full">
+              <span className="text-lg font-semibold text-brand1">
+                Bookings
+              </span>
+              <div
+                onClick={() => setviewBookings(true)}
+                className="text-lg font-semibold text-primary cursor-pointer"
+              >
+                view all
+              </div>
+            </div>
+          </div>{" "}
           <div className="flex flex-col gap-2 bg-slate-100 dark:bg-slate-700 sm:rounded-xl p-2 sm:p-4 mx-auto w-full justify-start items-start max-w-2xl">
             <span className="text-lg font-semibold text-brand1">
               Description
