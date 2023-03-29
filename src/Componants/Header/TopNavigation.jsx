@@ -18,12 +18,12 @@ function TopNavigation() {
       link: "/homescreen/live",
       name: "Live",
     },
-    {
-      icon: <Confetti size={22}></Confetti>,
-      isActive: 3,
-      link: "/homescreen/marketPlace",
-      name: "Event",
-    },
+    // {
+    //   icon: <Confetti size={22}></Confetti>,
+    //   isActive: 3,
+    //   link: "/homescreen/marketPlace",
+    //   name: "Event",
+    // },
   ];
   return (
     <div className="flex items-center justify-center h-fit p-1 rounded-lg space-x-10 ">
