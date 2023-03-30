@@ -1,7 +1,13 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { ChevronLeft, Filter, Plus, UserCircle } from "tabler-icons-react";
+import {
+  Adjustments,
+  ChevronLeft,
+  Filter,
+  Plus,
+  UserCircle,
+} from "tabler-icons-react";
 import Loading from "../Loading/Loading";
 import EventCard from "./EventCard";
 
@@ -61,17 +67,18 @@ function EventCardList() {
   return loading ? (
     <Loading />
   ) : (
-    <div className="relative flex flex-col items-center justify-start w-full h-full overflow-auto lg:mr-12">
+    <div className="relative flex flex-col items-center justify-start w-full h-full gap-2 overflow-auto lg:mr-12">
       <div className="sticky top-0 z-40 flex items-center w-full max-w-2xl gap-2 p-2 lg:rounded-xl bg-slate-100 dark:bg-slate-800 ">
         <input
           type="text"
           onChange={(e) => filterData(e.target.value)}
           placeholder="Search events"
           className="flex-grow w-full input input-bordered"
-        />{" "}
+        />
         <div className=" dropdown dropdown-end">
-          <label tabIndex={0} className=" text-brand3">
-            <Filter />
+          <label tabIndex={0} className="btn btn-ghost text-brand3">
+            {/* <Filter /> */}
+            <Adjustments />
           </label>
           <div
             tabIndex={0}
@@ -139,7 +146,7 @@ function EventCardList() {
           <span className="hidden sm:block">Create Event</span>
         </Link>
       </div>{" "}
-      <div className="grid w-full grid-cols-1 px-4 sm:w-fit h-fit md:grid-cols-2 xl:grid-cols-3 gap-x-4 gap-y-4 sm:gap-y-8 sm:mx-auto">
+      <div className="grid w-full grid-cols-1 px-4 pb-24 sm:w-fit h-fit md:grid-cols-2 xl:grid-cols-3 gap-x-4 gap-y-4 sm:gap-y-8 sm:mx-auto">
         {filteredData.map((event) => (
           <EventCard
             type={event.type}

@@ -254,9 +254,7 @@ export const signTransactionWithWalletAndSend = async (
     console.log(recoveredTransaction);
     const signedTx = await provider.signTransaction(recoveredTransaction); // signing the recovered transaction using the creator_wall
     console.log(signedTx);
-    const confirmTransaction = signedTx
-      .serialize({ requireAllSignatures: true })
-      .toString("base64");
+    const confirmTransaction = signedTx.serialize().toString("base64");
 
     console.log(confirmTransaction);
     const res = await sendTransaction(confirmTransaction);
@@ -264,7 +262,8 @@ export const signTransactionWithWalletAndSend = async (
     //   clusterApiUrl(process.env.REACT_APP_SOLANA_NETWORK)
     // );
     // await connection.sendEncodedTransaction(confirmTransaction);
-    return res.data.success ? true : false;
+    console.log(res);
+    return res?.data.success ? true : false;
   } catch (error) {
     console.log(error);
     return false;

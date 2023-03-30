@@ -275,7 +275,7 @@ function CreateEvent() {
       royalty: 0,
       collection: collection,
       // collection: "7KnYuwbcG3EDLBnpUTovGN1WjpB1WvvyNuMgjRezG33s",
-      items_available: isUnlimited ? 8000000000 : totalTickets,
+      items_available: isUnlimited ? "8000000000" : totalTickets,
       bulk_item_settings: {
         name: `${name} ticket #$ID+1$`,
         uri: "https://nftstorage.link/ipfs/" + metacid + "/meta.json",
@@ -286,7 +286,7 @@ function CreateEvent() {
           label: "ticket",
           guards: {
             solPayment: {
-              amount: isUnlimited ? 0 : ticketPrice,
+              amount: isFreeEvent ? 0 : ticketPrice,
               destination: State.database.walletAddress,
             },
             mintLimit: {
@@ -382,12 +382,13 @@ function CreateEvent() {
                         creartingMachine: false,
                         signingTransaction2: false,
                       });
+                  res && setUploadingEvent(false);
                   res &&
                     handleSubmit(response.data?.result?.candy_machine, cid);
                 })
                 .catch((error) => {
                   console.log(error);
-                  uploadingEvent(false);
+                  setUploadingEvent(false);
 
                   State.toast(
                     "error",
@@ -397,7 +398,7 @@ function CreateEvent() {
           })
           .catch((error) => {
             console.log(error);
-            uploadingEvent(false);
+            setUploadingEvent(false);
             State.toast(
               "error",
               "Error while setting up ticket counter,please try again!"
@@ -406,7 +407,7 @@ function CreateEvent() {
       )
       .catch((error) => {
         console.log(error);
-        uploadingEvent(false);
+        setUploadingEvent(false);
         State.toast(
           "error",
           "Error while uploading metadata,please try again!"
@@ -867,7 +868,7 @@ function CreateEvent() {
               type={type}
               Category={Category}
               isFreeEvent={isFreeEvent}
-              selectedPostImg={URL.createObjectURL(selectedPost)}
+              selectedPostImg={URL.createObjectURL(thumbnail)}
               name={name}
               startDate={startDate}
               userImg={
@@ -994,9 +995,9 @@ function CreateEvent() {
                 <Loader className="animate-spin" />
               )}{" "}
               Creating ticket counter
-              {/* {!stepper.creartingMachine && (
+              {!stepper.creartingMachine && (
                 <div onClick={() => candyMachine(collectionId, cid)}>Retry</div>
-              )} */}
+              )}
             </div>{" "}
             <div
               className={`flex items-center gap-2 w-full bg-slate-300 dark:bg-slate-700 p-4 rounded-lg text-lg font-semibold ${

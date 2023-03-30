@@ -41,7 +41,7 @@ function Event() {
   }, []);
 
   return (
-    <div className="w-screen h-screen pt-20 bg-white lg:px-12 dark:bg-slate-900 ">
+    <div className="w-screen h-screen pt-16 bg-white lg:pt-24 lg:px-12 dark:bg-slate-900 ">
       {/* <div className='flex-col hidden w-1/4 h-full pt-24 ml-12 space-y-6 overflow-y-auto lg:flex'>
         <Filter></Filter>
         <EventCategories></EventCategories>
