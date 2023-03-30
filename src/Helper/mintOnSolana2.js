@@ -257,16 +257,15 @@ export const signTransactionWithWalletAndSend = async (
     const confirmTransaction = signedTx.serialize().toString("base64");
 
     console.log(confirmTransaction);
-    const res = await sendTransaction(confirmTransaction);
+
     // const connection = new Connection(
     //   clusterApiUrl(process.env.REACT_APP_SOLANA_NETWORK)
     // );
     // await connection.sendEncodedTransaction(confirmTransaction);
-    console.log(res);
-    return res?.data.success ? true : false;
+
+    return await sendTransaction(confirmTransaction);
   } catch (error) {
     console.log(error);
-    return false;
   }
 };
 
@@ -278,16 +277,17 @@ export const sendTransaction = async (encodedTransaction) => {
     };
     console.log(data);
 
-    const res = await axios
-      .post(`https://api.shyft.to/sol/v1/transaction/send_txn`, data, {
+    const res = await axios.post(
+      `https://api.shyft.to/sol/v1/transaction/send_txn`,
+      data,
+      {
         headers: {
           "x-api-key": `${process.env.REACT_APP_SHYFT_API_KEY}`,
           "content-type": "application/json",
         },
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+      }
+    );
+
     console.log(res);
     return res;
   } catch (error) {

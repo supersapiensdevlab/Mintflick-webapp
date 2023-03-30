@@ -375,39 +375,56 @@ function CreateEvent() {
                         creartingMachine: true,
                         signingTransaction2: true,
                       })
-                    : setstepper({
-                        uploadingFile: true,
-                        creatingEvent: true,
-                        signingTransaction1: true,
-                        creartingMachine: false,
-                        signingTransaction2: false,
-                      });
-                  res && setUploadingEvent(false);
-                  res &&
-                    handleSubmit(response.data?.result?.candy_machine, cid);
+                    : setUploadingEvent(false);
+                  res
+                    ? handleSubmit(response.data?.result?.candy_machine, cid)
+                    : setstep(4);
                 })
                 .catch((error) => {
                   console.log(error);
                   setUploadingEvent(false);
-
+                  setstep(4);
                   State.toast(
                     "error",
                     "Error while signing transaction,please try again!"
                   );
+                  setstepper({
+                    uploadingFile: false,
+                    creatingEvent: false,
+                    signingTransaction1: false,
+                    creartingMachine: false,
+                    signingTransaction2: false,
+                  });
                 });
           })
           .catch((error) => {
             console.log(error);
             setUploadingEvent(false);
+            setstep(4);
             State.toast(
               "error",
               "Error while setting up ticket counter,please try again!"
             );
+            setstepper({
+              uploadingFile: false,
+              creatingEvent: false,
+              signingTransaction1: false,
+              creartingMachine: false,
+              signingTransaction2: false,
+            });
           })
       )
       .catch((error) => {
         console.log(error);
         setUploadingEvent(false);
+        setstep(4);
+        setstepper({
+          uploadingFile: false,
+          creatingEvent: false,
+          signingTransaction1: false,
+          creartingMachine: false,
+          signingTransaction2: false,
+        });
         State.toast(
           "error",
           "Error while uploading metadata,please try again!"
@@ -995,9 +1012,9 @@ function CreateEvent() {
                 <Loader className="animate-spin" />
               )}{" "}
               Creating ticket counter
-              {!stepper.creartingMachine && (
+              {/* {!stepper.creartingMachine && (
                 <div onClick={() => candyMachine(collectionId, cid)}>Retry</div>
-              )}
+              )} */}
             </div>{" "}
             <div
               className={`flex items-center gap-2 w-full bg-slate-300 dark:bg-slate-700 p-4 rounded-lg text-lg font-semibold ${

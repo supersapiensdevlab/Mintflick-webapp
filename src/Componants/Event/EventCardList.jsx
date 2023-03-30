@@ -68,7 +68,7 @@ function EventCardList() {
     <Loading />
   ) : (
     <div className="relative flex flex-col items-center justify-start w-full h-full gap-2 overflow-auto lg:mr-12">
-      <div className="sticky top-0 z-40 flex items-center w-full max-w-2xl gap-2 p-2 lg:rounded-xl bg-slate-100 dark:bg-slate-800 ">
+      <div className="sticky top-0 z-40 flex items-center w-full max-w-2xl gap-2 p-2 lg:rounded-xl bg-slate-900/25 backdrop-blur-xl border-[1px] border-gray-300/20">
         <input
           type="text"
           onChange={(e) => filterData(e.target.value)}

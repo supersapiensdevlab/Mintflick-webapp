@@ -39,6 +39,10 @@ function HomeScreen() {
   useEffect(() => {
     // console.log(localStorage.getItem("walletAddress"));
     // console.log(JSON.parse(localStorage.getItem("provider")));
+    // console.log(State.database);
+    State.updateDatabase({
+      newNotifications: State.database.userData.data?.user.notification.length,
+    });
     loadNftsData();
     try {
       loadBalance();
@@ -48,7 +52,7 @@ function HomeScreen() {
   }, []);
 
   return (
-    <div className="relative flex flex-col h-screen w-screen  bg-white dark:bg-slate-900">
+    <div className="relative flex flex-col w-screen h-screen bg-white dark:bg-slate-900">
       <Helmet>
         <meta charSet="utf-8" />
         <title>MintFlick - Feed</title>

@@ -48,9 +48,10 @@ function BottomNavigation() {
       name: "Notifications",
       isActive: 5,
       link: "/homescreen/notifications",
-      notification: State.database.userData.data?.user?.notification?.length,
+      notification: State.database.newNotifications,
     },
   ];
+
   return (
     <div className="flex  items-center   py-4 pb-6 justify-evenly   bg-slate-900/25 backdrop-blur-xl border-t-[1px] border-gray-300/20">
       {data.map((item) => (
