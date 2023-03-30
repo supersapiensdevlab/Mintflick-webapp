@@ -39,7 +39,7 @@ function HomeScreen() {
   useEffect(() => {
     // console.log(localStorage.getItem("walletAddress"));
     // console.log(JSON.parse(localStorage.getItem("provider")));
-    // console.log(State.database);
+    console.log(State.database);
     State.updateDatabase({
       newNotifications: State.database.userData.data?.user.notification.length,
     });

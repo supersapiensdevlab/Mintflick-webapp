@@ -48,7 +48,9 @@ function BottomNavigation() {
       name: "Notifications",
       isActive: 5,
       link: "/homescreen/notifications",
-      notification: State.database.newNotifications,
+      notification: State.database.newNotifications
+        ? State.database.newNotifications
+        : 0,
     },
   ];
 

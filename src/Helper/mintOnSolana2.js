@@ -287,7 +287,6 @@ export const sendTransaction = async (encodedTransaction) => {
         },
       }
     );
-
     console.log(res);
     return res;
   } catch (error) {

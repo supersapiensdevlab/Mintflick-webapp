@@ -18,6 +18,7 @@ import {
   signTransactionWithWalletAndSend,
   signWithRelayer,
 } from "../../Helper/mintOnSolana2";
+import emailTemp from "../../Hooks/emailTemp";
 import { UserContext } from "../../Store";
 import { sendMail } from "../Home/Utility/sendMail";
 import Loading from "../Loading/Loading";
@@ -183,9 +184,20 @@ function EventDetails(lockAddress) {
               response
                 ? State.toast("success", "Ticket bought successfully!")
                 : State.toast("error", "Error while buying ticket!");
+              const mailBody =
+                response &&
+                emailTemp(
+                  mintRequest.data.result.mint,
+                  data.title,
+                  data.startTime,
+                  data.location ? data.location : null,
+                  data.eventUrl ? data.eventUrl : null,
+                  null,
+                  data.eventImage
+                );
               response &&
                 sendMail(
-                  `<div><span>Mint Id:${mintRequest.data.result.mint}</span><span>Event name:${data.title}</span><span>Event host:${data.eventHost}</span><span>Your wallet address:${State.database.walletAddress}</span></div>`,
+                  mailBody,
                   `[Important] Mintflick - ${data?.title}  ticket receipt`,
                   State.database.userData?.data?.user?.email
                 );

@@ -386,7 +386,7 @@ function CreateEvent() {
                   setstep(4);
                   State.toast(
                     "error",
-                    "Error while signing transaction,please try again!"
+                    "Error while sending transaction to blockchain,please try again!"
                   );
                   setstepper({
                     uploadingFile: false,
