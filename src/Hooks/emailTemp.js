@@ -108,7 +108,7 @@ function emailTemp(
 <table border="0" cellpadding="15" cellspacing="0" class="image_block block-1" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;" width="100%">
 <tbody><tr>
 <td class="pad">
-<div align="center" class="alignment" style="line-height:10px"><img src="https://www.mintflick.network/static/media/mintflick-head.a7cc272da65f750e4f74b9e0f50531c8.svg" style="display: block; height: auto; border: 0; width: 192px; max-width: 100%;" width="192">
+<div align="center" class="alignment" style="line-height:10px"><img src="https://nftstorage.link/ipfs/bafybeifwfd3w7iucxxt7lo5beyum2ydhmcvqfgupxtwmwoaqp4tbcakiyq/image" style="display: block; height: auto; border: 0; width: 192px; max-width: 100%;" width="192">
 
 </div>
 </td>
