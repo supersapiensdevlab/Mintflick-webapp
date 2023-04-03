@@ -46,15 +46,16 @@ function Booking(props) {
   return info ? (
     <Link
       to={`/homescreen/profile/${info?.username}`}
-      className="flex items-center gap-1 hover:opacity-80"
-    >
+      className="flex items-center gap-1 hover:opacity-80">
       <img
         className="w-10 rounded-full aspect-square"
         src={info?.profile_image}
-        alt="banner"
+        alt="Profile"
       />{" "}
       <div className="flex flex-col items-start ">
-        <span className="text-lg font-semibold text-brand1">{info?.name}</span>
+        <span className="text-base font-semibold text-brand1">
+          {info?.name}
+        </span>
         <span className="text-xs font-semibold text-brand4">
           {info?.wallet_id.slice(0, 6) +
             "..." +
@@ -468,8 +469,7 @@ function EventDetails(lockAddress) {
           </p>
           <Link
             to={`/homescreen/create-event`}
-            className="w-full mt-4 capitalize btn btn-brand"
-          >
+            className="w-full mt-4 capitalize btn btn-brand">
             Host event
           </Link>
         </div>
@@ -478,16 +478,14 @@ function EventDetails(lockAddress) {
         <div className="flex items-center justify-between w-full max-w-3xl p-4 mx-auto">
           <button
             onClick={() => navigateTo("../marketPlace")}
-            className="flex items-center justify-center font-semibold text-brand3"
-          >
+            className="flex items-center justify-center font-semibold text-brand3">
             <ChevronLeft />
             Back
           </button>
 
           <span
             // onClick={() => setwalletModalOpen(true)}
-            className=" text-brand1"
-          >
+            className=" text-brand1">
             <Share
               onClick={() =>
                 State.updateDatabase({
@@ -590,8 +588,7 @@ function EventDetails(lockAddress) {
               ) : data?.unlimitedTickets ? (
                 <button
                   onClick={buyOnSolana}
-                  className={`pl-3 pr-[2px] py-1 md:pl-4 md:pr-1 md:py-2 bg-success text-white flex items-center gap-1 rounded-full capitalize  `}
-                >
+                  className={`pl-3 pr-[2px] py-1 md:pl-4 md:pr-1 md:py-2 bg-success text-white flex items-center gap-1 rounded-full capitalize  `}>
                   {buying && <Loader size={16} className="animate-spin " />}
                   <span className="text-base ">Book for</span>
                   {data ? (
@@ -624,8 +621,7 @@ function EventDetails(lockAddress) {
                   ) : (
                     <button
                       onClick={buyOnSolana}
-                      className={`pl-3 pr-[2px] py-1 md:pl-4 md:pr-1 md:py-2 bg-success text-white flex items-center gap-1 rounded-full capitalize  `}
-                    >
+                      className={`pl-3 pr-[2px] py-1 md:pl-4 md:pr-1 md:py-2 bg-success text-white flex items-center gap-1 rounded-full capitalize  `}>
                       {buying && <Loader size={16} className="animate-spin " />}{" "}
                       Book for
                       {data ? (
@@ -658,8 +654,7 @@ function EventDetails(lockAddress) {
                 </span>
                 <div
                   onClick={() => setviewBookings(true)}
-                  className="text-lg font-semibold cursor-pointer text-primary"
-                >
+                  className="text-lg font-semibold cursor-pointer text-primary">
                   view all
                 </div>
               </div>
@@ -674,8 +669,7 @@ function EventDetails(lockAddress) {
                   <progress
                     className="w-2/3 progress progress-success"
                     value={mintedNfts?.length}
-                    max={data?.ticketCount}
-                  ></progress>
+                    max={data?.ticketCount}></progress>
                   <span className="flex items-center gap-1 text-sm font-semibold w-fit text-brand1">
                     {`${data?.ticketCount - mintedNfts?.length} tickets left`}
                   </span>
@@ -738,38 +732,35 @@ function EventDetails(lockAddress) {
               <div
                 className={`${
                   viewBookings && "modal-open"
-                } modal  modal-bottom sm:modal-middle`}
-              >
+                } modal  modal-bottom sm:modal-middle`}>
                 <div className="p-0 modal-box bg-slate-100 dark:bg-slate-800 ">
                   <div className="w-full p-2 h-fit bg-slate-300 dark:bg-slate-700">
                     <div className="flex items-center justify-between p-2">
                       <h3 className="flex items-center gap-2 text-lg font-bold text-brand2">
                         Bookings
                       </h3>
-
                       <X
                         onClick={() => setviewBookings(false)}
-                        className="cursor-pointer text-brand2"
-                      ></X>
+                        className="cursor-pointer text-brand2"></X>
                     </div>
                   </div>
                   <div className="flex flex-col w-full divide-y-2 dark:divide-slate-700 divide-dashed">
                     <span className="p-4 text-lg font-bold text-success">
-                      {mintedNfts?.length} Tickets Booked ✨
+                      {mintedNfts?.length === 0
+                        ? "No Bookings yet!"
+                        : `${mintedNfts?.length} Tickets Booked ✨`}
                     </span>
                     {bookings?.map((booking) => (
                       <div className="flex items-center justify-between px-4 py-2">
                         <Booking wallet={booking.owner} />
-
                         <a
                           href={`https://translator.shyft.to/address/${booking.mint}?cluster=${process.env.REACT_APP_SOLANA_NETWORK}`}
                           target="_blank"
-                          className="mx-2 text-sm font-semibold text-primary"
-                        >
+                          className="mx-2 w-24 text-sm font-semibold text-primary text-end">
                           View Ticket
                         </a>
                       </div>
-                    ))}{" "}
+                    ))}
                     {bookings?.length % 10 === 0 &&
                       mintedNfts?.length % 10 !== 0 &&
                       bookings?.length !== 0 && (
@@ -777,8 +768,7 @@ function EventDetails(lockAddress) {
                           onClick={() => {
                             getBookings(data.lockId, bookings?.length / 10 + 1);
                           }}
-                          className="p-4 font-bold text-primary"
-                        >
+                          className="p-4 font-bold text-primary">
                           View more tickets
                         </button>
                       )}

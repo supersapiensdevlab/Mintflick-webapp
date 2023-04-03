@@ -10,6 +10,8 @@ import {
 } from "tabler-icons-react";
 import Loading from "../Loading/Loading";
 import EventCard from "./EventCard";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 function EventCardList() {
   const [data, setData] = useState([]);
@@ -64,107 +66,118 @@ function EventCardList() {
     price ? setfilteredData(filtered) : setfilteredData(data);
   }, [price]);
 
-  return loading ? (
-    <Loading />
-  ) : (
-    <div className="relative flex flex-col items-center justify-start w-full h-full gap-2 overflow-auto lg:mr-12">
-      <div className="sticky top-0 z-40 flex items-center w-full max-w-2xl gap-2 p-2 lg:rounded-xl bg-slate-900/25 backdrop-blur-xl border-[1px] border-gray-300/20">
-        <input
-          type="text"
-          onChange={(e) => filterData(e.target.value)}
-          placeholder="Search events"
-          className="flex-grow w-full input input-bordered"
-        />
-        <div className=" dropdown dropdown-end">
-          <label tabIndex={0} className="btn btn-ghost text-brand3">
-            {/* <Filter /> */}
-            <Adjustments />
-          </label>
-          <div
-            tabIndex={0}
-            className="p-2 mt-3 text-base font-medium border-2 rounded-lg shadow-xl menu menu-compact dropdown-content border-slate-300 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-brand1 w-52"
-          >
-            <div className="flex items-center w-full gap-2 text-sm font-semibold text-brand2">
-              <div className="flex-grow h-[2px] bg-slate-400 rounded-full"></div>
-              Price
-              <div className="flex-grow h-[2px] bg-slate-400 rounded-full"></div>
-            </div>
-            <span className="flex items-center justify-between w-full p-2">
-              Free
-              <input
-                type="checkbox"
-                onChange={(e) =>
-                  e.target.checked ? setprice("free") : setprice(null)
-                }
-                checked={price === "free"}
-                className="checkbox checkbox-primary"
-              />
-            </span>
-            <span className="flex items-center justify-between w-full p-2">
-              Paid
-              <input
-                type="checkbox"
-                onChange={(e) =>
-                  e.target.checked ? setprice("paid") : setprice(null)
-                }
-                checked={price === "paid"}
-                className="checkbox checkbox-primary"
-              />
-            </span>
-            <div className="flex items-center w-full gap-2 text-sm font-semibold text-brand2">
-              <div className="flex-grow h-[2px] bg-slate-400 rounded-full"></div>
-              Type
-              <div className="flex-grow h-[2px] bg-slate-400 rounded-full"></div>
-            </div>
-
-            <span className="flex items-center justify-between w-full p-2">
-              Online
-              <input
-                type="checkbox"
-                onChange={(e) =>
-                  e.target.checked ? settype("Online") : settype(null)
-                }
-                checked={type === "Online"}
-                className="checkbox checkbox-primary"
-              />
-            </span>
-            <span className="flex items-center justify-between w-full p-2">
-              In-person
-              <input
-                type="checkbox"
-                onChange={(e) =>
-                  e.target.checked ? settype("In-person") : settype(null)
-                }
-                checked={type === "In-person"}
-                className="checkbox checkbox-primary"
-              />
-            </span>
-          </div>
-        </div>
-        <Link className="gap-2 btn btn-brand" to={"../create-event"}>
-          <Plus />
-          <span className="hidden sm:block">Create Event</span>
-        </Link>
-      </div>{" "}
-      <div className="grid w-full grid-cols-1 px-4 pb-24 sm:w-fit h-fit md:grid-cols-2 xl:grid-cols-3 gap-x-4 gap-y-4 sm:gap-y-8 sm:mx-auto">
-        {filteredData.map((event) => (
-          <EventCard
-            type={event.type}
-            Category={event.category}
-            isFreeEvent={event.freeEvent}
-            selectedPostImg={event.eventImage}
-            name={event.title}
-            startDate={event.startTime}
-            price={event.ticketPrice}
-            userImg={event.channelProfile}
-            username={event.channelName || event.eventHost}
-            description={event.description}
-            lockId={event.lockId}
-            id={event.eventId}
+  return (
+    <>
+      <div className="relative flex flex-col items-center justify-start w-full h-full gap-2 overflow-auto lg:mr-12">
+        <div className="sticky top-0 z-40 flex items-center w-full max-w-2xl gap-2 p-2 lg:rounded-xl bg-slate-900/25 backdrop-blur-xl border-[1px] border-gray-300/20">
+          <input
+            type="text"
+            onChange={(e) => filterData(e.target.value)}
+            placeholder="Search events"
+            className="flex-grow w-full input input-bordered"
           />
-        ))}
+          <div className=" dropdown dropdown-end">
+            <label tabIndex={0} className="btn btn-ghost text-brand3">
+              {/* <Filter /> */}
+              <Adjustments />
+            </label>
+            <div
+              tabIndex={0}
+              className="p-2 mt-3 text-base font-medium border-2 rounded-lg shadow-xl menu menu-compact dropdown-content border-slate-300 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-brand1 w-52">
+              <div className="flex items-center w-full gap-2 text-sm font-semibold text-brand2">
+                <div className="flex-grow h-[2px] bg-slate-400 rounded-full"></div>
+                Price
+                <div className="flex-grow h-[2px] bg-slate-400 rounded-full"></div>
+              </div>
+              <span className="flex items-center justify-between w-full p-2">
+                Free
+                <input
+                  type="checkbox"
+                  onChange={(e) =>
+                    e.target.checked ? setprice("free") : setprice(null)
+                  }
+                  checked={price === "free"}
+                  className="checkbox checkbox-primary"
+                />
+              </span>
+              <span className="flex items-center justify-between w-full p-2">
+                Paid
+                <input
+                  type="checkbox"
+                  onChange={(e) =>
+                    e.target.checked ? setprice("paid") : setprice(null)
+                  }
+                  checked={price === "paid"}
+                  className="checkbox checkbox-primary"
+                />
+              </span>
+              <div className="flex items-center w-full gap-2 text-sm font-semibold text-brand2">
+                <div className="flex-grow h-[2px] bg-slate-400 rounded-full"></div>
+                Type
+                <div className="flex-grow h-[2px] bg-slate-400 rounded-full"></div>
+              </div>
+
+              <span className="flex items-center justify-between w-full p-2">
+                Online
+                <input
+                  type="checkbox"
+                  onChange={(e) =>
+                    e.target.checked ? settype("Online") : settype(null)
+                  }
+                  checked={type === "Online"}
+                  className="checkbox checkbox-primary"
+                />
+              </span>
+              <span className="flex items-center justify-between w-full p-2">
+                In-person
+                <input
+                  type="checkbox"
+                  onChange={(e) =>
+                    e.target.checked ? settype("In-person") : settype(null)
+                  }
+                  checked={type === "In-person"}
+                  className="checkbox checkbox-primary"
+                />
+              </span>
+            </div>
+          </div>
+          <Link className="gap-2 btn btn-brand" to={"../create-event"}>
+            <Plus />
+            <span className="hidden sm:block">Create Event</span>
+          </Link>
+        </div>
+
+        <div className="grid w-full grid-cols-1 px-4 pb-24 sm:w-fit h-fit md:grid-cols-2 xl:grid-cols-3 gap-x-4 gap-y-4 sm:gap-y-8 sm:mx-auto">
+          {loading ? (
+            <>
+              <div className="w-full rounded-lg shadow-xl bg-slate-900/60 sm:w-96 aspect-square"></div>
+              <div className="w-full rounded-lg shadow-xl bg-slate-900/60 sm:w-96 aspect-square"></div>
+              <div className="w-full rounded-lg shadow-xl bg-slate-900/60 sm:w-96 aspect-square"></div>
+              <div className="w-full rounded-lg shadow-xl bg-slate-900/60 sm:w-96 aspect-square"></div>
+              <div className="w-full rounded-lg shadow-xl bg-slate-900/60 sm:w-96 aspect-square"></div>
+              <div className="w-full rounded-lg shadow-xl bg-slate-900/60 sm:w-96 aspect-square"></div>
+            </>
+          ) : (
+            filteredData.map((event) => (
+              <EventCard
+                type={event.type}
+                Category={event.category}
+                isFreeEvent={event.freeEvent}
+                selectedPostImg={event.eventImage}
+                name={event.title}
+                startDate={event.startTime}
+                price={event.ticketPrice}
+                userImg={event.channelProfile}
+                username={event.channelName || event.eventHost}
+                description={event.description}
+                lockId={event.lockId}
+                id={event.eventId}
+              />
+            ))
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 
