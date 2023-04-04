@@ -13,11 +13,11 @@ function Live() {
     State.updateDatabase({ showBottomNav: true });
   }, []);
   return (
-    <div className=" flex w-full h-screen  bg-white dark:bg-slate-900  ">
-      <div className="hidden lg:flex flex-col h-full w-1/4 ml-12 pt-24  space-y-6 overflow-y-auto">
+    <div className="flex w-full h-screen bg-white  dark:bg-slate-900">
+      <div className="flex-col hidden w-1/4 h-full pt-24 ml-12 space-y-6 overflow-y-auto lg:flex">
         <LiveChannels></LiveChannels>
       </div>
-      <div className="w-full lg:w-3/4 lg:mr-12 h-full pt-16 lg:pt-24  space-y-6 overflow-y-auto pb-24">
+      <div className="w-full h-full pt-16 pb-24 space-y-6 overflow-y-auto lg:w-3/4 lg:mr-12 lg:pt-24">
         <LiveBanners></LiveBanners>
         <LiveChannelCategories
           section_name="Live Now"

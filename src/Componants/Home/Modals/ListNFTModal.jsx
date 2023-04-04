@@ -1,6 +1,12 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { useState } from "react";
-import { Award, CheckupList, Share, X } from "tabler-icons-react";
+import {
+  AlertTriangle,
+  Award,
+  CheckupList,
+  Share,
+  X,
+} from "tabler-icons-react";
 import { UserContext } from "../../../Store";
 
 import axios from "axios";
@@ -11,6 +17,7 @@ import PolygonToken from "../../../Assets/logos/PolygonToken";
 import {
   listNFTOnSolana2,
   signTransactionWithWallet,
+  signTransactionWithWalletAndSend,
   signWithRelayer,
 } from "../../../Helper/mintOnSolana2";
 import { signTransaction } from "../../../Helper/mintOnSolana";
@@ -18,6 +25,8 @@ import ReactPlayer from "react-player";
 import NftCard from "../NftCard";
 import { clusterApiUrl, Connection, Transaction } from "@solana/web3.js";
 import { SolanaWallet } from "@web3auth/solana-provider";
+import { loadBalance } from "../../../Helper/getWalletBalance";
+import BuySol from "../../Wallet/BuySol";
 
 function ListNFTModal({
   text,
@@ -37,6 +46,7 @@ function ListNFTModal({
   const [loadFeed, loadUser, loadProfileCard, loadNftsData] = useUserActions();
   const [loadNfts] = useLoadNfts();
   const [price, setPrice] = useState(0);
+  const [balance, setbalance] = useState(0);
 
   const clearData = () => {
     setListing(false);
@@ -54,34 +64,24 @@ function ListNFTModal({
       listNFTOnSolana2(tokenId, price, State.database?.walletAddress)
         .then((response) => {
           console.log(response);
-          signTransactionWithWallet(
+          signTransactionWithWalletAndSend(
             response.data.result.encoded_transaction,
             State.database.provider
           )
-            .then((signedTx) => {
-              console.log(signedTx);
-              signWithRelayer(signedTx)
-                .then((response) => {
-                  response.success
-                    ? State.toast("success", "NFT listed successfully")
-                    : State.toast(
-                        "error",
-                        "Error while listing your NFT,please try again!"
-                      );
-
-                  response.success && setNftPrice(1);
-                  response.success && loadNftsData();
-                  response.success
-                    ? setListModalOpen(false)
-                    : setListing(false);
-                })
-                .catch((error) => {
-                  State.toast(
+            .then((response) => {
+              console.log(response);
+              response.data.success
+                ? State.toast("success", "NFT listed successfully")
+                : State.toast(
                     "error",
-                    "Gas Station Signing transaction failed!"
+                    "Error while listing your NFT,please try again!"
                   );
-                  setListing(false);
-                });
+
+              response.data.success && setNftPrice(1);
+              response.data.success && loadNftsData();
+              response.data.success
+                ? setListModalOpen(false)
+                : setListing(false);
             })
             .catch((error) => {
               console.log(error);
@@ -101,16 +101,25 @@ function ListNFTModal({
       return;
     }
   };
+  async function loadbalance() {
+    const x = await loadBalance(State.database.walletAddress);
+
+    setbalance(x);
+  }
+  useEffect(() => {
+    loadbalance();
+  }, []);
+
   return (
     <div
       className={`${
         listModalOpen && "modal-open"
       } modal  modal-bottom sm:modal-middle`}
     >
-      <div className="modal-box p-0 bg-slate-100 dark:bg-slate-800 ">
-        <div className="w-full h-fit p-2 bg-slate-300 dark:bg-slate-700">
-          <div className="flex justify-between items-center p-2">
-            <h3 className="flex items-center gap-2 font-bold text-lg text-brand2">
+      <div className="p-0 modal-box bg-slate-100 dark:bg-slate-800 ">
+        <div className="w-full p-2 h-fit bg-slate-300 dark:bg-slate-700">
+          <div className="flex items-center justify-between p-2">
+            <h3 className="flex items-center gap-2 text-lg font-bold text-brand2">
               <CheckupList />
               List NFT for sale
             </h3>
@@ -119,14 +128,14 @@ function ListNFTModal({
                 setListModalOpen(false);
                 clearData();
               }}
-              className="text-brand2 cursor-pointer"
+              className="cursor-pointer text-brand2"
             ></X>
           </div>
         </div>
 
-        <div className="flex flex-col flex-wrap p-4 w-full space-y-4 justify-center text-white">
+        <div className="flex flex-col flex-wrap justify-center w-full p-4 space-y-4 text-white">
           {contentType === "video" && (
-            <div className="w-full rounded-lg    overflow-hidden aspect-video  dark:bg-slate-900 bg-slate-300 object-cover">
+            <div className="object-cover w-full overflow-hidden rounded-lg aspect-video dark:bg-slate-900 bg-slate-300">
               <ReactPlayer
                 className="w-full"
                 width="100%"
@@ -141,7 +150,7 @@ function ListNFTModal({
           )}
 
           {contentType === "post" && (
-            <img src={content} className="  w-full object-cover rounded-lg" />
+            <img src={content} className="object-cover w-full rounded-lg " />
           )}
           <div className="form-control">
             <label className="input-group">
@@ -149,7 +158,7 @@ function ListNFTModal({
                 min={1}
                 type="number"
                 placeholder="1"
-                className="input input-bordered input-sm w-24"
+                className="w-24 input input-bordered input-sm"
                 value={price}
                 onChange={(e) => setPrice(e.target.value)}
                 required={true}
@@ -168,14 +177,24 @@ function ListNFTModal({
             </label>
           </div>
           <p>{successMessage}</p>
-          <button
-            onClick={handleListing}
-            className={`btn  
+          {balance > 0.01 ? (
+            <button
+              onClick={handleListing}
+              className={`btn  
                     btn-brand
                   w-full ${listing ? "loading" : ""} `}
-          >
-            {listing ? "Listing NFT for sale" : "confirm"}
-          </button>
+            >
+              {listing ? "Listing NFT for sale" : "confirm"}
+            </button>
+          ) : (
+            <div className="font-bold text-white shadow-lg alert alert-error">
+              <div>
+                <AlertTriangle />
+                <span>Oops! Low wallet balance to pay gas fee</span>
+                <BuySol text={"Buy SOL"} />
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

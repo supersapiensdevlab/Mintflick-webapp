@@ -10,8 +10,7 @@ import {
 } from "tabler-icons-react";
 import Loading from "../Loading/Loading";
 import EventCard from "./EventCard";
-import Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
+import ContentLoader from "react-content-loader";
 
 function EventCardList() {
   const [data, setData] = useState([]);
@@ -83,7 +82,8 @@ function EventCardList() {
             </label>
             <div
               tabIndex={0}
-              className="p-2 mt-3 text-base font-medium border-2 rounded-lg shadow-xl menu menu-compact dropdown-content border-slate-300 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-brand1 w-52">
+              className="p-2 mt-3 text-base font-medium border-2 rounded-lg shadow-xl menu menu-compact dropdown-content border-slate-300 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-brand1 w-52"
+            >
               <div className="flex items-center w-full gap-2 text-sm font-semibold text-brand2">
                 <div className="flex-grow h-[2px] bg-slate-400 rounded-full"></div>
                 Price
@@ -148,33 +148,44 @@ function EventCardList() {
         </div>
 
         <div className="grid w-full grid-cols-1 px-4 pb-24 sm:w-fit h-fit md:grid-cols-2 xl:grid-cols-3 gap-x-4 gap-y-4 sm:gap-y-8 sm:mx-auto">
-          {loading ? (
-            <>
-              <div className="w-full rounded-lg shadow-xl bg-slate-900/60 sm:w-96 aspect-square"></div>
-              <div className="w-full rounded-lg shadow-xl bg-slate-900/60 sm:w-96 aspect-square"></div>
-              <div className="w-full rounded-lg shadow-xl bg-slate-900/60 sm:w-96 aspect-square"></div>
-              <div className="w-full rounded-lg shadow-xl bg-slate-900/60 sm:w-96 aspect-square"></div>
-              <div className="w-full rounded-lg shadow-xl bg-slate-900/60 sm:w-96 aspect-square"></div>
-              <div className="w-full rounded-lg shadow-xl bg-slate-900/60 sm:w-96 aspect-square"></div>
-            </>
-          ) : (
-            filteredData.map((event) => (
-              <EventCard
-                type={event.type}
-                Category={event.category}
-                isFreeEvent={event.freeEvent}
-                selectedPostImg={event.eventImage}
-                name={event.title}
-                startDate={event.startTime}
-                price={event.ticketPrice}
-                userImg={event.channelProfile}
-                username={event.channelName || event.eventHost}
-                description={event.description}
-                lockId={event.lockId}
-                id={event.eventId}
-              />
-            ))
-          )}
+          {loading
+            ? [1, 2, 3, 4, 5, 6].map((x) => (
+                <ContentLoader
+                  width={450}
+                  height={400}
+                  viewBox="0 0 450 400"
+                  backgroundColor="#64748b"
+                  foregroundColor="#94a3b8"
+                  className="w-full"
+                >
+                  <rect x="43" y="304" rx="4" ry="4" width="271" height="9" />
+                  <rect x="44" y="323" rx="3" ry="3" width="119" height="6" />
+                  <rect
+                    x="42"
+                    y="77"
+                    rx="10"
+                    ry="10"
+                    width="388"
+                    height="217"
+                  />
+                </ContentLoader>
+              ))
+            : filteredData.map((event) => (
+                <EventCard
+                  type={event.type}
+                  Category={event.category}
+                  isFreeEvent={event.freeEvent}
+                  selectedPostImg={event.eventImage}
+                  name={event.title}
+                  startDate={event.startTime}
+                  price={event.ticketPrice}
+                  userImg={event.channelProfile}
+                  username={event.channelName || event.eventHost}
+                  description={event.description}
+                  lockId={event.lockId}
+                  id={event.eventId}
+                />
+              ))}
         </div>
       </div>
     </>

@@ -1,6 +1,6 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import imgPlaceHolder from "../../Assets/profile-pic.png";
+
 function EventCard({
   type,
   Category,
@@ -104,7 +104,7 @@ function EventCard({
         </p>
       </div>
       <div className="flex items-center w-full pb-4 ">
-        <p className="flex-grow h-12 px-4 overflow-hidden text-base font-semibold text-ellipsis text-brand4">
+        <p className="flex-grow h-12 px-4 overflow-hidden text-base font-semibold line-clamp-2 text-brand4">
           {description}
         </p>
         {/* <p className="flex-grow h-12 px-4 overflow-hidden text-base font-normal text-start text-ellipsis text-brand4">

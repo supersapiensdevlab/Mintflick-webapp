@@ -167,7 +167,7 @@ export const listNFTOnSolana2 = async (nft_address, price, seller_wallet) => {
 
   console.log(raw);
   await axios
-    .post(`https://api.shyft.to/sol/v1/marketplace/list_gasless`, raw, {
+    .post(`https://api.shyft.to/sol/v1/marketplace/list`, raw, {
       headers: {
         "x-api-key": `${process.env.REACT_APP_SHYFT_API_KEY}`,
         "content-type": "application/json",

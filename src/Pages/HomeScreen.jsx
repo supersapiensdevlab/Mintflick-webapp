@@ -29,13 +29,6 @@ function HomeScreen() {
   );
   const WALLET_ADDRESS = process.env.REACT_APP_FEEPAYER_WALLET; //👈 Replace with your wallet address
 
-  async function loadBalance() {
-    let balance = await SOLANA_CONNECTION.getBalance(
-      new PublicKey(WALLET_ADDRESS)
-    );
-    console.log(`Gas Station Balance: ${balance / LAMPORTS_PER_SOL}`);
-  }
-
   useEffect(() => {
     // console.log(localStorage.getItem("walletAddress"));
     // console.log(JSON.parse(localStorage.getItem("provider")));
@@ -44,11 +37,6 @@ function HomeScreen() {
       newNotifications: State.database.userData.data?.user.notification.length,
     });
     loadNftsData();
-    try {
-      loadBalance();
-    } catch (error) {
-      console.log(error);
-    }
   }, []);
 
   return (

@@ -104,6 +104,9 @@
   @apply dark:bg-slate-700;
   @apply dark:text-slate-300;
 }
+.btn {
+  @apply tracking-wider;
+}
 .btn-disabled {
   @apply dark:bg-slate-700 text-slate-500;
 }

@@ -80,7 +80,7 @@ function GoLive() {
 
   const [hideButton, setHideButton] = useState(false);
 
-  const liveUrl = `${process.env.REACT_APP_CLIENT_URL}/homescreen/liveuser/${user.database.userData?.data?.user?.username}`;
+  const liveUrl = `${process.env.REACT_APP_CLIENT_URL}/homescreen/live/${user.database.userData?.data?.user?.username}`;
 
   //nft video
   const category = [
@@ -872,10 +872,10 @@ function GoLive() {
         );
   };
   return user.database.userData?.data ? (
-    <div className=" bg-white dark:bg-slate-900 pt-20 ">
-      <div className="flex flex-col lg:flex-row p-4 gap-2">
+    <div className="pt-20 bg-white  dark:bg-slate-900">
+      <div className="flex flex-col gap-2 p-4 lg:flex-row">
         <div className="flex-1 space-y-2">
-          <div className="rounded-sm overflow-hidden">
+          <div className="overflow-hidden rounded-sm">
             {user.database.userData?.data.user &&
             user.database.userData?.data.user.livepeer_data.isActive ? (
               <Player
@@ -916,7 +916,7 @@ function GoLive() {
               //   footer={false}
               // />
               <img
-                className="border-2 border-slate-500 aspect-video w-full object-cover rounded-lg"
+                className="object-cover w-full border-2 rounded-lg border-slate-500 aspect-video"
                 src={
                   user.database.userData?.data?.user.thumbnail
                     ? user.database.userData?.data.user.thumbnail
@@ -925,10 +925,10 @@ function GoLive() {
               />
             )}
           </div>
-          <div className="w-full flex items-center flex-wrap justify-start gap-2">
+          <div className="flex flex-wrap items-center justify-start w-full gap-2">
             <button
               onClick={() => setScheduleStreamModal(true)}
-              className="flex items-center gap-1 text-white font-semibold cursor-pointer hover:bg-primary-focus   w-fit bg-primary rounded-full py-2 px-3"
+              className="flex items-center gap-1 px-3 py-2 font-semibold text-white rounded-full cursor-pointer hover:bg-primary-focus w-fit bg-primary"
             >
               <CalendarTime size={24} />
               Schedule upcoming Stream
@@ -936,7 +936,7 @@ function GoLive() {
             {/* this is for making nft */}
             {/* {recording ? (
               <button
-                className="flex items-center gap-1 text-brand2 cursor-pointer hover:bg-slate-50 hover:dark:bg-slate-700   w-fit bg-slate-100 dark:bg-slate-800  rounded-full py-2 px-3"
+                className="flex items-center gap-1 px-3 py-2 rounded-full cursor-pointer text-brand2 hover:bg-slate-50 hover:dark:bg-slate-700 w-fit bg-slate-100 dark:bg-slate-800"
                 onClick={stopRecording}
               >
                 <PlayerRecord className="text-error" size={24} />
@@ -944,7 +944,7 @@ function GoLive() {
               </button>
             ) : (
               <button
-                className="flex items-center gap-1 text-brand2 cursor-pointer hover:bg-slate-50 hover:dark:bg-slate-700   w-fit bg-slate-100 dark:bg-slate-800  rounded-full py-2 px-3"
+                className="flex items-center gap-1 px-3 py-2 rounded-full cursor-pointer text-brand2 hover:bg-slate-50 hover:dark:bg-slate-700 w-fit bg-slate-100 dark:bg-slate-800"
                 onClick={startRecording}
               >
                 <>
@@ -957,12 +957,12 @@ function GoLive() {
             {user.database.userData?.data.user &&
             user.database.userData?.data.user.streamSchedule > Date.now() &&
             !user.database.userData?.data.user.livepeer_data.isActive ? (
-              <span className="flex items-center  w-fit bg-slate-100 dark:bg-slate-800  rounded-full p-2">
-                <span className="relative flex h-3 w-3">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-teal-500 opacity-75"></span>
-                  <span className="absolute inline-flex rounded-full h-full w-full bg-teal-600"></span>
+              <span className="flex items-center p-2 rounded-full w-fit bg-slate-100 dark:bg-slate-800">
+                <span className="relative flex w-3 h-3">
+                  <span className="absolute inline-flex w-full h-full bg-teal-500 rounded-full opacity-75 animate-ping"></span>
+                  <span className="absolute inline-flex w-full h-full bg-teal-600 rounded-full"></span>
                 </span>
-                <p className="text-sm font-semibold text-brand2 mx-2">
+                <p className="mx-2 text-sm font-semibold text-brand2">
                   Stream Starting on{" "}
                   <span className="text-teal-600">
                     {moment(
@@ -976,22 +976,22 @@ function GoLive() {
             )}
             {user.database.userData?.data.user &&
             user.database.userData?.data.user.livepeer_data.isActive ? (
-              <span className="flex items-center gap-1 w-fit bg-slate-100 dark:bg-slate-800  rounded-full py-2 px-3">
-                <span className="relative flex h-3 w-3">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span>
-                  <span className="absolute inline-flex rounded-full h-full w-full bg-red-600"></span>
+              <span className="flex items-center gap-1 px-3 py-2 rounded-full w-fit bg-slate-100 dark:bg-slate-800">
+                <span className="relative flex w-3 h-3">
+                  <span className="absolute inline-flex w-full h-full bg-red-500 rounded-full opacity-75 animate-ping"></span>
+                  <span className="absolute inline-flex w-full h-full bg-red-600 rounded-full"></span>
                 </span>
-                <p className="text-sm font-semibold text-brand2  ">Live now</p>
+                <p className="text-sm font-semibold text-brand2 ">Live now</p>
               </span>
             ) : (
-              <span className="flex items-center text-brand2 gap-1 w-fit bg-slate-100 dark:bg-slate-800  rounded-full py-2 px-3">
+              <span className="flex items-center gap-1 px-3 py-2 rounded-full text-brand2 w-fit bg-slate-100 dark:bg-slate-800">
                 <AccessPointOff className="text-error" size={24} />
-                <p className="text-sm font-semibold   ">Offline</p>
+                <p className="text-sm font-semibold ">Offline</p>
               </span>
             )}
             <div
               onClick={handleRecord}
-              className="flex items-center gap-1 text-brand2 cursor-pointer hover:bg-slate-50 hover:dark:bg-slate-700   w-fit bg-slate-100 dark:bg-slate-800  rounded-full py-2 px-3"
+              className="flex items-center gap-1 px-3 py-2 rounded-full cursor-pointer text-brand2 hover:bg-slate-50 hover:dark:bg-slate-700 w-fit bg-slate-100 dark:bg-slate-800"
             >
               {!livepeerRecording ? (
                 <>
@@ -1006,16 +1006,16 @@ function GoLive() {
               )}
             </div>
           </div>
-          <div className="w-full flex  gap-2">
+          <div className="flex w-full gap-2">
             <div
               className={`${
                 editOption && "modal-open"
               } modal  modal-bottom sm:modal-middle`}
             >
-              <div className="modal-box p-0 bg-slate-100 dark:bg-slate-800 ">
-                <div className="w-full h-fit p-2 bg-slate-300 dark:bg-slate-700">
-                  <div className="flex justify-between items-center p-2">
-                    <h3 className="flex items-center gap-2 font-bold text-lg text-brand2">
+              <div className="p-0 modal-box bg-slate-100 dark:bg-slate-800 ">
+                <div className="w-full p-2 h-fit bg-slate-300 dark:bg-slate-700">
+                  <div className="flex items-center justify-between p-2">
+                    <h3 className="flex items-center gap-2 text-lg font-bold text-brand2">
                       <Edit />
                       Stream details
                     </h3>
@@ -1023,20 +1023,20 @@ function GoLive() {
                       onClick={() => {
                         setEditOption(false);
                       }}
-                      className="text-brand2 cursor-pointer"
+                      className="cursor-pointer text-brand2"
                     ></X>
                   </div>
                 </div>
                 <form className="p-4" onSubmit={handleStreamDetails}>
                   <div>
-                    <label className=" text-sm text-brand3">
+                    <label className="text-sm  text-brand3">
                       Stream Title
                       <span className="mx-2 text-sm text-brand5 font-base ">
                         required
                       </span>
                     </label>
                     <input
-                      className="input w-full"
+                      className="w-full input"
                       required={true}
                       value={streamDetails?.name}
                       onChange={(e) => {
@@ -1050,7 +1050,7 @@ function GoLive() {
                     />
                   </div>
                   <div className="mt-2">
-                    <label className=" text-sm text-brand3">
+                    <label className="text-sm  text-brand3">
                       Stream Description{" "}
                     </label>
                     <textarea
@@ -1068,7 +1068,7 @@ function GoLive() {
                     />
                   </div>
                   <div className="mt-1">
-                    <label className=" text-sm text-brand3">
+                    <label className="text-sm  text-brand3">
                       Stream Category{" "}
                       <span className="mx-2 text-sm text-brand5 font-base ">
                         required
@@ -1076,7 +1076,7 @@ function GoLive() {
                     </label>
                     <select
                       required={true}
-                      className="select block w-full"
+                      className="block w-full select"
                       onChange={(e) => {
                         setStreamDetails({
                           ...streamDetails,
@@ -1095,7 +1095,7 @@ function GoLive() {
                     </select>
                   </div>
 
-                  <div className="mt-4 flex gap-2 justify-end">
+                  <div className="flex justify-end gap-2 mt-4">
                     {undoButton ? (
                       <button
                         onClick={cancelStreamDetails}
@@ -1106,70 +1106,70 @@ function GoLive() {
                     ) : (
                       <></>
                     )}
-                    <button className="btn w-full btn-success" type="submit">
+                    <button className="w-full btn btn-success" type="submit">
                       Update
                     </button>
                   </div>
                 </form>
               </div>
             </div>
-            <div className="p-2 flex-grow flex flex-col gap-1 text-brand3 h-fit bg-slate-100 dark:bg-slate-800  rounded-xl ">
-              <div className="flex items-center gap-2 justify-start text-brand5 text-base font-semibold">
+            <div className="flex flex-col flex-grow gap-1 p-2 text-brand3 h-fit bg-slate-100 dark:bg-slate-800 rounded-xl ">
+              <div className="flex items-center justify-start gap-2 text-base font-semibold text-brand5">
                 Stream Title
                 <span
-                  className="text-xs text-primary cursor-pointer"
+                  className="text-xs cursor-pointer text-primary"
                   onClick={() => setEditOption(true)}
                 >
                   edit
                 </span>
               </div>
-              <div className="text-brand2 text-base ">
+              <div className="text-base text-brand2 ">
                 {streamDetails?.name}
               </div>
             </div>
-            <div className="p-2 w-fit flex flex-col gap-1 text-brand3 h-fit bg-slate-100 dark:bg-slate-800  rounded-xl ">
-              <div className="flex items-center gap-2 justify-start text-brand5 text-base font-semibold">
+            <div className="flex flex-col gap-1 p-2 w-fit text-brand3 h-fit bg-slate-100 dark:bg-slate-800 rounded-xl ">
+              <div className="flex items-center justify-start gap-2 text-base font-semibold text-brand5">
                 Stream Category{" "}
                 <span
-                  className="text-xs text-primary cursor-pointer"
+                  className="text-xs cursor-pointer text-primary"
                   onClick={() => setEditOption(true)}
                 >
                   edit
                 </span>
               </div>
-              <div className="text-brand2 w-fit text-base ">
+              <div className="text-base text-brand2 w-fit ">
                 {streamDetails?.category}
               </div>
             </div>
           </div>
-          <div className="w-full flex flex-col gap-2">
-            <div className="p-2 flex flex-col gap-1 text-brand3 h-fit bg-slate-100 dark:bg-slate-800  rounded-xl ">
-              <div className="flex items-center gap-2 justify-start text-brand5 text-base font-semibold">
+          <div className="flex flex-col w-full gap-2">
+            <div className="flex flex-col gap-1 p-2 text-brand3 h-fit bg-slate-100 dark:bg-slate-800 rounded-xl ">
+              <div className="flex items-center justify-start gap-2 text-base font-semibold text-brand5">
                 Stream Description{" "}
                 <span
-                  className="text-xs text-primary cursor-pointer"
+                  className="text-xs cursor-pointer text-primary"
                   onClick={() => setEditOption(true)}
                 >
                   edit
                 </span>
               </div>
-              <div className="text-brand2 text-base ">
+              <div className="text-base text-brand2 ">
                 {streamDetails?.description}
               </div>
             </div>
           </div>
-          <div className="w-full flex flex-col gap-2">
-            <div className="p-2 flex flex-col gap-1 text-brand3 h-fit bg-slate-100 dark:bg-slate-800  rounded-xl ">
-              <div className="text-brand5 text-base font-semibold">
+          <div className="flex flex-col w-full gap-2">
+            <div className="flex flex-col gap-1 p-2 text-brand3 h-fit bg-slate-100 dark:bg-slate-800 rounded-xl ">
+              <div className="text-base font-semibold text-brand5">
                 Add banners to live stream (Max 4)
               </div>
-              <div className="w-full flex flex-wrap">
+              <div className="flex flex-wrap w-full">
                 {user.database.userData?.data.user.streamLinks &&
                   user.database.userData?.data.user.streamLinks.map(
                     (link, index) => (
                       <div key={index} className="relative w-1/2 p-2">
                         <img
-                          className="rounded-md w-full aspect-video object-cover"
+                          className="object-cover w-full rounded-md aspect-video"
                           src={link.image}
                           alt="banner"
                         />
@@ -1185,11 +1185,11 @@ function GoLive() {
                 <form onSubmit={uploadLink} className="space-y-1">
                   <progress
                     hidden={!uploadingLink}
-                    className="progress progress-success w-full dark:bg-slate-400"
+                    className="w-full progress progress-success dark:bg-slate-400"
                   ></progress>
                   <label
                     htmlFor="file"
-                    className=" cursor-pointer flex justify-start items-center gap-2  w-full p-2 border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4"
+                    className="flex items-center justify-start w-full gap-2 p-2 border-2 border-dashed rounded-lg cursor-pointer  border-slate-400 dark:border-slate-600 text-brand4"
                   >
                     {selectedLinkFile ? (
                       selectedLinkFile.file ? (
@@ -1198,7 +1198,7 @@ function GoLive() {
                     ) : (
                       <>
                         Choose Image( PNG, JPG, GIF)
-                        <span className="text-red-600 text-xl">*</span>
+                        <span className="text-xl text-red-600">*</span>
                       </>
                     )}
                     <input
@@ -1210,7 +1210,7 @@ function GoLive() {
                       className="sr-only"
                     />
                   </label>
-                  <div className="w-full flex flex-col sm:flex-row gap-2">
+                  <div className="flex flex-col w-full gap-2 sm:flex-row">
                     <input
                       required={true}
                       value={streamLink.url}
@@ -1221,7 +1221,7 @@ function GoLive() {
                         })
                       }
                       placeholder="URL"
-                      className="input flex-grow"
+                      className="flex-grow input"
                       type={"url"}
                     />
                     <input
@@ -1237,56 +1237,56 @@ function GoLive() {
           </div>
         </div>
 
-        <div className="w-full lg:w-96 flex flex-col gap-2">
-          <div className="collapse collapse-open  w-full text-brand3  bg-slate-100 dark:bg-slate-800  rounded-xl  ">
+        <div className="flex flex-col w-full gap-2 lg:w-96">
+          <div className="w-full collapse collapse-open text-brand3 bg-slate-100 dark:bg-slate-800 rounded-xl ">
             <input type="checkbox" />
-            <div className="collapse-title text-xl font-medium">
-              <span className="font-semibold text-base ">
+            <div className="text-xl font-medium collapse-title">
+              <span className="text-base font-semibold ">
                 Streaming Details
               </span>
             </div>
-            <div className="collapse-content w-full space-y-2">
-              <div className="w-full p-2 flex gap-2 border-2 border-slate-200 dark:border-slate-700  rounded-md text-brand3">
-                <span className="font-semibold text-base">Name</span>
+            <div className="w-full space-y-2 collapse-content">
+              <div className="flex w-full gap-2 p-2 border-2 rounded-md border-slate-200 dark:border-slate-700 text-brand3">
+                <span className="text-base font-semibold">Name</span>
                 <p className="text-base text-brand4">
                   {user.database.userData?.data.user.name}
                 </p>
               </div>
-              <div className="w-full p-2 flex gap-2 border-2 border-slate-200 dark:border-slate-700  rounded-md text-brand3">
-                <span className="font-semibold text-base">Username</span>
+              <div className="flex w-full gap-2 p-2 border-2 rounded-md border-slate-200 dark:border-slate-700 text-brand3">
+                <span className="text-base font-semibold">Username</span>
                 <p className="text-base text-brand4">
                   {user.database.userData?.data.user.username}
                 </p>
               </div>
-              <div className="p-2 flex flex-col gap-1 border-2 border-slate-200 dark:border-slate-700  rounded-md text-brand3">
-                <span className="font-semibold text-base">RTMP URL</span>
-                <p className="text-base flex gap-1 text-brand4">
+              <div className="flex flex-col gap-1 p-2 border-2 rounded-md border-slate-200 dark:border-slate-700 text-brand3">
+                <span className="text-base font-semibold">RTMP URL</span>
+                <p className="flex gap-1 text-base text-brand4">
                   rtmp://rtmp.livepeer.com/live
                   <CopyToClipboard text="rtmp://rtmp.livepeer.com/live" />
                 </p>
               </div>
-              <div className="p-2 flex flex-col gap-1 border-2 border-slate-200 dark:border-slate-700  rounded-md text-brand3">
-                <span className="font-semibold text-base">Streamer Key</span>
-                <p className="text-base flex gap-1 text-brand4">
+              <div className="flex flex-col gap-1 p-2 border-2 rounded-md border-slate-200 dark:border-slate-700 text-brand3">
+                <span className="text-base font-semibold">Streamer Key</span>
+                <p className="flex gap-1 text-base text-brand4">
                   {userStreams.streamKey}
                   <CopyToClipboard text={userStreams.streamKey} />
                 </p>
               </div>
-              <div className="p-2 flex flex-col gap-1 border-2 border-slate-200 dark:border-slate-700  rounded-md text-brand3">
-                <span className="font-semibold text-base">Playback URL</span>
-                <p className="text-base flex gap-1 text-brand4">
+              <div className="flex flex-col gap-1 p-2 border-2 rounded-md border-slate-200 dark:border-slate-700 text-brand3">
+                <span className="text-base font-semibold">Playback URL</span>
+                <p className="flex gap-1 text-base text-brand4">
                   <span className="w-5/6 truncate">{playbackUrl}</span>
                   <CopyToClipboard text={playbackUrl} />
                 </p>
               </div>
-              <div className="p-2 flex flex-col gap-1 border-2 border-slate-200 dark:border-slate-700  rounded-md text-brand3">
-                <span className="font-semibold text-base">
+              <div className="flex flex-col gap-1 p-2 border-2 rounded-md border-slate-200 dark:border-slate-700 text-brand3">
+                <span className="text-base font-semibold">
                   Live URL{" "}
-                  <span className="text-sm text-brand6 ml-2">
+                  <span className="ml-2 text-sm text-brand6">
                     Share this with viwers.
                   </span>
                 </span>
-                <p className="text-base flex gap-1 text-brand4">
+                <p className="flex gap-1 text-base text-brand4">
                   <a
                     className="w-5/6 truncate"
                     href={liveUrl}
@@ -1303,7 +1303,7 @@ function GoLive() {
               {/* Stream Links */}
               <div className="hidden">
                 <div className="flex flex-col">
-                  <p className="text-center mb-1">Currently Connected :</p>
+                  <p className="mb-1 text-center">Currently Connected :</p>
                   <div className="flex flex-wrap justify-center">
                     {multiStreamConnected.map((value, index) => {
                       ////console.log(value);
@@ -1312,16 +1312,16 @@ function GoLive() {
                           <img
                             src={value.platform.logo}
                             alt="logo"
-                            className="h-6 lg:h-10 w-auto"
+                            className="w-auto h-6 lg:h-10"
                           />
                         </div>
                       );
                     })}
                   </div>
-                  <div className="nm-flat-dbeats-dark-primary-sm p-1 rounded-3xl hover:nm-inset-dbeats-dark-secondary-xs w-max mx-auto">
+                  <div className="p-1 mx-auto nm-flat-dbeats-dark-primary-sm rounded-3xl hover:nm-inset-dbeats-dark-secondary-xs w-max">
                     <button
                       variant="primary"
-                      className="bg-dbeats-dark-secondary text-center content-center justify-center align-middle hover:nm-inset-dbeats-light flex text-white rounded-3xl font-bold px-2 py-3 tracking-widest w-max"
+                      className="flex content-center justify-center px-2 py-3 font-bold tracking-widest text-center text-white align-middle bg-dbeats-dark-secondary hover:nm-inset-dbeats-light rounded-3xl w-max"
                       type="button"
                       onClick={
                         multiStreamConnected.length < 3
@@ -1330,36 +1330,36 @@ function GoLive() {
                       }
                     >
                       Add MultiStream Platforms
-                      <i className="fas fa-solid fa-video mx-2 cursor-pointer pt-1"></i>
+                      <i className="pt-1 mx-2 cursor-pointer fas fa-solid fa-video"></i>
                     </button>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <div className="p-2 flex flex-col gap-1 text-brand3 h-fit bg-slate-100 dark:bg-slate-800  rounded-xl ">
-            <span className="font-semibold text-base">Thumbnail</span>
+          <div className="flex flex-col gap-1 p-2 text-brand3 h-fit bg-slate-100 dark:bg-slate-800 rounded-xl ">
+            <span className="text-base font-semibold">Thumbnail</span>
             {selectedFile ? (
               <img
                 src={selectedFile.localurl}
-                className="aspect-video object-cover w-full rounded-md"
+                className="object-cover w-full rounded-md aspect-video"
               ></img>
             ) : user.database.userData?.data.user.thumbnail ? (
               <img
                 src={user.database.userData?.data.user.thumbnail}
-                className="aspect-video object-cover w-full rounded-md"
+                className="object-cover w-full rounded-md aspect-video"
               ></img>
             ) : null}
             <progress
               hidden={!uploadingFile}
-              className="progress progress-success w-full dark:bg-slate-400"
+              className="w-full progress progress-success dark:bg-slate-400"
             ></progress>
             <form
               className="flex flex-col items-center gap-1"
               onSubmit={uploadThumbnail}
             >
               <input
-                className="p-0 input h-fit w-full "
+                className="w-full p-0 input h-fit "
                 name="Thumbnail image"
                 type="file"
                 accept=".jpg,.png,.jpeg,.gif,.webp"
@@ -1381,8 +1381,8 @@ function GoLive() {
       </div>
 
       {/* {newRecord === 1 ? (
-        <div className="flex justify-between m-6 py-6 px-10 bg-dbeats-dark-secondary">
-          <div className="w-full flex justify-center">
+        <div className="flex justify-between px-10 py-6 m-6 bg-dbeats-dark-secondary">
+          <div className="flex justify-center w-full">
             <video
               src={recordUrl}
               width="90%"
@@ -1399,18 +1399,18 @@ function GoLive() {
                 <div className="col-span-1 sm:col-span-1">
                   <label
                     htmlFor="videoName"
-                    className="block 2xl:text-sm text-sm lg:text-xs font-medium dark:text-gray-100 text-gray-700"
+                    className="block text-sm font-medium text-gray-700 2xl:text-sm lg:text-xs dark:text-gray-100"
                   >
                     Video Title
                   </label>
-                  <div className="mt-1 flex rounded-md shadow-sm">
+                  <div className="flex mt-1 rounded-md shadow-sm">
                     <input
                       type="text"
                       name="videoName"
                       id="videoName"
                       value={recordvideo.videoName}
                       onChange={handleVideoInputs}
-                      className="focus:ring-dbeats-dark-primary border dark:border-dbeats-alt border-gray-300 dark:bg-dbeats-dark-primary ring-dbeats-dark-secondary  ring-0   flex-1 block w-full rounded-md sm:text-sm  "
+                      className="flex-1 block w-full border border-gray-300 rounded-md focus:ring-dbeats-dark-primary dark:border-dbeats-alt dark:bg-dbeats-dark-primary ring-dbeats-dark-secondary ring-0 sm:text-sm "
                       placeholder=""
                     />
                   </div>
@@ -1418,30 +1418,30 @@ function GoLive() {
               </div>
 
               <div className="grid grid-cols-8 gap-6 sm:grid-cols-8">
-                <div className="lg:col-span-4 col-span-8  sm:col-span-4">
+                <div className="col-span-8 lg:col-span-4 sm:col-span-4">
                   <label
                     htmlFor="company-website"
-                    className="block 2xl:text-sm text-sm lg:text-xs font-medium dark:text-gray-100 text-gray-700"
+                    className="block text-sm font-medium text-gray-700 2xl:text-sm lg:text-xs dark:text-gray-100"
                   >
                     Category
                   </label>
                   <div className="flex rounded-md shadow-sm"></div>
                 </div>
-                <div className="lg:col-span-4 col-span-8  sm:col-span-4">
+                <div className="col-span-8 lg:col-span-4 sm:col-span-4">
                   <label
                     htmlFor="videoName"
-                    className="block mr-2 2xl:text-sm text-sm lg:text-xs font-medium dark:text-gray-100 text-gray-700"
+                    className="block mr-2 text-sm font-medium text-gray-700 2xl:text-sm lg:text-xs dark:text-gray-100"
                   >
                     Pricing
                   </label>
-                  <div className="mt-1 flex rounded-md shadow-sm">
+                  <div className="flex mt-1 rounded-md shadow-sm">
                     <input
                       type="text"
                       name="price"
                       id="price"
                       value={recordvideo.price}
                       onChange={handleVideoInputs}
-                      className="focus:ring-dbeats-dark-primary border dark:border-dbeats-alt border-gray-300 dark:bg-dbeats-dark-primary ring-dbeats-dark-secondary  ring-0   flex-1 block w-full rounded-md sm:text-sm  "
+                      className="flex-1 block w-full border border-gray-300 rounded-md focus:ring-dbeats-dark-primary dark:border-dbeats-alt dark:bg-dbeats-dark-primary ring-dbeats-dark-secondary ring-0 sm:text-sm "
                       placeholder=""
                     />
                   </div>
@@ -1451,7 +1451,7 @@ function GoLive() {
               <div className="">
                 <label
                   htmlFor="description"
-                  className="block 2xl:text-sm text-sm lg:text-xs font-medium dark:text-gray-100 text-gray-700"
+                  className="block text-sm font-medium text-gray-700 2xl:text-sm lg:text-xs dark:text-gray-100"
                 >
                   Description
                 </label>
@@ -1462,20 +1462,20 @@ function GoLive() {
                     rows={3}
                     value={recordvideo.description}
                     onChange={handleVideoInputs}
-                    className="dark:placeholder-gray-600 focus:ring-dbeats-dark-primary border dark:border-dbeats-alt border-gray-300 dark:bg-dbeats-dark-primary ring-dbeats-dark-secondary  ring-0   flex-1 block w-full rounded-md sm:text-sm  "
+                    className="flex-1 block w-full border border-gray-300 rounded-md dark:placeholder-gray-600 focus:ring-dbeats-dark-primary dark:border-dbeats-alt dark:bg-dbeats-dark-primary ring-dbeats-dark-secondary ring-0 sm:text-sm "
                     placeholder="Any Behind the scenes you'll like your Audience to know!"
                   />
                 </div>
               </div>
 
-              <div className="float-right pt-20 flex items-center">
+              <div className="flex items-center float-right pt-20">
                 <div
                   hidden={hideButton}
                   onClick={() => {
                     // mintNFT();
                     // setHideButton(true);
                   }}
-                  className="w-max font-bold cursor-pointer px-12 nowrap py-2 rounded-md text-md text-white bg-dbeats-light"
+                  className="px-12 py-2 font-bold text-white rounded-md cursor-pointer w-max nowrap text-md bg-dbeats-light"
                 >
                   Mint NFT
                 </div>
@@ -1483,7 +1483,7 @@ function GoLive() {
                 {recordvideo.cid == null ? (
                   <div
                     hidden={!hideButton}
-                    className=" mx-5 flex items-center w-64"
+                    className="flex items-center w-64 mx-5 "
                   >
                     <input
                       type="range"
@@ -1491,8 +1491,7 @@ function GoLive() {
                       min="0"
                       max="100"
                       hidden={!hideButton}
-                      className="appearance-none cursor-pointer w-full h-3 bg-green-400 
-                font-white rounded-full slider-thumb  backdrop-blur-md"
+                      className="w-full h-3 bg-green-400 rounded-full appearance-none cursor-pointer font-white slider-thumb backdrop-blur-md"
                     />
                     <p
                       className="mx-2 text-base font-medium text-white"
@@ -1513,15 +1512,15 @@ function GoLive() {
           mintClipModal && "modal-open"
         } modal  modal-bottom sm:modal-middle`}
       >
-        <div className="modal-box p-0 bg-slate-100 dark:bg-slate-800 ">
-          <div className="w-full h-fit p-2 bg-slate-300 dark:bg-slate-700">
-            <div className="flex justify-between items-center p-2">
-              <h3 className="flex items-center gap-2 font-bold text-lg text-brand2">
+        <div className="p-0 modal-box bg-slate-100 dark:bg-slate-800 ">
+          <div className="w-full p-2 h-fit bg-slate-300 dark:bg-slate-700">
+            <div className="flex items-center justify-between p-2">
+              <h3 className="flex items-center gap-2 text-lg font-bold text-brand2">
                 Mint video
               </h3>
               <X
                 onClick={() => clearNftMintModalData()}
-                className="text-brand2 cursor-pointer"
+                className="cursor-pointer text-brand2"
               ></X>
             </div>
           </div>
@@ -1539,7 +1538,7 @@ function GoLive() {
               hidden={!hideButton}
               value={uploading}
               max="100"
-              className="progress progress-success w-full dark:bg-slate-400"
+              className="w-full progress progress-success dark:bg-slate-400"
             ></progress>
             <div className="flex gap-2">
               <input
@@ -1548,7 +1547,7 @@ function GoLive() {
                 id="videoName"
                 value={recordvideo.videoName}
                 onChange={handleVideoInputs}
-                className="input w-full "
+                className="w-full input "
                 placeholder="Enter video title..."
               />
               <input
@@ -1557,11 +1556,11 @@ function GoLive() {
                 id="price"
                 value={recordvideo.price}
                 onChange={handleVideoInputs}
-                className="input w-full"
+                className="w-full input"
                 placeholder="Enter price..."
               />
             </div>
-            <select className="select  w-full" onChange={(e) => {}}>
+            <select className="w-full select" onChange={(e) => {}}>
               <option disabled selected>
                 Categories
               </option>
@@ -1575,15 +1574,15 @@ function GoLive() {
               rows={3}
               value={recordvideo.description}
               onChange={handleVideoInputs}
-              className="textarea w-full"
+              className="w-full textarea"
               placeholder="Any Behind the scenes you'll like your Audience to know!"
             />
             {mintSuccess && (
-              <p className="w-full text-center my-2 text-green-500">
+              <p className="w-full my-2 text-center text-green-500">
                 {mintSuccess}
               </p>
             )}
-            <div className="w-full px-1 flex space-x-2 -ml-1">
+            <div className="flex w-full px-1 -ml-1 space-x-2">
               <div
                 disabled={hideButton}
                 onClick={() => {
@@ -1598,7 +1597,7 @@ function GoLive() {
                 Mint as NFT
               </div>
               {recordvideo?.videoFile ? (
-                <button className="btn btn-brand w-1/2 " onClick={saveStream}>
+                <button className="w-1/2 btn btn-brand " onClick={saveStream}>
                   {saveSuccess ? "Saved" : "Save Stream"}
                 </button>
               ) : (
@@ -1614,36 +1613,36 @@ function GoLive() {
           scheduleStreamModal && "modal-open"
         } modal  modal-bottom sm:modal-middle`}
       >
-        <div className="modal-box p-0 bg-slate-100 dark:bg-slate-800 ">
-          <div className="w-full h-fit p-2 bg-slate-300 dark:bg-slate-700">
-            <div className="flex justify-between items-center p-2">
-              <h3 className="flex items-center gap-2 font-bold text-lg text-brand2">
+        <div className="p-0 modal-box bg-slate-100 dark:bg-slate-800 ">
+          <div className="w-full p-2 h-fit bg-slate-300 dark:bg-slate-700">
+            <div className="flex items-center justify-between p-2">
+              <h3 className="flex items-center gap-2 text-lg font-bold text-brand2">
                 <CalendarEvent /> Select Date and Time
               </h3>
               <X
                 onClick={() => setScheduleStreamModal(false)}
-                className="text-brand2 cursor-pointer"
+                className="cursor-pointer text-brand2"
               ></X>
             </div>
           </div>
-          <form onSubmit={handleStreamSchedule} className="space-y-2 m-4 ">
-            <div className=" flex flex-col items-center justify-center gap-4 w-full py-8">
+          <form onSubmit={handleStreamSchedule} className="m-4 space-y-2 ">
+            <div className="flex flex-col items-center justify-center w-full gap-4 py-8 ">
               <span
                 onClick={() => dateTimePicker.current.showPicker()}
-                className="text-4xl font-bold text-brand1   text-center   underline-offset-8 flex items-center gap-1 mx-auto"
+                className="flex items-center gap-1 mx-auto text-4xl font-bold text-center text-brand1 underline-offset-8"
               >
                 {moment(streamSchedule).format("Do MMMM  YYYY h:mm a")}
                 <CalendarEvent
-                  className="hover:bg-slate-500 hover:dark:bg-slate-900 p-2 cursor-pointer rounded-full text-primary h-10 w-10"
+                  className="w-10 h-10 p-2 rounded-full cursor-pointer hover:bg-slate-500 hover:dark:bg-slate-900 text-primary"
                   size={24}
                 />
               </span>
               <span
                 onClick={() => dateTimePicker.current.showPicker()}
-                className="text-2xl font-bold text-brand5 w-full text-center "
+                className="w-full text-2xl font-bold text-center text-brand5 "
               >
                 {countdown(streamSchedule)}{" "}
-                <span className="text-xl font-bold text-brand7 w-full text-center">
+                <span className="w-full text-xl font-bold text-center text-brand7">
                   From now
                 </span>
               </span>
@@ -1660,7 +1659,7 @@ function GoLive() {
               />
             </div>
             <input
-              className="btn btn-brand w-full capitalize "
+              className="w-full capitalize btn btn-brand "
               value={"Schedule stream"}
               type={"submit"}
             />
@@ -1669,7 +1668,7 @@ function GoLive() {
       </div>
     </div>
   ) : (
-    <div className="h-screen w-screen bg-slate-100 dark:bg-slate-800 ">
+    <div className="w-screen h-screen bg-slate-100 dark:bg-slate-800 ">
       <Loading />
     </div>
   );

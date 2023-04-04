@@ -23,6 +23,8 @@ import { UserContext } from "../../Store";
 import { sendMail } from "../Home/Utility/sendMail";
 import Loading from "../Loading/Loading";
 import ProfileCard from "../Profile/ProfileCard";
+import ContentLoader from "react-content-loader";
+import imgPlaceHolder from "../../Assets/profile-pic.png";
 
 function Booking(props) {
   const [info, setinfo] = useState(null);
@@ -46,12 +48,13 @@ function Booking(props) {
   return info ? (
     <Link
       to={`/homescreen/profile/${info?.username}`}
-      className="flex items-center gap-1 hover:opacity-80">
+      className="flex items-center gap-1 hover:opacity-80"
+    >
       <img
         className="w-10 rounded-full aspect-square"
-        src={info?.profile_image}
+        src={info?.profile_image || imgPlaceHolder}
         alt="Profile"
-      />{" "}
+      />
       <div className="flex flex-col items-start ">
         <span className="text-base font-semibold text-brand1">
           {info?.name}
@@ -469,7 +472,8 @@ function EventDetails(lockAddress) {
           </p>
           <Link
             to={`/homescreen/create-event`}
-            className="w-full mt-4 capitalize btn btn-brand">
+            className="w-full mt-4 capitalize btn btn-brand"
+          >
             Host event
           </Link>
         </div>
@@ -478,14 +482,16 @@ function EventDetails(lockAddress) {
         <div className="flex items-center justify-between w-full max-w-3xl p-4 mx-auto">
           <button
             onClick={() => navigateTo("../marketPlace")}
-            className="flex items-center justify-center font-semibold text-brand3">
+            className="flex items-center justify-center font-semibold text-brand3"
+          >
             <ChevronLeft />
             Back
           </button>
 
           <span
             // onClick={() => setwalletModalOpen(true)}
-            className=" text-brand1">
+            className=" text-brand1"
+          >
             <Share
               onClick={() =>
                 State.updateDatabase({
@@ -588,7 +594,8 @@ function EventDetails(lockAddress) {
               ) : data?.unlimitedTickets ? (
                 <button
                   onClick={buyOnSolana}
-                  className={`pl-3 pr-[2px] py-1 md:pl-4 md:pr-1 md:py-2 bg-success text-white flex items-center gap-1 rounded-full capitalize  `}>
+                  className={`pl-3 pr-[2px] py-1 md:pl-4 md:pr-1 md:py-2 bg-success text-white flex items-center gap-1 rounded-full capitalize  `}
+                >
                   {buying && <Loader size={16} className="animate-spin " />}
                   <span className="text-base ">Book for</span>
                   {data ? (
@@ -621,7 +628,8 @@ function EventDetails(lockAddress) {
                   ) : (
                     <button
                       onClick={buyOnSolana}
-                      className={`pl-3 pr-[2px] py-1 md:pl-4 md:pr-1 md:py-2 bg-success text-white flex items-center gap-1 rounded-full capitalize  `}>
+                      className={`pl-3 pr-[2px] py-1 md:pl-4 md:pr-1 md:py-2 bg-success text-white flex items-center gap-1 rounded-full capitalize  `}
+                    >
                       {buying && <Loader size={16} className="animate-spin " />}{" "}
                       Book for
                       {data ? (
@@ -654,7 +662,8 @@ function EventDetails(lockAddress) {
                 </span>
                 <div
                   onClick={() => setviewBookings(true)}
-                  className="text-lg font-semibold cursor-pointer text-primary">
+                  className="text-lg font-semibold cursor-pointer text-primary"
+                >
                   view all
                 </div>
               </div>
@@ -669,7 +678,8 @@ function EventDetails(lockAddress) {
                   <progress
                     className="w-2/3 progress progress-success"
                     value={mintedNfts?.length}
-                    max={data?.ticketCount}></progress>
+                    max={data?.ticketCount}
+                  ></progress>
                   <span className="flex items-center gap-1 text-sm font-semibold w-fit text-brand1">
                     {`${data?.ticketCount - mintedNfts?.length} tickets left`}
                   </span>
@@ -732,7 +742,8 @@ function EventDetails(lockAddress) {
               <div
                 className={`${
                   viewBookings && "modal-open"
-                } modal  modal-bottom sm:modal-middle`}>
+                } modal  modal-bottom sm:modal-middle`}
+              >
                 <div className="p-0 modal-box bg-slate-100 dark:bg-slate-800 ">
                   <div className="w-full p-2 h-fit bg-slate-300 dark:bg-slate-700">
                     <div className="flex items-center justify-between p-2">
@@ -741,7 +752,8 @@ function EventDetails(lockAddress) {
                       </h3>
                       <X
                         onClick={() => setviewBookings(false)}
-                        className="cursor-pointer text-brand2"></X>
+                        className="cursor-pointer text-brand2"
+                      ></X>
                     </div>
                   </div>
                   <div className="flex flex-col w-full divide-y-2 dark:divide-slate-700 divide-dashed">
@@ -756,7 +768,8 @@ function EventDetails(lockAddress) {
                         <a
                           href={`https://translator.shyft.to/address/${booking.mint}?cluster=${process.env.REACT_APP_SOLANA_NETWORK}`}
                           target="_blank"
-                          className="mx-2 w-24 text-sm font-semibold text-primary text-end">
+                          className="w-24 mx-2 text-sm font-semibold text-primary text-end"
+                        >
                           View Ticket
                         </a>
                       </div>
@@ -768,7 +781,8 @@ function EventDetails(lockAddress) {
                           onClick={() => {
                             getBookings(data.lockId, bookings?.length / 10 + 1);
                           }}
-                          className="p-4 font-bold text-primary">
+                          className="p-4 font-bold text-primary"
+                        >
                           View more tickets
                         </button>
                       )}
@@ -778,7 +792,39 @@ function EventDetails(lockAddress) {
             )}
           </div>
         ) : (
-          <Loading />
+          <ContentLoader
+            viewBox="0 0 500 720"
+            height={720}
+            className="w-full p-2 "
+            backgroundColor="#64748b"
+            foregroundColor="#94a3b8"
+          >
+            <rect x="12" y="3" className="w-full " height="360" />
+            <rect
+              x="12"
+              y="370"
+              rx="0"
+              ry="0"
+              className="w-full "
+              height="60"
+            />
+            <rect
+              x="12"
+              y="435"
+              rx="0"
+              ry="0"
+              className="w-full "
+              height="60"
+            />
+            <rect
+              x="12"
+              y="500"
+              rx="0"
+              ry="0"
+              className="w-full "
+              height="60"
+            />
+          </ContentLoader>
         )}
       </div>
       <div className="flex-col items-end hidden w-1/4 h-full pt-20 ml-4 mr-12 lg:flex">

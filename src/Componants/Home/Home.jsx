@@ -13,6 +13,7 @@ import { useRef } from "react";
 import { ArrowUpCircle, ChevronUp } from "tabler-icons-react";
 import FeedbackForm from "./FeedbackForm";
 import producthuntImage from "../../Assets/productHunt.webp";
+import WalletSummary from "../Wallet/WalletSummary";
 
 function Home() {
   const State = useContext(UserContext);
@@ -61,7 +62,7 @@ function Home() {
   return (
     <div className="flex w-screen h-screen bg-slate-100 dark:bg-slate-800 lg:bg-white lg:dark:bg-slate-900">
       <div className="flex-col hidden w-1/4 h-full pt-24 ml-12 mr-4 space-y-6 overflow-y-auto lg:flex">
-        <Channels></Channels>
+        {/* <Channels></Channels> */}
         <LiveChannels></LiveChannels>
       </div>
       <div
@@ -89,6 +90,7 @@ function Home() {
       <div className="flex-col items-end hidden w-1/4 h-full pt-24 ml-4 mr-12 lg:flex">
         <GameOfLuck></GameOfLuck>
         <FeedbackForm></FeedbackForm>
+        <WalletSummary />
       </div>
       {showButton && (
         <div className="fixed flex justify-center w-screen bottom-20 lg:bottom-5 ">

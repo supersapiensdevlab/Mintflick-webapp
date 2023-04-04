@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
-import Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
 
 function QuestCard({ questId, selectedPostImg, name, description, status }) {
   return (
@@ -12,28 +10,28 @@ function QuestCard({ questId, selectedPostImg, name, description, status }) {
       } mx-auto relative h-fit w-full sm:w-96   rounded-lg bg-white dark:bg-slate-700 sm:hover:scale-105 cursor-pointer transition-all ease-in-out shadow-xl overflow-hidden`}
     >
       <img
-        className="aspect-video w-full object-cover sm:rounded-t-md"
+        className="object-cover w-full aspect-video sm:rounded-t-md"
         src={selectedPostImg}
         alt="banner"
       />
-      <div className="flex items-center w-full space-x-2 my-1  py-3 px-4">
+      <div className="flex items-center w-full px-4 py-3 my-1 space-x-2">
         <div className="flex-grow ">
-          <p className="w-48 text-lg font-semibold text-brand1 truncate">
-            {name || <Skeleton />}
+          <p className="w-48 text-lg font-semibold truncate text-brand1">
+            {name}
           </p>
         </div>
-        <span className="h-8 w-1 bg-slate-200 dark:bg-slate-600 rounded-full"></span>
+        <span className="w-1 h-8 rounded-full bg-slate-200 dark:bg-slate-600"></span>
         <p
           className={`flex gap-1 items-end w-fit my-1 px-4 text-lg font-semibold ${
             status ? "text-green-600" : "text-error"
           }`}
         >
-          <span className="font-bold text-2xl">
+          <span className="text-2xl font-bold">
             {status ? (
               <div className="flex items-center gap-2">
-                <span className="relative flex h-3 w-3">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75"></span>
-                  <span className="absolute inline-flex rounded-full h-3 w-3 bg-green-600"></span>
+                <span className="relative flex w-3 h-3">
+                  <span className="absolute inline-flex w-full h-full bg-green-500 rounded-full opacity-75 animate-ping"></span>
+                  <span className="absolute inline-flex w-3 h-3 bg-green-600 rounded-full"></span>
                 </span>
                 Live
               </div>
@@ -43,8 +41,8 @@ function QuestCard({ questId, selectedPostImg, name, description, status }) {
           </span>
         </p>
       </div>
-      <div className="flex items-center w-full space-x-2  pb-4 px-2">
-        <p className="flex-grow px-4  h-12  text-ellipsis  overflow-hidden text-base font-normal text-brand4">
+      <div className="flex items-center w-full px-2 pb-4 space-x-2">
+        <p className="flex-grow h-12 px-4 overflow-hidden text-base font-normal text-ellipsis text-brand4">
           {description}
         </p>
       </div>

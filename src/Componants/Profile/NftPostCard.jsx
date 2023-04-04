@@ -28,7 +28,7 @@ function NftPostCard({ nftDetails }) {
         {type !== "" ? (
           type !== "video/mp4" ? (
             <Image
-              className="object-contain w-full aspect-square"
+              className="object-cover w-full aspect-square"
               width="100%"
               height="100%"
               src={

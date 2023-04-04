@@ -33,25 +33,25 @@ function LiveChannels() {
       });
   }, []);
   return (
-    <div className="w-full h-fit space-y-4">
-      <p className="font-extrabold text-lg text-brand5 mb-2">Live now</p>
+    <div className="w-full space-y-4 h-fit">
+      <p className="mb-2 text-lg font-extrabold text-brand5">Live now</p>
       {State.database.liveUsers.length > 0 ? (
         <>
           {State.database.liveUsers.map((channel) => (
             <div
-              onClick={() => navigateTo(`../liveuser/${channel.username}`)}
-              className="group flex cursor-pointer items-center gap-2  rounded-full hover:bg-slate-100 dark:hover:bg-slate-800"
+              onClick={() => navigateTo(`../live/${channel.username}`)}
+              className="flex items-center gap-2 rounded-full cursor-pointer group hover:bg-slate-100 dark:hover:bg-slate-800"
               key={channel.id}
             >
               {/* <img
-                  className="h-full rounded-full border-2 border-rose-600"
+                  className="h-full border-2 rounded-full border-rose-600"
                   src={channel.profile_image}
                   alt="profileImage"
                 /> */}
               <Image
                 width={33}
                 height={33}
-                className="h-full aspect-square object-cover rounded-full border-2 border-rose-600"
+                className="object-cover h-full border-2 rounded-full aspect-square border-rose-600"
                 src={
                   channel.profile_image
                     ? channel.profile_image
@@ -60,10 +60,10 @@ function LiveChannels() {
                 alt="profileImage"
                 placeholderSrc={placeholderImage}
               />
-              <p className="cursor-pointer text-base font-medium text-brand3">
+              <p className="text-base font-medium cursor-pointer text-brand3">
                 {channel.name}
               </p>
-              <p className="hidden  group-hover:flex items-center gap-1 cursor-pointer text-sm font-semibold  text-brand6 ml-auto mr-4">
+              <p className="items-center hidden gap-1 ml-auto mr-4 text-sm font-semibold cursor-pointer group-hover:flex text-brand6">
                 Watch Now
                 {/* <Eye size={16} />  */}
               </p>
