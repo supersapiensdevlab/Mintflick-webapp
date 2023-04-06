@@ -24,6 +24,7 @@ import { useNavigate } from "react-router-dom";
 import {
   mintNFTOnSolana2,
   signTransactionKeyWallet,
+  signTransactionWithWallet,
   signTransactionWithWalletAndSend,
   signWithRelayer,
 } from "../../Helper/mintOnSolana2";
@@ -269,7 +270,7 @@ function CreateEvent() {
     let nftSolanaData = {
       network: process.env.REACT_APP_SOLANA_NETWORK,
       wallet: State.database.walletAddress,
-      // fee_payer: process.env.REACT_APP_FEEPAYER_WALLET,
+      fee_payer: process.env.REACT_APP_FEEPAYER_WALLET,
       symbol: "FLICK",
       max_supply: 0,
       royalty: 0,
@@ -302,7 +303,6 @@ function CreateEvent() {
     };
 
     console.log(nftSolanaData);
-
     const res = await axios
       .post(`https://api.shyft.to/sol/v1/candy_machine/create`, nftSolanaData, {
         headers: {
@@ -362,8 +362,9 @@ function CreateEvent() {
               });
 
             response.data.success &&
-              signTransactionWithWalletAndSend(
+              signTransactionKeyWallet(
                 response.data.result.encoded_transaction,
+                process.env.REACT_APP_FEEPAYER_PRIVATEKEY,
                 State.database.provider
               )
                 .then((res) => {
@@ -396,6 +397,42 @@ function CreateEvent() {
                     signingTransaction2: false,
                   });
                 });
+
+            // response.data.success &&
+            //   signTransactionWithWalletAndSend(
+            //     response.data.result.encoded_transaction,
+            //     State.database.provider
+            //   )
+            //     .then((res) => {
+            //       res
+            //         ? setstepper({
+            //             uploadingFile: true,
+            //             creatingEvent: true,
+            //             signingTransaction1: true,
+            //             creartingMachine: true,
+            //             signingTransaction2: true,
+            //           })
+            //         : setUploadingEvent(false);
+            //       res
+            //         ? handleSubmit(response.data?.result?.candy_machine, cid)
+            //         : setstep(4);
+            //     })
+            //     .catch((error) => {
+            //       console.log(error);
+            //       setUploadingEvent(false);
+            //       setstep(4);
+            //       State.toast(
+            //         "error",
+            //         "Error while sending transaction to blockchain,please try again!"
+            //       );
+            //       setstepper({
+            //         uploadingFile: false,
+            //         creatingEvent: false,
+            //         signingTransaction1: false,
+            //         creartingMachine: false,
+            //         signingTransaction2: false,
+            //       });
+            //     });
           })
           .catch((error) => {
             console.log(error);

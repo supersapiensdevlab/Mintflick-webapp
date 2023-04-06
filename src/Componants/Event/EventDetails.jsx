@@ -14,6 +14,7 @@ import {
   buyTicket,
   mintNFTOnSolana2,
   signTransactionKeyWallet,
+  signTransactionWithKey,
   signTransactionWithWallet,
   signTransactionWithWalletAndSend,
   signWithRelayer,
@@ -141,13 +142,22 @@ function EventDetails(lockAddress) {
     console.log(receipt);
   };
   const mintTicket = async (collection, host) => {
-    let nftSolanaData = {
-      network: process.env.REACT_APP_SOLANA_NETWORK,
-      wallet: State.database.walletAddress,
-      authority: host,
-      candy_machine: collection,
-      mint_group: "ticket",
-    };
+    let nftSolanaData = data.freeEvent
+      ? {
+          network: process.env.REACT_APP_SOLANA_NETWORK,
+          fee_payer: process.env.REACT_APP_FEEPAYER_WALLET,
+          wallet: State.database.walletAddress,
+          authority: host,
+          candy_machine: collection,
+          mint_group: "ticket",
+        }
+      : {
+          network: process.env.REACT_APP_SOLANA_NETWORK,
+          wallet: State.database.walletAddress,
+          authority: host,
+          candy_machine: collection,
+          mint_group: "ticket",
+        };
 
     console.log(nftSolanaData);
 
@@ -177,44 +187,81 @@ function EventDetails(lockAddress) {
         console.log(mintRequest);
         console.log(mintRequest.data.result.encoded_transaction);
 
-        mintRequest.data.success &&
-          signTransactionWithWalletAndSend(
-            mintRequest.data.result.encoded_transaction,
-            State.database.provider
-          )
-            .then((response) => {
-              console.log(response);
-              response && fetchData(params.id);
-              response
-                ? State.toast("success", "Ticket bought successfully!")
-                : State.toast("error", "Error while buying ticket!");
-              const mailBody =
+        mintRequest.data.success && data.freeEvent
+          ? signTransactionWithKey(
+              mintRequest.data.result.encoded_transaction,
+              process.env.REACT_APP_FEEPAYER_PRIVATEKEY
+            )
+              .then((response) => {
+                console.log(response);
+                response && fetchData(params.id);
+                response
+                  ? State.toast("success", "Ticket bought successfully!")
+                  : State.toast("error", "Error while buying ticket!");
+                const mailBody =
+                  response &&
+                  emailTemp(
+                    mintRequest.data.result.mint,
+                    data.title,
+                    data.startTime,
+                    data.location ? data.location : null,
+                    data.eventUrl ? data.eventUrl : null,
+                    null,
+                    data.eventImage
+                  );
                 response &&
-                emailTemp(
-                  mintRequest.data.result.mint,
-                  data.title,
-                  data.startTime,
-                  data.location ? data.location : null,
-                  data.eventUrl ? data.eventUrl : null,
-                  null,
-                  data.eventImage
+                  sendMail(
+                    mailBody,
+                    `[Important] Mintflick - ${data?.title}  ticket receipt`,
+                    State.database.userData?.data?.user?.email
+                  );
+                setbuying(false);
+              })
+              .catch((error) => {
+                console.log(error);
+                State.toast(
+                  "error",
+                  "Error while signing transaction,please try again!"
                 );
-              response &&
-                sendMail(
-                  mailBody,
-                  `[Important] Mintflick - ${data?.title}  ticket receipt`,
-                  State.database.userData?.data?.user?.email
+                setbuying(false);
+              })
+          : signTransactionWithWalletAndSend(
+              mintRequest.data.result.encoded_transaction,
+              State.database.provider
+            )
+              .then((response) => {
+                console.log(response);
+                response && fetchData(params.id);
+                response
+                  ? State.toast("success", "Ticket bought successfully!")
+                  : State.toast("error", "Error while buying ticket!");
+                const mailBody =
+                  response &&
+                  emailTemp(
+                    mintRequest.data.result.mint,
+                    data.title,
+                    data.startTime,
+                    data.location ? data.location : null,
+                    data.eventUrl ? data.eventUrl : null,
+                    null,
+                    data.eventImage
+                  );
+                response &&
+                  sendMail(
+                    mailBody,
+                    `[Important] Mintflick - ${data?.title}  ticket receipt`,
+                    State.database.userData?.data?.user?.email
+                  );
+                setbuying(false);
+              })
+              .catch((error) => {
+                console.log(error);
+                State.toast(
+                  "error",
+                  "Error while signing transaction,please try again!"
                 );
-              setbuying(false);
-            })
-            .catch((error) => {
-              console.log(error);
-              State.toast(
-                "error",
-                "Error while signing transaction,please try again!"
-              );
-              setbuying(false);
-            });
+                setbuying(false);
+              });
         // signTransactionWithWallet(
         //   mintRequest.data.result.encoded_transaction,
         //   State.database.provider
@@ -621,6 +668,7 @@ function EventDetails(lockAddress) {
                 </button>
               ) : (
                 <span className="flex items-center gap-1 text-sm font-semibold w-fit text-brand1">
+                  {}{" "}
                   {data.ticketCount - mintedNfts?.length === 0 ? (
                     <div className="p-2 px-3 text-white rounded-full bg-error">
                       Soldout
@@ -704,14 +752,14 @@ function EventDetails(lockAddress) {
                 </p>
               </div>
             )}
-            {data.eventUrl && (
+            {/* {data.eventUrl && (
               <div className="flex flex-col items-start justify-start w-full max-w-2xl gap-2 p-2 mx-auto bg-slate-100 dark:bg-slate-700 sm:rounded-xl sm:p-4">
                 <span className="text-lg font-semibold text-brand1">Link</span>
                 <p className="text-base font-normal text-brand1">
                   {data ? data.eventUrl : ""}
                 </p>
               </div>
-            )}
+            )} */}
             <div className="flex flex-col items-start justify-start w-full max-w-2xl gap-2 mx-auto bg-slate-100 dark:bg-slate-700 sm:rounded-xl lg:hidden">
               <span className="p-2 pb-0 text-lg font-semibold text-brand1">
                 Host Details
@@ -757,7 +805,11 @@ function EventDetails(lockAddress) {
                     </div>
                   </div>
                   <div className="flex flex-col w-full divide-y-2 dark:divide-slate-700 divide-dashed">
-                    <span className="p-4 text-lg font-bold text-success">
+                    <span
+                      className={`p-4 text-lg font-bold  ${
+                        mintedNfts?.length === 0 ? "text-success" : "text-error"
+                      }`}
+                    >
                       {mintedNfts?.length === 0
                         ? "No Bookings yet!"
                         : `${mintedNfts?.length} Tickets Booked ✨`}
