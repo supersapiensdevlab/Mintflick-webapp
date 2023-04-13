@@ -30,6 +30,7 @@ import NftCard from "../NftCard";
 import { Walkthrough } from "../../Walkthrough/Walkthrough";
 import CustomInput from "../../CustomInputs/CustomInput";
 import { TypeAnimation } from "react-type-animation";
+import NftLimit from "../NftLimit";
 
 function ThoughtPostModal({ setthoughtPostModalOpen }) {
   const State = useContext(UserContext);
@@ -44,6 +45,8 @@ function ThoughtPostModal({ setthoughtPostModalOpen }) {
   const [listSuccess, setListSuccess] = useState(false);
   const [successMsg, setSuccessMsg] = useState("");
   const [btnText, setbtnText] = useState("Flick Thought");
+
+  const [nftLimit, setNftLimit] = useState(0);
 
   const [showWalkthrough, setshowWalkthrough] = useState(
     State.database.userData?.data.user?.seenIntro?.thoughtWalkthrough
@@ -348,10 +351,10 @@ function ThoughtPostModal({ setthoughtPostModalOpen }) {
 
   return (
     <>
-      <div className="modal-box p-0 bg-slate-100 dark:bg-slate-800 ">
-        <div className="w-full h-fit p-2 bg-slate-300 dark:bg-slate-700">
-          <div className="flex justify-between items-center p-2">
-            <h3 className="flex items-center gap-2 font-bold text-lg text-brand2">
+      <div className="p-0 modal-box bg-slate-100 dark:bg-slate-800 ">
+        <div className="w-full p-2 h-fit bg-slate-300 dark:bg-slate-700">
+          <div className="flex items-center justify-between p-2">
+            <h3 className="flex items-center gap-2 text-lg font-bold text-brand2">
               <Bulb />
               Post a Thought
             </h3>
@@ -359,7 +362,7 @@ function ThoughtPostModal({ setthoughtPostModalOpen }) {
               onClick={() => {
                 clearData();
               }}
-              className="text-brand2 cursor-pointer"
+              className="cursor-pointer text-brand2"
             ></X>
           </div>
         </div>
@@ -367,13 +370,13 @@ function ThoughtPostModal({ setthoughtPostModalOpen }) {
         <form onSubmit={(e) => e.preventDefault()}>
           <div className="w-full p-4 space-y-3">
             {/* <textarea
-            className="textarea  w-full"
+            className="w-full textarea"
             placeholder="Whats on your mind!"
             onChange={(e) => setCaption(e.target.value)}
             value={caption}
           ></textarea> */}{" "}
             {isNFT && caption && (
-              <div className="mx-auto w-fit m-4">
+              <div className="m-4 mx-auto w-fit">
                 <NftCard
                   id="my-nft"
                   name={State.database.userData.data.user.name}
@@ -401,7 +404,7 @@ function ThoughtPostModal({ setthoughtPostModalOpen }) {
             <div id="walkthroughThoughtStep1">
               <CustomInput
                 placeholder={"Whats on your mind!"}
-                className=" textarea w-full"
+                className="w-full textarea"
                 value={caption}
                 setValue={setCaption}
                 mentions={tagged}
@@ -412,7 +415,7 @@ function ThoughtPostModal({ setthoughtPostModalOpen }) {
                 value={caption}
                 onChange={(e) => caption(e.target.value)}
                 style={defaultStyle}
-                className="textarea w-full h-24  pt-2 focus:outline-0 overflow-scroll mentionsinputoverflow"
+                className="w-full h-24 pt-2 overflow-scroll textarea focus:outline-0 mentionsinputoverflow"
                 placeholder={"Whats on your mind!"}
                 a11ySuggestionsListLabel={"Suggested mentions"}
                 inputRef={mentionsRef}
@@ -427,13 +430,13 @@ function ThoughtPostModal({ setthoughtPostModalOpen }) {
               </MentionsInput> */}
             </div>
             {mintSuccess || (mintSuccess && listSuccess) ? (
-              <div className="w-fit flex space-x-2 text-green-500">
+              <div className="flex space-x-2 text-green-500 w-fit">
                 {successMsg}
               </div>
             ) : (
               <></>
             )}
-            <div className="w-fit flex space-x-2">
+            <div className="flex space-x-2 w-fit">
               {mintSuccess ? (
                 <div className="flex items-center">
                   {!listSuccess ? (
@@ -445,13 +448,13 @@ function ThoughtPostModal({ setthoughtPostModalOpen }) {
               ) : (
                 <label
                   id="walkthroughThoughtStep2"
-                  className="flex items-center cursor-pointer gap-2 bg-slate-200 dark:bg-slate-700 p-2 rounded-full pr-4"
+                  className="flex items-center gap-2 p-2 pr-4 rounded-full cursor-pointer bg-slate-200 dark:bg-slate-700"
                 >
                   <input
                     type="checkbox"
                     value={isNFT}
                     onChange={() => setIsNFT(!isNFT)}
-                    className="checkbox checkbox-primary rounded-full"
+                    className="rounded-full checkbox checkbox-primary"
                   />
                   <span className="label-text text-brand3">Mint as NFT</span>
                 </label>
@@ -463,7 +466,7 @@ function ThoughtPostModal({ setthoughtPostModalOpen }) {
                       min={1}
                       type="number"
                       placeholder="1"
-                      className="input input-bordered input-sm w-24"
+                      className="w-24 input input-bordered input-sm"
                       value={nftPrice}
                       onChange={(e) => setNFTPrice(e.target.value)}
                       required={true}
@@ -489,7 +492,7 @@ function ThoughtPostModal({ setthoughtPostModalOpen }) {
               max="100"
             ></progress>
             {isNFT && (
-              <div className="  bg-emerald-600 p-2 rounded-md pr-4 text-sm font-semibold tracking-wide text-white">
+              <div className="p-2 pr-4 text-sm font-semibold tracking-wide text-white rounded-md bg-emerald-600">
                 <TypeAnimation
                   sequence={[
                     "✨Exciting! A Non Fungible Token (NFT) will be created on the Blockchain to preserve your content for all eternity and make it publicly accessible to everyone. Your connected wallet will be the proud owner of this unique digital asset, ensuring that your creation is forever enshrined in the blockchain's immutable ledger.",
@@ -512,13 +515,20 @@ function ThoughtPostModal({ setthoughtPostModalOpen }) {
                 </span> */}
               </div>
             )}
+            {isNFT && (
+              <NftLimit
+                username={State.database.userData?.data?.user?.username}
+                setNftLimit={setNftLimit}
+                isNFT={isNFT}
+              />
+            )}
             {!mintSuccess ? (
               <button
                 type={"submit"}
                 onClick={handleThoughtPost}
                 // onClick={onButtonClick}
                 className={`btn capitalize w-full  ${
-                  caption ? "btn-brand" : "btn-disabled"
+                  caption && nftLimit < 5 ? "btn-brand" : "btn-disabled"
                 }  ${uploadingPost ? "loading" : ""}`}
               >
                 {btnText}
@@ -538,7 +548,7 @@ function ThoughtPostModal({ setthoughtPostModalOpen }) {
                     Close
                   </button>
                 ) : (
-                  <div className="w-full flex justify-around space-x-1">
+                  <div className="flex justify-around w-full space-x-1">
                     <button
                       onClick={handleThoughtNFTListing}
                       className={`btn  ${

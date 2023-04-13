@@ -36,6 +36,7 @@ import { sanitizeFilename } from "../../../functions/sanitizeFilename";
 import { Walkthrough } from "../../Walkthrough/Walkthrough";
 import CustomInput from "../../CustomInputs/CustomInput";
 import { TypeAnimation } from "react-type-animation";
+import NftLimit from "../NftLimit";
 
 function PhotoPostModal({ setphotoPostModalOpen }) {
   const State = useContext(UserContext);
@@ -92,6 +93,7 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
   // Minting
   const [minting, setMinting] = useState(null);
   const [mintingProgress, setMintingProgress] = useState(0);
+  const [nftLimit, setNftLimit] = useState(0);
 
   const web3 = new Web3(State.database.provider);
 
@@ -474,6 +476,7 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
               <Camera />
               Upload Photo
             </h3>
+
             <X
               onClick={() => clearData()}
               className="cursor-pointer text-brand2"
@@ -539,7 +542,7 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
             <div id="walkthroughStep2">
               <CustomInput
                 placeholder={"Enter caption."}
-                className="w-full  textarea"
+                className="w-full textarea"
                 value={caption}
                 setValue={setCaption}
                 mentions={tagged}
@@ -625,7 +628,7 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
               </div>
             ) : null}
             {isNFT && (
-              <div className="p-2 pr-4 text-sm font-semibold tracking-wide text-white rounded-md  bg-emerald-600">
+              <div className="p-2 pr-4 text-sm font-semibold tracking-wide text-white rounded-md bg-emerald-600">
                 <TypeAnimation
                   sequence={[
                     "✨Exciting! A Non Fungible Token (NFT) will be created on the Blockchain to preserve your content for all eternity and make it publicly accessible to everyone. Your connected wallet will be the proud owner of this unique digital asset, ensuring that your creation is forever enshrined in the blockchain's immutable ledger.",
@@ -648,6 +651,13 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
                 </span> */}
               </div>
             )}
+            {isNFT && (
+              <NftLimit
+                username={State.database.userData?.data?.user?.username}
+                setNftLimit={setNftLimit}
+              />
+            )}
+
             {mintSuccess == "NFT Minted Successfully" ? (
               <div className="flex justify-around w-full space-x-1">
                 <button
@@ -697,7 +707,7 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
                       handleSubmit();
                     }}
                     className={`btn  ${
-                      selectedPost?.file[0] && caption !== ""
+                      selectedPost?.file[0] && caption !== "" && nftLimit < 5
                         ? "btn-brand"
                         : "btn-disabled"
                     } w-full capitalize ${uploadingPost ? "loading " : ""}`}

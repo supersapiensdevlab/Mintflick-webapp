@@ -3,6 +3,7 @@ import React, { useContext, useState, useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import {
   CalendarEvent,
+  Check,
   ChevronLeft,
   Loader,
   Share,
@@ -26,6 +27,16 @@ import Loading from "../Loading/Loading";
 import ProfileCard from "../Profile/ProfileCard";
 import ContentLoader from "react-content-loader";
 import imgPlaceHolder from "../../Assets/profile-pic.png";
+import { transactionWithFee } from "../Home/Utility/mintflickTransaction";
+import {
+  Connection,
+  Keypair,
+  LAMPORTS_PER_SOL,
+  PublicKey,
+  SystemProgram,
+  Transaction,
+} from "@solana/web3.js";
+import { decode } from "bs58";
 
 function Booking(props) {
   const [info, setinfo] = useState(null);
@@ -89,6 +100,7 @@ function EventDetails(lockAddress) {
   const [viewBookings, setviewBookings] = useState(false);
   const [bookings, setbookings] = useState([]);
   const [hostDetails, sethostDetails] = useState(null);
+  const [loading, setloading] = useState(false);
 
   const params = useParams();
   // Wrapping all calls in an async block
@@ -357,6 +369,71 @@ function EventDetails(lockAddress) {
       })
       .catch(function (error) {
         console.log(error);
+      });
+  }
+  async function transferSol(ammount, receiver) {
+    let tx;
+    console.log(ammount);
+    const feePayer = Keypair.fromSecretKey(
+      decode(process.env.REACT_APP_FEEPAYER_PRIVATEKEY)
+    );
+    const connection = new Connection(process.env.REACT_APP_SOLANA_RPC);
+    const blockhash = (await connection.getRecentBlockhash("finalized"))
+      .blockhash;
+
+    let transaction = new Transaction({
+      recentBlockhash: blockhash,
+      feePayer: new PublicKey(process.env.REACT_APP_FEEPAYER_WALLET),
+    }).add(
+      SystemProgram.transfer({
+        fromPubkey: new PublicKey(process.env.REACT_APP_FEEPAYER_WALLET),
+        toPubkey: new PublicKey(receiver),
+        lamports: Math.round(ammount * LAMPORTS_PER_SOL),
+      })
+    );
+    await transaction.partialSign(feePayer);
+    await connection
+      .sendRawTransaction(transaction.serialize())
+      .then((response) => {
+        tx = response;
+      });
+
+    return tx;
+  }
+  async function withdrawSol(amount) {
+    await transferSol(amount, data.eventHost)
+      .then((receipt) => {
+        console.log(receipt);
+        if (receipt) {
+          axios
+            .post(
+              `${process.env.REACT_APP_SERVER_URL}/user/withdraw`,
+              { eventId: data.eventId },
+              {
+                headers: {
+                  "content-type": "application/json",
+                  "auth-token": JSON.stringify(
+                    localStorage.getItem("authtoken")
+                  ),
+                },
+              }
+            )
+            .then(async (res) => {
+              console.log(res);
+              setData(res.data);
+            })
+            .catch((err) => {
+              console.log(err);
+              setloading(false);
+            });
+        } else {
+          setloading(false);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        State.toast("error", "Transaction failed. Please try again");
+        setloading(false);
       });
   }
 
@@ -637,7 +714,30 @@ function EventDetails(lockAddress) {
                 </div>
               </div>{" "}
               {data?.eventHost === State.database.walletAddress ? (
-                <></>
+                !data.freeEvent && !data.withdrawn ? (
+                  Date.parse(data.endTime) <= Math.floor(Date.now()) && (
+                    <button
+                      onClick={() =>
+                        withdrawSol(
+                          data.ticketPrice * mintedNfts?.length * 0.95
+                        )
+                      }
+                      className={`text-white capitalize rounded-full btn btn-success ${
+                        loading && "loading"
+                      }`}
+                    >
+                      Withdraw {data.ticketPrice * mintedNfts?.length * 0.95}{" "}
+                      SOL
+                    </button>
+                  )
+                ) : (
+                  <button
+                    className={`text-white capitalize rounded-full btn btn-ghost gap-2`}
+                  >
+                    <Check className="text-success"></Check> Withdrawn{" "}
+                    {data.ticketPrice * mintedNfts?.length * 0.95} SOL
+                  </button>
+                )
               ) : data?.unlimitedTickets ? (
                 <button
                   onClick={buyOnSolana}

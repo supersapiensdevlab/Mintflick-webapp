@@ -288,7 +288,8 @@ function CreateEvent() {
           guards: {
             solPayment: {
               amount: isFreeEvent ? 0 : ticketPrice,
-              destination: State.database.walletAddress,
+              // destination: State.database.walletAddress,
+              destination: process.env.REACT_APP_FEEPAYER_WALLET,
             },
             mintLimit: {
               limit: 1,

@@ -20,6 +20,7 @@ import { uploadFile } from "../../../Helper/uploadHelper";
 import { upload } from "@testing-library/user-event/dist/upload";
 import ReactPlayer from "react-player";
 import NftCard from "../NftCard";
+import NftLimit from "../NftLimit";
 
 function MintNFTModal({
   mintModalOpen,
@@ -38,6 +39,8 @@ function MintNFTModal({
   const [successMessage, setSuccessMessage] = useState(
     "Please confirm to mint this post as an NFT"
   );
+  const [nftLimit, setNftLimit] = useState(0);
+
   const [minting, setMinting] = useState(false);
   const [loadFeed, loadUser] = useUserActions();
   // console.log(content);
@@ -307,10 +310,10 @@ function MintNFTModal({
         mintModalOpen && "modal-open"
       } modal  modal-bottom sm:modal-middle`}
     >
-      <div className="modal-box p-0 bg-slate-100 dark:bg-slate-800 ">
-        <div className="w-full h-fit p-2 bg-slate-300 dark:bg-slate-700">
-          <div className="flex justify-between items-center p-2">
-            <h3 className="flex items-center gap-2 font-bold text-lg text-brand2">
+      <div className="p-0 modal-box bg-slate-100 dark:bg-slate-800 ">
+        <div className="w-full p-2 h-fit bg-slate-300 dark:bg-slate-700">
+          <div className="flex items-center justify-between p-2">
+            <h3 className="flex items-center gap-2 text-lg font-bold text-brand2">
               <Award />
               Mint as NFT
             </h3>
@@ -319,20 +322,20 @@ function MintNFTModal({
                 setMintModalOpen(false);
                 clearData();
               }}
-              className="text-brand2 cursor-pointer"
+              className="cursor-pointer text-brand2"
             ></X>
           </div>
         </div>
 
-        <div className="flex flex-wrap p-4 w-full space-y-4 justify-center text-white">
+        <div className="flex flex-wrap justify-center w-full p-4 space-y-4 text-white">
           {!videoImage && content && (
             <img
               src={videoImage ? videoImage : content}
-              className="  w-full object-cover rounded-lg"
+              className="object-cover w-full rounded-lg "
             />
           )}
           {videoImage && (
-            <div className="w-full rounded-lg    overflow-hidden aspect-video  dark:bg-slate-900 bg-slate-300 object-cover">
+            <div className="object-cover w-full overflow-hidden rounded-lg aspect-video dark:bg-slate-900 bg-slate-300">
               <ReactPlayer
                 className="w-full"
                 width="100%"
@@ -346,7 +349,7 @@ function MintNFTModal({
             </div>
           )}
           {!videoImage && !content && (
-            <div className="mx-auto w-fit m-4">
+            <div className="m-4 mx-auto w-fit">
               <NftCard
                 id="my-nft"
                 name={State.database.userData?.data?.user?.name}
@@ -375,11 +378,19 @@ function MintNFTModal({
           {/* <span>
             {name},{description}
           </span> */}
+          {
+            <NftLimit
+              username={State.database.userData?.data?.user?.username}
+              setNftLimit={setNftLimit}
+            />
+          }
           <button
             onClick={handleMinting}
             className={`btn  
-                    btn-brand capitalize
-                  w-full ${minting ? "loading" : ""} `}
+                     capitalize
+                  w-full ${minting ? "loading" : ""} ${
+              nftLimit < 5 ? "btn-brand" : "btn-disabled"
+            }`}
           >
             {minting ? "" : "Confirm"}
           </button>
