@@ -7,7 +7,10 @@ import {
   Check,
   ChevronLeft,
   Loader,
+  Qrcode,
   Refresh,
+  RefreshDot,
+  Scan,
   Share,
   Ticket,
   X,
@@ -40,7 +43,9 @@ import {
 } from "@solana/web3.js";
 import { decode } from "bs58";
 import { Component } from "react";
-import QrReader from "react-qr-scanner";
+import { QrReader } from "react-qr-reader";
+
+import QRCode from "react-qr-code";
 
 function Booking(props) {
   const [info, setinfo] = useState(null);
@@ -111,6 +116,11 @@ function EventDetails(lockAddress) {
     useState(null);
   const [scannedTicket, setScannedTicket] = useState(null);
   const [alreadyVerified, setAlreadyVerified] = useState(false);
+
+  const [refreshLoading, setrefreshLoading] = useState(false);
+  const [alreadyBought, setalreadyBought] = useState(false);
+  const [ticketInfo, setticketInfo] = useState({});
+  const [showQr, setshowQr] = useState(false);
 
   const params = useParams();
   // Wrapping all calls in an async block
@@ -197,6 +207,35 @@ function EventDetails(lockAddress) {
     console.log(res);
     return res;
   };
+  async function ticketBought(receipt) {
+    if (receipt) {
+      axios
+        .post(
+          `${process.env.REACT_APP_SERVER_URL}/user/bookTicket`,
+          {
+            eventId: data.eventId,
+            ticketId: receipt,
+            ownerWallet: State.database.walletAddress,
+          },
+          {
+            headers: {
+              "content-type": "application/json",
+              "auth-token": JSON.stringify(localStorage.getItem("authtoken")),
+            },
+          }
+        )
+        .then(async (res) => {
+          console.log(res);
+          setData(res.data);
+          setalreadyBought(true);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      setalreadyBought(true);
+    }
+  }
   async function buyOnSolana() {
     setbuying(true);
     // const response = await fetch(data?.eventImage);
@@ -217,6 +256,7 @@ function EventDetails(lockAddress) {
               .then((response) => {
                 console.log(response);
                 response && fetchData(params.id);
+                response && ticketBought(mintRequest.data.result.mint);
                 response
                   ? State.toast("success", "Ticket bought successfully!")
                   : State.toast("error", "Error while buying ticket!");
@@ -254,6 +294,7 @@ function EventDetails(lockAddress) {
               .then((response) => {
                 console.log(response);
                 response && fetchData(params.id);
+                response && ticketBought(mintRequest.data.result.mint);
                 response
                   ? State.toast("success", "Ticket bought successfully!")
                   : State.toast("error", "Error while buying ticket!");
@@ -312,12 +353,14 @@ function EventDetails(lockAddress) {
       });
   }
   async function fetchData(id) {
+    setrefreshLoading(true);
     try {
       let response = await axios.get(
         `${process.env.REACT_APP_SERVER_URL}/event/${id}`
       );
       console.log("Event details:", response);
       setData(response.data);
+
       console.log("Verified Tickets:", response.data.verifiedTickets);
       let verifiedTickets = new Set(response.data.verifiedTickets);
       verifiedTickets = [...verifiedTickets];
@@ -325,6 +368,7 @@ function EventDetails(lockAddress) {
       getMintedNfts(response.data.lockId);
       getBookings(response.data.lockId, 1);
       getUserByWallet(response.data.eventHost);
+      setrefreshLoading(false);
     } catch (error) {}
   }
 
@@ -334,7 +378,6 @@ function EventDetails(lockAddress) {
     if (ticketVerified.includes(ticketId)) {
       console.log("Already Verified");
       setAlreadyVerified(true);
-      setVerify(false);
     } else
       try {
         verify &&
@@ -358,17 +401,14 @@ function EventDetails(lockAddress) {
 
               setVerified(verifiedTickets);
               fetchData(params.id);
-              setVerify(false);
             })
             .catch((err) => {
               console.log(err);
-              setVerify(false);
             });
 
         setVerify(false);
       } catch (error) {
         console.log(error);
-        setVerify(false);
       }
     getNftOwner(ticketId);
   }
@@ -558,6 +598,17 @@ function EventDetails(lockAddress) {
   }, [params.id]);
 
   useEffect(() => {
+    data &&
+      data.bookings.map((booking) => {
+        booking.owner === State.database.walletAddress &&
+          setalreadyBought(true);
+        booking.owner === State.database.walletAddress &&
+          setticketInfo(booking);
+        return true;
+      });
+  }, [data]);
+
+  useEffect(() => {
     State.updateDatabase({ showHeader: false });
     State.updateDatabase({ showBottomNav: false });
   }, []);
@@ -695,8 +746,14 @@ function EventDetails(lockAddress) {
 
           <span
             // onClick={() => setwalletModalOpen(true)}
-            className=" text-brand1"
+            className="flex items-center gap-2 text-brand1"
           >
+            <Refresh
+              onClick={() => {
+                fetchData(params.id);
+              }}
+              className={`cursor-pointer   ${refreshLoading && "animate-spin"}`}
+            />
             <Share
               onClick={() =>
                 State.updateDatabase({
@@ -794,93 +851,120 @@ function EventDetails(lockAddress) {
                   </p>
                 </div>
               </div>{" "}
+              {data?.eventHost === State.database.walletAddress && (
+                <button
+                  className="text-white capitalize rounded-full btn btn-info"
+                  onClick={() => setVerify(!verify)}
+                >
+                  Verify Tickets
+                </button>
+              )}
               {data?.eventHost === State.database.walletAddress ? (
                 !data.freeEvent && !data.withdrawn ? (
                   Date.parse(data.endTime) <= Math.floor(Date.now()) && (
-                    <button
-                      onClick={() =>
-                        withdrawSol(
+                    <div className="flex flex-col items-center gap-2">
+                      <button
+                        onClick={() =>
+                          withdrawSol(
+                            Math.floor(
+                              data.ticketPrice * mintedNfts?.length * 0.95
+                            )
+                          )
+                        }
+                        className={`text-white capitalize rounded-full btn btn-success ${
+                          loading && "loading"
+                        }`}
+                      >
+                        Withdraw{" "}
+                        {Math.floor(
                           data.ticketPrice * mintedNfts?.length * 0.95
-                        )
-                      }
-                      className={`text-white capitalize rounded-full btn btn-success ${
-                        loading && "loading"
-                      }`}
-                    >
-                      Withdraw {data.ticketPrice * mintedNfts?.length * 0.95}{" "}
-                      SOL
-                    </button>
+                        )}{" "}
+                        SOL
+                      </button>
+                    </div>
                   )
                 ) : (
-                  <button
-                    className={`text-white capitalize rounded-full btn btn-ghost gap-2`}
-                  >
-                    <Check className="text-success"></Check> Withdrawn{" "}
-                    {data.ticketPrice * mintedNfts?.length * 0.95} SOL
-                  </button>
-                )
-              ) : data?.unlimitedTickets ? (
-                <button
-                  onClick={buyOnSolana}
-                  className={`pl-3 pr-[2px] py-1 md:pl-4 md:pr-1 md:py-2 bg-success text-white flex items-center gap-1 rounded-full capitalize  `}
-                >
-                  {buying && <Loader size={16} className="animate-spin " />}
-                  <span className="text-base ">Book for</span>
-                  {data ? (
-                    data.freeEvent ? (
-                      <>
-                        <span className="mx-1 mr-2 text-lg font-bold ">
-                          free
-                        </span>
-                      </>
-                    ) : (
-                      <>
-                        <span className="text-lg font-bold">
-                          {data.ticketPrice}
-                        </span>
-                        <div className="flex items-center gap-2 p-2 mx-1 rounded-full bg-slate-900">
-                          <SolanaToken size={16} />
-                        </div>
-                      </>
-                    )
-                  ) : (
-                    ""
-                  )}
-                </button>
-              ) : (
-                <span className="flex items-center gap-1 text-sm font-semibold w-fit text-brand1">
-                  {}{" "}
-                  {data.ticketCount - mintedNfts?.length === 0 ? (
-                    <div className="p-2 px-3 text-white rounded-full bg-error">
-                      Soldout
-                    </div>
-                  ) : (
+                  !data.freeEvent && (
                     <button
-                      onClick={buyOnSolana}
-                      className={`pl-3 pr-[2px] py-1 md:pl-4 md:pr-1 md:py-2 bg-success text-white flex items-center gap-1 rounded-full capitalize  `}
+                      className={`text-white capitalize rounded-full btn btn-ghost gap-2`}
                     >
-                      {buying && <Loader size={16} className="animate-spin " />}{" "}
-                      Book for
-                      {data ? (
-                        data.freeEvent ? (
-                          <span className="mx-1 mr-2 text-lg font-bold">
+                      <Check className="text-success"></Check> Withdrawn{" "}
+                      {data.ticketPrice * mintedNfts?.length * 0.95} SOL
+                    </button>
+                  )
+                )
+              ) : !alreadyBought ? (
+                data?.unlimitedTickets ? (
+                  <button
+                    onClick={buyOnSolana}
+                    className={`pl-3 pr-[2px] py-1 md:pl-4 md:pr-1 md:py-2 bg-success text-white flex items-center gap-1 rounded-full capitalize  `}
+                  >
+                    {buying && <Loader size={16} className="animate-spin " />}
+                    <span className="text-base ">Book for</span>
+                    {data ? (
+                      data.freeEvent ? (
+                        <>
+                          <span className="mx-1 mr-2 text-lg font-bold ">
                             free
                           </span>
-                        ) : (
-                          <>
-                            <span className="text-lg font-bold">
-                              {data.ticketPrice}
-                            </span>
-                            <div className="flex items-center gap-2 p-2 mx-1 rounded-full bg-slate-900">
-                              <SolanaToken size={16} />
-                            </div>
-                          </>
-                        )
+                        </>
                       ) : (
-                        ""
-                      )}
-                    </button>
-                  )}
+                        <>
+                          <span className="text-lg font-bold">
+                            {data.ticketPrice}
+                          </span>
+                          <div className="flex items-center gap-2 p-2 mx-1 rounded-full bg-slate-900">
+                            <SolanaToken size={16} />
+                          </div>
+                        </>
+                      )
+                    ) : (
+                      ""
+                    )}
+                  </button>
+                ) : (
+                  <span className="flex items-center gap-1 text-sm font-semibold w-fit text-brand1">
+                    {data.ticketCount - mintedNfts?.length === 0 ? (
+                      <div className="p-2 px-3 text-white rounded-full bg-error">
+                        Soldout
+                      </div>
+                    ) : (
+                      <button
+                        onClick={buyOnSolana}
+                        className={`pl-3 pr-[2px] py-1 md:pl-4 md:pr-1 md:py-2 bg-success text-white flex items-center gap-1 rounded-full capitalize  `}
+                      >
+                        {buying && (
+                          <Loader size={16} className="animate-spin " />
+                        )}{" "}
+                        Book for
+                        {data ? (
+                          data.freeEvent ? (
+                            <span className="mx-1 mr-2 text-lg font-bold">
+                              free
+                            </span>
+                          ) : (
+                            <>
+                              <span className="text-lg font-bold">
+                                {data.ticketPrice}
+                              </span>
+                              <div className="flex items-center gap-2 p-2 mx-1 rounded-full bg-slate-900">
+                                <SolanaToken size={16} />
+                              </div>
+                            </>
+                          )
+                        ) : (
+                          ""
+                        )}
+                      </button>
+                    )}
+                  </span>
+                )
+              ) : (
+                <span
+                  onClick={() => setshowQr(true)}
+                  className="gap-2 text-white capitalize rounded-full btn btn-success"
+                >
+                  <Qrcode></Qrcode> View QR
                 </span>
               )}
             </div>
@@ -1059,6 +1143,125 @@ function EventDetails(lockAddress) {
             />
           </ContentLoader>
         )}
+        {verify && (
+          <div
+            className={`${
+              verify && "modal-open"
+            } modal  modal-bottom sm:modal-middle `}
+          >
+            <div className="p-0 modal-box bg-slate-100 dark:bg-slate-800 ">
+              <div className="w-full p-2 h-fit bg-slate-300 dark:bg-slate-700">
+                <div className="flex items-center justify-between p-2">
+                  <h3 className="flex items-center gap-2 text-lg font-bold text-brand2">
+                    <Scan /> Scan QR Code
+                  </h3>
+                  <X
+                    onClick={() => setVerify(false)}
+                    className="cursor-pointer text-brand2"
+                  ></X>
+                </div>
+              </div>
+              <div className="w-full">
+                {" "}
+                {latestVerifiedTicketOwner ? (
+                  <>
+                    <div className="flex justify-center ">
+                      <div className="flex flex-col items-center justify-center gap-4 p-10 bg-slate-800 border-slate-600">
+                        <div className="flex gap-2 ">
+                          {alreadyVerified ? (
+                            <div className="flex gap-2 text-warning ">
+                              <AlertTriangle className="text-warning"></AlertTriangle>{" "}
+                              Ticket already Verified
+                            </div>
+                          ) : (
+                            <div className="flex gap-2 text-success ">
+                              <Check className="text-success"></Check> Ticket
+                              Verified
+                            </div>
+                          )}
+                        </div>
+                        <Booking wallet={latestVerifiedTicketOwner} />
+                        <div>
+                          {" "}
+                          <a
+                            href={`https://translator.shyft.to/address/${scannedTicket}?cluster=${process.env.REACT_APP_SOLANA_NETWORK}`}
+                            target="_blank"
+                            className="w-24 mx-2 text-sm font-semibold text-primary text-end"
+                          >
+                            View Ticket
+                          </a>
+                        </div>
+                        <div
+                          className=" btn btn-primary"
+                          onClick={() => {
+                            setAlreadyVerified(false);
+                            setScannedTicket();
+                            setLatestVerifiedTicketOwner();
+                          }}
+                        >
+                          Close
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <QrReader
+                    constraints={{ facingMode: "user" }}
+                    onResult={(result, error) => {
+                      if (result) {
+                        console.log(result?.text);
+                        setScannedTicket(result?.text);
+                        let hasString = mintedNfts.includes(result?.text);
+
+                        console.log(
+                          "NFT Found in CandyMachine",
+                          hasString,
+                          result?.text,
+                          mintedNfts,
+                          verify
+                        );
+
+                        hasString
+                          ? verifyTicket(result?.text)
+                          : State.toast(
+                              "error",
+                              "Ticket not found! scan another QR"
+                            );
+                      }
+                      if (error) {
+                        // console.info(error);
+                      }
+                    }}
+                  />
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+        {showQr && (
+          <div
+            className={`${
+              showQr && "modal-open"
+            } modal  modal-bottom  sm:modal-middle `}
+          >
+            <div className="p-0 modal-box bg-slate-100 dark:bg-slate-800 ">
+              <div className="w-full p-2 h-fit bg-slate-300 dark:bg-slate-700">
+                <div className="flex items-center justify-between p-2">
+                  <h3 className="flex items-center gap-2 text-lg font-bold text-brand2">
+                    <Scan /> Scan this QR
+                  </h3>
+                  <X
+                    onClick={() => setshowQr(false)}
+                    className="cursor-pointer text-brand2"
+                  ></X>
+                </div>
+              </div>
+              <div className="flex flex-col items-center justify-center w-full p-2 bg-white">
+                <QRCode value={ticketInfo?.ticketId} viewBox={`0 0 256 256`} />
+              </div>
+            </div>
+          </div>
+        )}
       </div>
       <div className="flex-col items-end hidden w-1/4 h-full pt-20 ml-4 mr-12 lg:flex">
         {hostDetails && (
@@ -1072,19 +1275,8 @@ function EventDetails(lockAddress) {
             superfan_to={hostDetails?.superfan_to?.length}
           />
         )}
-        <div
-          className="btn btn-square "
-          onClick={() => {
-            fetchData(params.id);
-          }}
-        >
-          X
-        </div>
-        <div className="btn btn-info" onClick={() => setVerify(!verify)}>
-          Verify Tickets
-        </div>
 
-        {verify && (
+        {/* {verify && (
           <div className="absolute w-screen translate-x-1/2 ">
             <div className="p-2 bg-white border-white rounded-sm border-3 w-max">
               <QrReader
@@ -1110,50 +1302,7 @@ function EventDetails(lockAddress) {
               />
             </div>
           </div>
-        )}
-
-        {latestVerifiedTicketOwner && (
-          <>
-            {" "}
-            <div className="absolute flex justify-center w-screen ">
-              <div className="flex flex-col items-center justify-center gap-4 p-10 border rounded-md shadow-lg h-max bg-slate-800 w-max border-slate-600">
-                <div className="flex gap-2 ">
-                  {alreadyVerified ? (
-                    <div className="flex gap-2 text-warning ">
-                      <AlertTriangle className="text-warning"></AlertTriangle>{" "}
-                      Ticket already Verified
-                    </div>
-                  ) : (
-                    <div className="flex gap-2 text-success ">
-                      <Check className="text-success"></Check> Ticket Verified
-                    </div>
-                  )}
-                </div>
-                <Booking wallet={latestVerifiedTicketOwner} />
-                <div>
-                  {" "}
-                  <a
-                    href={`https://translator.shyft.to/address/${scannedTicket}?cluster=${process.env.REACT_APP_SOLANA_NETWORK}`}
-                    target="_blank"
-                    className="w-24 mx-2 text-sm font-semibold text-primary text-end"
-                  >
-                    View Ticket
-                  </a>
-                </div>
-                <div
-                  className=" btn btn-primary"
-                  onClick={() => {
-                    setAlreadyVerified(false);
-                    setScannedTicket();
-                    setLatestVerifiedTicketOwner();
-                  }}
-                >
-                  Close
-                </div>
-              </div>
-            </div>
-          </>
-        )}
+        )} */}
 
         {/* {ticketVerified && (
           <div className="w-full h-12 text-white bg-red-200">

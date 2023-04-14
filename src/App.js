@@ -80,7 +80,7 @@ function App() {
 
     console.log("userdata", State.database.userData);
 
-    console.log("authtoken", localStorage.getItem("authtoken"));
+    // console.log("authtoken", localStorage.getItem("authtoken"));
   }, []);
 
   function fetchLiveUserData() {
