@@ -380,33 +380,28 @@ function EventDetails(lockAddress) {
       setAlreadyVerified(true);
     } else
       try {
-        verify &&
-          axios
-            .post(
-              `${process.env.REACT_APP_SERVER_URL}/user/verifyTicket`,
-              { eventId: data.eventId, ticketId: ticketId },
-              {
-                headers: {
-                  "content-type": "application/json",
-                  "auth-token": JSON.stringify(
-                    localStorage.getItem("authtoken")
-                  ),
-                },
-              }
-            )
-            .then(async (res) => {
-              console.log(ticketId);
-              let verifiedTickets = new Set(res.verifiedTickets);
-              verifiedTickets = [...verifiedTickets];
+        axios
+          .post(
+            `${process.env.REACT_APP_SERVER_URL}/user/verifyTicket`,
+            { eventId: data.eventId, ticketId: ticketId },
+            {
+              headers: {
+                "content-type": "application/json",
+                "auth-token": JSON.stringify(localStorage.getItem("authtoken")),
+              },
+            }
+          )
+          .then(async (res) => {
+            console.log(ticketId);
+            let verifiedTickets = new Set(res.verifiedTickets);
+            verifiedTickets = [...verifiedTickets];
 
-              setVerified(verifiedTickets);
-              fetchData(params.id);
-            })
-            .catch((err) => {
-              console.log(err);
-            });
-
-        setVerify(false);
+            setVerified(verifiedTickets);
+            fetchData(params.id);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       } catch (error) {
         console.log(error);
       }
@@ -866,9 +861,11 @@ function EventDetails(lockAddress) {
                       <button
                         onClick={() =>
                           withdrawSol(
-                            Math.floor(
-                              data.ticketPrice * mintedNfts?.length * 0.95
-                            )
+                            (
+                              data.ticketPrice *
+                              mintedNfts?.length *
+                              0.95
+                            ).toFixed(2)
                           )
                         }
                         className={`text-white capitalize rounded-full btn btn-success ${
@@ -876,8 +873,8 @@ function EventDetails(lockAddress) {
                         }`}
                       >
                         Withdraw{" "}
-                        {Math.floor(
-                          data.ticketPrice * mintedNfts?.length * 0.95
+                        {(data.ticketPrice * mintedNfts?.length * 0.95).toFixed(
+                          2
                         )}{" "}
                         SOL
                       </button>
@@ -889,7 +886,10 @@ function EventDetails(lockAddress) {
                       className={`text-white capitalize rounded-full btn btn-ghost gap-2`}
                     >
                       <Check className="text-success"></Check> Withdrawn{" "}
-                      {data.ticketPrice * mintedNfts?.length * 0.95} SOL
+                      {(data.ticketPrice * mintedNfts?.length * 0.95).toFixed(
+                        2
+                      )}{" "}
+                      SOL
                     </button>
                   )
                 )
@@ -1162,7 +1162,6 @@ function EventDetails(lockAddress) {
                 </div>
               </div>
               <div className="w-full">
-                {" "}
                 {latestVerifiedTicketOwner ? (
                   <>
                     <div className="flex justify-center ">
@@ -1181,25 +1180,24 @@ function EventDetails(lockAddress) {
                           )}
                         </div>
                         <Booking wallet={latestVerifiedTicketOwner} />
-                        <div>
-                          {" "}
+                        <div className="flex items-center gap-2">
                           <a
                             href={`https://translator.shyft.to/address/${scannedTicket}?cluster=${process.env.REACT_APP_SOLANA_NETWORK}`}
                             target="_blank"
-                            className="w-24 mx-2 text-sm font-semibold text-primary text-end"
+                            className="btn btn-primary"
                           >
                             View Ticket
-                          </a>
-                        </div>
-                        <div
-                          className=" btn btn-primary"
-                          onClick={() => {
-                            setAlreadyVerified(false);
-                            setScannedTicket();
-                            setLatestVerifiedTicketOwner();
-                          }}
-                        >
-                          Close
+                          </a>{" "}
+                          <div
+                            className="capitalize btn btn-ghost text-error"
+                            onClick={() => {
+                              setAlreadyVerified(false);
+                              setScannedTicket();
+                              setLatestVerifiedTicketOwner();
+                            }}
+                          >
+                            Close
+                          </div>
                         </div>
                       </div>
                     </div>

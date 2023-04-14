@@ -361,43 +361,45 @@ function CreateEvent() {
                 creartingMachine: true,
                 signingTransaction2: false,
               });
-
             response.data.success &&
-              signTransactionKeyWallet(
-                response.data.result.encoded_transaction,
-                process.env.REACT_APP_FEEPAYER_PRIVATEKEY,
-                State.database.provider
-              )
-                .then((res) => {
-                  res
-                    ? setstepper({
-                        uploadingFile: true,
-                        creatingEvent: true,
-                        signingTransaction1: true,
-                        creartingMachine: true,
-                        signingTransaction2: true,
-                      })
-                    : setUploadingEvent(false);
-                  res
-                    ? handleSubmit(response.data?.result?.candy_machine, cid)
-                    : setstep(4);
-                })
-                .catch((error) => {
-                  console.log(error);
-                  setUploadingEvent(false);
-                  setstep(4);
-                  State.toast(
-                    "error",
-                    "Error while sending transaction to blockchain,please try again!"
-                  );
-                  setstepper({
-                    uploadingFile: false,
-                    creatingEvent: false,
-                    signingTransaction1: false,
-                    creartingMachine: false,
-                    signingTransaction2: false,
+              setTimeout(function () {
+                //your code to be executed after 1 second
+                signTransactionKeyWallet(
+                  response.data.result.encoded_transaction,
+                  process.env.REACT_APP_FEEPAYER_PRIVATEKEY,
+                  State.database.provider
+                )
+                  .then((res) => {
+                    res
+                      ? setstepper({
+                          uploadingFile: true,
+                          creatingEvent: true,
+                          signingTransaction1: true,
+                          creartingMachine: true,
+                          signingTransaction2: true,
+                        })
+                      : setUploadingEvent(false);
+                    res
+                      ? handleSubmit(response.data?.result?.candy_machine, cid)
+                      : setstep(4);
+                  })
+                  .catch((error) => {
+                    console.log(error);
+                    setUploadingEvent(false);
+                    setstep(4);
+                    State.toast(
+                      "error",
+                      "Error while sending transaction to blockchain,please try again!"
+                    );
+                    setstepper({
+                      uploadingFile: false,
+                      creatingEvent: false,
+                      signingTransaction1: false,
+                      creartingMachine: false,
+                      signingTransaction2: false,
+                    });
                   });
-                });
+              }, 5000);
 
             // response.data.success &&
             //   signTransactionWithWalletAndSend(
@@ -533,6 +535,7 @@ function CreateEvent() {
                 console.log(response);
 
                 setCollectionId(mintRequest.data.result.mint);
+
                 candyMachine(mintRequest.data.result.mint, cid);
               })
               .catch((error) => {
