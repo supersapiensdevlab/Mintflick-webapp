@@ -2,10 +2,12 @@ import axios from "axios";
 import React, { useContext, useState, useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import {
+  AlertTriangle,
   CalendarEvent,
   Check,
   ChevronLeft,
   Loader,
+  Refresh,
   Share,
   Ticket,
   X,
@@ -37,6 +39,8 @@ import {
   Transaction,
 } from "@solana/web3.js";
 import { decode } from "bs58";
+import { Component } from "react";
+import QrReader from "react-qr-scanner";
 
 function Booking(props) {
   const [info, setinfo] = useState(null);
@@ -101,6 +105,12 @@ function EventDetails(lockAddress) {
   const [bookings, setbookings] = useState([]);
   const [hostDetails, sethostDetails] = useState(null);
   const [loading, setloading] = useState(false);
+  const [verify, setVerify] = useState(false);
+  const [ticketVerified, setVerified] = useState([]);
+  const [latestVerifiedTicketOwner, setLatestVerifiedTicketOwner] =
+    useState(null);
+  const [scannedTicket, setScannedTicket] = useState(null);
+  const [alreadyVerified, setAlreadyVerified] = useState(false);
 
   const params = useParams();
   // Wrapping all calls in an async block
@@ -306,12 +316,82 @@ function EventDetails(lockAddress) {
       let response = await axios.get(
         `${process.env.REACT_APP_SERVER_URL}/event/${id}`
       );
-      console.log("EVENT details:", response);
+      console.log("Event details:", response);
       setData(response.data);
+      console.log("Verified Tickets:", response.data.verifiedTickets);
+      let verifiedTickets = new Set(response.data.verifiedTickets);
+      verifiedTickets = [...verifiedTickets];
+      setVerified(verifiedTickets);
       getMintedNfts(response.data.lockId);
       getBookings(response.data.lockId, 1);
       getUserByWallet(response.data.eventHost);
     } catch (error) {}
+  }
+
+  async function verifyTicket(ticketId) {
+    console.log("Verifying", ticketId);
+
+    if (ticketVerified.includes(ticketId)) {
+      console.log("Already Verified");
+      setAlreadyVerified(true);
+      setVerify(false);
+    } else
+      try {
+        verify &&
+          axios
+            .post(
+              `${process.env.REACT_APP_SERVER_URL}/user/verifyTicket`,
+              { eventId: data.eventId, ticketId: ticketId },
+              {
+                headers: {
+                  "content-type": "application/json",
+                  "auth-token": JSON.stringify(
+                    localStorage.getItem("authtoken")
+                  ),
+                },
+              }
+            )
+            .then(async (res) => {
+              console.log(ticketId);
+              let verifiedTickets = new Set(res.verifiedTickets);
+              verifiedTickets = [...verifiedTickets];
+
+              setVerified(verifiedTickets);
+              fetchData(params.id);
+              setVerify(false);
+            })
+            .catch((err) => {
+              console.log(err);
+              setVerify(false);
+            });
+
+        setVerify(false);
+      } catch (error) {
+        console.log(error);
+        setVerify(false);
+      }
+    getNftOwner(ticketId);
+  }
+
+  async function getNftOwner(mintId) {
+    try {
+      await axios({
+        method: "post",
+        url: `https://api.shyft.to/sol/v1/nft/get_owners`,
+        data: {
+          network: `${process.env.REACT_APP_SOLANA_NETWORK}`,
+          nft_addresses: [mintId],
+        },
+        headers: {
+          "x-api-key": `${process.env.REACT_APP_SHYFT_API_KEY}`,
+          "content-type": "application/json",
+        },
+      }).then(async (response) => {
+        setLatestVerifiedTicketOwner(response.data.result[0].owner);
+      });
+    } catch (error) {
+      console.log(error);
+    }
   }
   async function getMintedNfts(address) {
     const res = await axios
@@ -334,6 +414,7 @@ function EventDetails(lockAddress) {
     console.log(res);
     return res;
   }
+
   async function getBookings(address, page) {
     const res = await axios
       .get(
@@ -991,6 +1072,106 @@ function EventDetails(lockAddress) {
             superfan_to={hostDetails?.superfan_to?.length}
           />
         )}
+        <div
+          className="btn btn-square "
+          onClick={() => {
+            fetchData(params.id);
+          }}
+        >
+          X
+        </div>
+        <div className="btn btn-info" onClick={() => setVerify(!verify)}>
+          Verify Tickets
+        </div>
+
+        {verify && (
+          <div className="absolute w-screen translate-x-1/2 ">
+            <div className="p-2 bg-white border-white rounded-sm border-3 w-max">
+              <QrReader
+                delay={1000}
+                style={{ height: 240, width: 320 }}
+                onError={(err) => {
+                  console.log(err);
+                }}
+                onScan={(scan) => {
+                  setScannedTicket(scan?.text);
+                  const hasString = mintedNfts.indexOf(scan?.text) !== -1;
+
+                  console.log(
+                    "NFT Found in CandyMachine",
+                    hasString,
+                    scan?.text,
+                    mintedNfts,
+                    verify
+                  );
+
+                  hasString && verify && verifyTicket(scan?.text);
+                }}
+              />
+            </div>
+          </div>
+        )}
+
+        {latestVerifiedTicketOwner && (
+          <>
+            {" "}
+            <div className="absolute flex justify-center w-screen ">
+              <div className="flex flex-col items-center justify-center gap-4 p-10 border rounded-md shadow-lg h-max bg-slate-800 w-max border-slate-600">
+                <div className="flex gap-2 ">
+                  {alreadyVerified ? (
+                    <div className="flex gap-2 text-warning ">
+                      <AlertTriangle className="text-warning"></AlertTriangle>{" "}
+                      Ticket already Verified
+                    </div>
+                  ) : (
+                    <div className="flex gap-2 text-success ">
+                      <Check className="text-success"></Check> Ticket Verified
+                    </div>
+                  )}
+                </div>
+                <Booking wallet={latestVerifiedTicketOwner} />
+                <div>
+                  {" "}
+                  <a
+                    href={`https://translator.shyft.to/address/${scannedTicket}?cluster=${process.env.REACT_APP_SOLANA_NETWORK}`}
+                    target="_blank"
+                    className="w-24 mx-2 text-sm font-semibold text-primary text-end"
+                  >
+                    View Ticket
+                  </a>
+                </div>
+                <div
+                  className=" btn btn-primary"
+                  onClick={() => {
+                    setAlreadyVerified(false);
+                    setScannedTicket();
+                    setLatestVerifiedTicketOwner();
+                  }}
+                >
+                  Close
+                </div>
+              </div>
+            </div>
+          </>
+        )}
+
+        {/* {ticketVerified && (
+          <div className="w-full h-12 text-white bg-red-200">
+            {Array.from(ticketVerified)?.map((data, index) => {
+              return (
+                <div className="flex items-center justify-between px-4 py-2">
+                  <a
+                    href={`https://translator.shyft.to/address/${data}?cluster=${process.env.REACT_APP_SOLANA_NETWORK}`}
+                    target="_blank"
+                    className="w-24 mx-2 text-sm font-semibold text-primary text-end"
+                  >
+                    View Ticket
+                  </a>
+                </div>
+              );
+            })}
+          </div>
+        )} */}
       </div>
     </div>
   );

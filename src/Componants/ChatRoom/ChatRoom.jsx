@@ -460,7 +460,7 @@ function ChatRoom(props) {
                 setCustomRoom(e.target.value);
               }}
               type="text"
-              className="input-bordered"
+              className="input input-bordered"
             />
             <p className="text-white">{customRoom}</p>
             <button
@@ -476,7 +476,7 @@ function ChatRoom(props) {
             <button
               className="btn-square btn btn-primary"
               onClick={() => {
-                send("ENABLE_MIC");
+                send("ENABLE_CAM");
                 send("JOIN_ROOM");
               }}
             >
@@ -485,10 +485,10 @@ function ChatRoom(props) {
             <button
               className="btn-square btn btn-primary"
               onClick={() => {
-                send("PRODUCE_MIC");
+                send("PRODUCE_CAM");
               }}
             >
-              Mic
+              Cam
             </button>
           </div>
         </div>
