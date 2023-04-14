@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 import { ChevronLeft, Plus, Search } from "tabler-icons-react";
 import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "../../Store";
-function Event() {
+function Events() {
   const [payWallStatus, setPayWallStatus] = useState();
   const [userInfo, setUserInfo] = useState();
 
@@ -52,4 +52,4 @@ function Event() {
   );
 }
 
-export default Event;
+export default Events;
