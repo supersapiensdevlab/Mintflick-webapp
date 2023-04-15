@@ -25,5 +25,5 @@ yarn-error.log*
 package-lock.json
 .env 
 
-yarn.lock
+# yarn.lock
 .backup
