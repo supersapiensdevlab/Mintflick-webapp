@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Image } from "react-img-placeholder";
-import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import { NavLink, useParams } from "react-router-dom";
 import {
   ArrowBackUp,
@@ -11,6 +10,7 @@ import {
 import Main_logo from "../Assets/logos/Main_logo";
 import ListNFTModal from "../Componants/Home/Modals/ListNFTModal";
 import { UserContext } from "../Store";
+import SolanaToken from "../Assets/logos/SolanaToken";
 
 function NftDetails() {
   const param = useParams();
@@ -87,38 +87,38 @@ function NftDetails() {
 
   return (
     <>
-      <div className="flex flex-col xl:flex-row overflow-auto h-screen w-screen bg-white dark:bg-slate-800  xl:px-12 pt-20 pb-24 xl:pb-4 ">
+      <div className="flex flex-col w-screen h-screen pt-20 pb-24 overflow-auto bg-white xl:flex-row dark:bg-slate-800 xl:px-12 xl:pb-4 ">
         {error ? (
-          <div className="w-full h-full flex flex-col   justify-center items-center text-xl font-bold text-brand1 flex-wrap text-center">
+          <div className="flex flex-col flex-wrap items-center justify-center w-full h-full text-xl font-bold text-center text-brand1">
             NFT not found on {process.env.REACT_APP_SOLANA_NETWORK}
-            {/* <span className="text-primary text-sm ">{param.tokenId}</span>  */}
+            {/* <span className="text-sm text-primary ">{param.tokenId}</span>  */}
             <NavLink
               to={"/homescreen/home"}
-              className="btn btn-sm capitalize btn-primary btn-outline rounded-full gap-2 mt-4"
+              className="gap-2 mt-4 capitalize rounded-full btn btn-sm btn-primary btn-outline"
             >
               <ArrowBackUp /> Back to homepage
             </NavLink>
           </div>
         ) : (
           <>
-            <div className="xl:w-1/2 max-w-2xl  w-full aspect-square  mx-auto bg-slate-50 dark:bg-slate-900  md:rounded-lg">
+            <div className="w-full max-w-2xl mx-auto xl:w-1/2 aspect-square bg-slate-50 dark:bg-slate-900 md:rounded-lg">
               {type !== "" ? (
                 type !== "video/mp4" ? (
                   <img
-                    className="aspect-square w-full object-contain "
+                    className="object-contain w-full aspect-square "
                     src={nftDetails?.image_uri}
                     alt={"nft Image"}
                   />
                 ) : (
                   <video
-                    className="  w-full aspect-square object-contain "
+                    className="object-contain w-full aspect-square"
                     controls
                   >
                     <source src={nftDetails?.files[0].uri} />
                   </video>
                 )
               ) : (
-                <div className="w-full  aspect-square flex flex-col justify-center items-center gap-1">
+                <div className="flex flex-col items-center justify-center w-full gap-1 aspect-square">
                   <Main_logo></Main_logo>
                   <span className="text-lg font-bold text-brand6">
                     Loading...
@@ -126,17 +126,17 @@ function NftDetails() {
                 </div>
               )}
             </div>
-            <div className="flex flex-col p-4 mx-auto  w-full max-w-2xl h-fit xl:h-full xl:overflow-auto items-start justify-start gap-4">
-              <span className="text-2xl md:text-4xl font-bold text-brand1 tracking-wider">
+            <div className="flex flex-col items-start justify-start w-full max-w-2xl gap-4 p-4 mx-auto h-fit xl:h-full xl:overflow-auto">
+              <span className="text-2xl font-bold tracking-wider md:text-4xl text-brand1">
                 {nftDetails?.name}
               </span>
-              <div className="flex gap-2 flex-wrap">
-                <span className="text-sm md:text-base font-semibold text-brand3 truncate w-fit border-2   border-slate-100 dark:border-slate-700 p-1 md:p-2 px-2 md:px-3 rounded-full">
+              <div className="flex flex-wrap gap-2">
+                <span className="p-1 px-2 text-sm font-semibold truncate border-2 rounded-full md:text-base text-brand3 w-fit border-slate-100 dark:border-slate-700 md:p-2 md:px-3">
                   Owner
                   <a
                     href={`https://translator.shyft.to/address/${nftDetails?.owner}?cluster=${process.env.REACT_APP_SOLANA_NETWORK}`}
                     target="_blank"
-                    className="text-primary mx-2"
+                    className="mx-2 text-primary"
                   >
                     {nftDetails?.owner?.slice(0, 6)}...
                     {nftDetails?.owner?.slice(
@@ -145,12 +145,12 @@ function NftDetails() {
                     )}
                   </a>
                 </span>
-                <span className="text-sm md:text-base font-semibold text-brand3 truncate w-fit border-2   border-slate-100 dark:border-slate-700 p-1 md:p-2 px-2 md:px-3 rounded-full">
+                <span className="p-1 px-2 text-sm font-semibold truncate border-2 rounded-full md:text-base text-brand3 w-fit border-slate-100 dark:border-slate-700 md:p-2 md:px-3">
                   Mint id
                   <a
                     href={`https://translator.shyft.to/address/${nftDetails?.mint}?cluster=${process.env.REACT_APP_SOLANA_NETWORK}`}
                     target="_blank"
-                    className="text-primary mx-2"
+                    className="mx-2 text-primary"
                   >
                     {nftDetails?.mint?.slice(0, 6)}...
                     {nftDetails?.mint?.slice(
@@ -160,81 +160,100 @@ function NftDetails() {
                   </a>
                 </span>
               </div>
-              <span className="flex flex-col items-start text-xl font-semibold text-brand5 w-full">
+              <span className="flex flex-col items-start w-full text-xl font-semibold text-brand5">
                 Description
-                <span className="text-xl font-semibold text-brand2 w-full ">
-                  {nftDetails?.description}
+                <span className="w-full text-xl font-semibold text-brand2 ">
+                  {nftDetails?.description || (
+                    <span className="text-base font-semibold text-brand5">
+                      Loading...
+                    </span>
+                  )}
                 </span>
               </span>
-              <span className="flex flex-col gap-2 items-start text-xl font-semibold text-brand5 w-full">
+              <span className="flex flex-col items-start w-full gap-2 text-xl font-semibold text-brand5">
                 Attributes{" "}
-                <span className="flex  gap-2 items-start flex-wrap w-full">
+                <span className="flex flex-wrap items-start w-full gap-2">
                   {nftDetails?.attributes_array.map((a, index) => (
                     <span
                       key={index}
-                      className="flex flex-col items-center text-base font-semibold text-brand4 truncate w-fit border-2   border-slate-100 dark:border-slate-700 p-2 px-3 rounded-md"
+                      className="flex flex-col items-center p-2 px-3 text-base font-semibold truncate border-2 rounded-md text-brand4 w-fit border-slate-100 dark:border-slate-700"
                     >
                       {a.trait_type}
                       <span className="text-brand2 ">{a.value}</span>
                     </span>
-                  ))}
+                  )) || (
+                    <span className="text-base font-semibold text-brand5">
+                      Loading...
+                    </span>
+                  )}
                 </span>
               </span>{" "}
-              {/* {price > 0 ? (
-            owner === State.database.walletAddress ? (
-              <div className="flex items-center justify-center p-4 bg-success gap-1 rounded-full w-full capitalize text-lg text-white font-bold">
-                <CircleCheck /> Listed for Sale
-              </div>
-            ) : (
-              <div
-                onClick={() =>
-                  State.updateDatabase({
-                    buyNFTModalData: {
-                      ownedBy: owner,
-                      nftName: nftDetails?.name ? nftDetails?.name : null,
+              {price > 0 ? (
+                owner === State.database.walletAddress ? (
+                  <div className="flex items-center justify-center w-full gap-1 p-4 text-lg font-bold text-white capitalize rounded-full bg-success">
+                    <CircleCheck /> Listed for{" "}
+                    <>
+                      <span className="text-lg font-bold">{price}</span>
+                      <div className="flex items-center gap-2 p-2 mx-1 rounded-full bg-slate-900">
+                        <SolanaToken size={16} />
+                      </div>
+                    </>
+                  </div>
+                ) : (
+                  <div
+                    onClick={() =>
+                      State.updateDatabase({
+                        buyNFTModalData: {
+                          ownedBy: owner,
+                          nftName: nftDetails?.name ? nftDetails?.name : null,
 
-                      content: nftDetails?.cached_image_uri,
-                      videoImage:
-                        type === "video/mp4" && nftDetails?.cached_image_uri,
-                      nftImage: nftDetails?.cached_image_uri,
-                      nftDescription: nftDetails?.description,
-                      nftPrice: price,
-                      tokenId: nftDetails?.mint,
-                      sellerAddress: owner,
-                      setPrice: setPrice,
-                      setOwner: setOwner,
-                    },
+                          content: nftDetails?.cached_image_uri,
+                          videoImage:
+                            type === "video/mp4" &&
+                            nftDetails?.cached_image_uri,
+                          nftImage: nftDetails?.cached_image_uri,
+                          nftDescription: nftDetails?.description,
+                          nftPrice: price,
+                          tokenId: nftDetails?.mint,
+                          sellerAddress: owner,
+                          setPrice: setPrice,
+                          setOwner: setOwner,
+                        },
 
-                    buyNFTModalOpen: true,
-                  })
-                }
-                className="btn btn-success  gap-1 rounded-full w-full capitalize text-lg "
-              >
-                <Wallet size={18} />
-                Buy
-              </div>
-            )
-          ) : (
-            <>
-              {owner === State.database.walletAddress ? (
-                <div
-                  className="btn btn-primary btn-outline gap-1 rounded-full w-full capitalize text-lg "
-                  onClick={() => setListModalOpen(true)}
-                >
-                
-                  <CheckupList size={24} />
-                  List or Sell
-                </div>
+                        buyNFTModalOpen: true,
+                      })
+                    }
+                    className="w-full gap-1 text-lg text-white capitalize rounded-full btn btn-success "
+                  >
+                    <Wallet size={18} />
+                    Buy for
+                    <>
+                      <span className="text-lg font-bold">{price}</span>
+                      <div className="flex items-center gap-2 p-2 mx-1 rounded-full bg-slate-900">
+                        <SolanaToken size={16} />
+                      </div>
+                    </>
+                  </div>
+                )
               ) : (
-                <></>
+                <>
+                  {owner === State.database.walletAddress ? (
+                    <div
+                      className="w-full gap-1 text-lg capitalize rounded-full btn btn-primary btn-outline "
+                      onClick={() => setListModalOpen(true)}
+                    >
+                      <CheckupList size={24} />
+                      List or Sell
+                    </div>
+                  ) : (
+                    <></>
+                  )}
+                </>
               )}
-            </>
-          )} */}
             </div>
           </>
         )}
       </div>
-
       <ListNFTModal
         text={nftDetails?.name}
         contentType={type !== "video/mp4" ? "post" : "video"}

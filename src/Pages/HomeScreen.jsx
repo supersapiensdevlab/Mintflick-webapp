@@ -29,26 +29,18 @@ function HomeScreen() {
   );
   const WALLET_ADDRESS = process.env.REACT_APP_FEEPAYER_WALLET; //👈 Replace with your wallet address
 
-  async function loadBalance() {
-    let balance = await SOLANA_CONNECTION.getBalance(
-      new PublicKey(WALLET_ADDRESS)
-    );
-    console.log(`Gas Station Balance: ${balance / LAMPORTS_PER_SOL}`);
-  }
-
   useEffect(() => {
     // console.log(localStorage.getItem("walletAddress"));
     // console.log(JSON.parse(localStorage.getItem("provider")));
+    console.log(State.database);
+    State.updateDatabase({
+      newNotifications: State.database.userData.data?.user.notification.length,
+    });
     loadNftsData();
-    try {
-      loadBalance();
-    } catch (error) {
-      console.log(error);
-    }
   }, []);
 
   return (
-    <div className="relative flex flex-col h-screen w-screen  bg-white dark:bg-slate-900">
+    <div className="relative flex flex-col w-screen h-screen bg-white dark:bg-slate-900">
       <Helmet>
         <meta charSet="utf-8" />
         <title>MintFlick - Feed</title>

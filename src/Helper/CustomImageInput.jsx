@@ -2,7 +2,6 @@ import React, { useCallback, useRef, useState } from "react";
 import Cropper from "react-easy-crop";
 import { Photo } from "tabler-icons-react";
 import { sanitizeFilename } from "../functions/sanitizeFilename";
-import Compressor from "compressorjs";
 
 const createImage = (url) =>
   new Promise((resolve, reject) => {
@@ -131,7 +130,7 @@ function CustomImageInput({
         console.log("donee", { croppedImage });
         const response = await fetch(croppedImage);
         const blob = await response.blob();
-        const myNewFile = new File([blob], "profileImage", {
+        const myNewFile = new File([blob], "image", {
           type: blob.type,
         });
 
@@ -161,57 +160,64 @@ function CustomImageInput({
     });
   };
   return (
-    <div className=" flex flex-col   items-start   gap-2  w-full  border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4">
-      {selectedFile?.localurl && (
-        <div className="relative w-full h-96">
-          <Cropper
-            image={selectedFile?.localurl}
-            crop={crop}
-            rotation={rotation}
-            zoom={zoom}
-            aspect={aspect}
-            cropShape={cropShape}
-            showGrid={showGrid}
-            onCropChange={setCrop}
-            onRotationChange={setRotation}
-            onCropComplete={onCropComplete}
-            onZoomChange={setZoom}
-            style={{
-              containerStyle: { width: "100%" },
-            }}
-          />
-        </div>
-      )}
-      <label
-        onClick={handleClick}
-        className="w-full flex items-center gap-2 p-2  cursor-pointer "
-      >
-        <Photo />
-        {selectedFile ? (
-          selectedFile.file && (
-            <div className="flex items-center truncate ">
-              <span className="flex-grow truncate text-brand2">
-                Choose another file
-              </span>
-            </div>
-          )
-        ) : (
-          <div className="flex items-center gap-1">{label}</div>
+    <>
+      <div className="flex flex-col items-start w-full gap-2 border-2 border-dashed rounded-lg border-slate-400 dark:border-slate-600 text-brand4">
+        {selectedFile?.localurl && (
+          <div className="relative w-full h-96">
+            <Cropper
+              image={selectedFile?.localurl}
+              crop={crop}
+              rotation={rotation}
+              zoom={zoom}
+              aspect={aspect}
+              cropShape={cropShape}
+              showGrid={showGrid}
+              onCropChange={setCrop}
+              onRotationChange={setRotation}
+              onCropComplete={onCropComplete}
+              onZoomChange={setZoom}
+              style={{
+                containerStyle: { height: "100%" },
+              }}
+            />
+          </div>
         )}
-      </label>
-      <input
-        ref={hiddenFileInput}
-        type="file"
-        accept="image/*"
-        onChange={handleImageChange}
-        className="sr-only"
-        onClick={(event) => {
-          event.target.value = null;
-          setselectedFile(null);
-          console.log("setting null");
-        }}
-      />
-    </div>
+        <label
+          onClick={handleClick}
+          className="flex items-center w-full gap-2 p-2 cursor-pointer "
+        >
+          <Photo />
+          {selectedFile ? (
+            selectedFile.file && (
+              <div className="flex items-center truncate ">
+                <span className="flex-grow truncate text-brand2">
+                  Choose another file
+                </span>
+              </div>
+            )
+          ) : (
+            <div className="flex items-center gap-1">{label}</div>
+          )}
+        </label>
+        <input
+          ref={hiddenFileInput}
+          type="file"
+          accept="image/*"
+          onChange={handleImageChange}
+          className="sr-only"
+          onClick={(event) => {
+            event.target.value = null;
+            setselectedFile(null);
+            console.log("setting null");
+          }}
+        />
+      </div>
+      {selectedFile && selectedFile.file[0]?.size > 2000000 && (
+        <span className="ml-2 font-semibold text-error">
+          File size must be less than 2MB.
+        </span>
+      )}
+    </>
   );
 }
 

@@ -37,12 +37,16 @@ function Nfts() {
   }, []);
 
   return (
-    <div className="w-full max-w-2xl  space-y-6 p-2">
+    <div className="w-full max-w-2xl p-2 space-y-6">
       {!loader ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 2xl:grid-cols-3  gap-4 w-full p-4 lg:p-0">
-          {nfts?.map((nft) => (
-            <NftPostCard nftDetails={nft} />
-          ))}
+        <div className="grid w-full grid-cols-1 gap-4 p-4 sm:grid-cols-2 2xl:grid-cols-3 lg:p-0">
+          {nfts?.length === 0 ? (
+            <div className="mx-auto text-lg font-semibold w-fit text-brand4">
+              No NFTs to show!
+            </div>
+          ) : (
+            nfts?.map((nft) => <NftPostCard nftDetails={nft} />)
+          )}
           <span className="text-lg font-bold text-brand1"> </span>
         </div>
       ) : (

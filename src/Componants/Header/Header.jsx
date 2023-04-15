@@ -101,7 +101,7 @@ function Header() {
       State.database.userData.data?.user.notification &&
       !onlyOnce
     ) {
-      setOnlyOnce(true);
+      // setOnlyOnce(true);
       if (State.database.userData.data?.user.notification.length > 0) {
         setNewNotification(
           State.database.userData.data?.user.notification.length
@@ -355,7 +355,7 @@ function Header() {
         className={`transition-all ease-in-out hidden lg:flex fixed z-50  top-0  px-4 lg:px-12 justify-between items-center h-20 bg-white/25 dark:bg-slate-900/25 backdrop-blur-sm w-full border-b-[1px] border-gray-300/20 shadow-mintflick`}
       >
         <div
-          className="flex items-center space-x-4 h-full w-1/3 -ml-2"
+          className="flex items-center w-1/3 h-full -ml-2 space-x-4"
           onClick={handleAuthorityUpdate}
         >
           <Link to={`/homescreen/home`}>
@@ -366,17 +366,17 @@ function Header() {
             )}
           </Link>
           <div className="relative w-full">
-            <div className="hidden lg:flex items-center flex-grow">
+            <div className="items-center flex-grow hidden lg:flex">
               <input
                 type="text"
                 placeholder="Search for anything..."
-                className="input input-bordered w-full max-w-xl "
+                className="w-full max-w-xl input input-bordered "
                 onChange={handleFilter}
                 value={wordEntered}
                 onKeyDown={handleKeyDown}
               ></input>
               <Link to={`/homescreen/explore`}>
-                <Search className="-translate-x-8 dark:text-slate-100 cursor-pointer"></Search>
+                <Search className="-translate-x-8 cursor-pointer dark:text-slate-100"></Search>
               </Link>
             </div>
             <div
@@ -399,10 +399,10 @@ function Header() {
                           <Link to={`/homescreen/explore`}>
                             <div
                               key={key}
-                              className="p-2 pl-3  flex items-center cursor-pointer hover:bg-slate-600"
+                              className="flex items-center p-2 pl-3 cursor-pointer hover:bg-slate-600"
                             >
                               <Search
-                                className=" dark:text-slate-100  opacity-60 mr-2"
+                                className="mr-2 dark:text-slate-100 opacity-60"
                                 size={16}
                               ></Search>
                               {value.video.videoName.toLowerCase()}{" "}
@@ -428,10 +428,10 @@ function Header() {
                           <Link to={`/homescreen/explore`}>
                             <div
                               key={key}
-                              className="p-2 pl-3 hover:bg-slate-600 flex items-center cursor-pointer"
+                              className="flex items-center p-2 pl-3 cursor-pointer hover:bg-slate-600"
                             >
                               <Search
-                                className=" dark:text-slate-100 opacity-60 mr-2"
+                                className="mr-2 dark:text-slate-100 opacity-60"
                                 size={16}
                               ></Search>
                               {value.username.toLowerCase()}{" "}
@@ -445,13 +445,13 @@ function Header() {
             </div>
           </div>
         </div>
-        <div className="hidden lg:flex w-1/3 items-center justify-center h-full  ">
+        <div className="items-center justify-center hidden w-1/3 h-full lg:flex ">
           <TopNavigation></TopNavigation>
         </div>
-        <div className="flex w-1/3 justify-end items-center space-x-4 h-full   ">
+        <div className="flex items-center justify-end w-1/3 h-full space-x-4 ">
           <NavLink
             to={"/homescreen/golive"}
-            className="hidden lg:flex  btn btn-outline btn-primary gap-2 rounded-full"
+            className="hidden gap-2 rounded-full lg:flex btn btn-outline btn-primary"
           >
             <AccessPoint size={28}></AccessPoint>
             GO LIVE
@@ -468,19 +468,14 @@ function Header() {
                 <Bell size={28}></Bell>
               </button>
               {newNotification > 0 ? (
-                <div
-                  className="bg-rose-600 rounded-full shadow  
-                        h-4 w-4 text-xs self-center text-center font-semibold  
-                        absolute top-1  right-2  
-                         text-white"
-                >
+                <div className="absolute self-center w-4 h-4 text-xs font-semibold text-center text-white rounded-full shadow bg-rose-600 top-1 right-2">
                   {newNotification}
                 </div>
               ) : null}
             </label>
             <div
               tabindex="0"
-              className="menu menu-compact dropdown-content mt-3 shadow-xl bg-slate-100 dark:bg-slate-700  rounded-lg w-80 overflow-y-scroll	max-h-96"
+              className="mt-3 overflow-y-scroll rounded-lg shadow-xl menu menu-compact dropdown-content bg-slate-100 dark:bg-slate-700 w-80 max-h-96"
             >
               {notification.length > 0 ? (
                 <div className="w-full p-2">
@@ -514,7 +509,7 @@ function Header() {
             >
               <button
                 class="btn btn-circle btn-ghost "
-                onClick={showListedNFTs}
+                // onClick={showListedNFTs}
               >
                 <MessageDots size={28}></MessageDots>
               </button>
@@ -552,7 +547,7 @@ function Header() {
             </label>
             <ul
               tabindex="0"
-              className="menu menu-compact dropdown-content mt-3 p-2 shadow-xl  border-2 border-slate-300  dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-brand1 text-base font-medium rounded-lg w-52"
+              className="p-2 mt-3 text-base font-medium border-2 rounded-lg shadow-xl menu menu-compact dropdown-content border-slate-300 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-brand1 w-52"
             >
               <li>
                 <NavLink
@@ -561,7 +556,7 @@ function Header() {
                       ? State.database.userData.data.user.username
                       : ""
                   }`}
-                  className="  hover:dark:bg-slate-900"
+                  className=" hover:dark:bg-slate-900"
                 >
                   <User size={22}></User>Profile
                 </NavLink>
@@ -630,7 +625,7 @@ function Header() {
                 </NavLink>
               </li>
               <li>
-                <span className=" flex flex-col   gap-0 items-start truncate bg-slate-200 dark:bg-slate-900 p-0 mt-1">
+                <span className="flex flex-col items-start gap-0 p-0 mt-1 truncate bg-slate-200 dark:bg-slate-900">
                   <div
                     onClick={() => {
                       navigator.clipboard.writeText(
@@ -638,9 +633,9 @@ function Header() {
                       );
                       State.toast("success", "Wallet Address Copied!");
                     }}
-                    className="bg-emerald-600 hover:bg-emerald-700 text-center p-2  w-full capitalize text-white font-bold flex items-center justify-center gap-2"
+                    className="flex items-center justify-center w-full gap-2 p-2 font-bold text-center text-white capitalize bg-emerald-600 hover:bg-emerald-700"
                   >
-                    <span className="   text-center">
+                    <span className="text-center ">
                       {localStorage.getItem("walletAddress")?.slice(0, 6)}...
                       {localStorage
                         .getItem("walletAddress")

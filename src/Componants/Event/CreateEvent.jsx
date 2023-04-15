@@ -24,6 +24,7 @@ import { useNavigate } from "react-router-dom";
 import {
   mintNFTOnSolana2,
   signTransactionKeyWallet,
+  signTransactionWithWallet,
   signTransactionWithWalletAndSend,
   signWithRelayer,
 } from "../../Helper/mintOnSolana2";
@@ -40,6 +41,7 @@ function CreateEvent() {
 
   const [type, settype] = useState("");
   const [name, setname] = useState("");
+  const [nameError, setnameError] = useState(null);
   const [Category, setCategory] = useState("");
   const [ticketPrice, setticketPrice] = useState(0);
   const [totalTickets, settotalTickets] = useState("");
@@ -258,25 +260,26 @@ function CreateEvent() {
         })
         .catch((err) => {
           State.toast("error", "Oops!something went wrong uploading event!");
+          uploadingEvent(false);
           console.log(err);
           //clearState();
         });
     }
   };
-  const createCandyMachine = async (collection) => {
+  const createCandyMachine = async (collection, metacid) => {
     let nftSolanaData = {
       network: process.env.REACT_APP_SOLANA_NETWORK,
       wallet: State.database.walletAddress,
-      // fee_payer: process.env.REACT_APP_FEEPAYER_WALLET,
+      fee_payer: process.env.REACT_APP_FEEPAYER_WALLET,
       symbol: "FLICK",
       max_supply: 0,
       royalty: 0,
       collection: collection,
       // collection: "7KnYuwbcG3EDLBnpUTovGN1WjpB1WvvyNuMgjRezG33s",
-      items_available: isUnlimited ? 8000000000 : totalTickets,
+      items_available: isUnlimited ? "8000000000" : totalTickets,
       bulk_item_settings: {
-        name: "ticket #$ID+1$",
-        uri: "https://mintflick.app",
+        name: `${name} ticket #$ID+1$`,
+        uri: "https://nftstorage.link/ipfs/" + metacid + "/meta.json",
       },
       // amount: isUnlimited ? 0 : ticketPrice,
       groups: [
@@ -284,8 +287,9 @@ function CreateEvent() {
           label: "ticket",
           guards: {
             solPayment: {
-              amount: isUnlimited ? 0 : ticketPrice,
-              destination: State.database.walletAddress,
+              amount: isFreeEvent ? 0 : ticketPrice,
+              // destination: State.database.walletAddress,
+              destination: process.env.REACT_APP_FEEPAYER_WALLET,
             },
             mintLimit: {
               limit: 1,
@@ -293,10 +297,13 @@ function CreateEvent() {
           },
         },
       ],
+      // creators: [
+      //   { address: State.database.walletAddress, share: 90 },
+      //   { address: "BeRmvLjhKRu11j7U2bB1stiuxZWbFfBMKkxcau7ACJqz", share: 10 },
+      // ],
     };
 
     console.log(nftSolanaData);
-
     const res = await axios
       .post(`https://api.shyft.to/sol/v1/candy_machine/create`, nftSolanaData, {
         headers: {
@@ -312,49 +319,155 @@ function CreateEvent() {
   };
 
   function candyMachine(mint, cid) {
-    createCandyMachine(mint)
-      .then((response) => {
-        console.log(response);
-        response.data.success &&
-          setstepper({
-            uploadingFile: true,
-            creatingEvent: true,
-            signingTransaction1: true,
-            creartingMachine: true,
-            signingTransaction2: false,
-          });
+    const metadata = {
+      name: "Mintflick events",
+      symbol: "FLICK",
+      description: description,
+      seller_fee_basis_points: 500,
+      external_url:
+        "https://nftstorage.link/ipfs/" + cid + "/" + selectedPost.name,
+      image: "https://nftstorage.link/ipfs/" + cid + "/" + selectedPost.name,
+      attributes: [{ trait_type: "Event", value: name }],
+      properties: {
+        files: [
+          {
+            uri:
+              "https://nftstorage.link/ipfs/" + cid + "/" + selectedPost.name,
+            type: "image/jpeg",
+          },
+        ],
+      },
+    };
 
-        response.data.success &&
-          signTransactionWithWalletAndSend(
-            response.data.result.encoded_transaction,
-            State.database.provider
-          )
-            .then((res) => {
+    function convertBlobToFile(blob, fileName) {
+      blob.lastModifiedDate = new Date();
+      blob.name = fileName;
+      return blob;
+    }
+    const blob = new Blob([JSON.stringify(metadata)], {
+      type: "application/json",
+    });
+    var file = convertBlobToFile(blob, "meta.json");
+    uploadFile([file])
+      .then((metacid) =>
+        createCandyMachine(mint, metacid)
+          .then((response) => {
+            console.log(response);
+            response.data.success &&
               setstepper({
                 uploadingFile: true,
                 creatingEvent: true,
                 signingTransaction1: true,
                 creartingMachine: true,
-                signingTransaction2: true,
+                signingTransaction2: false,
               });
-              handleSubmit(response.data?.result?.candy_machine, cid);
-            })
-            .catch((error) => {
-              console.log(error);
-              uploadingEvent(false);
+            response.data.success &&
+              setTimeout(function () {
+                //your code to be executed after 1 second
+                signTransactionKeyWallet(
+                  response.data.result.encoded_transaction,
+                  process.env.REACT_APP_FEEPAYER_PRIVATEKEY,
+                  State.database.provider
+                )
+                  .then((res) => {
+                    res
+                      ? setstepper({
+                          uploadingFile: true,
+                          creatingEvent: true,
+                          signingTransaction1: true,
+                          creartingMachine: true,
+                          signingTransaction2: true,
+                        })
+                      : setUploadingEvent(false);
+                    res
+                      ? handleSubmit(response.data?.result?.candy_machine, cid)
+                      : setstep(4);
+                  })
+                  .catch((error) => {
+                    console.log(error);
+                    setUploadingEvent(false);
+                    setstep(4);
+                    State.toast(
+                      "error",
+                      "Error while sending transaction to blockchain,please try again!"
+                    );
+                    setstepper({
+                      uploadingFile: false,
+                      creatingEvent: false,
+                      signingTransaction1: false,
+                      creartingMachine: false,
+                      signingTransaction2: false,
+                    });
+                  });
+              }, 5000);
 
-              State.toast(
-                "error",
-                "Error while signing transaction,please try again!"
-              );
+            // response.data.success &&
+            //   signTransactionWithWalletAndSend(
+            //     response.data.result.encoded_transaction,
+            //     State.database.provider
+            //   )
+            //     .then((res) => {
+            //       res
+            //         ? setstepper({
+            //             uploadingFile: true,
+            //             creatingEvent: true,
+            //             signingTransaction1: true,
+            //             creartingMachine: true,
+            //             signingTransaction2: true,
+            //           })
+            //         : setUploadingEvent(false);
+            //       res
+            //         ? handleSubmit(response.data?.result?.candy_machine, cid)
+            //         : setstep(4);
+            //     })
+            //     .catch((error) => {
+            //       console.log(error);
+            //       setUploadingEvent(false);
+            //       setstep(4);
+            //       State.toast(
+            //         "error",
+            //         "Error while sending transaction to blockchain,please try again!"
+            //       );
+            //       setstepper({
+            //         uploadingFile: false,
+            //         creatingEvent: false,
+            //         signingTransaction1: false,
+            //         creartingMachine: false,
+            //         signingTransaction2: false,
+            //       });
+            //     });
+          })
+          .catch((error) => {
+            console.log(error);
+            setUploadingEvent(false);
+            setstep(4);
+            State.toast(
+              "error",
+              "Error while setting up ticket counter,please try again!"
+            );
+            setstepper({
+              uploadingFile: false,
+              creatingEvent: false,
+              signingTransaction1: false,
+              creartingMachine: false,
+              signingTransaction2: false,
             });
-      })
+          })
+      )
       .catch((error) => {
         console.log(error);
-        uploadingEvent(false);
+        setUploadingEvent(false);
+        setstep(4);
+        setstepper({
+          uploadingFile: false,
+          creatingEvent: false,
+          signingTransaction1: false,
+          creartingMachine: false,
+          signingTransaction2: false,
+        });
         State.toast(
           "error",
-          "Error while setting up ticket counter,please try again!"
+          "Error while uploading metadata,please try again!"
         );
       });
   }
@@ -422,6 +535,7 @@ function CreateEvent() {
                 console.log(response);
 
                 setCollectionId(mintRequest.data.result.mint);
+
                 candyMachine(mintRequest.data.result.mint, cid);
               })
               .catch((error) => {
@@ -504,12 +618,12 @@ function CreateEvent() {
   }, []);
 
   return (
-    <div className="lg:px-12 lg:pt-24  w-screen h-screen  bg-white dark:bg-slate-900 flex flex-col items-center">
-      <div className="w-full p-4 flex items-center justify-start   max-w-2xl mx-auto">
+    <div className="flex flex-col items-center w-screen h-full bg-white lg:px-12 lg:pt-24 dark:bg-slate-900">
+      <div className="flex items-center justify-start w-full max-w-2xl p-4 mx-auto">
         {step !== 1 && (
           <button
             onClick={() => setstep(step - 1)}
-            className="flex justify-start items-center gap-2 text-brand3 font-semibold"
+            className="flex items-center justify-start gap-2 font-semibold text-brand3"
           >
             <ChevronLeft />
             Previous step
@@ -517,14 +631,14 @@ function CreateEvent() {
         )}{" "}
         <button
           onClick={() => navigateTo("../marketPlace")}
-          className="flex w-fit justify-center items-center text-brand3 font-semibold ml-auto"
+          className="flex items-center justify-center ml-auto font-semibold w-fit text-brand3"
         >
           {/* <ChevronLeft /> */}
           Cancel
         </button>
       </div>{" "}
-      <div className="flex-grow flex flex-col w-full p-4 overflow-y-auto max-w-2xl md:rounded-lg gap-2 text-brand3 bg-slate-100 dark:bg-slate-800">
-        <span className=" my-2 text-3xl font-bold text-brand-gradient flex">
+      <div className="flex flex-col flex-grow w-full max-w-2xl gap-2 p-4 overflow-y-auto md:rounded-lg text-brand3 bg-slate-100 dark:bg-slate-800">
+        <span className="flex my-2 text-3xl font-bold text-brand-gradient">
           {step === 1 && "Event Details"}
           {step === 2 && "Some more Details"}
           {step === 3 && "Almost Done"}
@@ -532,37 +646,46 @@ function CreateEvent() {
           {step === 5 && "Creating event"}
         </span>
         <progress
-          className="progress progress-success w-full "
+          className="w-full progress progress-success "
           value={step * 25}
           max="100"
         ></progress>
-        {error && (
-          <div className="alert alert-error shadow-lg text-white">
-            <div>
-              <AlertTriangle />
-              <span className="font-semibold">
-                Please fill all the details.
-              </span>
-            </div>
-          </div>
-        )}
         {step === 1 && (
           <>
             <div className="mt-2 ">
               <label className="ml-2 text-sm font-bold">Event Name</label>
-              <input
-                type="text"
-                value={name}
-                onChange={(e) => setname(e.target.value)}
-                placeholder="Name of event"
-                className="input input-bordered w-full flex-grow"
-              />
+              <div className="relative">
+                <input
+                  type="text"
+                  value={name}
+                  onChange={(e) => {
+                    e.target.value.length > 32
+                      ? setnameError("Event name is too long!")
+                      : setnameError(null);
+                    setname(e.target.value);
+                  }}
+                  placeholder="Name of event"
+                  className="flex-grow w-full input input-bordered"
+                />
+                <div
+                  className="absolute right-3 top-3 radial-progress text-brand3"
+                  style={{
+                    "--value": `${(name.length * 100) / 32}`,
+                    "--size": "24px",
+                    "--thickness": "4px",
+                  }}
+                ></div>
+              </div>
+              <div className="flex items-center justify-between w-full mx-2 text-sm font-semibold ">
+                <label className=" text-error">{nameError}</label>
+                <label className="mr-4 text-brand4">{`${name.length}/32`}</label>
+              </div>
             </div>
             <div className="mt-2 ">
               <label className="ml-2 text-sm font-bold">Event Type</label>
               <select
                 onChange={(e) => settype(e.target.value)}
-                className="select block w-full font-semibold"
+                className="block w-full font-semibold select"
               >
                 <option disabled selected>
                   Type of event
@@ -575,7 +698,7 @@ function CreateEvent() {
               <label className="ml-2 text-sm font-bold">Event Category</label>
               <select
                 onChange={(e) => setCategory(e.target.value)}
-                className="select block w-full font-semibold"
+                className="block w-full font-semibold select"
               >
                 <option disabled selected>
                   Category of event
@@ -584,7 +707,7 @@ function CreateEvent() {
                 <option>Meetup</option>
               </select>
             </div>
-            <label className="cursor-pointer label w-fit gap-2 ">
+            <label className="gap-2 cursor-pointer label w-fit ">
               <span className="text-brand3">Is it a free event?</span>
               <input
                 type="checkbox"
@@ -594,19 +717,19 @@ function CreateEvent() {
               />
             </label>
             {!isFreeEvent && (
-              <div className=" ">
+              <div className="">
                 <label className="ml-2 text-sm font-bold">Ticket Price</label>
                 <input
                   value={ticketPrice}
                   onChange={(e) => setticketPrice(parseFloat(e.target.value))}
                   type="number"
                   placeholder="Price of a ticket"
-                  className="input input-bordered w-full flex-grow"
+                  className="flex-grow w-full input input-bordered"
                 />
               </div>
             )}
 
-            <label className="cursor-pointer label w-fit gap-2 ">
+            <label className="gap-2 cursor-pointer label w-fit ">
               <span className="text-brand3">Unlimited Tickets</span>
               <input
                 type="checkbox"
@@ -623,7 +746,7 @@ function CreateEvent() {
                   onChange={(e) => settotalTickets(e.target.value)}
                   type="text"
                   placeholder="How many tickets you want to generate?"
-                  className="input input-bordered w-full flex-grow"
+                  className="flex-grow w-full input input-bordered"
                 />
               </div>
             )}
@@ -633,7 +756,7 @@ function CreateEvent() {
                 name && type && Category && setstep(2);
                 name && type && Category ? seterror(false) : seterror(true);
               }}
-              className="mt-2 btn gap-2 btn-brand capitalize"
+              className="gap-2 mt-2 capitalize btn btn-brand"
             >
               Next <ArrowNarrowRight />
             </button>
@@ -648,7 +771,7 @@ function CreateEvent() {
                 onChange={(e) => setdescription(e.target.value)}
                 type="text"
                 placeholder="Description of event"
-                className="textarea textarea-bordered w-full flex-grow"
+                className="flex-grow w-full textarea textarea-bordered"
               />
             </div>
             <div className="mt-2 ">
@@ -663,7 +786,9 @@ function CreateEvent() {
               />
             </div>{" "}
             <div className="mt-2 ">
-              <label className="ml-2 text-sm font-bold">Event End Time</label>
+              <label className="ml-2 text-sm font-bold">
+                Event End Time (approx)
+              </label>
               <input
                 value={endDate}
                 onChange={(e) => handleEndDateChange(e)}
@@ -677,7 +802,7 @@ function CreateEvent() {
               <label className="ml-2 text-sm font-bold">Event Timezone</label>
               <select
                 onChange={(e) => settimezone(e.target.value)}
-                className="select block w-full font-semibold"
+                className="block w-full font-semibold select"
               >
                 <option disabled selected>
                   Select timezone
@@ -724,7 +849,7 @@ function CreateEvent() {
                   ? seterror(false)
                   : seterror(true);
               }}
-              className="mt-2 btn gap-2 btn-brand capitalize"
+              className="gap-2 mt-2 capitalize btn btn-brand"
             >
               Next <ArrowNarrowRight />
             </button>
@@ -736,9 +861,9 @@ function CreateEvent() {
               <label className="ml-2 text-sm font-bold">
                 Who is hosting event?
               </label>
-              <div className="h-10 my-2 flex justify-start items-center">
+              <div className="flex items-center justify-start h-10 my-2">
                 <img
-                  className="h-10 w-10 rounded-full object-cover"
+                  className="object-cover w-10 h-10 rounded-full"
                   src={
                     State.database.userData.data?.user.profile_image
                       ? State.database.userData.data.user.profile_image
@@ -765,7 +890,7 @@ function CreateEvent() {
                   onChange={(e) => setlocation(e.target.value)}
                   type="text"
                   placeholder="Location of event"
-                  className="textarea textarea-bordered w-full flex-grow"
+                  className="flex-grow w-full textarea textarea-bordered"
                 />
               </div>
             ) : (
@@ -776,7 +901,7 @@ function CreateEvent() {
                   onChange={(e) => seteventLink(e.target.value)}
                   type="text"
                   placeholder="Link of event"
-                  className="input input-bordered w-full flex-grow"
+                  className="flex-grow w-full input input-bordered"
                 />
               </div>
             )}
@@ -789,7 +914,7 @@ function CreateEvent() {
                 type === "In-person" && location && seterror(false);
                 type !== "In-person" && eventLink && seterror(false);
               }}
-              className="mt-2 btn gap-2 btn-brand capitalize"
+              className="gap-2 mt-2 capitalize btn btn-brand"
             >
               Review Details <ArrowNarrowRight />
             </button>
@@ -801,7 +926,7 @@ function CreateEvent() {
               type={type}
               Category={Category}
               isFreeEvent={isFreeEvent}
-              selectedPostImg={URL.createObjectURL(selectedPost)}
+              selectedPostImg={URL.createObjectURL(thumbnail)}
               name={name}
               startDate={startDate}
               userImg={
@@ -817,34 +942,34 @@ function CreateEvent() {
               description={description}
             />
 
-            {/* <div className="mx-auto relative h-fit w-96  rounded-lg bg-white dark:bg-slate-700 hover:scale-105 transition-all ease-in-out shadow-md overflow-hidden">
-              <div className=" absolute flex items-center gap-1  top-2 left-2 w-fit">
-                <div className=" bg-slate-700/60 backdrop-blur-sm rounded-full px-2 text-slate-100 text-sm font-semibold">
+            {/* <div className="relative mx-auto overflow-hidden transition-all ease-in-out bg-white rounded-lg shadow-md h-fit w-96 dark:bg-slate-700 hover:scale-105">
+              <div className="absolute flex items-center gap-1 top-2 left-2 w-fit">
+                <div className="px-2 text-sm font-semibold rounded-full bg-slate-700/60 backdrop-blur-sm text-slate-100">
                   {type}
                 </div>
-                <div className=" bg-slate-700/60 backdrop-blur-sm rounded-full px-2 text-slate-100 text-sm font-semibold">
+                <div className="px-2 text-sm font-semibold rounded-full bg-slate-700/60 backdrop-blur-sm text-slate-100">
                   {Category}
                 </div>
               </div>
               {isFreeEvent && (
-                <div className="absolute right-2 top-2 w-fit bg-teal-700/60 backdrop-blur-sm rounded-full px-2 text-slate-100 text-sm font-semibold">
+                <div className="absolute px-2 text-sm font-semibold rounded-full right-2 top-2 w-fit bg-teal-700/60 backdrop-blur-sm text-slate-100">
                   free
                 </div>
               )}
               <img
-                className="aspect-video w-full object-cover rounded-t-md"
+                className="object-cover w-full aspect-video rounded-t-md"
                 src={`${selectedPost.localurl}`}
                 alt="banner"
               />
              
-              <div className="flex items-center w-full space-x-2 my-1  py-3 px-4">
+              <div className="flex items-center w-full px-4 py-3 my-1 space-x-2">
                 <img
-                  className="h-10 w-10 rounded-full"
+                  className="w-10 h-10 rounded-full"
                   src={selectedPost.localurl}
                   alt="user profile"
                 />
-                <div className=" ">
-                  <p className="w-48 text-lg font-semibold text-brand1 truncate">
+                <div className="">
+                  <p className="w-48 text-lg font-semibold truncate text-brand1">
                     {name}
                   </p>
                   <p className="text-base font-normal text-brand3">
@@ -854,12 +979,12 @@ function CreateEvent() {
                   </p>
                 </div>
               </div>
-              <div className="flex items-center w-full space-x-2 mb-1  pb-1 px-4">
-                <p className="flex flex-col items-center w-fit my-1 px-4 text-lg font-semibold text-success  ">
-                  <span className="font-bold text-2xl">14</span> Dec
+              <div className="flex items-center w-full px-4 pb-1 mb-1 space-x-2">
+                <p className="flex flex-col items-center px-4 my-1 text-lg font-semibold w-fit text-success ">
+                  <span className="text-2xl font-bold">14</span> Dec
                 </p>
-                <span className="h-8 w-1 bg-slate-200 dark:bg-slate-600 rounded-full"></span>
-                <p className="flex-grow px-4  h-12  text-ellipsis  overflow-hidden text-base font-normal text-brand4">
+                <span className="w-1 h-8 rounded-full bg-slate-200 dark:bg-slate-600"></span>
+                <p className="flex-grow h-12 px-4 overflow-hidden text-base font-normal text-ellipsis text-brand4">
                   {description}
                 </p>
               
@@ -880,7 +1005,7 @@ function CreateEvent() {
           </>
         )}
         {step === 5 && (
-          <div className="flex flex-col justify-start items-center gap-2">
+          <div className="flex flex-col items-center justify-start gap-2">
             <div
               className={`flex items-center gap-2 w-full bg-slate-300 dark:bg-slate-700 p-4 rounded-lg text-lg font-semibold ${
                 stepper.uploadingFile && "text-success"
@@ -918,7 +1043,7 @@ function CreateEvent() {
               Signing transaction
             </div>{" "}
             <div
-              className={`flex items-center gap-2 w-full bg-slate-300 dark:bg-slate-700 p-4 rounded-lg text-lg font-semibold ${
+              className={`flex items-center   gap-2 w-full bg-slate-300 dark:bg-slate-700 p-4 rounded-lg text-lg font-semibold ${
                 stepper.creartingMachine && "text-success"
               }`}
             >
@@ -928,9 +1053,9 @@ function CreateEvent() {
                 <Loader className="animate-spin" />
               )}{" "}
               Creating ticket counter
-              {!stepper.creartingMachine && (
+              {/* {!stepper.creartingMachine && (
                 <div onClick={() => candyMachine(collectionId, cid)}>Retry</div>
-              )}
+              )} */}
             </div>{" "}
             <div
               className={`flex items-center gap-2 w-full bg-slate-300 dark:bg-slate-700 p-4 rounded-lg text-lg font-semibold ${
@@ -943,6 +1068,16 @@ function CreateEvent() {
                 <Loader className="animate-spin" />
               )}{" "}
               Signing transaction
+            </div>
+          </div>
+        )}{" "}
+        {error && (
+          <div className="text-white shadow-lg alert alert-error">
+            <div>
+              <AlertTriangle />
+              <span className="font-semibold">
+                Please fill all the details.
+              </span>
             </div>
           </div>
         )}

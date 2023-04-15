@@ -36,28 +36,28 @@ function LiveChannelCategories(props) {
   }, []);
 
   return (
-    <div className="w-full h-fit   space-y-2 lg:rounded-xl bg-slate-100 dark:bg-slate-800 ">
-      <p className="font-bold text-base text-brand5 px-4 pt-4">
+    <div className="w-full space-y-2 h-fit lg:rounded-xl bg-slate-100 dark:bg-slate-800 ">
+      <p className="px-4 pt-4 text-base font-bold text-brand5">
         {props.section_name}
       </p>
-      <div className=" w-full overflow-x-auto px-4 pb-4">
+      <div className="w-full px-4 pb-4 overflow-x-auto ">
         <div className="flex space-x-4 w-fit">
           {State.database.liveUsers.length > 0 ? (
             <>
               {State.database.liveUsers.map((live) => (
                 <div
-                  onClick={() => navigateTo(`../liveuser/${live.username}`)}
+                  onClick={() => navigateTo(`../live/${live.username}`)}
                   className="relative w-64 space-y-2 cursor-pointer"
                 >
-                  <div className="absolute top-4 left-2 w-fit bg-rose-600 rounded-full px-2 text-slate-100 text-sm font-semibold">
+                  <div className="absolute px-2 text-sm font-semibold rounded-full top-4 left-2 w-fit bg-rose-600 text-slate-100">
                     {props.event_status}
                   </div>
                   <img
-                    className=" aspect-video w-full object-cover rounded-lg"
+                    className="object-cover w-full rounded-lg  aspect-video"
                     src={live.thumbnail ? live.thumbnail : placeholder}
                   />
                   {/* <div
-                    className=" h-36 w-full bg-cover rounded-lg"
+                    className="w-full bg-cover rounded-lg  h-36"
                     style={{
                       backgroundImage: `url(${live.thumbnail}  )`,
                     }}
@@ -75,8 +75,8 @@ function LiveChannelCategories(props) {
                       alt="profileImage"
                       placeholderSrc={placeholderImage}
                     />
-                    <div className=" ">
-                      <p className="w-48 text-sm font-medium text-brand3 truncate">
+                    <div className="">
+                      <p className="w-48 text-sm font-medium truncate text-brand3">
                         {live.streamDetails
                           ? live.streamDetails.name
                           : "Untitled Stream"}

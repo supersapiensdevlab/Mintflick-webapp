@@ -33,13 +33,14 @@ export async function transactionWithFee(
       lamports: Math.round(ammount * (1 - fee) * LAMPORTS_PER_SOL),
     })
   );
-  transaction.add(
-    SystemProgram.transfer({
-      fromPubkey: new PublicKey(sender),
-      toPubkey: new PublicKey("8TvHtNUsieHsr1xDwDCVLFBxPPeSWQ3zm6aigXfMEBEE"),
-      lamports: Math.round(ammount * fee * LAMPORTS_PER_SOL),
-    })
-  );
+  fee !== 0 &&
+    transaction.add(
+      SystemProgram.transfer({
+        fromPubkey: new PublicKey(sender),
+        toPubkey: new PublicKey(process.env.REACT_APP_FEEPAYER_WALLET),
+        lamports: Math.round(ammount * fee * LAMPORTS_PER_SOL),
+      })
+    );
   await provider.signTransaction(transaction).then(async (signedTrasaction) => {
     await connection
       .sendRawTransaction(signedTrasaction.serialize())

@@ -17,6 +17,7 @@ function MobileNotifications() {
 
   useEffect(() => {
     State.updateDatabase({ showHeader: true });
+
     if (
       State.database.userData.data?.user &&
       State.database.userData.data?.user.notification
@@ -51,11 +52,17 @@ function MobileNotifications() {
         setNotification(data.reverse());
       }
     }
+    handleNotification();
   }, [State.database.userData?.data?.user?.notification]);
 
   const handleNotification = () => {
-    if (State.database.userData?.data?.user && newNotification > 0) {
-      setNewNotification(0);
+    if (
+      State.database.userData?.data?.user &&
+      State.database.newNotifications > 0
+    ) {
+      State.updateDatabase({
+        newNotifications: 0,
+      });
       const data = {
         username: State.database.userData.data.user?.username,
       };
@@ -77,17 +84,14 @@ function MobileNotifications() {
     }
   };
   return (
-    <div className="p-2 py-20 overflow-y-auto w-screen h-screen bg-slate-100 dark:bg-slate-800">
+    <div className="w-screen h-screen p-2 py-20 overflow-y-auto bg-slate-100 dark:bg-slate-800">
       {/* <label tabindex="0" className=" avatar">
         <button class="btn btn-circle btn-ghost" onClick={handleNotification}>
           <Bell size={28}></Bell>
         </button>
         {newNotification > 0 ? (
           <div
-            className="bg-rose-600 rounded-full shadow  
-                        h-4 w-4 text-xs self-center text-center font-semibold  
-                        absolute top-1  right-2  
-                         text-white"
+            className="absolute self-center w-4 h-4 text-xs font-semibold text-center text-white rounded-full shadow bg-rose-600 top-1 right-2"
           >
             {newNotification}
           </div>
@@ -95,7 +99,7 @@ function MobileNotifications() {
       </label> */}
 
       {notification.length > 0 ? (
-        <div className="w-full p-2   divide-solid dark:divide-slate-700 divide-y-2">
+        <div className="w-full p-2 divide-y-2 divide-solid dark:divide-slate-700">
           {notification.map((value, i) => {
             return (
               <div key={i} className="w-full ">
@@ -106,7 +110,7 @@ function MobileNotifications() {
           })}
         </div>
       ) : (
-        <div className="h-full w-full flex justify-center items-center">
+        <div className="flex items-center justify-center w-full h-full">
           <div className="flex flex-col items-center gap-4 text-brand6">
             <AlertTriangle size={64} />
             <span className="text-2xl font-bold">No new notifications</span>

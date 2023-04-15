@@ -10,6 +10,33 @@ import { SolanaWallet } from "@web3auth/solana-provider";
 
 const connection = new Connection(process.env.REACT_APP_SOLANA_RPC);
 
+export const signTransactionWithKey = async (
+  encodedTransaction,
+  fromPrivateKey
+) => {
+  const feePayer = Keypair.fromSecretKey(decode(fromPrivateKey));
+  const recoveredTransaction = Transaction.from(
+    Buffer.from(encodedTransaction, "base64")
+  );
+  console.log(recoveredTransaction);
+  await recoveredTransaction.partialSign(feePayer);
+  // const serializedTransaction = recoveredTransaction.serialize({
+  //   requireAllSignatures: false,
+  // });
+  // const transactionBase64 = serializedTransaction.toString("base64");
+  // console.log(transactionBase64);
+  //partially signing using private key of fee_payer wallet
+
+  console.log(recoveredTransaction.serialize().toString("base64"));
+  const confirmTransaction = await connection.sendEncodedTransaction(
+    recoveredTransaction.serialize().toString("base64")
+  );
+  // const confirmTransaction = await sendTransaction(
+  //   signedTx.serialize().toString("base64")
+  // );
+  return confirmTransaction;
+};
+
 export const signTransactionKeyWallet = async (
   encodedTransaction,
   fromPrivateKey,
@@ -20,7 +47,7 @@ export const signTransactionKeyWallet = async (
     Buffer.from(encodedTransaction, "base64")
   );
   console.log(recoveredTransaction);
-  recoveredTransaction.partialSign(feePayer);
+  await recoveredTransaction.partialSign(feePayer);
   // const serializedTransaction = recoveredTransaction.serialize({
   //   requireAllSignatures: false,
   // });
@@ -29,12 +56,14 @@ export const signTransactionKeyWallet = async (
   //partially signing using private key of fee_payer wallet
 
   const signedTx = await provider.signTransaction(recoveredTransaction); // signing the recovered transaction using the creator_wall
-  console.log(
-    signedTx.serialize({ requireAllSignatures: false }).toString("base64")
+  console.log(signedTx.serialize().toString("base64"));
+  const confirmTransaction = await connection.sendEncodedTransaction(
+    signedTx.serialize().toString("base64")
   );
-  const confirmTransaction = await connection.sendRawTransaction(
-    signedTx.serialize()
-  );
+  // const confirmTransaction = await sendTransaction(
+  //   signedTx.serialize().toString("base64")
+  // );
+
   return confirmTransaction;
 };
 
@@ -167,7 +196,7 @@ export const listNFTOnSolana2 = async (nft_address, price, seller_wallet) => {
 
   console.log(raw);
   await axios
-    .post(`https://api.shyft.to/sol/v1/marketplace/list_gasless`, raw, {
+    .post(`https://api.shyft.to/sol/v1/marketplace/list`, raw, {
       headers: {
         "x-api-key": `${process.env.REACT_APP_SHYFT_API_KEY}`,
         "content-type": "application/json",
@@ -254,20 +283,18 @@ export const signTransactionWithWalletAndSend = async (
     console.log(recoveredTransaction);
     const signedTx = await provider.signTransaction(recoveredTransaction); // signing the recovered transaction using the creator_wall
     console.log(signedTx);
-    const confirmTransaction = signedTx
-      .serialize({ requireAllSignatures: false })
-      .toString("base64");
+    const confirmTransaction = signedTx.serialize().toString("base64");
 
     console.log(confirmTransaction);
-    const res = await sendTransaction(confirmTransaction);
+
     // const connection = new Connection(
     //   clusterApiUrl(process.env.REACT_APP_SOLANA_NETWORK)
     // );
     // await connection.sendEncodedTransaction(confirmTransaction);
-    return res.data.success ? true : false;
+
+    return await sendTransaction(confirmTransaction);
   } catch (error) {
     console.log(error);
-    return false;
   }
 };
 
@@ -279,16 +306,16 @@ export const sendTransaction = async (encodedTransaction) => {
     };
     console.log(data);
 
-    const res = await axios
-      .post(`https://api.shyft.to/sol/v1/transaction/send_txn`, data, {
+    const res = await axios.post(
+      `https://api.shyft.to/sol/v1/transaction/send_txn`,
+      data,
+      {
         headers: {
           "x-api-key": `${process.env.REACT_APP_SHYFT_API_KEY}`,
           "content-type": "application/json",
         },
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+      }
+    );
     console.log(res);
     return res;
   } catch (error) {

@@ -14,7 +14,7 @@ function SingleScheduled({ live }) {
 
   return (
     <div
-      onClick={() => navigateTo(`../liveuser/${live.username}`)}
+      onClick={() => navigateTo(`../live/${live.username}`)}
       className="relative w-64 space-y-2 cursor-pointer"
     >
       <div
@@ -29,20 +29,20 @@ function SingleScheduled({ live }) {
         Starting in {days > 0 && `${days}Days`} {hours}Hrs {minutes}mins
       </div>
       <img
-        className=" aspect-video w-full object-cover rounded-lg"
+        className="object-cover w-full rounded-lg aspect-video"
         src={live.thumbnail ? live.thumbnail : placeholder}
       />
       <div className="flex w-full space-x-2 ">
         <Image
           width={40}
           height={40}
-          className="h-10 rounded-full"
+          className="object-contain h-10 rounded-full"
           src={live.profile_image ? live.profile_image : placeholderImage}
           alt="profileImage"
           placeholderSrc={placeholderImage}
         />
-        <div className=" ">
-          <p className="w-48 text-sm font-medium text-brand3 truncate">
+        <div className="">
+          <p className="w-48 text-sm font-medium truncate text-brand3">
             {live.streamDetails ? live.streamDetails.name : "Untitled Stream"}
           </p>
           <p className="text-sm font-normal text-brand5">{live.username}</p>

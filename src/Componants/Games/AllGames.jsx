@@ -27,53 +27,58 @@ const AllGames = () => {
     State.updateDatabase({ showBottomNav: false });
   }, []);
   return (
-    <div className="lg:px-12  w-screen h-screen  bg-white dark:bg-slate-900 flex flex-col items-center">
-      {/* <div className='hidden lg:flex flex-col h-full w-1/4 ml-12 pt-24  space-y-6 overflow-y-auto'>
+    <div className="flex flex-col items-center w-screen h-screen bg-white lg:px-12 lg:pt-24 dark:bg-slate-900">
+      {/* <div className='flex-col hidden w-1/4 h-full pt-24 ml-12 space-y-6 overflow-y-auto lg:flex'>
         <Filter></Filter>
         <EventCategories></EventCategories>
       </div> */}
-      <div className="w-full p-4 flex items-center  max-w-3xl mx-auto">
+      <div className="flex items-center w-full max-w-3xl gap-2 p-4 mx-auto">
         <button
           onClick={() => navigateTo("../home")}
-          className="flex justify-center items-center text-brand3 font-semibold"
+          className="flex items-center justify-center font-semibold text-brand3"
         >
           <ChevronLeft />
           Back
         </button>
-        <span className="text-xl font-bold text-brand1 mx-auto -translate-x-8">
+        {/* <span className="mx-auto text-xl font-bold -translate-x-8 text-brand1">
           Games
-        </span>
+        </span>{" "} */}
+        <input
+          type="text"
+          placeholder="Search Games"
+          className="flex-grow input input-sm input-bordered"
+        />
         {/* <span
           onClick={() => setwalletModalOpen(true)}
-          className="  text-brand1 "
+          className=" text-brand1"
         >
           <Wallet />
         </span> */}
       </div>
-      <div className="py-2 px-4 w-full max-w-3xl mx-auto flex gap-2 sm:rounded-xl bg-slate-100 dark:bg-slate-800">
+      {/* <div className="flex w-full max-w-3xl gap-2 px-4 py-2 mx-auto sm:rounded-xl bg-slate-100 dark:bg-slate-800">
         <input
           type="text"
           placeholder="Search Games"
-          className="input input-bordered w-full  flex-grow"
+          className="flex-grow w-full input input-bordered"
         />
-      </div>
+      </div> */}
       <div className="flex-grow w-full py-4 overflow-y-auto">
-        <div className="w-full px-2 sm:w-fit h-fit  grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-4 sm:gap-y-8 sm:mx-auto">
-          <div className=" ">
+        <div className="grid w-full grid-cols-1 px-2 sm:w-fit h-fit md:grid-cols-2 gap-x-4 gap-y-4 sm:gap-y-8 sm:mx-auto">
+          <div className="">
             <GameCard
               image={spinwheelimg}
               link={`/homescreen/game/spinwheel`}
               name={"Spinwheel"}
             />
           </div>
-          <div className=" ">
+          <div className="">
             <GameCard
               image={dicerollimg}
               link={`/homescreen/game/rolldice`}
               name={"Dice"}
             />
           </div>
-          <div className=" ">
+          <div className="">
             <GameCard
               image={spingameimg}
               link={`/homescreen/game/spingame`}
@@ -83,7 +88,7 @@ const AllGames = () => {
         </div>{" "}
       </div>
 
-      {/* <div className="hidden lg:flex flex-col h-fit lg:h-full    lg:w-1/4 lg:ml-4 lg:mr-12 pt-4 lg:space-y-6 lg:overflow-y-auto">
+      {/* <div className="flex-col hidden pt-4 lg:flex h-fit lg:h-full lg:w-1/4 lg:ml-4 lg:mr-12 lg:space-y-6 lg:overflow-y-auto">
         <MintWallet />
       </div> */}
     </div>

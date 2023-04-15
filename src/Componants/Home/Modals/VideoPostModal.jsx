@@ -38,6 +38,7 @@ import { Walkthrough } from "../../Walkthrough/Walkthrough";
 import CustomInput from "../../CustomInputs/CustomInput";
 import ThoughtPostModal from "./ThoughtPostModal";
 import { TypeAnimation } from "react-type-animation";
+import NftLimit from "../NftLimit";
 
 function VideoPostModal({ setVideoPostModalOpen }) {
   const State = useContext(UserContext);
@@ -99,6 +100,8 @@ function VideoPostModal({ setVideoPostModalOpen }) {
 
   const [advancedOptionsShow, setadvancedOptionsShow] = useState(false);
   const [isNFT, setIsNFT] = useState(false);
+  const [nftLimit, setNftLimit] = useState(0);
+
   const [nftPrice, setNFTPrice] = useState(1);
   const category = [
     "Autos & Vehicles",
@@ -603,10 +606,10 @@ function VideoPostModal({ setVideoPostModalOpen }) {
 
   return (
     <>
-      <div className="modal-box p-0 bg-slate-100 dark:bg-slate-800 ">
-        <div className="w-full h-fit p-2 bg-slate-300 dark:bg-slate-700">
-          <div className="flex justify-between items-center p-2">
-            <h3 className="flex items-center gap-2 font-bold text-lg text-brand2">
+      <div className="p-0 modal-box bg-slate-100 dark:bg-slate-800 ">
+        <div className="w-full p-2 h-fit bg-slate-300 dark:bg-slate-700">
+          <div className="flex items-center justify-between p-2">
+            <h3 className="flex items-center gap-2 text-lg font-bold text-brand2">
               <Video />
               Upload Video
             </h3>
@@ -615,31 +618,31 @@ function VideoPostModal({ setVideoPostModalOpen }) {
                 clearState();
                 setTagged([]);
               }}
-              className="text-brand2 cursor-pointer"
+              className="cursor-pointer text-brand2"
             ></X>
           </div>
         </div>
         <form onSubmit={handleSubmit}>
           <div className="w-full p-4 space-y-3">
-            <div className="flex flex-col  gap-1 relative">
+            <div className="relative flex flex-col gap-1">
               {uploadingVideo && (
-                <div className="text-white gap-2 font-semibold absolute top-0 left-0 w-full h-full bg-white/10 backdrop-blur-sm rounded-lg flex flex-col items-center justify-center">
+                <div className="absolute top-0 left-0 flex flex-col items-center justify-center w-full h-full gap-2 font-semibold text-white rounded-lg bg-white/10 backdrop-blur-sm">
                   <Main_logo /> {btnText}
                 </div>
               )}
               <label
                 id="walkthroughVideoNftStep1"
                 htmlFor="videothumbnail"
-                className="  cursor-pointer flex flex-col items-center gap-2  w-full p-2 border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4"
+                className="flex flex-col items-center w-full gap-2 p-2 border-2 border-dashed rounded-lg cursor-pointer border-slate-400 dark:border-slate-600 text-brand4"
               >
                 {selectedThumbnail && selectedThumbnail.file && (
-                  <div className="w-72 flex items-center justify-center rounded-lg aspect-square  dark:bg-slate-900 bg-slate-300 object-cover">
+                  <div className="flex items-center justify-center object-cover rounded-lg w-72 aspect-square dark:bg-slate-900 bg-slate-300">
                     <img src={selectedThumbnail.localurl}></img>
                   </div>
                 )}
                 <div
                   htmlFor="videothumbnail"
-                  className="flex  cursor-pointer gap-1"
+                  className="flex gap-1 cursor-pointer"
                 >
                   <input
                     id="videothumbnail"
@@ -663,10 +666,10 @@ function VideoPostModal({ setVideoPostModalOpen }) {
               <div
                 id="walkthroughVideoNftStep2"
                 htmlFor="videofile"
-                className=" cursor-pointer flex items-center justify-center flex-col  gap-2  w-full p-2 border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4"
+                className="flex flex-col items-center justify-center w-full gap-2 p-2 border-2 border-dashed rounded-lg cursor-pointer border-slate-400 dark:border-slate-600 text-brand4"
               >
                 {selectedVideo && selectedVideo.localurl && (
-                  <div className="w-full rounded-lg    overflow-hidden aspect-video  dark:bg-slate-900 bg-slate-300 object-cover">
+                  <div className="object-cover w-full overflow-hidden rounded-lg aspect-video dark:bg-slate-900 bg-slate-300">
                     <ReactPlayer
                       className="w-full"
                       width="100%"
@@ -679,7 +682,7 @@ function VideoPostModal({ setVideoPostModalOpen }) {
                     />
                   </div>
                 )}
-                <label className="flex cursor-pointer gap-1">
+                <label className="flex gap-1 cursor-pointer">
                   <input
                     id="videofile"
                     type="file"
@@ -704,7 +707,7 @@ function VideoPostModal({ setVideoPostModalOpen }) {
               <input
                 type="text"
                 placeholder="Video title"
-                className="input w-full "
+                className="w-full input "
                 value={videoData.videoName}
                 onChange={(e) =>
                   setVideoData({ ...videoData, videoName: e.target.value })
@@ -712,7 +715,7 @@ function VideoPostModal({ setVideoPostModalOpen }) {
                 required={true}
               />
               <select
-                className="select w-44 font-semibold"
+                className="font-semibold select w-44"
                 onChange={(e) =>
                   setVideoData({ ...videoData, category: e.target.value })
                 }
@@ -727,7 +730,7 @@ function VideoPostModal({ setVideoPostModalOpen }) {
             </div>
 
             {/* <textarea
-            className="textarea  w-full"
+            className="w-full textarea"
             placeholder="Enter caption."
             onChange={(e) =>
               setVideoData({ ...videoData, description: e.target.value })
@@ -737,7 +740,7 @@ function VideoPostModal({ setVideoPostModalOpen }) {
             <div id="walkthroughVideoNftStep4">
               <CustomInput
                 placeholder={"Enter caption."}
-                className=" textarea w-full"
+                className="w-full textarea"
                 value={caption}
                 setValue={setCaption}
                 mentions={tagged}
@@ -747,7 +750,7 @@ function VideoPostModal({ setVideoPostModalOpen }) {
 
             <span
               onClick={() => setadvancedOptionsShow(!advancedOptionsShow)}
-              className="flex px-2 items-center gap-1 font-semibold text-brand3 cursor-pointer"
+              className="flex items-center gap-1 px-2 font-semibold cursor-pointer text-brand3"
             >
               Advanced options
               <label
@@ -764,9 +767,9 @@ function VideoPostModal({ setVideoPostModalOpen }) {
               </label>
             </span>
             {advancedOptionsShow && (
-              <div className="flex flex-col gap-1 w-full ">
+              <div className="flex flex-col w-full gap-1 ">
                 <select
-                  className="select font-semibold  "
+                  className="font-semibold select "
                   onChange={(e) =>
                     setVideoData({
                       ...videoData,
@@ -782,7 +785,7 @@ function VideoPostModal({ setVideoPostModalOpen }) {
                   ))}
                 </select>
                 <select
-                  className="select font-semibold  "
+                  className="font-semibold select "
                   onChange={(e) =>
                     setVideoData({
                       ...videoData,
@@ -798,7 +801,7 @@ function VideoPostModal({ setVideoPostModalOpen }) {
                   ))}
                 </select>
                 <select
-                  className="select font-semibold  "
+                  className="font-semibold select "
                   onChange={(e) =>
                     setVideoData({
                       ...videoData,
@@ -816,14 +819,14 @@ function VideoPostModal({ setVideoPostModalOpen }) {
               </div>
             )}
             {showListingOption ? (
-              <div className="w-fit flex space-x-2 text-green-500">
+              <div className="flex space-x-2 text-green-500 w-fit">
                 {mintSuccess}
               </div>
             ) : (
               <></>
             )}
             {mintSuccess == "" || mintSuccess == "NFT Minted Successfully" ? (
-              <div className="w-fit flex space-x-2">
+              <div className="flex space-x-2 w-fit">
                 {showListingOption ? (
                   <div className="flex items-center">
                     <span className="label-text text-brand3">List NFT</span>
@@ -831,13 +834,13 @@ function VideoPostModal({ setVideoPostModalOpen }) {
                 ) : (
                   <label
                     id="walkthroughVideoNftStep5"
-                    className="flex items-center cursor-pointer gap-2 bg-slate-200 dark:bg-slate-700 p-2 rounded-full pr-4"
+                    className="flex items-center gap-2 p-2 pr-4 rounded-full cursor-pointer bg-slate-200 dark:bg-slate-700"
                   >
                     <input
                       type="checkbox"
                       value={isNFT}
                       onChange={() => setIsNFT(!isNFT)}
-                      className="checkbox checkbox-primary rounded-full"
+                      className="rounded-full checkbox checkbox-primary"
                     />
                     <span className="label-text text-brand3">Mint as NFT</span>
                   </label>
@@ -849,7 +852,7 @@ function VideoPostModal({ setVideoPostModalOpen }) {
                         min={1}
                         type="number"
                         placeholder="1"
-                        className="input input-bordered input-sm w-24"
+                        className="w-24 input input-bordered input-sm"
                         value={nftPrice}
                         onChange={(e) => setNFTPrice(e.target.value)}
                         required={true}
@@ -871,7 +874,7 @@ function VideoPostModal({ setVideoPostModalOpen }) {
               </div>
             ) : null}
             {isNFT && (
-              <div className="  bg-emerald-600 p-2 rounded-md pr-4 text-sm font-semibold tracking-wide text-white">
+              <div className="p-2 pr-4 text-sm font-semibold tracking-wide text-white rounded-md bg-emerald-600">
                 <TypeAnimation
                   sequence={[
                     "✨Exciting! A Non Fungible Token (NFT) will be created on the Blockchain to preserve your content for all eternity and make it publicly accessible to everyone. Your connected wallet will be the proud owner of this unique digital asset, ensuring that your creation is forever enshrined in the blockchain's immutable ledger.",
@@ -894,6 +897,13 @@ function VideoPostModal({ setVideoPostModalOpen }) {
                 </span> */}
               </div>
             )}
+            {isNFT && (
+              <NftLimit
+                username={State.database.userData?.data?.user?.username}
+                setNftLimit={setNftLimit}
+                isNFT={isNFT}
+              />
+            )}
             {/* <button
             type={"submit"}
             className={`btn  w-full  ${
@@ -904,7 +914,7 @@ function VideoPostModal({ setVideoPostModalOpen }) {
             Post Video
           </button> */}
             {showListingOption && mintSuccess == "NFT Minted Successfully" ? (
-              <div className="w-full flex justify-around space-x-1">
+              <div className="flex justify-around w-full space-x-1">
                 <button
                   onClick={State.database?.chainId == 1 ? null : listNFTForSale}
                   className={`btn  ${
@@ -952,7 +962,8 @@ function VideoPostModal({ setVideoPostModalOpen }) {
                       selectedVideo?.file &&
                       selectedThumbnail?.file &&
                       videoData.description !== "" &&
-                      videoData.videoName !== ""
+                      videoData.videoName !== "" &&
+                      nftLimit < 5
                         ? "btn-brand"
                         : "btn-disabled"
                     } ${uploadingVideo ? "loading" : ""}`}

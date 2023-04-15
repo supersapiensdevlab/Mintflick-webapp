@@ -96,8 +96,8 @@ function ProfileCard(props) {
   };
 
   return (
-    <div className="flex flex-col items-center  bg-slate-100 dark:bg-slate-800 w-full h-fit rounded-lg ">
-      <div className="w-full  ">
+    <div className="flex flex-col items-center w-full rounded-lg bg-slate-100 dark:bg-slate-800 h-fit ">
+      <div className="w-full ">
         <Image
           className="w-full aspect-[6/2] lg:rounded-t-lg object-cover "
           width="100%"
@@ -113,19 +113,19 @@ function ProfileCard(props) {
         {/* <img
           src={props.coverImage ? props.coverImage : coverImage}
           alt="coverimage"
-          className="w-full h-full rounded-t-lg object-cover"
+          className="object-cover w-full h-full rounded-t-lg"
         /> */}
       </div>
       <img
         src={props.profileImage ? props.profileImage : coverImage}
         alt="Profileimage"
-        className="w-20 h-20 -mt-10 object-cover rounded-full"
+        className="object-cover w-20 h-20 -mt-10 rounded-full"
       />
-      <div className="flex flex-col items-center w-full h-fit space-y-1 m-2">
-        <p className="text-lg text-brand1 font-bold">{props.name}</p>
-        <span className="flex items-center gap-2 text-base text-brand3 font-medium">
+      <div className="flex flex-col items-center w-full m-2 space-y-1 h-fit">
+        <p className="text-lg font-bold text-brand1">{props.name}</p>
+        <span className="flex items-center gap-2 text-base font-medium text-brand3">
           {"@" + `${props.userName}`}
-          <p className="flex items-center gap-1 text-sm text-primary font-medium">
+          <p className="flex items-center gap-1 text-sm font-medium text-primary">
             {State.database.userProfileData &&
               State.database.userData.data &&
               State.database.userData.data.user.username !== props.userName &&
@@ -134,30 +134,30 @@ function ProfileCard(props) {
               ) ? (
                 <button
                   onClick={() => handleUnfollowUser(props.userName)}
-                  className="btn  btn-primary btn-outline btn-xs flex-grow"
+                  className="flex-grow btn btn-primary btn-outline btn-xs"
                 >
                   Unfollow
                 </button>
               ) : (
                 <button
                   onClick={() => handleFollowUser(props.userName)}
-                  className="btn  btn-primary btn-outline btn-xs flex-grow"
+                  className="flex-grow btn btn-primary btn-outline btn-xs"
                 >
                   Follow
                 </button>
               ))}
           </p>
         </span>
-        <div className="w-full flex p-2 justify-around">
+        <div className="flex justify-around w-full p-2">
           <span
             onClick={() => {
               settab(1);
               setfollowersModalOpen(true);
             }}
-            className="cursor-pointer flex flex-col items-center gap-1 text-lg text-brand3 font-bold"
+            className="flex flex-col items-center gap-1 text-lg font-bold cursor-pointer text-brand3"
           >
             {props.follower_count}
-            <p className="flex items-center  text-xs text-primary font-medium">
+            <p className="flex items-center text-xs font-medium text-primary">
               Followers
             </p>
           </span>
@@ -166,10 +166,10 @@ function ProfileCard(props) {
               settab(2);
               setfollowersModalOpen(true);
             }}
-            className="cursor-pointer flex flex-col items-center gap-1 text-lg text-brand3 font-bold"
+            className="flex flex-col items-center gap-1 text-lg font-bold cursor-pointer text-brand3"
           >
             {props.followee_count}
-            <p className="flex items-center  text-xs text-primary font-medium">
+            <p className="flex items-center text-xs font-medium text-primary">
               Following
             </p>
           </span>
@@ -178,16 +178,16 @@ function ProfileCard(props) {
               settab(3);
               setfollowersModalOpen(true);
             }}
-            className="cursor-pointer flex flex-col items-center gap-1 text-lg text-brand3 font-bold"
+            className="flex flex-col items-center gap-1 text-lg font-bold cursor-pointer text-brand3"
           >
             {props.superfan_to}
-            <p className="flex items-center gap-1 text-xs text-primary font-medium">
+            <p className="flex items-center gap-1 text-xs font-medium text-primary">
               SuperFans
             </p>
           </span>
         </div>
 
-        <div className="flex flex-col p-4 w-full gap-1">
+        <div className="flex flex-col w-full gap-1 p-4">
           {State.database.userData.data &&
             (State.database.userData.data.user.username === props.userName ? (
               <>
@@ -195,13 +195,13 @@ function ProfileCard(props) {
                   onClick={() => {
                     setMarketPlaceModalOpen(true);
                   }}
-                  className="btn btn-primary btn-outline btn-sm w-full"
+                  className="w-full btn btn-primary btn-outline btn-sm"
                 >
                   Setup Marketplace
                 </button> */}
                 <button
                   onClick={() => setsettingsModalOpen(true)}
-                  className="btn btn-primary btn-outline btn-sm w-full capitalize font-medium"
+                  className="w-full font-medium capitalize btn btn-primary btn-outline btn-sm"
                 >
                   Edit Profile
                 </button>
@@ -222,13 +222,13 @@ function ProfileCard(props) {
                       : null,
                   }}
                 >
-                  <button className="btn btn-primary btn-outline btn-sm w-full capitalize font-medium">
+                  <button className="w-full font-medium capitalize btn btn-primary btn-outline btn-sm">
                     Message
                   </button>
                 </NavLink>
 
                 <button
-                  className="btn btn-brand btn-sm capitalize font-medium"
+                  className="font-medium capitalize btn btn-brand btn-sm"
                   onClick={() => setJoinsuperfanModalOpen(true)}
                 >
                   <img className="w-5 mr-1" src={superfan_logo} />

@@ -36,6 +36,7 @@ import { sanitizeFilename } from "../../../functions/sanitizeFilename";
 import { Walkthrough } from "../../Walkthrough/Walkthrough";
 import CustomInput from "../../CustomInputs/CustomInput";
 import { TypeAnimation } from "react-type-animation";
+import NftLimit from "../NftLimit";
 
 function PhotoPostModal({ setphotoPostModalOpen }) {
   const State = useContext(UserContext);
@@ -92,6 +93,7 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
   // Minting
   const [minting, setMinting] = useState(null);
   const [mintingProgress, setMintingProgress] = useState(0);
+  const [nftLimit, setNftLimit] = useState(0);
 
   const web3 = new Web3(State.database.provider);
 
@@ -444,7 +446,7 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
       .then(async (res) => {
         State.toast("success", "Your Photo uploaded successfully!");
         setbtnText("Uploading Photo");
-        loadFeed();
+        await loadFeed();
         clearData();
       })
       .catch((err) => {
@@ -467,29 +469,30 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
 
   return (
     <>
-      <div className="modal-box p-0 bg-slate-100 dark:bg-slate-800 ">
-        <div className="w-full h-fit p-2 bg-slate-300 dark:bg-slate-700">
-          <div className="flex justify-between items-center p-2">
-            <h3 className="flex items-center gap-2 font-bold text-lg text-brand2">
+      <div className="p-0 modal-box bg-slate-100 dark:bg-slate-800 ">
+        <div className="w-full p-2 h-fit bg-slate-300 dark:bg-slate-700">
+          <div className="flex items-center justify-between p-2">
+            <h3 className="flex items-center gap-2 text-lg font-bold text-brand2">
               <Camera />
               Upload Photo
             </h3>
+
             <X
               onClick={() => clearData()}
-              className="text-brand2 cursor-pointer"
+              className="cursor-pointer text-brand2"
             ></X>
           </div>
         </div>
 
         <form>
-          <div className=" w-full p-4 space-y-3">
+          <div className="w-full p-4 space-y-3 ">
             <label
               id="walkthroughStep1"
               htmlFor="post_announcement_image"
-              className="relative cursor-pointer flex flex-col justify-between items-center gap-2  w-full p-2 border-2 border-slate-400 dark:border-slate-600 border-dashed rounded-lg text-brand4"
+              className="relative flex flex-col items-center justify-between w-full gap-2 p-2 border-2 border-dashed rounded-lg cursor-pointer border-slate-400 dark:border-slate-600 text-brand4"
             >
               {uploadingPost && (
-                <div className="text-white gap-2 font-semibold absolute top-0 left-0 w-full h-full bg-white/10 backdrop-blur-sm rounded-lg flex flex-col items-center justify-center">
+                <div className="absolute top-0 left-0 flex flex-col items-center justify-center w-full h-full gap-2 font-semibold text-white rounded-lg bg-white/10 backdrop-blur-sm">
                   <Main_logo /> {btnText}
                 </div>
               )}
@@ -507,7 +510,7 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
               />
               {selectedPost ? (
                 selectedPost.file ? (
-                  <div className="w-72 flex items-center justify-center rounded-lg aspect-square  dark:bg-slate-900 bg-slate-300 overflow-clip">
+                  <div className="flex items-center justify-center rounded-lg w-72 aspect-square dark:bg-slate-900 bg-slate-300 overflow-clip">
                     <img src={selectedPost.localurl}></img>
                   </div>
                 ) : null
@@ -524,14 +527,14 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
                   "No file choosen!"
                 )
               ) : (
-                <div className="w-full flex items-center gap-1">
+                <div className="flex items-center w-full gap-1">
                   <File />
                   Choose file *
                 </div>
               )}
             </label>
             {/* <textarea
-            className="textarea  w-full"
+            className="w-full textarea"
             placeholder="Enter caption."
             onChange={(e) => setCaption(e.target.value)}
             value={caption}
@@ -539,7 +542,7 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
             <div id="walkthroughStep2">
               <CustomInput
                 placeholder={"Enter caption."}
-                className=" textarea w-full"
+                className="w-full textarea"
                 value={caption}
                 setValue={setCaption}
                 mentions={tagged}
@@ -553,7 +556,7 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
               value={caption}
               onChange={(e) => setCaption(e.target.value)}
               style={defaultStyle}
-              className="textarea w-full h-24  pt-2 focus:outline-0 overflow-scroll mentionsinputoverflow"
+              className="w-full h-24 pt-2 overflow-scroll textarea focus:outline-0 mentionsinputoverflow"
               placeholder={"Enter caption."}
               a11ySuggestionsListLabel={"Suggested mentions"}
               inputRef={mentionsRef}
@@ -567,14 +570,14 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
               />
             </MentionsInput> */}
             {showListingOption ? (
-              <div className="w-fit flex space-x-2 text-green-500">
+              <div className="flex space-x-2 text-green-500 w-fit">
                 {mintSuccess}
               </div>
             ) : (
               <></>
             )}
             {mintSuccess == "" || mintSuccess == "NFT Minted Successfully" ? (
-              <div className="w-fit flex space-x-2">
+              <div className="flex space-x-2 w-fit">
                 {showListingOption ? (
                   <div className="flex items-center">
                     <span className="label-text text-brand3">List NFT</span>
@@ -582,15 +585,15 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
                 ) : (
                   <label
                     id="walkthroughStep3"
-                    className="flex items-center cursor-pointer gap-2 bg-slate-200 dark:bg-slate-700 p-2 rounded-full pr-4"
+                    className="flex items-center gap-2 p-2 pr-4 rounded-full cursor-pointer bg-slate-200 dark:bg-slate-700"
                   >
                     <input
                       type="checkbox"
                       value={isNFT}
                       onChange={() => setIsNFT(!isNFT)}
-                      className="checkbox checkbox-primary rounded-full"
+                      className="rounded-full checkbox checkbox-primary"
                     />
-                    <span className="label-text font-bold text-brand3">
+                    <span className="font-bold label-text text-brand3">
                       Mint as NFT
                     </span>
                   </label>
@@ -603,7 +606,7 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
                         min={1}
                         type="number"
                         placeholder="1"
-                        className="input input-bordered input-sm w-24"
+                        className="w-24 input input-bordered input-sm"
                         value={nftPrice}
                         onChange={(e) => setNFTPrice(e.target.value)}
                         required={true}
@@ -625,7 +628,7 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
               </div>
             ) : null}
             {isNFT && (
-              <div className="  bg-emerald-600 p-2 rounded-md pr-4 text-sm font-semibold tracking-wide text-white">
+              <div className="p-2 pr-4 text-sm font-semibold tracking-wide text-white rounded-md bg-emerald-600">
                 <TypeAnimation
                   sequence={[
                     "✨Exciting! A Non Fungible Token (NFT) will be created on the Blockchain to preserve your content for all eternity and make it publicly accessible to everyone. Your connected wallet will be the proud owner of this unique digital asset, ensuring that your creation is forever enshrined in the blockchain's immutable ledger.",
@@ -648,8 +651,15 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
                 </span> */}
               </div>
             )}
+            {isNFT && (
+              <NftLimit
+                username={State.database.userData?.data?.user?.username}
+                setNftLimit={setNftLimit}
+              />
+            )}
+
             {mintSuccess == "NFT Minted Successfully" ? (
-              <div className="w-full flex justify-around space-x-1">
+              <div className="flex justify-around w-full space-x-1">
                 <button
                   onClick={
                     State.database?.chainId == 1
@@ -697,7 +707,7 @@ function PhotoPostModal({ setphotoPostModalOpen }) {
                       handleSubmit();
                     }}
                     className={`btn  ${
-                      selectedPost?.file[0] && caption !== ""
+                      selectedPost?.file[0] && caption !== "" && nftLimit < 5
                         ? "btn-brand"
                         : "btn-disabled"
                     } w-full capitalize ${uploadingPost ? "loading " : ""}`}

@@ -18,15 +18,15 @@ function TopNavigation() {
       link: "/homescreen/live",
       name: "Live",
     },
-    // {
-    //   icon: <Confetti size={22}></Confetti>,
-    //   isActive: 3,
-    //   link: "/homescreen/marketPlace",
-    //   name: "Event",
-    // },
+    {
+      icon: <Confetti size={22}></Confetti>,
+      isActive: 3,
+      link: "/homescreen/marketPlace",
+      name: "Event",
+    },
   ];
   return (
-    <div className="flex items-center justify-center h-fit p-1 rounded-lg space-x-10 ">
+    <div className="flex items-center justify-center p-1 space-x-10 rounded-lg h-fit ">
       {data.map((item, i) => (
         <NavLink
           key={i}
@@ -42,7 +42,7 @@ function TopNavigation() {
           }
         >
           {item.icon}
-          <p className="font-semibold text-xs">{item.name}</p>
+          <p className="text-xs font-semibold">{item.name}</p>
         </NavLink>
       ))}
     </div>

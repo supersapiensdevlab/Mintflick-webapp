@@ -49,6 +49,7 @@ import {
   studioProvider,
 } from "@livepeer/react";
 import NftDetails from "./Pages/NftDetails";
+import ArtHunt from "./Pages/ArtHunt";
 function App() {
   const State = useContext(UserContext);
 
@@ -79,7 +80,7 @@ function App() {
 
     console.log("userdata", State.database.userData);
 
-    console.log("authtoken", localStorage.getItem("authtoken"));
+    // console.log("authtoken", localStorage.getItem("authtoken"));
   }, []);
 
   function fetchLiveUserData() {
@@ -166,7 +167,7 @@ function App() {
             }
           />
           <Route
-            path="liveuser/:username"
+            path="live/:username"
             element={
               <LivepeerConfig client={livepeerClient} theme={theme}>
                 <UserLivestream />
@@ -193,6 +194,7 @@ function App() {
           <Route path="quests" element={<Quests />} />
           <Route path="quest-details/:questId" element={<QuestDetails />} />
           <Route path="nft-details/:tokenId" element={<NftDetails />} />
+          <Route path="art-hunt" element={<ArtHunt />} />
         </Route>
         <Route path="quests-admin" element={<QuestAdmin />} />
         <Route path="quest-details-admin" element={<QuestDetailsAdmin />} />
