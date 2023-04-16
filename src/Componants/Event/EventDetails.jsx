@@ -594,7 +594,7 @@ function EventDetails(lockAddress) {
 
   useEffect(() => {
     data &&
-      data.bookings.map((booking) => {
+      data?.bookings?.map((booking) => {
         booking.owner === State.database.walletAddress &&
           setalreadyBought(true);
         booking.owner === State.database.walletAddress &&

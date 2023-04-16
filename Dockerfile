@@ -1,5 +1,5 @@
 # Base image
-FROM node:16.10.0
+FROM --platform=linux/amd64 node:16.10.0
 
 ENV NODE_OPTIONS=--max_old_space_size=4096
 
@@ -7,7 +7,7 @@ ENV NODE_OPTIONS=--max_old_space_size=4096
 WORKDIR /app
 
 # Copy package.json and pnpm-lock.yaml (if using pnpm) to the working directory
- COPY package.json package-lock.json ./
+COPY package.json package-lock.json ./
 
 # Install pnpm globally and install dependencies
 RUN npm install
@@ -18,8 +18,10 @@ COPY . .
 # Build the React project
 RUN npm run build
 
+RUN rm -r .env
+
 # Expose the port the app will run on
-EXPOSE 3000
+EXPOSE 80
 
 # Install serve to serve the built app and start the server
 # RUN npm install -g serve
