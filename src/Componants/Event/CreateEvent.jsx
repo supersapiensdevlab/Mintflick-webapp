@@ -32,6 +32,7 @@ import { uploadFile } from "../../Helper/uploadHelper";
 import { sanitizeFilename } from "../../functions/sanitizeFilename";
 import { clusterApiUrl, Connection, Transaction } from "@solana/web3.js";
 import CustomImageInput from "../../Helper/CustomImageInput";
+import AutoComplete from "../CustomInputs/AutoComplete";
 const { ethereum } = window;
 function CreateEvent() {
   const State = useContext(UserContext);
@@ -800,7 +801,7 @@ function CreateEvent() {
             </div>{" "}
             <div className="mt-2 ">
               <label className="ml-2 text-sm font-bold">Event Timezone</label>
-              <select
+              {/* <select
                 onChange={(e) => settimezone(e.target.value)}
                 className="block w-full font-semibold select"
               >
@@ -810,7 +811,167 @@ function CreateEvent() {
                 {timezones.map((timezone) => (
                   <option>{timezone}</option>
                 ))}
-              </select>
+              </select> */}
+              <AutoComplete
+                placeholder="Select timezone"
+                dark={State.database.dark}
+                setValue={settimezone}
+                showIcon={false}
+                items={[
+                  {
+                    id: 0,
+                    name: "Baker Island, Howland Island",
+                  },
+                  {
+                    id: 1,
+                    name: "Samoa, Midway Atoll",
+                  },
+                  {
+                    id: 2,
+                    name: "Hawaii, Aleutian Islands",
+                  },
+                  {
+                    id: 3,
+                    name: "Alaska",
+                  },
+                  {
+                    id: 4,
+                    name: "Pacific Time (US and Canada)",
+                  },
+                  {
+                    id: 5,
+                    name: "Mountain Time (US and Canada)",
+                  },
+                  {
+                    id: 6,
+                    name: "Central Time (US and Canada), Mexico City",
+                  },
+                  {
+                    id: 7,
+                    name: "Eastern Time (US and Canada), Bogota, Lima",
+                  },
+                  {
+                    id: 8,
+                    name: "Atlantic Time (Canada), Caracas, La Paz",
+                  },
+                  {
+                    id: 9,
+                    name: "Newfoundland",
+                  },
+                  {
+                    id: 10,
+                    name: "Brasilia, Buenos Aires, Greenland",
+                  },
+                  {
+                    id: 11,
+                    name: "Mid-Atlantic",
+                  },
+                  {
+                    id: 12,
+                    name: "Azores, Cape Verde Islands",
+                  },
+                  {
+                    id: 13,
+                    name: "Western Europe Time, London, Lisbon, Casablanca",
+                  },
+                  {
+                    id: 14,
+                    name: "Central European Time, Brussels, Copenhagen, Madrid",
+                  },
+                  {
+                    id: 15,
+                    name: "Eastern European Time, Athens, Istanbul, Jerusalem",
+                  },
+                  {
+                    id: 16,
+                    name: "Moscow, Baghdad, Nairobi",
+                  },
+                  {
+                    id: 17,
+                    name: "Tehran",
+                  },
+                  {
+                    id: 18,
+                    name: "Abu Dhabi, Muscat, Baku, Tbilisi",
+                  },
+                  {
+                    id: 19,
+                    name: "Kabul",
+                  },
+                  {
+                    id: 20,
+                    name: "Islamabad, Karachi, Yekaterinburg",
+                  },
+                  {
+                    id: 21,
+                    name: "New Delhi, Mumbai, Kolkata",
+                  },
+                  {
+                    id: 22,
+                    name: "Kathmandu",
+                  },
+                  {
+                    id: 0,
+                    name: "Almaty, Dhaka, Novosibirsk",
+                  },
+                  {
+                    id: 23,
+                    name: "Yangon",
+                  },
+                  {
+                    id: 24,
+                    name: "Bangkok, Hanoi, Jakarta",
+                  },
+                  {
+                    id: 25,
+                    name: "Beijing, Perth, Singapore, Taipei",
+                  },
+                  {
+                    id: 26,
+                    name: "Eucla",
+                  },
+                  {
+                    id: 27,
+                    name: "Tokyo, Seoul, Yakutsk",
+                  },
+                  {
+                    id: 28,
+                    name: "Adelaide, Darwin",
+                  },
+                  {
+                    id: 29,
+                    name: "Eastern Australia, Guam, Vladivostok",
+                  },
+                  {
+                    id: 30,
+                    name: "Lord Howe Island",
+                  },
+                  {
+                    id: 31,
+                    name: "Magadan, Solomon Islands, Vanuatu",
+                  },
+                  {
+                    id: 32,
+                    name: "Norfolk Island",
+                  },
+                  {
+                    id: 33,
+                    name: "Auckland, Fiji, Kamchatka",
+                  },
+                  {
+                    id: 34,
+                    name: "Chatham Islands",
+                  },
+                  {
+                    id: 35,
+                    name: "Samoa, Tonga",
+                  },
+                  {
+                    id: 36,
+                    name: "Kiritimati",
+                  },
+                ]}
+              />
             </div>
             <div className="mt-2 ">
               <label className="ml-2 text-sm font-bold">NFT Ticket Image</label>

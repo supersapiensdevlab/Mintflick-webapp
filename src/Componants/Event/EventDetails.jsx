@@ -362,11 +362,11 @@ function EventDetails(lockAddress) {
       );
       console.log("Event details:", response);
       setData(response.data);
+      getMintedNfts(response.data.lockId);
       console.log("Verified Tickets:", response.data.verifiedTickets);
       let verifiedTickets = new Set(response.data.verifiedTickets);
       verifiedTickets = [...verifiedTickets];
       setVerified(verifiedTickets);
-      getMintedNfts(response.data.lockId);
       getBookings(response.data.lockId, 1);
       getUserByWallet(response.data.eventHost);
       setrefreshLoading(false);
