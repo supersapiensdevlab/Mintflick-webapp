@@ -33,6 +33,14 @@ import { sanitizeFilename } from "../../functions/sanitizeFilename";
 import { clusterApiUrl, Connection, Transaction } from "@solana/web3.js";
 import CustomImageInput from "../../Helper/CustomImageInput";
 import AutoComplete from "../CustomInputs/AutoComplete";
+import {
+  BrandInstagram,
+  BrandLinkedin,
+  BrandTwitter,
+  ExternalLink,
+  Globe,
+  Trash,
+} from "tabler-icons-react/dist";
 const { ethereum } = window;
 function CreateEvent() {
   const State = useContext(UserContext);
@@ -51,6 +59,8 @@ function CreateEvent() {
   const [startDate, setstartDate] = useState("");
   const [endDate, setendDate] = useState("");
   const [timezone, settimezone] = useState("");
+
+  const [socialLinks, setsocialLinks] = useState({});
 
   const timezones = [
     "Baker Island, Howland Island",
@@ -243,6 +253,7 @@ function CreateEvent() {
         eventUrl: eventLink,
         location: location,
         lockId: lockId,
+        socialLinks: socialLinks,
         // chainId: "80001",
       };
       console.log(data);
@@ -624,16 +635,14 @@ function CreateEvent() {
         {step !== 1 && (
           <button
             onClick={() => setstep(step - 1)}
-            className="flex items-center justify-start gap-2 font-semibold text-brand3"
-          >
+            className="flex items-center justify-start gap-2 font-semibold text-brand3">
             <ChevronLeft />
             Previous step
           </button>
         )}{" "}
         <button
           onClick={() => navigateTo("../marketPlace")}
-          className="flex items-center justify-center ml-auto font-semibold w-fit text-brand3"
-        >
+          className="flex items-center justify-center ml-auto font-semibold w-fit text-brand3">
           {/* <ChevronLeft /> */}
           Cancel
         </button>
@@ -649,12 +658,12 @@ function CreateEvent() {
         <progress
           className="w-full progress progress-success "
           value={step * 25}
-          max="100"
-        ></progress>
+          max="100"></progress>
         {step === 1 && (
           <>
             <div className="mt-2 ">
               <label className="ml-2 text-sm font-bold">Event Name</label>
+
               <div className="relative">
                 <input
                   type="text"
@@ -674,8 +683,7 @@ function CreateEvent() {
                     "--value": `${(name.length * 100) / 32}`,
                     "--size": "24px",
                     "--thickness": "4px",
-                  }}
-                ></div>
+                  }}></div>
               </div>
               <div className="flex items-center justify-between w-full mx-2 text-sm font-semibold ">
                 <label className=" text-error">{nameError}</label>
@@ -686,8 +694,7 @@ function CreateEvent() {
               <label className="ml-2 text-sm font-bold">Event Type</label>
               <select
                 onChange={(e) => settype(e.target.value)}
-                className="block w-full font-semibold select"
-              >
+                className="block w-full font-semibold select">
                 <option disabled selected>
                   Type of event
                 </option>
@@ -699,8 +706,7 @@ function CreateEvent() {
               <label className="ml-2 text-sm font-bold">Event Category</label>
               <select
                 onChange={(e) => setCategory(e.target.value)}
-                className="block w-full font-semibold select"
-              >
+                className="block w-full font-semibold select">
                 <option disabled selected>
                   Category of event
                 </option>
@@ -757,8 +763,7 @@ function CreateEvent() {
                 name && type && Category && setstep(2);
                 name && type && Category ? seterror(false) : seterror(true);
               }}
-              className="gap-2 mt-2 capitalize btn btn-brand"
-            >
+              className="gap-2 mt-2 capitalize btn btn-brand">
               Next <ArrowNarrowRight />
             </button>
           </>
@@ -1010,8 +1015,7 @@ function CreateEvent() {
                   ? seterror(false)
                   : seterror(true);
               }}
-              className="gap-2 mt-2 capitalize btn btn-brand"
-            >
+              className="gap-2 mt-2 capitalize btn btn-brand">
               Next <ArrowNarrowRight />
             </button>
           </>
@@ -1044,8 +1048,13 @@ function CreateEvent() {
               </div>
             </div>
             {type === "In-person" ? (
-              <div className="mt-2 ">
-                <label className="ml-2 text-sm font-bold">Event Location</label>
+              <div className="flex flex-col mt-2">
+                <label className="ml-2 text-sm font-bold ">
+                  Event Location
+                </label>
+                <span className="mb-2 ml-2 text-sm text-info">
+                  Paste the google map location link
+                </span>
                 <textarea
                   value={location}
                   onChange={(e) => setlocation(e.target.value)}
@@ -1066,6 +1075,69 @@ function CreateEvent() {
                 />
               </div>
             )}
+            <div className="w-full mt-2 form-control">
+              <label className="ml-2 text-sm font-bold">
+                Social links <span className="text-brand5">(optional) </span>
+              </label>
+              <div className="flex items-center mb-1">
+                <BrandTwitter
+                  size={16}
+                  className="translate-x-2 text-[#00acee]"
+                />
+                <input
+                  type="text"
+                  className="w-full pl-8 -ml-4 input input-sm"
+                  placeholder={"Twitter"}
+                  onChange={(e) => {
+                    socialLinks.twitter = e.target.value;
+                  }}
+                  // value={socialLinks.twitter}
+                />
+              </div>
+              <div className="flex items-center mb-1">
+                <BrandInstagram
+                  size={16}
+                  className="translate-x-2 text-[#bc2a8d]"
+                />
+                <input
+                  type="text"
+                  className="w-full pl-8 -ml-4 input input-sm"
+                  placeholder={"Instagram"}
+                  onChange={(e) => {
+                    socialLinks.instagram = e.target.value;
+                  }}
+                  // value={socialLinks.instagram}
+                />
+              </div>
+              <div className="flex items-center mb-1">
+                <BrandLinkedin
+                  size={16}
+                  className="translate-x-2 text-[#0A66C2]"
+                />
+                <input
+                  type="text"
+                  className="w-full pl-8 -ml-4 input input-sm"
+                  placeholder={"LinkedIn"}
+                  onChange={(e) => {
+                    socialLinks.linkedin = e.target.value;
+                  }}
+                  // value={socialLinks.instagram}
+                />
+              </div>
+              <div className="flex items-center mb-1">
+                <ExternalLink size={16} className="translate-x-2 text-brand2" />
+                <input
+                  type="text"
+                  className="w-full pl-8 -ml-4 input input-sm"
+                  placeholder={"Website link"}
+                  onChange={(e) => {
+                    socialLinks.website = e.target.value;
+                    console.log(socialLinks);
+                  }}
+                  // value={socialLinks.instagram}
+                />
+              </div>
+            </div>
 
             <button
               onClick={() => {
@@ -1075,8 +1147,7 @@ function CreateEvent() {
                 type === "In-person" && location && seterror(false);
                 type !== "In-person" && eventLink && seterror(false);
               }}
-              className="gap-2 mt-2 capitalize btn btn-brand"
-            >
+              className="gap-2 mt-2 capitalize btn btn-brand">
               Review Details <ArrowNarrowRight />
             </button>
           </>
@@ -1159,8 +1230,7 @@ function CreateEvent() {
               }}
               className={`${
                 uploadingEvent ? "loading" : ""
-              } mt-2 btn gap-2 btn-brand capitalize`}
-            >
+              } mt-2 btn gap-2 btn-brand capitalize`}>
               Publish event <Confetti />
             </button>
           </>
@@ -1170,8 +1240,7 @@ function CreateEvent() {
             <div
               className={`flex items-center gap-2 w-full bg-slate-300 dark:bg-slate-700 p-4 rounded-lg text-lg font-semibold ${
                 stepper.uploadingFile && "text-success"
-              }`}
-            >
+              }`}>
               {stepper.uploadingFile ? (
                 <CircleCheck />
               ) : (
@@ -1182,8 +1251,7 @@ function CreateEvent() {
             <div
               className={`flex items-center gap-2 w-full bg-slate-300 dark:bg-slate-700 p-4 rounded-lg text-lg font-semibold ${
                 stepper.creatingEvent && "text-success"
-              }`}
-            >
+              }`}>
               {stepper.creatingEvent ? (
                 <CircleCheck />
               ) : (
@@ -1194,8 +1262,7 @@ function CreateEvent() {
             <div
               className={`flex items-center gap-2 w-full bg-slate-300 dark:bg-slate-700 p-4 rounded-lg text-lg font-semibold ${
                 stepper.signingTransaction1 && "text-success"
-              }`}
-            >
+              }`}>
               {stepper.signingTransaction1 ? (
                 <CircleCheck />
               ) : (
@@ -1206,8 +1273,7 @@ function CreateEvent() {
             <div
               className={`flex items-center   gap-2 w-full bg-slate-300 dark:bg-slate-700 p-4 rounded-lg text-lg font-semibold ${
                 stepper.creartingMachine && "text-success"
-              }`}
-            >
+              }`}>
               {stepper.creartingMachine ? (
                 <CircleCheck />
               ) : (
@@ -1221,8 +1287,7 @@ function CreateEvent() {
             <div
               className={`flex items-center gap-2 w-full bg-slate-300 dark:bg-slate-700 p-4 rounded-lg text-lg font-semibold ${
                 stepper.signingTransaction2 && "text-success"
-              }`}
-            >
+              }`}>
               {stepper.signingTransaction2 ? (
                 <CircleCheck />
               ) : (
