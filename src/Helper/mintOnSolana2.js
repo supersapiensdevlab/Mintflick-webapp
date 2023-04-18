@@ -7,8 +7,11 @@ import {
 } from "@solana/web3.js";
 import { decode } from "bs58";
 import { SolanaWallet } from "@web3auth/solana-provider";
+import { clusterUrl } from "../Componants/Home/Utility/utilityFunc";
 
-const connection = new Connection(process.env.REACT_APP_SOLANA_RPC);
+const rpcUrl = clusterUrl(process.env.REACT_APP_SOLANA_NETWORK);
+
+const connection = new Connection(rpcUrl, "confirmed");
 
 export const signTransactionWithKey = async (
   encodedTransaction,
@@ -19,7 +22,7 @@ export const signTransactionWithKey = async (
     Buffer.from(encodedTransaction, "base64")
   );
   console.log(recoveredTransaction);
-  await recoveredTransaction.partialSign(feePayer);
+  recoveredTransaction.partialSign(feePayer);
   // const serializedTransaction = recoveredTransaction.serialize({
   //   requireAllSignatures: false,
   // });
@@ -28,9 +31,9 @@ export const signTransactionWithKey = async (
   //partially signing using private key of fee_payer wallet
 
   console.log(recoveredTransaction.serialize().toString("base64"));
-  const confirmTransaction = await connection.sendEncodedTransaction(
-    recoveredTransaction.serialize().toString("base64")
-  );
+  const base64Txn = recoveredTransaction.serialize().toString("base64");
+
+  const confirmTransaction = await connection.sendEncodedTransaction(base64Txn);
   // const confirmTransaction = await sendTransaction(
   //   signedTx.serialize().toString("base64")
   // );
@@ -47,7 +50,7 @@ export const signTransactionKeyWallet = async (
     Buffer.from(encodedTransaction, "base64")
   );
   console.log(recoveredTransaction);
-  await recoveredTransaction.partialSign(feePayer);
+  recoveredTransaction.partialSign(feePayer);
   // const serializedTransaction = recoveredTransaction.serialize({
   //   requireAllSignatures: false,
   // });
@@ -57,9 +60,8 @@ export const signTransactionKeyWallet = async (
 
   const signedTx = await provider.signTransaction(recoveredTransaction); // signing the recovered transaction using the creator_wall
   console.log(signedTx.serialize().toString("base64"));
-  const confirmTransaction = await connection.sendEncodedTransaction(
-    signedTx.serialize().toString("base64")
-  );
+  const base64Txn = signedTx.serialize().toString("base64");
+  const confirmTransaction = await connection.sendEncodedTransaction(base64Txn);
   // const confirmTransaction = await sendTransaction(
   //   signedTx.serialize().toString("base64")
   // );
@@ -91,7 +93,7 @@ export const signTransactionWithWallet = async (
   //   signedTx.serialize()
   // );
 
-  confirmTransaction = signedTx
+  confirmTransaction = await signedTx
     .serialize({ requireAllSignatures: false })
     .toString("base64");
 
@@ -232,10 +234,7 @@ export const buyNFTOnSolana2 = (buyNftData, provider) => {
         provider
       );
       console.log(signedTrasaction);
-      const connection = new Connection(
-        clusterApiUrl(process.env.REACT_APP_SOLANA_NETWORK),
-        "confirmed"
-      );
+
       await connection.sendRawTransaction(signedTrasaction.serialize());
       return true;
     })
