@@ -21,7 +21,7 @@ function TopNavigation() {
     {
       icon: <Confetti size={22}></Confetti>,
       isActive: 3,
-      link: "/homescreen/marketPlace",
+      link: "/homescreen/events",
       name: "Event",
     },
   ];
@@ -39,8 +39,7 @@ function TopNavigation() {
             isActive
               ? `btn   btn-brand flex  gap-2 items-center justify-center  `
               : `btn  btn-ghost dark:text-gray-100 flex  gap-2 items-center justify-center `
-          }
-        >
+          }>
           {item.icon}
           <p className="text-xs font-semibold">{item.name}</p>
         </NavLink>

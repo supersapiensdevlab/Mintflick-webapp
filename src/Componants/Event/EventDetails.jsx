@@ -617,7 +617,7 @@ function EventDetails(lockAddress) {
   //   <div className="flex flex-col w-screen h-screen gap-2 overflow-auto bg-white md:gap-4 dark:bg-slate-900">
   //     <div className="flex items-center w-full max-w-3xl p-4 mx-auto">
   //       <button
-  //         onClick={() => navigateTo("../marketPlace")}
+  //         onClick={() => navigateTo("..")}
   //         className="flex items-center justify-center font-semibold text-brand3"
   //       >
   //         <ChevronLeft />
@@ -736,7 +736,7 @@ function EventDetails(lockAddress) {
       <div className="flex flex-col items-center w-full bg-white lg:w-2/4 lg:px-12 dark:bg-slate-900">
         <div className="flex items-center justify-between w-full max-w-3xl p-4 mx-auto">
           <button
-            onClick={() => navigateTo("../marketPlace")}
+            onClick={() => navigateTo("../events")}
             className="flex items-center justify-center font-semibold text-brand3">
             <ChevronLeft />
             Back
@@ -1045,30 +1045,38 @@ function EventDetails(lockAddress) {
                   Social links
                 </span>
                 <div className="flex items-center gap-3">
-                  <a target="_blank" href={data?.socialLinks?.twitter}>
-                    <BrandTwitter
-                      size={28}
-                      className="translate-x-2 text-[#00acee]"
-                    />
-                  </a>
-                  <a target="_blank" href={data?.socialLinks?.instagram}>
-                    <BrandInstagram
-                      size={28}
-                      className="translate-x-2 text-[#bc2a8d]"
-                    />
-                  </a>
-                  <a target="_blank" href={data?.socialLinks?.linkedIn}>
-                    <BrandLinkedin
-                      size={28}
-                      className="translate-x-2 text-[#0A66C2]"
-                    />
-                  </a>
-                  <a target="_blank" href={data?.socialLinks?.website}>
-                    <ExternalLink
-                      size={28}
-                      className="translate-x-2 text-brand2"
-                    />
-                  </a>
+                  {data?.socialLinks?.twitter && (
+                    <a target="_blank" href={data?.socialLinks?.twitter}>
+                      <BrandTwitter
+                        size={28}
+                        className="translate-x-2 text-[#00acee]"
+                      />
+                    </a>
+                  )}
+                  {data?.socialLinks?.instagram && (
+                    <a target="_blank" href={data?.socialLinks?.instagram}>
+                      <BrandInstagram
+                        size={28}
+                        className="translate-x-2 text-[#bc2a8d]"
+                      />
+                    </a>
+                  )}
+                  {data?.socialLinks?.linkedIn && (
+                    <a target="_blank" href={data?.socialLinks?.linkedIn}>
+                      <BrandLinkedin
+                        size={28}
+                        className="translate-x-2 text-[#0A66C2]"
+                      />
+                    </a>
+                  )}
+                  {data?.socialLinks?.website && (
+                    <a target="_blank" href={data?.socialLinks?.website}>
+                      <ExternalLink
+                        size={28}
+                        className="translate-x-2 text-brand2"
+                      />
+                    </a>
+                  )}
                 </div>
               </div>
             )}

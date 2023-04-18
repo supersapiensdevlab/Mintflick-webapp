@@ -268,7 +268,7 @@ function CreateEvent() {
         .then(async (res) => {
           State.toast("success", "Your event created successfully!");
           //await clearState();
-          navigateTo("../marketPlace");
+          navigateTo("../events");
         })
         .catch((err) => {
           State.toast("error", "Oops!something went wrong uploading event!");
@@ -641,7 +641,7 @@ function CreateEvent() {
           </button>
         )}{" "}
         <button
-          onClick={() => navigateTo("../marketPlace")}
+          onClick={() => navigateTo("../events")}
           className="flex items-center justify-center ml-auto font-semibold w-fit text-brand3">
           {/* <ChevronLeft /> */}
           Cancel
