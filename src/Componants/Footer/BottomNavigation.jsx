@@ -33,7 +33,7 @@ function BottomNavigation() {
       icon: <Confetti size={28}></Confetti>,
       name: "Events",
       isActive: 3,
-      link: "/homescreen/marketPlace",
+      link: "/homescreen/events",
       notification: 0,
     },
     {
@@ -65,8 +65,7 @@ function BottomNavigation() {
           }}
           className={({ isActive }) =>
             isActive ? `relative  text-white ` : ` relative   text-white/50`
-          }
-        >
+          }>
           {item.icon}
           {item.notification !== 0 && (
             <div className="absolute self-center h-4 px-1 text-xs font-semibold text-center text-white rounded-full shadow bg-rose-600 w-fit -top-2 left-4">

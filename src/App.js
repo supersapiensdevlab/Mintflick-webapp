@@ -174,7 +174,7 @@ function App() {
               </LivepeerConfig>
             }
           />
-          <Route path="marketPlace" element={<Events></Events>} />
+          <Route path="events" element={<Events></Events>} />
           <Route path="create-event" element={<CreateEvent />} />
           <Route path="event-details/:id" element={<EventDetails />} />
 
@@ -200,8 +200,7 @@ function App() {
         <Route path="quest-details-admin" element={<QuestDetailsAdmin />} />
         <Route
           path="/quest/:questId/:taskId"
-          element={<QuestOnboarding />}
-        ></Route>
+          element={<QuestOnboarding />}></Route>
       </Routes>
       <ShareModal />
       <BuyNFTModal />
