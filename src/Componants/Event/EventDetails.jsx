@@ -1039,8 +1039,7 @@ function EventDetails(lockAddress) {
                 </a>
               </div>
             )}
-            {/* {data.socialLinks &&  */}
-            {
+            {data.socialLinks && (
               <div className="flex flex-col items-start justify-start w-full max-w-2xl gap-2 p-2 mx-auto bg-slate-100 dark:bg-slate-700 sm:rounded-xl sm:p-4">
                 <span className="text-lg font-semibold text-brand1">
                   Social links
@@ -1072,7 +1071,7 @@ function EventDetails(lockAddress) {
                   </a>
                 </div>
               </div>
-            }
+            )}
             {/* {data.eventUrl && (
               <div className="flex flex-col items-start justify-start w-full max-w-2xl gap-2 p-2 mx-auto bg-slate-100 dark:bg-slate-700 sm:rounded-xl sm:p-4">
                 <span className="text-lg font-semibold text-brand1">Link</span>
@@ -1106,7 +1105,7 @@ function EventDetails(lockAddress) {
             }
             alt="banner"
           />
-        </div> */}{" "}
+        </div> */}
             {viewBookings && (
               <div
                 className={`${
