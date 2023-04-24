@@ -41,11 +41,13 @@ import {
   Globe,
   Trash,
 } from "tabler-icons-react/dist";
+import BuyPlatformPlan from "../Wallet/BuyPlatformPlan";
 const { ethereum } = window;
 function CreateEvent() {
   const State = useContext(UserContext);
   const navigateTo = useNavigate();
 
+  const [buyPlatformPlanOpen, setbuyPlatformPlanOpen] = useState(false);
   const [step, setstep] = useState(1);
 
   const [type, settype] = useState("");
@@ -63,44 +65,158 @@ function CreateEvent() {
   const [socialLinks, setsocialLinks] = useState({});
 
   const timezones = [
-    "Baker Island, Howland Island",
-    "Samoa, Midway Atoll",
-    "Hawaii, Aleutian Islands",
-    "Alaska",
-    "Pacific Time (US and Canada)",
-    "Mountain Time (US and Canada)",
-    "Central Time (US and Canada), Mexico City",
-    "Eastern Time (US and Canada), Bogota, Lima",
-    "Atlantic Time (Canada), Caracas, La Paz",
-    "Newfoundland",
-    "Brasilia, Buenos Aires, Greenland",
-    "Mid-Atlantic",
-    "Azores, Cape Verde Islands",
-    "Western Europe Time, London, Lisbon, Casablanca",
-    "Central European Time, Brussels, Copenhagen, Madrid",
-    "Eastern European Time, Athens, Istanbul, Jerusalem",
-    "Moscow, Baghdad, Nairobi",
-    "Tehran",
-    "Abu Dhabi, Muscat, Baku, Tbilisi",
-    "Kabul",
-    "Islamabad, Karachi, Yekaterinburg",
-    "New Delhi, Mumbai, Kolkata",
-    "Kathmandu",
-    "Almaty, Dhaka, Novosibirsk",
-    "Yangon",
-    "Bangkok, Hanoi, Jakarta",
-    "Beijing, Perth, Singapore, Taipei",
-    "Eucla",
-    "Tokyo, Seoul, Yakutsk",
-    "Adelaide, Darwin",
-    "Eastern Australia, Guam, Vladivostok",
-    "Lord Howe Island",
-    "Magadan, Solomon Islands, Vanuatu",
-    "Norfolk Island",
-    "Auckland, Fiji, Kamchatka",
-    "Chatham Islands",
-    "Samoa, Tonga",
-    "Kiritimati",
+    {
+      id: 0,
+      name: "Baker Island, Howland Island",
+    },
+    {
+      id: 1,
+      name: "Samoa, Midway Atoll",
+    },
+    {
+      id: 2,
+      name: "Hawaii, Aleutian Islands",
+    },
+    {
+      id: 3,
+      name: "Alaska",
+    },
+    {
+      id: 4,
+      name: "Pacific Time (US and Canada)",
+    },
+    {
+      id: 5,
+      name: "Mountain Time (US and Canada)",
+    },
+    {
+      id: 6,
+      name: "Central Time (US and Canada), Mexico City",
+    },
+    {
+      id: 7,
+      name: "Eastern Time (US and Canada), Bogota, Lima",
+    },
+    {
+      id: 8,
+      name: "Atlantic Time (Canada), Caracas, La Paz",
+    },
+    {
+      id: 9,
+      name: "Newfoundland",
+    },
+    {
+      id: 10,
+      name: "Brasilia, Buenos Aires, Greenland",
+    },
+    {
+      id: 11,
+      name: "Mid-Atlantic",
+    },
+    {
+      id: 12,
+      name: "Azores, Cape Verde Islands",
+    },
+    {
+      id: 13,
+      name: "Western Europe Time, London, Lisbon, Casablanca",
+    },
+    {
+      id: 14,
+      name: "Central European Time, Brussels, Copenhagen, Madrid",
+    },
+    {
+      id: 15,
+      name: "Eastern European Time, Athens, Istanbul, Jerusalem",
+    },
+    {
+      id: 16,
+      name: "Moscow, Baghdad, Nairobi",
+    },
+    {
+      id: 17,
+      name: "Tehran",
+    },
+    {
+      id: 18,
+      name: "Abu Dhabi, Muscat, Baku, Tbilisi",
+    },
+    {
+      id: 19,
+      name: "Kabul",
+    },
+    {
+      id: 20,
+      name: "Islamabad, Karachi, Yekaterinburg",
+    },
+    {
+      id: 21,
+      name: "New Delhi, Mumbai, Kolkata",
+    },
+    {
+      id: 22,
+      name: "Kathmandu",
+    },
+    {
+      id: 0,
+      name: "Almaty, Dhaka, Novosibirsk",
+    },
+    {
+      id: 23,
+      name: "Yangon",
+    },
+    {
+      id: 24,
+      name: "Bangkok, Hanoi, Jakarta",
+    },
+    {
+      id: 25,
+      name: "Beijing, Perth, Singapore, Taipei",
+    },
+    {
+      id: 26,
+      name: "Eucla",
+    },
+    {
+      id: 27,
+      name: "Tokyo, Seoul, Yakutsk",
+    },
+    {
+      id: 28,
+      name: "Adelaide, Darwin",
+    },
+    {
+      id: 29,
+      name: "Eastern Australia, Guam, Vladivostok",
+    },
+    {
+      id: 30,
+      name: "Lord Howe Island",
+    },
+    {
+      id: 31,
+      name: "Magadan, Solomon Islands, Vanuatu",
+    },
+    {
+      id: 32,
+      name: "Norfolk Island",
+    },
+    {
+      id: 33,
+      name: "Auckland, Fiji, Kamchatka",
+    },
+    {
+      id: 34,
+      name: "Chatham Islands",
+    },
+    {
+      id: 35,
+      name: "Samoa, Tonga",
+    },
+    {
+      id: 36,
+      name: "Kiritimati",
+    },
   ];
 
   const [isFreeEvent, setisFreeEvent] = useState(false);
@@ -623,7 +739,16 @@ function CreateEvent() {
         });
       });
   }
-
+  const hasPro = () => {
+    let isPro;
+    State.database.userData?.data?.user?.subscription?.map((s) => {
+      s.type === "platform" &&
+        s.plan === "Pro" &&
+        s.validity >= Math.round(Date.now() / 1000) &&
+        (isPro = true);
+    });
+    return isPro;
+  };
   useEffect(() => {
     State.updateDatabase({ showHeader: false });
     State.updateDatabase({ showBottomNav: false });
@@ -635,14 +760,16 @@ function CreateEvent() {
         {step !== 1 && (
           <button
             onClick={() => setstep(step - 1)}
-            className="flex items-center justify-start gap-2 font-semibold text-brand3">
+            className="flex items-center justify-start gap-2 font-semibold text-brand3"
+          >
             <ChevronLeft />
             Previous step
           </button>
         )}{" "}
         <button
           onClick={() => navigateTo("../events")}
-          className="flex items-center justify-center ml-auto font-semibold w-fit text-brand3">
+          className="flex items-center justify-center ml-auto font-semibold w-fit text-brand3"
+        >
           {/* <ChevronLeft /> */}
           Cancel
         </button>
@@ -658,7 +785,8 @@ function CreateEvent() {
         <progress
           className="w-full progress progress-success "
           value={step * 25}
-          max="100"></progress>
+          max="100"
+        ></progress>
         {step === 1 && (
           <>
             <div className="mt-2 ">
@@ -683,7 +811,8 @@ function CreateEvent() {
                     "--value": `${(name.length * 100) / 32}`,
                     "--size": "24px",
                     "--thickness": "4px",
-                  }}></div>
+                  }}
+                ></div>
               </div>
               <div className="flex items-center justify-between w-full mx-2 text-sm font-semibold ">
                 <label className=" text-error">{nameError}</label>
@@ -694,7 +823,8 @@ function CreateEvent() {
               <label className="ml-2 text-sm font-bold">Event Type</label>
               <select
                 onChange={(e) => settype(e.target.value)}
-                className="block w-full font-semibold select">
+                className="block w-full font-semibold select"
+              >
                 <option disabled selected>
                   Type of event
                 </option>
@@ -706,7 +836,8 @@ function CreateEvent() {
               <label className="ml-2 text-sm font-bold">Event Category</label>
               <select
                 onChange={(e) => setCategory(e.target.value)}
-                className="block w-full font-semibold select">
+                className="block w-full font-semibold select"
+              >
                 <option disabled selected>
                   Category of event
                 </option>
@@ -736,7 +867,7 @@ function CreateEvent() {
               </div>
             )}
 
-            <label className="gap-2 cursor-pointer label w-fit ">
+            {/* <label className="gap-2 cursor-pointer label w-fit ">
               <span className="text-brand3">Unlimited Tickets</span>
               <input
                 type="checkbox"
@@ -744,26 +875,44 @@ function CreateEvent() {
                 checked={isUnlimited}
                 onChange={() => setisUnlimited(!isUnlimited)}
               />
-            </label>
+            </label> */}
             {!isUnlimited && (
               <div className="">
-                <label className="ml-2 text-sm font-bold">Total tickets</label>
+                <label className="ml-2 text-sm font-bold">Ticket Count</label>
                 <input
                   value={totalTickets}
-                  onChange={(e) => settotalTickets(e.target.value)}
+                  onChange={(e) => {
+                    settotalTickets(e.target.value);
+                  }}
                   type="text"
                   placeholder="How many tickets you want to generate?"
                   className="flex-grow w-full input input-bordered"
                 />
+                {isFreeEvent && totalTickets > 100 && !hasPro() && (
+                  <>
+                    <span className="font-semibold text-error">
+                      Tickets are limited for free events if you are not PRO
+                      plan subscriber!
+                    </span>{" "}
+                    <span
+                      onClick={() => setbuyPlatformPlanOpen(true)}
+                      className="font-semibold cursor-pointer text-primary"
+                    >
+                      Subscribe here
+                    </span>
+                  </>
+                )}
               </div>
             )}
-
             <button
               onClick={() => {
                 name && type && Category && setstep(2);
                 name && type && Category ? seterror(false) : seterror(true);
               }}
-              className="gap-2 mt-2 capitalize btn btn-brand">
+              className={`gap-2 mt-2 capitalize btn btn-brand ${
+                isFreeEvent && totalTickets > 100 && !hasPro() && "btn-disabled"
+              }  `}
+            >
               Next <ArrowNarrowRight />
             </button>
           </>
@@ -822,160 +971,7 @@ function CreateEvent() {
                 dark={State.database.dark}
                 setValue={settimezone}
                 showIcon={false}
-                items={[
-                  {
-                    id: 0,
-                    name: "Baker Island, Howland Island",
-                  },
-                  {
-                    id: 1,
-                    name: "Samoa, Midway Atoll",
-                  },
-                  {
-                    id: 2,
-                    name: "Hawaii, Aleutian Islands",
-                  },
-                  {
-                    id: 3,
-                    name: "Alaska",
-                  },
-                  {
-                    id: 4,
-                    name: "Pacific Time (US and Canada)",
-                  },
-                  {
-                    id: 5,
-                    name: "Mountain Time (US and Canada)",
-                  },
-                  {
-                    id: 6,
-                    name: "Central Time (US and Canada), Mexico City",
-                  },
-                  {
-                    id: 7,
-                    name: "Eastern Time (US and Canada), Bogota, Lima",
-                  },
-                  {
-                    id: 8,
-                    name: "Atlantic Time (Canada), Caracas, La Paz",
-                  },
-                  {
-                    id: 9,
-                    name: "Newfoundland",
-                  },
-                  {
-                    id: 10,
-                    name: "Brasilia, Buenos Aires, Greenland",
-                  },
-                  {
-                    id: 11,
-                    name: "Mid-Atlantic",
-                  },
-                  {
-                    id: 12,
-                    name: "Azores, Cape Verde Islands",
-                  },
-                  {
-                    id: 13,
-                    name: "Western Europe Time, London, Lisbon, Casablanca",
-                  },
-                  {
-                    id: 14,
-                    name: "Central European Time, Brussels, Copenhagen, Madrid",
-                  },
-                  {
-                    id: 15,
-                    name: "Eastern European Time, Athens, Istanbul, Jerusalem",
-                  },
-                  {
-                    id: 16,
-                    name: "Moscow, Baghdad, Nairobi",
-                  },
-                  {
-                    id: 17,
-                    name: "Tehran",
-                  },
-                  {
-                    id: 18,
-                    name: "Abu Dhabi, Muscat, Baku, Tbilisi",
-                  },
-                  {
-                    id: 19,
-                    name: "Kabul",
-                  },
-                  {
-                    id: 20,
-                    name: "Islamabad, Karachi, Yekaterinburg",
-                  },
-                  {
-                    id: 21,
-                    name: "New Delhi, Mumbai, Kolkata",
-                  },
-                  {
-                    id: 22,
-                    name: "Kathmandu",
-                  },
-                  {
-                    id: 0,
-                    name: "Almaty, Dhaka, Novosibirsk",
-                  },
-                  {
-                    id: 23,
-                    name: "Yangon",
-                  },
-                  {
-                    id: 24,
-                    name: "Bangkok, Hanoi, Jakarta",
-                  },
-                  {
-                    id: 25,
-                    name: "Beijing, Perth, Singapore, Taipei",
-                  },
-                  {
-                    id: 26,
-                    name: "Eucla",
-                  },
-                  {
-                    id: 27,
-                    name: "Tokyo, Seoul, Yakutsk",
-                  },
-                  {
-                    id: 28,
-                    name: "Adelaide, Darwin",
-                  },
-                  {
-                    id: 29,
-                    name: "Eastern Australia, Guam, Vladivostok",
-                  },
-                  {
-                    id: 30,
-                    name: "Lord Howe Island",
-                  },
-                  {
-                    id: 31,
-                    name: "Magadan, Solomon Islands, Vanuatu",
-                  },
-                  {
-                    id: 32,
-                    name: "Norfolk Island",
-                  },
-                  {
-                    id: 33,
-                    name: "Auckland, Fiji, Kamchatka",
-                  },
-                  {
-                    id: 34,
-                    name: "Chatham Islands",
-                  },
-                  {
-                    id: 35,
-                    name: "Samoa, Tonga",
-                  },
-                  {
-                    id: 36,
-                    name: "Kiritimati",
-                  },
-                ]}
+                items={timezones}
               />
             </div>
             <div className="mt-2 ">
@@ -1015,7 +1011,8 @@ function CreateEvent() {
                   ? seterror(false)
                   : seterror(true);
               }}
-              className="gap-2 mt-2 capitalize btn btn-brand">
+              className="gap-2 mt-2 capitalize btn btn-brand"
+            >
               Next <ArrowNarrowRight />
             </button>
           </>
@@ -1147,7 +1144,8 @@ function CreateEvent() {
                 type === "In-person" && location && seterror(false);
                 type !== "In-person" && eventLink && seterror(false);
               }}
-              className="gap-2 mt-2 capitalize btn btn-brand">
+              className="gap-2 mt-2 capitalize btn btn-brand"
+            >
               Review Details <ArrowNarrowRight />
             </button>
           </>
@@ -1230,7 +1228,8 @@ function CreateEvent() {
               }}
               className={`${
                 uploadingEvent ? "loading" : ""
-              } mt-2 btn gap-2 btn-brand capitalize`}>
+              } mt-2 btn gap-2 btn-brand capitalize`}
+            >
               Publish event <Confetti />
             </button>
           </>
@@ -1240,7 +1239,8 @@ function CreateEvent() {
             <div
               className={`flex items-center gap-2 w-full bg-slate-300 dark:bg-slate-700 p-4 rounded-lg text-lg font-semibold ${
                 stepper.uploadingFile && "text-success"
-              }`}>
+              }`}
+            >
               {stepper.uploadingFile ? (
                 <CircleCheck />
               ) : (
@@ -1251,7 +1251,8 @@ function CreateEvent() {
             <div
               className={`flex items-center gap-2 w-full bg-slate-300 dark:bg-slate-700 p-4 rounded-lg text-lg font-semibold ${
                 stepper.creatingEvent && "text-success"
-              }`}>
+              }`}
+            >
               {stepper.creatingEvent ? (
                 <CircleCheck />
               ) : (
@@ -1262,7 +1263,8 @@ function CreateEvent() {
             <div
               className={`flex items-center gap-2 w-full bg-slate-300 dark:bg-slate-700 p-4 rounded-lg text-lg font-semibold ${
                 stepper.signingTransaction1 && "text-success"
-              }`}>
+              }`}
+            >
               {stepper.signingTransaction1 ? (
                 <CircleCheck />
               ) : (
@@ -1273,7 +1275,8 @@ function CreateEvent() {
             <div
               className={`flex items-center   gap-2 w-full bg-slate-300 dark:bg-slate-700 p-4 rounded-lg text-lg font-semibold ${
                 stepper.creartingMachine && "text-success"
-              }`}>
+              }`}
+            >
               {stepper.creartingMachine ? (
                 <CircleCheck />
               ) : (
@@ -1287,7 +1290,8 @@ function CreateEvent() {
             <div
               className={`flex items-center gap-2 w-full bg-slate-300 dark:bg-slate-700 p-4 rounded-lg text-lg font-semibold ${
                 stepper.signingTransaction2 && "text-success"
-              }`}>
+              }`}
+            >
               {stepper.signingTransaction2 ? (
                 <CircleCheck />
               ) : (
@@ -1308,6 +1312,12 @@ function CreateEvent() {
           </div>
         )}
       </div>
+      {buyPlatformPlanOpen && (
+        <BuyPlatformPlan
+          setOpen={setbuyPlatformPlanOpen}
+          open={buyPlatformPlanOpen}
+        />
+      )}
     </div>
   );
 }

@@ -13,6 +13,7 @@ import {
   Scan,
   Share,
   Ticket,
+  World,
   X,
 } from "tabler-icons-react";
 import SolanaToken from "../../Assets/logos/SolanaToken";
@@ -52,6 +53,7 @@ import {
   BrandTwitter,
   ExternalLink,
 } from "tabler-icons-react/dist";
+import WalletSummary from "../Wallet/WalletSummary";
 
 function Booking(props) {
   const [info, setinfo] = useState(null);
@@ -75,7 +77,8 @@ function Booking(props) {
   return info ? (
     <Link
       to={`/homescreen/profile/${info?.username}`}
-      className="flex items-center gap-1 hover:opacity-80">
+      className="flex items-center gap-1 hover:opacity-80"
+    >
       <img
         className="w-10 rounded-full aspect-square"
         src={info?.profile_image || imgPlaceHolder}
@@ -728,7 +731,8 @@ function EventDetails(lockAddress) {
           </p>
           <Link
             to={`/homescreen/create-event`}
-            className="w-full mt-4 capitalize btn btn-brand">
+            className="w-full mt-4 capitalize btn btn-brand"
+          >
             Host event
           </Link>
         </div>
@@ -737,14 +741,16 @@ function EventDetails(lockAddress) {
         <div className="flex items-center justify-between w-full max-w-3xl p-4 mx-auto">
           <button
             onClick={() => navigateTo("../events")}
-            className="flex items-center justify-center font-semibold text-brand3">
+            className="flex items-center justify-center font-semibold text-brand3"
+          >
             <ChevronLeft />
             Back
           </button>
 
           <span
             // onClick={() => setwalletModalOpen(true)}
-            className="flex items-center gap-2 text-brand1">
+            className="flex items-center gap-2 text-brand1"
+          >
             <Refresh
               onClick={() => {
                 fetchData(params.id);
@@ -850,7 +856,8 @@ function EventDetails(lockAddress) {
                 {alreadyBought && (
                   <span
                     onClick={() => setshowQr(true)}
-                    className="gap-2 text-white capitalize rounded-full btn btn-success">
+                    className="gap-2 text-white capitalize rounded-full btn btn-success"
+                  >
                     <Qrcode></Qrcode> View QR
                   </span>
                 )}
@@ -858,7 +865,8 @@ function EventDetails(lockAddress) {
                   (data?.unlimitedTickets ? (
                     <button
                       onClick={buyOnSolana}
-                      className={`pl-3 pr-[2px] py-1 md:pl-4 md:pr-1 md:py-2 bg-success text-white flex items-center gap-1 rounded-full capitalize  `}>
+                      className={`pl-3 pr-[2px] py-1 md:pl-4 md:pr-1 md:py-2 bg-success text-white flex items-center gap-1 rounded-full capitalize  `}
+                    >
                       {buying && <Loader size={16} className="animate-spin" />}
                       <span className="text-base ">Book for</span>
                       {data?.freeEvent ? (
@@ -887,7 +895,8 @@ function EventDetails(lockAddress) {
                       ) : (
                         <button
                           onClick={buyOnSolana}
-                          className={`pl-3 pr-[2px] py-1 md:pl-4 md:pr-1 md:py-2 bg-success text-white flex items-center gap-1 rounded-full capitalize  `}>
+                          className={`pl-3 pr-[2px] py-1 md:pl-4 md:pr-1 md:py-2 bg-success text-white flex items-center gap-1 rounded-full capitalize  `}
+                        >
                           {buying && (
                             <Loader size={16} className="animate-spin " />
                           )}{" "}
@@ -920,7 +929,8 @@ function EventDetails(lockAddress) {
               <div className="flex items-center gap-2 ">
                 <button
                   className="text-white capitalize rounded-full btn btn-info"
-                  onClick={() => setVerify(!verify)}>
+                  onClick={() => setVerify(!verify)}
+                >
                   Verify Tickets
                 </button>
                 {!data.freeEvent && !data.withdrawn
@@ -938,7 +948,8 @@ function EventDetails(lockAddress) {
                           }
                           className={`text-white capitalize rounded-full btn btn-success ${
                             loading && "loading"
-                          }`}>
+                          }`}
+                        >
                           Withdraw{" "}
                           {(
                             data.ticketPrice *
@@ -951,7 +962,8 @@ function EventDetails(lockAddress) {
                     )
                   : !data.freeEvent && (
                       <button
-                        className={`text-white capitalize rounded-full btn btn-ghost gap-2`}>
+                        className={`text-white capitalize rounded-full btn btn-ghost gap-2`}
+                      >
                         <Check className="text-success"></Check> Withdrawn{" "}
                         {(data.ticketPrice * mintedNfts?.length * 0.95).toFixed(
                           2
@@ -968,7 +980,8 @@ function EventDetails(lockAddress) {
                 </span>
                 <div
                   onClick={() => setviewBookings(true)}
-                  className="text-lg font-semibold cursor-pointer text-primary">
+                  className="text-lg font-semibold cursor-pointer text-primary"
+                >
                   view all
                 </div>
               </div>
@@ -983,7 +996,8 @@ function EventDetails(lockAddress) {
                   <progress
                     className="w-2/3 progress progress-success"
                     value={mintedNfts?.length}
-                    max={data?.ticketCount}></progress>
+                    max={data?.ticketCount}
+                  ></progress>
                   <span className="flex items-center gap-1 text-sm font-semibold w-fit text-brand1">
                     {`${data?.ticketCount - mintedNfts?.length} tickets left`}
                   </span>
@@ -1006,13 +1020,15 @@ function EventDetails(lockAddress) {
                 <a
                   href={data?.location}
                   target="_blank"
-                  className="flex items-center gap-2 text-white rounded-full">
+                  className="flex items-center gap-2 text-white rounded-full"
+                >
                   <svg
                     width="17"
                     height="24"
                     viewBox="0 0 17 24"
                     fill="none"
-                    xmlns="http://www.w3.org/2000/svg">
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
                     <path
                       d="M10.9035 0.388396C10.1078 0.137359 9.2552 0 8.3742 0C5.80226 0 3.50031 1.16045 1.96094 2.98875L5.91594 6.3138L10.9035 0.388396Z"
                       fill="#1A73E8"
@@ -1039,11 +1055,9 @@ function EventDetails(lockAddress) {
                 </a>
               </div>
             )}
-            {data.socialLinks && (
+            {data?.socialLinks && (
               <div className="flex flex-col items-start justify-start w-full max-w-2xl gap-2 p-2 mx-auto bg-slate-100 dark:bg-slate-700 sm:rounded-xl sm:p-4">
-                <span className="text-lg font-semibold text-brand1">
-                  Social links
-                </span>
+                <span className="text-lg font-semibold text-brand1">Links</span>
                 <div className="flex items-center gap-3">
                   {data?.socialLinks?.twitter && (
                     <a target="_blank" href={data?.socialLinks?.twitter}>
@@ -1071,10 +1085,7 @@ function EventDetails(lockAddress) {
                   )}
                   {data?.socialLinks?.website && (
                     <a target="_blank" href={data?.socialLinks?.website}>
-                      <ExternalLink
-                        size={28}
-                        className="translate-x-2 text-brand2"
-                      />
+                      <World size={28} className="translate-x-2 text-brand2" />
                     </a>
                   )}
                 </div>
@@ -1087,7 +1098,10 @@ function EventDetails(lockAddress) {
                   {data ? data.eventUrl : ""}
                 </p>
               </div>
-            )} */}
+            )} */}{" "}
+            <div className=" lg:hidden">
+              <WalletSummary />
+            </div>
             <div className="flex flex-col items-start justify-start w-full max-w-2xl gap-2 mx-auto bg-slate-100 dark:bg-slate-700 sm:rounded-xl lg:hidden">
               <span className="p-2 pb-0 text-lg font-semibold text-brand1">
                 Host Details
@@ -1102,7 +1116,7 @@ function EventDetails(lockAddress) {
                   followee_count={hostDetails?.followee_count?.length}
                   superfan_to={hostDetails?.superfan_to?.length}
                 />
-              )}
+              )}{" "}
             </div>
             {/* <div className="flex flex-col items-start justify-start w-full max-w-2xl gap-2 p-2 mx-auto bg-slate-100 dark:bg-slate-700 sm:rounded-xl sm:p-4">
           <span className="text-lg font-semibold text-brand1">Location</span>
@@ -1118,7 +1132,8 @@ function EventDetails(lockAddress) {
               <div
                 className={`${
                   viewBookings && "modal-open"
-                } modal  modal-bottom sm:modal-middle`}>
+                } modal  modal-bottom sm:modal-middle`}
+              >
                 <div className="p-0 modal-box bg-slate-100 dark:bg-slate-800 ">
                   <div className="w-full p-2 h-fit bg-slate-300 dark:bg-slate-700">
                     <div className="flex items-center justify-between p-2">
@@ -1127,14 +1142,16 @@ function EventDetails(lockAddress) {
                       </h3>
                       <X
                         onClick={() => setviewBookings(false)}
-                        className="cursor-pointer text-brand2"></X>
+                        className="cursor-pointer text-brand2"
+                      ></X>
                     </div>
                   </div>
                   <div className="flex flex-col w-full divide-y-2 dark:divide-slate-700 divide-dashed">
                     <span
                       className={`p-4 text-lg font-bold  ${
-                        mintedNfts?.length === 0 ? "text-success" : "text-error"
-                      }`}>
+                        mintedNfts?.length === 0 ? "text-error" : "text-success"
+                      }`}
+                    >
                       {mintedNfts?.length === 0
                         ? "No Bookings yet!"
                         : `${mintedNfts?.length} Tickets Booked ✨`}
@@ -1145,7 +1162,8 @@ function EventDetails(lockAddress) {
                         <a
                           href={`https://translator.shyft.to/address/${booking.mint}?cluster=${process.env.REACT_APP_SOLANA_NETWORK}`}
                           target="_blank"
-                          className="w-24 mx-2 text-sm font-semibold text-primary text-end">
+                          className="w-24 mx-2 text-sm font-semibold text-primary text-end"
+                        >
                           View Ticket
                         </a>
                       </div>
@@ -1157,7 +1175,8 @@ function EventDetails(lockAddress) {
                           onClick={() => {
                             getBookings(data.lockId, bookings?.length / 10 + 1);
                           }}
-                          className="p-4 font-bold text-primary">
+                          className="p-4 font-bold text-primary"
+                        >
                           View more tickets
                         </button>
                       )}
@@ -1172,7 +1191,8 @@ function EventDetails(lockAddress) {
             height={720}
             className="w-full p-2 "
             backgroundColor="#64748b"
-            foregroundColor="#94a3b8">
+            foregroundColor="#94a3b8"
+          >
             <rect x="12" y="3" className="w-full " height="360" />
             <rect
               x="12"
@@ -1204,7 +1224,8 @@ function EventDetails(lockAddress) {
           <div
             className={`${
               verify && "modal-open"
-            } modal  modal-bottom sm:modal-middle `}>
+            } modal  modal-bottom sm:modal-middle `}
+          >
             <div className="p-0 modal-box bg-slate-100 dark:bg-slate-800 ">
               <div className="w-full p-2 h-fit bg-slate-300 dark:bg-slate-700">
                 <div className="flex items-center justify-between p-2">
@@ -1219,7 +1240,8 @@ function EventDetails(lockAddress) {
                       setLatestVerifiedTicketOwner();
                       setopenReader(true);
                     }}
-                    className="cursor-pointer text-brand2"></X>
+                    className="cursor-pointer text-brand2"
+                  ></X>
                 </div>
               </div>
               <div className="w-full">
@@ -1231,7 +1253,8 @@ function EventDetails(lockAddress) {
                         <div className="flex items-center gap-2 text-lg font-semibold text-warning">
                           <AlertTriangle
                             size={36}
-                            className=" text-warning"></AlertTriangle>{" "}
+                            className=" text-warning"
+                          ></AlertTriangle>{" "}
                           This ticket has already been verified!
                         </div>
                       ) : (
@@ -1245,7 +1268,8 @@ function EventDetails(lockAddress) {
                       <a
                         href={`https://translator.shyft.to/address/${scannedTicket}?cluster=${process.env.REACT_APP_SOLANA_NETWORK}`}
                         target="_blank"
-                        className="w-1/2 btn btn-primary">
+                        className="w-1/2 btn btn-primary"
+                      >
                         View Ticket
                       </a>
                       <div
@@ -1256,7 +1280,8 @@ function EventDetails(lockAddress) {
                           setLatestVerifiedTicketOwner();
                           setopenReader(true);
                           setVerify(false);
-                        }}>
+                        }}
+                      >
                         Close
                       </div>
                     </div>
@@ -1300,7 +1325,8 @@ function EventDetails(lockAddress) {
           <div
             className={`${
               showQr && "modal-open"
-            } modal  modal-bottom  sm:modal-middle `}>
+            } modal  modal-bottom  sm:modal-middle `}
+          >
             <div className="p-0 modal-box bg-slate-100 dark:bg-slate-800 ">
               <div className="w-full p-2 h-fit bg-slate-300 dark:bg-slate-700">
                 <div className="flex items-center justify-between p-2">
@@ -1309,7 +1335,8 @@ function EventDetails(lockAddress) {
                   </h3>
                   <X
                     onClick={() => setshowQr(false)}
-                    className="cursor-pointer text-brand2"></X>
+                    className="cursor-pointer text-brand2"
+                  ></X>
                 </div>
               </div>
               <div className="flex flex-col items-center justify-center w-full p-2 bg-white">
@@ -1319,7 +1346,7 @@ function EventDetails(lockAddress) {
           </div>
         )}
       </div>
-      <div className="flex-col items-end hidden w-1/4 h-full pt-20 ml-4 mr-12 lg:flex">
+      <div className="flex-col items-end hidden w-1/4 h-full gap-2 pt-20 ml-4 mr-12 lg:flex">
         {hostDetails && (
           <ProfileCard
             coverImage={hostDetails.cover_image}
@@ -1331,7 +1358,7 @@ function EventDetails(lockAddress) {
             superfan_to={hostDetails?.superfan_to?.length}
           />
         )}
-
+        <WalletSummary />
         {/* {verify && (
           <div className="absolute w-screen translate-x-1/2 ">
             <div className="p-2 bg-white border-white rounded-sm border-3 w-max">

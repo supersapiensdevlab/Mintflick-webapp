@@ -87,7 +87,7 @@ function Home() {
 
         <TimeLine></TimeLine>
       </div>
-      <div className="flex-col items-end hidden w-1/4 h-full pt-24 ml-4 mr-12 lg:flex">
+      <div className="flex-col items-end hidden w-1/4 h-full gap-2 pt-24 ml-4 mr-12 lg:flex">
         <GameOfLuck></GameOfLuck>
         <FeedbackForm></FeedbackForm>
         <WalletSummary />

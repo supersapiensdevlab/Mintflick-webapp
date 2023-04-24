@@ -15,7 +15,6 @@ import { clusterUrl } from "../Componants/Home/Utility/utilityFunc";
 
 const rpcUrl = clusterUrl(process.env.REACT_APP_SOLANA_NETWORK);
 
-console.log("RPPPPC:", rpcUrl);
 const connection = new Connection(rpcUrl, "confirmed");
 
 export async function loadBalance(wallet) {

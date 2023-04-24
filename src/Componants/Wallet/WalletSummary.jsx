@@ -18,9 +18,9 @@ function WalletSummary() {
   }, []);
 
   return (
-    <div className="flex flex-col items-start w-full p-5 mt-5 space-y-4 h-fit bg-slate-100 dark:bg-slate-800 rounded-xl">
+    <div className="flex flex-col items-start w-full p-5 space-y-4 h-fit bg-slate-100 dark:bg-slate-800 rounded-xl">
       <p className="flex items-center w-full text-lg font-black text-brand3">
-        Wallet Balance
+        Your Wallet Balance
       </p>
       <p className="flex items-center w-full gap-2 text-base font-medium text-brand2">
         <SolanaToken /> {balance} SOL

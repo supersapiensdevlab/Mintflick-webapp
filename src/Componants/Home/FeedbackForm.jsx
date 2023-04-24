@@ -45,10 +45,10 @@ const FeedbackForm = () => {
   };
 
   return (
-    <div className="flex flex-col items-center  w-full h-fit bg-slate-100 dark:bg-slate-800 rounded-xl px-5 py-0 lg:py-5  mt-5">
+    <div className="flex flex-col items-center w-full px-5 py-0 h-fit bg-slate-100 dark:bg-slate-800 rounded-xl lg:py-5 ">
       {!showFeedback ? (
         <div className="w-full">
-          <p className=" text-brand2 text-lg font-bold">
+          <p className="text-lg font-bold  text-brand2">
             ✨ We are listening to you.
           </p>
 
@@ -56,34 +56,34 @@ const FeedbackForm = () => {
             onClick={() => {
               handleShowFeedback();
             }}
-            className="btn mt-2  btn-brand  capitalize mx-auto w-full"
+            className="w-full mx-auto mt-2 capitalize btn btn-brand"
           >
             Leave your feedback
           </button>
         </div>
       ) : (
-        <div className="flex flex-col gap-3 w-full">
-          <div className="justify-between flex col-span-2">
-            <p className=" text-brand2 text-lg font-bold">Leave a feedback✨</p>
+        <div className="flex flex-col w-full gap-3">
+          <div className="flex justify-between col-span-2">
+            <p className="text-lg font-bold  text-brand2">Leave a feedback✨</p>
             <a
               href="# "
               onClick={() => {
                 setShowFeedback(false);
               }}
-              className="  text-brand2"
+              className=" text-brand2"
             >
               close
             </a>
           </div>
           <div className="w-full space-y-1">
-            <p className="text-brand2 font-semibold">How is it going so far?</p>{" "}
+            <p className="font-semibold text-brand2">How is it going so far?</p>{" "}
             <textarea
               required
               type="text"
               name="feedback"
               value={values.feedback}
               onChange={handleChange}
-              className="textarea w-full"
+              className="w-full textarea"
               placeholder="Tell us more"
             />
             {/* <input
@@ -92,19 +92,19 @@ const FeedbackForm = () => {
               value={values.email}
               required
               onChange={handleChange}
-              className="input w-full"
+              className="w-full input"
               placeholder={State.database.userData?.data?.user?.email}
             /> */}
             <button
               onClick={handleFeedbackSubmit}
-              className="btn mx-auto mt-2  btn-success w-full capitalize"
+              className="w-full mx-auto mt-2 capitalize btn btn-success"
             >
               Send feedback
             </button>
           </div>
-          <div className="text-brand1 w-full space-y-2">
-            {/* <span className=" text-brand2 font-semibold ">join us on</span> */}
-            <div className="flex justify-center w-full items-center gap-2">
+          <div className="w-full space-y-2 text-brand1">
+            {/* <span className="font-semibold  text-brand2">join us on</span> */}
+            <div className="flex items-center justify-center w-full gap-2">
               <a
                 target="_blank"
                 rel="noopener noreferrer"
@@ -115,7 +115,7 @@ const FeedbackForm = () => {
                 <svg
                   viewBox="0 0 71 55"
                   fill="none"
-                  className=" w-4 h-4"
+                  className="w-4 h-4 "
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <g clipPath="url(#clip0)">
@@ -139,7 +139,7 @@ const FeedbackForm = () => {
                 className="text-white bg-[#1da1f2] hover:bg-[#1da1f2]/60  font-medium rounded-lg p-2 flex justify-center items-center"
               >
                 <svg
-                  className=" w-4 h-4"
+                  className="w-4 h-4 "
                   aria-hidden="true"
                   focusable="false"
                   data-prefix="fab"
@@ -163,7 +163,7 @@ const FeedbackForm = () => {
                 className="text-white bg-[#0e76a8] hover:bg-[#0a76a8]/60  font-medium rounded-lg p-2 flex justify-center items-center"
               >
                 <svg
-                  className=" w-4 h-4"
+                  className="w-4 h-4 "
                   aria-hidden="true"
                   focusable="false"
                   data-prefix="fab"
@@ -186,7 +186,7 @@ const FeedbackForm = () => {
                 className="text-white bg-[#8a3ab9] hover:bg-[#bc2a8d]/60  font-medium rounded-lg p-2 flex justify-center items-center"
               >
                 <svg
-                  className=" w-4 h-4"
+                  className="w-4 h-4 "
                   aria-hidden="true"
                   focusable="false"
                   data-prefix="fab"

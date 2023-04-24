@@ -59,9 +59,9 @@ export const signTransactionKeyWallet = async (
   //partially signing using private key of fee_payer wallet
 
   const signedTx = await provider.signTransaction(recoveredTransaction); // signing the recovered transaction using the creator_wall
-  const encodedSignedTx = signedTx.serialize().toString("base64");
-  console.log(signedTx.serialize().toString("base64"));
+
   const base64Txn = signedTx.serialize().toString("base64");
+  console.log(base64Txn);
   const confirmTransaction = await connection.sendEncodedTransaction(base64Txn);
   // const confirmTransaction = await sendTransaction(
   //   signedTx.serialize().toString("base64")
