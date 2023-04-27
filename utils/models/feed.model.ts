@@ -1,7 +1,19 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+import { Schema, model } from 'mongoose';
 
-const feedSchema = new Schema({
+interface IFeed {
+  username: string;
+  name: string;
+  profile_image: string;
+  superfan_data: Object;
+  content: Object;
+  content_type: string;
+  reports: Array<string>;
+  superfan_to: Array<string>;
+  user_id: string;
+  wallet_id: string;
+}
+0
+const feedSchema = new Schema<IFeed>({
   username: {
     type: String,
   },
@@ -21,10 +33,10 @@ const feedSchema = new Schema({
     type: String,
   },
   reports: {
-    type: Array,
+    type: [String],
   },
   superfan_to: {
-    type: Array,
+    type: [String],
   },
   user_id: {
     type: String,
@@ -38,5 +50,4 @@ const feedSchema = new Schema({
   
 } ,{ timestamps: true });
 
-const Feed = mongoose.model('Feed', feedSchema);
-module.exports = Feed;
+export const Feed = model<IFeed>('Feed', feedSchema);

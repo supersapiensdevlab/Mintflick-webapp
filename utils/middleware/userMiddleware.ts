@@ -1,8 +1,7 @@
-var jwt = require('jsonwebtoken');
-
-const userMiddleware = (req, res, next) => {
+import { MIDDLEWARE_CONFIG } from '@/services/config.service';
+import jwt from 'jsonwebtoken'
+const userMiddleware = (req: any, res:any, next:any) => {
   // Get the user from the jwt token and add id to req object
-  const JWT_SECRET = process.env.JWT_SECRET;
   const token = req.header('auth-token');
   console.log(token);
   if (!token) {
@@ -12,8 +11,7 @@ const userMiddleware = (req, res, next) => {
     return;
   }
   try {
-    const data = jwt.verify(JSON.parse(token), JWT_SECRET);
-
+    const data: any = jwt.verify(JSON.parse(token), MIDDLEWARE_CONFIG.JWT_SECRET);
     req.user_id = data.user_id;
     next();
   } catch (error) {

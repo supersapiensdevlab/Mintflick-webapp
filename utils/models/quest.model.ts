@@ -1,7 +1,15 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+import {Schema, model} from 'mongoose';
 
-const questSchema = new Schema({
+interface IQuest {
+  questId: string;
+  name: string;
+  banner: string;
+  description: string;
+  tasks: Array<string>;
+  status: boolean;
+}
+
+const questSchema = new Schema<IQuest>({
   questId: {
     type: String,
     trim: true,
@@ -19,7 +27,7 @@ const questSchema = new Schema({
     trim: true,
   },  
    tasks:{
-    type:Array,
+    type: [String],
     default:[]
    },
    status:{
@@ -29,5 +37,4 @@ const questSchema = new Schema({
   
 } ,{ timestamps: true });
 
-const Quest = mongoose.model('Quest', questSchema);
-module.exports = Quest;
+export const Quest = model<IQuest>('Quest', questSchema);

@@ -1,7 +1,15 @@
-import mongoose from 'mongoose';
-const Schema = mongoose.Schema;
+import {Date, Schema, model} from 'mongoose';
 
-const chatSchema = Schema({
+interface IChat{
+  user_id: Schema.Types.ObjectId;
+  type: string;
+  message: string;
+  url: string;
+  reply_to: Object;
+  createdAt: Date;
+}
+
+const chatSchema = new Schema<IChat>({
   user_id: {
     type: Schema.Types.ObjectId,
     ref: 'User',
@@ -27,7 +35,15 @@ const chatSchema = Schema({
   },
 });
 
-const roomSchema = Schema({
+interface IRoom {
+  room_admin: string;
+  room_admin_userid: string;
+  users: string[];
+  latestMessage: Object;
+  chats: IChat[];
+}
+
+const roomSchema = new Schema<IRoom>({
   room_admin: {
     type: String,
     unique: true,
@@ -38,7 +54,7 @@ const roomSchema = Schema({
     unique: true,
   },
   users: {
-    type: Array,
+    type: [String],
     default: [],
   },
   latestMessage: {
@@ -47,13 +63,21 @@ const roomSchema = Schema({
   chats: [chatSchema],
 });
 
-const dmSchema = Schema({
+interface IDM {
+  users: string[];
+  usernames: string[];
+  room_id: string;
+  latestMessage: Object;
+  chats: IChat[];
+}
+
+const dmSchema = new Schema<IDM>({
   users: {
-    type: Array,
+    type: [String],
     required: true,
   },
   usernames: {
-    type: Array,
+    type: [String],
     required: true,
   },
   room_id: {
@@ -64,3 +88,7 @@ const dmSchema = Schema({
   },
   chats: [chatSchema],
 });
+
+export const Chat = model<IChat>('Chat', chatSchema);
+export const Room = model<IRoom>('Room', roomSchema);
+export const DM = model<IDM>('DM', dmSchema);

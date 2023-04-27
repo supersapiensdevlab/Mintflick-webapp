@@ -1,7 +1,30 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+import {Schema, model} from "mongoose";
 
-const eventSchema = new Schema(
+interface IEvent {
+  eventId: string;
+  title: string;
+  type: string;
+  category: string;
+  freeEvent: boolean;
+  ticketPrice: string;
+  unlimitedTickets: boolean;
+  ticketCount: string;
+  description: string;
+  startTime: string;
+  endTime: string;
+  timeZone: string;
+  eventImage: string;
+  eventGallery: string;
+  eventHost: string;
+  eventUrl: string;
+  location: string;
+  lockId: string;
+  withdrawn: boolean;
+  verifiedTickets: string[];
+  bookings: String[];
+}
+
+const eventSchema = new Schema<IEvent>(
   {
     eventId: {
       type: String,
@@ -80,7 +103,7 @@ const eventSchema = new Schema(
       type: [String],
       default: [],
       validate: {
-        validator: function (arr) {
+        validator: function (arr: any[]) {
           // Custom validator function to check for unique values
           const uniqueValues = new Set(arr);
           return uniqueValues.size === arr.length;
@@ -89,11 +112,9 @@ const eventSchema = new Schema(
       },
     },
     bookings: {
-      type: Array,
-      default: [],
+      type: [String],
     },
   },
   { timestamps: true },
 );
-
-export const Event = mongoose.model('Event', eventSchema);
+export const Event = model<IEvent>('Event', eventSchema);

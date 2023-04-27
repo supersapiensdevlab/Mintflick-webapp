@@ -1,7 +1,6 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
+import { Schema, model } from 'mongoose';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 
 const userSchema = new Schema(
   {
@@ -178,7 +177,7 @@ const userSchema = new Schema(
   },
 );
 
-userSchema.methods.generateAuthToken = async function (res) {
+userSchema.methods.generateAuthToken = async function (res: any) {
   try {
     const token = jwt.sign(
       { _id: this._id.toString() },
@@ -193,5 +192,4 @@ userSchema.methods.generateAuthToken = async function (res) {
   }
 };
 
-const User = mongoose.model('User', userSchema);
-module.exports = User;
+export const User = model('User', userSchema);

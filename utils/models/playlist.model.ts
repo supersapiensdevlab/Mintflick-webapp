@@ -1,7 +1,17 @@
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
+import { Schema, model } from "mongoose";
 
-const playlistSchema = new Schema(
+interface IPlaylist {
+  artwork: string;
+  description: string;
+  id: string;
+  is_album: boolean;
+  playlist_name: string;
+  repost_count: number;
+  favorite_count: number;
+  total_play_count: number;
+}
+
+const playlistSchema = new Schema<IPlaylist>(
   {
     artwork: {
       type: String,
@@ -35,6 +45,4 @@ const playlistSchema = new Schema(
   }
 );
 
-const Playlist = mongoose.model("Playlist", playlistSchema);
-
-module.exports = Playlist;
+export const Playlist = model<IPlaylist>("Playlist", playlistSchema);

@@ -1,7 +1,6 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+import { Schema, model } from 'mongoose';
 
-const chatSchema = Schema({
+const chatSchema = new Schema({
   user_id: {
     type: Schema.Types.ObjectId,
     ref: 'User',
@@ -36,7 +35,14 @@ const chatSchema = Schema({
   },
 });
 
-const roomSchema = Schema({
+interface IRoom {
+  room_admin: string;
+  room_admin_userid: string;
+  chats: Object[];
+
+}
+
+const roomSchema = new Schema<IRoom>({
   room_admin: {
     type: String,
     unique: true,
@@ -49,5 +55,4 @@ const roomSchema = Schema({
   chats: [chatSchema],
 });
 
-const LiveRoom = mongoose.model('LiveRoom', roomSchema);
-module.exports = LiveRoom;
+export const Room = model<IRoom>('Room', roomSchema);

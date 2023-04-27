@@ -8,3 +8,7 @@ export const REDIS_CONFIG = {
 export const MONGO_CONFIG = {
   host: process.env.ATLAS_URI || "",
 };
+
+export const MIDDLEWARE_CONFIG = {
+  JWT_SECRET: process.env.JWT_SECRET || "",
+}

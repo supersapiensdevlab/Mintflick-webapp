@@ -1,5 +1,4 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+import {Schema, model } from 'mongoose';
 
 const trendingSchema = new Schema(
   {
@@ -16,6 +15,4 @@ const trendingSchema = new Schema(
     timestamps: true,
   },
 );
-
-const Trending = mongoose.model('Trending', trendingSchema);
-module.exports = Trending;
+export const Trending = model('Trending', trendingSchema);

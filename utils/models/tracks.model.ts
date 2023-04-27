@@ -1,5 +1,4 @@
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
+import {Schema, model} from 'mongoose';
 
 const trackSchema = new Schema(
   {
@@ -45,6 +44,4 @@ const trackSchema = new Schema(
   }
 );
 
-const Track = mongoose.model("Track", trackSchema);
-
-module.exports = Track;
+export const Track = model('Track', trackSchema);

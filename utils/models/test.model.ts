@@ -1,7 +1,63 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
+import {Schema, model} from 'mongoose';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+// interface IUser {
+//   id: string;
+//   name: string;
+//   username: string;
+//   email: string;
+//   jwt_token: string;
+//   resetToken: string;
+//   expireToken: Date;
+//   wallet_id: string;
+//   password: string;
+//   cover_image: string;
+//   profile_image: string;
+//   livepeer_data: Object;
+//   superfan_data: Object;
+//   tracks: Array<string>;
+//   videos: Array<string>;
+//   followers: Array<string>;
+//   following: Array<string>;
+//   notifications: Array<string>;
+//   oldnotifications: Array<string>;
+//   chats: Array<string>;
+//   polls: Array<string>;
+//   multistream_platform: Array<string>;
+//   pinned: Array<string>;
+//   posts: Array<string>;
+//   events: Array<string>;
+//   notification: Array<string>;
+//   oldnotification: Array<string>;
+//   your_reactions: Array<string>;
+//   my_playlists: Array<string>;
+//   reports: Array<string>;
+//   refer: Object;
+//   seenIntro: string;
+//   gems: Object;
+//   coins: Object;
+//   thumbnail: string;
+//   streamDetails: Object;
+//   streamSchedule: string;
+//   streamLinks: Array<string>;
+//   album_count: number;
+//   bio: string;
+//   followee_count: Array<string>
+//   follower_count: Array<string>
+//   superfan_to: Array<string>
+//   superfan_of: Array<string>
+//   favorite_tracks: Array<string>
+//   is_mail_verified: boolean;
+//   is_verified: boolean;
+//   location: string;
+//   playlist_count: number;
+//   repost_count: number;
+//   track_count: number;
+//   preference: string;
+//   conversations: Array<string>;
+//   quests: Array<string>;
+// }
+
 
 const userSchema = new Schema(
   {
@@ -174,7 +230,7 @@ const userSchema = new Schema(
   },
 );
 
-userSchema.methods.generateAuthToken = async function (res) {
+userSchema.methods.generateAuthToken = async function (res: any) {
   try {
     const token = jwt.sign(
       { _id: this._id.toString() },
@@ -189,5 +245,4 @@ userSchema.methods.generateAuthToken = async function (res) {
   }
 };
 
-const User = mongoose.model('User', userSchema);
-module.exports = User;
+export const User = model('User', userSchema);
