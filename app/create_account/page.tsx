@@ -4,7 +4,7 @@ import Divider from "@/components/molecules/Divider";
 import FullscreenContainer from "@/components/molecules/FullscreenContainer";
 import Image from "next/image";
 
-export default function Home() {
+export default function CreateAccount() {
   return (
     <FullscreenContainer className="flex flex-col items-start justify-start max-w-lg mx-auto overflow-hidden bg-vapormintBlack-300">
       <div className="relative w-full mx-auto h-1/2 ">
