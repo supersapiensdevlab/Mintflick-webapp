@@ -15,9 +15,10 @@ function SearchBar(props: Props) {
   return (
     <div className={` flex flex-col items-center justify-start w-full`}>
       <div
-        className={`flex items-center justify-start w-full gap-3 px-6 py-4 ${
-          props.solid && "bg-slate-700"
-        }`}>
+        className={`flex items-center justify-start w-full gap-3 px-6 py-4 text-vapormintWhite-100 ${
+          props.solid && "bg-vapormintBlack-200"
+        }`}
+      >
         {
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -25,7 +26,8 @@ function SearchBar(props: Props) {
             viewBox="0 0 24 24"
             strokeWidth="1.5"
             stroke="currentColor"
-            className={`w-6 h-6 `}>
+            className={`w-6 h-6 `}
+          >
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -35,8 +37,8 @@ function SearchBar(props: Props) {
         }
 
         <input
-          className={`flex-grow text-base font-semibold tracking-wider text-white h-fit focus:outline-none ${
-            props.solid ? "bg-slate-700" : " bg-black"
+          className={`flex-grow text-base font-semibold tracking-wider  h-fit focus:outline-none ${
+            props.solid ? "bg-vapormintBlack-200" : " bg-vapormintBlack-300"
           }`}
           onChange={props.onChange}
           value={props.value}
@@ -51,7 +53,8 @@ function SearchBar(props: Props) {
           stroke="currentColor"
           className={`w-6 h-6 ${
             !props.value && "scale-0"
-          } transition-all ease-in-out cursor-pointer origin-center`}>
+          } transition-all ease-in-out cursor-pointer origin-center delay-150`}
+        >
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -61,7 +64,7 @@ function SearchBar(props: Props) {
       </div>
       <span
         style={{ height: `1px` }}
-        className={`  w-full  bg-gradient-to-r from-black via-white to-black"`}
+        className={`  w-full  bg-gradient-to-r from-vapormintBlack-300 via-vapormintWhite-100 to-vapormintBlack-300"`}
       />
     </div>
   );

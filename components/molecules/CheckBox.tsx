@@ -10,11 +10,15 @@ export default function CheckBox(props: Props) {
   return (
     <div
       onClick={() => props.onChange()}
-      className="flex items-center gap-2 p-1 cursor-pointer select-none">
+      className="flex items-center gap-2 p-1 cursor-pointer select-none"
+    >
       <div
         className={`w-6 h-6  ${
-          props.checked ? "bg-green-600" : "border-white border-[2px]"
-        }  rounded-lg flex items-center justify-center`}>
+          props.checked
+            ? "bg-vapormintSuccess-500"
+            : "border-white border-[2px]"
+        }  rounded-lg flex items-center justify-center`}
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -23,7 +27,8 @@ export default function CheckBox(props: Props) {
           stroke="currentColor"
           className={`w-4 h-4 ${
             props.checked ? "scale-100" : "scale-0"
-          } transition-all ease-in-out  origin-center`}>
+          } transition-all ease-in-out  origin-center`}
+        >
           <path
             strokeLinecap="round"
             strokeLinejoin="round"

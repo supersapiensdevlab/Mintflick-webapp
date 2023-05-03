@@ -1,6 +1,46 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+@layer base {
+  @font-face {
+    font-family: "Gilroy-Black";
+    src: url("/fonts/Gilroy-Black.woff");
+    font-weight: black;
+  }
+  @font-face {
+    font-family: "Gilroy-Bold";
+    src: url("/fonts/Gilroy-Bold.woff");
+    font-weight: bold;
+  }
+  @font-face {
+    font-family: "Gilroy-Semiold";
+    src: url("/fonts/Gilroy-Semiold.woff");
+    font-weight: semibold;
+  }
+  @font-face {
+    font-family: "Gilroy-Medium";
+    src: url("/fonts/Gilroy-Medium.woff");
+    font-weight: medium;
+  }
+  @font-face {
+    font-family: "Gilroy-Light";
+    src: url("/fonts/Gilroy-Light.woff");
+    font-weight: light;
+  }
+  @font-face {
+    font-family: "Gilroy-Thin";
+    src: url("/fonts/Gilroy-Thin.woff");
+    font-weight: thin;
+  }
+}
+
+* {
+  font-family: "Gilroy";
+}
 
 :root {
   --foreground-rgb: 0, 0, 0;
