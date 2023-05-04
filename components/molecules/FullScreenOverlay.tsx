@@ -2,7 +2,7 @@ import { useViewportSize } from "@mantine/hooks";
 import React, { ReactNode, useEffect, useState } from "react";
 
 type Props = {
-  title: String;
+  title?: String;
   onClose: Function;
   children: ReactNode;
 };
@@ -19,13 +19,13 @@ export default function FullScreenOverlay(props: Props) {
   return height && width ? (
     <div
       style={{ height: height, width: width }}
-      className={`fixed top-0 left-0 z-50 flex flex-col items-center justify-start   select-none transition-all ease-in-out bg-vapormintBlack-200  backdrop-blur-sm  ${
+      className={`fixed top-0 left-0 z-50 flex flex-col  items-center justify-start   select-none transition-all ease-in-out   ${
         animation ? "translate-y-0" : "translate-y-full"
-      } transition-all ease-in-out`}
+      } transition-all duration-300 ease-in-out`}
     >
-      <div className="flex items-center justify-between w-full p-4 bg-vapormintBlack-300">
+      <div className="flex items-center justify-between w-full max-w-lg p-4 mx-auto bg-vapormintBlack-300">
         <span className="text-2xl font-black from-vapormintWhite-100 text-vapormintWhite-100">
-          {props.title}
+          {props.title || ""}
         </span>
         <svg
           onClick={() => {
@@ -48,7 +48,7 @@ export default function FullScreenOverlay(props: Props) {
           />
         </svg>
       </div>
-      <div className="flex justify-center flex-grow w-full overflow-y-auto overflow-x-clip">
+      <div className="flex flex-col flex-grow w-full max-w-lg mx-auto overflow-y-auto backdrop-blur-lg bg-vapormintBlack-200/40 overflow-x-clip">
         {props.children}
       </div>
     </div>

@@ -7,8 +7,16 @@ type buttonProps = {
   type: "solid" | "outlined" | "ghost";
   size: "small" | "base";
   children: React.ReactNode;
+  disabled?: boolean;
 };
-function Button({ kind, type, size, handleClick, children }: buttonProps) {
+function Button({
+  kind,
+  type,
+  size,
+  handleClick,
+  children,
+  disabled,
+}: buttonProps) {
   const [animation, setAnimation] = useState(false);
   const animateClick = () => {
     setAnimation(true);
@@ -21,14 +29,15 @@ function Button({ kind, type, size, handleClick, children }: buttonProps) {
     <div className="flex w-full p-2">
       <div
         onClick={(e) => {
-          animateClick();
-          setTimeout(() => {
-            handleClick(e);
-          }, 178 * 2);
+          !disabled && animateClick();
+          !disabled &&
+            setTimeout(() => {
+              handleClick(e);
+            }, 178 * 2);
         }}
         className={`relative flex-grow select-none ${
           size === "small" ? "h-[44px]" : "h-[60px]"
-        }`}
+        } ${disabled ? "grayscale" : ""}`}
       >
         {type === "solid" && (
           <>

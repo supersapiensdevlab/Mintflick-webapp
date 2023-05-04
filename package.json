@@ -19,10 +19,12 @@
   "dependencies": {
     "@heroicons/react": "^2.0.17",
     "@mantine/hooks": "^6.0.9",
+    "@toruslabs/solana-embed": "^0.3.4",
     "@types/node": "18.16.0",
     "@types/react": "18.0.38",
     "@types/react-dom": "18.0.11",
     "autoprefixer": "10.4.14",
+    "axios": "^1.4.0",
     "next": "13.3.1",
     "postcss": "8.4.23",
     "react": "18.2.0",

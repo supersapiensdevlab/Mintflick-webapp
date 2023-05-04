@@ -10,6 +10,7 @@ type Props = React.DetailedHTMLProps<
   value: String;
   placeholder?: String;
   count?: number;
+  optional?: boolean;
 };
 
 function TextareaInput(props: Props) {
@@ -18,6 +19,11 @@ function TextareaInput(props: Props) {
       {props.title && (
         <span className="text-xs font-semibold tracking-widest uppercase text-vapormintWhite-100">
           {props.title}
+          {props.optional && (
+            <span className="text-xs font-semibold tracking-widest uppercase text-vapormintBlack-200">
+              optional
+            </span>
+          )}
         </span>
       )}
       <textarea

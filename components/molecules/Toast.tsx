@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 type Props = {
   message: String;
@@ -14,8 +14,29 @@ type Props = {
 };
 
 export default function Toast(props: Props) {
+  const [animation, setanimation] = useState(false);
+
+  useEffect(() => {
+    setanimation(true);
+    const animationTimeout = setTimeout(() => {
+      setanimation(false);
+    }, 4000);
+    const closeTimeout = setTimeout(() => {
+      props.onCancel();
+    }, 5000);
+
+    return () => {
+      clearTimeout(animationTimeout);
+      clearTimeout(closeTimeout);
+    };
+  }, []);
+
   return (
-    <div className="w-full p-1 select-none">
+    <div
+      className={`w-full p-1 select-none transition ease-in-out max-w-xl mx-auto delay-100 ${
+        animation ? "translate-y-0" : "-translate-y-32"
+      }`}
+    >
       <div
         className={`flex flex-col gap-0 overflow-hidden  rounded-lg ${
           props.kind === "default"

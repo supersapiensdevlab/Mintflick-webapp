@@ -3,8 +3,59 @@ import Button from "@/components/molecules/Button";
 import Divider from "@/components/molecules/Divider";
 import FullscreenContainer from "@/components/molecules/FullscreenContainer";
 import Image from "next/image";
+import SolanaTorus from "@toruslabs/solana-embed";
+import axios from "axios";
+import { useRouter } from "next/navigation";
+import { useContext } from "react";
+import WalletProviderContextContainer, {
+  walletProviderContext,
+} from "@/contexts/walletProviderContext";
+import { UserContext } from "@/contexts/userContext";
 
 export default function Home() {
+  const router = useRouter();
+  const userState = useContext(UserContext);
+  const walletProvider = useContext(walletProviderContext);
+  async function isUserAvaliable(walletAddress: string, provider: any) {
+    console.log("Checking for User with Wallet:", walletAddress);
+    await axios({
+      method: "post",
+      url: `${process.env.NEXT_PUBLIC_SERVER_URL}/user/getuser_by_wallet`,
+      data: {
+        walletId: walletAddress,
+      },
+    })
+      .then((response) => {
+        console.log("user data", response);
+        userState.updateUserData(response.data.user);
+        console.log("user data saved in state");
+        localStorage.setItem("authtoken", response.data.jwtToken);
+        console.log("auth token saved in storage");
+        localStorage.setItem("walletAddress", walletAddress);
+        console.log("wallet address saved in storage");
+
+        // response.status === 200 && router.push("/home");
+        response.status === 200 && router.push("/create_account");
+      })
+      .catch(async function (error) {
+        console.log(error);
+
+        error.response.status === 404 && router.push("/create_account");
+        // error.response.status === 0 && State.toast(error.message);
+      });
+  }
+  const handleTorusConnect = async () => {
+    const torus = new SolanaTorus();
+    await torus.init();
+    await torus.login();
+    walletProvider.setSolanaProvider(torus);
+    console.log("torus", torus);
+    const address = torus.provider.selectedAddress;
+    console.log(address);
+
+    address && isUserAvaliable(address, torus);
+  };
+
   return (
     <FullscreenContainer className="flex flex-col items-start justify-start max-w-lg mx-auto overflow-hidden bg-vapormintBlack-300">
       <div className="relative w-full mx-auto h-1/2 ">
@@ -152,7 +203,12 @@ export default function Home() {
           </span>
         </div>
         <div className="flex-grow lg:flex-none lg:h-12"></div>
-        <Button handleClick={() => {}} kind="white" type="solid" size="base">
+        <Button
+          handleClick={() => handleTorusConnect()}
+          kind="white"
+          type="solid"
+          size="base"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"

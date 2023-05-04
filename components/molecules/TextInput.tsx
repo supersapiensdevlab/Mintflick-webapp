@@ -10,6 +10,7 @@ type Props = React.DetailedHTMLProps<
   value: String;
   placeholder?: String;
   count?: number;
+  optional?: boolean;
 };
 
 function TextInput(props: Props) {
@@ -17,7 +18,12 @@ function TextInput(props: Props) {
     <div className="flex flex-col items-start justify-start w-full gap-1 py-1">
       {props.title && (
         <span className="text-xs font-semibold tracking-widest uppercase text-vapormintWhite-100">
-          {props.title}
+          {props.title}{" "}
+          {props.optional && (
+            <span className="text-xs font-semibold tracking-widest uppercase text-vapormintBlack-200">
+              optional
+            </span>
+          )}
         </span>
       )}
       <input
