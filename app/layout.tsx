@@ -22,7 +22,7 @@ export default function RootLayout({
           <ToastContextContainer>
             <TopNavigation />
             <body>{children}</body>
-            <BottomNavigation active={1} />
+            <BottomNavigation />
           </ToastContextContainer>
         </UserContextContainer>
       </WalletProviderContextContainer>

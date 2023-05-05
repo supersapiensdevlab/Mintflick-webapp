@@ -42,13 +42,11 @@ export default function Home() {
 
         response.status === 200 && router.push("/home");
         // response.status === 200 && router.push("/create_account");
-        setCheckingUser(false);
       })
       .catch(async function (error) {
         console.log(error);
 
         error.response.status === 404 && router.push("/create_account");
-        setCheckingUser(false);
         // error.response.status === 0 && State.toast(error.message);
       });
   }

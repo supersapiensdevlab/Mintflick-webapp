@@ -9,8 +9,12 @@ export default function BottomNavigation({}: Props) {
   const router = useRouter();
   const path = usePathname();
 
-  return (
-    <div className="absolute bottom-0 left-0 flex flex-col w-full transition-all ease-in-out select-none ">
+  return path === "/home" ||
+    path === "/live" ||
+    path === "/events" ||
+    path === "/explore" ||
+    path === "/notifications" ? (
+    <div className="absolute bottom-0 left-0 z-50 flex flex-col w-full transition-all ease-in-out select-none ">
       <GradientDivider />
       <div className="flex items-center w-full max-w-lg px-4 py-3 mx-auto bg-vapormintBlack-300/90 backdrop-blur-lg">
         <div
@@ -109,5 +113,7 @@ export default function BottomNavigation({}: Props) {
         </div>
       </div>
     </div>
+  ) : (
+    <></>
   );
 }

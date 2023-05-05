@@ -2,12 +2,19 @@
 import React from "react";
 import Avatar from "../molecules/Avatar";
 import Main_logo from "../molecules/MainLogo";
+import { usePathname } from "next/navigation";
 
 type Props = {};
 
 export default function TopNavigation({}: Props) {
-  return (
-    <div className="absolute top-0 left-0 flex flex-col items-center w-full">
+  const path = usePathname();
+
+  return path === "/home" ||
+    path === "/live" ||
+    path === "/events" ||
+    path === "/explore" ||
+    path === "/notifications" ? (
+    <div className="absolute top-0 left-0 z-50 flex flex-col items-center w-full">
       <div className="flex items-center justify-between w-full max-w-lg px-4 py-2 bg-vapormintBlack-300/90 backdrop-blur-lg">
         <Avatar size="sm" kind="default" />
         <Main_logo />
@@ -31,5 +38,7 @@ export default function TopNavigation({}: Props) {
         className={`  w-full  bg-gradient-to-r from-vapormintBlack-300 via-vapormintWhite-100 to-vapormintBlack-300 max-w-2xl`}
       />
     </div>
+  ) : (
+    <></>
   );
 }
