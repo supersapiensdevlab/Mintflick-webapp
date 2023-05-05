@@ -15,7 +15,7 @@ export interface AvatarProps {
 
 export default function Avatar(props: AvatarProps) {
   return (
-    <div className="p-1">
+    <div className="p-1 cursor-pointer">
       <img
         className={`border-[2px] ${
           props.kind === "default"

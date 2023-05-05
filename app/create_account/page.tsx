@@ -82,14 +82,23 @@ export default function CreateAccount() {
   return (
     <FullscreenContainer className="flex flex-col items-start justify-between max-w-lg mx-auto overflow-hidden sm:gap-6 sm:justify-start bg-vapormintBlack-300">
       <div className="flex flex-col w-full gap-6 p-4 h-fit">
-        <div className="flex flex-col gap-3 py-9">
-          <span className="text-3xl font-black text-vapormintWhite-100">
-            Welcome to Mintflick
-          </span>
-          <span className="text-base font-medium text-vapormintBlack-100">
-            Some interesting text that could give a feeling of trust to the
-            user.
-          </span>
+        <div className="flex items-center justify-start gap-4 pt-9">
+          <Image
+            className={`h-24 aspect-square rounded-full  object-fill `}
+            src={SplashScreenData[step - 1].image}
+            alt="loginImage"
+            width={96}
+            height={96}
+          />
+          <div className="flex flex-col gap-3 ">
+            <span className="text-3xl font-black text-vapormintWhite-100">
+              Welcome to Mintflick
+            </span>
+            <span className="text-base font-medium text-vapormintBlack-100">
+              Some interesting text that could give a feeling of trust to the
+              user.
+            </span>
+          </div>
         </div>
         <Divider kind="center" size={1} />
         <div className="flex flex-col gap-3 ">

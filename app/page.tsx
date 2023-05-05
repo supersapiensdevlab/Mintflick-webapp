@@ -6,17 +6,23 @@ import Image from "next/image";
 import SolanaTorus from "@toruslabs/solana-embed";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import WalletProviderContextContainer, {
   walletProviderContext,
 } from "@/contexts/walletProviderContext";
 import { UserContext } from "@/contexts/userContext";
+import FullScreenOverlay from "@/components/molecules/FullScreenOverlay";
+import Header from "@/components/organisms/TopNavigation";
+import TopNavigation from "@/components/organisms/TopNavigation";
+import BottomNavigation from "@/components/organisms/BottomNavigation";
 
 export default function Home() {
   const router = useRouter();
   const userState = useContext(UserContext);
   const walletProvider = useContext(walletProviderContext);
-  async function isUserAvaliable(walletAddress: string, provider: any) {
+
+  const [checkingUser, setCheckingUser] = useState(false);
+  async function isUserAvaliable(walletAddress: string) {
     console.log("Checking for User with Wallet:", walletAddress);
     await axios({
       method: "post",
@@ -34,17 +40,20 @@ export default function Home() {
         localStorage.setItem("walletAddress", walletAddress);
         console.log("wallet address saved in storage");
 
-        // response.status === 200 && router.push("/home");
-        response.status === 200 && router.push("/create_account");
+        response.status === 200 && router.push("/home");
+        // response.status === 200 && router.push("/create_account");
+        setCheckingUser(false);
       })
       .catch(async function (error) {
         console.log(error);
 
         error.response.status === 404 && router.push("/create_account");
+        setCheckingUser(false);
         // error.response.status === 0 && State.toast(error.message);
       });
   }
   const handleTorusConnect = async () => {
+    setCheckingUser(true);
     const torus = new SolanaTorus();
     await torus.init();
     await torus.login();
@@ -52,8 +61,7 @@ export default function Home() {
     console.log("torus", torus);
     const address = torus.provider.selectedAddress;
     console.log(address);
-
-    address && isUserAvaliable(address, torus);
+    address && isUserAvaliable(address);
   };
 
   return (
@@ -70,7 +78,7 @@ export default function Home() {
         />
         <span className="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-vapormintBlack-300 "></span>
       </div>
-      <div className="flex flex-col justify-center flex-grow w-full ">
+      <div className="flex flex-col justify-start flex-grow w-full my-6">
         <Divider kind="center" size={2} />
         <div className="flex items-center justify-start w-full gap-2 px-8 py-2">
           <span className="text-2xl font-black tracking-widest uppercase text text-vapormintWhite-300 ">
@@ -245,6 +253,15 @@ export default function Home() {
           Continue With Google
         </Button>
       </div>
+      {checkingUser && (
+        <FullScreenOverlay onClose={() => {}}>
+          <div className="flex flex-col w-full h-full bg-vapormintBlack-300">
+            <div className="flex flex-col items-center justify-center flex-grow text-2xl font-bold text-vapormintWhite-100">
+              Checking User Information...
+            </div>
+          </div>
+        </FullScreenOverlay>
+      )}
     </FullscreenContainer>
   );
 }
