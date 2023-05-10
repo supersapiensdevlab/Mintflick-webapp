@@ -77,7 +77,10 @@ export default function BottomNavigation({}: Props) {
           </svg>
           {path === "/events" && "Events"}
         </div>
-        <div className="flex flex-col items-center justify-start w-1/5 gap-1 text-xs font-semibold cursor-pointer text-vapormintWhite-100">
+        <div
+          onClick={() => router.push("explore")}
+          className="flex flex-col items-center justify-start w-1/5 gap-1 text-xs font-semibold cursor-pointer text-vapormintWhite-100"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -94,7 +97,10 @@ export default function BottomNavigation({}: Props) {
           </svg>
           {path === "/explore" && "Explore"}
         </div>
-        <div className="flex flex-col items-center justify-start w-1/5 gap-1 text-xs font-semibold cursor-pointer text-vapormintWhite-100">
+        <div
+          onClick={() => router.push("notifications")}
+          className="flex flex-col items-center justify-start w-1/5 gap-1 text-xs font-semibold cursor-pointer text-vapormintWhite-100"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"

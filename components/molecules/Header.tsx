@@ -1,3 +1,4 @@
+"use client";
 import React, { ReactNode } from "react";
 import { useRouter } from "next/navigation";
 
@@ -10,7 +11,7 @@ type Props = {
 export default function Header(props: Props) {
   const router = useRouter();
   return (
-    <div className="flex flex-col items-start justify-start w-full select-none bg-vapormintBlack-300">
+    <div className="absolute top-0 left-0 flex flex-col items-start justify-start w-full select-none bg-vapormintBlack-300">
       <div className="flex items-center w-full p-4 pl-3 ">
         <div
           onClick={() => router.back()}

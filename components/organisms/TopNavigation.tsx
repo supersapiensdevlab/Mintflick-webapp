@@ -2,12 +2,13 @@
 import React from "react";
 import Avatar from "../molecules/Avatar";
 import Main_logo from "../molecules/MainLogo";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 type Props = {};
 
 export default function TopNavigation({}: Props) {
   const path = usePathname();
+  const router = useRouter();
 
   return path === "/home" ||
     path === "/live" ||
@@ -16,7 +17,11 @@ export default function TopNavigation({}: Props) {
     path === "/notifications" ? (
     <div className="absolute top-0 left-0 z-50 flex flex-col items-center w-full">
       <div className="flex items-center justify-between w-full max-w-lg px-4 py-2 bg-vapormintBlack-300/90 backdrop-blur-lg">
-        <Avatar size="sm" kind="default" />
+        <Avatar
+          onClick={() => router.push("profile")}
+          size="sm"
+          kind="default"
+        />
         <Main_logo />
         <svg
           xmlns="http://www.w3.org/2000/svg"

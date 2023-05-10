@@ -1,3 +1,4 @@
+"use client";
 import { useViewportSize } from "@mantine/hooks";
 import React from "react";
 

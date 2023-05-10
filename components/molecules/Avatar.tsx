@@ -11,11 +11,12 @@ export interface AvatarProps {
     | "luxury"
     | "warning"
     | "success";
+  onClick?: React.MouseEventHandler<HTMLDivElement>;
 }
 
 export default function Avatar(props: AvatarProps) {
   return (
-    <div className="p-1 cursor-pointer">
+    <div onClick={props.onClick} className="p-1 cursor-pointer">
       <img
         className={`border-[2px] ${
           props.kind === "default"
@@ -40,25 +41,25 @@ export default function Avatar(props: AvatarProps) {
         alt="userImage"
         width={
           props.size === "xs"
-            ? 24
+            ? 28
             : props.size === "sm"
-            ? 32
+            ? 36
             : props.size === "md"
-            ? 40
+            ? 44
             : props.size === "lg"
-            ? 48
-            : 24
+            ? 52
+            : 28
         }
         height={
           props.size === "xs"
-            ? 24
+            ? 28
             : props.size === "sm"
-            ? 32
+            ? 36
             : props.size === "md"
-            ? 40
+            ? 44
             : props.size === "lg"
-            ? 48
-            : 24
+            ? 52
+            : 28
         }
       />
     </div>
