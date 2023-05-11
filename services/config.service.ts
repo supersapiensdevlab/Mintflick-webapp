@@ -11,4 +11,4 @@ export const MONGO_CONFIG = {
 
 export const MIDDLEWARE_CONFIG = {
   JWT_SECRET: process.env.JWT_SECRET || "",
-}
+};
