@@ -18,7 +18,6 @@ module.exports = {
         "vapormintMint-100": "#6BFFFC",
         "vapormintMint-75": "#96FFFD",
         "vapormintMint-50": "#E6FFFE",
-
         "vapormintBlue-500": "#2D009C",
         "vapormintBlue-400": "#3300B3",
         "vapormintBlue-300": "#4900FF",

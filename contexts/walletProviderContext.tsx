@@ -26,15 +26,17 @@ export default function WalletProviderContextContainer({ children }: Props) {
   const [polygonProvider, setPolygonProvider] = useState({});
 
   return (
-    <walletProviderContext.Provider
-      value={{
-        solanaProvider,
-        setSolanaProvider,
-        polygonProvider,
-        setPolygonProvider,
-      }}
-    >
-      {children}
-    </walletProviderContext.Provider>
+    <div>
+      <walletProviderContext.Provider
+        value={{
+          solanaProvider,
+          setSolanaProvider,
+          polygonProvider,
+          setPolygonProvider,
+        }}
+      >
+        {children}
+      </walletProviderContext.Provider>
+    </div>
   );
 }

@@ -16,7 +16,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className=" font-Gilroy">
+    <html lang="en" className="font-Gilroy">
       <WalletProviderContextContainer>
         <UserContextContainer>
           <ToastContextContainer>

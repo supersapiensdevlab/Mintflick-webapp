@@ -22,9 +22,11 @@ export default function ToastContextContainer({ children }: Props) {
   };
 
   return (
-    <toastContext.Provider value={{ toasts, showToast }}>
-      {children}
-      <ToastContainer />
-    </toastContext.Provider>
+    <div>
+      <toastContext.Provider value={{ toasts, showToast }}>
+        {children}
+        <ToastContainer />
+      </toastContext.Provider>
+    </div>
   );
 }

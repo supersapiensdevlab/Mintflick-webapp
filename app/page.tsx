@@ -6,15 +6,12 @@ import Image from "next/image";
 import SolanaTorus from "@toruslabs/solana-embed";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import WalletProviderContextContainer, {
   walletProviderContext,
 } from "@/contexts/walletProviderContext";
 import { UserContext } from "@/contexts/userContext";
 import FullScreenOverlay from "@/components/molecules/FullScreenOverlay";
-import Header from "@/components/organisms/TopNavigation";
-import TopNavigation from "@/components/organisms/TopNavigation";
-import BottomNavigation from "@/components/organisms/BottomNavigation";
 
 export default function Home() {
   const router = useRouter();
@@ -83,10 +80,13 @@ export default function Home() {
             trust
           </span>
           <span className="text-2xl font-black tracking-widest text-transparent uppercase text text-vapormintBlack-200">
-            Coommunity
+            Community
           </span>
           <span className="text-2xl font-black tracking-widest uppercase text text-vapormintWhite-300 ">
             Support
+          </span>{" "}
+          <span className="text-2xl font-black tracking-widest text-transparent uppercase text text-vapormintBlack-200">
+            trust
           </span>
         </div>
         <Divider kind="center" size={2} />
@@ -252,7 +252,7 @@ export default function Home() {
         </Button>
       </div>
       {checkingUser && (
-        <FullScreenOverlay onClose={() => {}}>
+        <FullScreenOverlay animation="bottom" onClose={() => {}}>
           <div className="flex flex-col w-full h-full bg-vapormintBlack-300">
             <div className="flex flex-col items-center justify-center flex-grow text-2xl font-bold text-vapormintWhite-100">
               Checking User Information...

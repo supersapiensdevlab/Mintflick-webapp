@@ -1,6 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url("/fonts/Gilroy-Black.woff");
+@import url("/fonts/Gilroy-Bold.woff");
+@import url("/fonts/Gilroy-Semiold.woff");
+@import url("/fonts/Gilroy-Medium.woff");
+@import url("/fonts/Gilroy-Light.woff");
+@import url("/fonts/Gilroy-Thin.woff");
+
 * {
   -webkit-tap-highlight-color: transparent;
 }

@@ -16,7 +16,7 @@ export default function BottomNavigation({}: Props) {
     path === "/notifications" ? (
     <div className="absolute bottom-0 left-0 z-50 flex flex-col w-full transition-all ease-in-out select-none ">
       <GradientDivider />
-      <div className="flex items-center w-full max-w-lg px-4 py-3 mx-auto bg-vapormintBlack-300/90 backdrop-blur-lg">
+      <div className="flex items-center w-full max-w-lg px-4 py-3 mx-auto bg-vapormintBlack-300/60 backdrop-blur-lg">
         <div
           onClick={() => router.push("home")}
           className="flex flex-col items-center justify-start w-1/5 gap-1 text-xs font-semibold cursor-pointer text-vapormintWhite-100"
