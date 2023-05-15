@@ -146,6 +146,7 @@ export default function CreateAccount() {
       </Button>
       {showOnboarding && (
         <FullScreenOverlay
+          animation="bottom"
           onClose={() => {
             setShowOnboarding(false);
             setStep(1);

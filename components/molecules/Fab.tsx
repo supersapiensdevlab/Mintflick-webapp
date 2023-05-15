@@ -1,6 +1,8 @@
-import React from "react";
+import { useEventListener, usePrevious, useWindowScroll } from "@mantine/hooks";
+import React, { ReactNode, useEffect, useState } from "react";
 
 type Props = {
+  icon: ReactNode;
   text: String;
   size: "xsmall" | "small" | "base";
   onClick: React.MouseEventHandler<HTMLDivElement> | undefined;
@@ -19,7 +21,7 @@ function Fab(props: Props) {
   return (
     <div
       onClick={props.onClick}
-      className={`flex items-center w-fit gap-2  cursor-pointer select-none  rounded-l-full ${
+      className={`absolute bottom-20 right-0 flex items-center w-fit gap-2  cursor-pointer select-none  rounded-l-full ${
         props.size === "xsmall" ? "p-2" : props.size === "small" ? "p-3" : "p-5"
       }  ${
         props.kind === "default"
@@ -38,20 +40,7 @@ function Fab(props: Props) {
             "bg-vapormintSuccess-500 text-vapormintWhite-100"
       }   transition-all ease-in-out  `}
     >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        strokeWidth="1.5"
-        stroke="currentColor"
-        className="w-6 h-6 "
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M12 4.5v15m7.5-7.5h-15"
-        />
-      </svg>
+      {props.icon}
       {props.showText && (
         <span className={`mr-1 text-lg font-semibold`}>{props.text}</span>
       )}

@@ -20,7 +20,7 @@ export default function TopNavigation({}: Props) {
     <div className="absolute top-0 left-0 z-50 flex flex-col items-center w-full">
       <div className="flex items-center justify-between w-full max-w-lg px-4 py-2 bg-vapormintBlack-300/60 backdrop-blur-lg">
         <Avatar
-          onClick={() => router.push(`/my_profile`)}
+          onClick={() => router.push(`/profile/${userState.userData.username}`)}
           size="sm"
           kind="default"
           src={userState.userData.profile_image}

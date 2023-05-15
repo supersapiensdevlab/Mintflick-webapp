@@ -53,10 +53,8 @@ export default function UserContextContainer({ children }: Props) {
   }, []);
 
   return (
-    <div>
-      <UserContext.Provider value={{ userData, updateUserData }}>
-        {children}
-      </UserContext.Provider>
-    </div>
+    <UserContext.Provider value={{ userData, updateUserData }}>
+      {children}
+    </UserContext.Provider>
   );
 }

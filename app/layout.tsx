@@ -16,16 +16,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="font-Gilroy">
-      <WalletProviderContextContainer>
-        <UserContextContainer>
-          <ToastContextContainer>
-            <TopNavigation />
-            <body>{children}</body>
-            <BottomNavigation />
-          </ToastContextContainer>
-        </UserContextContainer>
-      </WalletProviderContextContainer>
+    <html lang="en" className="font-Gilroy scrollbar-none">
+      <body>
+        <WalletProviderContextContainer>
+          <UserContextContainer>
+            <ToastContextContainer>
+              <TopNavigation />
+              {children} <BottomNavigation />
+            </ToastContextContainer>
+          </UserContextContainer>
+        </WalletProviderContextContainer>
+      </body>
     </html>
   );
 }
