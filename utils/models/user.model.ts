@@ -1,6 +1,59 @@
-import { Schema, model } from 'mongoose';
-import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
+import { Schema, model, models } from "mongoose";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+
+interface IUser {
+  id: String;
+  name: String;
+  username: String;
+  email: String;
+  jwt_token: String;
+  resetToken: String;
+  expireToken: Date;
+  wallet_id: String;
+  password: String;
+  cover_image: String;
+  profile_image: String;
+  livepeer_data: Object;
+  superfan_data: Object;
+  tracks: Array<any>;
+  videos: Array<any>;
+  subscription: Array<any>;
+  polls: Array<any>;
+  multistream_platform: Array<any>;
+  pinned: Array<any>;
+  posts: Array<any>;
+  events: Array<any>;
+  notification: Array<any>;
+  oldnotification: Array<any>;
+  your_reactions: Array<any>;
+  my_playlists: Array<any>;
+  reports: Array<any>;
+  refer: Object;
+  seenIntro: Object;
+  gems: Object;
+  coins: Object;
+  thumbnail: String;
+  streamDetails: Object;
+  streamSchedule: String;
+  streamLinks: Array<any>;
+  album_count: Number;
+  bio: String;
+  followee_count: Array<any>;
+  follower_count: Array<any>;
+  superfan_to: Array<any>;
+  superfan_of: Array<any>;
+  favorite_tracks: Array<any>;
+  is_mail_verified: Boolean;
+  is_verified: Boolean;
+  location: String;
+  playlist_count: Number;
+  repost_count: Number;
+  track_count: Number;
+  preference: String;
+  conversations: Array<any>;
+  quests: Array<any>;
+}
 
 const userSchema = new Schema(
   {
@@ -41,11 +94,11 @@ const userSchema = new Schema(
     },
     cover_image: {
       type: String,
-      default: '',
+      default: "",
     },
     profile_image: {
       type: String,
-      default: '',
+      default: "",
     },
     livepeer_data: {
       type: Object,
@@ -147,7 +200,7 @@ const userSchema = new Schema(
     },
     streamLinks: { type: Array, default: [] },
     album_count: { type: Number, default: 0 },
-    bio: { type: String, default: '', trim: true },
+    bio: { type: String, default: "", trim: true },
     followee_count: { type: Array, default: [] },
     follower_count: { type: Array, default: [] },
     superfan_to: { type: Array, default: [] },
@@ -174,22 +227,22 @@ const userSchema = new Schema(
   },
   {
     timestamps: true,
-  },
+  }
 );
 
 userSchema.methods.generateAuthToken = async function (res: any) {
   try {
     const token = jwt.sign(
       { _id: this._id.toString() },
-      'mynameissahilpunjabicomputerengineer',
+      "mynameissahilpunjabicomputerengineer"
     );
     this.jwt_token = token;
     await this.save();
     return token;
   } catch (error) {
-    console.log('error is' + error);
-    res.send('error is' + error);
+    console.log("error is" + error);
+    res.send("error is" + error);
   }
 };
 
-export const User = model('User', userSchema);
+export const User = models.User || model("User", userSchema);
