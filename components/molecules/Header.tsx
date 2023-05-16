@@ -15,16 +15,14 @@ export default function Header(props: Props) {
       <div className="flex items-center w-full p-4 pl-3 ">
         <div
           onClick={() => router.back()}
-          className="flex items-center justify-start w-1/4 gap-1 text-base font-bold cursor-pointer text-vapormintWhite-100"
-        >
+          className="flex items-center justify-start w-1/4 gap-1 text-base font-bold cursor-pointer text-vapormintWhite-100">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
             strokeWidth="1.5"
             stroke="currentColor"
-            className="w-6 h-6 "
-          >
+            className="w-6 h-6 ">
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -42,7 +40,7 @@ export default function Header(props: Props) {
       </div>
       <span
         style={{ height: `1px` }}
-        className={`  w-full  bg-gradient-to-r from-vapormintWhite-100 to-vapormintBlack-300"`}
+        className={`  w-full  bg-gradient-to-r from-vapormintWhite-100 to-vapormintBlack-300`}
       />
     </div>
   );

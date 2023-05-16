@@ -143,14 +143,14 @@ function ImageInput({
           rotation,
           compression
         );
-        console.log("donee", { croppedImage });
+        // console.log("donee", { croppedImage });
         const response = await fetch(croppedImage);
         const blob = await response.blob();
         const myNewFile = new File([blob], "image", {
           type: blob.type,
         });
 
-        console.log("Compressed Image", myNewFile);
+        // console.log("Compressed Image", myNewFile);
 
         setImage(myNewFile);
         setimageUrl(croppedImage);
@@ -169,7 +169,7 @@ function ImageInput({
     // Update the state
 
     const file = sanitizeFilename(event.target.files[0]);
-    console.log(file);
+    // console.log(file);
 
     setselectedFile({
       file: [file],
@@ -179,106 +179,127 @@ function ImageInput({
     event.target.files[0]?.size < 2000000 && setcropperOpen(true);
   };
   return (
-    <>
-      <div className="flex flex-col items-center w-full gap-2 p-1 border-2 border-dashed rounded-lg border-vapormintBlack-200 text-brand4">
-        {selectedFile?.localurl && cropperOpen && (
-          <FullScreenOverlay
-            title={"Crop Image"}
-            onClose={() => {
-              setcropperOpen(false);
-            }}>
-            <div className="flex flex-col items-center justify-start w-full h-full max-w-lg gap-2 p-1 overflow-hidden">
-              <div className="relative flex-grow w-full overflow-hidden rounded-lg">
-                <Cropper
-                  image={selectedFile?.localurl}
-                  crop={crop}
-                  rotation={rotation}
-                  zoom={zoom}
-                  aspect={aspect}
-                  cropShape={cropShape}
-                  showGrid={showGrid}
-                  onCropChange={setCrop}
-                  onRotationChange={setRotation}
-                  onCropComplete={onCropComplete}
-                  onZoomChange={setZoom}
-                  style={{
-                    containerStyle: {
-                      height: "100%",
-                      width: "100%",
-                      backgroundColor: "transparent",
-                    },
-                    mediaStyle: {
-                      backgroundColor: "transparent",
-                    },
-                    cropAreaStyle: {
-                      width: "100%",
-                      backgroundColor: "transparent",
-                    },
-                  }}
-                />
-              </div>{" "}
-              <Button
-                handleClick={() => setcropperOpen(false)}
-                kind="success"
-                type="solid"
-                size="base">
-                Done
-              </Button>
-            </div>
-          </FullScreenOverlay>
-        )}
-        {selectedFile && selectedFile.file[0]?.size > 2000000 && (
-          <span className="text-base font-semibold tracking-wider text-vapormintError-500 ">
-            File size must be less than 2MB.
-          </span>
-        )}
-        {imageUrl && <img className="w-full max-w-lg rounded" src={imageUrl} />}
-        <label className="flex items-start w-full gap-2 p-2 cursor-pointer ">
-          {selectedFile ? (
-            selectedFile.file && (
-              <Button
-                handleClick={handleClick}
-                kind="warning"
-                type="ghost"
-                size="small">
-                Choose another photo
-              </Button>
-            )
-          ) : (
-            <div
-              onClick={handleClick}
-              className="flex items-center w-full gap-2 text-base font-semibold capitalize text-vapormintWhite-100">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth="1.5"
-                stroke="currentColor"
-                className="w-6 h-6 ">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"
-                />
-              </svg>
-              {label}
-            </div>
-          )}
-        </label>
-        <input
-          ref={hiddenFileInput}
-          type="file"
-          accept="image/*"
-          onChange={handleImageChange}
-          className="sr-only"
-          onClick={(event: any) => {
-            event.target.value = null;
+    <div className="flex flex-col items-center w-full gap-2 p-1 border-2 border-dashed rounded-lg border-vapormintBlack-200 text-brand4">
+      {selectedFile?.localurl && cropperOpen && (
+        <FullScreenOverlay
+          animation="bottom"
+          title={"Crop Image"}
+          onClose={() => {
+            setcropperOpen(false);
+          }}>
+          <div className="flex flex-col items-center justify-start w-full h-full max-w-lg gap-2 p-1 overflow-hidden">
+            <div className="relative flex-grow w-full overflow-hidden rounded-lg">
+              <Cropper
+                image={selectedFile?.localurl}
+                crop={crop}
+                rotation={rotation}
+                zoom={zoom}
+                aspect={aspect}
+                cropShape={cropShape}
+                showGrid={showGrid}
+                onCropChange={setCrop}
+                onRotationChange={setRotation}
+                onCropComplete={onCropComplete}
+                onZoomChange={setZoom}
+                style={{
+                  containerStyle: {
+                    height: "100%",
+                    width: "100%",
+                    backgroundColor: "transparent",
+                  },
+                  mediaStyle: {
+                    backgroundColor: "transparent",
+                  },
+                  cropAreaStyle: {
+                    width: "100%",
+                    backgroundColor: "transparent",
+                  },
+                }}
+              />
+            </div>{" "}
+            <Button
+              handleClick={() => setcropperOpen(false)}
+              kind="success"
+              type="solid"
+              size="base">
+              Done
+            </Button>
+          </div>
+        </FullScreenOverlay>
+      )}
+      {selectedFile && (
+        <svg
+          onClick={() => {
             setselectedFile(null);
-            console.log("setting null");
+            setImage(null);
+            setimageUrl("");
           }}
-        />
-      </div>
-    </>
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth="1.5"
+          stroke="currentColor"
+          className="w-6 h-6 ml-auto cursor-pointer text-vapormintWhite-100">
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M6 18L18 6M6 6l12 12"
+          />
+        </svg>
+      )}
+      {imageUrl && <img className="w-full max-w-lg rounded" src={imageUrl} />}
+      <label className="flex items-start w-full gap-2 p-2 cursor-pointer ">
+        {selectedFile ? (
+          selectedFile.file && (
+            <Button
+              handleClick={handleClick}
+              kind="warning"
+              type="ghost"
+              size="small">
+              Choose another photo
+            </Button>
+          )
+        ) : (
+          <div
+            onClick={handleClick}
+            className="flex items-center w-full gap-2 text-base font-semibold capitalize text-vapormintWhite-100">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth="1.5"
+              stroke="currentColor"
+              className="w-6 h-6 ">
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"
+              />
+            </svg>
+            {label}
+          </div>
+        )}
+      </label>{" "}
+      {selectedFile && selectedFile.file[0]?.size > 2000000 && (
+        <span className="text-base font-semibold tracking-wider text-vapormintError-500 ">
+          File size must be less than 2MB.
+        </span>
+      )}
+      <input
+        ref={hiddenFileInput}
+        type="file"
+        accept="image/*"
+        onChange={handleImageChange}
+        className="sr-only"
+        onClick={(event: any) => {
+          event.target.value = null;
+          setselectedFile(null);
+          setImage(null);
+          setimageUrl("");
+          // console.log("setting null");
+        }}
+      />
+    </div>
   );
 }
 

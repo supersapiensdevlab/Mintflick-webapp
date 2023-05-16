@@ -5,8 +5,6 @@ import Image from "next/image";
 import React, { useContext, useState } from "react";
 import { UserContext } from "@/contexts/userContext";
 import Divider from "@/components/molecules/Divider";
-import social from "@/public/social.webp";
-import NftCoin from "@/components/organisms/NftCoin";
 import Avatar from "@/components/molecules/Avatar";
 import USDT from "@/components/organisms/USDT";
 

@@ -2,12 +2,12 @@
 import FullscreenContainer from "@/components/molecules/FullscreenContainer";
 import Feed from "./Feed";
 import Fab from "@/components/molecules/Fab";
-import { useEffect, useState } from "react";
-import { useEventListener } from "@mantine/hooks";
+import { useRouter } from "next/navigation";
 
 type Props = {};
 
 export default function page({}: Props) {
+  const router = useRouter();
   return (
     <FullscreenContainer className="relative border-x-[1px] border-vapormintBlack-200/60 flex flex-col items-start max-w-lg mx-auto overflow-hidden bg-vapormintBlack-300">
       <Feed />
@@ -29,7 +29,7 @@ export default function page({}: Props) {
           </svg>
         }
         kind="mint"
-        onClick={() => {}}
+        onClick={() => router.push("/new_post")}
         size="small"
         showText={true}
         text={"New Post"}

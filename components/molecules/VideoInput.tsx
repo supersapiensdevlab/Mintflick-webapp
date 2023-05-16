@@ -36,6 +36,23 @@ export default function VideoInput(props: Props) {
 
   return (
     <div className="flex flex-col items-center justify-center w-full gap-2 p-2 border-2 border-dashed rounded-lg cursor-pointer border-vapormintBlack-200 text-brand4">
+      {props.selectedVideo && (
+        <svg
+          onClick={() => props.setSelectedVideo(null)}
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth="1.5"
+          stroke="currentColor"
+          className="w-6 h-6 ml-auto cursor-pointer text-vapormintWhite-100">
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M6 18L18 6M6 6l12 12"
+          />
+        </svg>
+      )}
+
       {props.selectedVideo && props.selectedVideo.localurl && (
         <div className="object-cover w-full overflow-hidden rounded-lg aspect-video bg-vapormintBlack-200">
           <ReactPlayer
@@ -43,6 +60,7 @@ export default function VideoInput(props: Props) {
             width="100%"
             height={"100%"}
             playing={true}
+            loop
             muted={true}
             volume={0.5}
             url={props.selectedVideo.localurl}
@@ -50,7 +68,7 @@ export default function VideoInput(props: Props) {
           />
         </div>
       )}
-      <label className="flex items-center justify-start w-full gap-2 text-base font-semibold capitalize text-vapormintWhite-100">
+      <label className="flex items-center justify-start w-full gap-2 p-1 text-base font-semibold capitalize cursor-pointer text-vapormintWhite-100">
         <input
           id="videofile"
           type="file"
