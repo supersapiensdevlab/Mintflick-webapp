@@ -6,8 +6,11 @@ export async function POST(request: Request) {
   try {
     await conn();
     const req = await request.json();
-    const following = req.body.following;
-    const user = await findById(req.user_id);
+    const following = req.following;
+    const { success, user, error } = await findById(req.user_id);
+    if (!success) {
+      return NextResponse.json({ status: "error", message: error });
+    }
     const announcementData = {
       announcement: `${user?.username} started following you`,
       post_image: user?.profile_image ? user?.profile_image : null,
@@ -17,7 +20,7 @@ export async function POST(request: Request) {
       username: user?.username,
       linkpreview_data: null,
     };
-    await findOneAndUpdate(
+    const pushNotification = await findOneAndUpdate(
       { username: following },
       {
         $push: {
@@ -27,11 +30,23 @@ export async function POST(request: Request) {
       },
       {}
     );
-    await findOneAndUpdate(
+    if (!pushNotification.success) {
+      return NextResponse.json({
+        status: "error",
+        message: pushNotification.error,
+      });
+    }
+    const updateFollowing = await findOneAndUpdate(
       { username: user?.username },
       { $push: { followee_count: following } },
       {}
     );
+    if (!updateFollowing.success) {
+      return NextResponse.json({
+        status: "error",
+        message: updateFollowing.error,
+      });
+    }
     return NextResponse.json({ status: "success", message: "Follow success" });
   } catch (err) {
     return NextResponse.json({ status: "error", message: err });

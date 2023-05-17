@@ -12,15 +12,23 @@ export async function GET(
   try {
     const username = params.username;
 
-    const user = await findOne({ username: username });
-
-    await findOneAndUpdate(
+    const { success, user, error } = await findOne({ username: username });
+    if (!success) {
+      return NextResponse.json({ status: "error", message: error });
+    }
+    const getGems = await findOneAndUpdate(
       { username: username },
       {
         $set: { "gems.balance": user.gems.balance + 50 },
       },
       {}
     );
+    if (!getGems.success) {
+      return NextResponse.json({
+        status: "error",
+        message: getGems.error,
+      });
+    }
     return NextResponse.json({
       status: "success",
       message: "Gems sent successfully",

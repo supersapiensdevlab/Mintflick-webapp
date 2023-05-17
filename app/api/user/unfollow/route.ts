@@ -7,7 +7,10 @@ export async function POST(request: Request) {
     await conn();
     const req = await request.json();
     const following = req.following;
-    const user = await findById(req.user_id);
+    const { success, user, error } = await findById(req.user_id);
+    if (!success) {
+      return NextResponse.json({ status: "error", message: error });
+    }
 
     const announcementData = {
       announcement: `${user.username} unfollowed you`,
@@ -19,28 +22,52 @@ export async function POST(request: Request) {
       linkpreview_data: null,
     };
 
-    await findOneAndUpdate(
+    const removeFollowing = await findOneAndUpdate(
       { username: following },
       { $pull: { follower_count: user.username } },
       {}
     );
+    if (!removeFollowing.success) {
+      return NextResponse.json({
+        status: "error",
+        message: removeFollowing.error,
+      });
+    }
 
-    await findOneAndUpdate(
+    const pushNotification = await findOneAndUpdate(
       { username: following },
       { $push: { notification: announcementData } },
       {}
     );
+    if (!pushNotification.success) {
+      return NextResponse.json({
+        status: "error",
+        message: pushNotification.error,
+      });
+    }
 
-    await findOneAndUpdate(
+    const removeFollower = await findOneAndUpdate(
       { username: user.username },
       { $pull: { followee_count: following } },
       {}
     );
-    await findOneAndUpdate(
+    if (!removeFollower.success) {
+      return NextResponse.json({
+        status: "error",
+        message: removeFollower.error,
+      });
+    }
+    const removePinned = await findOneAndUpdate(
       { username: user.username },
       { $pull: { pinned: following } },
       {}
     );
+    if (!removePinned.success) {
+      return NextResponse.json({
+        status: "error",
+        message: removePinned.error,
+      });
+    }
 
     return NextResponse.json({ status: "success", message: "Unollow success" });
   } catch (err) {

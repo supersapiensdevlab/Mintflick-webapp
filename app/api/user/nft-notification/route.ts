@@ -9,7 +9,6 @@ export async function POST(request: Request) {
     const username = req.username;
     const profile_image = req.nft_image;
     const user = await findById(req.user_id);
-    // console.log(following, follower);
 
     const announcementData = {
       announcement: `Check out ${username}'s new NFT`,

@@ -17,26 +17,29 @@ export async function POST(request: Request) {
 
     const referrer = req.referrer;
 
-    const userData = await findOne({ wallet_id: wallet_id });
-    if (userData) {
+    const { success, user, error } = await findOne({ wallet_id: wallet_id });
+    if (!success) {
+      return NextResponse.json({ status: "error", message: error });
+    }
+    if (user) {
       const data = {
-        user_id: userData._id,
+        user_id: user._id,
       };
       const authtoken = jwt.sign(data, MIDDLEWARE_CONFIG.JWT_SECRET);
       let loginData = {
-        user: userData,
+        user: user,
         jwtToken: authtoken,
       };
       return NextResponse.json({
         status: "success",
+        message: "User fetched successfully",
         data: loginData,
       });
-    } else if (!userData && req.fetchData) {
+    } else if (!user && req.fetchData) {
       return "No user found";
     } else {
       if (email != "" && email != null && email != undefined) {
         let userName = email.substring(0, email.lastIndexOf("@"));
-        console.log(userName);
 
         const userId = Str.random(8);
 
@@ -46,21 +49,21 @@ export async function POST(request: Request) {
           email: email,
         });
 
-        if (user_emailcheck) {
+        if (user_emailcheck.user) {
           unique = false;
           not_unique = "Email";
         }
         let user_usernamecheck = await findOne({
           username: userName,
         });
-        if (user_usernamecheck) {
+        if (user_usernamecheck.user) {
           // unique = false;
           // not_unique = 'Username';
           userName = userName + userId;
         }
 
         let user_idcheck = await findOne({ id: userId });
-        if (user_idcheck) {
+        if (user_idcheck.user) {
           unique = false;
           not_unique = "ID";
         }
@@ -105,7 +108,6 @@ export async function POST(request: Request) {
                 Authorization: AuthStr,
               },
             });
-            console.log(value.data);
 
             const newUser = await addUser({
               username: userName,
@@ -123,8 +125,6 @@ export async function POST(request: Request) {
               },
             });
 
-            console.log(newUser);
-
             newUser
               .save()
               .then(async () => {
@@ -136,47 +136,31 @@ export async function POST(request: Request) {
                   user: newUser,
                   jwtToken: authtoken,
                 };
-                console.log(loginData);
 
-                /////
-                await findOneAndUpdate(
+                const updateRererals = await findOneAndUpdate(
                   { username: referrer },
                   { $inc: { "refer.unverified_referrals": 1 } },
-                  //   function (error, success) {
-                  //     if (error) {
-                  //       console.log(error);
-                  //       res.send(error);
-                  //     } else if (success) {
-                  //       console.log('referral click incremented');
-                  //       res.json(loginData);
-                  //     }
-                  //   },
                   { upsert: true }
-                )
-                  .then(() => {
-                    return NextResponse.json({
-                      status: "success",
-                      data: loginData,
-                    });
-                  })
-                  .catch((err) => {
-                    return NextResponse.json({ status: "error", data: err });
+                );
+                if (!updateRererals.success) {
+                  return NextResponse.json({
+                    status: "error",
+                    message: updateRererals.error,
                   });
-
-                /////
-                const userData2 = await findOne({
+                }
+                const user2 = await findOne({
                   wallet_id: wallet_id,
                 });
-                if (userData2) {
+                if (user2.user) {
                   const data = {
-                    user_id: userData2._id,
+                    user_id: user2.user._id,
                   };
                   const authtoken = jwt.sign(
                     data,
                     MIDDLEWARE_CONFIG.JWT_SECRET
                   );
                   let loginData = {
-                    user: userData2,
+                    user: user2.user,
                     jwtToken: authtoken,
                   };
                   return NextResponse.json({

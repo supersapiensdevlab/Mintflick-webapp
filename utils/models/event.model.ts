@@ -1,4 +1,4 @@
-import {Schema, model} from "mongoose";
+import { Schema, model, models } from "mongoose";
 
 interface IEvent {
   eventId: string;
@@ -47,7 +47,7 @@ const eventSchema = new Schema<IEvent>(
     },
     ticketPrice: {
       type: String,
-      default: '0',
+      default: "0",
     },
     unlimitedTickets: {
       type: Boolean,
@@ -71,7 +71,7 @@ const eventSchema = new Schema<IEvent>(
     timeZone: {
       type: String,
       trim: true,
-      default: 'Asia/Kolkata',
+      default: "Asia/Kolkata",
     },
     eventImage: {
       type: String,
@@ -108,13 +108,13 @@ const eventSchema = new Schema<IEvent>(
           const uniqueValues = new Set(arr);
           return uniqueValues.size === arr.length;
         },
-        message: 'Duplicate values found in the array', // Custom error message
+        message: "Duplicate values found in the array", // Custom error message
       },
     },
     bookings: {
       type: [String],
     },
   },
-  { timestamps: true },
+  { timestamps: true }
 );
-export const Event = model<IEvent>('Event', eventSchema);
+export const Event = models.Feed || model<IEvent>("Event", eventSchema);

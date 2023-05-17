@@ -5,7 +5,6 @@ import { isAuthenticated } from "./utils/middleware/userMiddleware";
 // This function can be marked `async` if using `await` inside
 export function middleware(request: NextRequest) {
   // Call our authentication function to check the request
-  console.log(isAuthenticated(request));
   if (!isAuthenticated(request)) {
     // Respond with JSON indicating an error message
     return new NextResponse(

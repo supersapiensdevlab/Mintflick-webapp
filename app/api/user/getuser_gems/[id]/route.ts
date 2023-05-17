@@ -11,11 +11,18 @@ export async function GET(
 ) {
   try {
     const id = params.id;
-    const user = await findOne({ id: id });
+    const { success, user, error } = await findOne({ id: id });
+    if (!success) {
+      return NextResponse.json({ status: "error", message: error });
+    }
 
     if (user.gems) {
       let gems = user.gems;
-      return NextResponse.json({ status: "success", data: gems });
+      return NextResponse.json({
+        status: "success",
+        message: "Gems fetched successfully",
+        data: gems,
+      });
     } else {
       return NextResponse.json({
         status: "success",

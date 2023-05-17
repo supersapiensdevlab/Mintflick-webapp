@@ -11,8 +11,10 @@ export async function POST(request: Request) {
     const prevBalance = req.prevBalance;
     const update = req.update;
     const tasksPerformed = req.tasksPerformed;
-    const user = await findById(req.user_id);
-
+    const { success, user, error } = await findById(req.user_id);
+    if (!success) {
+      return NextResponse.json({ status: "error", message: error });
+    }
     if (req.type === "social") {
       if (!prevBalance) {
         let data = {
@@ -33,13 +35,19 @@ export async function POST(request: Request) {
           },
         };
 
-        await findOneAndUpdate(
+        const setCoins = await findOneAndUpdate(
           { username: user.username },
           {
             $set: { coins: data },
           },
           {}
         );
+        if (!setCoins.success) {
+          return NextResponse.json({
+            status: "error",
+            message: setCoins.error,
+          });
+        }
         return NextResponse.json({ status: "success" });
       } else {
         let total = prevBalance ? prevBalance + value : value;
@@ -62,28 +70,45 @@ export async function POST(request: Request) {
             break;
         }
 
-        await findOneAndUpdate(
+        const setBalance = await findOneAndUpdate(
           { username: user.username },
           {
             $set: { "coins.balance": total },
           },
           {}
         );
-
-        await findOneAndUpdate(
+        if (!setBalance.success) {
+          return NextResponse.json({
+            status: "error",
+            message: setBalance.error,
+          });
+        }
+        const setHistory = await findOneAndUpdate(
           { username: user.username },
           {
             $push: { "coins.history": data },
           },
           {}
         );
-        await findOneAndUpdate(
+        if (!setHistory.success) {
+          return NextResponse.json({
+            status: "error",
+            message: setHistory.error,
+          });
+        }
+        const setTasks = await findOneAndUpdate(
           { username: user.username },
           {
             $set: { "coins.tasksPerformed": tasksPerformed },
           },
           {}
         );
+        if (!setTasks.success) {
+          return NextResponse.json({
+            status: "error",
+            message: setTasks.error,
+          });
+        }
         return NextResponse.json({ status: "success" });
       }
     }
@@ -108,14 +133,19 @@ export async function POST(request: Request) {
           },
         };
 
-        await findOneAndUpdate(
+        const set = await findOneAndUpdate(
           { username: user.username },
           {
             $set: { coins: data },
           },
           {}
         );
-
+        if (!set.success) {
+          return NextResponse.json({
+            status: "error",
+            message: set.error,
+          });
+        }
         return NextResponse.json({ status: "success" });
       } else {
         let total = prevBalance ? prevBalance + value : value;
@@ -138,7 +168,6 @@ export async function POST(request: Request) {
           },
           {}
         );
-
         await findOneAndUpdate(
           { username: user.username },
           {
@@ -146,6 +175,7 @@ export async function POST(request: Request) {
           },
           {}
         );
+
         await findOneAndUpdate(
           { username: user.username },
           {

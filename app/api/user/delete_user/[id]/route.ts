@@ -11,8 +11,14 @@ export async function DELETE(
 ) {
   try {
     const id = params.id;
-    await findOneAndDelete({ id: id });
-    return NextResponse.json({ status: "success", message: "User Deleted" });
+    const deleteUser = await findOneAndDelete({ id: id });
+    if (!deleteUser.success) {
+      return NextResponse.json({ status: "error", message: deleteUser.error });
+    }
+    return NextResponse.json({
+      status: "success",
+      message: "User Deleted successfully",
+    });
   } catch (error) {
     return NextResponse.json({ status: "error", message: error });
   }
