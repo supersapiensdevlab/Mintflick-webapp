@@ -1,15 +1,15 @@
-"use client";
-import FullscreenContainer from "@/components/molecules/FullscreenContainer";
-import Header from "@/components/molecules/Header";
-import Image from "next/image";
-import React, { useContext, useState } from "react";
-import { UserContext } from "@/contexts/userContext";
-import Divider from "@/components/molecules/Divider";
-import social from "@/public/social.webp";
-import FullScreenOverlay from "@/components/molecules/FullScreenOverlay";
-import Settings from "../Settings";
-import Pricing from "../Pricing";
-import { useRouter } from "next/navigation";
+'use client';
+import FullscreenContainer from '@/components/molecules/FullscreenContainer';
+import Header from '@/components/molecules/Header';
+import Image from 'next/image';
+import React, { useContext, useState } from 'react';
+import { UserContext } from '@/contexts/userContext';
+import Divider from '@/components/molecules/Divider';
+import social from '@/public/social.webp';
+import FullScreenOverlay from '@/components/molecules/FullScreenOverlay';
+import Settings from '../Settings';
+import Pricing from '../Pricing';
+import { useRouter } from 'next/navigation';
 
 type Props = {};
 
@@ -17,7 +17,7 @@ export default function page({}: Props) {
   const userState = useContext(UserContext);
   const router = useRouter();
 
-  const [selectedTab, setSelectedTab] = useState("posts");
+  const [selectedTab, setSelectedTab] = useState('posts');
   const [openSettings, setOpenSettings] = useState(false);
 
   const [openPricingModal, setOpenPricingModal] = useState(false);
@@ -47,7 +47,7 @@ export default function page({}: Props) {
       {openSettings && (
         <FullScreenOverlay
           animation="right"
-          title={"Settings"}
+          title={'Settings'}
           onClose={() => setOpenSettings(false)}
         >
           <Settings />
@@ -69,7 +69,7 @@ export default function page({}: Props) {
             />
           )}
 
-          <div className="flex items-end w-full gap-3 px-4 py-3 -mt-12">
+          <div className="flex items-end w-full gap-1 px-4 py-3 -mt-12">
             {userState.userData.profile_image ? (
               <img
                 className={`border-[4px] border-vapormintBlack-300/25 rounded-full w-20 h-20`}
@@ -85,7 +85,7 @@ export default function page({}: Props) {
               {userState.userData.username}
             </h1>
             <div
-              onClick={() => router.push("/edit_profile")}
+              onClick={() => router.push('/edit_profile')}
               className="flex items-center gap-1 p-1 ml-auto text-sm font-semibold cursor-pointer text-vapormintError-300"
             >
               <svg
@@ -116,14 +116,14 @@ export default function page({}: Props) {
             <div
               className={` rounded-full bg-vapormintBlack-200 animate-pulse w-16 h-16 `}
             />
-          )}{" "}
+          )}{' '}
           <div className="flex flex-col gap-[2px]">
             <h2 className="text-xl font-bold text-vapormintWhite-100">
               Become a Pro member
-            </h2>{" "}
+            </h2>{' '}
             <h2 className="text-xs font-semibold text-vapormintWhite-100">
               Text explaining how a creater get <br />
-              benefited by these plans{" "}
+              benefited by these plans{' '}
             </h2>
           </div>
           <svg
@@ -152,14 +152,14 @@ export default function page({}: Props) {
             <div
               className={` rounded-full bg-vapormintBlack-200 animate-pulse w-16 h-16 `}
             />
-          )}{" "}
+          )}{' '}
           <div className="flex flex-col gap-[2px]">
             <h2 className="text-xl font-bold text-vapormintWhite-100">
               Setup Superfan plans
-            </h2>{" "}
+            </h2>{' '}
             <h2 className="text-xs font-semibold text-vapormintWhite-100">
               Text explaining how a creater get <br />
-              benefited by these plans{" "}
+              benefited by these plans{' '}
             </h2>
           </div>
           <svg
@@ -179,7 +179,7 @@ export default function page({}: Props) {
           <div className="flex flex-col items-center gap-1">
             <span className="text-2xl font-bold text-vapormintWhite-100">
               243K
-            </span>{" "}
+            </span>{' '}
             <span className="text-base font-semibold text-vapormintWhite-300">
               Followers
             </span>
@@ -187,7 +187,7 @@ export default function page({}: Props) {
           <div className="flex flex-col items-center gap-1">
             <span className="text-2xl font-bold text-vapormintWhite-100">
               122
-            </span>{" "}
+            </span>{' '}
             <span className="text-base font-semibold text-vapormintWhite-300">
               Following
             </span>
@@ -209,44 +209,44 @@ export default function page({}: Props) {
           <span className="text-base font-light ">
             Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet
             sint. Velit officia consequat duis enim velit mollit. Exercitation
-            veniam consequat sunt nostrud amet.{" "}
+            veniam consequat sunt nostrud amet.{' '}
           </span>
-        </div>{" "}
+        </div>{' '}
         <Divider kind="solid" size={1} />
         <div className="sticky top-0 flex items-center p-4 gap-9 bg-vapormintBlack-300">
           <span
-            onClick={() => setSelectedTab("posts")}
+            onClick={() => setSelectedTab('posts')}
             className={`text-base font-bold uppercase cursor-pointer tracking-[.16em] ${
-              selectedTab === "posts"
-                ? "text-vapormintWhite-100"
-                : "text-vapormintBlack-200"
+              selectedTab === 'posts'
+                ? 'text-vapormintWhite-100'
+                : 'text-vapormintBlack-200'
             }`}
           >
             posts
           </span>
           <span
-            onClick={() => setSelectedTab("nfts")}
+            onClick={() => setSelectedTab('nfts')}
             className={`text-base font-bold uppercase cursor-pointer tracking-[.16em] ${
-              selectedTab === "nfts"
-                ? "text-vapormintWhite-100"
-                : "text-vapormintBlack-200"
+              selectedTab === 'nfts'
+                ? 'text-vapormintWhite-100'
+                : 'text-vapormintBlack-200'
             }`}
           >
             NFTs
-          </span>{" "}
+          </span>{' '}
           <span
-            onClick={() => setSelectedTab("superfans")}
+            onClick={() => setSelectedTab('superfans')}
             className={`text-base font-bold uppercase cursor-pointer tracking-[.16em] ${
-              selectedTab === "superfans"
-                ? "text-vapormintWhite-100"
-                : "text-vapormintBlack-200"
+              selectedTab === 'superfans'
+                ? 'text-vapormintWhite-100'
+                : 'text-vapormintBlack-200'
             }`}
           >
             superfans
           </span>
         </div>
         <div className="grid w-full grid-cols-3 gap-[1px] h-full place-content-start">
-          {selectedTab === "posts" &&
+          {selectedTab === 'posts' &&
             [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2].map(() => (
               <Image
                 className={`w-full aspect-square object-cover`}
@@ -256,7 +256,7 @@ export default function page({}: Props) {
                 height={100}
               />
             ))}
-          {selectedTab === "nfts" &&
+          {selectedTab === 'nfts' &&
             [1, 2, 2, 2, 3, 2, 2].map(() => (
               <Image
                 className={`w-full aspect-square object-cover`}
@@ -266,7 +266,7 @@ export default function page({}: Props) {
                 height={100}
               />
             ))}
-          {selectedTab === "superfans" &&
+          {selectedTab === 'superfans' &&
             [1, 3, 3, 2].map(() => (
               <Image
                 className={`w-full aspect-square object-cover`}
@@ -281,7 +281,7 @@ export default function page({}: Props) {
       {openPricingModal && (
         <FullScreenOverlay
           animation="bottom"
-          title={"Mintflick Pro"}
+          title={'Mintflick Pro'}
           onClose={() => setOpenPricingModal(false)}
         >
           <Pricing />

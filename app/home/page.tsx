@@ -1,8 +1,8 @@
-"use client";
-import FullscreenContainer from "@/components/molecules/FullscreenContainer";
-import Feed from "./Feed";
-import Fab from "@/components/molecules/Fab";
-import { useRouter } from "next/navigation";
+'use client';
+import FullscreenContainer from '@/components/molecules/FullscreenContainer';
+import Feed from './Feed';
+import Fab from '@/components/molecules/Fab';
+import { useRouter } from 'next/navigation';
 
 type Props = {};
 
@@ -29,10 +29,9 @@ export default function page({}: Props) {
           </svg>
         }
         kind="mint"
-        onClick={() => router.push("/new_post")}
+        onClick={() => router.push('/new_post')}
         size="small"
-        showText={true}
-        text={"New Post"}
+        text={'New Post'}
       />
     </FullscreenContainer>
   );

@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import { useClipboard } from '@mantine/hooks';
+import React, { useState } from 'react';
 
 function CopyToClipboard(props: {
   className: string;
@@ -6,23 +7,11 @@ function CopyToClipboard(props: {
   title?: string;
   children?: React.ReactNode;
 }) {
-  const [copied, setCopied] = useState(props.title ? props.title : "Copy");
+  const clipboard = useClipboard({ timeout: 1000 });
 
-  const handleCopied = () => {
-    setCopied("Copied");
-    setTimeout(() => {
-      setCopied(props.title ? props.title : "Copy");
-    }, 3000);
-  };
   return (
-    <div
-      className={props.className}
-      onClick={() => {
-        navigator.clipboard.writeText(props.text);
-        handleCopied();
-      }}
-    >
-      {copied}
+    <div className={props.className} onClick={() => clipboard.copy(props.text)}>
+      {props.title ? props.title : ''} {clipboard.copied ? 'Copied' : 'Copy'}{' '}
     </div>
   );
 }

@@ -1,11 +1,11 @@
-import React, { ReactNode, useEffect, useState } from 'react';
+import { useElementSize, useHover } from '@mantine/hooks';
+import React, { ReactNode, useEffect, useRef, useState } from 'react';
 
 type Props = {
   icon: ReactNode;
   text: String;
   size: 'xsmall' | 'small' | 'base';
   onClick: React.MouseEventHandler<HTMLDivElement> | undefined;
-  showText: Boolean;
   kind:
     | 'default'
     | 'mint'
@@ -18,30 +18,32 @@ type Props = {
 
 function Fab(props: Props) {
   const [showText, setShowText] = useState(true);
-  const [animation, setAnimation] = useState(false);
+  const ref1: React.MutableRefObject<HTMLDivElement> = useRef(null);
+  const { hovered, ref } = useHover();
 
-  // const { height, width } = useViewportSize();
   useEffect(() => {
+    console.log(ref1.current.clientWidth);
     const t = setTimeout(() => {
       setShowText(false);
-    }, 1000);
-    const t2 = setTimeout(() => {
-      setAnimation(true);
-    }, 300);
+    }, 2000);
 
     return () => {
       clearTimeout(t);
-      clearTimeout(t2);
       setShowText(false);
-      setAnimation(false);
     };
   }, []);
   return (
     <div
+      ref={ref}
+      style={{
+        transform: `translate(${
+          showText || hovered ? 0 : ref1.current.clientWidth + 16
+        }px)`,
+      }}
       onClick={props.onClick}
       className={`absolute bottom-20 right-0 flex items-center w-fit gap-2  cursor-pointer select-none  rounded-l-full ${
         props.size === 'xsmall' ? 'p-2' : props.size === 'small' ? 'p-3' : 'p-5'
-      } ${animation ? `translate-x-0` : 'translate-x-full'}  ${
+      } ${
         props.kind === 'default'
           ? 'bg-vapormintWhite-100 text-vapormintBlack-300'
           : props.kind === 'mint'
@@ -56,16 +58,13 @@ function Fab(props: Props) {
           ? 'bg-vapormintWarning-500 text-vapormintWhite-100'
           : props.kind === 'success' &&
             'bg-vapormintSuccess-500 text-vapormintWhite-100'
-      }   transition-all ease-in-out  `}>
+      }   transition-all ease-in-out  `}
+    >
       {props.icon}
-      {props.showText && (
-        <div
-          className={`mr-1 text-lg font-semibold  ${
-            showText ? `scale-x-100` : `scale-x-0`
-          } transition-all origin-right duration-300 ease-in-out`}>
-          {props.text}
-        </div>
-      )}
+
+      <div ref={ref1} className={`mr-1 text-lg font-semibold`}>
+        {props.text}
+      </div>
     </div>
   );
 }

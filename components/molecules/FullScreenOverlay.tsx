@@ -1,11 +1,11 @@
-import { useViewportSize } from "@mantine/hooks";
-import React, { ReactNode, useEffect, useState } from "react";
+import { useViewportSize } from '@mantine/hooks';
+import React, { ReactNode, useEffect, useState } from 'react';
 
 type Props = {
   title?: String;
   onClose: Function;
   children: ReactNode;
-  animation: "bottom" | "right";
+  animation: 'bottom' | 'right';
 };
 
 export default function FullScreenOverlay(props: Props) {
@@ -22,17 +22,17 @@ export default function FullScreenOverlay(props: Props) {
       // style={{ height: height, width: width }}
       className={`h-full w-full  absolute top-0 left-0 z-50 flex flex-col  items-center justify-start   select-none transition-all ease-in-out   ${
         animation
-          ? props.animation === "bottom"
-            ? "translate-y-0"
-            : "translate-x-0"
-          : props.animation === "bottom"
-          ? "translate-y-full"
-          : "translate-x-full"
+          ? props.animation === 'bottom'
+            ? 'translate-y-0'
+            : 'translate-x-0'
+          : props.animation === 'bottom'
+          ? 'translate-y-full'
+          : 'translate-x-full'
       } transition-all duration-300 ease-in-out`}
     >
-      <div className="flex items-center justify-between w-full max-w-lg p-4 mx-auto bg-vapormintBlack-300">
+      <div className="flex items-center justify-between w-full max-w-lg p-4 mx-auto bg-vapormintBlack-300 ">
         <span className="text-2xl font-black from-vapormintWhite-100 text-vapormintWhite-100">
-          {props.title || ""}
+          {props.title || ''}
         </span>
         <svg
           onClick={() => {
@@ -55,7 +55,7 @@ export default function FullScreenOverlay(props: Props) {
           />
         </svg>
       </div>
-      <div className="flex flex-col flex-grow w-full max-w-lg mx-auto overflow-y-auto backdrop-blur-lg bg-vapormintBlack-200/40 overflow-x-clip">
+      <div className="flex flex-col flex-grow w-full max-w-lg mx-auto overflow-y-auto scrollbar-none backdrop-blur-lg bg-vapormintBlack-200/40 overflow-x-clip">
         {props.children}
       </div>
     </div>

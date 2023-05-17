@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 type Props = React.DetailedHTMLProps<
   React.InputHTMLAttributes<HTMLInputElement>,
@@ -11,6 +11,7 @@ type Props = React.DetailedHTMLProps<
   placeholder?: String;
   count?: number;
   optional?: boolean;
+  type?: String;
 };
 
 function TextInput(props: Props) {
@@ -18,7 +19,7 @@ function TextInput(props: Props) {
     <div className="flex flex-col items-start justify-start w-full gap-1 py-1">
       {props.title && (
         <span className="text-xs font-semibold tracking-widest uppercase text-vapormintWhite-100">
-          {props.title}{" "}
+          {props.title}{' '}
           {props.optional && (
             <span className="text-xs font-semibold tracking-widest uppercase text-vapormintBlack-200">
               optional
@@ -27,10 +28,12 @@ function TextInput(props: Props) {
         </span>
       )}
       <input
-        className={`w-full h-12 text-base border-b rounded-none text-vapormintWhite-100 bg-vapormintBlack-300  ${
+        type={props.type ? props.type : 'text'}
+        min="0"
+        className={`w-full h-12 text-base border-b rounded-none text-vapormintWhite-100 bg-vapormintBlack-300   ${
           props.error
-            ? "border-vapormintError-500"
-            : "border-vapormintBlack-200 focus:border-vapormintWhite-100"
+            ? 'border-vapormintError-500'
+            : 'border-vapormintBlack-200 focus:border-vapormintWhite-100'
         }  focus:outline-none `}
         onChange={props.onChange}
         value={props.value}
@@ -51,8 +54,8 @@ function TextInput(props: Props) {
           <span
             className={`ml-auto ${
               props.value?.length >= props.count
-                ? "text-lg text-vapormintError-500 font-bold"
-                : "text-xs text-vapormintWarning-500 font-semibold"
+                ? 'text-lg text-vapormintError-500 font-bold'
+                : 'text-xs text-vapormintWarning-500 font-semibold'
             }    font-semibold uppercase transition-all ease-in-out`}
           >
             {props.value?.length} / {props.count}

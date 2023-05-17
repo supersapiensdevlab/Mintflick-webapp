@@ -1,25 +1,32 @@
-"use client";
-import FullscreenContainer from "@/components/molecules/FullscreenContainer";
-import Header from "@/components/molecules/Header";
-import Image from "next/image";
-import React, { useContext, useState } from "react";
-import { UserContext } from "@/contexts/userContext";
-import TextInput from "@/components/molecules/TextInput";
-import TextareaInput from "@/components/molecules/TextareaInput";
-import Button from "@/components/molecules/Button";
+'use client';
+import FullscreenContainer from '@/components/molecules/FullscreenContainer';
+import Header from '@/components/molecules/Header';
+import Image from 'next/image';
+import React, { useContext, useState } from 'react';
+import { UserContext } from '@/contexts/userContext';
+import TextInput from '@/components/molecules/TextInput';
+import TextareaInput from '@/components/molecules/TextareaInput';
+import Button from '@/components/molecules/Button';
 
 type Props = {};
 
 export default function page({}: Props) {
   const userState = useContext(UserContext);
-  const [userName, setUserName] = useState("");
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [bio, setBio] = useState("");
+  const [userName, setUserName] = useState('');
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [bio, setBio] = useState('');
 
   return (
     <FullscreenContainer className="select-none border-x-[1px] border-vapormintBlack-200/60 relative flex flex-col items-start max-w-lg pt-14 mx-auto overflow-hidden bg-vapormintBlack-300">
-      <Header text="Back" title="Edit Profile" />
+      <Header
+        text="Back"
+        rightSection={
+          <span className="text-lg font-bold text-vapormintSuccess-500">
+            Save
+          </span>
+        }
+      />
       <div className="w-full h-full overflow-y-scroll snap-y scrollbar-none">
         <div className="flex flex-col items-start w-full">
           <div className="relative w-full ">
@@ -62,15 +69,15 @@ export default function page({}: Props) {
         </div>
         <div className="flex flex-col w-full gap-2 p-4">
           <TextInput
-            title={"Username"}
+            title={'Username'}
             placeholder={userState.userData.username}
             onChange={(e) => {
               setUserName(e.target.value);
             }}
             value={userName}
-          />{" "}
+          />{' '}
           <TextInput
-            title={"Name"}
+            title={'Name'}
             placeholder={userState.userData.name}
             onChange={(e) => {
               setName(e.target.value);
@@ -78,7 +85,7 @@ export default function page({}: Props) {
             value={name}
           />
           <TextInput
-            title={"Email"}
+            title={'Email'}
             placeholder={userState.userData.email}
             onChange={(e) => {
               setEmail(e.target.value);
@@ -86,21 +93,21 @@ export default function page({}: Props) {
             value={email}
           />
           <TextareaInput
-            title={"Bio"}
+            title={'Bio'}
             placeholder={userState.userData.bio}
             onChange={(e) => {
               setBio(e.target.value);
             }}
             value={bio}
           />
-          <Button
+          {/* <Button
             handleClick={() => {}}
             kind="success"
             size="base"
             type="ghost"
           >
             Save Changes
-          </Button>
+          </Button> */}
         </div>
       </div>
     </FullscreenContainer>

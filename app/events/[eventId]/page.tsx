@@ -1,12 +1,12 @@
-"use client";
-import FullscreenContainer from "@/components/molecules/FullscreenContainer";
-import Header from "@/components/molecules/Header";
-import Image from "next/image";
-import React, { useContext, useState } from "react";
-import { UserContext } from "@/contexts/userContext";
-import Divider from "@/components/molecules/Divider";
-import Avatar from "@/components/molecules/Avatar";
-import USDT from "@/components/organisms/USDT";
+'use client';
+import FullscreenContainer from '@/components/molecules/FullscreenContainer';
+import Header from '@/components/molecules/Header';
+import Image from 'next/image';
+import React, { useContext, useState } from 'react';
+import { UserContext } from '@/contexts/userContext';
+import Divider from '@/components/molecules/Divider';
+import Avatar from '@/components/molecules/Avatar';
+import USDT from '@/components/organisms/USDT';
 
 type Props = {};
 
@@ -36,7 +36,7 @@ export default function page({}: Props) {
               Event name
             </h1>
           </div>
-        </div>{" "}
+        </div>{' '}
         <Divider kind="center" size={1} />
         <div className="flex gap-[2px] items-center px-4 py-3">
           <span className="text-sm font-semibold text-vapormintBlack-200">
@@ -73,34 +73,29 @@ export default function page({}: Props) {
         </div>
         <div className="flex gap-[2px] items-center px-4 py-3 w-full">
           <span className="text-sm font-semibold text-vapormintBlack-200">
-            Bookings{" "}
+            Bookings{' '}
           </span>
           <div className="flex items-center -space-x-4">
             <Avatar
               src={userState.userData.profile_image}
               kind="default"
               size="xs"
-            />{" "}
+            />{' '}
             <Avatar
               src={userState.userData.profile_image}
               kind="default"
               size="xs"
-            />{" "}
+            />{' '}
             <Avatar
               src={userState.userData.profile_image}
               kind="default"
               size="xs"
-            />{" "}
+            />{' '}
             <Avatar
               src={userState.userData.profile_image}
               kind="default"
               size="xs"
-            />{" "}
-            <Avatar
-              src={userState.userData.profile_image}
-              kind="default"
-              size="xs"
-            />
+            />{' '}
           </div>
           <span className="text-xs font-medium text-vapormintSuccess-500">
             + 12 more
@@ -115,29 +110,29 @@ export default function page({}: Props) {
           <span className="text-base font-light ">
             Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet
             sint. Velit officia consequat duis enim velit mollit. Exercitation
-            veniam consequat sunt nostrud amet.{" "}
+            veniam consequat sunt nostrud amet.{' '}
           </span>
-        </div>{" "}
-        <Divider kind="solid" size={1} />{" "}
+        </div>{' '}
+        <Divider kind="solid" size={1} />{' '}
         <div className="flex flex-col gap-2 px-4 py-2 text-vapormintWhite-100">
           <span className="text-lg font-semibold ">Details</span>
           <div className="flex items-center justify-start w-full gap-2 px-4 ">
             <h1 className="text-base font-medium text-vapormintWhite-300 ">
               Location
-            </h1>{" "}
+            </h1>{' '}
             <h1 className="text-base font-bold text-vapormintSuccess-400 ">
               Google maps link
             </h1>
-          </div>{" "}
+          </div>{' '}
           <div className="flex items-center justify-start w-full gap-2 px-4 ">
             <h1 className="text-base font-medium text-vapormintWhite-300 ">
               Link
-            </h1>{" "}
+            </h1>{' '}
             <h1 className="text-base font-bold text-vapormintSuccess-400 ">
               link.com
             </h1>
-          </div>{" "}
-        </div>{" "}
+          </div>{' '}
+        </div>{' '}
       </div>
     </FullscreenContainer>
   );
