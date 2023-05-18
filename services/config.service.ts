@@ -12,3 +12,7 @@ export const MONGO_CONFIG = {
 export const MIDDLEWARE_CONFIG = {
   JWT_SECRET: process.env.JWT_SECRET || "",
 };
+
+export const LIVEPEER_CONFIG = {
+  livepeerkey: process.env.LIVEPEER_KEY || "",
+};
