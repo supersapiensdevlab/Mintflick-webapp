@@ -18,11 +18,10 @@ type Props = {
 
 function Fab(props: Props) {
   const [showText, setShowText] = useState(true);
-  const ref1: React.MutableRefObject<HTMLDivElement> = useRef(null);
+  const ref1: React.MutableRefObject<HTMLDivElement> = useRef();
   const { hovered, ref } = useHover();
 
   useEffect(() => {
-    console.log(ref1.current.clientWidth);
     const t = setTimeout(() => {
       setShowText(false);
     }, 2000);

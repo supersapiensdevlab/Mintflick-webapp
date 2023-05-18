@@ -56,10 +56,10 @@ export default function Post({}: Props) {
           }
         >
           <div className="flex gap-1 flex-col items-start bg-vapormintBlack-300 rounded-lg border-[1px] border-vapormintBlack-200 p-2">
-            <span className="text-base font-semibold cursor-pointer text-vapormintWhite-100">
+            <span className="p-2 text-base font-semibold cursor-pointer text-vapormintWhite-100">
               Report
             </span>
-            <span className="text-base font-semibold cursor-pointer text-vapormintWhite-100">
+            <span className="p-2 text-base font-semibold cursor-pointer text-vapormintWhite-100">
               Share
             </span>
           </div>
