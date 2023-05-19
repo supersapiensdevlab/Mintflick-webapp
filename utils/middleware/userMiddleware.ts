@@ -16,6 +16,7 @@ export const isAuthenticated = (request: NextRequest) => {
     // request.user_id = data.user_id;
     return true;
   } catch (error) {
+    console.log(error);
     return false;
   }
 };
