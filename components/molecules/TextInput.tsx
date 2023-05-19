@@ -1,11 +1,13 @@
-import React from 'react';
+import { randomId } from '@mantine/hooks';
+import moment from 'moment';
+import React, { useRef } from 'react';
 
 type Props = React.DetailedHTMLProps<
   React.InputHTMLAttributes<HTMLInputElement>,
   HTMLInputElement
 > & {
   title?: String;
-  error?: String;
+  error?: String | null;
   onChange: React.ChangeEventHandler<HTMLInputElement>;
   value: String;
   placeholder?: String;
@@ -15,21 +17,31 @@ type Props = React.DetailedHTMLProps<
 };
 
 function TextInput(props: Props) {
+  const ref = useRef<HTMLInputElement>(null);
   return (
-    <div className="flex flex-col items-start justify-start w-full gap-1 py-1">
+    <label className='flex flex-col items-start justify-start w-full gap-1 py-1 '>
       {props.title && (
-        <span className="text-xs font-semibold tracking-widest uppercase text-vapormintWhite-100">
+        <span className='text-xs font-semibold tracking-widest uppercase text-vapormintWhite-100'>
           {props.title}{' '}
           {props.optional && (
-            <span className="text-xs font-semibold tracking-widest uppercase text-vapormintBlack-200">
+            <span className='text-xs font-semibold tracking-widest uppercase text-vapormintBlack-200'>
               optional
             </span>
           )}
         </span>
       )}
+
       <input
+        id='dateInput'
+        ref={ref}
         type={props.type ? props.type : 'text'}
-        min="0"
+        min={
+          props.type === 'text'
+            ? '0'
+            : props.type === 'datetime-local'
+            ? moment().format('YYYY-MM-DDThh:mm')
+            : ''
+        }
         className={`w-full h-12 text-base border-b rounded-none text-vapormintWhite-100 bg-vapormintBlack-300   ${
           props.error
             ? 'border-vapormintError-500'
@@ -39,9 +51,9 @@ function TextInput(props: Props) {
         value={props.value}
         placeholder={props.placeholder}
       />
-      <div className="flex items-center justify-between w-full">
+      <div className='flex items-center justify-between w-full'>
         {props.error && (
-          <span className="text-sm tracking-wider text-vapormintError-500 ">
+          <span className='text-sm tracking-wider text-vapormintError-500 '>
             {props.error}
           </span>
         )}
@@ -62,7 +74,7 @@ function TextInput(props: Props) {
           </span>
         )}
       </div>
-    </div>
+    </label>
   );
 }
 

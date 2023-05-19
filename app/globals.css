@@ -11,7 +11,15 @@
 * {
   -webkit-tap-highlight-color: transparent;
 }
-
+#dateInput::-webkit-calendar-picker-indicator {
+  /* Your styles for the calendar icon */
+  /* For example: */
+  background-color: #f1f1f1;
+  color: #999;
+  cursor: pointer;
+  padding: 2px;
+  border-radius: 4px;
+}
 @layer base {
   @font-face {
     font-family: 'Gilroy-Black';

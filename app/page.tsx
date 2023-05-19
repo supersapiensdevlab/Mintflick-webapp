@@ -7,9 +7,7 @@ import SolanaTorus from '@toruslabs/solana-embed';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { useContext, useEffect, useState } from 'react';
-import WalletProviderContextContainer, {
-  walletProviderContext,
-} from '@/contexts/walletProviderContext';
+import { walletProviderContext } from '@/contexts/walletProviderContext';
 import { UserContext } from '@/contexts/userContext';
 import FullScreenOverlay from '@/components/molecules/FullScreenOverlay';
 
