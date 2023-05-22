@@ -26,8 +26,7 @@ export async function POST(request: Request) {
     }
 
     if (count != -1) {
-      let data = user.videos;
-      let views = [];
+      const data = user.videos;
       if (!data[count].views) {
         data[count].views = [];
         data[count].views.push(viewedUser.user.username);

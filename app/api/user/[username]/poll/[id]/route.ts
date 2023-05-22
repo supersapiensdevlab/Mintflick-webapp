@@ -16,11 +16,11 @@ export async function GET(
     if (!success) {
       return NextResponse.json({ status: "error", message: error });
     }
-    let content = user.polls.filter((v: any) => {
+    const content = user.polls.filter((v: any) => {
       return v.pollId === pollId;
     });
     if (content[0]) {
-      let totaldata = {
+      const totaldata = {
         user_id: user._id,
         wallet_id: user.wallet_id,
         username: user.username,

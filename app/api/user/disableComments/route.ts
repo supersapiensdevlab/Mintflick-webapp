@@ -11,7 +11,7 @@ export async function POST(request: Request) {
     if (!success) {
       return NextResponse.json({ status: "error", message: error });
     }
-    let obj = user.videos.find((video: any, i: any) => {
+    const obj = user.videos.find((video: any, i: any) => {
       if (video.videoId == videoId) {
         user.videos[i].disableComments = value;
         return true; // stop searching

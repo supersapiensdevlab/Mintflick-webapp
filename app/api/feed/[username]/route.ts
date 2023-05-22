@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import { conn } from "@/services/mongo.service";
-import { findOneAndUpdateEvent } from "@/utils/event/event";
 import { findOne } from "@/utils/user/user";
 
 export async function GET(
@@ -15,7 +14,7 @@ export async function GET(
     await conn();
     const req = await request.json();
     const username = params.username;
-    let feeds: any = [];
+    const feeds: any = [];
     const { success, user, error } = await findOne({ username: username });
     if (!success) {
       return NextResponse.json({ status: "error", message: error });
@@ -86,13 +85,13 @@ export async function GET(
         });
       }
       feeds.sort((a: any, b: any) => {
-        let da: any = new Date(a.content.time * 1);
-        let db: any = new Date(b.content.time * 1);
+        const da: any = new Date(a.content.time * 1);
+        const db: any = new Date(b.content.time * 1);
         return db - da;
       });
       return NextResponse.json({
         status: "success",
-        message: "Treasury converted successfully",
+        message: "Fetch success",
         data: feeds,
       });
     } else {

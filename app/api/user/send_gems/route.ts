@@ -17,7 +17,7 @@ export async function POST(request: Request) {
     }
     if (req.type === "social") {
       if (!prevBalance) {
-        let data = {
+        const data = {
           balance: value,
           history: [
             {
@@ -50,8 +50,8 @@ export async function POST(request: Request) {
         }
         return NextResponse.json({ status: "success" });
       } else {
-        let total = prevBalance ? prevBalance + value : value;
-        let data = {
+        const total = prevBalance ? prevBalance + value : value;
+        const data = {
           receivedBy: receivedBy,
           time: Date.now() / 1000,
         };
@@ -115,7 +115,7 @@ export async function POST(request: Request) {
 
     if (req.type === "platformTasks") {
       if (!prevBalance) {
-        let data = {
+        const data = {
           balance: value,
           history: [
             {
@@ -148,8 +148,8 @@ export async function POST(request: Request) {
         }
         return NextResponse.json({ status: "success" });
       } else {
-        let total = prevBalance ? prevBalance + value : value;
-        let historyData = {
+        const total = prevBalance ? prevBalance + value : value;
+        const historyData = {
           receivedBy: receivedBy,
           time: Date.now() / 1000,
         };

@@ -25,7 +25,7 @@ export async function POST(request: Request) {
     }
 
     if (count != -1) {
-      let data = user.posts;
+      const data = user.posts;
       if (!data[count].likes) {
         data[count].likes = [];
         data[count].likes.push(reactusername);

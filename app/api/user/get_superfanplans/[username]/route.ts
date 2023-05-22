@@ -23,7 +23,7 @@ export async function GET(
         data: data,
       });
     } else if (user?.superfan_data && user?.superfan_of) {
-      let data = user.superfan_data;
+      const data = user.superfan_data;
       user?.superfan_of.forEach((value: any) => {
         switch (value.plan) {
           case "Basic":

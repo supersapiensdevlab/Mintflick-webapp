@@ -18,7 +18,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ status: "error", message: cuser.error });
     }
     // For Notification
-    let announcementData = {
+    const announcementData = {
       announcement: `${cuser.user.username} liked your comment on post of ${user.username}`,
       post_image: cuser.user.profile_image ? cuser.user.profile_image : null,
       post_video: null,
@@ -30,7 +30,7 @@ export async function POST(request: Request) {
     let tonotification = null;
 
     if (content.videoId) {
-      let obj = user.videos.find((video: any, i: any) => {
+      const obj = user.videos.find((video: any, i: any) => {
         if (video.videoId == content.videoId) {
           if (user.videos[i].comments) {
             return user.videos[i].comments.find(async (c: any, j: any) => {
@@ -130,7 +130,7 @@ export async function POST(request: Request) {
         }
       });
       // for trending
-      let trending = await Feed.findOne({
+      const trending = await Feed.findOne({
         "content.videoId": content.videoId,
       });
       if (trending && trending.content.comments) {
@@ -190,7 +190,7 @@ export async function POST(request: Request) {
         });
       }
     } else if (content.trackId) {
-      let obj = user.tracks.find((track: any, i: any) => {
+      const obj = user.tracks.find((track: any, i: any) => {
         if (track.trackId == content.trackId) {
           if (user.tracks[i].comments) {
             return user.tracks[i].comments.find(async (c: any, j: any) => {
@@ -287,7 +287,7 @@ export async function POST(request: Request) {
       });
 
       // for trending
-      let trending = await Feed.findOne({
+      const trending = await Feed.findOne({
         "content.trackId": content.trackId,
       });
       if (trending && trending.content.comments) {
@@ -346,7 +346,7 @@ export async function POST(request: Request) {
         });
       }
     } else if (content.announcement) {
-      let obj = user.posts.find((post: any, i: any) => {
+      const obj = user.posts.find((post: any, i: any) => {
         if (post.postId == content.postId) {
           if (user.posts[i].comments) {
             return user.posts[i].comments.find(async (c: any, j: any) => {
@@ -444,7 +444,7 @@ export async function POST(request: Request) {
         }
       });
       // for trending
-      let trending = await Feed.findOne({
+      const trending = await Feed.findOne({
         // user_id: user_data_id,
         "content.postId": content.postId,
       });
@@ -503,7 +503,7 @@ export async function POST(request: Request) {
         });
       }
     } else if (content.pollId) {
-      let obj = user.polls.find((poll: any, i: any) => {
+      const obj = user.polls.find((poll: any, i: any) => {
         if (poll.pollId == content.pollId) {
           if (user.polls[i].comments) {
             return user.polls[i].comments.find(async (c: any, j: any) => {
@@ -600,7 +600,7 @@ export async function POST(request: Request) {
         }
       });
       // for trending
-      let trending = await Feed.findOne({
+      const trending = await Feed.findOne({
         "content.pollId": content.pollId,
       });
       if (trending && trending.content.comments) {

@@ -24,14 +24,14 @@ export async function POST(request: Request) {
     }
 
     if (count != -1) {
-      let data = user.polls;
+      const data = user.polls;
       if (!data[count].likes) {
         data[count].likes = [];
         data[count].likes.push(reactusername);
       } else if (!data[count].likes.includes(reactusername)) {
         data[count].likes.push(reactusername);
       } else if (data[count].likes.includes(reactusername)) {
-        let newArray = data[count].likes.filter(
+        const newArray = data[count].likes.filter(
           (item: any, index: any) => item != reactusername
         );
         data[count].likes = newArray;

@@ -6,11 +6,10 @@ export async function POST(request: Request) {
   try {
     await conn();
     const req = await request.json();
-    let currentTimeInSeconds = Math.floor(Date.now() / 1000); //unix timestamp in seconds
-
+    const currentTimeInSeconds = Math.floor(Date.now() / 1000); //unix timestamp in seconds
     const time = currentTimeInSeconds;
-    let addedValidity = req.validity * 24 * 60 * 60;
-    let validity = time + addedValidity;
+    const addedValidity = req.validity * 24 * 60 * 60;
+    const validity = time + addedValidity;
 
     const update = await findOneAndUpdate(
       { _id: req.user_id },

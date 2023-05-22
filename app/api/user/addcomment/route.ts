@@ -18,7 +18,7 @@ export async function POST(request: Request) {
     if (!cuser.success) {
       return NextResponse.json({ status: "error", message: cuser.user.error });
     }
-    let announcementData = {
+    const announcementData = {
       announcement: `${cuser.user.username} commented on your post`,
       post_image: cuser.user.profile_image ? cuser.user.profile_image : null,
       post_video: null,
@@ -29,7 +29,7 @@ export async function POST(request: Request) {
     };
 
     if (content.videoId) {
-      let obj = user.videos.find(async (video: any, i: any) => {
+      const obj = user.videos.find(async (video: any, i: any) => {
         if (video.videoId == content.videoId) {
           if (user.videos[i].comments) {
             if (replyTo) {
@@ -54,7 +54,7 @@ export async function POST(request: Request) {
                   }
 
                   // For notification to reply user
-                  let ad = {
+                  const ad = {
                     announcement: `${cuser.user.username} replied to your comment on video of ${user.username}`,
                     post_image: cuser.user.profile_image
                       ? cuser.user.profile_image
@@ -111,7 +111,7 @@ export async function POST(request: Request) {
         }
       });
       // for trending
-      let trending = await Feed.findOne({
+      const trending = await Feed.findOne({
         "content.videoId": content.videoId,
       });
       if (trending) {
@@ -170,7 +170,7 @@ export async function POST(request: Request) {
         });
       }
     } else if (content.trackId) {
-      let obj = user.tracks.find((track: any, i: any) => {
+      const obj = user.tracks.find((track: any, i: any) => {
         if (track.trackId == content.trackId) {
           if (user.tracks[i].comments) {
             if (replyTo) {
@@ -195,7 +195,7 @@ export async function POST(request: Request) {
                   }
 
                   // For notification to reply user
-                  let ad = {
+                  const ad = {
                     announcement: `${cuser.user.username} replied to your comment on track of ${user.username}`,
                     post_image: cuser.user.profile_image
                       ? cuser.user.profile_image
@@ -252,7 +252,7 @@ export async function POST(request: Request) {
         }
       });
       // for trending
-      let trending = await Feed.findOne({
+      const trending = await Feed.findOne({
         "content.trackId": content.trackId,
       });
       if (trending) {
@@ -314,7 +314,7 @@ export async function POST(request: Request) {
         });
       }
     } else if (content.announcement) {
-      let obj = user.posts.find((post: any, i: any) => {
+      const obj = user.posts.find((post: any, i: any) => {
         if (post.postId == content.postId) {
           if (user.posts[i].comments) {
             if (replyTo) {
@@ -339,7 +339,7 @@ export async function POST(request: Request) {
                   }
 
                   // For notification to reply user
-                  let ad = {
+                  const ad = {
                     announcement: `${cuser.user.username} replied to your comment on post of ${user.username}`,
                     post_image: cuser.user.profile_image
                       ? cuser.user.profile_image
@@ -400,7 +400,7 @@ export async function POST(request: Request) {
       });
 
       // for trending
-      let trending = await Feed.findOne({
+      const trending = await Feed.findOne({
         // user_id: user_data_id,
         "content.postId": content.postId,
       });
@@ -465,7 +465,7 @@ export async function POST(request: Request) {
       }
     } else if (content.pollId) {
       console.log("in");
-      let obj = user.polls.find((poll: any, i: any) => {
+      const obj = user.polls.find((poll: any, i: any) => {
         if (poll.pollId == content.pollId) {
           if (user.polls[i].comments) {
             if (replyTo) {
@@ -490,7 +490,7 @@ export async function POST(request: Request) {
                   }
 
                   // For notification to reply user
-                  let ad = {
+                  const ad = {
                     announcement: `${cuser.user.username} replied to your comment on poll of ${user.username}`,
                     post_image: cuser.user.profile_image
                       ? cuser.user.profile_image
@@ -548,7 +548,7 @@ export async function POST(request: Request) {
       });
 
       // for trending
-      let trending = await Feed.findOne({
+      const trending = await Feed.findOne({
         // user_id: user_data_id,
         "content.pollId": content.pollId,
       });

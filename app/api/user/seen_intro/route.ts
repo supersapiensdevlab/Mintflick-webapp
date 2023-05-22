@@ -9,7 +9,7 @@ export async function POST(request: Request) {
     const field = req.field; // replace with the actual field name
     const value = req.value ? req.value : true; // replace with the new value
 
-    let username = req.username;
+    const username = req.username;
 
     console.log("Updating...", username);
 

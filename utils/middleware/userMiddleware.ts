@@ -1,22 +1,42 @@
 import { MIDDLEWARE_CONFIG } from "@/services/config.service";
-import jwt from "jsonwebtoken";
+import { jwtVerify } from "jose";
 import { NextRequest } from "next/server";
 
-export const isAuthenticated = (request: NextRequest) => {
-  const token: any = request.headers.get("auth-token");
-  if (!token) {
-    return false;
+const getJwtSecretKey = () => {
+  const secret = MIDDLEWARE_CONFIG.JWT_SECRET;
+  if (!secret || secret.length === 0) {
+    throw new Error("JWT secret key unaivailable");
   }
+  return secret;
+};
+
+const verifyToken = async (token: string) => {
   try {
-    console.log(jwt);
-    const data = jwt.verify(
-      JSON.stringify(token),
-      MIDDLEWARE_CONFIG.JWT_SECRET
+    const decoded = await jwtVerify(
+      token,
+      new TextEncoder().encode(getJwtSecretKey())
     );
-    // request.user_id = data.user_id;
-    return true;
+    return decoded.payload;
   } catch (error) {
     console.log(error);
+    return null; // Invalid token or token expired
+  }
+};
+
+export const isAuthenticated = async (
+  request: NextRequest
+): Promise<Boolean> => {
+  const token = request.headers.get("auth-token");
+  if (!token) return false;
+  try {
+    const decodedToken = await verifyToken(token);
+
+    if (!decodedToken) {
+      return false;
+    }
+    (request as any).user_id = decodedToken.user_id;
+    return true;
+  } catch (error) {
     return false;
   }
 };

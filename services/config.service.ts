@@ -20,3 +20,8 @@ export const LIVEPEER_CONFIG = {
 export const CREATE_ROOM_CONFIG = {
   xApikey: process.env.CREATE_ROOM_API || "",
 };
+
+export const SENDGRID_CONFIG = {
+  apiKey: process.env.SENDGRID_API || "",
+  serviceEmail: process.env.SERVICE_EMAIL || "",
+};

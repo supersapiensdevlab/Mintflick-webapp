@@ -46,7 +46,7 @@ export async function GET(
         });
     }
     if (content[0]) {
-      let totaldata = {
+      const totaldata = {
         user_id: user._id,
         wallet_id: user.wallet_id,
         username: user.username,

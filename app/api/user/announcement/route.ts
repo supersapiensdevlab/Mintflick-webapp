@@ -24,9 +24,9 @@ export async function POST(request: Request) {
     let post_image = null;
     let post_video = null;
 
-    if (req.files) {
-      post_image = req.files.postImage;
-      post_video = req.files.postVideo;
+    if (req) {
+      post_image = req.postImage;
+      post_video = req.postVideo;
     }
 
     const link = req.eventlink;
@@ -93,7 +93,7 @@ export async function POST(request: Request) {
       linkpreview_data: linkData,
     };
 
-    let trendValue = {
+    const trendValue = {
       user_id: user._id,
       wallet_id: user.wallet_id,
       username: user.username,
@@ -106,7 +106,7 @@ export async function POST(request: Request) {
       superfan_to: user.superfan_to,
     };
 
-    let taggedAnnouncement = {
+    const taggedAnnouncement = {
       postId: postId,
       announcement: `${user.username} tagged you in a post`,
       post_image: postImg ? postImg : null,
