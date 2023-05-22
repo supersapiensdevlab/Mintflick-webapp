@@ -60,3 +60,17 @@ export const findOneAndUpdateEvent = async (
     return { success: false, error: error };
   }
 };
+
+/**
+ * Delete an event by id
+ * @param {Object} filter
+ * @returns
+ */
+export const findOneAndDeleteEvent = async (filter: Object) => {
+  try {
+    await Event.findOneAndDelete(filter);
+    return { success: true, error: null };
+  } catch (error) {
+    return { success: false, error: error };
+  }
+};

@@ -9,8 +9,8 @@ export async function POST(request: Request) {
     const req = await request.json();
     const { success, user, error } = await findOne({ _id: req.user_id });
     const tokenId = req.tokenId;
-    const contentId = req.contentId;
-    const contentType = req.contentType;
+    const contentId: string = req.contentId;
+    const contentType: string = req.contentType;
     if (success) {
       let data;
       let count = -1;

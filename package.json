@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@sendgrid/mail": "^7.7.0",
     "@supercharge/strings": "^2.0.0",
     "@types/node": "18.16.0",
     "@types/react": "18.0.38",
@@ -17,7 +18,9 @@
     "autoprefixer": "10.4.14",
     "axios": "^1.4.0",
     "bcryptjs": "^2.4.3",
+    "fs-extra": "^11.1.1",
     "ioredis": "^5.3.2",
+    "jose": "^4.14.4",
     "jsonwebtoken": "^9.0.0",
     "mongoose": "^7.0.5",
     "next": "13.3.1",
@@ -29,6 +32,7 @@
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
+    "@types/fs-extra": "^11.0.1",
     "@types/jsonwebtoken": "^9.0.2",
     "@types/mongoose": "^5.11.97"
   }

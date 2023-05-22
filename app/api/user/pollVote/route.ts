@@ -26,7 +26,7 @@ export async function POST(request: Request) {
     }
 
     if (count != -1) {
-      let data = user.polls;
+      const data = user.polls;
       if (!data[count].options[voted].selectedBy) {
         data[count].options[voted].selectedBy = [];
         data[count].options[voted].selectedBy.push(reactusername);

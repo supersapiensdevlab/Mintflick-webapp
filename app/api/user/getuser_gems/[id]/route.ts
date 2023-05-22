@@ -17,7 +17,7 @@ export async function GET(
     }
 
     if (user.gems) {
-      let gems = user.gems;
+      const gems = user.gems;
       return NextResponse.json({
         status: "success",
         message: "Gems fetched successfully",
