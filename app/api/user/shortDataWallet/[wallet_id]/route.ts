@@ -11,7 +11,7 @@ export async function GET(
   }
 ) {
   try {
-    const wallet_id = params.wallet_id;
+    const wallet_id: string = params.wallet_id;
     await User.findOne({ wallet_id: wallet_id })
       .select({
         username: 1,

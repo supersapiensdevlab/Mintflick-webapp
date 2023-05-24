@@ -6,7 +6,8 @@ export async function POST(request: Request) {
   try {
     await conn();
     const req = await request.json();
-    const { email, username } = req;
+    const email: string = req.email;
+    const username: string = req.username;
     if (email && username) {
       let data = { username: false, email: false };
       const isEmailRegistered = await findOne({ email: email });

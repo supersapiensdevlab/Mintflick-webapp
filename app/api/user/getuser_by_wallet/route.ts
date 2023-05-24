@@ -4,7 +4,6 @@ import { conn } from "@/services/mongo.service";
 import { addUser, findOne, findOneAndUpdate } from "@/utils/user/user";
 import { Str } from "@supercharge/strings/dist";
 import axios from "axios";
-import jwt from "jsonwebtoken";
 import * as jose from "jose";
 
 export async function POST(request: Request) {
@@ -30,7 +29,7 @@ export async function POST(request: Request) {
       const secret = new TextEncoder().encode(MIDDLEWARE_CONFIG.JWT_SECRET);
       const alg = "HS256";
 
-      const authtoken = await new jose.SignJWT({ "urn:example:claim": true })
+      const authtoken = await new jose.SignJWT(data)
         .setProtectedHeader({ alg })
 
         .sign(secret);
@@ -145,7 +144,7 @@ export async function POST(request: Request) {
                 );
                 const alg = "HS256";
 
-                const authtoken = await new jose.SignJWT({})
+                const authtoken = await new jose.SignJWT(data)
                   .setProtectedHeader({ alg })
 
                   .sign(secret);
@@ -177,7 +176,7 @@ export async function POST(request: Request) {
                   );
                   const alg = "HS256";
 
-                  const authtoken = await new jose.SignJWT({})
+                  const authtoken = await new jose.SignJWT(data)
                     .setProtectedHeader({ alg })
 
                     .sign(secret);

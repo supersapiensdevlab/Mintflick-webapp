@@ -12,7 +12,7 @@ export async function POST(
 ) {
   try {
     await conn();
-    const username = params.username;
+    const username: string = params.username;
     const update = await findOneAndUpdate(
       { username: username },
       { $inc: { "refer.clicks": 1 } },

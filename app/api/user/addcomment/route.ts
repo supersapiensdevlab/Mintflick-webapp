@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { conn } from "@/services/mongo.service";
-import { findById, findOneAndUpdate, findOne } from "@/utils/user/user";
+import { findOneAndUpdate, findOne } from "@/utils/user/user";
 import mongoose from "mongoose";
 import { Feed } from "@/utils/models/feed.model";
 

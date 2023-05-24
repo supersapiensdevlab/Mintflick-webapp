@@ -1,13 +1,13 @@
 import { NextResponse } from "next/server";
 import { conn } from "@/services/mongo.service";
-import { findById, findOneAndUpdate } from "@/utils/user/user";
+import { findOneAndUpdate } from "@/utils/user/user";
 import { deleteOneFeed } from "@/utils/feed/feed";
 
 export async function DELETE(request: Request) {
   try {
     await conn();
     const req = await request.json();
-    const toDelete = req.toDelete;
+    const toDelete: object = req.toDelete;
 
     if (req.body.postId) {
       const deleteOne = await findOneAndUpdate(

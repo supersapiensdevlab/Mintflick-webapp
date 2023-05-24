@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { conn } from "@/services/mongo.service";
-import { findById, findOneAndUpdate } from "@/utils/user/user";
+import { findOneAndUpdate } from "@/utils/user/user";
 import { makeid } from "@/utils/makeId/makeId";
 import { insertOneEvent } from "@/utils/event/event";
 
@@ -8,6 +8,7 @@ export async function POST(request: Request) {
   try {
     await conn();
     const req = await request.json();
+    const id: string = req.id;
     if (!req.title) {
       return NextResponse.json({
         status: "error",
@@ -40,7 +41,7 @@ export async function POST(request: Request) {
     };
 
     const update = await findOneAndUpdate(
-      { id: req.user_id },
+      { id: id },
       {
         $push: { events: event },
       },

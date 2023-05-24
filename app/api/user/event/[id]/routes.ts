@@ -12,7 +12,7 @@ export async function GET(
 ) {
   try {
     await conn();
-    const id = params.id;
+    const id: string = params.id;
     const { success, event, error } = await findOneEvent({ eventId: id });
     if (!success) {
       return NextResponse.json({ status: "error", message: error });

@@ -9,7 +9,8 @@ export async function POST(request: Request) {
     const req = await request.json();
     const videoUsername = req.videousername;
     const videoindex = req.videoindex;
-    const viewedUser = await findOne({ _id: req.user_id });
+    const id: string = req.id;
+    const viewedUser = await findOne({ id: id });
     if (!viewedUser.success) {
       return NextResponse.json({ status: "error", message: viewedUser.error });
     }

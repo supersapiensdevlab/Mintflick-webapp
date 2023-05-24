@@ -7,8 +7,8 @@ export async function POST(request: Request) {
   try {
     await conn();
     const req = await request.json();
-    const title = req.title;
-    const hostWallets = req.hostWallets;
+    const title: string = req.title;
+    const hostWallets: string = req.hostWallets;
     await axios
       .post(
         "  https://us-central1-nfts-apis.cloudfunctions.net/createroom",

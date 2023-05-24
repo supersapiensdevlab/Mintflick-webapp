@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { conn } from "@/services/mongo.service";
-import { findById, findOneAndUpdate } from "@/utils/user/user";
+import { findOne, findOneAndUpdate } from "@/utils/user/user";
 import { updateMany } from "@/utils/feed/feed";
 
 export async function POST(request: Request) {
@@ -8,7 +8,8 @@ export async function POST(request: Request) {
     await conn();
     const req = await request.json();
     const superfanData = req.superfanData;
-    const { success, user, error } = await findById(req.user_id);
+    const id: string = req.id;
+    const { success, user, error } = await findOne({ id: id });
     if (!success) {
       return NextResponse.json({ status: "error", message: error });
     }

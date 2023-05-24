@@ -8,7 +8,7 @@ export async function POST(request: Request) {
   try {
     await conn();
     const req = await request.json();
-    const userId = req.username;
+    const userId: string = req.username;
     const profileImage = req.profileImage;
 
     const profileImagePath = profileImage.name;

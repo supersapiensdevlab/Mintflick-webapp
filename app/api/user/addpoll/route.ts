@@ -8,6 +8,7 @@ export async function POST(request: Request) {
   try {
     await conn();
     const req = await request.json();
+    const id: string = req.id;
     if (req.question && req.options) {
       const uid = makeid(7);
       var currentTimeInSeconds = Math.floor(Date.now() / 1000);
@@ -22,7 +23,7 @@ export async function POST(request: Request) {
         likes: [],
         comments: [],
       };
-      await User.findByIdAndUpdate(req.user_id, { $push: { polls: poll } })
+      await User.findOneAndUpdate({ id: id }, { $push: { polls: poll } })
         .then(async (data) => {
           var trend = new Feed({
             user_id: data._id,

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { conn } from "@/services/mongo.service";
-import { findById, findOneAndUpdate } from "@/utils/user/user";
+import { findOne, findOneAndUpdate } from "@/utils/user/user";
 
 export async function POST(request: Request) {
   try {
@@ -11,7 +11,8 @@ export async function POST(request: Request) {
     const prevBalance = req.prevBalance;
     const update = req.update;
     const tasksPerformed = req.tasksPerformed;
-    const { success, user, error } = await findById(req.user_id);
+    const id: string = req.id;
+    const { success, user, error } = await findOne({ id: id });
     if (!success) {
       return NextResponse.json({ status: "error", message: error });
     }

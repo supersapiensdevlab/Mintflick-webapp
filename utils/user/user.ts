@@ -2,7 +2,7 @@ import { User } from "@/utils/models/user.model";
 import { Mutex } from "async-mutex";
 
 // Create an object to store the count of calls for each user
-const callCount: any = {};
+export const callCount: any = {};
 
 // Create a mutex for synchronizing access to callCount object
 const mutex = new Mutex();
