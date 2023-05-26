@@ -11,6 +11,7 @@ interface IUser {
   resetToken: String;
   expireToken: Date;
   wallet_id: String;
+  evm_wallet_id: String;
   password: String;
   cover_image: String;
   profile_image: String;
@@ -87,6 +88,7 @@ const userSchema = new Schema(
     resetToken: String,
     expireToken: Date,
     wallet_id: { type: String, trim: true, default: null },
+    evm_wallet_id: { type: String, trim: true, default: null },
     password: {
       type: String,
       default: false,
