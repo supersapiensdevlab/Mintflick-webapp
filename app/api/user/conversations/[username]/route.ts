@@ -10,8 +10,9 @@ export async function GET(
   }
 ) {
   try {
+    const username: string = params.username;
     const { success, user, error } = await findOne({
-      username: params.username,
+      username: username,
     });
     if (!success) {
       return NextResponse.json({ status: "error", message: error });

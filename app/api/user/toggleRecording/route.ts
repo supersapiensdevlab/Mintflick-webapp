@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { conn } from "@/services/mongo.service";
-import { findById, findOneAndUpdate } from "@/utils/user/user";
+import { findOneAndUpdate } from "@/utils/user/user";
 import { LIVEPEER_CONFIG } from "@/services/config.service";
 import axios from "axios";
 

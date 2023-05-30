@@ -10,8 +10,8 @@ export async function GET(
   }
 ) {
   try {
-    const username = params.username;
-    const pollId = params.id;
+    const username: string = params.username;
+    const pollId: string = params.id;
     const { success, user, error } = await findOne({ username: username });
     if (!success) {
       return NextResponse.json({ status: "error", message: error });

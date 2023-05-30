@@ -10,7 +10,7 @@ export async function GET(
   }
 ) {
   try {
-    const username = params.username;
+    const username: string = params.username;
 
     const { success, user, error } = await findOne({ username: username });
     if (!success) {

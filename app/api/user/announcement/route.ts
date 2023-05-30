@@ -10,16 +10,14 @@ export async function POST(request: Request) {
   try {
     await conn();
     const req = await request.json();
-
+    const id: string = req.id;
     let tagged = req.tagged;
-    const announcement = req.announcement;
+    const announcement: string = req.announcement;
     let linkData = {};
     if (req.previewData) {
       linkData = JSON.parse(req.previewData);
     }
-    const tokenId = req.tokenId;
-
-    console.log(tokenId);
+    const tokenId: string = req.tokenId;
 
     let post_image = null;
     let post_video = null;
@@ -32,7 +30,7 @@ export async function POST(request: Request) {
     const link = req.eventlink;
     const uploadHash = req.announcementHash ? req.announcementHash : null;
 
-    const { success, user, error } = await findOne({ _id: req.user_id });
+    const { success, user, error } = await findOne({ id: id });
     if (!success) {
       return NextResponse.json({ status: "error", message: error });
     }

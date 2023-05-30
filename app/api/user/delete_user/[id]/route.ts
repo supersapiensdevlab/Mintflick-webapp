@@ -10,7 +10,7 @@ export async function DELETE(
   }
 ) {
   try {
-    const id = params.id;
+    const id: string = params.id;
     const deleteUser = await findOneAndDelete({ id: id });
     if (!deleteUser.success) {
       return NextResponse.json({ status: "error", message: deleteUser.error });

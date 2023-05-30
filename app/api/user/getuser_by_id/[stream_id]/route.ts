@@ -10,7 +10,7 @@ export async function GET(
   }
 ) {
   try {
-    const stream_id = params.stream_id;
+    const stream_id: string = params.stream_id;
     const { success, user, error } = await findOne({
       "livepeer_data.id": stream_id,
     });

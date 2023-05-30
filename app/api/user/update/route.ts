@@ -1,16 +1,16 @@
 import { NextResponse } from "next/server";
 import { conn } from "@/services/mongo.service";
-import { findById, findOne, findOneAndUpdate } from "@/utils/user/user";
+import { findOne } from "@/utils/user/user";
 import { updateMany } from "@/utils/feed/feed";
 
 export async function POST(request: Request) {
   try {
     await conn();
     const req = await request.json();
-    const username = req.username;
-    const new_name = req.name;
-    const new_email = req.email;
-    const { success, user, error } = await findOne({ _id: req.user_id });
+    const username: string = req.username;
+    const new_name: string = req.name;
+    const new_email: string = req.email;
+    const { success, user, error } = await findOne({ username: username });
     if (!success) {
       return NextResponse.json({ status: "error", message: error });
     }

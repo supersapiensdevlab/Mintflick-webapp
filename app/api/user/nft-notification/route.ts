@@ -1,14 +1,15 @@
 import { NextResponse } from "next/server";
 import { conn } from "@/services/mongo.service";
-import { findById, updateOne } from "@/utils/user/user";
+import { findOne, updateOne } from "@/utils/user/user";
 
 export async function POST(request: Request) {
   try {
     await conn();
     const req = await request.json();
-    const username = req.username;
+    const username: string = req.username;
     const profile_image = req.nft_image;
-    const { success, user, error } = await findById(req.user_id);
+    const id: string = req.id;
+    const { success, user, error } = await findOne({ id: id });
 
     const announcementData = {
       announcement: `Check out ${username}'s new NFT`,

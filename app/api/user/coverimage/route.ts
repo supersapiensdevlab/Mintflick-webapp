@@ -7,7 +7,7 @@ export async function POST(request: Request) {
   try {
     await conn();
     const req = await request.json();
-    const userId = req.username;
+    const userId: string = req.username;
     const coverImage = req.coverImage;
 
     const coverImagePath = coverImage.name;

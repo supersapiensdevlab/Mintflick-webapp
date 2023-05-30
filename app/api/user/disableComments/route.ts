@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { conn } from "@/services/mongo.service";
-import { findById, findOneAndUpdate, findOne } from "@/utils/user/user";
+import { findOne } from "@/utils/user/user";
 
 export async function POST(request: Request) {
   try {

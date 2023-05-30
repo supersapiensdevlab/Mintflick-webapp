@@ -1,11 +1,6 @@
 import { NextResponse } from "next/server";
 import { conn } from "@/services/mongo.service";
-import {
-  findById,
-  findOneAndUpdate,
-  findOne,
-  updateOne,
-} from "@/utils/user/user";
+import { findOne, updateOne } from "@/utils/user/user";
 import { limitCheck } from "@/utils/user/user";
 import path from "path";
 import fs from "fs-extra";
@@ -26,12 +21,13 @@ export async function POST(request: Request) {
       commercialUse,
       derivativeWorks,
       tokenId,
+      id,
     } = req;
 
     let tagged = req.tagged;
-    const userId = req.user_id;
+    const userId = req.id;
 
-    const { success, user, error } = await findOne({ _id: userId });
+    const { success, user, error } = await findOne({ id: userId });
     if (!success) {
       return NextResponse.json({ status: "error", message: error });
     }

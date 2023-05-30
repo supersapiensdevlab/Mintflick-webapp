@@ -6,8 +6,8 @@ export async function POST(request: Request) {
   try {
     sendgrid.setApiKey = SENDGRID_CONFIG.apiKey.toString;
     const req = await request.json();
-    const feedback = req.feedback;
-    const email = req.email;
+    const feedback: string = req.feedback;
+    const email: string = req.email;
     console.log(feedback);
     await sendgrid.send({
       to: SENDGRID_CONFIG.serviceEmail,

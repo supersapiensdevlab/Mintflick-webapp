@@ -7,9 +7,9 @@ export async function POST(request: Request) {
   try {
     await conn();
     const req = await request.json();
-    const reactusername = req.reactusername;
-    const pollusername = req.pollusername;
-    const pollId = req.pollId;
+    const reactusername: string = req.reactusername;
+    const pollusername: string = req.pollusername;
+    const pollId: string = req.pollId;
     const voted = req.voted;
     const { success, user, error } = await findOne({ username: pollusername });
 

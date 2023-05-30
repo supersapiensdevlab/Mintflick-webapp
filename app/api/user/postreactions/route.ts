@@ -7,9 +7,9 @@ export async function POST(request: Request) {
   try {
     await conn();
     const req = await request.json();
-    const reactusername = req.reactusername;
-    const postusername = req.postusername;
-    const postId = req.postId;
+    const reactusername: string = req.reactusername;
+    const postusername: string = req.postusername;
+    const postId: string = req.postId;
 
     const { success, user, error } = await findOne({ username: postusername });
     if (!success) {
