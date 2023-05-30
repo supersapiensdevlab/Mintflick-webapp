@@ -13,6 +13,9 @@ import CopyToClipboard from '@/components/molecules/CopyButton';
 import { UserContext } from '@/contexts/userContext';
 import { walletProviderContext } from '@/contexts/walletProviderContext';
 import { toastContext } from '@/contexts/toastContext';
+import axios from 'axios';
+import { useForm } from '@mantine/form';
+import CheckBox from '@/components/molecules/CheckBox';
 
 const SplashScreenData = [
   {
@@ -58,7 +61,7 @@ const SplashScreenData = [
 
 export default function CreateAccount() {
   const [userInfo, setUserInfo] = useState<any>({});
-  const [username, setUsername] = useState('');
+  const [usernameError, setUsernameError] = useState('');
   const userState = useContext(UserContext);
   const toastState = useContext(toastContext);
   const [walletAddress, setWalletAddress] = useState('');
@@ -67,7 +70,21 @@ export default function CreateAccount() {
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [step, setStep] = useState(1);
 
-  async function getEmailAndName() {
+  const form = useForm({
+    initialValues: {
+      username: '',
+      termsOfService: false,
+    },
+
+    validate: {
+      username: (value) =>
+        /^[a-zA-Z0-9._]+$/.test(value) ? null : 'Invalid username',
+      termsOfService: (value) =>
+        value ? null : 'Please accept terms and conditions.',
+    },
+  });
+
+  async function getUserInfo() {
     const userInfo =
       walletProvider.chain === 'evm'
         ? await walletProvider.polygonProvider.getUserInfo()
@@ -80,8 +97,35 @@ export default function CreateAccount() {
     );
   }
 
+  async function checkUserName() {
+    form.validate();
+    !form.isValid('termsOfService') &&
+      toastState.showToast([
+        { message: 'Please accept terms and conditions.', kind: 'error' },
+      ]);
+    form.isValid() &&
+      (await axios({
+        method: 'post',
+        url: `/api/user/check_availability`,
+        data: {
+          email: userInfo.email,
+          username: form.values.username,
+        },
+      })
+        .then((response: any) => {
+          console.log(response);
+
+          response.data.data.username === true &&
+            setUsernameError('Username not availiable');
+          response.data.data.username === false && setShowOnboarding(true);
+        })
+        .catch(async function (error) {
+          console.log(error);
+        }));
+  }
+
   useEffect(() => {
-    getEmailAndName();
+    getUserInfo();
     console.log('render');
   }, []);
 
@@ -90,15 +134,15 @@ export default function CreateAccount() {
       <div className='flex flex-col w-full gap-6 p-4 h-fit'>
         <div className='flex items-center justify-start gap-4 pt-9'>
           <Image
-            className={`h-24 aspect-square rounded-full  object-fill `}
+            className={`h-16 aspect-square rounded-full  object-fill `}
             src={userInfo.profileImage}
             alt='loginImage'
-            width={96}
-            height={96}
+            width={64}
+            height={64}
           />
           <div className='flex flex-col gap-2 '>
             <span className='text-xl font-black text-vapormintWhite-100'>
-              Welcome to Mintflick {userInfo.username}
+              Welcome to Mintflick {userInfo.name}
             </span>
             <span className='text-base font-semibold text-vapormintBlack-100'>
               {userInfo.email}
@@ -128,14 +172,27 @@ export default function CreateAccount() {
         </div>
         <Divider kind='center' size={1} />
         <TextInput
-          onChange={(e) => setUsername(e.target.value)}
-          value={username}
+          onChange={(e) =>
+            form.setValues({
+              username: e.target.value,
+            })
+          }
+          value={form.values.username}
+          error={usernameError || form.errors.username}
           title={'username'}
           placeholder={'Pick a unique username'}
         />
+        <CheckBox
+          checked={form.values.termsOfService}
+          onChange={() =>
+            form.setFieldValue('termsOfService', !form.values.termsOfService)
+          }
+          text={'I accept terms and conditions'}
+        />
       </div>
       <Button
-        handleClick={() => setShowOnboarding(true)}
+        // handleClick={() => setShowOnboarding(true)}
+        handleClick={() => checkUserName()}
         kind='success'
         type='outlined'
         size='base'

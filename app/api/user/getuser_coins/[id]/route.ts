@@ -17,7 +17,7 @@ export async function GET(
       return NextResponse.json({ status: "error", message: error });
     }
     if (user.coins) {
-      let coins = user.coins;
+      const coins = user.coins;
       return NextResponse.json({
         status: "success",
         message: "Coins fetched successfully",

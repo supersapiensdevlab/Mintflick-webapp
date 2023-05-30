@@ -5,6 +5,7 @@ import { addUser, findOne, findOneAndUpdate } from "@/utils/user/user";
 import { Str } from "@supercharge/strings/dist";
 import axios from "axios";
 import jwt from "jsonwebtoken";
+import * as jose from "jose";
 
 export async function POST(request: Request) {
   try {
@@ -25,7 +26,15 @@ export async function POST(request: Request) {
       const data = {
         user_id: user._id,
       };
-      const authtoken = jwt.sign(data, MIDDLEWARE_CONFIG.JWT_SECRET);
+      // const authtoken = jwt.sign(data, MIDDLEWARE_CONFIG.JWT_SECRET);
+      const secret = new TextEncoder().encode(MIDDLEWARE_CONFIG.JWT_SECRET);
+      const alg = "HS256";
+
+      const authtoken = await new jose.SignJWT({ "urn:example:claim": true })
+        .setProtectedHeader({ alg })
+
+        .sign(secret);
+
       let loginData = {
         user: user,
         jwtToken: authtoken,
@@ -131,7 +140,15 @@ export async function POST(request: Request) {
                 const data = {
                   user_id: newUser._id,
                 };
-                const authtoken = jwt.sign(data, MIDDLEWARE_CONFIG.JWT_SECRET);
+                const secret = new TextEncoder().encode(
+                  MIDDLEWARE_CONFIG.JWT_SECRET
+                );
+                const alg = "HS256";
+
+                const authtoken = await new jose.SignJWT({})
+                  .setProtectedHeader({ alg })
+
+                  .sign(secret);
                 let loginData = {
                   user: newUser,
                   jwtToken: authtoken,
@@ -155,10 +172,15 @@ export async function POST(request: Request) {
                   const data = {
                     user_id: user2.user._id,
                   };
-                  const authtoken = jwt.sign(
-                    data,
+                  const secret = new TextEncoder().encode(
                     MIDDLEWARE_CONFIG.JWT_SECRET
                   );
+                  const alg = "HS256";
+
+                  const authtoken = await new jose.SignJWT({})
+                    .setProtectedHeader({ alg })
+
+                    .sign(secret);
                   let loginData = {
                     user: user2.user,
                     jwtToken: authtoken,

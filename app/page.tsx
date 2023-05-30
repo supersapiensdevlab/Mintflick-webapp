@@ -30,37 +30,41 @@ export default function Home() {
     })
       .then((response: any) => {
         console.log('user data', response);
-        userState.updateUserData(response.data.data.user);
-        console.log('user data saved in state');
-        localStorage.setItem('authtoken', response.data.data.jwtToken);
-        console.log('auth token saved in storage');
-        localStorage.setItem('walletAddress', walletAddress);
-        console.log('wallet address saved in storage');
-
         response.data.data === 'No user found'
           ? router.push('/create_account')
-          : router.push('/home');
+          : () => {
+              userState.updateUserData(response.data.data.user);
+              console.log('user data saved in state');
+              localStorage.setItem('authtoken', response.data.data.jwtToken);
+              console.log('auth token saved in storage');
+              localStorage.setItem('walletAddress', walletAddress);
+              console.log('wallet address saved in storage');
+              router.push('/home');
+            };
       })
       .catch(async function (error) {
         console.log(error);
-        error.response.status === 404 && router.push('/create_account');
+
         // error.response.status === 0 && State.toast(error.message);
       });
   }
-  const handleTorusSolanaConnect = async () => {
-    setCheckingUser(true);
-    const torus = new SolanaTorus();
-    await torus.init();
-    await torus.login();
-    await torus.hideTorusButton();
-    walletProvider.setChain('solana');
+  //function for connecting solana wallet
+  // const handleTorusSolanaConnect = async () => {
+  //   setCheckingUser(true);
+  //   const torus = new SolanaTorus();
+  //   await torus.init();
+  //   await torus.login();
+  //   await torus.hideTorusButton();
+  //   walletProvider.setChain('solana');
 
-    walletProvider.setSolanaProvider(torus);
-    console.log('torus', torus);
-    const address = torus.provider.selectedAddress;
-    console.log(address);
-    address && isUserAvaliable(address);
-  };
+  //   walletProvider.setSolanaProvider(torus);
+  //   console.log('torus', torus);
+  //   const address = torus.provider.selectedAddress;
+  //   console.log(address);
+  //   address && isUserAvaliable(address);
+  // };
+
+  ///function for connecting evm wallet
   const onClickLogin = async () => {
     const torus = new Torus({
       buttonPosition: 'top-right', // default: 'bottom-left'
