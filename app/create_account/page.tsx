@@ -124,6 +124,25 @@ export default function CreateAccount() {
         }));
   }
 
+  async function createUser() {
+    await axios({
+      method: 'post',
+      url: `/api/user/check_availability`,
+      data: {
+        evm_wallet_id: walletAddress,
+        name: userInfo.name,
+        email: userInfo.email,
+        profileImage: userInfo.profileImage,
+      },
+    })
+      .then((response: any) => {
+        console.log(response);
+      })
+      .catch(async function (error) {
+        console.log(error);
+      });
+  }
+
   useEffect(() => {
     getUserInfo();
     console.log('render');
@@ -237,7 +256,7 @@ export default function CreateAccount() {
             <Button
               handleClick={() => {
                 if (step === 4) {
-                  setStep(1);
+                  createUser();
                 } else {
                   setStep(step + 1);
                 }
