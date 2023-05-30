@@ -10,7 +10,7 @@ export async function GET(
   }
 ) {
   try {
-    const id = params.id;
+    const id: string = params.id;
 
     const { success, user, error } = await findOne({ id: id });
     if (!success) {

@@ -11,7 +11,7 @@ export async function GET(
   }
 ) {
   try {
-    const id = params.id;
+    const id: string = params.id;
     await User.findOne({ id: id })
       .select({
         username: 1,

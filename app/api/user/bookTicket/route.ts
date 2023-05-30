@@ -6,7 +6,9 @@ export async function POST(request: Request) {
   try {
     await conn();
     const req = await request.json();
-    const { eventId, ticketId, ownerWallet } = req;
+    const eventId: string = req.eventId;
+    const ticketId: string = req.ticketId;
+    const ownerWallet: string = req.ownerWallet;
     if (eventId && ticketId && ownerWallet) {
       const update = await findOneAndUpdateEvent(
         { eventId: eventId },

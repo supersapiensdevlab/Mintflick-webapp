@@ -25,3 +25,8 @@ export const SENDGRID_CONFIG = {
   apiKey: process.env.SENDGRID_API || "",
   serviceEmail: process.env.SERVICE_EMAIL || "",
 };
+
+export const GAMESTOWEB3_CONGIG = {
+  xApiKey: process.env.GAMESTOWEB3_API_KEY || "",
+  apiUrl: process.env.GAMESTOWEB3_API_URL || "",
+};

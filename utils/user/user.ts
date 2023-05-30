@@ -2,7 +2,7 @@ import { User } from "@/utils/models/user.model";
 import { Mutex } from "async-mutex";
 
 // Create an object to store the count of calls for each user
-const callCount: any = {};
+export const callCount: any = {};
 
 // Create a mutex for synchronizing access to callCount object
 const mutex = new Mutex();
@@ -42,10 +42,10 @@ export const findOneAndUpdate = async (
   options: Object
 ) => {
   try {
-    await User.findOneAndUpdate(filter, update, options);
-    return { success: true, error: null };
+    const user = await User.findOneAndUpdate(filter, update, options);
+    return { success: true, user: user, error: null };
   } catch (error) {
-    return { success: false, error: error };
+    return { success: false, user: null, error: error };
   }
 };
 

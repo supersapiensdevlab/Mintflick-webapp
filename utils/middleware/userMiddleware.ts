@@ -29,12 +29,12 @@ export const isAuthenticated = async (
   const token = request.headers.get("auth-token");
   if (!token) return false;
   try {
-    const decodedToken = await verifyToken(token);
+    const decodedToken: any = await verifyToken(token);
 
     if (!decodedToken) {
       return false;
     }
-    (request as any).user_id = decodedToken.user_id;
+    request.user_id = decodedToken;
     return true;
   } catch (error) {
     return false;

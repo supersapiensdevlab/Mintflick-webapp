@@ -10,15 +10,19 @@ export async function POST(request: Request) {
     const time = currentTimeInSeconds;
     const addedValidity = req.validity * 24 * 60 * 60;
     const validity = time + addedValidity;
+    const plan: string = req.plan;
+    const txnHash: string = req.txnHash;
+    const type: string = req.type;
+    const id: string = req.id;
 
     const update = await findOneAndUpdate(
-      { _id: req.user_id },
+      { id: id },
       {
         $push: {
           subscription: {
-            plan: req.plan,
-            txnHash: req.txnHash,
-            type: req.type,
+            plan: plan,
+            txnHash: txnHash,
+            type: type,
             validity: validity,
             createdAt: time,
           },

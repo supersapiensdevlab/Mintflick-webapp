@@ -11,7 +11,7 @@ export async function GET(
   }
 ) {
   try {
-    const username = params.username;
+    const username: string = params.username;
     await User.findOne({ username: username })
       .select({
         username: 1,

@@ -6,7 +6,8 @@ export async function POST(request: Request) {
   try {
     await conn();
     const req = await request.json();
-    const { success, user, error } = await findOne({ _id: req.user_id });
+    const id: string = req.id;
+    const { success, user, error } = await findOne({ id: id });
     if (success) {
       let data = [];
       if (user.oldnotification.length > 0) {

@@ -10,9 +10,9 @@ export async function GET(
   }
 ) {
   try {
-    const username = params.username;
-    const type = params.type;
-    const id = params.id;
+    const username: string = params.username;
+    const type: string = params.type;
+    const id: string = params.id;
     const { success, user, error } = await findOne({ username: username });
     if (!success) {
       return NextResponse.json({ status: "error", message: error });

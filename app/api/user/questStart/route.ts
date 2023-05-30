@@ -6,7 +6,7 @@ export async function POST(request: Request) {
   try {
     await conn();
     const req = await request.json();
-    const walletId = req.walletId;
+    const walletId: string = req.walletId;
     const questId = req.questId;
 
     const addQuest = await findOneAndUpdate(
