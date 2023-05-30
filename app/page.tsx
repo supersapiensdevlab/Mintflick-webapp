@@ -10,6 +10,8 @@ import { useContext, useEffect, useState } from 'react';
 import { walletProviderContext } from '@/contexts/walletProviderContext';
 import { UserContext } from '@/contexts/userContext';
 import FullScreenOverlay from '@/components/molecules/FullScreenOverlay';
+import Torus from '@toruslabs/torus-embed';
+import Web3 from 'web3';
 
 export default function Home() {
   const router = useRouter();
@@ -26,7 +28,7 @@ export default function Home() {
         walletId: walletAddress,
       },
     })
-      .then((response) => {
+      .then((response: any) => {
         console.log('user data', response);
         userState.updateUserData(response.data.data.user);
         console.log('user data saved in state');
@@ -35,28 +37,59 @@ export default function Home() {
         localStorage.setItem('walletAddress', walletAddress);
         console.log('wallet address saved in storage');
 
-        response.status === 200 && router.push('/home');
-        // response.status === 200 && router.push("/create_account");
+        response.data.data === 'No user found'
+          ? router.push('/create_account')
+          : router.push('/home');
       })
       .catch(async function (error) {
         console.log(error);
-
         error.response.status === 404 && router.push('/create_account');
         // error.response.status === 0 && State.toast(error.message);
       });
   }
-  const handleTorusConnect = async () => {
+  const handleTorusSolanaConnect = async () => {
     setCheckingUser(true);
     const torus = new SolanaTorus();
     await torus.init();
     await torus.login();
+    await torus.hideTorusButton();
+    walletProvider.setChain('solana');
+
     walletProvider.setSolanaProvider(torus);
     console.log('torus', torus);
     const address = torus.provider.selectedAddress;
     console.log(address);
     address && isUserAvaliable(address);
   };
+  const onClickLogin = async () => {
+    const torus = new Torus({
+      buttonPosition: 'top-right', // default: 'bottom-left'
+    });
+    await torus.init({
+      enableLogging: false,
+      network: {
+        host: 'https://rpc.testnet.mantle.xyz/', // mandatory
+        networkName: 'Mantle Testnet',
+        chainId: 5001,
+        blockExplorer: 'https://explorer.testnet.mantle.xyz/',
+        ticker: 'BIT',
+        tickerName: 'BIT',
+      },
+    });
+    // await torus.hideTorusButton();
 
+    await torus.login();
+    torus.hideTorusButton();
+    walletProvider.setChain('evm');
+
+    walletProvider.setPolygonProvider(torus);
+    console.log(walletProvider);
+
+    const web3 = new Web3(torus.provider);
+    const address = (await web3.eth.getAccounts())[0];
+    console.log(address);
+    address && isUserAvaliable(address);
+  };
   return (
     <FullscreenContainer className='flex flex-col items-start justify-start max-w-lg mx-auto overflow-hidden bg-vapormintBlack-300'>
       <div className='relative w-full mx-auto h-1/2 '>
@@ -208,7 +241,8 @@ export default function Home() {
         </div>
         <div className='flex-grow lg:flex-none lg:h-12'></div>
         <Button
-          handleClick={() => handleTorusConnect()}
+          // handleClick={() => handleTorusSolanaConnect()}
+          handleClick={() => onClickLogin()}
           kind='white'
           type='solid'
           size='base'

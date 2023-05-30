@@ -7,6 +7,8 @@ type Props = {
 };
 
 type WalletContextInt = {
+  chain: string;
+  setChain: Function;
   setOpenModal: Function;
   solanaProvider: any;
   setSolanaProvider: (data: any) => void;
@@ -15,6 +17,9 @@ type WalletContextInt = {
 };
 
 let walletContextObj: WalletContextInt = {
+  chain: 'evm',
+  setChain: () => {},
+
   setOpenModal: () => {},
   solanaProvider: {},
   setSolanaProvider: (data: any) => {},
@@ -25,6 +30,8 @@ let walletContextObj: WalletContextInt = {
 export const walletProviderContext = createContext(walletContextObj);
 
 export default function WalletProviderContextContainer({ children }: Props) {
+  const [chain, setChain] = useState('evm');
+
   const [solanaProvider, setSolanaProvider] = useState({});
   const [polygonProvider, setPolygonProvider] = useState({});
 
@@ -33,12 +40,15 @@ export default function WalletProviderContextContainer({ children }: Props) {
   return (
     <walletProviderContext.Provider
       value={{
+        chain,
+        setChain,
         setOpenModal,
         solanaProvider,
         setSolanaProvider,
         polygonProvider,
         setPolygonProvider,
-      }}>
+      }}
+    >
       {children}
       <ConnectWalletModal
         open={openModal}

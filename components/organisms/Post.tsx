@@ -1,3 +1,4 @@
+'use client';
 import React, { useState } from 'react';
 import Avatar from '../molecules/Avatar';
 import Tick from '../molecules/Tick';
@@ -18,21 +19,21 @@ export default function Post({}: Props) {
 
   const router = useRouter();
   return (
-    <div className="w-full p-4 space-y-2 select-none scroll-mt-16 snap-start">
-      <div className="flex items-center justify-between w-full">
-        <div className="flex items-center gap-1">
-          <Avatar kind="default" size="md" />
-          <div className="flex flex-col gap-[1px]">
-            <div className="flex items-center gap-1">
-              <span className="text-base font-semibold cursor-pointer text-vapormintWhite-100">
+    <div className='w-full p-4 space-y-2 select-none scroll-mt-16 snap-start'>
+      <div className='flex items-center justify-between w-full'>
+        <div className='flex items-center gap-1'>
+          <Avatar kind='default' size='md' />
+          <div className='flex flex-col gap-[1px]'>
+            <div className='flex items-center gap-1'>
+              <span className='text-base font-semibold cursor-pointer text-vapormintWhite-100'>
                 username
               </span>
               <Tick />
-              <span className="text-sm font-medium cursor-pointer text-vapormintMint-300">
+              <span className='text-sm font-medium cursor-pointer text-vapormintMint-300'>
                 Follow
               </span>
             </div>
-            <span className="text-sm font-semibold text-vapormintBlack-200">
+            <span className='text-sm font-semibold text-vapormintBlack-200'>
               1 hour ago
             </span>
           </div>
@@ -40,34 +41,34 @@ export default function Post({}: Props) {
         <Menu
           title={
             <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth="1.5"
-              stroke="currentColor"
-              className="w-6 h-6 cursor-pointer text-vapormintWhite-100"
+              xmlns='http://www.w3.org/2000/svg'
+              fill='none'
+              viewBox='0 0 24 24'
+              strokeWidth='1.5'
+              stroke='currentColor'
+              className='w-6 h-6 cursor-pointer text-vapormintWhite-100'
             >
               <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z"
+                strokeLinecap='round'
+                strokeLinejoin='round'
+                d='M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z'
               />
             </svg>
           }
         >
-          <div className="flex gap-1 flex-col items-start bg-vapormintBlack-300 rounded-lg border-[1px] border-vapormintBlack-200 p-2">
-            <span className="p-2 text-base font-semibold cursor-pointer text-vapormintWhite-100">
+          <div className='flex gap-1 flex-col items-start bg-vapormintBlack-300 rounded-lg border-[1px] border-vapormintBlack-200 p-2'>
+            <span className='p-2 text-base font-semibold cursor-pointer text-vapormintWhite-100'>
               Report
             </span>
-            <span className="p-2 text-base font-semibold cursor-pointer text-vapormintWhite-100">
+            <span className='p-2 text-base font-semibold cursor-pointer text-vapormintWhite-100'>
               Share
             </span>
           </div>
         </Menu>
       </div>
-      <div className="flex items-end w-full gap-2">
-        <div className="flex flex-col flex-grow gap-2">
-          <p className="text-base font-medium text-vapormintWhite-200">
+      <div className='flex items-end w-full gap-2'>
+        <div className='flex flex-col flex-grow gap-2'>
+          <p className='text-base font-medium text-vapormintWhite-200'>
             Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet
             sint. Velit officia consequat duis enim velit mollit. Exercitation
             veniam consequat sunt nostrud amet.
@@ -75,42 +76,42 @@ export default function Post({}: Props) {
           <Image
             className={`w-full    h-full object-cover rounded-lg border-[0.5px] border-vapormintBlack-200`}
             src={social}
-            alt="loginImage"
+            alt='loginImage'
             width={100}
             height={100}
           />
         </div>
-        <div className="flex flex-col items-center justify-end gap-3 w-fit">
-          <div className="flex flex-col items-center gap-[2px]">
+        <div className='flex flex-col items-center justify-end gap-3 w-fit'>
+          <div className='flex flex-col items-center gap-[2px]'>
             <LikeButton
               liked={liked}
               onClick={() => setLiked((prev) => !prev)}
             />
 
-            <span className="text-xs font-semibold text-vapormintWhite-300">
+            <span className='text-xs font-semibold text-vapormintWhite-300'>
               999K
             </span>
           </div>
           {/* comments */}
           <div
             onClick={() => setShowComments(true)}
-            className="flex flex-col items-center gap-[2px] cursor-pointer"
+            className='flex flex-col items-center gap-[2px] cursor-pointer'
           >
             <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth="1.5"
-              stroke="currentColor"
-              className="w-6 h-6 text-vapormintBlack-100"
+              xmlns='http://www.w3.org/2000/svg'
+              fill='none'
+              viewBox='0 0 24 24'
+              strokeWidth='1.5'
+              stroke='currentColor'
+              className='w-6 h-6 text-vapormintBlack-100'
             >
               <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 015.41 20.97a5.969 5.969 0 01-.474-.065 4.48 4.48 0 00.978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25z"
+                strokeLinecap='round'
+                strokeLinejoin='round'
+                d='M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 015.41 20.97a5.969 5.969 0 01-.474-.065 4.48 4.48 0 00.978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25z'
               />
             </svg>
-            <span className="text-xs font-semibold text-vapormintWhite-300">
+            <span className='text-xs font-semibold text-vapormintWhite-300'>
               9K
             </span>
           </div>
@@ -131,40 +132,40 @@ export default function Post({}: Props) {
           </svg> */}
 
           <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth="1.5"
-            stroke="currentColor"
-            className="w-6 h-6 text-vapormintBlack-100"
+            xmlns='http://www.w3.org/2000/svg'
+            fill='none'
+            viewBox='0 0 24 24'
+            strokeWidth='1.5'
+            stroke='currentColor'
+            className='w-6 h-6 text-vapormintBlack-100'
           >
             <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M7.217 10.907a2.25 2.25 0 100 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186l9.566-5.314m-9.566 7.5l9.566 5.314m0 0a2.25 2.25 0 103.935 2.186 2.25 2.25 0 00-3.935-2.186zm0-12.814a2.25 2.25 0 103.933-2.185 2.25 2.25 0 00-3.933 2.185z"
+              strokeLinecap='round'
+              strokeLinejoin='round'
+              d='M7.217 10.907a2.25 2.25 0 100 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186l9.566-5.314m-9.566 7.5l9.566 5.314m0 0a2.25 2.25 0 103.935 2.186 2.25 2.25 0 00-3.935-2.186zm0-12.814a2.25 2.25 0 103.933-2.185 2.25 2.25 0 00-3.933 2.185z'
             />
           </svg>
         </div>
       </div>
-      <div className="flex gap-[2px] items-center">
+      <div className='flex gap-[2px] items-center'>
         <NftCoin />{' '}
-        <span className="text-sm font-semibold text-vapormintBlack-200">
+        <span className='text-sm font-semibold text-vapormintBlack-200'>
           Owned by
         </span>
-        <Avatar kind="default" size="xs" />
-        <span className="text-sm font-semibold text-vapormintWhite-300">
+        <Avatar kind='default' size='xs' />
+        <span className='text-sm font-semibold text-vapormintWhite-300'>
           Arlene McCoy
         </span>
         <span
           onClick={() => router.push(`/nft/1234`)}
-          className="ml-4 text-sm font-semibold cursor-pointer text-vapormintSuccess-500"
+          className='ml-4 text-sm font-semibold cursor-pointer text-vapormintSuccess-500'
         >
           View NFT
         </span>
       </div>
       {showComments && (
         <FullScreenOverlay
-          animation="bottom"
+          animation='bottom'
           title={'Comments'}
           onClose={() => setShowComments(false)}
         >

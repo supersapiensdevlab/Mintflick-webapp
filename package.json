@@ -21,9 +21,11 @@
     "@mantine/hooks": "^6.0.9",
     "@supercharge/strings": "^2.0.0",
     "@toruslabs/solana-embed": "^0.3.4",
+    "@toruslabs/torus-embed": "^1.41.3",
     "@types/node": "18.16.0",
     "@types/react": "18.0.38",
     "@types/react-dom": "18.0.11",
+    "@web3auth/modal": "^5.2.0",
     "async-mutex": "^0.4.0",
     "autoprefixer": "10.4.14",
     "axios": "^1.4.0",
@@ -42,7 +44,8 @@
     "react-search-autocomplete": "^8.5.2",
     "tailwind-scrollbar": "^3.0.0",
     "tailwindcss": "3.3.1",
-    "typescript": "5.0.4"
+    "typescript": "5.0.4",
+    "web3": "^1.10.0"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",

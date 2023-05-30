@@ -15,7 +15,7 @@ export default function BottomNavigation({}: Props) {
     path === '/events' ||
     path === '/explore' ||
     path === '/notifications' ? (
-    <div className='absolute bottom-0 left-0 z-40 flex flex-col w-full transition-all ease-in-out select-none '>
+    <div className='absolute bottom-0 left-0 z-40 flex flex-col w-full transition-all ease-in-out select-none lg:hidden '>
       <GradientDivider />
       <div className='flex items-center w-full max-w-lg px-4 py-3 mx-auto bg-vapormintBlack-300/60 backdrop-blur-lg'>
         <div

@@ -40,7 +40,7 @@ function Fab(props: Props) {
         }px)`,
       }}
       onClick={props.onClick}
-      className={`absolute bottom-20 right-0 flex items-center w-fit gap-2  cursor-pointer select-none  rounded-l-full ${
+      className={`lg:hidden absolute bottom-20 right-0 flex items-center w-fit gap-2  cursor-pointer select-none  rounded-l-full ${
         props.size === 'xsmall' ? 'p-2' : props.size === 'small' ? 'p-3' : 'p-5'
       } ${
         props.kind === 'default'
