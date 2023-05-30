@@ -1,37 +1,54 @@
 import { Schema, model, models } from "mongoose";
 
+type chainData = {
+  id: number;
+  name: string;
+};
+
+type metadata = {
+  name: string;
+  image: string;
+  description: string;
+  external_uri: string;
+  attributes: object;
+};
 interface IListing {
-  owner: string;
-  minter: string;
-  token_id: string;
-  price: number;
-  quantity: number;
-  chain_id: number;
+  contract_address: string;
+  contract_type: string;
+  token_id: number;
+  chain: chainData;
+  price: string;
+  meta_data_url: string;
+  is_in_auction: boolean;
+  is_in_sale: boolean;
+  token_owner: string;
+  meta_data: metadata;
+  createdAt: string;
+  updatedAt: string;
 }
 
 const listingSchema = new Schema<IListing>({
-  owner: {
+  contract_address: {
     type: String,
     required: true,
   },
-  minter: {
+  contract_type: {
     type: String,
-    trim: true,
   },
   token_id: {
-    type: String,
-    required: true,
-    unique: true,
-    trim: true,
-    minlength: 5,
-  },
-  price: { type: Number, default: 0 },
-  quantity: {
     type: Number,
     required: true,
-    default: 0,
+    unique: true,
   },
-  chain_id: { type: Number, default: 0 },
+  chain: { type: Object, required: true },
+  price: { type: String },
+  meta_data_url: { type: String },
+  is_in_auction: { type: Boolean },
+  is_in_sale: { type: Boolean },
+  token_owner: { type: String },
+  meta_data: { type: Object },
+  createdAt: { type: String },
+  updatedAt: { type: String },
 });
 
 export const Listing =

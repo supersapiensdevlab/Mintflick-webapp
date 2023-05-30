@@ -42,10 +42,10 @@ export const findOneAndUpdate = async (
   options: Object
 ) => {
   try {
-    await User.findOneAndUpdate(filter, update, options);
-    return { success: true, error: null };
+    const user = await User.findOneAndUpdate(filter, update, options);
+    return { success: true, user: user, error: null };
   } catch (error) {
-    return { success: false, error: error };
+    return { success: false, user: null, error: error };
   }
 };
 

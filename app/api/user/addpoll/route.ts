@@ -3,6 +3,7 @@ import { conn } from "@/services/mongo.service";
 import { makeid } from "@/utils/makeId/makeId";
 import { User } from "@/utils/models/user.model";
 import { Feed } from "@/utils/models/feed.model";
+import { findOneAndUpdate } from "@/utils/user/user";
 
 export async function POST(request: Request) {
   try {
@@ -23,30 +24,35 @@ export async function POST(request: Request) {
         likes: [],
         comments: [],
       };
-      await User.findOneAndUpdate({ id: id }, { $push: { polls: poll } })
-        .then(async (data) => {
-          var trend = new Feed({
-            user_id: data._id,
-            wallet_id: data.wallet_id,
-            username: data.username,
-            name: data.name,
-            profile_image: data.profile_image,
-            superfan_data: data.superfan_data,
-            content: poll,
-            content_type: "poll",
-            reports: data.reports,
-            superfan_to: data.superfan_to,
-          });
-          await trend.save();
-          return NextResponse.json({
-            status: "success",
-            message: "Poll created successfully",
-            data: data,
-          });
-        })
-        .catch((err) => {
-          return NextResponse.json({ status: "error", message: err });
+      const update = await findOneAndUpdate(
+        { id: id },
+        { $push: { polls: poll } },
+        {}
+      );
+      if (!update.success) {
+        return NextResponse.json({
+          status: "error",
+          message: update.error,
         });
+      }
+      var trend = new Feed({
+        user_id: update.user._id,
+        wallet_id: update.user.wallet_id,
+        username: update.user.username,
+        name: update.user.name,
+        profile_image: update.user.profile_image,
+        superfan_data: update.user.superfan_data,
+        content: poll,
+        content_type: "poll",
+        reports: update.user.reports,
+        superfan_to: update.user.superfan_to,
+      });
+      await trend.save();
+      return NextResponse.json({
+        status: "success",
+        message: "Poll created successfully",
+        data: update.user,
+      });
     } else {
       return NextResponse.json({
         status: "error",
