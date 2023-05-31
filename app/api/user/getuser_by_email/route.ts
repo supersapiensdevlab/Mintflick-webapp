@@ -9,6 +9,7 @@ export async function POST(request: Request) {
     await conn();
     const req = await request.json();
     const email: string = req.email;
+    const evm_wallet_id = req.evmWalletId;
 
     if (email) {
       const { success, user, error } = await findOne({ email: email });
@@ -21,6 +22,17 @@ export async function POST(request: Request) {
         });
       }
       if (success && user) {
+        if (evm_wallet_id && user?.evm_wallet_id) {
+          return NextResponse.json({
+            success: false,
+            status: "400",
+            message: "User already has an evm wallet address",
+            data: {},
+          });
+        } else {
+          user.evm_wallet_id = evm_wallet_id;
+          await user.save();
+        }
         const data = {
           user_id: user._id,
         };
