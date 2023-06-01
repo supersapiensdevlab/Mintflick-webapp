@@ -127,7 +127,7 @@ export default function CreateAccount() {
   async function createUser() {
     await axios({
       method: 'post',
-      url: `/api/user/check_availability`,
+      url: `/api/user/create_user`,
       data: {
         evm_wallet_id: walletAddress,
         name: userInfo.name,
