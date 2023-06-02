@@ -30,6 +30,13 @@ export async function POST(request: Request) {
     const link = req.eventlink;
     const uploadHash = req.announcementHash ? req.announcementHash : null;
 
+    if (!id) {
+      return NextResponse.json({
+        status: "error",
+        message: "Please provide user id in request body",
+      });
+    }
+
     const { success, user, error } = await findOne({ id: id });
     if (!success) {
       return NextResponse.json({ status: "error", message: error });

@@ -1,82 +1,89 @@
 import { NextResponse } from "next/server";
 import { conn } from "@/services/mongo.service";
+import { mintNft } from "@/utils/marketplace/gamestoweb3/erc721";
 import { Nft } from "@/utils/models/nft.model";
 
 type IData = {
-  contract_type: string;
+  wallet_address: string;
   contract_address: string;
   token_owner: string;
-  number_of_tokens: number;
-  token_id: number;
-  chain: object;
-  price: string;
-  meta_data_url: string;
-  is_in_auction: boolean;
-  is_in_sale: boolean;
-  meta_data: object;
-  createdAt: string;
-  updatedAt: string;
+  image_uri: string;
+  name: string;
+  description: string;
+  attributes: Array<object>;
+  external_uri: string;
 };
 
 export async function POST(request: Request) {
   try {
     await conn();
     const req = await request.json();
-    const contract_type: string = req.contract_type;
+    const wallet_address: string = req.wallet_address;
     const contract_address: string = req.contract_address;
-    const token_id: number = req.token_id;
-    const chain: object = req.chain;
-    const price: string = req.price;
-    const meta_data_url: string = req.meta_data_url;
-    const is_in_auction: boolean = req.is_in_auction;
-    const is_in_sale: boolean = req.is_in_sale;
-    const meta_data: object = req.meta_data;
     const token_owner: string = req.token_owner;
-    const createdAt: string = req.createdAt;
-    const updatedAt: string = req.updatedAt;
+    const image_uri: string = req.image_uri;
+    const name: string = req.name;
+    const description: string = req.description;
+    const attributes: Array<object> = req.attributes;
+    const external_uri: string = req.external_uri;
+
+    console.log(
+      !wallet_address,
+      !contract_address,
+      !token_owner,
+      !image_uri,
+      !name,
+      !description,
+      !attributes,
+      !external_uri
+    );
 
     if (
-      !contract_type ||
+      !wallet_address ||
       !contract_address ||
       !token_owner ||
-      token_id === undefined ||
-      is_in_auction === undefined ||
-      is_in_sale === undefined ||
-      !chain ||
-      !price ||
-      !meta_data_url ||
-      !meta_data
+      !image_uri ||
+      !name ||
+      !description ||
+      !attributes ||
+      !external_uri
     ) {
       return NextResponse.json({
         success: false,
-        message: "Missing some required parameters in request body",
+        message: "Error while minting nft",
         data: {},
       });
     }
 
     const mintData: IData = {
-      contract_type: contract_type,
+      wallet_address: wallet_address,
       contract_address: contract_address,
       token_owner: token_owner,
-      number_of_tokens: 1,
-      token_id: token_id,
-      chain: chain,
-      price: price,
-      meta_data_url: meta_data_url,
-      is_in_auction: is_in_auction,
-      is_in_sale: is_in_sale,
-      meta_data: meta_data,
-      createdAt: createdAt,
-      updatedAt: updatedAt,
+      image_uri: image_uri,
+      name: name,
+      description: description,
+      attributes: attributes,
+      external_uri: external_uri,
     };
 
-    const nft = new Nft(mintData);
+    const { success, nftData, error } = await mintNft(mintData);
+    console.log(nftData);
+    if (!success) {
+      return NextResponse.json({
+        success: false,
+        message: error,
+        data: {},
+      });
+    }
+
+    // put logic to save nft to database
+    const nft = new Nft(nftData);
     await nft.save();
 
     return NextResponse.json({
       success: true,
-      message: "New Nft added to database",
-      data: nft,
+      message: "Nft minted successfully",
+      data: nftData,
     });
   } catch (err) {
     return NextResponse.json({

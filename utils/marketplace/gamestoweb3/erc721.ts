@@ -35,10 +35,11 @@ type inputListData = {
 export const mintNft = async (mintData: inputMintData): Promise<returnData> => {
   try {
     let nftData: any;
+    console.log(mintData);
     await axios
       .post(`${GAMESTOWEB3_CONGIG.apiUrl}/nft/mint-nft`, mintData, {
         headers: {
-          "X-API-HEADER ": GAMESTOWEB3_CONGIG.xApiKey,
+          "X-API-HEADER": GAMESTOWEB3_CONGIG.xApiKey,
         },
       })
       .then((response) => {
