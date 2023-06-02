@@ -23,13 +23,13 @@ export default function UserContextContainer({ children }: Props) {
     }));
   };
 
-  async function isUserAvaliable(walletAddress: string) {
-    console.log('Checking for User with Wallet:', walletAddress);
+  async function isUserAvaliable(email: string) {
+    console.log('Checking for User with email:', email);
     await axios({
       method: 'post',
-      url: `/api/user/getuser_by_wallet`,
+      url: `/api/user/getuser_by_email`,
       data: {
-        walletId: walletAddress,
+        email: email,
       },
     })
       .then((response) => {
@@ -38,8 +38,8 @@ export default function UserContextContainer({ children }: Props) {
         console.log('user data saved in state');
         localStorage.setItem('authtoken', response.data.data.jwtToken);
         console.log('auth token saved in storage');
-        localStorage.setItem('walletAddress', walletAddress);
-        console.log('wallet address saved in storage');
+        localStorage.setItem('email', email);
+        console.log('email address saved in storage');
       })
       .catch(async function (error) {
         console.log(error);
@@ -47,9 +47,9 @@ export default function UserContextContainer({ children }: Props) {
   }
 
   useEffect(() => {
-    const wallet = localStorage.getItem('walletAddress');
-    console.log(wallet);
-    wallet && isUserAvaliable(wallet);
+    const email = localStorage.getItem('email');
+    console.log(email);
+    email && isUserAvaliable(email);
   }, []);
 
   return (

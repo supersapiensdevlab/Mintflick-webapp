@@ -62,7 +62,6 @@ const SplashScreenData = [
 export default function CreateAccount() {
   const [userInfo, setUserInfo] = useState<any>({});
   const [usernameError, setUsernameError] = useState('');
-  const userState = useContext(UserContext);
   const toastState = useContext(toastContext);
   const [walletAddress, setWalletAddress] = useState('');
   const walletProvider = useContext(walletProviderContext);
@@ -71,14 +70,13 @@ export default function CreateAccount() {
   const [step, setStep] = useState(1);
 
   const form = useForm({
+    validateInputOnChange: true,
     initialValues: {
       username: '',
       termsOfService: false,
     },
 
     validate: {
-      username: (value) =>
-        /^[a-zA-Z0-9._]+$/.test(value) ? null : 'Invalid username',
       termsOfService: (value) =>
         value ? null : 'Please accept terms and conditions.',
     },
@@ -106,17 +104,18 @@ export default function CreateAccount() {
     form.isValid() &&
       (await axios({
         method: 'post',
-        url: `/api/user/check_availability`,
+        url: `/api/user/check_availability_username`,
         data: {
           email: userInfo.email,
           username: form.values.username,
         },
       })
         .then((response: any) => {
+          setUsernameError('');
           console.log(response);
 
           response.data.data.username === true &&
-            setUsernameError('Username not availiable');
+            setUsernameError('Username already taken!');
           response.data.data.username === false && setShowOnboarding(true);
         })
         .catch(async function (error) {
@@ -142,6 +141,15 @@ export default function CreateAccount() {
         console.log(error);
       });
   }
+  const validateUsername = (value: string) => {
+    form.setFieldValue('username', value);
+
+    /^[a-z0-9._]+$/.test(value)
+      ? value.length < 4
+        ? setUsernameError('username is too short.')
+        : setUsernameError('')
+      : setUsernameError('username not valid.');
+  };
 
   useEffect(() => {
     getUserInfo();
@@ -191,13 +199,9 @@ export default function CreateAccount() {
         </div>
         <Divider kind='center' size={1} />
         <TextInput
-          onChange={(e) =>
-            form.setValues({
-              username: e.target.value,
-            })
-          }
+          onChange={(e) => validateUsername(e.target.value)}
           value={form.values.username}
-          error={usernameError || form.errors.username}
+          error={usernameError}
           title={'username'}
           placeholder={'Pick a unique username'}
         />

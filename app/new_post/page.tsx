@@ -5,8 +5,12 @@ import Header from '@/components/molecules/Header';
 import ImageInput from '@/components/molecules/ImageInput';
 import TextareaInput from '@/components/molecules/TextareaInput';
 import VideoInput from '@/components/molecules/VideoInput';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import PollInput from './PollInput';
+import axios from 'axios';
+import CustomInput from '@/components/molecules/CustomInput';
+import { UserContext } from '@/contexts/userContext';
+import FullScreenOverlay from '@/components/molecules/FullScreenOverlay';
 
 type Props = {};
 
@@ -17,6 +21,36 @@ export default function page({}: Props) {
   const [video, setVideo] = useState(null);
   const [question, setQuestion] = useState('');
   const [options, setOptions] = useState([]);
+  const [tagged, setTagged] = useState([]);
+  const [uploadingPost, setUploadingPost] = useState(false);
+
+  const userState: any = useContext(UserContext);
+
+  async function uploadPost() {
+    setUploadingPost(true);
+    const data = {
+      announcement: description,
+      tagged: tagged,
+    };
+    axios
+      .post(`/api/user/announcement`, data, {
+        headers: {
+          'content-type': 'application/json',
+          'auth-token': JSON.stringify(localStorage.getItem('authtoken')),
+        },
+      })
+      .then(async () => {
+        clearData();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+  const clearData = () => {
+    setDescription('');
+    setImage(null);
+    setVideo(null);
+  };
 
   return (
     <FullscreenContainer className='select-none  border-x-[1px] border-vapormintBlack-200/60 relative flex flex-col items-start max-w-lg pt-14 mx-auto overflow-hidden bg-vapormintBlack-300'>
@@ -28,7 +62,8 @@ export default function page({}: Props) {
             activeTab === 1
               ? 'text-vapormintMint-300'
               : 'text-vapormintWhite-200'
-          }`}>
+          }`}
+        >
           Post
         </div>
         <div
@@ -37,7 +72,8 @@ export default function page({}: Props) {
             activeTab === 2
               ? 'text-vapormintMint-300'
               : 'text-vapormintWhite-200'
-          }`}>
+          }`}
+        >
           Poll
         </div>
       </div>{' '}
@@ -49,13 +85,13 @@ export default function page({}: Props) {
       />
       {activeTab === 1 && (
         <div className='flex flex-col flex-grow w-full gap-2 p-4 overflow-y-auto scrollbar-none'>
-          <TextareaInput
-            title={'Description'}
-            placeholder={'Whats on your mind...'}
-            onChange={(e) => {
-              setDescription(e.target.value);
-            }}
+          <CustomInput
+            placeholder={'Whats on your mind!'}
+            className={`w-full h-20 text-base border-b rounded-none text-vapormintWhite-100 bg-vapormintBlack-300 hover:resize-y scrollbar scrollbar-thumb-gray-900 scrollbar-track-black focus:outline-none `}
             value={description}
+            setValue={setDescription}
+            mentions={tagged}
+            setMentions={setTagged}
           />
           {!video && (
             <ImageInput
@@ -84,9 +120,28 @@ export default function page({}: Props) {
           />
         </div>
       )}
-      <Button handleClick={() => {}} kind='mint' size='small' type='solid'>
+      <Button
+        handleClick={() => description && uploadPost()}
+        kind='mint'
+        size='small'
+        type='solid'
+      >
         {activeTab === 1 ? 'Flick Post' : 'Take Poll'}
       </Button>
+      {uploadingPost && (
+        <FullScreenOverlay
+          animation='bottom'
+          onClose={() => {
+            setUploadingPost(false);
+          }}
+        >
+          <div className='flex flex-col w-full h-full bg-vapormintBlack-300'>
+            <div className='flex flex-col items-center justify-center flex-grow text-2xl font-bold text-vapormintWhite-100'>
+              Uploading Post
+            </div>
+          </div>
+        </FullScreenOverlay>
+      )}
     </FullscreenContainer>
   );
 }

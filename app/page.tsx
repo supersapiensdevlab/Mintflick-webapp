@@ -19,28 +19,32 @@ export default function Home() {
   const walletProvider = useContext(walletProviderContext);
 
   const [checkingUser, setCheckingUser] = useState(false);
-  async function isUserAvaliable(walletAddress: string) {
-    console.log('Checking for User with Wallet:', walletAddress);
+
+  async function isUserAvaliable(walletAddress: string, email: string) {
+    console.log('Checking for User with email:', email);
     await axios({
       method: 'post',
-      url: `/api/user/getuser_by_wallet`,
+      url: `/api/user/getuser_by_email`,
       data: {
-        walletId: walletAddress,
+        evmWalletId: walletAddress,
+        email: email,
       },
     })
       .then((response: any) => {
         console.log('user data', response);
-        response.data.data === 'No user found'
-          ? router.push('/create_account')
-          : () => {
-              userState.updateUserData(response.data.data.user);
-              console.log('user data saved in state');
-              localStorage.setItem('authtoken', response.data.data.jwtToken);
-              console.log('auth token saved in storage');
-              localStorage.setItem('walletAddress', walletAddress);
-              console.log('wallet address saved in storage');
-              router.push('/home');
-            };
+        response.data.data === 'No user found' &&
+          router.push('/create_account');
+        userState.updateUserData(response.data.data.user);
+        console.log('user data saved in state');
+        localStorage.setItem('authtoken', response.data.data.jwtToken);
+        console.log('auth token saved in storage');
+        localStorage.setItem('walletAddress', walletAddress);
+        console.log('wallet address saved in storage');
+
+        localStorage.setItem('email', email);
+        console.log('email address saved in storage');
+
+        router.push('/home');
       })
       .catch(async function (error) {
         console.log(error);
@@ -66,6 +70,7 @@ export default function Home() {
 
   ///function for connecting evm wallet
   const onClickLogin = async () => {
+    setCheckingUser(true);
     const torus = new Torus({
       buttonPosition: 'top-right', // default: 'bottom-left'
     });
@@ -86,13 +91,15 @@ export default function Home() {
     torus.hideTorusButton();
     walletProvider.setChain('evm');
 
-    walletProvider.setPolygonProvider(torus);
+    await walletProvider.setPolygonProvider(torus);
     console.log(walletProvider);
+    const userInfo = await torus.getUserInfo();
+    console.log(userInfo);
 
     const web3 = new Web3(torus.provider);
     const address = (await web3.eth.getAccounts())[0];
     console.log(address);
-    address && isUserAvaliable(address);
+    address && isUserAvaliable(address, userInfo.email);
   };
   return (
     <FullscreenContainer className='flex flex-col items-start justify-start max-w-lg mx-auto overflow-hidden bg-vapormintBlack-300'>

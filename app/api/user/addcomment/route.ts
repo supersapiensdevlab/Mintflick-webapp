@@ -27,8 +27,7 @@ export async function POST(request: Request) {
       username: cuser.user.username,
       linkpreview_data: null,
     };
-
-    if (content.videoId) {
+     if (content.videoId) {
       const obj = user.videos.find(async (video: any, i: any) => {
         if (video.videoId == content.videoId) {
           if (user.videos[i].comments) {

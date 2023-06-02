@@ -10,23 +10,26 @@ import Menu from '../molecules/Menu';
 import FullScreenOverlay from '../molecules/FullScreenOverlay';
 import Comments from './Comments';
 import LikeButton from '../molecules/LikeButton';
+import { calculateTimeToToday } from '@/app/helper/timeFunctions';
+import moment from 'moment';
 
-type Props = {};
-
-export default function Post({}: Props) {
+export default function Post({ post }: any) {
   const [showComments, setShowComments] = useState(false);
   const [liked, setLiked] = useState(false);
-
+  console.log(post);
   const router = useRouter();
   return (
-    <div className='w-full p-4 space-y-2 select-none scroll-mt-16 snap-start'>
+    <div
+      key={post._id}
+      className='w-full p-4 space-y-2 select-none scroll-mt-16 snap-start'
+    >
       <div className='flex items-center justify-between w-full'>
         <div className='flex items-center gap-1'>
-          <Avatar kind='default' size='md' />
+          <Avatar src={post.profile_image} kind='default' size='md' />
           <div className='flex flex-col gap-[1px]'>
             <div className='flex items-center gap-1'>
               <span className='text-base font-semibold cursor-pointer text-vapormintWhite-100'>
-                username
+                {post.username}
               </span>
               <Tick />
               <span className='text-sm font-medium cursor-pointer text-vapormintMint-300'>
@@ -34,7 +37,7 @@ export default function Post({}: Props) {
               </span>
             </div>
             <span className='text-sm font-semibold text-vapormintBlack-200'>
-              1 hour ago
+              {calculateTimeToToday(post.content.time)}
             </span>
           </div>
         </div>
@@ -66,22 +69,22 @@ export default function Post({}: Props) {
           </div>
         </Menu>
       </div>
-      <div className='flex items-end w-full gap-2'>
-        <div className='flex flex-col flex-grow gap-2'>
-          <p className='text-base font-medium text-vapormintWhite-200'>
-            Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet
-            sint. Velit officia consequat duis enim velit mollit. Exercitation
-            veniam consequat sunt nostrud amet.
+      <div className='flex items-start w-full gap-2 '>
+        <div className='flex flex-col items-start flex-grow min-h-full gap-2'>
+          <p className='mb-auto text-base font-medium text-vapormintWhite-200'>
+            {post.content.announcement}
           </p>
-          <Image
-            className={`w-full    h-full object-cover rounded-lg border-[0.5px] border-vapormintBlack-200`}
-            src={social}
-            alt='loginImage'
-            width={100}
-            height={100}
-          />
+          {post.content.post_image && (
+            <Image
+              className={`w-full h-full object-cover rounded-lg border-[0.5px] border-vapormintBlack-200`}
+              src={post.content.post_image}
+              alt='loginImage'
+              width={100}
+              height={100}
+            />
+          )}
         </div>
-        <div className='flex flex-col items-center justify-end gap-3 w-fit'>
+        <div className='flex flex-col items-center justify-end gap-3 mt-auto w-fit '>
           <div className='flex flex-col items-center gap-[2px]'>
             <LikeButton
               liked={liked}
@@ -147,22 +150,25 @@ export default function Post({}: Props) {
           </svg>
         </div>
       </div>
-      <div className='flex gap-[2px] items-center'>
-        <NftCoin />{' '}
-        <span className='text-sm font-semibold text-vapormintBlack-200'>
-          Owned by
-        </span>
-        <Avatar kind='default' size='xs' />
-        <span className='text-sm font-semibold text-vapormintWhite-300'>
-          Arlene McCoy
-        </span>
-        <span
-          onClick={() => router.push(`/nft/1234`)}
-          className='ml-4 text-sm font-semibold cursor-pointer text-vapormintSuccess-500'
-        >
-          View NFT
-        </span>
-      </div>
+      {post.content.tokenId && (
+        <div className='flex gap-[2px] items-center'>
+          <NftCoin />{' '}
+          <span className='text-sm font-semibold text-vapormintBlack-200'>
+            Owned by
+          </span>
+          <Avatar kind='default' size='xs' />
+          <span className='text-sm font-semibold text-vapormintWhite-300'>
+            Arlene McCoy
+          </span>
+          <span
+            onClick={() => router.push(`/nft/1234`)}
+            className='ml-4 text-sm font-semibold cursor-pointer text-vapormintSuccess-500'
+          >
+            View NFT
+          </span>
+        </div>
+      )}
+
       {showComments && (
         <FullScreenOverlay
           animation='bottom'

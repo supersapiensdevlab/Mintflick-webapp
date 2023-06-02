@@ -19,16 +19,13 @@ export async function POST(request: Request) {
 
     if (email != "" && email != null && email != undefined) {
       let userName = email.substring(0, email.lastIndexOf("@"));
-
-      const userId = Str.random(8);
-
-      let unique = true;
+       const userId = Str.random(8);
+       let unique = true;
       let not_unique = "";
       let user_emailcheck = await findOne({
         email: email,
       });
-
-      if (user_emailcheck.user) {
+       if (user_emailcheck.user) {
         unique = false;
         not_unique = "Email";
       }
@@ -40,14 +37,12 @@ export async function POST(request: Request) {
         // not_unique = 'Username';
         userName = userName + userId;
       }
-
-      let user_idcheck = await findOne({ id: userId });
+       let user_idcheck = await findOne({ id: userId });
       if (user_idcheck.user) {
         unique = false;
         not_unique = "ID";
       }
-
-      if (unique) {
+       if (unique) {
         try {
           const AuthStr = "Bearer ".concat(LIVEPEER_CONFIG.livepeerkey);
 
