@@ -1,28 +1,30 @@
 import { Schema, model, models } from "mongoose";
 
-type chainData = {
-  id: number;
-  name: string;
-};
+// type chainData = {
+//   id: number;
+//   name: string;
+// };
 
-type metadata = {
-  name: string;
-  image: string;
-  description: string;
-  external_uri: string;
-  attributes: object;
-};
+// type metadata = {
+//   name: string;
+//   image: string;
+//   description: string;
+//   external_uri: string;
+//   attributes: object;
+// };
+
 interface IMint {
   contract_address: string;
   contract_type: string;
   token_id: number;
-  chain: chainData;
+  number_of_tokens: number;
+  chain: object;
   price: string;
   meta_data_url: string;
   is_in_auction: boolean;
   is_in_sale: boolean;
   token_owner: string;
-  meta_data: metadata;
+  meta_data: object;
   createdAt: string;
   updatedAt: string;
 }
@@ -47,6 +49,7 @@ const mintSchema = new Schema<IMint>({
   is_in_sale: { type: Boolean },
   token_owner: { type: String },
   meta_data: { type: Object },
+  number_of_tokens: { type: Number },
   createdAt: { type: String },
   updatedAt: { type: String },
 });

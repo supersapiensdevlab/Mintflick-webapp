@@ -22,14 +22,13 @@ export async function POST(request: Request) {
         });
       }
       if (success && user) {
-        if (evm_wallet_id && user?.evm_wallet_id) {
-          return NextResponse.json({
-            success: false,
-            status: "400",
-            message: "User already has an evm wallet address",
-            data: {},
-          });
-        } else {
+        if (evm_wallet_id && !user?.evm_wallet_id) {
+          // return NextResponse.json({
+          //   success: false,
+          //   status: "400",
+          //   message: "User already has an evm wallet address",
+          //   data: {},
+          // });
           user.evm_wallet_id = evm_wallet_id;
           await user.save();
         }

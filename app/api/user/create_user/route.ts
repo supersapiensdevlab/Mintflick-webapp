@@ -10,7 +10,7 @@ export async function POST(request: Request) {
   try {
     await conn();
     const req = await request.json();
-    const wallet_id: string = req.walletId;
+    // const wallet_id: string = req.walletId;
     const evm_wallet_id: string = req.evmWalletId;
     const name: string = req.name;
     const email: string = req.email;
@@ -93,7 +93,7 @@ export async function POST(request: Request) {
             id: userId,
             name: name,
             email: email,
-            wallet_id: wallet_id,
+            // wallet_id: wallet_id,
             evm_wallet_id: evm_wallet_id,
             livepeer_data: value.data,
             profile_image: profileImage,
@@ -137,11 +137,12 @@ export async function POST(request: Request) {
                 });
               }
               let user2;
-              if (wallet_id) {
-                user2 = await findOne({
-                  wallet_id: wallet_id,
-                });
-              } else if (evm_wallet_id) {
+              // if (wallet_id) {
+              //   user2 = await findOne({
+              //     wallet_id: wallet_id,
+              //   });
+              // } else
+              if (evm_wallet_id) {
                 user2 = await findOne({
                   evm_wallet_id: evm_wallet_id,
                 });
