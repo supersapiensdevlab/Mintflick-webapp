@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import Avatar from '../molecules/Avatar';
 import Tick from '../molecules/Tick';
 import Image from 'next/image';
@@ -12,12 +12,39 @@ import Comments from './Comments';
 import LikeButton from '../molecules/LikeButton';
 import { calculateTimeToToday } from '@/app/helper/timeFunctions';
 import moment from 'moment';
+import ReactPlayer from 'react-player';
+import { UserContext } from '@/contexts/userContext';
+import axios, { AxiosError, AxiosResponse } from 'axios';
 
 export default function Post({ post }: any) {
+  const userState = useContext(UserContext);
+
   const [showComments, setShowComments] = useState(false);
   const [liked, setLiked] = useState(false);
   console.log(post);
   const router = useRouter();
+  const handleFollowUser = async (toFollow: string): Promise<void> => {
+    const followData = {
+      following: toFollow,
+    };
+
+    await axios({
+      method: 'POST',
+      url: `${process.env.REACT_APP_SERVER_URL}/user/follow`,
+      headers: {
+        'content-type': 'application/json',
+        'auth-token': JSON.stringify(localStorage.getItem('authtoken')),
+      },
+      data: followData,
+    })
+      .then(async function (response: AxiosResponse) {
+        await userState.loadUser();
+        console.log('user followed');
+      })
+      .catch(function (error: AxiosError) {
+        console.log(error);
+      });
+  };
   return (
     <div
       key={post._id}
@@ -31,10 +58,17 @@ export default function Post({ post }: any) {
               <span className='text-base font-semibold cursor-pointer text-vapormintWhite-100'>
                 {post.username}
               </span>
-              <Tick />
-              <span className='text-sm font-medium cursor-pointer text-vapormintMint-300'>
-                Follow
-              </span>
+
+              {/* <Tick /> */}
+              {!userState.userData?.followee_count.includes(post.username) &&
+                userState.userData.username !== post.username && (
+                  <span
+                    onClick={() => handleFollowUser(post.username)}
+                    className='text-sm font-medium cursor-pointer text-vapormintMint-300'
+                  >
+                    Follow
+                  </span>
+                )}
             </div>
             <span className='text-sm font-semibold text-vapormintBlack-200'>
               {calculateTimeToToday(post.content.time)}
@@ -71,9 +105,14 @@ export default function Post({ post }: any) {
       </div>
       <div className='flex items-start w-full gap-2 '>
         <div className='flex flex-col items-start flex-grow min-h-full gap-2'>
-          <p className='mb-auto text-base font-medium text-vapormintWhite-200'>
+          <p className='mb-auto mr-3 text-base font-medium text-justify text-vapormintWhite-200'>
             {post.content.announcement}
-          </p>
+          </p>{' '}
+          {post.content_type === 'poll' && (
+            <p className='mb-auto mr-3 text-base font-medium text-justify text-vapormintWhite-200'>
+              {post.content.question}
+            </p>
+          )}
           {post.content.post_image && (
             <Image
               className={`w-full h-full object-cover rounded-lg border-[0.5px] border-vapormintBlack-200`}
@@ -82,6 +121,49 @@ export default function Post({ post }: any) {
               width={100}
               height={100}
             />
+          )}
+          {post.content.post_video && (
+            <div className='w-full h-full object-cover rounded-lg border-[0.5px] border-vapormintBlack-200 aspect-video  '>
+              <ReactPlayer
+                className='w-full'
+                width='100%'
+                height={'100%'}
+                playing={true}
+                loop
+                muted={true}
+                volume={0.5}
+                url={post.content.post_video}
+                controls={true}
+              />
+            </div>
+          )}
+          {post.content_type === 'poll' && (
+            <div className='w-full'>
+              {post.content.options?.map((option: string, i: number) => {
+                return (
+                  <div
+                    key={i}
+                    // onClick={() => {
+                    //   if (
+                    //     !pollVoted &&
+                    //     !votesArr.includes(
+                    //       State.database.userData?.data?.user.username
+                    //     )
+                    //   ) {
+                    //     handlePollVote(i);
+                    //   }
+                    // }}
+                  >
+                    <h1 className='cursor-pointer p-2 m-2 text-base font-medium text-justify text-vapormintWhite-200 rounded-lg border-[0.5px] border-vapormintWhite-200/40'>
+                      {option}
+                    </h1>
+                  </div>
+                );
+              })}
+              {/* <div className='space-x-2 text-sm text-brand4'>
+                <span>{pollVotes}&nbsp; Votes</span>
+              </div> */}
+            </div>
           )}
         </div>
         <div className='flex flex-col items-center justify-end gap-3 mt-auto w-fit '>

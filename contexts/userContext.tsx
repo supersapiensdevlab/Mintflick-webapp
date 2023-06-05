@@ -9,10 +9,12 @@ type Props = {
 type StateProps = {
   userData: any;
   updateUserData: Function;
+  loadUser: Function;
 };
 export const UserContext = createContext<StateProps>({
   userData: {},
   updateUserData: (data: any) => {},
+  loadUser: (data: any) => {},
 });
 export default function UserContextContainer({ children }: Props) {
   const [userData, setUserData] = useState({});
@@ -22,6 +24,23 @@ export default function UserContextContainer({ children }: Props) {
       ...data,
     }));
   };
+
+  async function loadUser() {
+    await axios({
+      method: 'get',
+      url: `/api/user/getuser_by_email`,
+      headers: {
+        'auth-token': JSON.stringify(localStorage.getItem('authtoken')),
+      },
+    })
+      .then((response) => {
+        console.log(response);
+        updateUserData(response.data.data.user);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
 
   async function isUserAvaliable(email: string) {
     console.log('Checking for User with email:', email);
@@ -53,8 +72,8 @@ export default function UserContextContainer({ children }: Props) {
   }, []);
 
   return (
-    <UserContext.Provider value={{ userData, updateUserData }}>
-      {children}
+    <UserContext.Provider value={{ userData, updateUserData, loadUser }}>
+      {userData ? children : <>loading</>}
     </UserContext.Provider>
   );
 }

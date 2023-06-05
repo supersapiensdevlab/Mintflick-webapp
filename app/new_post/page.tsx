@@ -5,12 +5,16 @@ import Header from '@/components/molecules/Header';
 import ImageInput from '@/components/molecules/ImageInput';
 import TextareaInput from '@/components/molecules/TextareaInput';
 import VideoInput from '@/components/molecules/VideoInput';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import PollInput from './PollInput';
 import axios from 'axios';
 import CustomInput from '@/components/molecules/CustomInput';
 import { UserContext } from '@/contexts/userContext';
 import FullScreenOverlay from '@/components/molecules/FullScreenOverlay';
+import { sanitizeFilename } from '../helper/sanitizeFile';
+import { storeWithProgress } from '../helper/uploadHelper';
+import { toastContext } from '@/contexts/toastContext';
+import { useRouter } from 'next/navigation';
 
 type Props = {};
 
@@ -25,33 +29,96 @@ export default function page({}: Props) {
   const [uploadingPost, setUploadingPost] = useState(false);
 
   const userState: any = useContext(UserContext);
+  const toastState = useContext(toastContext);
+  const router = useRouter();
 
-  async function uploadPost() {
-    setUploadingPost(true);
+  async function uploadToServer(hash?: string) {
     const data = {
       announcement: description,
+      announcementHash: hash,
+      postImage: image,
+      postVideo: video,
       tagged: tagged,
+      id: userState.userData.id,
     };
     axios
       .post(`/api/user/announcement`, data, {
         headers: {
           'content-type': 'application/json',
-          'auth-token': JSON.stringify(localStorage.getItem('authtoken')),
+          'auth-token': localStorage.getItem('authtoken'),
         },
       })
       .then(async () => {
-        clearData();
+        router.push('/home');
+        toastState.showToast([
+          { message: 'Post uploaded successfully!', kind: 'success' },
+        ]);
+        setUploadingPost(false);
       })
       .catch((err) => {
         console.log(err);
+        setUploadingPost(false);
+        toastState.showToast([{ message: 'Please try again!', kind: 'error' }]);
       });
   }
-  const clearData = () => {
-    setDescription('');
-    setImage(null);
-    setVideo(null);
-  };
 
+  async function Post() {
+    setUploadingPost(true);
+
+    const file = image ? image : video ? video : null;
+    file
+      ? storeWithProgress([file])
+          .then((hash) => {
+            uploadToServer(hash);
+          })
+          .catch((e) => console.log(e))
+      : uploadToServer();
+  }
+  const UploadPoll = () => {
+    if (question) {
+      let data = {
+        question: question,
+        options: options,
+        id: userState.userData.id,
+      };
+      if (options.length > 1) {
+        setUploadingPost(true);
+        axios
+          .post(`/api/user/addpoll`, data, {
+            headers: {
+              'content-type': 'application/json',
+              'auth-token': localStorage.getItem('authtoken'),
+            },
+          })
+          .then(async (res) => {
+            router.push('/home');
+            toastState.showToast([
+              {
+                message: 'Your poll uploaded successfully!',
+                kind: 'success',
+              },
+            ]);
+          })
+          .catch((err) => {
+            toastState.showToast([
+              { message: 'Please try again!', kind: 'error' },
+            ]);
+            setUploadingPost(false);
+          });
+      } else {
+        toastState.showToast([
+          {
+            message: 'Please put at-least 2 options!',
+            kind: 'error',
+          },
+        ]);
+      }
+    } else {
+      toastState.showToast([
+        { message: 'Please type a question!', kind: 'error' },
+      ]);
+    }
+  };
   return (
     <FullscreenContainer className='select-none  border-x-[1px] border-vapormintBlack-200/60 relative flex flex-col items-start max-w-lg pt-14 mx-auto overflow-hidden bg-vapormintBlack-300'>
       <Header text='Back' />
@@ -121,7 +188,18 @@ export default function page({}: Props) {
         </div>
       )}
       <Button
-        handleClick={() => description && uploadPost()}
+        // handleClick={() => description && uploadPost()}
+        handleClick={() => {
+          if (activeTab === 1) {
+            description
+              ? Post()
+              : toastState.showToast([
+                  { message: 'Please add description!', kind: 'error' },
+                ]);
+          } else {
+            activeTab === 2 && UploadPoll();
+          }
+        }}
         kind='mint'
         size='small'
         type='solid'

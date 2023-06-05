@@ -30,10 +30,9 @@ export default function Home() {
         email: email,
       },
     })
-      .then((response: any) => {
+      .then(async (response: any) => {
         console.log('user data', response);
-        response.data.data === 'No user found' &&
-          router.push('/create_account');
+
         userState.updateUserData(response.data.data.user);
         console.log('user data saved in state');
         localStorage.setItem('authtoken', response.data.data.jwtToken);
@@ -43,8 +42,9 @@ export default function Home() {
 
         localStorage.setItem('email', email);
         console.log('email address saved in storage');
-
-        router.push('/home');
+        response.data.status === 404
+          ? await router.push('/create_account')
+          : router.push('/home');
       })
       .catch(async function (error) {
         console.log(error);

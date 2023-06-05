@@ -16,6 +16,7 @@ import { toastContext } from '@/contexts/toastContext';
 import axios from 'axios';
 import { useForm } from '@mantine/form';
 import CheckBox from '@/components/molecules/CheckBox';
+import { useRouter } from 'next/navigation';
 
 const SplashScreenData = [
   {
@@ -60,6 +61,9 @@ const SplashScreenData = [
 ];
 
 export default function CreateAccount() {
+  const userState = useContext(UserContext);
+  const router = useRouter();
+
   const [userInfo, setUserInfo] = useState<any>({});
   const [usernameError, setUsernameError] = useState('');
   const toastState = useContext(toastContext);
@@ -124,6 +128,7 @@ export default function CreateAccount() {
   }
 
   async function createUser() {
+    setStep(4);
     await axios({
       method: 'post',
       url: `/api/user/create_user`,
@@ -135,10 +140,21 @@ export default function CreateAccount() {
       },
     })
       .then((response: any) => {
-        console.log(response);
+        console.log('user data', response);
+        response.data.status === 'error' && setShowOnboarding(false);
+        response.data.status === 'error' && setStep(3);
+
+        userState.updateUserData(response.data.data.user);
+        console.log('user data saved in state');
+        localStorage.setItem('authtoken', response.data.data.jwtToken);
+        console.log('auth token saved in storage');
+        console.log('email address saved in storage');
+        response.data.status === 'success' && router.push('/home');
       })
       .catch(async function (error) {
         console.log(error);
+        setShowOnboarding(false);
+        setStep(3);
       });
   }
   const validateUsername = (value: string) => {
@@ -233,7 +249,7 @@ export default function CreateAccount() {
           <div className='flex flex-col w-full h-full bg-vapormintBlack-300'>
             {step === 4 ? (
               <div className='flex flex-col items-center justify-center flex-grow text-2xl font-bold text-vapormintWhite-100'>
-                creating your account...
+                Creating your account
               </div>
             ) : (
               <div className='flex flex-col items-center justify-start flex-grow'>
@@ -257,20 +273,22 @@ export default function CreateAccount() {
                 </div>
               </div>
             )}
-            <Button
-              handleClick={() => {
-                if (step === 4) {
-                  createUser();
-                } else {
-                  setStep(step + 1);
-                }
-              }}
-              kind='success'
-              type={step === 3 ? 'solid' : 'outlined'}
-              size='base'
-            >
-              {step === 3 ? 'Create account' : 'Next'}
-            </Button>
+            {step !== 4 && (
+              <Button
+                handleClick={() => {
+                  if (step === 3) {
+                    createUser();
+                  } else {
+                    setStep(step + 1);
+                  }
+                }}
+                kind='success'
+                type={step === 3 ? 'solid' : 'outlined'}
+                size='base'
+              >
+                {step === 3 ? 'Create account' : 'Next'}
+              </Button>
+            )}
           </div>
         </FullScreenOverlay>
       )}

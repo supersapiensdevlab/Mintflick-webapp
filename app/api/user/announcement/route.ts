@@ -46,11 +46,11 @@ export async function POST(request: Request) {
 
     if (post_video) {
       postVid =
-        "https://nftstorage.link/ipfs/" + uploadHash + "/" + post_video.name;
+        "https://nftstorage.link/ipfs/" + uploadHash + "/" + 'video';
     }
     if (post_image) {
       postImg =
-        "https://nftstorage.link/ipfs/" + uploadHash + "/" + post_image.name;
+        "https://nftstorage.link/ipfs/" + uploadHash + "/" + 'image';
     }
     const postId = makeid(7);
     const announcementData = {
