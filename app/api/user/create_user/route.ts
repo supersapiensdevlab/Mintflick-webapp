@@ -19,7 +19,6 @@ export async function POST(request: Request) {
 
     if (email != "" && email != null && email != undefined) {
       let userName = email.substring(0, email.lastIndexOf("@"));
-
       const userId = Str.random(8);
 
       let unique = true;
@@ -105,37 +104,42 @@ export async function POST(request: Request) {
             },
           });
 
-          newUser
+          var loginData = {};
+          await newUser
             .save()
             .then(async () => {
-              const data = {
-                user_id: newUser._id,
-              };
-              const secret = new TextEncoder().encode(
-                MIDDLEWARE_CONFIG.JWT_SECRET
-              );
-              const alg = "HS256";
+              // const data = {
+              //   user_id: newUser._id,
+              // };
+              // const secret = new TextEncoder().encode(
+              //   MIDDLEWARE_CONFIG.JWT_SECRET
+              // );
+              // const alg = "HS256";
 
-              const authtoken = await new jose.SignJWT(data)
-                .setProtectedHeader({ alg })
+              // const authtoken = await new jose.SignJWT(data)
+              //   .setProtectedHeader({ alg })
 
-                .sign(secret);
-              let loginData = {
-                user: newUser,
-                jwtToken: authtoken,
-              };
+              //   .sign(secret);
+              // // let loginData = {
+              // //   user: newUser,
+              // //   jwtToken: authtoken,
+              // // };
 
-              const updateRererals = await findOneAndUpdate(
-                { username: referrer },
-                { $inc: { "refer.unverified_referrals": 1 } },
-                { upsert: true }
-              );
-              if (!updateRererals.success) {
-                return NextResponse.json({
-                  status: "error",
-                  message: updateRererals.error,
-                });
+              if (referrer) {
+                const updateRererals = await findOneAndUpdate(
+                  { username: referrer },
+                  { $inc: { "refer.unverified_referrals": 1 } },
+                  { upsert: true }
+                );
+
+                if (!updateRererals.success) {
+                  return NextResponse.json({
+                    status: "error",
+                    message: updateRererals.error,
+                  });
+                }
               }
+
               let user2;
               // if (wallet_id) {
               //   user2 = await findOne({
@@ -166,22 +170,21 @@ export async function POST(request: Request) {
                   .setProtectedHeader({ alg })
 
                   .sign(secret);
-                let loginData = {
+
+                loginData = {
                   user: user2.user,
                   jwtToken: authtoken,
                 };
-                return NextResponse.json({
-                  status: "success",
-                  data: loginData,
-                });
               }
             })
             .catch((err: any) => {
-              console.log(err);
               return NextResponse.json({ status: "error", data: err });
             });
+          return NextResponse.json({
+            status: "success",
+            data: loginData,
+          });
         } catch (err) {
-          console.log(err);
           return NextResponse.json({ status: "error", data: err });
         }
       } else {
