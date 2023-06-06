@@ -1,4 +1,4 @@
-import { useElementSize, useHover } from '@mantine/hooks';
+import { useElementSize, useHover, useWindowScroll } from '@mantine/hooks';
 import React, { ReactNode, useEffect, useRef, useState } from 'react';
 
 type Props = {
@@ -17,6 +17,8 @@ type Props = {
 };
 
 function Fab(props: Props) {
+  const [scroll, scrollTo] = useWindowScroll();
+
   const [showText, setShowText] = useState(true);
   const ref1: React.MutableRefObject<HTMLDivElement> = useRef();
   const { hovered, ref } = useHover();
@@ -31,6 +33,7 @@ function Fab(props: Props) {
       setShowText(false);
     };
   }, []);
+
   return (
     <div
       ref={ref}

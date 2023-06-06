@@ -2,11 +2,13 @@ import Image from 'next/image';
 import React, { useContext } from 'react';
 import social from '@/public/social.webp';
 import { walletProviderContext } from '@/contexts/walletProviderContext';
+import { useRouter } from 'next/navigation';
 
 type Props = {};
 
 export default function Settings({}: Props) {
   const walletProvider = useContext(walletProviderContext);
+  const router = useRouter();
 
   return (
     <div className='w-full'>
@@ -45,6 +47,7 @@ export default function Settings({}: Props) {
         onClick={() => {
           localStorage.removeItem('email');
           walletProvider.polygonProvider.logout();
+          router.push('/');
         }}
         className='p-4 text-lg font-bold cursor-pointer text-vapormintError-500'
       >

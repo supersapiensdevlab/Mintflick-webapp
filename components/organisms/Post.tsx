@@ -21,6 +21,11 @@ export default function Post({ post }: any) {
 
   const [showComments, setShowComments] = useState(false);
   const [liked, setLiked] = useState(false);
+  const [likesCount, setLikesCount] = useState(post.content.likes?.length);
+  const [commentCount, setCommentCount] = useState(
+    post.content.comments?.length
+  );
+
   console.log(post);
   const router = useRouter();
   const handleFollowUser = async (toFollow: string): Promise<void> => {
@@ -45,6 +50,67 @@ export default function Post({ post }: any) {
         console.log(error);
       });
   };
+
+  const handlePostLikes = () => {
+    setLiked((prev) => !prev);
+    setLikesCount(liked ? likesCount - 1 : likesCount + 1);
+    const likeData = {
+      reactusername: `${userState.userData.username}`,
+      postusername: `${post.username}`,
+      postId: `${post.content.postId}`,
+      image: post.content.post_image ? post.content.post_image : null,
+    };
+    axios({
+      method: 'POST',
+      url: `/api/user/postreactions`,
+      headers: {
+        'content-type': 'application/json',
+        'auth-token': localStorage.getItem('authtoken'),
+      },
+      data: likeData,
+    })
+      .then(function (response) {
+        if (response) {
+          console.log(response);
+        } else {
+          console.log('error');
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+  const handlePollLikes = () => {
+    setLiked((prev) => !prev);
+    setLikesCount(liked ? likesCount - 1 : likesCount + 1);
+
+    const likeData = {
+      reactusername: `${userState.userData.username}`,
+      pollusername: `${post.username}`,
+      pollId: `${post.content.postId}`,
+    };
+    axios({
+      method: 'POST',
+      url: `/api/user/pollreactions`,
+      headers: {
+        'content-type': 'application/json',
+        'auth-token': localStorage.getItem('authtoken'),
+      },
+      data: likeData,
+    })
+      .then(function (response) {
+        if (response) {
+          console.log(response);
+        } else {
+          console.log('error');
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
   return (
     <div
       key={post._id}
@@ -60,7 +126,7 @@ export default function Post({ post }: any) {
               </span>
 
               {/* <Tick /> */}
-              {!userState.userData?.followee_count.includes(post.username) &&
+              {!userState.userData?.followee_count?.includes(post.username) &&
                 userState.userData.username !== post.username && (
                   <span
                     onClick={() => handleFollowUser(post.username)}
@@ -169,12 +235,19 @@ export default function Post({ post }: any) {
         <div className='flex flex-col items-center justify-end gap-3 mt-auto w-fit '>
           <div className='flex flex-col items-center gap-[2px]'>
             <LikeButton
-              liked={liked}
-              onClick={() => setLiked((prev) => !prev)}
+              liked={
+                post.content.likes?.includes(userState.userData.username) ||
+                liked
+              }
+              onClick={() =>
+                post.content_type === 'poll'
+                  ? handlePollLikes()
+                  : handlePostLikes()
+              }
             />
 
             <span className='text-xs font-semibold text-vapormintWhite-300'>
-              999K
+              {likesCount}
             </span>
           </div>
           {/* comments */}
@@ -197,7 +270,7 @@ export default function Post({ post }: any) {
               />
             </svg>
             <span className='text-xs font-semibold text-vapormintWhite-300'>
-              9K
+              {commentCount}
             </span>
           </div>
 
