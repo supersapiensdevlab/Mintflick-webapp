@@ -27,17 +27,6 @@ export async function POST(request: Request) {
     const attributes: Array<object> = req.attributes;
     const external_uri: string = req.external_uri;
 
-    console.log(
-      !wallet_address,
-      !contract_address,
-      !token_owner,
-      !image_uri,
-      !name,
-      !description,
-      !attributes,
-      !external_uri
-    );
-
     if (
       !wallet_address ||
       !contract_address ||
@@ -67,7 +56,7 @@ export async function POST(request: Request) {
     };
 
     const { success, nftData, error } = await mintNft(mintData);
-    console.log(nftData);
+
     if (!success) {
       return NextResponse.json({
         success: false,

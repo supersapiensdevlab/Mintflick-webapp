@@ -5,12 +5,28 @@ import { makeid } from "@/utils/makeId/makeId";
 import { limitCheck } from "@/utils/user/user";
 import { updateOne } from "@/utils/user/user";
 import { Feed } from "@/utils/models/feed.model";
+import axios from "axios";
+import { GAMESTOWEB3_CONGIG } from "@/services/config.service";
+import { mintNft } from "@/utils/marketplace/gamestoweb3/erc721";
+import { Nft } from "@/utils/models/nft.model";
+
+type IData = {
+  wallet_address: string;
+  contract_address: string;
+  token_owner: string;
+  image_uri: string;
+  name: string;
+  description: string;
+  attributes: Array<object>;
+  external_uri: string;
+};
 
 export async function POST(request: Request) {
   try {
     await conn();
     const req = await request.json();
     const id: string = req.id;
+    const isNft: boolean = req.isNft;
     let tagged = req.tagged;
     const announcement: string = req.announcement;
     let linkData = {};
@@ -59,6 +75,50 @@ export async function POST(request: Request) {
       postImg =
         "https://nftstorage.link/ipfs/" + uploadHash + "/" + post_image.name;
     }
+
+    try {
+      if (isNft) {
+        const mintData: IData = {
+          wallet_address: GAMESTOWEB3_CONGIG.creatorWallet,
+          contract_address: GAMESTOWEB3_CONGIG.erc721Contract,
+          token_owner: user.evm_wallet_address,
+          image_uri: postImg ? postImg : postVid || "",
+          name: "",
+          description: announcement,
+          attributes: [],
+          external_uri: "https://mintflick.app",
+        };
+        // await axios
+        //   .post("/api/marketplace/erc721/mint", nftData)
+        //   .then((response: any) => {
+        //     if (!response?.success) {
+        //       return NextResponse.json({
+        //         status: "error",
+        //         message: "Error while minting nft in post route",
+        //       });
+        //     }
+        //     console.log("nft minted successfully");
+        //   })
+        //   .catch((error) => {
+        //     return NextResponse.json({ status: "error", message: error });
+        //   });
+        const { success, nftData, error } = await mintNft(mintData);
+        if (!success) {
+          return NextResponse.json({
+            success: false,
+            message: error,
+            data: {},
+          });
+        }
+
+        // put logic to save nft to database
+        const nft = new Nft(nftData);
+        await nft.save();
+      }
+    } catch (error) {
+      return NextResponse.json({ status: "error", message: error });
+    }
+
     const postId = makeid(7);
     const announcementData = {
       postId: postId,
