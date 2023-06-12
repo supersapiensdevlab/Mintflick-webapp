@@ -20,14 +20,23 @@ export default function Post({ post }: any) {
   const userState = useContext(UserContext);
 
   const [showComments, setShowComments] = useState(false);
-  const [liked, setLiked] = useState(false);
+  const [liked, setLiked] = useState(
+    post.content.likes?.includes(userState.userData.username)
+  );
   const [likesCount, setLikesCount] = useState(post.content.likes?.length);
   const [commentCount, setCommentCount] = useState(
     post.content.comments?.length
   );
 
+  const [pollVoted, setPollVoted] = useState(
+    post.content.votes.includes(userState.userData.username)
+  );
+  const [pollVotes, setPollVotes] = useState(post.content.votes);
+  const [selectedOption, setSelectedOption] = useState();
+
   console.log(post);
   const router = useRouter();
+
   const handleFollowUser = async (toFollow: string): Promise<void> => {
     const followData = {
       following: toFollow,
@@ -52,7 +61,7 @@ export default function Post({ post }: any) {
   };
 
   const handlePostLikes = () => {
-    setLiked((prev) => !prev);
+    setLiked((prev: Boolean) => !prev);
     setLikesCount(liked ? likesCount - 1 : likesCount + 1);
     const likeData = {
       reactusername: `${userState.userData.username}`,
@@ -82,7 +91,7 @@ export default function Post({ post }: any) {
   };
 
   const handlePollLikes = () => {
-    setLiked((prev) => !prev);
+    setLiked((prev: Boolean) => !prev);
     setLikesCount(liked ? likesCount - 1 : likesCount + 1);
 
     const likeData = {
@@ -111,11 +120,58 @@ export default function Post({ post }: any) {
       });
   };
 
+  const handlePollVote = (choice: number) => {
+    if (!pollVoted) {
+      setPollVotes(pollVotes + 1);
+      setPollVotes([...pollVotes, userState.userData.username]);
+      pollOptions[choice].selectedBy.push(
+        State.database.userData.data?.user?.username
+      );
+    }
+    // if (trackLikes.includes(user.username)) {
+    //   let newArr = trackLikes.filter((item, index) => item != user.username);
+    //   setTrackLikes(newArr);
+    //   set
+    // } else {
+    //   let temp = trackLikes;
+    //   temp.push(user.username);
+    //   setTrackLikes(temp);
+    //   console.log(trackLikes, 'in else');
+    // }
+
+    const voteData = {
+      reactusername: `${userState.userData.username}`,
+      pollusername: `${post.username}`,
+      pollId: `${post.content.pollId}`,
+      voted: `${choice}`,
+    };
+    axios({
+      method: 'POST',
+      url: `${process.env.REACT_APP_SERVER_URL}/user/pollVote`,
+      headers: {
+        'content-type': 'application/json',
+        'auth-token': JSON.stringify(localStorage.getItem('authtoken')),
+      },
+      data: voteData,
+    })
+      .then(async function (response) {
+        setPollVoted(true);
+        setPollChoice(choice);
+        if (response) {
+          ////console.log(response);
+          // await loadFeed();
+        } else {
+          console.log('error');
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
   return (
     <div
       key={post._id}
-      className='w-full p-4 space-y-2 select-none scroll-mt-16 snap-start'
-    >
+      className='w-full p-4 space-y-2 select-none scroll-mt-16 snap-start'>
       <div className='flex items-center justify-between w-full'>
         <div className='flex items-center gap-1'>
           <Avatar src={post.profile_image} kind='default' size='md' />
@@ -130,8 +186,7 @@ export default function Post({ post }: any) {
                 userState.userData.username !== post.username && (
                   <span
                     onClick={() => handleFollowUser(post.username)}
-                    className='text-sm font-medium cursor-pointer text-vapormintMint-300'
-                  >
+                    className='text-sm font-medium cursor-pointer text-vapormintMint-300'>
                     Follow
                   </span>
                 )}
@@ -149,16 +204,14 @@ export default function Post({ post }: any) {
               viewBox='0 0 24 24'
               strokeWidth='1.5'
               stroke='currentColor'
-              className='w-6 h-6 cursor-pointer text-vapormintWhite-100'
-            >
+              className='w-6 h-6 cursor-pointer text-vapormintWhite-100'>
               <path
                 strokeLinecap='round'
                 strokeLinejoin='round'
                 d='M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z'
               />
             </svg>
-          }
-        >
+          }>
           <div className='flex gap-1 flex-col items-start bg-vapormintBlack-300 rounded-lg border-[1px] border-vapormintBlack-200 p-2'>
             <span className='p-2 text-base font-semibold cursor-pointer text-vapormintWhite-100'>
               Report
@@ -235,10 +288,7 @@ export default function Post({ post }: any) {
         <div className='flex flex-col items-center justify-end gap-3 mt-auto w-fit '>
           <div className='flex flex-col items-center gap-[2px]'>
             <LikeButton
-              liked={
-                post.content.likes?.includes(userState.userData.username) ||
-                liked
-              }
+              liked={liked}
               onClick={() =>
                 post.content_type === 'poll'
                   ? handlePollLikes()
@@ -253,16 +303,14 @@ export default function Post({ post }: any) {
           {/* comments */}
           <div
             onClick={() => setShowComments(true)}
-            className='flex flex-col items-center gap-[2px] cursor-pointer'
-          >
+            className='flex flex-col items-center gap-[2px] cursor-pointer'>
             <svg
               xmlns='http://www.w3.org/2000/svg'
               fill='none'
               viewBox='0 0 24 24'
               strokeWidth='1.5'
               stroke='currentColor'
-              className='w-6 h-6 text-vapormintBlack-100'
-            >
+              className='w-6 h-6 text-vapormintBlack-100'>
               <path
                 strokeLinecap='round'
                 strokeLinejoin='round'
@@ -295,8 +343,7 @@ export default function Post({ post }: any) {
             viewBox='0 0 24 24'
             strokeWidth='1.5'
             stroke='currentColor'
-            className='w-6 h-6 text-vapormintBlack-100'
-          >
+            className='w-6 h-6 text-vapormintBlack-100'>
             <path
               strokeLinecap='round'
               strokeLinejoin='round'
@@ -317,8 +364,7 @@ export default function Post({ post }: any) {
           </span>
           <span
             onClick={() => router.push(`/nft/1234`)}
-            className='ml-4 text-sm font-semibold cursor-pointer text-vapormintSuccess-500'
-          >
+            className='ml-4 text-sm font-semibold cursor-pointer text-vapormintSuccess-500'>
             View NFT
           </span>
         </div>
@@ -328,8 +374,7 @@ export default function Post({ post }: any) {
         <FullScreenOverlay
           animation='bottom'
           title={'Comments'}
-          onClose={() => setShowComments(false)}
-        >
+          onClose={() => setShowComments(false)}>
           <Comments />
         </FullScreenOverlay>
       )}
