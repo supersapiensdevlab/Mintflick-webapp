@@ -4,11 +4,26 @@ import { findOne, updateOne } from "@/utils/user/user";
 import { limitCheck } from "@/utils/user/user";
 import path from "path";
 import fs from "fs-extra";
+import { GAMESTOWEB3_CONGIG } from "@/services/config.service";
+import { mintNft } from "@/utils/marketplace/gamestoweb3/erc721";
+import { Nft } from "@/utils/models/nft.model";
+
+type IData = {
+  wallet_address: string;
+  contract_address: string;
+  token_owner: string;
+  image_uri: string;
+  name: string;
+  description: string;
+  attributes: Array<object>;
+  external_uri: string;
+};
 
 export async function POST(request: Request) {
   try {
     await conn();
     const req = await request.json();
+    const isNft: boolean = req.isNft;
     const {
       userName,
       userImage,
@@ -93,6 +108,32 @@ export async function POST(request: Request) {
               videoHashLink != null &&
               meta_url != null
             ) {
+              try {
+                if (isNft) {
+                  const mintData: IData = {
+                    wallet_address: GAMESTOWEB3_CONGIG.creatorWallet,
+                    contract_address: GAMESTOWEB3_CONGIG.erc721Contract,
+                    token_owner: user.wallet_address,
+                    image_uri: videoHashLink || "",
+                    name: videoName || "",
+                    description: description || "",
+                    attributes: [],
+                    external_uri: albumhashLink || "",
+                  };
+                  const { success, nftData, error } = await mintNft(mintData);
+                  if (!success) {
+                    return NextResponse.json({
+                      success: false,
+                      message: error,
+                      data: {},
+                    });
+                  }
+                  const nft = new Nft(nftData);
+                  await nft.save();
+                }
+              } catch (error) {
+                return NextResponse.json({ status: "error", message: error });
+              }
               //   saveVideoToDB(
               //     user.username,
               //     userImage,

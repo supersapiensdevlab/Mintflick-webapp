@@ -75,6 +75,7 @@ export async function POST(request: Request) {
       data: nftData,
     });
   } catch (err) {
+    console.log(err, "error catch");
     return NextResponse.json({
       success: false,
       message: "Error while minting nft",

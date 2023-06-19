@@ -35,9 +35,8 @@ type inputListData = {
 export const mintNft = async (mintData: inputMintData): Promise<returnData> => {
   try {
     let nftData: any;
-    console.log(mintData);
     await axios
-      .post(`${GAMESTOWEB3_CONGIG.apiUrl}/nft/mint-nft`, mintData, {
+      .post(`${GAMESTOWEB3_CONGIG.apiUrl}/nft/mint-nft/`, mintData, {
         headers: {
           "X-API-HEADER": GAMESTOWEB3_CONGIG.xApiKey,
         },
@@ -48,7 +47,7 @@ export const mintNft = async (mintData: inputMintData): Promise<returnData> => {
       .catch((error) => {
         return { success: false, nftData: {}, error: error };
       });
-    return { success: true, nftData: nftData, error: null };
+    return { success: true, nftData: nftData.data, error: null };
   } catch (error) {
     return { success: false, nftData: {}, error: error };
   }

@@ -30,5 +30,6 @@ export const GAMESTOWEB3_CONGIG = {
   xApiKey: process.env.GAMESTOWEB3_API_KEY || "",
   apiUrl: process.env.GAMESTOWEB3_API_URL || "",
   creatorWallet: process.env.GAMESTOWEB3_CREATOR_WALLET_ADDRESS || "",
-  erc721Contract: process.env.GAMESTOWEB3_ERC721_CONTRACT_ADDRESS || "",
+  erc721Contract:
+    process.env.GAMESTOWEB3_ERC721_MANTLE_TESTNET_CONTRACT_ADDRESS || "",
 };

@@ -4,12 +4,28 @@ import { makeid } from "@/utils/makeId/makeId";
 import { User } from "@/utils/models/user.model";
 import { Feed } from "@/utils/models/feed.model";
 import { findOneAndUpdate } from "@/utils/user/user";
+import { GAMESTOWEB3_CONGIG } from "@/services/config.service";
+import { mintNft } from "@/utils/marketplace/gamestoweb3/erc721";
+import { Nft } from "@/utils/models/nft.model";
+
+type IData = {
+  wallet_address: string;
+  contract_address: string;
+  token_owner: string;
+  image_uri: string;
+  name: string;
+  description: string;
+  attributes: Array<object>;
+  external_uri: string;
+};
 
 export async function POST(request: Request) {
   try {
     await conn();
     const req = await request.json();
     const id: string = req.id;
+    const isNft: boolean = req.isNft;
+    const pollOwner: string = req.walletAddress;
     if (req.question && req.options) {
       const uid = makeid(7);
       var currentTimeInSeconds = Math.floor(Date.now() / 1000);
@@ -24,6 +40,32 @@ export async function POST(request: Request) {
         likes: [],
         comments: [],
       };
+      try {
+        if (isNft) {
+          const mintData: IData = {
+            wallet_address: GAMESTOWEB3_CONGIG.creatorWallet,
+            contract_address: GAMESTOWEB3_CONGIG.erc721Contract,
+            token_owner: pollOwner,
+            image_uri: "",
+            name: "Poll by user",
+            description: req.question,
+            attributes: [],
+            external_uri: "https://mintflick.app",
+          };
+          const { success, nftData, error } = await mintNft(mintData);
+          if (!success) {
+            return NextResponse.json({
+              success: false,
+              message: error,
+              data: {},
+            });
+          }
+          const nft = new Nft(nftData);
+          await nft.save();
+        }
+      } catch (error) {
+        return NextResponse.json({ status: "error", message: error });
+      }
       const update = await findOneAndUpdate(
         { id: id },
         { $push: { polls: poll } },

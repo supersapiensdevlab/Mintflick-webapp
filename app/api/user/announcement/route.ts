@@ -88,20 +88,6 @@ export async function POST(request: Request) {
           attributes: [],
           external_uri: "https://mintflick.app",
         };
-        // await axios
-        //   .post("/api/marketplace/erc721/mint", nftData)
-        //   .then((response: any) => {
-        //     if (!response?.success) {
-        //       return NextResponse.json({
-        //         status: "error",
-        //         message: "Error while minting nft in post route",
-        //       });
-        //     }
-        //     console.log("nft minted successfully");
-        //   })
-        //   .catch((error) => {
-        //     return NextResponse.json({ status: "error", message: error });
-        //   });
         const { success, nftData, error } = await mintNft(mintData);
         if (!success) {
           return NextResponse.json({
@@ -110,8 +96,6 @@ export async function POST(request: Request) {
             data: {},
           });
         }
-
-        // put logic to save nft to database
         const nft = new Nft(nftData);
         await nft.save();
       }
